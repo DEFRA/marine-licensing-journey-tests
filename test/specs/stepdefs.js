@@ -12,6 +12,7 @@ When('the user inputs a valid project name and clicks save and continue', functi
 });
 
 Then('the new notification is created'), function () {
+    assert.strictEqual(this.projectName, 'My First Project');
     // will I call a read API to check Mongo DB
     // ultimately this would also check dataverse
 }
