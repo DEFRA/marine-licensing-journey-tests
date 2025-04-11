@@ -94,7 +94,8 @@ export const config = {
       // Allure is used to generate the final HTML report
       'allure',
       {
-        outputDir: 'allure-results'
+        outputDir: 'allure-results',
+        useCucumberStepReporter: true
       }
     ]
   ],

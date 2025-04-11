@@ -160,7 +160,8 @@ export const config = {
     [
       'allure',
       {
-        outputDir: 'allure-results'
+        outputDir: 'allure-results',
+        useCucumberStepReporter: true
       }
     ]
   ],
