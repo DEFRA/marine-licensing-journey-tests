@@ -1,19 +1,19 @@
-import { Given, When, Then } from '@cucumber/cucumber'
-import { expect } from 'chai'
+import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
+import Actor from '../screenplay/actor.js'
+import BrowseTheWeb from '../screenplay/abilities/browse.the.web.js'
+import ApplyForExemption from '../screenplay/tasks/apply.for.exemption.js'
+import Ensure from '../screenplay/interactions/ensure.heading.is.js'
 
-Given('a web browser is on the home page', async () => {
-  await browser.url('')
-  await browser.takeScreenshot()
+Given('a user wants to apply for an exemption', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
 })
 
-When(
-  'the user inputs a valid project name and clicks save and continue',
-  function () {
-    this.projectName = 'My First Project'
-  }
-)
+When('the user launches the marine licensing app', async function () {
+  await this.actor.attemptsTo(ApplyForExemption.where(''))
+})
 
-Then('the user is on the home page', async () => {
-  expect(await browser.$('h1').getText()).to.equal('Home')
+Then('the user is on the home page', async function () {
+  await this.actor.attemptsTo(Ensure.thatPageHeadingIs(this.actor, 'Home'))
 })

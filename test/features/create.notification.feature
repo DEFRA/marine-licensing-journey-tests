@@ -1,5 +1,6 @@
 Feature: ProveConnectivityOnCdpPipeline
 
   Scenario: This feature has been written purely to prove that a test can run
-    Given a web browser is on the home page
+    Given a user wants to apply for an exemption
+    When the user launches the marine licensing app
     Then the user is on the home page
