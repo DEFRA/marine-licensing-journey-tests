@@ -5,6 +5,7 @@ import { browser } from '@wdio/globals'
 
 Given('a web browser is on the home page', async () => {
   await browser.url('')
+  await browser.takeScreenshot()
 })
 
 When(
