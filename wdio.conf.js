@@ -32,10 +32,14 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  // Tests to run
-  specs: ['./test/specs/**/*.js'],
-  // Tests to exclude
-  exclude: [],
+  specs: ['test/features/*.feature'],
+  // Patterns to exclude.
+  exclude: [
+    // 'path/to/excluded/files'
+  ],
+  cucumberOpts: {
+    require: ['test/steps/*.js']
+  },
   maxInstances: 1,
 
   capabilities: [
@@ -74,7 +78,7 @@ export const config = {
   waitforInterval: 200,
   connectionRetryTimeout: 6000,
   connectionRetryCount: 3,
-  framework: 'mocha',
+  framework: 'cucumber',
 
   reporters: [
     [
