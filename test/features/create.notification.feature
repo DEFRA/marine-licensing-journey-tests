@@ -1,7 +1,5 @@
-Feature: ProvideTheProjectName
+Feature: ProveConnectivity
 
-  Scenario: Create a project with a project name and save
-    Given a web browser is on the Project Name page
-    Then the user is on the correct page
-    # When the user inputs a valid project name and clicks save and continue
-    # Then the new notification is created
+  Scenario: This feature has been written purely to prove that a test can run
+    Given a web browser is on the home page
+    Then the user is on the home page

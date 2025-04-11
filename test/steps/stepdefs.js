@@ -3,7 +3,7 @@ import { HomePage } from 'page-objects/home.page.js'
 import { expect } from 'chai'
 import { browser } from '@wdio/globals'
 
-Given('a web browser is on the Project Name page', async () => {
+Given('a web browser is on the home page', async () => {
   await browser.url('')
 })
 
@@ -14,7 +14,7 @@ When(
   }
 )
 
-Then('the user is on the correct page', async () => {
+Then('the user is on the home page', async () => {
   const pageHeading = await HomePage.pageHeading.getText()
   expect(pageHeading).to.equal('Home')
 })
