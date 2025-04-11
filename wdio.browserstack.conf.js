@@ -29,7 +29,7 @@ export const config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-  baseUrl: `https://marine-licensing-journey-tests.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
+  baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
 
   // You will need to provide your own BrowserStack credentials.
   // These should be added as secrets to the test suite.
