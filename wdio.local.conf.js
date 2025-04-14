@@ -161,7 +161,9 @@ export const config = {
       'allure',
       {
         outputDir: 'allure-results',
-        useCucumberStepReporter: true
+        useCucumberStepReporter: true,
+        issueLinkTemplate:
+          'https://dev.azure.com/defragovuk/DEFRA-Marine-Licensing/_workitems/edit/{}'
       }
     ]
   ],
