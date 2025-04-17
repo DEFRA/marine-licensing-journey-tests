@@ -6,20 +6,20 @@ import Ensure from '../screenplay/interactions/ensure.heading.is.js'
 import ApplyForExemption from '../screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../screenplay/tasks/complete.project.name.js'
 
-Given('a user is on the project name page', async function () {
+Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   this.actor.attemptsTo(ApplyForExemption.where(''))
 })
 
-When('the user provides a project name and clicks save and continue', () => {
+When('entering and saving the project name', () => {
   this.actor.attemptsTo(CompleteProjectName.with('example project name'))
 })
 
-Then('the new notification record is created', () => {
+Then('a new notification record is created', () => {
   // Write code here that turns the phrase above into concrete actions
 })
 
-Then('the user remains on the project name page', async function () {
+Then('the project name page remains displayed', async function () {
   await this.actor.attemptsTo(Ensure.thatPageHeadingIs(this.actor, 'Home'))
 })
