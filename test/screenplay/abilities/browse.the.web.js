@@ -30,4 +30,8 @@ export default class BrowseTheWeb {
   async getText(locator) {
     return await this.browser.$(locator).getText()
   }
+
+  async takeScreenshot(name) {
+    await this.browser.takeScreenshot()
+  }
 }

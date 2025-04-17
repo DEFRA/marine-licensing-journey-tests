@@ -5,11 +5,13 @@ import Actor from '../screenplay/actor.js'
 import Ensure from '../screenplay/interactions/ensure.heading.is.js'
 import ApplyForExemption from '../screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../screenplay/tasks/complete.project.name.js'
+import TakeScreenshot from '../screenplay/interactions/take.screenshot.js'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   this.actor.attemptsTo(ApplyForExemption.where(''))
+  this.actor.attemptsTo(TakeScreenshot.named())
 })
 
 When('entering and saving the project name', async function () {
