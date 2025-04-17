@@ -1,9 +1,11 @@
 @issue=536842
-Feature: The project name page allows the user to define a freetext name for their project
-which is meaningful to them. This is the beginning of the process to create the exemption
-notification, with the IAT aspect of the journey having been conducted in the Fivium space.
+@post-iat
+Feature: Project name entry for exemption notifications
+  As the first step in creating an exemption notification,
+  applicants can provide a meaningful name for their project.
+  This helps them identify and track their notification throughout the process.
 
-  Scenario: User supplies a valid project name and successfully saves their notification
+  Scenario: Starting a new exemption notification by providing a project name
     Given the project name page is displayed
     When entering and saving the project name
     Then a new notification record is created
