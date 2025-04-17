@@ -12,11 +12,11 @@ Given('the project name page is displayed', async function () {
   this.actor.attemptsTo(ApplyForExemption.where(''))
 })
 
-When('entering and saving the project name', () => {
+When('entering and saving the project name', async function () {
   this.actor.attemptsTo(CompleteProjectName.with('example project name'))
 })
 
-Then('a new notification record is created', () => {
+Then('a new notification record is created', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
