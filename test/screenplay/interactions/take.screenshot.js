@@ -9,6 +9,5 @@ export default class TakeScreenshot {
 
   async performAs(actor) {
     await actor.ability.takeScreenshot(this.name)
-    return true
   }
 }
