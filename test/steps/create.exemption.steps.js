@@ -1,9 +1,10 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
-import Actor from '../screenplay/actor.js'
 import BrowseTheWeb from '../screenplay/abilities/browse.the.web.js'
-import ApplyForExemption from '../screenplay/tasks/apply.for.exemption.js'
+import Actor from '../screenplay/actor.js'
 import Ensure from '../screenplay/interactions/ensure.heading.is.js'
+import ApplyForExemption from '../screenplay/tasks/apply.for.exemption.js'
+import CompleteProjectName from '../screenplay/tasks/complete.project.name.js'
 
 Given('a user is on the project name page', async function () {
   this.actor = new Actor('Alice')
@@ -12,8 +13,7 @@ Given('a user is on the project name page', async function () {
 })
 
 When('the user provides a project name and clicks save and continue', () => {
-  // insert new project name
-  // click save and continue
+  this.actor.attemptsTo(CompleteProjectName.with('example project name'))
 })
 
 Then('the new notification record is created', () => {

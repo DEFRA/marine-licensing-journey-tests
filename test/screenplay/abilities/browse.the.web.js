@@ -14,4 +14,20 @@ export default class BrowseTheWeb {
   async getHeading() {
     return await this.browser.$('h1').getText()
   }
+
+  async sendKeys(locator, keys) {
+    await this.browser.$(locator).setValue(keys)
+  }
+
+  async click(locator) {
+    await this.browser.$(locator).click()
+  }
+
+  async selectOption(locator, option) {
+    await this.browser.$(locator).selectByVisibleText(option)
+  }
+
+  async getText(locator) {
+    return await this.browser.$(locator).getText()
+  }
 }
