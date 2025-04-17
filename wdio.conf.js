@@ -32,13 +32,13 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  specs: ['test/features/*.feature'],
+  specs: ['specs/features/*.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
   ],
   cucumberOpts: {
-    require: ['test/steps/*.js']
+    require: ['specs/steps/*.js']
   },
   maxInstances: 1,
 
@@ -95,9 +95,9 @@ export const config = {
       'allure',
       {
         outputDir: 'allure-results',
-        useCucumberStepReporter: true,
-        issueLinkTemplate:
-          'https://dev.azure.com/defragovuk/DEFRA-Marine-Licensing/_workitems/edit/{}'
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: true,
+        useCucumberStepReporter: true
       }
     ]
   ],

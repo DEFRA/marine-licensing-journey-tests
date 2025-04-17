@@ -33,13 +33,13 @@ export const config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ['test/features/*.feature'],
+  specs: ['specs/features/*.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
   ],
   cucumberOpts: {
-    require: ['test/steps/*.js']
+    require: ['specs/steps/*.js']
   },
   // injectGlobals: false,
   //
@@ -161,9 +161,9 @@ export const config = {
       'allure',
       {
         outputDir: 'allure-results',
-        useCucumberStepReporter: true,
-        issueLinkTemplate:
-          'https://dev.azure.com/defragovuk/DEFRA-Marine-Licensing/_workitems/edit/{}'
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: true,
+        useCucumberStepReporter: true
       }
     ]
   ],
