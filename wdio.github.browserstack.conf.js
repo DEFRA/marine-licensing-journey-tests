@@ -1,20 +1,13 @@
 import allure from 'allure-commandline'
+import { config as baseConfig } from './wdio.browserstack.base.conf.js'
 
 const oneMinute = 60 * 1000
 
 export const config = {
-  //
-  // ====================
-  // Runner Configuration
-  // ====================
-  // WebdriverIO supports running e2e tests as well as unit and component tests.
-  runner: 'local',
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
-  baseUrl: `http://localhost:3000`,
+  ...baseConfig,
+
+  // Override base URL for GitHub workflow
+  baseUrl: 'http://localhost:3000',
 
   user: process.env.BROWSERSTACK_USER,
   key: process.env.BROWSERSTACK_KEY,

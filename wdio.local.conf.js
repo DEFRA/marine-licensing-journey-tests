@@ -1,4 +1,5 @@
 import allure from 'allure-commandline'
+import { config as baseConfig } from './wdio.base.conf.js'
 
 const debug = process.env.DEBUG
 const oneMinute = 60 * 1000
@@ -11,6 +12,8 @@ if (debug) {
 }
 
 export const config = {
+  ...baseConfig,
+
   //
   // ====================
   // Runner Configuration

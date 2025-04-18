@@ -1,20 +1,23 @@
 import allure from 'allure-commandline'
+import { config as baseConfig } from './wdio.base.conf.js'
 
 const oneMinute = 60 * 1000
 
 export const config = {
+  ...baseConfig,
+
+  // Override base URL for GitHub workflow
+  baseUrl: 'http://localhost:3000',
+
+  // Override connection retry timeout for GitHub workflow
+  connectionRetryTimeout: 120000,
+
   //
   // ====================
   // Runner Configuration
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
-  baseUrl: `http://localhost:3000`,
 
   // Connection to remote chromedriver
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
@@ -57,7 +60,6 @@ export const config = {
   bail: 0,
   waitforTimeout: 10000,
   waitforInterval: 200,
-  connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
 
   framework: 'mocha',
