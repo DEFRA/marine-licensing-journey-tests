@@ -2,7 +2,7 @@ import Ability from '../abilities/ability'
 
 /**
  * Represents an ability to browse the web using a browser instance.
- * Extends the Ability class.
+ * Extends the Ability class to provide type safety
  */
 export default class BrowseTheWeb extends Ability {
   /**
