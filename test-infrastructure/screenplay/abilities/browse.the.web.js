@@ -1,5 +1,8 @@
-export default class BrowseTheWeb {
+import Ability from '../abilities/ability'
+
+export default class BrowseTheWeb extends Ability {
   constructor(browser) {
+    super()
     this.browser = browser
   }
 
