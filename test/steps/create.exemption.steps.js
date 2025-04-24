@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@cucumber/cucumber'
+import { Given, Then, When, After } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import BrowseTheWeb from '../../test-infrastructure/screenplay/abilities/browse.the.web.js'
 import Actor from '../../test-infrastructure/screenplay/actor.js'
@@ -6,6 +6,7 @@ import EnsureThatPageHeading from '../../test-infrastructure/screenplay/interact
 import EnsureProjectNameError from '../../test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
 import ApplyForExemption from '../../test-infrastructure/screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../../test-infrastructure/screenplay/tasks/complete.project.name.js'
+import { takeScreenshot } from '~/test-infrastructure/capture/screenshot.js'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
@@ -34,4 +35,10 @@ Then('the project name page remains displayed', async function () {
 
 Then('the error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(EnsureProjectNameError.is(errorMessage))
+})
+
+After(async function (testCase) {
+  if (testCase.result.status === 'failed') {
+    takeScreenshot()
+  }
 })
