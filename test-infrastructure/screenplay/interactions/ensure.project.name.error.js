@@ -31,6 +31,9 @@ export default class EnsureProjectNameError extends Task {
    * @returns {*}
    */
   async performAs(actor) {
-    await actor.ability.expectToHaveText('#projectName-error', this.expectation)
+    await actor.ability.expectElementToHaveText(
+      '#projectName-error',
+      this.expectation
+    )
   }
 }

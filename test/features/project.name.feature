@@ -16,5 +16,5 @@ Feature: Starting a new exemption notification by providing a project name
     Then the error "<errorMessage>" is displayed
 
     Examples:
-      | projectName | errorMessage           |
-      |             | Enter the project name |
+      | projectName | errorMessage             |
+      |             | Enter the projectus name |
