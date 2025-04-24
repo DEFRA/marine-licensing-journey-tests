@@ -32,6 +32,6 @@ export default class CompleteProjectName extends Task {
       ProjectNamePage.projectNameInput,
       this.projectName
     )
-    await browseTheWeb.clickSaveAndContinue()
+    await browseTheWeb.click(ProjectNamePage.saveAndContinue)
   }
 }
