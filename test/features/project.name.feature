@@ -1,7 +1,8 @@
 @issue=536842 @post-iat @project-name
 Feature: Starting a new exemption notification by providing a project name
 
-  Scenario: As the first step in creating an exemption notification,
+  Scenario: Provide a valid project name for a new exemption notification
+  As the first step in creating an exemption notification,
   applicants can provide a meaningful name for their project.
   This helps them identify and track their notification throughout the process.  
 
@@ -10,11 +11,12 @@ Feature: Starting a new exemption notification by providing a project name
     Then a new notification record is created
     And the project name page remains displayed
 
-  Scenario Outline: Invalid projects names should generate an error.
+  Scenario Outline: Error when project name is <projectName>.
     Given the project name page is displayed
     When entering and saving the project with name "<projectName>"
     Then the error "<errorMessage>" is displayed
 
     Examples:
-      | projectName | errorMessage             |
-      |             | Enter the projectus name |
+      | projectName                                                                                                                                                                                                                                                                        | errorMessage                                  |
+      |                                                                                                                                                                                                                                                                                    | Enter the project name                        |
+      | Construction of an Eco-Conscious Offshore Wind Farm Featuring Advanced Turbine Technology, Renewable Energy Integration Systems, and Marine Environmental Safeguards to Protect Biodiversity Across Coastal and Open Water Ecosystems While Promoting Sustainable Energy Solutions | Project name should be 250 characters or less |

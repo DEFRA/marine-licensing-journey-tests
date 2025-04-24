@@ -48,12 +48,17 @@ export const config = {
       {
         outputDir: 'allure-results',
         disableWebdriverStepsReporting: true,
-        // disableWebdriverScreenshotsReporting: true,
         useCucumberStepReporter: true
       }
     ]
   ],
 
+  /**
+   * This cucumber hook executes after a scenario and attaches a screenshot
+   * to the report if the scenario has failed
+   *
+   * @param {object} scenario the cucumber scenario context
+   */
   afterScenario: async function (scenario) {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
