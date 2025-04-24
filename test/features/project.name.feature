@@ -7,8 +7,8 @@ Feature: Starting a new exemption notification by providing a project name
   This helps them identify and track their notification throughout the process.  
 
     Given the project name page is displayed
-    When entering and saving the project name
-    Then a new notification record is created
+    When entering and saving the project with name "My first project"
+    Then a new notification record is created with name "My first project"
     And the project name page remains displayed
 
   Scenario Outline: Error when project name is <projectName>
