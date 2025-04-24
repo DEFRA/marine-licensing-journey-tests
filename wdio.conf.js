@@ -32,13 +32,13 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  specs: ['specs/features/*.feature'],
+  specs: ['test/features/*.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
   ],
   cucumberOpts: {
-    require: ['specs/steps/*.js']
+    require: ['test/steps/*.js']
   },
   maxInstances: 1,
 

@@ -20,7 +20,9 @@ export default class Actor {
    * The actor attempts to perform multiple tasks.
    * @param {...Task} tasks - The tasks to be performed.
    */
-  attemptsTo(...tasks) {
-    tasks.forEach((task) => task.performAs(this))
+  async attemptsTo(...tasks) {
+    for (const task of tasks) {
+      await task.performAs(this)
+    }
   }
 }

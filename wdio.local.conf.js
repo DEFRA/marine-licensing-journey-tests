@@ -33,13 +33,13 @@ export const config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ['specs/features/*.feature'],
+  specs: ['test/features/*.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
   ],
   cucumberOpts: {
-    require: ['specs/steps/*.js']
+    require: ['test/steps/*.js']
   },
   // injectGlobals: false,
   //
@@ -115,7 +115,7 @@ export const config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-  baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
+  baseUrl: `http://localhost:3000/`,
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,

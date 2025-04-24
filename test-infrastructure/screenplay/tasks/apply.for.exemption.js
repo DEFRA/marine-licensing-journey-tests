@@ -26,7 +26,12 @@ export default class ApplyForExemption extends Task {
    * @returns {Promise<void>} A promise that resolves when the navigation is complete.
    */
   async performAs(actor) {
+    await this.sleep(2000)
     const browseTheWeb = actor.ability
     await browseTheWeb.navigateTo(this.url)
+  }
+
+  async sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }

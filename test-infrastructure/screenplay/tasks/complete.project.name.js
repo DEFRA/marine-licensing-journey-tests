@@ -27,7 +27,7 @@ export default class CompleteProjectName extends Task {
    */
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    await browseTheWeb.sendKeys('', this.projectName)
-    await browseTheWeb.click('')
+    await browseTheWeb.sendKeys('#projectName', this.projectName)
+    await browseTheWeb.clickSaveAndContinue()
   }
 }
