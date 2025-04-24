@@ -17,7 +17,6 @@ Given('the project name page is displayed', async function () {
 
 When('entering and saving the project name', async function () {
   await this.actor.attemptsTo(CompleteProjectName.with('example project name'))
-  await takeScreenshot()
 })
 
 When(
@@ -33,7 +32,7 @@ Then('a new notification record is created', async function () {
 })
 
 Then('the project name page remains displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is('Home'))
+  await this.actor.attemptsTo(EnsureThatPageHeading.is('Project name'))
 })
 
 Then('the error {string} is displayed', async function (errorMessage) {
