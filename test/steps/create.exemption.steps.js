@@ -34,11 +34,11 @@ Then(
     const result = await queryMongoDb(global.sharedVariables.mongoDbUri)
     attachJson(result)
 
-    expect(result).to.have.lengthOf(
+    expect(result.data).to.have.lengthOf(
       1,
       `Expected one record, but found ${result.length}`
     )
-    expect(result[0]).to.have.property('projectName', projectName)
+    expect(result.data[0]).to.have.property('projectName', projectName)
   }
 )
 
