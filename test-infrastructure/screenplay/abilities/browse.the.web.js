@@ -8,6 +8,7 @@ import { textToBePresentInElement } from '~/node_modules/wdio-wait-for/dist/inde
 export default class BrowseTheWeb extends Ability {
   /**
    * Creates an instance of BrowseTheWeb.
+   *
    * @param {Object} browser - The browser instance used for web interactions.
    */
   constructor(browser) {
@@ -17,6 +18,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Navigates to the specified URL.
+   *
    * @param {string} url - The URL to navigate to.
    * @returns {Promise<void>} A promise that resolves when the navigation is complete.
    */
@@ -26,6 +28,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Retrieves the current page title.
+   *
    * @returns {Promise<string>} A promise that resolves to the page title.
    */
   async getTitle() {
@@ -42,6 +45,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Sends keys to an input field identified by the given locator.
+   *
    * @param {string} locator - The selector for the input field.
    * @param {string} keys - The text to input.
    * @returns {Promise<void>} A promise that resolves when the keys are sent.
@@ -52,6 +56,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Clicks an element identified by the given locator.
+   *
    * @param {string} locator - The selector for the clickable element.
    * @returns {Promise<void>} A promise that resolves when the element is clicked.
    */
@@ -60,12 +65,22 @@ export default class BrowseTheWeb extends Ability {
   }
 
   /**
-   * Description placeholder
+   * Calls the slickSubmit function, included for readability
    *
    * @async
    * @returns {*}
    */
   async clickSaveAndContinue() {
+    await this.clickSubmit()
+  }
+
+  /**
+   * Clicks a button of type submit
+   *
+   * @async
+   * @returns {*}
+   */
+  async clickSubmit() {
     await this.click('button[type="submit"]')
   }
 
@@ -79,6 +94,14 @@ export default class BrowseTheWeb extends Ability {
     await this.browser.$(locator).selectByVisibleText(option)
   }
 
+  /**
+   * Checks if the element contains the text and throws an error if not
+   *
+   * @async
+   * @param {string} locator
+   * @param {string} expectedSubstring
+   * @returns {*}
+   */
   async expectElementToHaveText(locator, expectedSubstring) {
     const textPresent = await textToBePresentInElement(
       $(locator),
@@ -90,14 +113,5 @@ export default class BrowseTheWeb extends Ability {
         `Expected ${locator} with text "${await $(locator).getText()}" to contain "${expectedSubstring}".`
       )
     }
-  }
-
-  /**
-   * Takes a screenshot of the current page.
-   * @param {string} name - The name to assign to the screenshot.
-   * @returns {Promise<void>} A promise that resolves when the screenshot is taken.
-   */
-  async takeScreenshot(name) {
-    await this.browser.takeScreenshot()
   }
 }

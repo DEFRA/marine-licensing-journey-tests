@@ -6,13 +6,11 @@ import EnsureThatPageHeading from '../../test-infrastructure/screenplay/interact
 import EnsureProjectNameError from '../../test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
 import ApplyForExemption from '../../test-infrastructure/screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../../test-infrastructure/screenplay/tasks/complete.project.name.js'
-import { takeScreenshot } from '~/test-infrastructure/capture/screenshot.js'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   await this.actor.attemptsTo(ApplyForExemption.where('exemption/project-name'))
-  await takeScreenshot()
 })
 
 When('entering and saving the project name', async function () {
