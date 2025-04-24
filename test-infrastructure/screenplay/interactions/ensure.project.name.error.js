@@ -1,4 +1,5 @@
 import Task from '../tasks/task'
+import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 
 export default class EnsureProjectNameError extends Task {
   /**
@@ -32,7 +33,7 @@ export default class EnsureProjectNameError extends Task {
    */
   async performAs(actor) {
     await actor.ability.expectElementToHaveText(
-      '#projectName-error',
+      ProjectNamePage.projectNameError,
       this.expectation
     )
   }

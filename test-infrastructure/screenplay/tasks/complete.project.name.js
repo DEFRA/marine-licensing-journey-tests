@@ -1,4 +1,5 @@
 import Task from '../tasks/task'
+import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 
 export default class CompleteProjectName extends Task {
   /**
@@ -27,7 +28,10 @@ export default class CompleteProjectName extends Task {
    */
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    await browseTheWeb.sendKeys('#projectName', this.projectName)
+    await browseTheWeb.sendKeys(
+      ProjectNamePage.projectNameInput,
+      this.projectName
+    )
     await browseTheWeb.clickSaveAndContinue()
   }
 }
