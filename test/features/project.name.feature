@@ -1,4 +1,4 @@
-@issue=536842 @post-iat
+@issue=536842 @post-iat @project-name
 Feature: Starting a new exemption notification by providing a project name
 
   Scenario: As the first step in creating an exemption notification,
