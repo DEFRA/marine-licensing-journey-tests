@@ -58,6 +58,12 @@ export default class BrowseTheWeb extends Ability {
     await this.browser.$(locator).click()
   }
 
+  /**
+   * Description placeholder
+   *
+   * @async
+   * @returns {*}
+   */
   async clickSaveAndContinue() {
     await this.click('button[type="submit"]')
   }
@@ -72,18 +78,9 @@ export default class BrowseTheWeb extends Ability {
     await this.browser.$(locator).selectByVisibleText(option)
   }
 
-  /**
-   * Retrieves the text content of an element identified by the given locator, ensuring the element is visible first.
-   * @param {string} locator - The selector for the element.
-   * @returns {Promise<string>} A promise that resolves to the element's text if it is not blank and visible.
-   */
-  async getText(locator) {
-    const errorElement = $(locator)
-    browser.waitUntil(() => errorElement.getText() !== '', {
-      timeout: 5000,
-      timeoutMsg: 'Error message did not match within the specified time'
-    })
-    return errorElement.getText()
+  async expectToHaveText(locator, expectedSubstring) {
+    const element = await $(locator)
+    await expect(element).toHaveText(expect.stringContaining(expectedSubstring))
   }
 
   /**

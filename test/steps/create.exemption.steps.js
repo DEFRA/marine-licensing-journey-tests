@@ -23,7 +23,6 @@ When(
   'entering and saving the project with name {string}',
   async function (projectName) {
     await this.actor.attemptsTo(CompleteProjectName.with(projectName))
-    await takeScreenshot()
   }
 )
 

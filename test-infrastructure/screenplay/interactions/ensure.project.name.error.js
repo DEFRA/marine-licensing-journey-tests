@@ -1,7 +1,5 @@
 import Task from '../tasks/task'
 
-import { expect } from 'chai'
-
 export default class EnsureProjectNameError extends Task {
   /**
    * Description placeholder
@@ -26,14 +24,13 @@ export default class EnsureProjectNameError extends Task {
   }
 
   /**
-   * Description placeholder
+   * Waits for the error message to appear
    *
    * @async
    * @param {Actor} actor
    * @returns {*}
    */
   async performAs(actor) {
-    const projectNameError = await actor.ability.getText('projectName-error')
-    expect(projectNameError).to.equal(this.expectation)
+    await actor.ability.expectToHaveText('#projectName-error', this.expectation)
   }
 }
