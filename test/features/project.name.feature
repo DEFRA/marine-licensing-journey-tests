@@ -11,7 +11,7 @@ Feature: Starting a new exemption notification by providing a project name
     Then a new notification record is created
     And the project name page remains displayed
 
-  Scenario Outline: Error when project name is <projectName>.
+  Scenario Outline: Error when project name is <projectName>
     Given the project name page is displayed
     When entering and saving the project with name "<projectName>"
     Then the error "<errorMessage>" is displayed
