@@ -96,12 +96,6 @@ export const config = {
     ]
   ],
 
-  beforeScenario: async function () {
-    global.sharedVariables = {
-      mongoDbUri: `mongodb://protected-mongo-01.${process.env.ENVIRONMENT}.protected.cdp:27017,protected-mongo-02.${process.env.ENVIRONMENT}.protected.cdp:27017,protected-mongo-03.${process.env.ENVIRONMENT}.protected.cdp:27017/admin?authSource=$external&authMechanism=MONGODB-AWS&tls=true&readPreference=secondaryPreferred`
-    }
-  },
-
   /**
    * This cucumber hook executes after a scenario and attaches a screenshot
    * to the report if the scenario has failed

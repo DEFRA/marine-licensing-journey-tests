@@ -43,10 +43,10 @@
     "chai": "5.2.0",
     "esm-module-alias": "2.2.1",
     "global-agent": "3.0.0",
-    "mongodb": "6.16.0",
     "undici": "7.3.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "9.7.0",
     "@wdio/cli": "9.12.4",
     "@wdio/cucumber-framework": "9.12.3",
     "eslint": "^8.57.0",

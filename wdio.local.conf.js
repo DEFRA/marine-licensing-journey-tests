@@ -54,12 +54,6 @@ export const config = {
     ]
   ],
 
-  beforeScenario: async function () {
-    global.sharedVariables = {
-      mongoDbUri: 'mongodb://localhost:27017/'
-    }
-  },
-
   /**
    * This cucumber hook executes after a scenario and attaches a screenshot
    * to the report if the scenario has failed

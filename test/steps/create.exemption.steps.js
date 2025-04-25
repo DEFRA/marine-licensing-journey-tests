@@ -7,14 +7,17 @@ import EnsureThatPageHeading from '../../test-infrastructure/screenplay/interact
 import EnsureProjectNameError from '../../test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
 import ApplyForExemption from '../../test-infrastructure/screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../../test-infrastructure/screenplay/tasks/complete.project.name.js'
-import { clearExemptionDataFromMongoDb } from '~/test-infrastructure/db/mongo.db.js'
-import EnsureNotification from '~/test-infrastructure/screenplay/interactions/ensure.notification.js'
+import { faker } from '~/node_modules/@faker-js/faker/dist/index.js'
 
 Given('the project name page is displayed', async function () {
-  clearExemptionDataFromMongoDb(global.sharedVariables.mongoDbUri)
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+})
+
+When('entering and saving the project with a valid name', async function () {
+  this.projectName = faker.lorem.words(5)
+  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
 })
 
 When(
@@ -24,14 +27,9 @@ When(
   }
 )
 
-Then(
-  'a new notification record is created with name {string}',
-  async function (projectName) {
-    await this.actor.attemptsTo(
-      EnsureNotification.isCreatedWithName(projectName)
-    )
-  }
-)
+Then('a new notification record is created', async function () {
+  // to be implemented once a GET api is created (or perhaps via the UI)
+})
 
 Then('the project name page remains displayed', async function () {
   await this.actor.attemptsTo(EnsureThatPageHeading.is('Project name'))
