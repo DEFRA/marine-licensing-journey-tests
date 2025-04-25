@@ -13,17 +13,7 @@ if (process.env.HTTP_PROXY) {
 }
 
 export const config = {
-  //
-  // ====================
-  // Runner Configuration
-  // ====================
-  // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
   baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
 
   // Connection to remote chromedriver
@@ -90,7 +80,7 @@ export const config = {
       {
         outputDir: 'allure-results',
         issueLinkTemplate: 'https://eaflood.atlassian.net/browse/{}',
-        disableWebdriverStepsReporting: true,
+        disableWebdriverStepsReporting: false,
         useCucumberStepReporter: true
       }
     ]
