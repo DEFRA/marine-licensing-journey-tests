@@ -11,7 +11,7 @@ Feature: Starting a new exemption notification by providing a project name
 
     Given the project name page is displayed
     When entering and saving the project with a valid name
-    Then the project name page remains displayed
+    Then the task list page is displayed
     # And a new notification record is created
 
   Scenario Outline: Error when project name is <projectName>
