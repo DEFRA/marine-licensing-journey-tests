@@ -1,4 +1,4 @@
-@issue=536842 @post-iat @project-name
+@issue=ML-1 @post-iat @project-name @exemptions
 Feature: Starting a new exemption notification by providing a project name
 
   Scenario: Provide a valid project name for a new exemption notification
