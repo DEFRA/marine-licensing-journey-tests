@@ -32,7 +32,9 @@ Then('a new notification record is created', async function () {
 })
 
 Then('the project name page remains displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is('Project name'))
+  await this.actor.attemptsTo(
+    EnsureThatPageHeading.is(ProjectNamePage.pageHeading)
+  )
 })
 
 Then('the error {string} is displayed', async function (errorMessage) {
