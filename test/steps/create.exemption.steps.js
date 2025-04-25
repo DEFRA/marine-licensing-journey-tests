@@ -7,12 +7,8 @@ import EnsureThatPageHeading from '../../test-infrastructure/screenplay/interact
 import EnsureProjectNameError from '../../test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
 import ApplyForExemption from '../../test-infrastructure/screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '../../test-infrastructure/screenplay/tasks/complete.project.name.js'
-import {
-  clearExemptionDataFromMongoDb,
-  queryMongoDb
-} from '~/test-infrastructure/db/mongo.db.js'
-import { expect } from 'chai'
-import { attachJson } from '~/test-infrastructure/capture/json.js'
+import { clearExemptionDataFromMongoDb } from '~/test-infrastructure/db/mongo.db.js'
+import EnsureNotification from '~/test-infrastructure/screenplay/interactions/ensure.notification.js'
 
 Given('the project name page is displayed', async function () {
   clearExemptionDataFromMongoDb(global.sharedVariables.mongoDbUri)
@@ -31,14 +27,9 @@ When(
 Then(
   'a new notification record is created with name {string}',
   async function (projectName) {
-    const result = await queryMongoDb(global.sharedVariables.mongoDbUri)
-    attachJson(result)
-
-    expect(result.data).to.have.lengthOf(
-      1,
-      `Expected one record, but found ${result.length}`
+    await this.actor.attemptsTo(
+      EnsureNotification.isCreatedWithName(projectName)
     )
-    expect(result.data[0]).to.have.property('projectName', projectName)
   }
 )
 
