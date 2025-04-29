@@ -1,4 +1,4 @@
-@issue=ML-1 @post-iat @project-name @exemptions
+@issue=ML-1 @issue=ML-9 @post-iat @project-name @exemptions
 Feature: Starting a new exemption notification by providing a project name
 
   Scenario: Provide a valid project name for a new exemption notification
@@ -10,7 +10,7 @@ Feature: Starting a new exemption notification by providing a project name
   story.
 
     Given the project name page is displayed
-    When entering and saving the project with a valid name
+    When entering and saving a project with a valid name
     Then the task list page is displayed
     # And a new notification record is created
 
@@ -20,6 +20,6 @@ Feature: Starting a new exemption notification by providing a project name
     Then the error "<errorMessage>" is displayed
 
     Examples:
-      | projectName                                                                                                                                                                                                                                                                        | errorMessage                                  |
-      |                                                                                                                                                                                                                                                                                    | Enter the project name                        |
-      | Construction of an Eco-Conscious Offshore Wind Farm Featuring Advanced Turbine Technology, Renewable Energy Integration Systems, and Marine Environmental Safeguards to Protect Biodiversity Across Coastal and Open Water Ecosystems While Promoting Sustainable Energy Solutions | Project name should be 250 characters or less |
+      | errorMessage                                  | projectName                                                                                                                                                                                                                                                                        |
+      | Enter the project name                        |                                                                                                                                                                                                                                                                                    |
+      | Project name should be 250 characters or less | Construction of an Eco-Conscious Offshore Wind Farm Featuring Advanced Turbine Technology, Renewable Energy Integration Systems, and Marine Environmental Safeguards to Protect Biodiversity Across Coastal and Open Water Ecosystems While Promoting Sustainable Energy Solutions |
