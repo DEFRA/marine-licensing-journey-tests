@@ -25,6 +25,7 @@ Feature: View exemption task details
     When the project name is updated
     Then the new project name is saved
 
+  
   Scenario Outline: Accessing task <task> not yet implemented
     Given the task list page is displayed
     When the "<task>" task is selected
