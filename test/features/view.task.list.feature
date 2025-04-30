@@ -1,4 +1,4 @@
-@issue=ML-9 @post-iat @task-list @exemptions
+@issue=ML-9
 Feature: View exemption task details
   As an applicant
   I want to view the details of what I need to provide for my exemption
