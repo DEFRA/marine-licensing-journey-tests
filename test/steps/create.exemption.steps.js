@@ -2,15 +2,16 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import { faker } from '~/node_modules/@faker-js/faker/dist/index.js'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page.js'
-import EnsureThatTask from '~/test-infrastructure/screenplay/interactions/ensure.task.is.js'
-import SelectTheTask from '~/test-infrastructure/screenplay/interactions/select.task.js'
+import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 import BrowseTheWeb from '~/test-infrastructure/screenplay/abilities/browse.the.web.js'
 import Actor from '~/test-infrastructure/screenplay/actor.js'
 import EnsureThatPageHeading from '~/test-infrastructure/screenplay/interactions/ensure.heading.js'
 import EnsureProjectName from '~/test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
+import EnsureThatProjectName from '~/test-infrastructure/screenplay/interactions/ensure.project.name.js'
+import EnsureTaskStatus from '~/test-infrastructure/screenplay/interactions/ensure.task.is.js'
+import SelectTheTask from '~/test-infrastructure/screenplay/interactions/select.task.js'
 import ApplyForExemption from '~/test-infrastructure/screenplay/tasks/apply.for.exemption.js'
 import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name.js'
-import EnsureThatProjectName from '~/test-infrastructure/screenplay/interactions/ensure.project.name.js'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
@@ -51,26 +52,12 @@ When('the project name is updated', async function () {
   await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
 })
 
-Then('a new notification record is created', async function () {
-  // to be implemented once a GET api is created (or perhaps via the UI)
-})
-
-Then('the project name page remains displayed', async function () {
-  await this.actor.attemptsTo(
-    EnsureThatPageHeading.is(ProjectNamePage.pageHeading)
-  )
-})
-
 Then('the error {string} is displayed', async function (errorMessage) {
-  await this.actor.attemptsTo(EnsureProjectName.errorIs(errorMessage))
+  await this.actor.attemptsTo(EnsureProjectName.is(errorMessage))
 })
 
 Then('the task list page is displayed', async function () {
   await this.actor.attemptsTo(EnsureThatPageHeading.is(this.projectName))
-})
-
-Then('the project name task is shown as {string}', async function (taskStatus) {
-  await this.actor.attemptsTo(EnsureThatTask.is('Project name', taskStatus))
 })
 
 Then('the project name is pre-populated', async function () {
@@ -81,6 +68,8 @@ Then('the new project name is saved', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
-Then('the task statuses are', (table) => {
-  // Write code here that turns the phrase above into concrete actions
+Then('the Project name task status is {string}', async function (taskStatus) {
+  await this.actor.attemptsTo(
+    EnsureTaskStatus.is(TaskListPage.projectNameTaskStatus, taskStatus)
+  )
 })

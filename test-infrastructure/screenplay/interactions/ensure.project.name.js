@@ -32,7 +32,7 @@ export default class EnsureThatProjectName extends Task {
    * @returns {*}
    */
   async performAs(actor) {
-    await actor.ability.expectElementToHaveText(
+    await actor.ability.expectElementToHaveValue(
       ProjectNamePage.projectNameInput,
       this.expectation
     )

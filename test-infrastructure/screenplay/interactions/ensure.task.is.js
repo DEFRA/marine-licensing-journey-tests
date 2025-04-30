@@ -1,35 +1,34 @@
 import Task from '../tasks/task'
 
-export default class EnsureThatTask extends Task {
+export default class EnsureTaskStatus extends Task {
   /**
    * @static
+   * @param {string} locator
    * @param {string} expectation
-   * @returns {EnsureThatTask}
+   * @returns {EnsureTaskStatus}
    */
-  static is(taskName, expectation) {
-    return new EnsureThatTask(taskName, expectation)
+  static is(locator, expectation) {
+    return new EnsureTaskStatus(locator, expectation)
   }
 
   /**
    * Creates an instance of EnsureThatTask.
    *
    * @constructor
-   * @param {string} expectation
+   * @param {string} locator
    */
-  constructor(taskName, expectation) {
+  constructor(locator, expectation) {
     super()
-    this.taskName = taskName
+    this.locator = locator
     this.expectation = expectation
   }
 
   /**
-   * Waits for the error message to appear
-   *
    * @async
    * @param {Actor} actor
    * @returns {*}
    */
   async performAs(actor) {
-    await actor.ability.expectElementToHaveText(this.taskName, this.expectation)
+    await actor.ability.expectElementToHaveText(this.locator, this.expectation)
   }
 }

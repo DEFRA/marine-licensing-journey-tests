@@ -1,5 +1,8 @@
 import Ability from '../abilities/ability'
-import { textToBePresentInElement } from '~/node_modules/wdio-wait-for/dist/index'
+import {
+  textToBePresentInElement,
+  textToBePresentInElementValue
+} from '~/node_modules/wdio-wait-for/dist/index'
 
 /**
  * Represents an ability to browse the web using a browser instance.
@@ -111,6 +114,19 @@ export default class BrowseTheWeb extends Ability {
     if (!textPresent) {
       throw new Error(
         `Expected ${locator} with text "${await $(locator).getText()}" to contain "${expectedSubstring}".`
+      )
+    }
+  }
+
+  async expectElementToHaveValue(locator, expectedValue) {
+    const textPresent = await textToBePresentInElementValue(
+      $(locator),
+      expectedValue
+    )()
+
+    if (!textPresent) {
+      throw new Error(
+        `Expected ${locator} with text "${await $(locator).getValue()}" to contain "${expectedValue}".`
       )
     }
   }
