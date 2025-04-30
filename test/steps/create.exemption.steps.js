@@ -49,6 +49,7 @@ When('the {string} task is selected', async function (taskName) {
 
 When('the project name is updated', async function () {
   this.projectName = faker.lorem.words(4)
+  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
 })
 
@@ -65,7 +66,8 @@ Then('the project name is pre-populated', async function () {
 })
 
 Then('the new project name is saved', async function () {
-  // Write code here that turns the phrase above into concrete actions
+  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
+  await this.actor.attemptsTo(EnsureThatProjectName.is(this.projectName))
 })
 
 Then('the Project name task status is {string}', async function (taskStatus) {
