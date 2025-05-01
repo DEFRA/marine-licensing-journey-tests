@@ -22,6 +22,8 @@ export default class ApplyForExemption extends Task {
   /**
    * Performs the task as the given actor.
    * Uses the actor's ability to navigate to the given URL.
+   * This will be extended to perform a full application for exemption later
+   *
    * @param {Actor} actor - The actor performing the task.
    * @returns {Promise<void>} A promise that resolves when the navigation is complete.
    */

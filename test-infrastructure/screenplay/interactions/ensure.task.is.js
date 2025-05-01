@@ -24,6 +24,8 @@ export default class EnsureTaskStatus extends Task {
   }
 
   /**
+   * Performs the task of ensuring that a task is in the expected state.
+   *
    * @async
    * @param {Actor} actor
    * @returns {*}
