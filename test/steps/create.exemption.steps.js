@@ -1,17 +1,19 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
-import { faker } from '~/node_modules/@faker-js/faker/dist/index.js'
-import ProjectNamePage from '~/test-infrastructure/pages/project.name.page.js'
-import TaskListPage from '~/test-infrastructure/pages/task.list.page'
-import BrowseTheWeb from '~/test-infrastructure/screenplay/abilities/browse.the.web.js'
-import Actor from '~/test-infrastructure/screenplay/actor.js'
-import EnsureThatPageHeading from '~/test-infrastructure/screenplay/interactions/ensure.heading.js'
-import EnsureProjectName from '~/test-infrastructure/screenplay/interactions/ensure.project.name.error.js'
-import EnsureThatProjectName from '~/test-infrastructure/screenplay/interactions/ensure.project.name.js'
-import EnsureTaskStatus from '~/test-infrastructure/screenplay/interactions/ensure.task.is.js'
-import SelectTheTask from '~/test-infrastructure/screenplay/interactions/select.task.js'
-import ApplyForExemption from '~/test-infrastructure/screenplay/tasks/apply.for.exemption.js'
-import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name.js'
+import { faker } from '@faker-js/faker'
+
+import { ProjectNamePage, TaskListPage } from '~/test-infrastructure/pages'
+import {
+  Actor,
+  BrowseTheWeb,
+  EnsureThatPageHeading,
+  EnsureProjectName,
+  EnsureThatProjectName,
+  EnsureTaskStatus,
+  SelectTheTask,
+  ApplyForExemption,
+  CompleteProjectName
+} from '~/test-infrastructure/screenplay'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
