@@ -36,7 +36,7 @@ export const config = {
   logLevel: debug ? 'debug' : 'info',
   bail: 1,
   baseUrl: `http://localhost:3000/`,
-  waitforTimeout: 10000,
+  waitforTimeout: 5000,
   waitforInterval: 200,
   connectionRetryTimeout: 120000,
   connectionRetryCount: 3,

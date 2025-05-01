@@ -31,6 +31,9 @@ export default class EnsureTaskStatus extends Task {
    * @returns {*}
    */
   async performAs(actor) {
-    await actor.ability.expectElementToHaveText(this.locator, this.expectation)
+    await actor.ability.expectElementToContainText(
+      this.locator,
+      this.expectation
+    )
   }
 }

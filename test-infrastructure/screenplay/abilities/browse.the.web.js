@@ -1,8 +1,5 @@
 import Ability from '../abilities/ability'
-import {
-  textToBePresentInElement,
-  textToBePresentInElementValue
-} from '~/node_modules/wdio-wait-for/dist/index'
+import { expect } from '~/node_modules/@wdio/globals/build/index'
 
 /**
  * Represents an ability to browse the web using a browser instance.
@@ -107,17 +104,10 @@ export default class BrowseTheWeb extends Ability {
    * @param {string} expectedSubstring
    * @returns {*}
    */
-  async expectElementToHaveText(locator, expectedSubstring) {
-    const textPresent = await textToBePresentInElement(
-      $(locator),
-      expectedSubstring
-    )()
-
-    if (!textPresent) {
-      throw new Error(
-        `Expected ${locator} with text "${await $(locator).getText()}" to contain "${expectedSubstring}".`
-      )
-    }
+  async expectElementToContainText(locator, expectedSubstring) {
+    await expect($(locator)).toHaveText(
+      expect.stringContaining(expectedSubstring)
+    )
   }
 
   /**
@@ -129,15 +119,6 @@ export default class BrowseTheWeb extends Ability {
    * @returns {*}
    */
   async expectElementToHaveValue(locator, expectedValue) {
-    const textPresent = await textToBePresentInElementValue(
-      $(locator),
-      expectedValue
-    )()
-
-    if (!textPresent) {
-      throw new Error(
-        `Expected ${locator} with text "${await $(locator).getValue()}" to contain "${expectedValue}".`
-      )
-    }
+    await expect($(locator)).toHaveAttribute('value', expectedValue)
   }
 }
