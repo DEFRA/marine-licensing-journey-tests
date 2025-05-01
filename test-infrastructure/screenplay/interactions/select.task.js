@@ -22,7 +22,7 @@ export default class SelectTheTask extends Task {
   }
 
   /**
-   * Selects the task from the tast list
+   * Selects the task from the task list
    *
    * @async
    * @param {Actor} actor
