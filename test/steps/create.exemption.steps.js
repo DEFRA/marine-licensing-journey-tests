@@ -7,7 +7,7 @@ import {
   Actor,
   BrowseTheWeb,
   EnsureThatPageHeading,
-  EnsureProjectName,
+  EnsureProjectNameError,
   EnsureThatProjectName,
   EnsureTaskStatus,
   SelectTheTask,
@@ -56,7 +56,7 @@ When('the project name is updated', async function () {
 })
 
 Then('the error {string} is displayed', async function (errorMessage) {
-  await this.actor.attemptsTo(EnsureProjectName.is(errorMessage))
+  await this.actor.attemptsTo(EnsureProjectNameError.is(errorMessage))
 })
 
 Then('the task list page is displayed', async function () {
