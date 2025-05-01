@@ -40,6 +40,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Retrieves the text content of the first `<h1>` element on the page.
+   *
    * @returns {Promise<string>} A promise that resolves to the heading text.
    */
   async getHeading() {
@@ -89,6 +90,7 @@ export default class BrowseTheWeb extends Ability {
 
   /**
    * Selects an option from a dropdown menu.
+   *
    * @param {string} locator - The selector for the dropdown element.
    * @param {string} option - The visible text of the option to select.
    * @returns {Promise<void>} A promise that resolves when the option is selected.
@@ -98,7 +100,7 @@ export default class BrowseTheWeb extends Ability {
   }
 
   /**
-   * Checks if the element contains the text and throws an error if not
+   * Waits for the element to have a specific text and throws an error if not
    *
    * @async
    * @param {string} locator
@@ -118,6 +120,14 @@ export default class BrowseTheWeb extends Ability {
     }
   }
 
+  /**
+   * Waits for the element to have a specific value and throws an error if not
+   *
+   * @async
+   * @param {string} locator
+   * @param {string} expectedValue
+   * @returns {*}
+   */
   async expectElementToHaveValue(locator, expectedValue) {
     const textPresent = await textToBePresentInElementValue(
       $(locator),
