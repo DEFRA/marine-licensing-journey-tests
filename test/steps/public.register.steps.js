@@ -10,6 +10,7 @@ import {
   Actor,
   ApplyForExemption,
   CompleteProjectName,
+  EnsurePageHeadingIs,
   BrowseTheWeb
 } from '~/test-infrastructure/screenplay'
 
@@ -99,7 +100,7 @@ Then('the public register information is saved', async function () {
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    this.actor.attemptsTo(EnsurePageHeadingIs.is(this.projectName))
   }
 )
 
