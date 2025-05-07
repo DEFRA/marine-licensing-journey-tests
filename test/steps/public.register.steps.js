@@ -1,10 +1,15 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
+import { faker } from '@faker-js/faker'
 
-import { PublicRegisterPage } from '~/test-infrastructure/pages'
+import {
+  PublicRegisterPage,
+  ProjectNamePage
+} from '~/test-infrastructure/pages'
 import {
   Actor,
   ApplyForExemption,
+  CompleteProjectName,
   BrowseTheWeb
 } from '~/test-infrastructure/screenplay'
 
@@ -15,7 +20,11 @@ Given('the Public register page is displayed', async function () {
 })
 
 Given('the Public register task has been completed', async function () {
-  // Write code here that turns the phrase above into concrete actions
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+  this.projectName = faker.lorem.words(5)
+  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
 })
 
 When(
