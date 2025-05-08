@@ -8,6 +8,7 @@ import {
 } from '~/test-infrastructure/pages'
 import {
   Actor,
+  AllowDetailsToBeAddedToPublicRegister,
   ApplyForExemption,
   CompleteProjectName,
   EnsurePageHeadingIs,
@@ -45,7 +46,7 @@ When(
 When(
   'the “Save and continue” button is selected after choosing “Yes” without providing a reason',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    this.actor.attemptsTo(AllowDetailsToBeAddedToPublicRegister.where(true))
   }
 )
 

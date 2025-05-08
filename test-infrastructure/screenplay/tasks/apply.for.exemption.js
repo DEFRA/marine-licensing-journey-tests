@@ -1,38 +1,48 @@
+import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
 import Task from '../tasks/task'
 
-export default class ApplyForExemption extends Task {
+export default class AllowDetailsToBeAddedToPublicRegister extends Task {
   /**
-   * Creates a new instance of ApplyForExemption with the specified URL.
-   * @param {string} url - The URL for the exemptions app.
-   * @returns {ApplyForExemption} A new instance of ApplyForExemption.
+   * Creates a new instance of AllowDetailsToBeAddedToPublicRegister with the specified details
+   * @param {boolean} allowPublicRegister - whether to allow details to be added to the public register.
+   * @param {string} withholdReason - the reason for withholding information.
+   * @returns {AllowDetailsToBeAddedToPublicRegister} A new instance of ApplyForExemption.
    */
-  static where(url) {
-    return new ApplyForExemption(url)
+  static where(allowPublicRegister, withholdReason = '') {
+    return new AllowDetailsToBeAddedToPublicRegister(
+      allowPublicRegister,
+      withholdReason
+    )
   }
 
   /**
-   * Constructs an ApplyForExemption task.
-   * @param {string} url - The URL for the exemptions app.
+   * Constructs an AllowDetailsToBeAddedToPublicRegister task.
+   * @param {boolean} allowPublicRegister - whether to allow details to be added to the public register.
+   * @param {string} withholdReason - the reason for withholding information.
    */
-  constructor(url) {
+  constructor(allowPublicRegister, withholdReason) {
     super()
-    this.url = url
+    this.allowPublicRegister = allowPublicRegister
+    this.withholdReason = withholdReason
   }
 
   /**
    * Performs the task as the given actor.
-   * Uses the actor's ability to navigate to the given URL.
-   * This will be extended to perform a full application for exemption later
    *
    * @param {Actor} actor - The actor performing the task.
    * @returns {Promise<void>} A promise that resolves when the navigation is complete.
    */
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    await browseTheWeb.navigateTo(this.url)
-  }
-
-  async sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
+    browseTheWeb.selectOption(
+      PublicRegisterPage.allowPublicRegisterOption,
+      this.allowPublicRegister
+    )
+    if (this.withholdReason.length > 0) {
+      browseTheWeb.sendKeys(
+        PublicRegisterPage.withholdReason,
+        this.withholdReason
+      )
+    }
   }
 }
