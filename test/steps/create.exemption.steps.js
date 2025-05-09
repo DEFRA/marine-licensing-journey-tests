@@ -7,7 +7,7 @@ import {
   Actor,
   BrowseTheWeb,
   EnsureThatPageHeading,
-  EnsureProjectNameError,
+  EnsureErrorDisplayed,
   EnsureThatProjectName,
   EnsureTaskStatus,
   SelectTheTask,
@@ -27,21 +27,27 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-    this.projectName = faker.lorem.words(5)
-    await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+    this.actor.remembers('projectName', faker.lorem.words(5))
+    await this.actor.attemptsTo(
+      CompleteProjectName.with(this.actor.recalls('projectName'))
+    )
   }
 )
 
 When('entering and saving a project with a valid name', async function () {
-  this.projectName = faker.lorem.words(5)
-  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+  this.actor.remembers('projectName', faker.lorem.words(5))
+  await this.actor.attemptsTo(
+    CompleteProjectName.with(this.actor.recalls('projectName'))
+  )
 })
 
 When(
   'entering and saving the project with name {string}',
   async function (projectName) {
-    this.projectName = projectName
-    await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+    this.actor.remembers('projectName', projectName)
+    await this.actor.attemptsTo(
+      CompleteProjectName.with(this.actor.recalls('projectName'))
+    )
   }
 )
 
@@ -50,26 +56,36 @@ When('the {string} task is selected', async function (taskName) {
 })
 
 When('the project name is updated', async function () {
-  this.projectName = faker.lorem.words(4)
+  this.actor.remembers('projectName', faker.lorem.words(4))
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+  await this.actor.attemptsTo(
+    CompleteProjectName.with(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the error {string} is displayed', async function (errorMessage) {
-  await this.actor.attemptsTo(EnsureProjectNameError.is(errorMessage))
+  await this.actor.attemptsTo(
+    EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
+  )
 })
 
 Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatPageHeading.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the project name is pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectName.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the new project name is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(EnsureThatProjectName.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the Project name task status is {string}', async function (taskStatus) {

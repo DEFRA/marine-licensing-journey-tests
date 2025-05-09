@@ -34,7 +34,7 @@ export const config = {
       ],
   execArgv,
   logLevel: debug ? 'debug' : 'info',
-  bail: 1,
+  bail: 0,
   baseUrl: `http://localhost:3000/`,
   waitforTimeout: 5000,
   waitforInterval: 200,
@@ -53,7 +53,9 @@ export const config = {
       }
     ]
   ],
-
+  beforeScenario: async function () {
+    await browser.reloadSession()
+  },
   /**
    * This cucumber hook executes after a scenario and attaches a screenshot
    * to the report if the scenario has failed
