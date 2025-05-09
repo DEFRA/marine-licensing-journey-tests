@@ -146,7 +146,7 @@ Then(
 )
 
 Then('no information is pre-populated', async function () {
-  // Write code here that turns the phrase above into concrete actions
+  this.actor.attemptsTo(EnsurePublicRegisterTask.hasNoInformationCompleted())
 })
 
 Then(

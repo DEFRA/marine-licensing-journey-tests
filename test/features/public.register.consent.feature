@@ -18,16 +18,19 @@ Feature: Public Register Consent
     Then the Public register task status is "Completed"
     And the public register information is saved
 
-  Scenario: Project name appears on the Public register page
-    Given a notification has been created with a valid project name
-    When the "Public register" task is selected
-    Then the project name is displayed on the Public register page
-
+ @run-only
   Scenario: Public register task is not pre-populated if no information has been previously saved
     Given a notification has been created with a valid project name
     When the "Public register" task is selected
     Then no information is pre-populated
 
+  @run-only
+  Scenario: Project name appears on the Public register page
+    Given a notification has been created with a valid project name
+    When the "Public register" task is selected
+    Then the project name is displayed on the Public register page
+
+  @run-only
   Scenario: Public register task is pre-populated if information has been previously saved
     Given the Public register task has been completed
     When the "Public register" task is selected

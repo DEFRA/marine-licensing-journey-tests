@@ -34,7 +34,7 @@ export const config = {
       ],
   execArgv,
   logLevel: debug ? 'debug' : 'info',
-  bail: 1,
+  bail: 0,
   baseUrl: `http://localhost:3000/`,
   waitforTimeout: 5000,
   waitforInterval: 200,
@@ -64,6 +64,7 @@ export const config = {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
     }
+    await browser.reloadSession()
   },
 
   /**

@@ -132,4 +132,16 @@ export default class BrowseTheWeb extends Ability {
     const isSelected = await this.browser.$(locator).isSelected()
     await expect(isSelected).toBe(true)
   }
+
+  /**
+   * Checks if an element identified by the given locator is not selected.
+   *
+   * @async
+   * @param {string} locator
+   * @returns {*}
+   */
+  async isNotSelected(locator) {
+    const isSelected = await this.browser.$(locator).isSelected()
+    await expect(isSelected).toBe(false)
+  }
 }
