@@ -1,5 +1,5 @@
 export { default as EnsureThatPageHeading } from './ensure.heading'
-export { default as EnsureProjectNameError } from './ensure.project.name.error'
+export { default as EnsureErrorDisplayed } from './ensure.error'
 export { default as EnsureThatProjectName } from './ensure.project.name'
 export { default as EnsureTaskStatus } from './ensure.task.is'
 export { default as EnsurePublicRegisterTask } from './ensure.public.register'

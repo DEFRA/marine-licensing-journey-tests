@@ -1,26 +1,28 @@
 import Task from '../tasks/task'
-import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 
-export default class EnsureProjectNameError extends Task {
+export default class EnsureErrorDisplayed extends Task {
   /**
    * Description placeholder
    *
    * @static
+   * @param {string} locator
    * @param {string} expectation
-   * @returns {EnsureProjectNameError}
+   * @returns {EnsureErrorDisplayed}
    */
-  static is(expectation) {
-    return new EnsureProjectNameError(expectation)
+  static is(locator, expectation) {
+    return new EnsureErrorDisplayed(locator, expectation)
   }
 
   /**
-   * Creates an instance of EnsureProjectNameError.
+   * Creates an instance of EnsureErrorDisplayed.
    *
    * @constructor
+   * @param {string} locator
    * @param {string} expectation
    */
-  constructor(expectation) {
+  constructor(locator, expectation) {
     super()
+    this.locator = locator
     this.expectation = expectation
   }
 
@@ -33,7 +35,7 @@ export default class EnsureProjectNameError extends Task {
    */
   async performAs(actor) {
     await actor.ability.expectElementToContainText(
-      ProjectNamePage.projectNameError,
+      this.locator,
       this.expectation
     )
   }
