@@ -1,5 +1,6 @@
 export default class PublicRegisterPage {
-  static consent = '#consent'
-  static withhold = '#consent-2'
+  static consent = '#consent-2'
+  static withhold = '#consent'
   static withholdReason = '#reason-text'
+  static saveAndContinue = 'button[type="submit"]'
 }

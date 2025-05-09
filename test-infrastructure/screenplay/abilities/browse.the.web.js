@@ -121,4 +121,15 @@ export default class BrowseTheWeb extends Ability {
   async expectElementToHaveValue(locator, expectedValue) {
     await expect($(locator)).toHaveAttribute('value', expectedValue)
   }
+
+  /**
+   * Checks if an element identified by the given locator is selected.
+   *
+   * @param {string} locator - The selector for the element to check.
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the element is selected, otherwise `false`.
+   */
+  async isSelected(locator) {
+    const isSelected = await this.browser.$(locator).isSelected()
+    await expect(isSelected).toBe(true)
+  }
 }

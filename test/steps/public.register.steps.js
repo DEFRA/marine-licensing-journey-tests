@@ -4,18 +4,20 @@ import { faker } from '@faker-js/faker'
 
 import {
   PublicRegisterPage,
-  ProjectNamePage
+  ProjectNamePage,
+  TaskListPage
 } from '~/test-infrastructure/pages'
 import {
   Actor,
-  AllowDetailsToBeAddedToPublicRegister,
+  CompletePublicRegisterTask,
   ApplyForExemption,
   CompleteProjectName,
   BrowseTheWeb,
   SelectTheTask,
-  EnsureThatPageHeading
+  EnsureThatPageHeading,
+  EnsureTaskStatus,
+  EnsurePublicRegisterTask
 } from '~/test-infrastructure/screenplay'
-import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
@@ -23,7 +25,6 @@ Given('the Public register page is displayed', async function () {
   await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
   this.projectName = faker.lorem.words(5)
   await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
-  await takeScreenshot()
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
 })
 
@@ -31,21 +32,38 @@ Given('the Public register task has been completed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-  this.projectName = faker.lorem.words(5)
-  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+  this.actor.remembers('projectName', faker.lorem.words(5))
+  await this.actor.attemptsTo(
+    CompleteProjectName.with(this.actor.recalls('projectName'))
+  )
 })
 
 When(
   'choosing not to withhold information from the public register',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.where(
+        this.actor.recalls('publicRegisterChoice')
+      )
+    )
   }
 )
 
 When(
   'choosing to withhold information from the public register',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
+    this.actor.remembers(
+      'publicRegisterWithholdReason',
+      'Sensitive information'
+    )
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.where(
+        this.actor.recalls('publicRegisterChoice'),
+        this.actor.recalls('publicRegisterWithholdReason')
+      )
+    )
   }
 )
 
@@ -53,19 +71,23 @@ When(
   'the “Save and continue” button is selected after choosing “Yes” without providing a reason',
   async function () {
     this.actor.attemptsTo(
-      AllowDetailsToBeAddedToPublicRegister.where(PublicRegisterPage.withhold)
+      CompletePublicRegisterTask.has(PublicRegisterPage.withhold)
     )
   }
 )
 
 When(
   'the “Save and continue” button is selected with a reason exceeding {int} characters',
-  (numberOfCharacters) => {
-    const reason = faker.lorem.numberOfCharacters(numberOfCharacters + 1)
+  async function (numberOfCharacters) {
+    this.actor.remembers(
+      'publicRegisterWithholdReason',
+      faker.lorem.numberOfCharacters(numberOfCharacters + 1)
+    )
+
     this.actor.attemptsTo(
-      AllowDetailsToBeAddedToPublicRegister.where(
+      CompletePublicRegisterTask.where(
         PublicRegisterPage.withhold,
-        reason
+        this.actor.recalls('publicRegisterWithholdReason')
       )
     )
   }
@@ -74,8 +96,11 @@ When(
 When(
   'choosing to allow information to be added to the public register by selecting “No”',
   async function () {
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
     this.actor.attemptsTo(
-      AllowDetailsToBeAddedToPublicRegister.where(PublicRegisterPage.consent)
+      CompletePublicRegisterTask.where(
+        this.actor.recalls('publicRegisterChoice')
+      )
     )
   }
 )
@@ -104,7 +129,13 @@ When('changing the public register information', async function () {
 })
 
 Then('the public register information is saved', async function () {
-  // Write code here that turns the phrase above into concrete actions
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  await this.actor.attemptsTo(
+    EnsurePublicRegisterTask.hasBeenCompletedWith(
+      this.actor.recalls('publicRegisterChoice'),
+      this.actor.recalls('publicRegisterWithholdReason')
+    )
+  )
 })
 
 Then(
@@ -139,9 +170,14 @@ Then(
   }
 )
 
-Then('the Public register task status is {string}', (s) => {
-  // Write code here that turns the phrase above into concrete actions
-})
+Then(
+  'the Public register task status is {string}',
+  async function (taskStatus) {
+    await this.actor.attemptsTo(
+      EnsureTaskStatus.is(TaskListPage.publicRegisterTaskStatus, taskStatus)
+    )
+  }
+)
 
 Then(
   'any changes made on the page during this visit are not saved',

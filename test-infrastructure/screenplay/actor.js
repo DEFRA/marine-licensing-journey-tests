@@ -6,6 +6,7 @@ export default class Actor {
   const
   constructor(name) {
     this.name = name
+    this.memory = {}
   }
 
   /**
@@ -24,5 +25,23 @@ export default class Actor {
     for (const task of tasks) {
       await task.performAs(this)
     }
+  }
+
+  /**
+   * Stores a value in the actor's memory.
+   * @param {string} key - The key to associate with the value.
+   * @param {*} value - The value to store.
+   */
+  remembers(key, value) {
+    this.memory[key] = value
+  }
+
+  /**
+   * Retrieves a value from the actor's memory.
+   * @param {string} key - The key associated with the value.
+   * @returns {*} The value stored in memory, or undefined if not found.
+   */
+  recalls(key) {
+    return this.memory[key]
   }
 }
