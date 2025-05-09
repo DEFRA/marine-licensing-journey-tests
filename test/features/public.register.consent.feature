@@ -36,6 +36,7 @@ Feature: Public Register Consent
     When the "Public register" task is selected
     Then the page is pre-populated with the previously entered information
 
+  @run-only
   Scenario: Do not need to provide a reason when allowing information to be added to the public register
     Given the Public register page is displayed
     When choosing to allow information to be added to the public register by selecting “No”

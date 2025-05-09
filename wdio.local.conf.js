@@ -53,7 +53,9 @@ export const config = {
       }
     ]
   ],
-
+  beforeScenario: async function () {
+    await browser.reloadSession()
+  },
   /**
    * This cucumber hook executes after a scenario and attaches a screenshot
    * to the report if the scenario has failed
@@ -64,7 +66,6 @@ export const config = {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
     }
-    await browser.reloadSession()
   },
 
   /**

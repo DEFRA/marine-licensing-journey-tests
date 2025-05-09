@@ -16,7 +16,8 @@ import {
   SelectTheTask,
   EnsureThatPageHeading,
   EnsureTaskStatus,
-  EnsurePublicRegisterTask
+  EnsurePublicRegisterTask,
+  EnsureReasonTextBox
 } from '~/test-infrastructure/screenplay'
 
 Given('the Public register page is displayed', async function () {
@@ -166,7 +167,7 @@ Then(
 Then(
   'the option to provide a reason for withholding information is not available',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    await this.actor.attemptsTo(EnsureReasonTextBox.isNotDisplayed())
   }
 )
 

@@ -144,4 +144,8 @@ export default class BrowseTheWeb extends Ability {
     const isSelected = await this.browser.$(locator).isSelected()
     await expect(isSelected).toBe(false)
   }
+
+  async isDisplayed(locator) {
+    return await this.browser.$(locator).isDisplayed()
+  }
 }
