@@ -13,7 +13,7 @@ import {
   CompleteProjectName,
   BrowseTheWeb,
   SelectTheTask,
-  EnsureThatPageHeadingIs
+  EnsureThatPageHeading
 } from '~/test-infrastructure/screenplay'
 import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
@@ -110,7 +110,7 @@ Then('the public register information is saved', async function () {
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    this.actor.attemptsTo(EnsureThatPageHeadingIs.is(this.projectName))
+    this.actor.attemptsTo(EnsureThatPageHeading.is(this.projectName))
   }
 )
 
