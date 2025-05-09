@@ -1,7 +1,5 @@
 import Task from '../tasks/task'
 
-import { expect } from 'chai'
-
 export default class EnsurePageHeadingIs extends Task {
   /**
    * Description placeholder
@@ -33,7 +31,7 @@ export default class EnsurePageHeadingIs extends Task {
    * @returns {*}
    */
   async performAs(actor) {
-    const title = await actor.ability.getHeading()
-    expect(title).to.equal(this.expectation)
+    const browseTheWeb = actor.ability
+    await browseTheWeb.expectElementToContainText('h1', this.expectation)
   }
 }

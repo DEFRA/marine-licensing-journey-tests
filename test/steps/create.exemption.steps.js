@@ -68,16 +68,22 @@ Then('the error {string} is displayed', async function (errorMessage) {
 })
 
 Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatPageHeading.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the project name is pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectName.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the new project name is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(EnsureThatProjectName.is(this.projectName))
+  await this.actor.attemptsTo(
+    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+  )
 })
 
 Then('the Project name task status is {string}', async function (taskStatus) {

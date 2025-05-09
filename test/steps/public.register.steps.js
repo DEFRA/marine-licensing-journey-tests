@@ -19,14 +19,18 @@ import {
   EnsurePublicRegisterTask,
   EnsureReasonTextBox
 } from '~/test-infrastructure/screenplay'
+import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-  this.projectName = faker.lorem.words(5)
-  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+  this.actor.remembers('projectName', faker.lorem.words(5))
+  await this.actor.attemptsTo(
+    CompleteProjectName.with(this.actor.recalls('projectName'))
+  )
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
 })
 
 Given('the Public register task has been completed', async function () {
@@ -117,7 +121,9 @@ When('completing the public register task', async function () {
 When(
   'the “Save and continue” button is selected without choosing a radio option',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    const browseTheWeb = this.actor.ability
+    await takeScreenshot()
+    browseTheWeb.clickSaveAndContinue()
   }
 )
 
@@ -142,7 +148,9 @@ Then('the public register information is saved', async function () {
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    this.actor.attemptsTo(EnsureThatPageHeading.is(this.projectName))
+    this.actor.attemptsTo(
+      EnsureThatPageHeading.is(this.actor.recalls('projectName'))
+    )
   }
 )
 
@@ -191,6 +199,6 @@ Then('any changes made are not saved', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
-Then('the error message {string} is displayed', (s) => {
-  // Write code here that turns the phrase above into concrete actions
+Then('the error message {string} is displayed', async function (s) {
+  await takeScreenshot()
 })
