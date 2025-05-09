@@ -1,5 +1,5 @@
 export default class PublicRegisterPage {
-  static url = ''
-  static allowPublicRegisterOption = '#withhold-information'
-  static withholdReason = '#withhold-reason'
+  static consent = '#consent'
+  static withhold = '#consent-2'
+  static withholdReason = '#reason-text'
 }

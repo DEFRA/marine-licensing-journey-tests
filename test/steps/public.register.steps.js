@@ -11,14 +11,20 @@ import {
   AllowDetailsToBeAddedToPublicRegister,
   ApplyForExemption,
   CompleteProjectName,
-  EnsurePageHeadingIs,
-  BrowseTheWeb
+  BrowseTheWeb,
+  SelectTheTask,
+  EnsureThatPageHeadingIs
 } from '~/test-infrastructure/screenplay'
+import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  await this.actor.attemptsTo(ApplyForExemption.where(PublicRegisterPage.url)) // this might not be right now
+  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+  this.projectName = faker.lorem.words(5)
+  await this.actor.attemptsTo(CompleteProjectName.with(this.projectName))
+  await takeScreenshot()
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
 })
 
 Given('the Public register task has been completed', async function () {
@@ -46,32 +52,35 @@ When(
 When(
   'the “Save and continue” button is selected after choosing “Yes” without providing a reason',
   async function () {
-    this.actor.attemptsTo(AllowDetailsToBeAddedToPublicRegister.where(true))
+    this.actor.attemptsTo(
+      AllowDetailsToBeAddedToPublicRegister.where(PublicRegisterPage.withhold)
+    )
   }
 )
 
 When(
   'the “Save and continue” button is selected with a reason exceeding {int} characters',
-  (int) => {
-    // Write code here that turns the phrase above into concrete actions
-  }
-)
-
-When(
-  'choosing to withhold information from the public register by selecting “Yes”',
-  async function () {
-    // Write code here that turns the phrase above into concrete actions
+  (numberOfCharacters) => {
+    const reason = faker.lorem.numberOfCharacters(numberOfCharacters + 1)
+    this.actor.attemptsTo(
+      AllowDetailsToBeAddedToPublicRegister.where(
+        PublicRegisterPage.withhold,
+        reason
+      )
+    )
   }
 )
 
 When(
   'choosing to allow information to be added to the public register by selecting “No”',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
+    this.actor.attemptsTo(
+      AllowDetailsToBeAddedToPublicRegister.where(PublicRegisterPage.consent)
+    )
   }
 )
 
-When('selecting the {string} option', (s) => {
+When('selecting the {string} option', (option) => {
   // Write code here that turns the phrase above into concrete actions
 })
 
@@ -101,7 +110,7 @@ Then('the public register information is saved', async function () {
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    this.actor.attemptsTo(EnsurePageHeadingIs.is(this.projectName))
+    this.actor.attemptsTo(EnsureThatPageHeadingIs.is(this.projectName))
   }
 )
 
