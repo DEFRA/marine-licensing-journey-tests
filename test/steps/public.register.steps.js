@@ -1,26 +1,25 @@
 import { Given, Then, When } from '@cucumber/cucumber'
-import { browser } from '@wdio/globals'
 import { faker } from '@faker-js/faker'
+import { browser } from '@wdio/globals'
 
 import {
-  PublicRegisterPage,
   ProjectNamePage,
+  PublicRegisterPage,
   TaskListPage
 } from '~/test-infrastructure/pages'
 import {
   Actor,
-  CompletePublicRegisterTask,
   ApplyForExemption,
-  CompleteProjectName,
   BrowseTheWeb,
-  SelectTheTask,
-  EnsureThatPageHeading,
-  EnsureTaskStatus,
+  CompleteProjectName,
+  CompletePublicRegisterTask,
+  EnsureErrorDisplayed,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
-  EnsureErrorDisplayed
+  EnsureTaskStatus,
+  EnsureThatPageHeading,
+  SelectTheTask
 } from '~/test-infrastructure/screenplay'
-import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
@@ -49,7 +48,7 @@ When(
   async function () {
     this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
     await this.actor.attemptsTo(
-      CompletePublicRegisterTask.where(
+      CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice')
       )
     )
@@ -65,7 +64,7 @@ When(
       'Sensitive information'
     )
     await this.actor.attemptsTo(
-      CompletePublicRegisterTask.where(
+      CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice'),
         this.actor.recalls('publicRegisterWithholdReason')
       )
@@ -76,9 +75,13 @@ When(
 When(
   'the “Save and continue” button is selected after choosing “Yes” without providing a reason',
   async function () {
-    this.actor.attemptsTo(
-      CompletePublicRegisterTask.has(PublicRegisterPage.withhold)
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andSavingWith(
+        this.actor.recalls('publicRegisterChoice')
+      )
     )
+    await this.actor.ability.clickSaveAndContinue()
   }
 )
 
@@ -87,11 +90,11 @@ When(
   async function (numberOfCharacters) {
     this.actor.remembers(
       'publicRegisterWithholdReason',
-      faker.lorem.numberOfCharacters(numberOfCharacters + 1)
+      faker.lorem.words(500).slice(0, numberOfCharacters + 1)
     )
 
     this.actor.attemptsTo(
-      CompletePublicRegisterTask.where(
+      CompletePublicRegisterTask.andSavingWith(
         PublicRegisterPage.withhold,
         this.actor.recalls('publicRegisterWithholdReason')
       )
@@ -104,35 +107,26 @@ When(
   async function () {
     this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
     this.actor.attemptsTo(
-      CompletePublicRegisterTask.where(
+      CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice')
       )
     )
   }
 )
 
-When('selecting the {string} option', (option) => {
-  // Write code here that turns the phrase above into concrete actions
-})
-
-When('completing the public register task', async function () {
-  // Write code here that turns the phrase above into concrete actions
-})
-
 When(
   'the “Save and continue” button is clicked without choosing a radio option',
   async function () {
     const browseTheWeb = this.actor.ability
-    await takeScreenshot()
     browseTheWeb.clickSaveAndContinue()
   }
 )
 
-When('selecting the “Back” link', async function () {
+When('changing the public register information', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
-When('changing the public register information', async function () {
+When('completing the public register task but cancelling out', () => {
   // Write code here that turns the phrase above into concrete actions
 })
 
