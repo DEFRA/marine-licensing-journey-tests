@@ -26,7 +26,6 @@ Feature: Public Register Consent
     When the "Public register" task is selected
     Then the project name is displayed on the Public register page
 
-  @wip
   Scenario: Public register task is pre-populated if information has been previously saved
     Given the Public register task has been completed
     When the "Public register" task is selected

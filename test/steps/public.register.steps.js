@@ -41,6 +41,13 @@ Given('the Public register task has been completed', async function () {
   await this.actor.attemptsTo(
     CompleteProjectName.with(this.actor.recalls('projectName'))
   )
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+  await this.actor.attemptsTo(
+    CompletePublicRegisterTask.andSavingWith(
+      this.actor.recalls('publicRegisterChoice')
+    )
+  )
 })
 
 When(
@@ -180,14 +187,12 @@ Then('no information is pre-populated', async function () {
 Then(
   'the page is pre-populated with the previously entered information',
   async function () {
-    // Write code here that turns the phrase above into concrete actions
-  }
-)
-
-Then(
-  'the option to provide a reason for withholding information is available',
-  async function () {
-    // Write code here that turns the phrase above into concrete actions
+    await this.actor.attemptsTo(
+      EnsurePublicRegisterTask.hasBeenCompletedWith(
+        this.actor.recalls('publicRegisterChoice'),
+        this.actor.recalls('publicRegisterWithholdReason')
+      )
+    )
   }
 )
 
