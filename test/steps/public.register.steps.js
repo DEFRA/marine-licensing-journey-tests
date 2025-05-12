@@ -17,7 +17,8 @@ import {
   EnsureThatPageHeading,
   EnsureTaskStatus,
   EnsurePublicRegisterTask,
-  EnsureReasonTextBox
+  EnsureReasonTextBox,
+  EnsureErrorDisplayed
 } from '~/test-infrastructure/screenplay'
 import { takeScreenshot } from '~/test-infrastructure/capture/screenshot'
 
@@ -119,7 +120,7 @@ When('completing the public register task', async function () {
 })
 
 When(
-  'the “Save and continue” button is selected without choosing a radio option',
+  'the “Save and continue” button is clicked without choosing a radio option',
   async function () {
     const browseTheWeb = this.actor.ability
     await takeScreenshot()
@@ -199,6 +200,8 @@ Then('any changes made are not saved', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
-Then('the error message {string} is displayed', async function (s) {
-  await takeScreenshot()
+Then('the error message {string} is displayed', async function (errorMessage) {
+  await this.actor.attemptsTo(
+    EnsureErrorDisplayed.is(PublicRegisterPage.consentError, errorMessage)
+  )
 })

@@ -13,7 +13,8 @@ export const config = {
   runner: 'local',
   specs: ['test/features/*.feature'],
   cucumberOpts: {
-    require: ['test/steps/*.js']
+    require: ['test/steps/*.js'],
+    tags: ['not @wip']
   },
   maxInstances: 1,
   capabilities: debug
