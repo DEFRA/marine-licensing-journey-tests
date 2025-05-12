@@ -129,10 +129,6 @@ When(
   }
 )
 
-When('changing the public register information', async function () {
-  // Write code here that turns the phrase above into concrete actions
-})
-
 When(
   'completing the public register task but cancelling out',
   async function () {
@@ -156,6 +152,20 @@ When(
       )
     )
     await this.actor.ability.clickBack()
+  }
+)
+
+When(
+  'changing the public register information but cancelling out',
+  async function () {
+    throw new Error('Not yet implemented')
+  }
+)
+
+When(
+  'changing the public register information but selecting to go back',
+  async function () {
+    throw new Error('Not yet implemented')
   }
 )
 
@@ -237,3 +247,7 @@ Then(
     )
   }
 )
+
+Then('the previously saved changes are pre-populated', async function () {
+  throw new Error('Not yet implemented')
+})
