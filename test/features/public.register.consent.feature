@@ -51,32 +51,30 @@ Feature: Public Register Consent
     When the “Save and continue” button is selected with a reason exceeding 1000 characters
     Then the error message "Details of why the information should be witheld must be 1000 characters or less" is displayed
 
-  @wip
   Scenario: Cancelling out of the public register task when no information has previously been saved
     Given the Public register page is displayed
     When completing the public register task but cancelling out
     Then the task list page is displayed
-    And the Public register task status is "Not started"
-    And any changes made on the page during this visit are not saved
+    And the Public register task status is "Incomplete"
+    And any changes made on the public register page before cancelling are not saved
 
-  @wip
   Scenario: Using the back link from the public register task when no information has previously been saved
     Given the Public register page is displayed
     When completing the public register task but selecting to go back
     Then the task list page is displayed
-    And the Public register task status is "Not started"
-    And any changes made on the page during this visit are not saved
+    And the Public register task status is "Incomplete"
+    And any changes made on the public register page before going back are not saved
 
   @wip
   Scenario: Cancelling out of the public register task when information has previously been saved
     Given the Public register task has been completed
     When changing the public register information but cancelling out
     Then the Public register task status is "Completed"
-    And any changes made are not saved
+    And the previously saved changes are pre-populated
 
   @wip
   Scenario: Using the back link from the public register task when information has previously been saved
     Given the Public register task has been completed
     When changing the public register information but selecting to go back
     Then the Public register task status is "Completed"
-    And any changes made are not saved
+    And the previously saved changes are pre-populated

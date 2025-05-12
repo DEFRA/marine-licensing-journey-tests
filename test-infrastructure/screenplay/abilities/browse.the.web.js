@@ -148,4 +148,12 @@ export default class BrowseTheWeb extends Ability {
   async isDisplayed(locator) {
     return await this.browser.$(locator).isDisplayed()
   }
+
+  async clickBack() {
+    await this.browser.$('//a[text()="Back"]').click()
+  }
+
+  async clickCancel() {
+    await this.browser.$('//a[text()="Cancel"]').click()
+  }
 }

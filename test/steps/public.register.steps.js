@@ -126,18 +126,40 @@ When('changing the public register information', async function () {
   // Write code here that turns the phrase above into concrete actions
 })
 
-When('completing the public register task but cancelling out', () => {
-  // Write code here that turns the phrase above into concrete actions
-})
+When(
+  'completing the public register task but cancelling out',
+  async function () {
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andNotSavingWith(
+        this.actor.recalls('publicRegisterChoice')
+      )
+    )
+    await this.actor.ability.clickCancel()
+  }
+)
+
+When(
+  'completing the public register task but selecting to go back',
+  async function () {
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andNotSavingWith(
+        this.actor.recalls('publicRegisterChoice')
+      )
+    )
+    await this.actor.ability.clickBack()
+  }
+)
 
 Then('the public register information is saved', async function () {
-  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  await this.actor.attemptsTo(
-    EnsurePublicRegisterTask.hasBeenCompletedWith(
-      this.actor.recalls('publicRegisterChoice'),
-      this.actor.recalls('publicRegisterWithholdReason')
+  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+  this.actor.attemptsTo(
+    CompletePublicRegisterTask.andNotSavingWith(
+      this.actor.recalls('publicRegisterChoice')
     )
   )
+  this.actor.ability.clickBack()
 })
 
 Then(
@@ -150,7 +172,9 @@ Then(
 )
 
 Then('no information is pre-populated', async function () {
-  this.actor.attemptsTo(EnsurePublicRegisterTask.hasNoInformationCompleted())
+  await this.actor.attemptsTo(
+    EnsurePublicRegisterTask.hasNoInformationCompleted()
+  )
 })
 
 Then(
@@ -183,19 +207,28 @@ Then(
   }
 )
 
-Then(
-  'any changes made on the page during this visit are not saved',
-  async function () {
-    // Write code here that turns the phrase above into concrete actions
-  }
-)
-
-Then('any changes made are not saved', async function () {
-  // Write code here that turns the phrase above into concrete actions
-})
-
 Then('the error message {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
     EnsureErrorDisplayed.is(PublicRegisterPage.consentError, errorMessage)
   )
 })
+
+Then(
+  'any changes made on the public register page before going back are not saved',
+  async function () {
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    await this.actor.attemptsTo(
+      EnsurePublicRegisterTask.hasNoInformationCompleted()
+    )
+  }
+)
+
+Then(
+  'any changes made on the public register page before cancelling are not saved',
+  async function () {
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    await this.actor.attemptsTo(
+      EnsurePublicRegisterTask.hasNoInformationCompleted()
+    )
+  }
+)
