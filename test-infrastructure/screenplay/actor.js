@@ -27,6 +27,11 @@ export default class Actor {
     return this.memory[key]
   }
 
+  forgets(key) {
+    delete this.memory[key]
+    attachJson(this.toJson(), `actor-memory-removed-${key}.json`)
+  }
+
   toJson() {
     const memoryWithDescriptions = { ...this.memory }
 

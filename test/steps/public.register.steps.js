@@ -57,6 +57,28 @@ Given(
   }
 )
 
+Given(
+  'the Public register task has been completed to withhold information',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+    this.actor.remembers('projectName', faker.lorem.words(5))
+    await this.actor.attemptsTo(
+      CompleteProjectName.with(this.actor.recalls('projectName'))
+    )
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
+    this.actor.remembers('publicRegisterWithholdReason', faker.lorem.words(5))
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andSavingWith(
+        this.actor.recalls('publicRegisterChoice'),
+        this.actor.recalls('publicRegisterWithholdReason')
+      )
+    )
+  }
+)
+
 When(
   'choosing not to withhold information from the public register',
   async function () {
@@ -188,6 +210,30 @@ When(
     await this.actor.attemptsTo(ClickBack.now())
   }
 )
+
+When('changing the public register information to withhold', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
+  this.actor.remembers('publicRegisterWithholdReason', faker.lorem.words(5))
+  await this.actor.attemptsTo(
+    CompletePublicRegisterTask.andSavingWith(
+      this.actor.recalls('publicRegisterChoice'),
+      this.actor.recalls('publicRegisterWithholdReason')
+    )
+  )
+})
+
+When('changing the public register information to consent', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+  this.actor.forgets('publicRegisterWithholdReason', '')
+  await this.actor.attemptsTo(
+    CompletePublicRegisterTask.andSavingWith(
+      this.actor.recalls('publicRegisterChoice'),
+      this.actor.recalls('publicRegisterWithholdReason')
+    )
+  )
+})
 
 Then('the public register information is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))

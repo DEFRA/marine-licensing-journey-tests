@@ -16,6 +16,16 @@ Feature: Public Register Consent
     Then the Public register task status is "Completed"
     And the public register information is saved
 
+  Scenario: Changing previously saved information from consent to withhold
+    Given the Public register task has been completed with consent
+    When changing the public register information to withhold
+    Then the public register information is saved
+
+  Scenario: Changing previously saved information from withhold to consent
+    Given the Public register task has been completed to withhold information
+    When changing the public register information to consent
+    Then the public register information is saved
+
   Scenario: Public register task is not pre-populated if no information has been previously saved
     Given a notification has been created with a valid project name
     When the "Public register" task is selected
