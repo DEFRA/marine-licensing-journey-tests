@@ -10,24 +10,11 @@ export default class EnsureReasonTextBox extends Task {
     return new EnsureReasonTextBox(false)
   }
 
-  /**
-   * Creates an instance of EnsureReasonTextBox.
-   *
-   * @constructor
-   * @param {boolean} isDisplayed
-   */
   constructor(isDisplayed) {
     super()
     this.isDisplayed = isDisplayed
   }
 
-  /**
-   * Checks the public register task details.
-   *
-   * @async
-   * @param {Actor} actor
-   * @returns {*}
-   */
   async performAs(actor) {
     const browseTheWeb = actor.ability
     if (this.isDisplayed) {

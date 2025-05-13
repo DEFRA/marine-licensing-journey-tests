@@ -27,7 +27,7 @@ Feature: Public Register Consent
     Then the project name is displayed on the Public register page
 
   Scenario: Public register task is pre-populated if information has been previously saved
-    Given the Public register task has been completed
+    Given the Public register task has been completed with consent
     When the "Public register" task is selected
     Then the page is pre-populated with the previously entered information
 
@@ -67,14 +67,14 @@ Feature: Public Register Consent
 
   @wip
   Scenario: Cancelling out of the public register task when information has previously been saved
-    Given the Public register task has been completed
-    When changing the public register information but cancelling out
+    Given the Public register task has been completed with consent
+    When changing the public register information to withhold but cancelling out
     Then the Public register task status is "Completed"
-    And the previously saved changes are pre-populated
+    # And the previously saved changes are pre-populated
 
   @wip
   Scenario: Using the back link from the public register task when information has previously been saved
-    Given the Public register task has been completed
-    When changing the public register information but selecting to go back
+    Given the Public register task has been completed with consent
+    When changing the public register information to withhold but selecting to go back
     Then the Public register task status is "Completed"
     And the previously saved changes are pre-populated

@@ -57,26 +57,14 @@ export const config = {
   beforeScenario: async function () {
     await browser.reloadSession()
   },
-  /**
-   * This cucumber hook executes after a scenario and attaches a screenshot
-   * to the report if the scenario has failed
-   *
-   * @param {object} scenario the cucumber scenario context
-   */
+  afterStep: async function (step, scenario, result) {
+    await browser.takeScreenshot()
+  },
   afterScenario: async function (scenario) {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
     }
   },
-
-  /**
-   * Gets executed after all workers got shut down and the process is about to exit. An error
-   * thrown in the onComplete hook will result in the test run failing.
-   * @param {object} exitCode 0 - success, 1 - fail
-   * @param {object} config wdio configuration object
-   * @param {Array.<Object>} capabilities list of capabilities details
-   * @param {<Object>} results object containing test results
-   */
   onComplete: function (exitCode, config, capabilities, results) {
     const reportError = new Error('Could not generate Allure report')
     const generation = allure(['generate', 'allure-results', '--clean'])

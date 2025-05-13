@@ -33,22 +33,25 @@ Given('the Public register page is displayed', async function () {
   await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
 })
 
-Given('the Public register task has been completed', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(new BrowseTheWeb(browser))
-  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-  this.actor.remembers('projectName', faker.lorem.words(5))
-  await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('projectName'))
-  )
-  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
-  await this.actor.attemptsTo(
-    CompletePublicRegisterTask.andSavingWith(
-      this.actor.recalls('publicRegisterChoice')
+Given(
+  'the Public register task has been completed with consent',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+    this.actor.remembers('projectName', faker.lorem.words(5))
+    await this.actor.attemptsTo(
+      CompleteProjectName.with(this.actor.recalls('projectName'))
     )
-  )
-})
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andSavingWith(
+        this.actor.recalls('publicRegisterChoice')
+      )
+    )
+  }
+)
 
 When(
   'choosing not to withhold information from the public register',
@@ -155,21 +158,50 @@ When(
   }
 )
 
+When(
+  'changing the public register information to withhold but cancelling out',
+  async function () {
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andNotSavingWith(
+        PublicRegisterPage.withhold,
+        faker.lorem.words(5)
+      )
+    )
+    await this.actor.ability.clickCancel()
+  }
+)
+
+When(
+  'changing the public register information to withhold but selecting to go back',
+  async function () {
+    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+    await this.actor.attemptsTo(
+      CompletePublicRegisterTask.andNotSavingWith(
+        PublicRegisterPage.withhold,
+        faker.lorem.words(5)
+      )
+    )
+    await this.actor.ability.clickBack()
+  }
+)
+
 Then('the public register information is saved', async function () {
-  this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
-  this.actor.attemptsTo(
-    CompletePublicRegisterTask.andNotSavingWith(
-      this.actor.recalls('publicRegisterChoice')
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  await this.actor.attemptsTo(
+    EnsurePublicRegisterTask.hasBeenCompletedWith(
+      this.actor.recalls('publicRegisterChoice'),
+      this.actor.recalls('publicRegisterWithholdReason')
     )
   )
-  this.actor.ability.clickBack()
 })
 
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    this.actor.attemptsTo(
-      EnsureThatPageHeading.is(this.actor.recalls('projectName'))
+    await this.actor.ability.expectElementToContainText(
+      PublicRegisterPage.projectName,
+      this.actor.recalls('projectName')
     )
   }
 )

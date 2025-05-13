@@ -5,4 +5,5 @@ export default class PublicRegisterPage {
   static saveAndContinue = 'button[type="submit"]'
   static consentError = '#consent-error'
   static reasonError = '#reason-error'
+  static projectName = 'span.govuk-caption-l'
 }
