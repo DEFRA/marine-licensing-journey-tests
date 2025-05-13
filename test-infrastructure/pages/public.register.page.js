@@ -4,4 +4,5 @@ export default class PublicRegisterPage {
   static withholdReason = '#reason'
   static saveAndContinue = 'button[type="submit"]'
   static consentError = '#consent-error'
+  static reasonError = '#reason-error'
 }

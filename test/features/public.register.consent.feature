@@ -33,23 +33,23 @@ Feature: Public Register Consent
 
   Scenario: Do not need to provide a reason when allowing information to be added to the public register
     Given the Public register page is displayed
-    When choosing to allow information to be added to the public register by selecting “No”
+    When choosing to allow information to be added to the public register
     Then the option to provide a reason for withholding information is not available
+
+  Scenario: Validate mandatory reason text when selecting Yes
+    Given the Public register page is displayed
+    When the Save and continue button is selected after choosing Yes without providing a reason
+    Then the reason error message "Details of why the information should be withheld cannot be blank" is displayed
 
   Scenario: Validate mandatory radio button selection
     Given the Public register page is displayed
-    When the “Save and continue” button is clicked without choosing a radio option
-    Then the error message "Select whether you believe your information should be withheld from the public register" is displayed
-
-  Scenario: Validate mandatory reason text when selecting “Yes”
-    Given the Public register page is displayed
-    When the “Save and continue” button is selected after choosing “Yes” without providing a reason
-    Then the error message "Provide details of why the information should be withheld" is displayed
+    When the Save and continue button is clicked without choosing a radio option
+    Then the consent error message "Select whether you believe your information should be withheld from the public register" is displayed
 
   Scenario: Validate maximum length of reason text
     Given the Public register page is displayed
-    When the “Save and continue” button is selected with a reason exceeding 1000 characters
-    Then the error message "Details of why the information should be witheld must be 1000 characters or less" is displayed
+    When the Save and continue button is selected with a reason exceeding 1000 characters
+    Then the reason error message "Details of why the information should be witheld must be 1000 characters or less" is displayed
 
   Scenario: Cancelling out of the public register task when no information has previously been saved
     Given the Public register page is displayed

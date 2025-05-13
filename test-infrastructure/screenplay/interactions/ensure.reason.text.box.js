@@ -30,8 +30,10 @@ export default class EnsureReasonTextBox extends Task {
    */
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    expect(
+    if (this.isDisplayed) {
       await browseTheWeb.isDisplayed(PublicRegisterPage.withholdReason)
-    ).toEqual(this.isDisplayed)
+    } else {
+      await browseTheWeb.isNotDisplayed(PublicRegisterPage.withholdReason)
+    }
   }
 }

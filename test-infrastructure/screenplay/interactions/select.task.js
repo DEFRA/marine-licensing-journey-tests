@@ -30,6 +30,6 @@ export default class SelectTheTask extends Task {
    */
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    browseTheWeb.click(`a.govuk-task-list__link=${this.taskName}`)
+    browseTheWeb.click(`//a[normalize-space(text())="${this.taskName}"]`)
   }
 }

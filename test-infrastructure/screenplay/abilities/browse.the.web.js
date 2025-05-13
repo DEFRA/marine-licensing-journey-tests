@@ -1,5 +1,5 @@
-import Ability from '../abilities/ability'
 import { expect } from '~/node_modules/@wdio/globals/build/index'
+import Ability from '../abilities/ability'
 
 /**
  * Represents an ability to browse the web using a browser instance.
@@ -105,6 +105,7 @@ export default class BrowseTheWeb extends Ability {
    * @returns {*}
    */
   async expectElementToContainText(locator, expectedSubstring) {
+    await this.browser.$(locator).waitForExist()
     await expect($(locator)).toHaveText(
       expect.stringContaining(expectedSubstring)
     )
@@ -146,7 +147,11 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async isDisplayed(locator) {
-    return await this.browser.$(locator).isDisplayed()
+    await expect(this.browser.$(locator)).toBeDisplayed()
+  }
+
+  async isNotDisplayed(locator) {
+    await expect(this.browser.$(locator)).not.toBeDisplayed()
   }
 
   async clickBack() {

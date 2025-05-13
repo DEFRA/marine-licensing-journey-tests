@@ -80,7 +80,7 @@ When(
 )
 
 When(
-  'the “Save and continue” button is selected after choosing “Yes” without providing a reason',
+  'the Save and continue button is selected after choosing Yes without providing a reason',
   async function () {
     this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
     await this.actor.attemptsTo(
@@ -93,14 +93,14 @@ When(
 )
 
 When(
-  'the “Save and continue” button is selected with a reason exceeding {int} characters',
+  'the Save and continue button is selected with a reason exceeding {int} characters',
   async function (numberOfCharacters) {
     this.actor.remembers(
       'publicRegisterWithholdReason',
       faker.lorem.words(500).slice(0, numberOfCharacters + 1)
     )
 
-    this.actor.attemptsTo(
+    await this.actor.attemptsTo(
       CompletePublicRegisterTask.andSavingWith(
         PublicRegisterPage.withhold,
         this.actor.recalls('publicRegisterWithholdReason')
@@ -110,10 +110,10 @@ When(
 )
 
 When(
-  'choosing to allow information to be added to the public register by selecting “No”',
+  'choosing to allow information to be added to the public register',
   async function () {
     this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
-    this.actor.attemptsTo(
+    await this.actor.attemptsTo(
       CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice')
       )
@@ -122,10 +122,10 @@ When(
 )
 
 When(
-  'the “Save and continue” button is clicked without choosing a radio option',
+  'the Save and continue button is clicked without choosing a radio option',
   async function () {
     const browseTheWeb = this.actor.ability
-    browseTheWeb.clickSaveAndContinue()
+    await browseTheWeb.clickSaveAndContinue()
   }
 )
 
@@ -152,20 +152,6 @@ When(
       )
     )
     await this.actor.ability.clickBack()
-  }
-)
-
-When(
-  'changing the public register information but cancelling out',
-  async function () {
-    throw new Error('Not yet implemented')
-  }
-)
-
-When(
-  'changing the public register information but selecting to go back',
-  async function () {
-    throw new Error('Not yet implemented')
   }
 )
 
@@ -222,11 +208,14 @@ Then(
   }
 )
 
-Then('the error message {string} is displayed', async function (errorMessage) {
-  await this.actor.attemptsTo(
-    EnsureErrorDisplayed.is(PublicRegisterPage.consentError, errorMessage)
-  )
-})
+Then(
+  'the consent error message {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(PublicRegisterPage.consentError, errorMessage)
+    )
+  }
+)
 
 Then(
   'any changes made on the public register page before going back are not saved',
@@ -248,6 +237,11 @@ Then(
   }
 )
 
-Then('the previously saved changes are pre-populated', async function () {
-  throw new Error('Not yet implemented')
-})
+Then(
+  'the reason error message {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(PublicRegisterPage.reasonError, errorMessage)
+    )
+  }
+)
