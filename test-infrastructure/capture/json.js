@@ -1,8 +1,8 @@
 import allure from '@wdio/allure-reporter'
 
-export const attachJson = (result) => {
+export const attachJson = (result, name = 'result') => {
   allure.addAttachment(
-    'result',
+    name,
     JSON.stringify(result, null, 2),
     'application/json'
   )
