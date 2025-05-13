@@ -1,4 +1,4 @@
-@issue:ML-12
+@issue=ML-12
 Feature: Public Register Consent
   As an applicant
   I want to state whether I consent for my marine project to be shared on the public register

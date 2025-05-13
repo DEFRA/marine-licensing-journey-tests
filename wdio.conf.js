@@ -16,7 +16,6 @@ export const config = {
   runner: 'local',
   baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
 
-  // Connection to remote chromedriver
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
@@ -67,7 +66,6 @@ export const config = {
 
   reporters: [
     [
-      // Spec reporter provides rolling output to the logger so you can see it in-progress
       'spec',
       {
         addConsoleLogs: true,
@@ -76,7 +74,6 @@ export const config = {
       }
     ],
     [
-      // Allure is used to generate the final HTML report
       'allure',
       {
         outputDir: 'allure-results',
@@ -86,27 +83,18 @@ export const config = {
       }
     ]
   ],
-
-  /**
-   * This cucumber hook executes after a scenario and attaches a screenshot
-   * to the report if the scenario has failed
-   *
-   * @param {object} scenario the cucumber scenario context
-   */
+  beforeScenario: async function () {
+    await browser.reloadSession()
+  },
+  afterStep: async function () {
+    await browser.takeScreenshot()
+  },
   afterScenario: async function (scenario) {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
     }
   },
 
-  /**
-   * Gets executed after all workers got shut down and the process is about to exit. An error
-   * thrown in the onComplete hook will result in the test run failing.
-   * @param {object} exitCode 0 - success, 1 - fail
-   * @param {object} config wdio configuration object
-   * @param {Array.<Object>} capabilities list of capabilities details
-   * @param {<Object>} results object containing test results
-   */
   onComplete: function (exitCode, config, capabilities, results) {
     // !Do Not Remove! Required for test status to show correctly in portal.
     if (results?.failed && results.failed > 0) {

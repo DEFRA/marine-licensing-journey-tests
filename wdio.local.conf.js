@@ -57,7 +57,7 @@ export const config = {
   beforeScenario: async function () {
     await browser.reloadSession()
   },
-  afterStep: async function (step, scenario, result) {
+  afterStep: async function () {
     await browser.takeScreenshot()
   },
   afterScenario: async function (scenario) {
