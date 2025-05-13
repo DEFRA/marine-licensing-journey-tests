@@ -277,3 +277,13 @@ Then(
     )
   }
 )
+
+Then('the previously saved changes are pre-populated', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  await this.actor.attemptsTo(
+    EnsurePublicRegisterTask.hasBeenCompletedWith(
+      this.actor.recalls('publicRegisterChoice'),
+      this.actor.recalls('publicRegisterWithholdReason')
+    )
+  )
+})
