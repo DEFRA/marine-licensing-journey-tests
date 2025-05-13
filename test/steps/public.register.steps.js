@@ -21,7 +21,8 @@ import {
   SelectTheTask,
   ClickBack,
   ClickSaveAndContinue,
-  ClickCancel
+  ClickCancel,
+  EnsureProjectNameDisplayedAsCaption
 } from '~/test-infrastructure/screenplay'
 
 Given('the Public register page is displayed', async function () {
@@ -201,9 +202,8 @@ Then('the public register information is saved', async function () {
 Then(
   'the project name is displayed on the Public register page',
   async function () {
-    await this.actor.ability.expectElementToContainText(
-      PublicRegisterPage.projectName,
-      this.actor.recalls('projectName')
+    await this.actor.attemptsTo(
+      EnsureProjectNameDisplayedAsCaption.is(this.actor.recalls('projectName'))
     )
   }
 )
