@@ -18,7 +18,10 @@ import {
   EnsureReasonTextBox,
   EnsureTaskStatus,
   EnsureThatPageHeading,
-  SelectTheTask
+  SelectTheTask,
+  ClickBack,
+  ClickSaveAndContinue,
+  ClickCancel
 } from '~/test-infrastructure/screenplay'
 
 Given('the Public register page is displayed', async function () {
@@ -91,7 +94,7 @@ When(
         this.actor.recalls('publicRegisterChoice')
       )
     )
-    await this.actor.ability.clickSaveAndContinue()
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
 
@@ -127,8 +130,7 @@ When(
 When(
   'the Save and continue button is clicked without choosing a radio option',
   async function () {
-    const browseTheWeb = this.actor.ability
-    await browseTheWeb.clickSaveAndContinue()
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
 
@@ -141,7 +143,7 @@ When(
         this.actor.recalls('publicRegisterChoice')
       )
     )
-    await this.actor.ability.clickCancel()
+    await this.actor.attemptsTo(ClickCancel.now())
   }
 )
 
@@ -154,7 +156,7 @@ When(
         this.actor.recalls('publicRegisterChoice')
       )
     )
-    await this.actor.ability.clickBack()
+    await this.actor.attemptsTo(ClickBack.now())
   }
 )
 
@@ -168,7 +170,7 @@ When(
         faker.lorem.words(5)
       )
     )
-    await this.actor.ability.clickCancel()
+    await this.actor.attemptsTo(ClickCancel.now())
   }
 )
 
@@ -182,7 +184,7 @@ When(
         faker.lorem.words(5)
       )
     )
-    await this.actor.ability.clickBack()
+    await this.actor.attemptsTo(ClickBack.now())
   }
 )
 
