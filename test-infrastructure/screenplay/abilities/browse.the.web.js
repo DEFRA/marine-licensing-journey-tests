@@ -69,10 +69,10 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async clickBack() {
-    await this.browser.$('//a[text()="Back"]').click()
+    await this.click('//a[text()="Back"]')
   }
 
   async clickCancel() {
-    await this.browser.$('//a[text()="Cancel"]').click()
+    await this.click('//a[text()="Cancel"]')
   }
 }
