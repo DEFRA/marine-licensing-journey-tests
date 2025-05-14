@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@cucumber/cucumber'
+import { Given, When, Then } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import { faker } from '@faker-js/faker'
 
