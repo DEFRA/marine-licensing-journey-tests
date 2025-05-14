@@ -4,8 +4,7 @@ import { browser } from '@wdio/globals'
 
 import {
   ProjectNamePage,
-  PublicRegisterPage,
-  TaskListPage
+  PublicRegisterPage
 } from '~/test-infrastructure/pages'
 import {
   Actor,
@@ -16,7 +15,6 @@ import {
   EnsureErrorDisplayed,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
-  EnsureTaskStatus,
   EnsureThatPageHeading,
   SelectTheTask,
   ClickBack,
@@ -276,15 +274,6 @@ Then(
   'the option to provide a reason for withholding information is not available',
   async function () {
     await this.actor.attemptsTo(EnsureReasonTextBox.isNotDisplayed())
-  }
-)
-
-Then(
-  'the Public register task status is {string}',
-  async function (taskStatus) {
-    await this.actor.attemptsTo(
-      EnsureTaskStatus.is(TaskListPage.publicRegisterTaskStatus, taskStatus)
-    )
   }
 )
 

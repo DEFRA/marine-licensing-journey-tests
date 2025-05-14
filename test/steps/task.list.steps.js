@@ -22,3 +22,12 @@ Then('the Project name task status is {string}', async function (taskStatus) {
     EnsureTaskStatus.is(TaskListPage.projectNameTaskStatus, taskStatus)
   )
 })
+
+Then(
+  'the Public register task status is {string}',
+  async function (taskStatus) {
+    await this.actor.attemptsTo(
+      EnsureTaskStatus.is(TaskListPage.publicRegisterTaskStatus, taskStatus)
+    )
+  }
+)
