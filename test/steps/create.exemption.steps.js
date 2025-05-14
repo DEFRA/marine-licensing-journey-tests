@@ -2,14 +2,12 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import { faker } from '@faker-js/faker'
 
-import { ProjectNamePage, TaskListPage } from '~/test-infrastructure/pages'
+import { ProjectNamePage } from '~/test-infrastructure/pages'
 import {
   Actor,
   BrowseTheWeb,
-  EnsureThatPageHeading,
   EnsureErrorDisplayed,
   EnsureThatProjectName,
-  EnsureTaskStatus,
   SelectTheTask,
   ApplyForExemption,
   CompleteProjectName
@@ -51,10 +49,6 @@ When(
   }
 )
 
-When('the {string} task is selected', async function (taskName) {
-  await this.actor.attemptsTo(SelectTheTask.withName(taskName))
-})
-
 When('the project name is updated', async function () {
   this.actor.remembers('projectName', faker.lorem.words(4))
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
@@ -69,12 +63,6 @@ Then('the error {string} is displayed', async function (errorMessage) {
   )
 })
 
-Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(
-    EnsureThatPageHeading.is(this.actor.recalls('projectName'))
-  )
-})
-
 Then('the project name is pre-populated', async function () {
   await this.actor.attemptsTo(
     EnsureThatProjectName.is(this.actor.recalls('projectName'))
@@ -85,11 +73,5 @@ Then('the new project name is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(
     EnsureThatProjectName.is(this.actor.recalls('projectName'))
-  )
-})
-
-Then('the Project name task status is {string}', async function (taskStatus) {
-  await this.actor.attemptsTo(
-    EnsureTaskStatus.is(TaskListPage.projectNameTaskStatus, taskStatus)
   )
 })
