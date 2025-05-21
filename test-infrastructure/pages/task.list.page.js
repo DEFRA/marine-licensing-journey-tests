@@ -4,6 +4,6 @@ export default class TaskListPage {
   }
 
   static getTaskLink(taskName) {
-    return `//a[contains(text(), "${taskName}")]`
+    return `//a[normalize-space(text()) = "${taskName}"]`
   }
 }
