@@ -1,6 +1,4 @@
 import { Then, When } from '@cucumber/cucumber'
-
-import { TaskListPage } from '~/test-infrastructure/pages'
 import {
   EnsureThatPageHeading,
   EnsureTaskStatus,
@@ -17,17 +15,9 @@ Then('the task list page is displayed', async function () {
   )
 })
 
-Then('the Project name task status is {string}', async function (taskStatus) {
-  await this.actor.attemptsTo(
-    EnsureTaskStatus.is(TaskListPage.projectNameTaskStatus, taskStatus)
-  )
-})
-
 Then(
-  'the Public register task status is {string}',
-  async function (taskStatus) {
-    await this.actor.attemptsTo(
-      EnsureTaskStatus.is(TaskListPage.publicRegisterTaskStatus, taskStatus)
-    )
+  'the {string} task status is {string}',
+  async function (taskName, taskStatus) {
+    await this.actor.attemptsTo(EnsureTaskStatus.is(taskName, taskStatus))
   }
 )

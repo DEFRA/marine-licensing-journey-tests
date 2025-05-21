@@ -1,4 +1,5 @@
 import Task from '../tasks/task'
+import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 
 export default class SelectTheTask extends Task {
   static withName(taskName) {
@@ -12,6 +13,6 @@ export default class SelectTheTask extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    browseTheWeb.click(`//a[normalize-space(text())="${this.taskName}"]`)
+    browseTheWeb.click(TaskListPage.getTaskLink(this.taskName))
   }
 }

@@ -1,19 +1,20 @@
 import Task from '../tasks/task'
+import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 
 export default class EnsureTaskStatus extends Task {
-  static is(locator, expectation) {
-    return new EnsureTaskStatus(locator, expectation)
+  static is(taskName, expectation) {
+    return new EnsureTaskStatus(taskName, expectation)
   }
 
-  constructor(locator, expectation) {
+  constructor(taskName, expectation) {
     super()
-    this.locator = locator
+    this.taskName = taskName
     this.expectation = expectation
   }
 
   async performAs(actor) {
     await actor.ability.expectElementToContainText(
-      this.locator,
+      TaskListPage.getTaskStatus(this.taskName),
       this.expectation
     )
   }

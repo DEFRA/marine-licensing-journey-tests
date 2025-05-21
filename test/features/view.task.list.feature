@@ -7,7 +7,7 @@ Feature: View exemption task details
   Scenario: Display the task list page
     Given the project name page is displayed
     When entering and saving a project with a valid name
-    Then the Project name task status is "Completed"
+    Then the "Project name" task status is "Completed"
 
   Scenario: Access the Project name task where a project has previously been saved
     Given a notification has been created with a valid project name
