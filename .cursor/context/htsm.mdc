@@ -7,7 +7,7 @@ alwaysApply: false
 description: Heuristic Test Strategy Model for test strategy development
 globs: 
 ---
-# Heuristic Test Strategy Model (HTSM) v6.3 — Context for Development and Testing Support
+# Heuristic Test Strategy Model — Context for Development and Testing Support
 
 ## Overview
 
@@ -98,23 +98,3 @@ When coding or requesting help with test creation:
 - Highlight **risk areas**, **user roles**, or **interfaces** relevant to the feature under development.
 - Consider HTSM as a **framework for ideation**: not all parts must apply, but each can inspire better questions or stronger test design.
 
-HTSM can be applied **casually or rigorously**, and while it is **generic to any kind of software**, users are encouraged to **modify it to suit their organization's specific context**.
-
-**Version 6.3** includes enhancements emphasizing **state-based testing** and an expanded focus on **boundaries**.
-
-## License
-
-> Copyright © 1996–2024, Satisfice, Inc.
-> 
-> Designed by James Bach
-> 
-> Version 6.3
-> 
-> Contact: james@satisfice.com
-> 
-> Website: @https://www.satisfice.com
-## Official Download
-
-You can download the official HTSM v6.3 PDF here:
-
-👉 @Heuristic Test Strategy Model v6.3 – Satisfice
