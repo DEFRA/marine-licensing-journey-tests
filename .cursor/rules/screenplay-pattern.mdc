@@ -39,6 +39,7 @@ This project implements the Screenplay pattern for end-to-end testing, which is 
 3. Interactions should be small and focused on a single action
 4. Actor should be the primary entry point for all test actions
 5. Page objects should only contain locators, not actions
+6. In any test-infrastucture code do not `throw Error`. Always use a `chai` assertion instead to allow the tests to complete.
 
 ## Structure and Patterns
 

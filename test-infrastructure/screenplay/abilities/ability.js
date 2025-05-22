@@ -1,7 +1,9 @@
+import { expect } from 'chai'
+
 export default class Ability {
   constructor() {
     if (new.target === Ability) {
-      throw new Error(
+      expect.fail(
         'Ability is an abstract class and cannot be instantiated directly.'
       )
     }

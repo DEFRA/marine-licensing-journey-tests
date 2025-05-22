@@ -1,3 +1,4 @@
+import { expect } from 'chai'
 import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 import Task from '../tasks/task'
 
@@ -74,26 +75,23 @@ export default class EnsureTaskListContains extends Task {
   }
 
   checkExactCount(actualCount) {
-    if (actualCount !== this.count) {
-      throw new Error(
-        `Expected exactly ${this.count} tasks, but found ${actualCount}`
-      )
-    }
+    expect(actualCount).to.equal(
+      this.count,
+      `Expected exactly ${this.count} tasks, but found ${actualCount}`
+    )
   }
 
   checkAtLeastCount(actualCount) {
-    if (actualCount < this.count) {
-      throw new Error(
-        `Expected at least ${this.count} tasks, but found ${actualCount}`
-      )
-    }
+    expect(actualCount).to.be.at.least(
+      this.count,
+      `Expected at least ${this.count} tasks, but found ${actualCount}`
+    )
   }
 
   checkAtMostCount(actualCount) {
-    if (actualCount > this.count) {
-      throw new Error(
-        `Expected at most ${this.count} tasks, but found ${actualCount}`
-      )
-    }
+    expect(actualCount).to.be.at.most(
+      this.count,
+      `Expected at most ${this.count} tasks, but found ${actualCount}`
+    )
   }
 }
