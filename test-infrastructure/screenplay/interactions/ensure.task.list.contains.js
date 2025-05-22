@@ -48,33 +48,52 @@ export default class EnsureTaskListContains extends Task {
    */
   async performAs(actor) {
     const ability = actor.ability
+    const actualCount = await this.getTaskCount(ability)
 
+    this.verifyTaskCount(actualCount)
+  }
+
+  async getTaskCount(ability) {
     const selector = TaskListPage.getAllTasks()
     const elements = await ability.browser.$$(selector)
-    const actualCount = elements.length
+    return elements.length
+  }
 
+  verifyTaskCount(actualCount) {
     switch (this.mode) {
       case 'exactly':
-        if (actualCount !== this.count) {
-          throw new Error(
-            `Expected exactly ${this.count} tasks, but found ${actualCount}`
-          )
-        }
+        this.checkExactCount(actualCount)
         break
       case 'at-least':
-        if (actualCount < this.count) {
-          throw new Error(
-            `Expected at least ${this.count} tasks, but found ${actualCount}`
-          )
-        }
+        this.checkAtLeastCount(actualCount)
         break
       case 'at-most':
-        if (actualCount > this.count) {
-          throw new Error(
-            `Expected at most ${this.count} tasks, but found ${actualCount}`
-          )
-        }
+        this.checkAtMostCount(actualCount)
         break
+    }
+  }
+
+  checkExactCount(actualCount) {
+    if (actualCount !== this.count) {
+      throw new Error(
+        `Expected exactly ${this.count} tasks, but found ${actualCount}`
+      )
+    }
+  }
+
+  checkAtLeastCount(actualCount) {
+    if (actualCount < this.count) {
+      throw new Error(
+        `Expected at least ${this.count} tasks, but found ${actualCount}`
+      )
+    }
+  }
+
+  checkAtMostCount(actualCount) {
+    if (actualCount > this.count) {
+      throw new Error(
+        `Expected at most ${this.count} tasks, but found ${actualCount}`
+      )
     }
   }
 }
