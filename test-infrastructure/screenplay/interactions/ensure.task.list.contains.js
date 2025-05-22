@@ -49,12 +49,10 @@ export default class EnsureTaskListContains extends Task {
   async performAs(actor) {
     const ability = actor.ability
 
-    // Get all tasks
     const selector = TaskListPage.getAllTasks()
     const elements = await ability.browser.$$(selector)
     const actualCount = elements.length
 
-    // Verify count based on mode
     switch (this.mode) {
       case 'exactly':
         if (actualCount !== this.count) {
