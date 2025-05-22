@@ -1,0 +1,100 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Heuristic Test Strategy Model for test strategy development
+globs: 
+---
+# Heuristic Test Strategy Model — Context for Development and Testing Support
+
+## Overview
+
+The **Heuristic Test Strategy Model (HTSM) v6.3**, designed by **James Bach**, is a set of guideword heuristics to help software testers think critically and thoroughly about test strategy. It is structured into four major focus areas:
+
+1. **General Test Techniques**
+2. **Project Environment**
+3. **Product Factors**
+4. **Quality Criteria Categories**
+
+## Purpose in This Context
+
+This document serves as a **contextual guide for the Cursor IDE** to assist in:
+
+- Test strategy development
+- Code-level test case generation
+- Design decisions based on heuristic guidance
+- Test coverage evaluation aligned with risk and quality criteria
+
+When asking for help with **writing code or tests**, this model provides essential insights into **what kinds of tests to consider**, **what risks to explore**, and **how to approach testing given constraints and goals**.
+
+---
+
+## HTSM Focal Areas
+
+### 1. General Test Techniques
+
+Nine families of heuristics for designing tests:
+
+- **Function Testing** — What the product can do.
+- **Claims Testing** — Verifying documented and undocumented expectations.
+- **Domain Testing** — Data partitioning and boundary value analysis.
+- **User Testing** — Engaging real users or simulating their behavior.
+- **Stress Testing** — Pushing system limits under resource constraints.
+- **Risk Testing** — Focusing on likely or impactful problems.
+- **Flow Testing** — Exploring sequences of operations or states.
+- **Tool-Supported Testing** — Leveraging automation and analysis tools.
+- **Scenario Testing** — Building narratives that drive complex test cases.
+
+### 2. Project Environment
+
+Project-specific elements that affect testing, including:
+
+- **Mission**
+- **Information access**
+- **Developer relations**
+- **Test team makeup**
+- **Tools & equipment**
+- **Schedule**
+- **Test items**
+- **Deliverables**
+
+### 3. Product Factors
+
+What the product consists of and how it behaves, including:
+
+- **Structure** (code, hardware, services)
+- **Function** (business rules, security, error handling)
+- **Data** (input/output, invalid, persistent)
+- **Interfaces** (UI, APIs)
+- **Platform** (external software/hardware dependencies)
+- **Operations** (user behavior and use cases)
+- **Time** (timing, concurrency, pacing)
+
+### 4. Quality Criteria Categories
+
+These define **how product value is judged** and represent areas of potential risk:
+
+- **Capability**
+- **Reliability**
+- **Usability**
+- **Charisma**
+- **Security**
+- **Scalability**
+- **Compatibility**
+- **Performance**
+- **Installability**
+- **Development Characteristics** (testability, maintainability, portability, etc.)
+
+---
+
+## Notes for Cursor IDE Usage
+
+When coding or requesting help with test creation:
+
+- Use this model to clarify **what you are testing**, **why**, and **how**.
+- Reference relevant **product factors**, **project constraints**, or **quality criteria** to shape test intent.
+- Highlight **risk areas**, **user roles**, or **interfaces** relevant to the feature under development.
+- Consider HTSM as a **framework for ideation**: not all parts must apply, but each can inspire better questions or stronger test design.
+

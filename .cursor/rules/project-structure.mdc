@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure Standards
+
+This project follows a standard Express.js application structure with GOV.UK Frontend integration:
+
+- `test/` - contains cucumber features and steps
+  - `features/` - Main application entry point
+    - `*.feature` - individual feature files
+    - `*.js/` - implements cucumber steps
+- `test-infrastructure/` - Express route handlers
+  - `capture/` - and code that involves capturing data for the purposes of attaching to the allure report
+  - `pages/` - page objects which should only contain locators
+  - `screenplay/` - all code implementing the screenplay pattern
+    - `actor.js` - the actor represented in the test
+    - `abilities/` - the abilities that the actor has
+    - `interactions/` - granular interactions that the actor can perform
+    - `tasks/` - tasks that the actor can perform representing a user flow
+- `*.conf.js` - WebDriverIO config files
+
+## File Organization Rules
+
+1. All new features should be added to the `test/features/` directory
+2. All new steps should be added to the `test/steps/` directory
+3. All new screenplay pattern code should be added to the `test-infrastructure/screenplay` directory
+4. All new page objects should be added to the `test-infrastructure/pages` directory
+4. Keep the main `app.js` file focused on application setup and configuration
+5. Use the logger from `logger.js` for all logging needs
+
+## Naming Conventions
+- Static assets: Use kebab-case for filenames
+- JavaScript files: Use dot.case for filenames
