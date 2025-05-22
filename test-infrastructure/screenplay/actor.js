@@ -5,7 +5,6 @@ export default class Actor {
   constructor(name) {
     this.name = name
     this.memory = {}
-    // Keys that are allowed to be missing without failing the test
     this.optionalKeys = ['publicRegisterWithholdReason']
   }
 
@@ -25,7 +24,6 @@ export default class Actor {
   }
 
   recalls(key) {
-    // Don't assert for optional keys
     if (this.optionalKeys.includes(key)) {
       return this.memory[key] || ''
     }
@@ -35,13 +33,11 @@ export default class Actor {
     return this.memory[key]
   }
 
-  // Safely recall a key that might not exist, with a default value
   recallsOptional(key, defaultValue = '') {
     return key in this.memory ? this.memory[key] : defaultValue
   }
 
   forgets(key) {
-    // Don't assert for optional keys
     if (this.optionalKeys.includes(key)) {
       if (key in this.memory) {
         delete this.memory[key]
@@ -68,10 +64,8 @@ export default class Actor {
   toJson() {
     const memoryWithDescriptions = { ...this.memory }
 
-    // Convert technical selectors to human-readable descriptions
     if ('publicRegisterChoice' in memoryWithDescriptions) {
       const value = memoryWithDescriptions.publicRegisterChoice
-      // Avoid direct dependency on page objects
       if (value.includes('consent-2')) {
         memoryWithDescriptions.publicRegisterChoice =
           'Allow information to be added to the public register'
