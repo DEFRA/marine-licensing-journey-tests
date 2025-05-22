@@ -10,28 +10,24 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickBack,
+  ClickCancel,
+  ClickSaveAndContinue,
   CompleteProjectName,
   CompletePublicRegisterTask,
   EnsureErrorDisplayed,
+  EnsureProjectNameDisplayedAsCaption,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
   EnsureThatPageHeading,
-  SelectTheTask,
-  ClickBack,
-  ClickSaveAndContinue,
-  ClickCancel,
-  EnsureProjectNameDisplayedAsCaption
+  Navigate,
+  SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-  this.actor.remembers('projectName', faker.lorem.words(5))
-  await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('projectName'))
-  )
-  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
+  await this.actor.attemptsTo(Navigate.toPublicRegisterPage())
   await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
 })
 

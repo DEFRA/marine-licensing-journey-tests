@@ -19,12 +19,34 @@ export default class BrowseTheWeb extends Ability {
     return await this.browser.$('h1').getText()
   }
 
+  async getElement(locator) {
+    if (typeof locator === 'object' && locator.primary) {
+      try {
+        const element = await this.browser.$(locator.primary)
+        const isExisting = await element.isExisting()
+        if (isExisting) {
+          return element
+        }
+      } catch (error) {
+        // Primary locator failed, will try fallback if available
+      }
+
+      if (locator.fallback) {
+        return await this.browser.$(locator.fallback)
+      }
+    }
+
+    return await this.browser.$(locator)
+  }
+
   async sendKeys(locator, keys) {
-    await this.browser.$(locator).setValue(keys)
+    const element = await this.getElement(locator)
+    await element.setValue(keys)
   }
 
   async click(locator) {
-    await this.browser.$(locator).click()
+    const element = await this.getElement(locator)
+    await element.click()
   }
 
   async clickSaveAndContinue() {
@@ -36,36 +58,41 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async selectOption(locator, option) {
-    await this.browser.$(locator).selectByVisibleText(option)
+    const element = await this.getElement(locator)
+    await element.selectByVisibleText(option)
   }
 
   async expectElementToContainText(locator, expectedSubstring) {
-    await this.browser.$(locator).waitForExist()
-    await expect($(locator)).toHaveText(
-      expect.stringContaining(expectedSubstring)
-    )
+    const element = await this.getElement(locator)
+    await element.waitForExist()
+    await expect(element).toHaveText(expect.stringContaining(expectedSubstring))
   }
 
   async expectElementToHaveValue(locator, expectedValue) {
-    await expect($(locator)).toHaveAttribute('value', expectedValue)
+    const element = await this.getElement(locator)
+    await expect(element).toHaveAttribute('value', expectedValue)
   }
 
   async isSelected(locator) {
-    const isSelected = await this.browser.$(locator).isSelected()
+    const element = await this.getElement(locator)
+    const isSelected = await element.isSelected()
     await expect(isSelected).toBe(true)
   }
 
   async isNotSelected(locator) {
-    const isSelected = await this.browser.$(locator).isSelected()
+    const element = await this.getElement(locator)
+    const isSelected = await element.isSelected()
     await expect(isSelected).toBe(false)
   }
 
   async isDisplayed(locator) {
-    await expect(this.browser.$(locator)).toBeDisplayed()
+    const element = await this.getElement(locator)
+    await expect(element).toBeDisplayed()
   }
 
   async isNotDisplayed(locator) {
-    await expect(this.browser.$(locator)).not.toBeDisplayed()
+    const element = await this.getElement(locator)
+    await expect(element).not.toBeDisplayed()
   }
 
   async clickBack() {
