@@ -23,6 +23,7 @@ alwaysApply: true
    - Tasks should be high-level and represent user goals, not technical actions
    - Interactions should be small and focused on a single action
    - Interactions also encapsulate assertions using the `ensure` prefix
+   
 ## Code Quality Standards
 
 8. **Prefer explicit imports** - Use named imports over default imports where possible for better IDE support and refactoring
