@@ -17,3 +17,29 @@ alwaysApply: false
   - Given sets up initial state
   - When performs an action
   - Then verifies the outcome
+
+## Implementation Mapping
+
+**BDD → Screenplay Pattern:**
+- **Given steps** → Set up initial state (often through tasks)
+- **When steps** → User actions that map to high-level **Tasks** 
+- **Then steps** → Verification that maps to **Interactions** with `ensure` prefix
+
+> 📖 **See:** [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation details
+
+## Strategic Context
+
+**Planning Your Scenarios:**
+- Use HTSM quality criteria to identify what behaviors to test
+- Consider risk areas and product factors when designing scenarios
+- Focus on customer value and real user workflows
+
+> 📖 **See:** [`htsm.mdc`](./htsm.mdc) for strategic test thinking
+
+## File Organization
+
+- Feature files go in `test/features/`
+- Step definitions go in `test/steps/`
+- Screenplay implementation follows the patterns in `test-infrastructure/screenplay/`
+
+> 📖 **See:** [`project-structure.mdc`](./project-structure.mdc) for complete organization rules
