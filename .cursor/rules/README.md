@@ -55,6 +55,16 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 ### 📝 **Development Practices & Style**
 
+#### [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)
+
+**Clean Code & Code Smells**
+
+- Clean code principles and maintainability standards
+- Comprehensive code smell identification and remediation
+- Context-specific examples for test automation
+- Screenplay pattern-specific smells and solutions
+- Detection tips and pragmatic guidance
+
 #### [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)
 
 **General Rules**
@@ -88,7 +98,7 @@ This directory contains the complete set of rules and guidelines for the Marine 
 Strategic Level       →  HTSM guides what to test and why
 Writing Level         →  BDD ensures clear, maintainable scenarios
 Architecture Level    →  Project Structure + Screenplay Pattern organise implementation
-Code Level            →  Code Generation rules ensure quality and consistency
+Code Level            →  Code Generation + Clean Code rules ensure quality and consistency
 Development Practices →  Playbook rules guide style, process, and refinement
 ```
 
@@ -101,6 +111,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 | Adding new files or features         | [`project-structure.mdc`](./project-structure.mdc)           |
 | Implementing test automation         | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)         |
 | Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
+| Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
 | Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
 | Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
 | Refactoring existing content         | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)     |
@@ -111,6 +122,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 2. **Writing scenarios?** Read [`bdd.rules.mdc`](./bdd.rules.mdc) for clear Gherkin
 3. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
 4. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking
+5. **Reviewing code quality?** Consult [`playbook.clean.code.mdc`](./playbook.clean.code.mdc) for clean code practices
 
 ## Maintenance Notes
 

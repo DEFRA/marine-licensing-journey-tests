@@ -288,7 +288,11 @@ cat wdio.local.conf.js
 - **🎭 Screenplay Pattern**: `.cursor/rules/screenplay-pattern.mdc`
 - **🏗️ Project Structure**: `.cursor/rules/project-structure.mdc`
 - **💻 Coding Standards**: `.cursor/rules/code.generation.mdc`
+- **🧹 Clean Code & Code Smells**: `.cursor/rules/playbook.clean.code.mdc`
 - **📋 Test Strategy**: `.cursor/rules/htsm.mdc`
+- **📝 Style Guide**: `.cursor/rules/playbook.styleguide.mdc`
+- **🔄 Refactoring Guidelines**: `.cursor/rules/playbook.refactoring.mdc`
+- **📖 Complete Rules Index**: `.cursor/rules/README.md`
 
 ## 📜 Licence
 

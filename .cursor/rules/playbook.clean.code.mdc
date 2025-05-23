@@ -1,0 +1,101 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Clean Code
+- Clean code is obvious for other programmers
+- Clean code doesn't contain duplication (except where it improves readability, for example in tests)
+- Clean code contains a minimal number of classes and other moving parts
+- Clean code passes all tests
+- Clean code is easier and cheaper to maintain
+
+**No code comments** - Code should be expressive and self documenting. Comments often become outdated and misleading. In exceptional circumstances, use a comment for complex business logic or regulatory requirements that aren't obvious from the code itself.
+
+# Code Smells
+
+**High Priority (Fix Immediately)**
+- Shotgun Surgery - Changes require touching many files
+  - *Common in tests*: Changing a UI element breaks tests across multiple feature files
+  - *Solution*: Centralise element definitions in page objects
+- Long method / function - Impacts test readability
+  - *Common in tests*: Single test methods doing setup, action, verification, and cleanup
+  - *Solution*: Extract methods, use screenplay tasks
+- Duplicate Code - Maintenance nightmare
+  - *Common in tests*: Copy-pasted test setup or assertion patterns
+  - *Solution*: Extract to reusable tasks or interactions
+
+**Medium Priority (Address During Refactoring)**
+- Data clumps - Same group of parameters appearing together
+  - *Common in tests*: Always passing firstName, lastName, email together
+  - *Solution*: Create domain objects like UserDetails
+- Feature Envy - Methods using more data from other classes than their own
+  - *Solution*: Move methods closer to the data they use
+- Middle Man - Classes that just delegate to others without adding value
+  - *Solution*: Remove unnecessary layers or add meaningful functionality
+
+**Low Priority (Monitor)**
+- Lazy Class - May be acceptable for simple page objects
+  - *Context*: Simple page objects with only locators serve a valid purpose
+- Speculative Generality - Don't over-engineer
+  - *Solution*: Remove unused abstractions, add complexity only when needed
+
+**Change Preventers**
+- Divergent change - One class changed for multiple reasons
+- Parallel Inheritance Hierarchies - When you subclass one class, you need to subclass another
+- Shotgun Surgery - Single change requires modifications across many files
+
+**Dispensables**
+- Comments - Use expressive code instead
+- Data Class - Classes with only getters/setters (consider if they add value)
+- Lazy Class - Classes doing too little to justify existence
+- Duplicate Code - Exact or similar code repeated
+- Dead Code - Unused code, methods, variables
+- Speculative Generality - Code designed for future use cases that don't exist
+
+**Couplers**
+- Feature Envy - Methods more interested in other classes than their own
+- Incomplete Library Class - Library doesn't provide needed functionality
+- Middle Man - Classes that just delegate without adding value
+- Inappropriate Intimacy - Classes knowing too much about each other's internals
+- Message Chains - Long chains of method calls (a.getB().getC().getD())
+
+**Screenplay-Specific Smells**
+- **Task doing interactions directly** - Tasks should orchestrate, not implement
+  - *Example*: Task using `browser.click()` instead of calling Click interaction
+  - *Solution*: Move browser calls to interactions, compose tasks from interactions
+- **Page objects with behaviour** - Should only contain locators and dynamic selectors
+  - *Example*: Page object with `login(username, password)` method
+  - *Solution*: Move behaviour to tasks/interactions, keep only element definitions
+- **Actor remembering primitive values** - Use domain objects instead
+  - *Example*: `actor.remembers('email', 'test@example.com')`
+  - *Solution*: `actor.remembers('user', new User('test@example.com'))`
+
+**Detection Tips**
+- **Long methods**: More than 20-30 lines (adjust for test context)
+- **Parameter lists**: More than 3-4 parameters
+- **Data clumps**: Same group of 3+ parameters in multiple methods
+- **Shotgun surgery**: One feature change requires editing 5+ files
+- **Duplicate code**: Use IDE tools to detect similar code blocks
+
+**Important Note**: Code smells are guidelines, not absolute rules. In test automation:
+- Some duplication may improve test readability
+- Consider maintainability over theoretical purity
+- Focus on smells that actually impact the team's productivity
+
+# Clean Code Examples
+- **Obvious naming**: `calculateVatAmount()` not `calc()`  
+- **Single responsibility**: One function, one purpose
+- **Minimal dependencies**: Avoid deep coupling between components
+
+**Change validation**: After each edit, summarise what changed, what was preserved, and verify the change achieves the intended outcome.
+
+# When to Use This Playbook
+- **Starting new features**: Begin with project-structure.mdc
+- **Code reviews**: Reference clean-code.mdc and code.generation.mdc  
+- **Writing tests**: Follow screenplay-pattern.mdc
+- **Documentation**: Apply styleguide.mdc
+
+**Test failure patterns**: 
+- Use descriptive assertion messages that explain business context
+- Include relevant test data in failure reports
