@@ -23,13 +23,13 @@ These journey tests cover:
 
 - **Local Development** - Against locally running services
 - **CDP Environments** - Live development/test environments
-- **Docker Compose** - Containerized stack for CI/CD
+- **Docker Compose** - Containerised stack for CI/CD
 
 ## 🏗️ Architecture Overview
 
 ### **BDD + Screenplay Pattern**
 
-- **📋 Feature Files** (`test/features/`) - Gherkin scenarios describing business behaviors
+- **📋 Feature Files** (`test/features/`) - Gherkin scenarios describing business behaviours
 - **🎬 Step Definitions** (`test/steps/`) - Bridge between Gherkin and Screenplay
 - **🎭 Screenplay Pattern** (`test-infrastructure/screenplay/`) - User-centric test automation
   - **Actor** - Represents the user performing actions

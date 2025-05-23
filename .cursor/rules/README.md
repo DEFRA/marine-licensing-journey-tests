@@ -53,24 +53,57 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Error handling with Chai assertions
 - Tasks vs Interactions guidelines
 
+### 📝 **Development Practices & Style**
+
+#### [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)
+
+**General Rules**
+
+- Step-by-step thinking and planning approach
+- Targeted editing practices
+- Validation and change summarisation
+- Code quality assurance
+
+#### [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)
+
+**Style Guide**
+
+- British English standards for DEFRA
+- Professional tone requirements
+- GOV.UK content design guidance
+- UK Government style manual compliance
+
+#### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)
+
+**Refactoring Guidelines**
+
+- Targeted improvement principles
+- Content preservation strategies
+- Readability enhancement focus
+- Structure maintenance rules
+
 ## How These Rules Work Together
 
 ```
-Strategic Level    →  HTSM guides what to test and why
-Writing Level      →  BDD ensures clear, maintainable scenarios
-Architecture Level →  Project Structure + Screenplay Pattern organize implementation
-Code Level         →  Code Generation rules ensure quality and consistency
+Strategic Level       →  HTSM guides what to test and why
+Writing Level         →  BDD ensures clear, maintainable scenarios
+Architecture Level    →  Project Structure + Screenplay Pattern organise implementation
+Code Level            →  Code Generation rules ensure quality and consistency
+Development Practices →  Playbook rules guide style, process, and refinement
 ```
 
 ## Quick Reference
 
-| **When you're...**           | **Refer to...**                                      |
-| ---------------------------- | ---------------------------------------------------- |
-| Planning test strategy       | [`htsm.mdc`](./htsm.mdc)                             |
-| Writing Gherkin scenarios    | [`bdd.rules.mdc`](./bdd.rules.mdc)                   |
-| Adding new files or features | [`project-structure.mdc`](./project-structure.mdc)   |
-| Implementing test automation | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) |
-| Writing JavaScript code      | [`code.generation.mdc`](./code.generation.mdc)       |
+| **When you're...**                   | **Refer to...**                                              |
+| ------------------------------------ | ------------------------------------------------------------ |
+| Planning test strategy               | [`htsm.mdc`](./htsm.mdc)                                     |
+| Writing Gherkin scenarios            | [`bdd.rules.mdc`](./bdd.rules.mdc)                           |
+| Adding new files or features         | [`project-structure.mdc`](./project-structure.mdc)           |
+| Implementing test automation         | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)         |
+| Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
+| Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
+| Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
+| Refactoring existing content         | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)     |
 
 ## Getting Started
 

@@ -36,7 +36,7 @@ Nine families of heuristics for designing tests:
 - **Function Testing** — What the product can do.
 - **Claims Testing** — Verifying documented and undocumented expectations.
 - **Domain Testing** — Data partitioning and boundary value analysis.
-- **User Testing** — Engaging real users or simulating their behavior.
+- **User Testing** — Engaging real users or simulating their behaviour.
 - **Stress Testing** — Pushing system limits under resource constraints.
 - **Risk Testing** — Focusing on likely or impactful problems.
 - **Flow Testing** — Exploring sequences of operations or states.
@@ -65,7 +65,7 @@ What the product consists of and how it behaves, including:
 - **Data** (input/output, invalid, persistent)
 - **Interfaces** (UI, APIs)
 - **Platform** (external software/hardware dependencies)
-- **Operations** (user behavior and use cases)
+- **Operations** (user behaviour and use cases)
 - **Time** (timing, concurrency, pacing)
 
 ### 4. Quality Criteria Categories
