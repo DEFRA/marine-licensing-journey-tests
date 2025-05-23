@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rules to follow when generating code
+
+1. No TypeScript.
+2. No JSDocs. Code should be expressive and self documenting.
+3. No code comments, code should be expressive and self documenting
+4. No `console.log()`.  If something needs to be visible this should be attached to the allure report using one of the functions in `test-infrastructure/capture`
+5. Do not use `throw Error`. Any errors should use `chai` to cause the test to fail.

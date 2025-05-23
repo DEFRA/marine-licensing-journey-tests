@@ -1,11 +1,7 @@
 ---
 description: 
-globs: 
+globs: *.feature
 alwaysApply: false
----
----
-description: Heuristic Test Strategy Model for test strategy development
-globs: 
 ---
 # Heuristic Test Strategy Model — Context for Development and Testing Support
 

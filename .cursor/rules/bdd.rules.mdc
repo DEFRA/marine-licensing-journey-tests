@@ -1,0 +1,19 @@
+---
+description: 
+globs: *.feature,*.steps.js
+alwaysApply: false
+---
+# BDD Guidelines
+
+- **Golden Rule**
+  - Treat other readers as you would want to be treated. Write Gherkin so that people who don't know the feature will understand it.
+- **Cardinal Rule**
+  - One Scenario, One Behaviour
+- **Good titles** - the title is like the face of the scenario, the first thing people read
+- **Less is more** - keep your scenarios short and sweet <10 steps
+- **Focus features on customer needs**
+- **Always use Given, When, Then in that order and only that order** - don't repeat them; any single When-Then pair denotes an individual behaviour
+- **Respect the integrity of the step types**:
+  - Given sets up initial state
+  - When performs an action
+  - Then verifies the outcome
