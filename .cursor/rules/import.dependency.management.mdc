@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This should be included whenever you are changing dependencies during refactoring
+globs: 
 alwaysApply: false
 ---
 # Import and Dependency Management During Refactoring
@@ -156,8 +156,8 @@ alwaysApply: false
 ## Integration with Other Refactoring Activities
 
 **Cross-Reference**: This import management guidance works in conjunction with:
-- [URL and Hyperlink Management](url.hyperlink.management.mdc) - For protecting documentation links during refactoring
-- [Dangerous Commands and Tools](dangerous.url.commands.mdc) - For avoiding tools that corrupt import statements
+- [URL and Hyperlink Management](mdc:marine-licensing-journey-tests/url.hyperlink.management.mdc) - For protecting documentation links during refactoring
+- [Dangerous Commands and Tools](mdc:marine-licensing-journey-tests/dangerous.url.commands.mdc) - For avoiding tools that corrupt import statements
 - Main refactoring playbook - For overall refactoring strategy and validation
 
 **Key Integration Points**:

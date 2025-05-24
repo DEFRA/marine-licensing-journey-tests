@@ -1,5 +1,5 @@
 ---
-description: 
+description: any time you are reviewing code or refactoring
 globs: 
 alwaysApply: false
 ---
@@ -73,7 +73,7 @@ After every refactoring:
 
 ### Import and Dependency Management During Refactoring
 
-**⚠️ Critical Reference**: For comprehensive guidance on import management, dependency resolution, and avoiding import-related errors during refactoring operations, see [Import and Dependency Management During Refactoring](mdc:marine-licensing-journey-tests/import.dependency.management.mdc).
+**⚠️ Critical Reference**: For comprehensive guidance on import management, dependency resolution, and avoiding import-related errors during refactoring operations, see [Import and Dependency Management During Refactoring](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/import.dependency.management.mdc).
 
 This separate document provides:
 - Critical import rules and validation workflows
@@ -83,7 +83,7 @@ This separate document provides:
 
 ### URL and Hyperlink Management During Refactoring
 
-**⚠️ Critical Reference**: For comprehensive guidance on protecting URLs and hyperlinks during refactoring operations, see [URL and Hyperlink Management During Refactoring](mdc:marine-licensing-journey-tests/url.hyperlink.management.mdc).
+**⚠️ Critical Reference**: For comprehensive guidance on protecting URLs and hyperlinks during refactoring operations, see [URL and Hyperlink Management During Refactoring](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/url.hyperlink.management.mdc).
 
 This separate document provides:
 - Critical URL protection rules and best practices
@@ -93,7 +93,7 @@ This separate document provides:
 
 ### Command and Tool Safety During Refactoring
 
-**⚠️ Critical Reference**: For detailed guidance on specific commands and tools that can corrupt URLs during refactoring operations, see [Dangerous Commands and Tools During URL Refactoring](mdc:marine-licensing-journey-tests/dangerous.url.commands.mdc).
+**⚠️ Critical Reference**: For detailed guidance on specific commands and tools that can corrupt URLs during refactoring operations, see [Dangerous Commands and Tools During URL Refactoring](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/dangerous.url.commands.mdc).
 
 This separate document provides:
 - Specific high-risk operations and tools
@@ -127,7 +127,7 @@ This guidance incorporates research findings from:
 **Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
 *By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
 CodeScene Research Team  
-[Download PDF](mdc:marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf)
+[Download PDF](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf)
 
 Key research findings referenced:
 - AI refactoring success rates and failure patterns

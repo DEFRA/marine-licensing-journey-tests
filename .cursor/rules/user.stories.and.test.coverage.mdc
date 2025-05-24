@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: when we are creating new tests, assessing user stories, creating new coverage, reviewing existing test coverage, talking about strategy, test sessions
+globs: 
 alwaysApply: false
 ---
 # User Stories and Test Coverage

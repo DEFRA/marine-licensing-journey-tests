@@ -1,5 +1,5 @@
 ---
-description: This rule is useful when identifying test scenarios and assessing coverage
+description: This rule is useful when identifying test scenarios and assessing coverage and also when generating test charters or thinking about test strategy
 globs: 
 alwaysApply: false
 ---

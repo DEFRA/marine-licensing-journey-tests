@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: whenever we are refactoring, generating new code or doing code reviews
+globs: 
 alwaysApply: false
 ---
 # URL and Hyperlink Management During Refactoring
@@ -13,7 +13,7 @@ alwaysApply: false
 - Use precise, targeted replacements rather than broad pattern matching near URLs
 
 ## 2. Common URL Corruption Scenarios
-- **Markdown links**: Format `[text](url)` can be corrupted by path-based search/replace
+- **Markdown links**: Format `[text](mdc:marine-licensing-journey-tests/url)` can be corrupted by path-based search/replace
 - **Configuration URLs**: API endpoints, base URLs, and external references  
 - **Documentation links**: References to external resources, PDFs, and websites
 - **Asset paths**: Links to images, stylesheets, and other static resources
@@ -31,7 +31,7 @@ alwaysApply: false
 - **Version control check**: Review diffs specifically for unintended URL changes
 
 ## URL Debugging Checklist
-- [ ] All markdown links maintain proper `[text](url)` format
+- [ ] All markdown links maintain proper `[text](mdc:marine-licensing-journey-tests/url)` format
 - [ ] External URLs (https://, http://) are unchanged
 - [ ] Relative file paths in URLs reflect actual file structure
 - [ ] Configuration URLs and API endpoints are intact
@@ -59,8 +59,8 @@ alwaysApply: false
 - Check configuration files for proper URL formatting
 
 ## Related Guidance
-- See [Dangerous Commands and Tools During URL Refactoring](dangerous.url.commands.mdc) for specific tool risks
-- See [refactoring playbook](playbook.refactoring.mdc) for general refactoring principles
+- See [Dangerous Commands and Tools During URL Refactoring](mdc:marine-licensing-journey-tests/dangerous.url.commands.mdc) for specific tool risks
+- See [refactoring playbook](mdc:marine-licensing-journey-tests/playbook.refactoring.mdc) for general refactoring principles
 - See Import Management section for handling file path changes
 
 ## Real-World Context

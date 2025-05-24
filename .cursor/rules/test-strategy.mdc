@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: any time we are considering test strategy, implementation, coverage, charters, exploratory testing or test sessions
+globs: 
 alwaysApply: false
 ---
 # Test Strategy Documentation Standards

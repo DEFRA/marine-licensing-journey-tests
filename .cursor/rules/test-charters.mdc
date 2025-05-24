@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: any time we are thinking about tests or test charters, test design, test strategy
+globs: 
 alwaysApply: false
 ---
 # Test Charter Organization and Maintenance
@@ -50,7 +50,7 @@ Required table format:
 ```markdown
 | User Story | Charter          | Priority | Status   |
 | ---------- | ---------------- | -------- | -------- |
-| ML-X       | [Charter Name](./ML-X/ML-X-aspect.md) | High/Medium/Low | ✅ Ready / 🚧 Draft / ❌ Blocked |
+| ML-X       | [Charter Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-aspect.md) | High/Medium/Low | ✅ Ready / 🚧 Draft / ❌ Blocked |
 ```
 
 ### **Charter Organization Section**
