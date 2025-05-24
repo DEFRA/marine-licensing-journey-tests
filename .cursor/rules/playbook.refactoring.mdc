@@ -123,7 +123,7 @@ After every refactoring:
 - Use precise, targeted replacements rather than broad pattern matching near URLs
 
 **2. Common URL Corruption Scenarios**
-- **Markdown links**: Format `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)` can be corrupted by path-based search/replace
+- **Markdown links**: Format `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)` can be corrupted by path-based search/replace
 - **Configuration URLs**: API endpoints, base URLs, and external references  
 - **Documentation links**: References to external resources, PDFs, and websites
 - **Asset paths**: Links to images, stylesheets, and other static resources
@@ -141,7 +141,7 @@ After every refactoring:
 - **Version control check**: Review diffs specifically for unintended URL changes
 
 **URL Debugging Checklist:**
-- [ ] All markdown links maintain proper `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)` format
+- [ ] All markdown links maintain proper format
 - [ ] External URLs (https://, http://) are unchanged
 - [ ] Relative file paths in URLs reflect actual file structure
 - [ ] Configuration URLs and API endpoints are intact
@@ -174,7 +174,7 @@ This guidance incorporates research findings from:
 **Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
 *By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
 CodeScene Research Team
-[PDF Link](https://codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
+[PDF Link](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
 
 Key research findings referenced:
 - AI refactoring success rates and failure patterns
@@ -203,7 +203,7 @@ Key research findings referenced:
 **4. Real Examples That Caused Corruption**
 Based on actual issues encountered:
 - ✗ `search_replace` with path patterns near markdown links
-- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)`
+- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)`
 - ✗ Project-wide find/replace of directory names within URLs
 - ✗ Edit tools adding project prefixes to URLs mistaken for relative paths
 
@@ -223,5 +223,5 @@ Based on actual issues encountered:
 **Recovery Patterns for Corrupted URLs:**
 - Remove project prefixes: `sed 's|projectname/https:///|https:///|g'`
 - Fix protocol damage: `sed 's|https://\b|https:///|g'`
-- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)|g'`
+- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)|g'`
 - Always verify URLs resolve after cleanup 
