@@ -77,16 +77,16 @@ Each charter considers marine licensing personas:
 
 ## 📊 Charter Status
 
-| User Story | Charter          | Priority | Status   |
-| ---------- | ---------------- | -------- | -------- |
-| ML-1       | Happy Path       | High     | ✅ Ready |
-| ML-1       | Validation       | High     | ✅ Ready |
-| ML-1       | Accessibility    | Medium   | ✅ Ready |
-| ML-9       | Navigation       | High     | ✅ Ready |
-| ML-9       | Usability        | Medium   | ✅ Ready |
-| ML-12      | Consent Workflow | High     | ✅ Ready |
-| ML-12      | Validation       | High     | ✅ Ready |
-| ML-12      | Data Protection  | Medium   | ✅ Ready |
+| User Story | Charter                                               | Priority | Status   |
+| ---------- | ----------------------------------------------------- | -------- | -------- |
+| ML-1       | [Happy Path](./ML-1/ML-1-happy-path.md)               | High     | ✅ Ready |
+| ML-1       | [Validation](./ML-1/ML-1-validation.md)               | High     | ✅ Ready |
+| ML-1       | [Accessibility](./ML-1/ML-1-accessibility.md)         | Medium   | ✅ Ready |
+| ML-9       | [Navigation](./ML-9/ML-9-navigation.md)               | High     | ✅ Ready |
+| ML-9       | [Usability](./ML-9/ML-9-usability.md)                 | Medium   | ✅ Ready |
+| ML-12      | [Consent Workflow](./ML-12/ML-12-consent-workflow.md) | High     | ✅ Ready |
+| ML-12      | [Validation](./ML-12/ML-12-validation.md)             | High     | ✅ Ready |
+| ML-12      | [Data Protection](./ML-12/ML-12-data-protection.md)   | Medium   | ✅ Ready |
 
 ## 📋 Session Hopper
 
