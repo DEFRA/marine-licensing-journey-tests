@@ -22,6 +22,7 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - **[Automation Architecture](../../test-strategy/automation/README.md)** - Test pyramid and quality engineering
 - **[Domain Context](../../test-strategy/domain-context/README.md)** - Marine licensing reality
 - **[Exploratory Testing](../../test-strategy/exploratory/README.md)** - Session-based investigation
+- **[Scenario Testing](../../test-strategy/scenario-testing/README.md)** - Bolton's realistic user investigation framework
 
 #### [`test-strategy.integration.mdc`](./test-strategy.integration.mdc) 🆕
 
@@ -31,6 +32,27 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Guidelines for when and how to apply different strategy components
 - Examples of usage for test planning, implementation, and improvement
 - Key principles and authoritative source guidance for testing decisions
+
+#### [`scenario-testing.mdc`](./scenario-testing.mdc) 🆕
+
+**Scenario Testing Methodology - Bolton's Framework**
+
+- Michael Bolton's approach to breaking test case addiction
+- THEME, SETUP, ACTIVITIES, ORACLES, VARIATIONS framework
+- Marine licensing context implementation with realistic pressures
+- Evidence collection and problem classification systems
+- Integration with session-based testing and persona-driven investigation
+- Quality assurance principles for authentic user experience testing
+
+#### [`test-charters.mdc`](./test-charters.mdc) ⚡️ **Enhanced**
+
+**Test Charter Organization and Enhanced Testing Methodology**
+
+- Dual charter system: Traditional SBTM + Scenario-enhanced investigations
+- Charter selection strategy based on risk, time, and investigation goals
+- Enhanced charter status tracking and session hopper management
+- Bolton's framework integration with marine licensing personas
+- Evidence collection and cross-charter integration guidance
 
 #### [`htsm.mdc`](./htsm.mdc)
 

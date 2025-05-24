@@ -8,7 +8,11 @@
 
 **Duration:** 60 minutes  
 **Priority:** High  
+**Charter Type:** Traditional SBTM Investigation  
 **User Personas:** Zofia (Novice), Amy (Veteran)
+
+> **🎬 Scenario Testing Complement**  
+> This traditional charter focuses on **technical validation**. For **realistic user experience investigation**, see **[ML-1 Zofia First-Timer Scenario](./ML-1-zofia-first-timer.md)** which explores the same functionality under authentic user pressures.
 
 ## Background Context
 
@@ -106,6 +110,31 @@ Try project names that represent real marine licensing scenarios:
 - Performance issues or slow loading
 - Inconsistent rendering across browsers or devices
 
+## Integration with Scenario Testing
+
+### **What This Charter Provides**
+
+- **Technical validation** - Does the functionality work as specified?
+- **Cross-browser compatibility** - Consistent behaviour across platforms
+- **Performance baseline** - How fast should the save process be?
+- **Edge case discovery** - What happens with unusual but valid inputs?
+
+### **What Scenario Testing Adds**
+
+- **Realistic user context** - How does this work when users are confused, interrupted, or under pressure?
+- **Accessibility reality** - How does this work for users with assistive technology in real situations?
+- **Content effectiveness** - Does the guidance actually help real users or create confusion?
+- **User journey integration** - How does this step feel within the complete application process?
+
+### **Recommended Follow-up**
+
+If this charter discovers:
+
+- **Functional issues** → Fix and retest with traditional charter
+- **Usability concerns** → Investigate with **[Zofia First-Timer Scenario](./ML-1-zofia-first-timer.md)**
+- **Performance problems** → Test under realistic load conditions
+- **Content confusion** → Evaluate with scenario testing and user research
+
 ## Documentation Focus
 
 Record:
@@ -122,8 +151,15 @@ Record:
 - Identify opportunities for performance improvements
 - Document any usability insights for design feedback
 - Create bug reports for functional issues found
+- **Plan scenario testing** if user experience concerns emerge
 
 ---
 
-**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)  
-**Next Charter:** [ML-1 Validation Testing](./ML-1-validation.md)
+**Related Resources:**
+
+- **[ML-1 User Story](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)** - Requirements and acceptance criteria
+- **[ML-1 Zofia First-Timer Scenario](./ML-1-zofia-first-timer.md)** - Realistic novice user investigation
+- **[ML-1 Validation Charter](./ML-1-validation.md)** - Error handling and edge cases
+- **[ML-1 Accessibility Charter](./ML-1-accessibility.md)** - Inclusive design validation
+
+_This traditional charter provides technical validation that complements scenario testing's realistic user investigation._

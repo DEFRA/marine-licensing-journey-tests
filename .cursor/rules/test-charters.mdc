@@ -3,137 +3,313 @@ description: any time we are thinking about tests or test charters, test design,
 globs: 
 alwaysApply: false
 ---
-# Test Charter Organization and Maintenance
+# Test Charter Organization and Enhanced Testing Methodology
 
-## Core Structure
+## Charter Philosophy: Beyond Traditional Test Cases
+
+### **Scenario Testing Integration**
+Our test charters implement both **traditional Session-Based Test Management (SBTM)** and **Michael Bolton's scenario testing framework**. This dual approach provides:
+
+- **Technical validation** through traditional SBTM charters
+- **Realistic user investigation** through scenario-enhanced charters  
+- **Comprehensive coverage** from multiple perspectives
+- **Evidence quality** for both functional issues and user experience insights
+
+### **Breaking the Test Case Addiction**
+Following Bolton's principles, our scenario-enhanced charters:
+- Replace predetermined steps with **guided realistic investigation**
+- Focus on **authentic user pressures** rather than idealised conditions
+- Use **rich oracles** to detect quality problems that binary pass/fail misses
+- Investigate **how well features serve real users** under authentic conditions
+
+## Core Charter Structure
 
 ### **Directory Organization**
 - Test charters are organized in `test-charters/` at repository root
 - Each user story gets its own subdirectory: `ML-{number}/`
-- Charter files follow naming pattern: `ML-{number}-{aspect}.md`
+- Charter files follow enhanced naming pattern: `ML-{number}-{type}-{aspect}.md`
 
-### **Charter Naming Convention**
+### **Enhanced Charter Naming Convention**
 ```
+Traditional SBTM Charters:
 ML-{UserStoryNumber}-{TestingAspect}.md
 
+Scenario-Enhanced Charters:
+ML-{UserStoryNumber}-{PersonaName}-{Scenario}.md
+
 Examples:
-- ML-1-happy-path.md        (Core functionality)
-- ML-1-validation.md        (Error handling and edge cases)
-- ML-1-accessibility.md     (Inclusive design)
-- ML-9-navigation.md        (Navigation and workflow)
-- ML-9-usability.md         (User experience)
+Traditional:
+- ML-1-happy-path.md         (Core functionality validation)
+- ML-1-validation.md         (Error handling and edge cases)
+- ML-1-accessibility.md      (Inclusive design validation)
+
+Scenario-Enhanced:
+- ML-1-zofia-first-timer.md     (Novice user realistic journey)
+- ML-1-amy-efficiency.md        (Veteran user speed patterns)
+- ML-9-fatima-interruptions.md  (Case officer multitasking)
+- ML-12-privacy-concerns.md     (Privacy decision under pressure)
 ```
 
-### **Charter Content Structure**
-Each charter must follow this format:
+### **Dual Charter Types**
+
+#### **Traditional SBTM Charters (60-90 minutes)**
+Standard exploratory testing for focused technical investigation:
 ```
 EXPLORE: [Area of the application]
-WITH: [Tools, data, personas, techniques]
+WITH: [Tools, data, personas, techniques]  
 TO DISCOVER: [Types of information, risks, problems]
 
-Duration: [Recommended time allocation]
+Duration: [60-90 minutes]
 Priority: [High/Medium/Low based on risk]
-User Personas: [Which marine licensing personas to consider]
+Charter Type: Traditional SBTM Investigation
+User Personas: [Which personas to consider]
 ```
+
+#### **Scenario-Enhanced Charters (90-120 minutes)**
+Rich, realistic user investigation using Bolton's framework:
+```
+CHARTER: [Investigation mission]
+
+SCENARIO CONTEXT:
+THEME: [Clear mission about realistic user situation]
+SETUP: [Authentic user context, pressures, environment]
+REALISTIC PRESSURES: [Interruptions, time pressure, friction]
+
+ACTIVITIES: [Guided but flexible realistic actions]
+ORACLES: [How to recognise problems and quality indicators]
+VARIATIONS: [Ways to introduce turbulence and stress]
+
+Duration: [90-120 minutes]
+Charter Type: Scenario-Enhanced Investigation  
+User Personas: [Primary persona with authentic context]
+```
+
+## Scenario Testing Methodology
+
+### **Bolton's Framework Elements**
+
+#### **THEME**
+- Clear mission statement about realistic user situation
+- Focus on authentic problems users actually face
+- Connect to business value and user outcomes
+
+#### **SETUP** 
+- Authentic user context, environment, and pressures
+- Realistic device configurations and constraints
+- Genuine emotional and situational pressures
+
+#### **ACTIVITIES**
+- Guided but flexible realistic actions
+- Adapt to discoveries while maintaining authenticity
+- Focus on what users would actually do, not ideal paths
+
+#### **ORACLES**
+- Multiple quality indicators beyond functional correctness
+- User experience signals and warning signs
+- Business value and efficiency indicators
+
+#### **VARIATIONS**
+- Introduce realistic turbulence and stress
+- Test system behaviour under authentic pressure
+- Explore edge cases through realistic scenarios
+
+### **Marine Licensing Scenario Elements**
+
+#### **Realistic Pressures**
+- **Time pressure** - Seasonal deadlines, end-of-day urgency
+- **Interruptions** - Phone calls, emails, colleague questions
+- **Technical friction** - Slow connections, device switching, browser issues
+- **Cognitive load** - Complex regulations, unfamiliar terminology, multiple tasks
+- **Environmental factors** - Office noise, mobile usage, assistive technology
+
+#### **Authentic User Contexts**
+- **Zofia scenarios** - First-time confusion, assistive technology, terminology barriers
+- **Amy scenarios** - Efficiency focus, keyboard shortcuts, data reuse expectations
+- **Fatima scenarios** - Multitasking pressure, interruptions, data integrity concerns
+- **Simon scenarios** - Technical review focus, compliance validation, field access needs
+
+#### **Evidence Collection Frameworks**
+- **User journey evidence** - Decision points, friction, cognitive load, help-seeking
+- **Technical evidence** - Performance, reliability, integration, data integrity
+- **Content evidence** - Language clarity, guidance effectiveness, example quality
+- **Problem classification** - Critical, significant, improvement opportunities
+
+## Charter Selection Strategy
+
+### **When to Use Traditional SBTM**
+- **Quick technical validation** - Does functionality work as specified?
+- **Cross-browser compatibility** - Consistent behaviour across platforms
+- **Performance baselines** - How fast should operations be?
+- **Edge case discovery** - What happens with unusual but valid inputs?
+- **Focused investigations** - Specific technical areas need validation
+
+### **When to Use Scenario-Enhanced**
+- **Realistic user experience** - How does this work under authentic conditions?
+- **Usability discovery** - What causes confusion or friction for real users?
+- **Accessibility reality** - How does assistive technology work in real usage?
+- **Content effectiveness** - Does guidance actually help or create confusion?
+- **Workflow integration** - How does this step feel within complete user journeys?
+
+### **Risk-Based Selection**
+- **High-risk functionality** → Scenario + Traditional charter combination
+- **Medium-risk functionality** → Traditional first, scenario follow-up if issues found
+- **Low-risk functionality** → Traditional charter focus
+
+### **Time-Based Selection**
+- **Short sessions (60 minutes)** → Traditional SBTM charters
+- **Standard sessions (90 minutes)** → Traditional or lightweight scenarios  
+- **Extended sessions (120+ minutes)** → Full scenario investigations
 
 ## Maintenance Requirements
 
-### **Charter Status Table**
-The `test-charters/README.md` must maintain an accurate status table:
-
-1. **Add new entries** when creating charters
-2. **Link charter names** directly to files using relative paths
-3. **Update status** as charters are completed or revised
-4. **Indicate priority** based on risk assessment
+### **Enhanced Charter Status Table**
+The `test-charters/README.md` must maintain accurate status for both charter types:
 
 Required table format:
 ```markdown
-| User Story | Charter          | Priority | Status   |
-| ---------- | ---------------- | -------- | -------- |
-| ML-X       | [Charter Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-aspect.md) | High/Medium/Low | ✅ Ready / 🚧 Draft / ❌ Blocked |
+| User Story | Charter Type | Charter Name | Priority | Status |
+| ---------- | ------------ | ------------ | -------- | ------ |
+| ML-X | Traditional | [Charter Name](./ML-X/ML-X-aspect.md) | High | ✅ Ready |
+| ML-X | Scenario | [Scenario Name](./ML-X/ML-X-persona-scenario.md) | High | 🔄 Draft |
 ```
 
-### **Charter Organization Section**
-Must keep the "Charter Organisation" section synchronized:
-- Group charters by user story
-- Provide brief descriptions of each charter's focus
-- Maintain consistent linking format
+Status indicators:
+- ✅ Ready: Charter complete and ready for use
+- 🔄 Draft: Charter exists but needs refinement  
+- ❌ Blocked: Charter cannot be completed due to dependencies
 
-### **Session Hopper Updates**
-When adding new charters:
-1. **Add corresponding session ideas** to the hopper
-2. **Remove completed sessions** that are no longer relevant
-3. **Keep hopper realistic** - 8-12 active sessions maximum
+### **Dual Session Hopper Management**
+
+#### **Traditional SBTM Hopper**
+Quick-focus technical investigations (60-90 minutes):
+- Functional validation sessions
+- Cross-browser compatibility testing
+- Performance and reliability validation
+- Edge case and error handling investigation
+
+#### **Scenario-Enhanced Hopper**  
+Rich, realistic user investigations (90-120 minutes):
+- Persona-driven authentic user journeys
+- Realistic pressure and interruption testing
+- Cross-device and accessibility scenarios
+- Privacy and decision-making investigations
+
+### **Charter Organization Section**
+Must maintain clear separation and cross-referencing:
+- Group by user story with charter type subsections
+- Show complementary relationships between traditional and scenario charters
+- Provide clear guidance on when to use each type
 
 ## Quality Standards
 
-### **Charter Completeness**
-Each charter must include:
-- Clear exploration objective
-- Specific tools and techniques
-- Target discoveries or risk areas
-- Realistic duration estimate
-- Appropriate persona consideration
+### **Traditional Charter Completeness**
+- Clear technical exploration objective
+- Specific tools and testing techniques
+- Target discoveries and risk areas
+- Realistic duration estimate (60-90 minutes)
+- Appropriate persona consideration for usability insights
 
-### **Linking Accuracy**
-- All table links must point to existing files
-- Relative paths must be correct from README location
-- Links must work when README is viewed from different contexts
+### **Scenario Charter Completeness**
+- Authentic theme and user situation
+- Realistic setup with genuine pressures
+- Guided but flexible activities
+- Rich oracles for quality detection
+- Meaningful variations and turbulence
+- Evidence collection framework
+- Realistic duration estimate (90-120 minutes)
 
-### **Status Accuracy**
-- ✅ Ready: Charter is complete and ready for use
-- 🚧 Draft: Charter exists but needs refinement
-- ❌ Blocked: Charter cannot be completed due to dependencies
+### **Cross-Charter Integration**
+- Traditional charters reference complementary scenario investigations
+- Scenario charters reference technical validation needs
+- Clear follow-up guidance between charter types
+- Integration with automation implications
 
 ## File Management Rules
 
 ### **When Adding New User Stories**
 1. Create new directory: `test-charters/ML-{number}/`
-2. Add charter files following naming convention
-3. Update Charter Status table with all new entries
-4. Update Charter Organisation section
-5. Add relevant sessions to Session Hopper
+2. Plan both traditional and scenario charter coverage
+3. Add traditional charters for core technical validation
+4. Add scenario charters for high-risk or complex user interactions
+5. Update Charter Status table with both charter types
+6. Update Charter Organisation section with clear type separation
+7. Add relevant sessions to both traditional and scenario hoppers
 
-### **When Updating Existing Charters**
-1. Update file content as needed
-2. Review and update priority if risk assessment changes
-3. Update status if charter moves between draft/ready states
-4. Ensure table links remain accurate
+### **When Planning Charter Coverage**
+1. **Start with risk assessment** - Which user story aspects need deep investigation?
+2. **Traditional first** - Basic functional validation using SBTM
+3. **Scenario enhancement** - Add realistic user investigation for complex/risky areas
+4. **Consider persona needs** - Which personas face the most significant challenges?
+5. **Plan integration** - How do traditional and scenario findings complement each other?
 
-### **When Removing Charters**
-1. Remove files from directory
-2. Remove entries from Charter Status table
-3. Remove links from Charter Organisation section
-4. Remove related sessions from Session Hopper
-5. Document reason for removal in commit message
+### **When Updating Charter Framework**
+1. Ensure both traditional and scenario templates are current
+2. Update methodology guidance based on team learning
+3. Maintain clear distinction between charter types
+4. Keep integration guidance current and practical
 
 ## Integration Requirements
 
 ### **User Story Traceability**
-- Charter names must clearly reference user story numbers
-- Charter content should align with user story acceptance criteria
-- Priority should reflect user story business value and risk
+- Charter names clearly reference user story numbers and types
+- Charter content aligns with user story acceptance criteria
+- Priority reflects user story business value and risk
+- Traditional charters focus on acceptance criteria validation
+- Scenario charters explore realistic usage of acceptance criteria
 
-### **Persona Integration**
-Each charter should specify which marine licensing personas to consider:
-- Zofia (Novice Applicant) - Clarity and guidance
-- Amy (Veteran Applicant) - Efficiency and patterns
-- Fatima (Case Officer) - Back-office and data quality
-- Simon (Marine Officer) - Technical and compliance
+### **Enhanced Persona Integration**
+Each charter type leverages personas differently:
+
+#### **Traditional Charters**
+- Consider persona needs for usability insights
+- Include persona-specific test data and approaches
+- Note persona-relevant discovery areas
+
+#### **Scenario Charters**  
+- Deep persona authenticity throughout investigation
+- Realistic pressures and contexts for specific personas
+- Persona-driven activities and variations
+- Evidence collection focused on persona experience
 
 ### **Testing Strategy Alignment**
-- High-priority charters should cover critical user journeys
-- Medium-priority charters should address edge cases and usability
-- Low-priority charters can explore nice-to-have scenarios
-- Charter coverage should complement automated test coverage
+- Traditional charters provide technical validation baseline
+- Scenario charters explore realistic user experience depth
+- Charter combination provides comprehensive coverage
+- Findings feed into automation strategy and design improvements
 
 ## Validation Checklist
 
 Before committing charter changes:
-- [ ] All table links work correctly
-- [ ] Charter Status table is complete and accurate
-- [ ] Charter Organisation section is synchronized
-- [ ] Session Hopper reflects current priorities
-- [ ] New charters follow required content structure
-- [ ] File naming follows established convention
-- [ ] Priority levels are appropriate for business risk
+- [ ] All table links work correctly for both charter types
+- [ ] Charter Status table includes charter type column
+- [ ] Charter Organisation section separates traditional and scenario types  
+- [ ] Session Hopper includes both traditional and scenario options
+- [ ] New traditional charters follow SBTM structure
+- [ ] New scenario charters follow Bolton's framework
+- [ ] File naming follows established convention for charter types
+- [ ] Cross-references between complementary charter types are included
+- [ ] Priority levels appropriate for business risk and investigation depth
+- [ ] Integration guidance connects charter types effectively
+
+## Evidence and Learning Integration
+
+### **Traditional Charter Evidence**
+- Functional correctness and technical validation
+- Performance benchmarks and reliability data
+- Cross-browser compatibility results
+- Edge case and error handling effectiveness
+
+### **Scenario Charter Evidence**
+- Realistic user experience quality
+- Content and guidance effectiveness  
+- Accessibility under authentic usage conditions
+- User decision-making patterns and support needs
+
+### **Combined Learning Framework**
+- Technical issues require traditional charter validation
+- User experience concerns require scenario investigation
+- Design improvements benefit from scenario insights
+- Automation strategies incorporate both evidence types
+- Risk assessment considers both technical and user experience factors
+
+This enhanced framework ensures our test charters provide both **technical validation** and **realistic user investigation**, delivering comprehensive evidence for quality decisions that serve real users effectively.

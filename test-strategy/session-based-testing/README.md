@@ -243,6 +243,192 @@ For a current list of available session charters and assignment approach, see th
 - Investigate marine-specific functionality
 - Explore environmental and safety considerations
 
+## 🎬 Integration with Scenario Testing
+
+> **📖 For Rich Scenario Framework**  
+> See **[Scenario Testing](../scenario-testing/README.md)** for Bolton's comprehensive approach to realistic user investigation that complements session-based testing perfectly.
+
+### **Scenarios as Session Content**
+
+**Session-based testing provides the timeboxed structure**, whilst **scenario testing provides the rich content** for investigation sessions:
+
+```
+SBTM Framework:              Scenario Content:
+├── 90-minute session       │  └── Rich user context & realistic friction
+├── Clear charter          │  └── THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS
+├── Uninterrupted focus    │  └── Guided flexibility with authentic pressures
+└── Reviewable outcomes    │  └── Evidence collection from realistic usage
+```
+
+### **Enhanced Charter Structure with Scenarios**
+
+Instead of simple SBTM charters, use **scenario-enriched charters**:
+
+#### **Traditional SBTM Charter:**
+
+```
+CHARTER: Test project name validation
+WITH: Various inputs, boundary values
+TO DISCOVER: Validation problems, error handling issues
+```
+
+#### **Scenario-Enhanced Charter:**
+
+```
+CHARTER: Investigate project name workflow using Zofia's first-time scenario
+
+SCENARIO CONTEXT:
+THEME: Discover guidance gaps for users completely new to marine licensing
+SETUP: Novice user, assistive technology, real-world distractions
+REALISTIC PRESSURES: Time pressure, unfamiliar terminology, device switching
+
+SESSION FOCUS:
+- Misinterpret marine licensing terminology deliberately
+- Start without reading guidance thoroughly (realistic behaviour)
+- Enter various coordinate formats and recover from mistakes
+- Test with assistive technologies and different devices
+- Simulate interruptions and task switching
+
+TO DISCOVER: Usability barriers, guidance effectiveness, error recovery, accessibility gaps
+```
+
+### **Scenario-Based Session Types**
+
+#### **Single Scenario Deep Dive (90 minutes)**
+
+Focus one entire session on executing one rich scenario:
+
+```
+SESSION: "Fatima's Busy Afternoon" Scenario Investigation
+
+CHARTER: Execute pressure-testing scenario for case officer workflows
+SCENARIO: ML-03 Fatima's Multi-Tasking Case Review
+DURATION: Long session (2 hours)
+FOCUS: Realistic interruptions, data integrity under pressure, workflow efficiency
+
+PLANNED ACTIVITIES:
+- Review 3-4 applications simultaneously
+- Simulate phone interruptions mid-task
+- Test data preservation across browser tabs
+- Investigate audit trail accuracy under multitasking
+```
+
+#### **Scenario Sampling Sessions (90 minutes)**
+
+Test multiple scenario elements in one session:
+
+```
+SESSION: Cross-Scenario Accessibility Investigation
+
+CHARTER: Sample accessibility aspects across different user scenarios
+DURATION: Normal session (90 minutes)
+PERSONAS: Zofia + Amy + Fatima with assistive technologies
+
+PLANNED ACTIVITIES:
+- Test screen reader compatibility (Zofia scenario elements)
+- Keyboard navigation efficiency (Amy scenario elements)
+- Administrative interface accessibility (Fatima scenario elements)
+```
+
+### **Scenario Execution Within Sessions**
+
+#### **Setup Phase (10 minutes)**
+
+- Configure realistic scenario context (devices, personas, environment)
+- Set up interruption simulations and friction elements
+- Prepare scenario-specific test data and materials
+
+#### **Investigation Phase (70 minutes)**
+
+- Execute scenario activities with guided flexibility
+- Follow realistic user patterns and friction simulation
+- Apply scenario oracles and quality indicators
+- Document discoveries using scenario evidence framework
+
+#### **Wrap-up Phase (10 minutes)**
+
+- Assess scenario completion and key discoveries
+- Note which variations worked well vs poorly
+- Identify follow-up scenario investigations needed
+
+### **Debrief Enhancement for Scenarios**
+
+Add **scenario-specific elements** to the PROOF debrief:
+
+#### **Past** - What happened during the scenario session?
+
+- Which scenario elements were most revealing?
+- How realistic did the user context feel?
+- What friction patterns emerged?
+
+#### **Results** - What scenario insights were gained?
+
+- Which user behaviours uncovered issues?
+- How effective were the scenario oracles?
+- What evidence was collected beyond traditional testing?
+
+#### **Obstacles** - What limited scenario realism?
+
+- Which scenario elements were difficult to simulate?
+- What tooling limitations affected realistic testing?
+- Where did the scenario need adjustment?
+
+#### **Outlook** - What scenario work remains?
+
+- Which scenario variations need investigation?
+- Should this scenario be refined or extended?
+- What new scenarios are suggested by findings?
+
+#### **Feelings** - How did the scenario approach feel?
+
+- Was the richer context helpful for discovery?
+- Did realistic pressures reveal different insights?
+- How engaging was the scenario compared to traditional testing?
+
+### **Combining SBTM Structure with Scenario Richness**
+
+#### **Best of Both Worlds**
+
+```
+SBTM Provides:                    Scenarios Provide:
+✅ Time management               ✅ Rich user context
+✅ Accountability structure      ✅ Realistic friction simulation
+✅ Progress tracking             ✅ Guided flexibility
+✅ Team coordination            ✅ Evidence collection frameworks
+✅ Coverage planning            ✅ Operational testing patterns
+```
+
+#### **Practical Integration Benefits**
+
+- **Better discovery** - Realistic scenarios uncover issues missed by traditional charters
+- **Improved accountability** - SBTM structure makes scenario work trackable and reviewable
+- **Enhanced evidence** - Rich scenarios provide business-relevant testing evidence
+- **Efficient coverage** - Time-boxed sessions ensure scenario work stays focused
+- **Team alignment** - SBTM planning integrates scenario work with project timelines
+
+### **Migration Path: From Traditional SBTM to Scenario-Enhanced**
+
+#### **Week 1: Start Simple**
+
+1. **Choose one familiar charter** - Convert to scenario-enhanced format
+2. **Pick appropriate persona** - Use marine licensing personas (Zofia, Amy, Fatima, Simon)
+3. **Add realistic context** - Include one or two friction elements
+4. **Execute as normal** - Follow SBTM session structure
+
+#### **Week 2-3: Deepen Scenarios**
+
+1. **Use full scenario framework** - THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS
+2. **Simulate realistic pressures** - Interruptions, time pressure, device switching
+3. **Apply scenario oracles** - Look for scenario-specific quality indicators
+4. **Enhanced debrief** - Include scenario-specific PROOF elements
+
+#### **Week 4+: Scenario Library**
+
+1. **Build scenario charter library** - Document effective scenario-enhanced charters
+2. **Share learnings** - Debrief scenario effectiveness with team
+3. **Refine scenarios** - Update scenarios based on discoveries and team feedback
+4. **Scale approach** - Apply scenario enhancement to all session work
+
 ## 📈 Session Metrics and Tracking
 
 ### **Key Metrics**

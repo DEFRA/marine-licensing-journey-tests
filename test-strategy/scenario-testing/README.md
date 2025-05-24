@@ -408,6 +408,60 @@ VARIATIONS:
 - **Scenario Tests** - **Human investigation of realistic use patterns**
 - **Heuristic Exploration** - Systematic discovery using testing heuristics
 
+### **Integration with Session-Based Testing**
+
+> **📖 For Structured Session Management**  
+> See **[Session-Based Testing](../session-based-testing/README.md)** for timeboxed session structure that perfectly complements rich scenario content.
+
+**Scenarios provide the "what to test"**, whilst **session-based testing provides the "how to manage it"**:
+
+```
+Scenario Framework:           SBTM Structure:              Combined Approach:
+├── Rich user contexts  +    ├── 90-minute sessions  =   ├── Focused realistic testing
+├── Authentic pressures      ├── Clear charters           ├── Structured user empathy
+├── Guided flexibility       ├── Uninterrupted focus      ├── Accountable discovery
+└── Evidence collection      └── Reviewable outcomes      └── Business-relevant insights
+```
+
+#### **Scenarios as Session Content**
+
+Instead of traditional session charters, use **scenario-enhanced sessions**:
+
+**Traditional Session:**
+
+```
+CHARTER: Test project name validation
+DURATION: 90 minutes
+WITH: Various inputs, boundary values
+TO DISCOVER: Validation problems, error handling issues
+```
+
+**Scenario-Enhanced Session:**
+
+```
+CHARTER: Execute ML-02 "Zofia's Confused First-Timer" scenario
+DURATION: 90 minutes
+SCENARIO THEME: Discover guidance gaps for marine licensing novices
+REALISTIC CONTEXT: Assistive technology, device switching, terminology confusion
+TO DISCOVER: Usability barriers, guidance effectiveness, accessibility gaps
+```
+
+#### **Session Structure for Scenarios**
+
+- **Setup (10 mins)** - Configure scenario context, personas, friction elements
+- **Investigation (70 mins)** - Execute scenario activities with guided flexibility
+- **Debrief (10 mins)** - Assess scenario completion, document evidence, plan follow-up
+
+#### **Benefits of SBTM + Scenarios**
+
+- **Time management** - Scenarios stay focused within structured sessions
+- **Accountability** - Rich scenario discoveries become trackable and reviewable
+- **Coverage planning** - Scenario work integrates with project timelines
+- **Team coordination** - Session management makes scenario testing scalable
+
+> **📚 Implementation Guide**  
+> See **[Scenario Integration in SBTM](../session-based-testing/README.md#-integration-with-scenario-testing)** for detailed guidance on combining approaches, charter templates, and migration paths.
+
 ### **Complementing Automation**
 
 Scenarios discover what automation should validate:

@@ -208,6 +208,20 @@ Document evidence beyond just bug reports:
 ## 🧠 Session-Based Test Management (SBTM)
 
 > **📖 For comprehensive guidance on session-based exploratory testing, see our detailed guide: [Session-Based Testing](../session-based-testing/README.md)**
+>
+> **🎬 For rich scenario content within sessions, see: [Scenario Testing Integration](../session-based-testing/README.md#-integration-with-scenario-testing)**
+
+### **SBTM + Scenarios: A Powerful Combination**
+
+**Session-based testing provides structure**, whilst **scenario testing provides rich content**:
+
+```
+SBTM Framework              +    Scenario Content           =    Enhanced Discovery
+├── 90-minute timeboxes     │    └── Rich user contexts     │    └── Focused realistic testing
+├── Clear charters         │    └── Authentic pressures    │    └── Structured user empathy
+├── Uninterrupted focus    │    └── Guided flexibility     │    └── Deep investigation
+└── Reviewable outcomes    │    └── Evidence frameworks    │    └── Business-relevant insights
+```
 
 ### **Charter-Driven Sessions**
 
@@ -219,6 +233,20 @@ WITH: [Tools, data, personas, techniques]
 TO DISCOVER: [Types of information we want to learn]
 ```
 
+**Enhanced with scenarios**, charters become much richer:
+
+```
+EXPLORE: Project name workflow under realistic conditions
+WITH: Zofia persona, assistive technology, interruptions, terminology confusion
+TO DISCOVER: Usability barriers, guidance gaps, error recovery effectiveness
+
+SCENARIO CONTEXT:
+- Deliberately misinterpret marine licensing terms
+- Start without reading guidance (realistic novice behaviour)
+- Switch between devices mid-task
+- Simulate real-world distractions and time pressure
+```
+
 ### **Session Structure**
 
 - **Duration**: 90-120 minutes (focused attention span)
@@ -226,7 +254,15 @@ TO DISCOVER: [Types of information we want to learn]
 - **Exploration**: 70-90 minutes active investigation
 - **Debrief**: 10-15 minutes documenting findings
 
+**With scenario integration**:
+
+- **Setup**: Configure realistic scenario context (personas, devices, friction)
+- **Investigation**: Execute scenario activities with guided flexibility
+- **Debrief**: Include scenario-specific insights and evidence collection
+
 ### **Example Charter: First-Time User Journey**
+
+#### **Traditional Charter:**
 
 ```
 EXPLORE: Exemption notification workflow
@@ -239,6 +275,44 @@ Focus Areas:
 - Where might users give up?
 - How effective are error messages?
 ```
+
+#### **Scenario-Enhanced Charter:**
+
+```
+EXPLORE: Exemption notification workflow using ML-02 "Zofia's Confused First-Timer"
+WITH: Full scenario context - assistive technology, device switching, realistic pressures
+TO DISCOVER: Complete user experience under authentic conditions
+
+SCENARIO CONTEXT:
+THEME: Discover guidance gaps for users completely new to marine licensing
+SETUP: Screen reader active, mobile/desktop switching, real-world distractions
+REALISTIC ACTIVITIES:
+- Start without reading all guidance (realistic behaviour)
+- Misinterpret marine licensing terminology deliberately
+- Enter location data in various formats, recover from mistakes
+- Save progress and resume from different device
+- Use help features when genuinely confused
+
+SCENARIO ORACLES:
+- Error messages understandable to non-experts
+- Help appears contextually when most needed
+- Accessibility features work consistently
+- Progress preserved across devices and sessions
+- Recovery from mistakes doesn't lose significant work
+```
+
+### **Integration Benefits**
+
+**Why combine SBTM with scenarios?**
+
+- **Better time management** - Scenarios provide rich content within structured sessions
+- **Enhanced accountability** - Rich discoveries become trackable and reviewable
+- **Realistic focus** - Scenario contexts keep testing grounded in real user needs
+- **Evidence quality** - Scenario oracles improve problem detection and business relevance
+- **Team coordination** - SBTM planning integrates scenario work with project timelines
+
+> **📚 Learn More**  
+> See **[Session-Based Testing Guide](../session-based-testing/README.md)** for detailed implementation guidance, including scenario-enhanced charter templates, debrief frameworks, and migration paths.
 
 ## 🎭 Persona-Driven Exploration
 
