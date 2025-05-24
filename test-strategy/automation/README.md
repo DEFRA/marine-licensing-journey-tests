@@ -25,9 +25,9 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
 ```
            🎭 E2E Tests (Current Focus)
          ┌─────────────────────────────────┐
-         │ Complete User Journeys          │  ← Current implementation
-         │ Cross-browser Compatibility     │     Fast execution via WebDriverIO
-         │ Accessibility Validation        │     Comprehensive coverage
+         │ Complete User Journeys          │      ← Current implementation
+         │ Cross-browser Compatibility     │        Fast execution via WebDriverIO
+         │ Accessibility Validation        │        Comprehensive coverage
          │ Marine Licensing Workflows      │
          └─────────────────────────────────┘
               🔌 API Tests (Future)
