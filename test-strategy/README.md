@@ -14,6 +14,28 @@ This test strategy is a **living document** that:
 
 The strategy grows with the team's understanding and the marine licensing domain complexity.
 
+## 🎯 Current Focus: Private Beta Exemption Notifications
+
+Our testing strategy is currently aligned with delivering a **private beta** that enables **members of the public to submit exemption notifications to the Marine Management Organisation (MMO)**.
+
+### **Testing Priorities for Private Beta**
+
+- 🌊 **Core exemption workflow** - Validating the complete user journey from notification start to submission
+- 👥 **Public user experience** - Testing accessibility, guidance, and usability for external users
+- 📋 **Essential functionality** - Ensuring reliable operation of the core notification features
+- 🔒 **Beta readiness** - Quality validation suitable for limited user testing and feedback
+
+### **Strategic Testing Focus**
+
+Our testing approach prioritises:
+
+1. **User journey completion** - End-to-end validation of exemption notification workflows
+2. **Accessibility compliance** - GOV.UK standards for inclusive public services
+3. **Error handling** - Graceful handling of user mistakes and system issues
+4. **Data validation** - Accurate capture and processing of exemption notification data
+
+This focus ensures our testing strategy directly supports the successful delivery of the private beta, providing confidence in the exemption notification functionality that real users will depend on.
+
 ## 🧠 Modern Testing Philosophy
 
 Our testing approach is built on **contemporary quality engineering principles**:

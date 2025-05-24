@@ -25,6 +25,28 @@ These journey tests cover:
 - **CDP Environments** - Live development/test environments
 - **Docker Compose** - Containerised stack for CI/CD
 
+## 🎯 Current Focus: Private Beta Exemption Notifications
+
+We are currently focused on delivering a **private beta** that enables **members of the public to submit exemption notifications to the Marine Management Organisation (MMO)**.
+
+### **Private Beta Scope**
+
+- 🌊 **Exemption notifications** - Allow users to notify the MMO of activities that qualify for marine licensing exemptions
+- 👥 **Public access** - External users (not just MMO staff) can create and submit notifications
+- 📋 **Essential workflow** - Core user journey from initial notification through to submission
+- 🔒 **Private beta constraints** - Limited user base for initial validation and feedback
+
+### **Key User Journey**
+
+The private beta focuses on enabling this core workflow:
+
+1. **Start exemption notification** - User initiates a new exemption notification
+2. **Provide project details** - Essential information about the marine activity
+3. **Submit notification** - Complete submission to the MMO
+4. **Receive confirmation** - User gets acknowledgement of successful submission
+
+This testing suite validates the complete end-to-end journey for exemption notifications, ensuring the private beta delivers reliable functionality for real users.
+
 ## 📋 User Stories & Current Coverage
 
 This project implements automated tests for marine licensing user journeys. See what functionality has been delivered:
