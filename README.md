@@ -83,7 +83,7 @@ This project implements a **contemporary quality engineering approach** that bui
 ```
 UI Tests (Few)          → Critical user journeys, accessibility
 API Tests (Many)        → Business logic, integrations, edge cases
-Unit Tests (Most)       → Component behaviour, domain logic
+Unit Tests (Excellent)  → Component behaviour, domain logic, high coverage
 Static Analysis         → Code quality, security vulnerabilities
 ```
 

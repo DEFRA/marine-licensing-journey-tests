@@ -225,15 +225,15 @@ Our **automation strategy** prioritises efficient feedback:
    ├── Cross-browser compatibility
    └── Accessibility automation
 
-🔺 API Tests (Future)
+🔺 API Tests (Planned)
    ├── Business logic validation
    ├── Data integrity checks
    └── Performance testing
 
-🔺 Unit Tests (Future)
-   ├── Component behaviour
-   ├── Validation logic
-   └── Error handling
+🔺 Unit Tests (Excellent Coverage)
+   ├── Component behaviour validation
+   ├── Business logic and validation rules
+   └── Error handling and edge cases
 ```
 
 ### **Scenario Testing Framework**
