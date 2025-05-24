@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Dangerous Commands and Tools During URL Refactoring
+
+**High-Risk Operations** - These commands and tools frequently corrupt URLs during refactoring:
+
+## 1. Broad Search/Replace Operations
+- **IDE Find/Replace with path patterns**: Using patterns like `../` or project names in global replace
+- **Search/replace in file tools**: Automated tools that match partial paths within URLs
+- **Bulk pattern matching**: Operations that don't exclude URLs from replacement scope
+
+## 2. Command Line Tools That Can Corrupt URLs
+- **sed with broad patterns**: `sed 's|path|newpath|g'` can corrupt URLs containing similar patterns
+- **grep with replacement**: Combining grep results with automated replacements
+- **find/replace scripts**: Automated scripts that don't recognize URL formats
+
+## 3. Editor-Specific Hazards
+- **File editing tools**: Tools that automatically add project prefixes to perceived "relative paths"
+- **Auto-completion interference**: Editors "helping" by adding paths they think are missing
+- **Template substitution**: Tools replacing variables within URL strings
+
+## 4. Real Examples That Caused Corruption
+Based on actual issues encountered during marine licensing test refactoring:
+- ✗ `search_replace` with path patterns near markdown links
+- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:url)`
+- ✗ Project-wide find/replace of directory names within URLs
+- ✗ Edit tools adding project prefixes to URLs mistaken for relative paths
+
+## 5. Safe Alternatives for URL-Adjacent Refactoring
+- **Manual verification**: Review each URL-containing file individually
+- **Targeted sed with context**: Use precise line numbers or unique surrounding text
+- **URL exclusion patterns**: Add negative lookaheads: `sed '/https:\/\//!s|pattern|replacement|g'`
+- **Two-step process**: Extract URLs, refactor other content, then restore URLs
+
+## Command Safety Checklist
+- [ ] Verify commands won't match URL patterns before execution
+- [ ] Use grep to preview changes before applying bulk operations
+- [ ] Test commands on a single file before bulk application
+- [ ] Check version control diffs specifically for URL changes
+- [ ] Keep URL-containing files separate from bulk refactoring operations
+
+## Recovery Patterns for Corrupted URLs
+- Remove project prefixes: `sed 's|projectname/https://|https://|g'`
+- Fix protocol damage: `sed 's|https:/\b|https://|g'`
+- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/url)|g'`
+- Always verify URLs resolve after cleanup
+
+## Related Guidance
+- See [refactoring playbook](mdc:marine-licensing-journey-tests/playbook.refactoring.mdc) for general refactoring principles
+- See URL and Hyperlink Management section for prevention strategies

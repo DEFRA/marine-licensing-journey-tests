@@ -1,0 +1,67 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# URL and Hyperlink Management During Refactoring
+
+**Critical URL Rules** - Protect links during refactoring operations:
+
+## 1. URL Structure Preservation
+- URLs and hyperlinks require special handling during search/replace operations
+- Always exclude URLs from bulk find/replace operations that modify file paths
+- Use precise, targeted replacements rather than broad pattern matching near URLs
+
+## 2. Common URL Corruption Scenarios
+- **Markdown links**: Format `[text](url)` can be corrupted by path-based search/replace
+- **Configuration URLs**: API endpoints, base URLs, and external references  
+- **Documentation links**: References to external resources, PDFs, and websites
+- **Asset paths**: Links to images, stylesheets, and other static resources
+
+## 3. URL Validation During Refactoring
+- Manually verify all URLs remain intact after structural changes
+- Test external links to ensure they resolve correctly
+- Check relative URLs when moving files between directories
+- Validate API endpoints in configuration files
+
+## 4. Safe URL Refactoring Practices
+- **Isolate URL changes**: Handle URL updates separately from code refactoring
+- **Use precise selectors**: Target specific occurrences rather than broad patterns
+- **Exclude URL patterns**: Add URL regex exclusions to find/replace operations
+- **Version control check**: Review diffs specifically for unintended URL changes
+
+## URL Debugging Checklist
+- [ ] All markdown links maintain proper `[text](url)` format
+- [ ] External URLs (https://, http://) are unchanged
+- [ ] Relative file paths in URLs reflect actual file structure
+- [ ] Configuration URLs and API endpoints are intact
+- [ ] Documentation links resolve correctly
+- [ ] No URL prefixes or suffixes were accidentally added
+
+## Prevention Strategies
+
+### Pre-Refactoring URL Assessment
+- Identify all files containing URLs before starting refactoring
+- Create a list of all external links and their expected formats
+- Document any relative paths that might be affected by file moves
+- Note configuration files with API endpoints or service URLs
+
+### During Refactoring Operations
+- Use URL-aware tools when available
+- Preview changes before applying bulk operations
+- Test URLs in staging environments after structural changes
+- Maintain separate commit history for URL-related changes
+
+### Post-Refactoring Validation
+- Run automated link checkers on documentation
+- Verify relative paths resolve correctly in the new structure
+- Test all external links for accessibility
+- Check configuration files for proper URL formatting
+
+## Related Guidance
+- See [Dangerous Commands and Tools During URL Refactoring](dangerous.url.commands.mdc) for specific tool risks
+- See [refactoring playbook](playbook.refactoring.mdc) for general refactoring principles
+- See Import Management section for handling file path changes
+
+## Real-World Context
+This guidance was developed from actual URL corruption experiences during marine licensing test refactoring, where search/replace operations repeatedly corrupted markdown links and external references.

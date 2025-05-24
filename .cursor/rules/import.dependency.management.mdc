@@ -1,0 +1,166 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Import and Dependency Management During Refactoring
+
+**Context**: This guidance specifically applies to JavaScript/Node.js projects using ES6 modules, CommonJS, or mixed module systems during refactoring operations.
+
+## Critical Import Rules
+
+**Always follow these when refactoring:**
+
+### 1. Extract and Move Operations
+- When extracting code to new files, identify all dependencies and add corresponding imports
+- When moving existing code, update import statements in both source and destination files
+- Verify that extracted constants, classes, or functions are properly imported where used
+
+### 2. File Structure Changes
+- When moving files to different directories, update all import paths that reference them
+- Use project-wide search to find all references to moved files
+- Update both direct imports and re-exports in index files
+
+### 3. Import Path Validation
+- Always verify import paths are correct after structural changes
+- Check for both relative imports (`../`, `./`) and absolute imports (`~/`)
+- Ensure import statements match the actual file structure
+
+### 4. Pre-Refactoring Import Audit
+- Before starting refactoring, list all current imports in affected files
+- Plan which imports will need to be added, removed, or updated
+- Consider creating new common/shared modules for extracted code
+
+### 5. Post-Refactoring Import Verification
+- Run tests immediately after import changes to catch `ReferenceError` issues
+- Check browser/IDE error consoles for unresolved import warnings
+- Verify all imported items are actually used (remove unused imports)
+
+## Common Import Scenarios in This Codebase
+
+### Moving Base Classes
+**Pattern**: `../tasks/task` → `../base/task.js`
+- Update Task imports across interactions and tasks directories
+- Ensure base classes are properly exported from new locations
+- Update index files if they re-export base classes
+
+### Extracting Page Objects
+**Pattern**: Moving hardcoded locators to page object files
+- Add new page object exports to `test-infrastructure/pages/index.js`
+- Update all files that reference hardcoded locators
+- Import page objects where locator methods are used
+
+### Creating Utility Classes
+**Pattern**: Extracting common functionality to shared utilities
+- Import shared utilities in all files that use extracted functions
+- Create proper module exports for utility functions
+- Update calls to use imported utility methods
+
+### Refactoring Abilities
+**Pattern**: Extracting methods from ability classes
+- Ensure all method extractions include necessary page object imports
+- Update ability classes to import extracted functionality
+- Verify interaction classes import updated ability methods
+
+### Domain Model Extraction
+**Pattern**: Moving domain logic from actor classes to separate models
+- Create model classes with proper exports
+- Import models where domain logic is used
+- Update actor classes to use imported model functionality
+
+## Import Debugging Checklist
+
+### Pre-Refactoring Preparation
+- [ ] List all current imports in files to be refactored
+- [ ] Identify dependencies that will need to move with extracted code
+- [ ] Plan new import structure before making changes
+- [ ] Check for circular dependency risks
+
+### During Refactoring Operations
+- [ ] Add imports to new files as they're created
+- [ ] Update imports in files losing extracted code
+- [ ] Verify relative path calculations for moved files
+- [ ] Update index files that re-export moved modules
+
+### Post-Refactoring Validation
+- [ ] All new files have necessary imports at the top
+- [ ] All moved/extracted code imports are updated
+- [ ] File paths in imports match actual directory structure
+- [ ] Index files export new modules
+- [ ] Tests run without `ReferenceError` or `Module not found` errors
+- [ ] No unused imports remain
+- [ ] IDE shows no unresolved import warnings
+
+## Troubleshooting Common Import Issues
+
+### ReferenceError: X is not defined
+**Symptoms**: Tests fail with reference errors
+**Common Causes**:
+- Missing import statement in file using the reference
+- Incorrect import path (wrong relative directory calculation)
+- Module not properly exported from source file
+
+**Resolution Steps**:
+1. Verify the module is exported from source file
+2. Check import path calculation (count `../` correctly)
+3. Ensure import statement syntax is correct
+4. Run tests to verify fix
+
+### Module not found
+**Symptoms**: Import statements show "module not found" errors
+**Common Causes**:
+- File moved but import paths not updated
+- Incorrect file extension in import path
+- Missing index.js file in directory
+
+**Resolution Steps**:
+1. Verify file exists at expected path
+2. Check file extension requirements (.js, no extension, etc.)
+3. Update import paths to match actual file structure
+4. Create index.js files if needed for directory imports
+
+### Circular Dependencies
+**Symptoms**: Runtime errors or modules returning undefined
+**Common Causes**:
+- Two modules importing each other directly
+- Indirect circular imports through multiple files
+
+**Resolution Steps**:
+1. Identify circular dependency chain
+2. Extract shared code to separate module
+3. Consider dependency inversion patterns
+4. Move shared types/interfaces to separate files
+
+## Prevention Strategies
+
+### Use Project-Wide Search
+- Always search entire codebase for references before moving files
+- Use tools like `grep`, VS Code search, or IDE find-in-files
+- Search for both imports and string references to file paths
+
+### Consistent Import Patterns
+- Establish project-wide conventions for import paths
+- Use absolute imports where possible to reduce relative path errors
+- Consider using import maps or module resolution configuration
+
+### Validation Automation
+- Run tests immediately after import changes
+- Use linting tools to catch import errors early
+- Consider automated tools to detect unused imports
+
+### Documentation
+- Update documentation when changing module structures
+- Maintain clear export/import conventions in team guides
+- Document any special import requirements or patterns
+
+## Integration with Other Refactoring Activities
+
+**Cross-Reference**: This import management guidance works in conjunction with:
+- [URL and Hyperlink Management](url.hyperlink.management.mdc) - For protecting documentation links during refactoring
+- [Dangerous Commands and Tools](dangerous.url.commands.mdc) - For avoiding tools that corrupt import statements
+- Main refactoring playbook - For overall refactoring strategy and validation
+
+**Key Integration Points**:
+- Import changes often happen during file structure refactoring
+- URL corruption tools can also damage import paths
+- Import validation is part of post-refactoring testing workflows

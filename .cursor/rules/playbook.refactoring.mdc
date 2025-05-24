@@ -1,5 +1,5 @@
 ---
-description: refactoring
+description: 
 globs: 
 alwaysApply: false
 ---
@@ -71,82 +71,35 @@ After every refactoring:
 4. **Validate performance** - ensure no performance regressions
 5. **Document rationale** - briefly note why the change improves the code
 
-### Import Management During Refactoring
+### Import and Dependency Management During Refactoring
 
-**Critical Import Rules** - Always follow these when refactoring:
+**⚠️ Critical Reference**: For comprehensive guidance on import management, dependency resolution, and avoiding import-related errors during refactoring operations, see [Import and Dependency Management During Refactoring](mdc:marine-licensing-journey-tests/import.dependency.management.mdc).
 
-**1. Extract and Move Operations**
-- When extracting code to new files, identify all dependencies and add corresponding imports
-- When moving existing code, update import statements in both source and destination files
-- Verify that extracted constants, classes, or functions are properly imported where used
-
-**2. File Structure Changes**
-- When moving files to different directories, update all import paths that reference them
-- Use project-wide search to find all references to moved files
-- Update both direct imports and re-exports in index files
-
-**3. Import Path Validation**
-- Always verify import paths are correct after structural changes
-- Check for both relative imports (`../`, `./`) and absolute imports (`~/`)
-- Ensure import statements match the actual file structure
-
-**4. Pre-Refactoring Import Audit**
-- Before starting refactoring, list all current imports in affected files
-- Plan which imports will need to be added, removed, or updated
-- Consider creating new common/shared modules for extracted code
-
-**5. Post-Refactoring Import Verification**
-- Run tests immediately after import changes to catch `ReferenceError` issues
-- Check browser/IDE error consoles for unresolved import warnings
-- Verify all imported items are actually used (remove unused imports)
-
-**Common Import Scenarios in This Codebase:**
-- **Moving base classes**: Update Task imports from `../tasks/task` to `../base/task.js`
-- **Extracting page objects**: Add new page object exports to `test-infrastructure/pages/index.js`
-- **Creating utility classes**: Import shared utilities in all files that use extracted functions
-- **Refactoring abilities**: Ensure all method extractions include necessary page object imports
-
-**Import Debugging Checklist:**
-- [ ] All new files have necessary imports at the top
-- [ ] All moved/extracted code imports are updated
-- [ ] File paths in imports match actual directory structure
-- [ ] Index files export new modules
-- [ ] Tests run without `ReferenceError` or `Module not found` errors
+This separate document provides:
+- Critical import rules and validation workflows
+- Common import scenarios specific to this codebase
+- Import debugging checklists and troubleshooting guides
+- Prevention strategies and integration with refactoring workflows
 
 ### URL and Hyperlink Management During Refactoring
 
-**Critical URL Rules** - Protect links during refactoring operations:
+**⚠️ Critical Reference**: For comprehensive guidance on protecting URLs and hyperlinks during refactoring operations, see [URL and Hyperlink Management During Refactoring](mdc:marine-licensing-journey-tests/url.hyperlink.management.mdc).
 
-**1. URL Structure Preservation**
-- URLs and hyperlinks require special handling during search/replace operations
-- Always exclude URLs from bulk find/replace operations that modify file paths
-- Use precise, targeted replacements rather than broad pattern matching near URLs
+This separate document provides:
+- Critical URL protection rules and best practices
+- Common corruption scenarios and prevention strategies
+- URL validation and debugging checklists
+- Pre, during, and post-refactoring URL management workflows
 
-**2. Common URL Corruption Scenarios**
-- **Markdown links**: Format `@text` can be corrupted by path-based search/replace
-- **Configuration URLs**: API endpoints, base URLs, and external references  
-- **Documentation links**: References to external resources, PDFs, and websites
-- **Asset paths**: Links to images, stylesheets, and other static resources
+### Command and Tool Safety During Refactoring
 
-**3. URL Validation During Refactoring**
-- Manually verify all URLs remain intact after structural changes
-- Test external links to ensure they resolve correctly
-- Check relative URLs when moving files between directories
-- Validate API endpoints in configuration files
+**⚠️ Critical Reference**: For detailed guidance on specific commands and tools that can corrupt URLs during refactoring operations, see [Dangerous Commands and Tools During URL Refactoring](mdc:marine-licensing-journey-tests/dangerous.url.commands.mdc).
 
-**4. Safe URL Refactoring Practices**
-- **Isolate URL changes**: Handle URL updates separately from code refactoring
-- **Use precise selectors**: Target specific occurrences rather than broad patterns
-- **Exclude URL patterns**: Add URL regex exclusions to find/replace operations
-- **Version control check**: Review diffs specifically for unintended URL changes
-
-**URL Debugging Checklist:**
-- [ ] All markdown links maintain proper format
-- [ ] External URLs (https://, http://) are unchanged
-- [ ] Relative file paths in URLs reflect actual file structure
-- [ ] Configuration URLs and API endpoints are intact
-- [ ] Documentation links resolve correctly
-- [ ] No URL prefixes or suffixes were accidentally added
+This separate document provides:
+- Specific high-risk operations and tools
+- Real examples of command failures encountered
+- Safe alternatives and recovery patterns
+- Command safety checklists
 
 ## Strategic Considerations
 
@@ -173,55 +126,11 @@ This guidance incorporates research findings from:
 
 **Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
 *By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
-CodeScene Research Team
-[PDF Link](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
+CodeScene Research Team  
+[Download PDF](mdc:marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf)
 
 Key research findings referenced:
 - AI refactoring success rates and failure patterns
 - The 70% rule about developer time spent understanding code
 - Statistical analysis of LLM performance on code refactoring tasks
 - Fact-checking methodologies for AI-generated code changes
-### Dangerous Commands and Tools During URL Refactoring
-
-**High-Risk Operations** - These commands and tools frequently corrupt URLs during refactoring:
-
-**1. Broad Search/Replace Operations**
-- **IDE Find/Replace with path patterns**: Using patterns like `../` or project names in global replace
-- **Search/replace in file tools**: Automated tools that match partial paths within URLs
-- **Bulk pattern matching**: Operations that don't exclude URLs from replacement scope
-
-**2. Command Line Tools That Can Corrupt URLs**
-- **sed with broad patterns**: `sed 's|path|newpath|g'` can corrupt URLs containing similar patterns
-- **grep with replacement**: Combining grep results with automated replacements
-- **find/replace scripts**: Automated scripts that don't recognize URL formats
-
-**3. Editor-Specific Hazards**
-- **File editing tools**: Tools that automatically add project prefixes to perceived "relative paths"
-- **Auto-completion interference**: Editors "helping" by adding paths they think are missing
-- **Template substitution**: Tools replacing variables within URL strings
-
-**4. Real Examples That Caused Corruption**
-Based on actual issues encountered:
-- ✗ `search_replace` with path patterns near markdown links
-- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)`
-- ✗ Project-wide find/replace of directory names within URLs
-- ✗ Edit tools adding project prefixes to URLs mistaken for relative paths
-
-**5. Safe Alternatives for URL-Adjacent Refactoring**
-- **Manual verification**: Review each URL-containing file individually
-- **Targeted sed with context**: Use precise line numbers or unique surrounding text
-- **URL exclusion patterns**: Add negative lookaheads: `sed '/https:\/\//!s|pattern|replacement|g'`
-- **Two-step process**: Extract URLs, refactor other content, then restore URLs
-
-**Command Safety Checklist:**
-- [ ] Verify commands won't match URL patterns before execution
-- [ ] Use grep to preview changes before applying bulk operations
-- [ ] Test commands on a single file before bulk application
-- [ ] Check version control diffs specifically for URL changes
-- [ ] Keep URL-containing files separate from bulk refactoring operations
-
-**Recovery Patterns for Corrupted URLs:**
-- Remove project prefixes: `sed 's|projectname/https:///|https:///|g'`
-- Fix protocol damage: `sed 's|https://\b|https:///|g'`
-- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/url)|g'`
-- Always verify URLs resolve after cleanup 
