@@ -162,10 +162,10 @@ We use **systematic thinking models** to guide our testing:
 
 ```
 HTSM Categories → Product Factors → Quality Criteria → Test Ideas
-    ↓                   ↓                ↓              ↓
-Structure           Features         Functional      Happy path tests
-Behaviour           Users            Usability       User journey tests
-Data                Platforms        Reliability     Error handling tests
+    ↓                   ↓                ↓                 ↓
+Structure            Features         Functional      Happy path tests
+Behaviour            Users            Usability       User journey tests
+Data                 Platforms        Reliability     Error handling tests
 ```
 
 ### **Automation Strategy**
