@@ -25,6 +25,20 @@ These journey tests cover:
 - **CDP Environments** - Live development/test environments
 - **Docker Compose** - Containerised stack for CI/CD
 
+## 📋 User Stories & Current Coverage
+
+This project implements automated tests for marine licensing user journeys. See what functionality has been delivered:
+
+**[📖 View Current User Stories & Test Coverage →](.cursor/user-stories/README.md)**
+
+**Currently Implemented:**
+
+- ✅ **ML-1**: Provide project name and create exemption
+- ✅ **ML-9**: View the task list and navigate between tasks
+- ✅ **ML-12**: Provide or withhold public register content
+
+Each user story includes acceptance criteria, screenshots, and links to corresponding feature files tagged with `@issue=ML-{number}` for full traceability between requirements and tests.
+
 ## 🏗️ Architecture Overview
 
 ### **BDD + Screenplay Pattern**

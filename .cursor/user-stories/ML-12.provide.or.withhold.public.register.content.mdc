@@ -1,0 +1,122 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# ML-12: Provide or Withhold Public Register Content
+
+## User Story
+
+**AS** an applicant  
+**I WANT** to state whether I consent for my marine project to be shared on the public register  
+**SO THAT** my notification will only be shared if I consent
+
+## Background
+
+MMO would like to share all exemption notifications to the public register (a publicly available list of all marine-licensable activities). Exemption notifications are not currently shared. In order to support this sharing in future, we need to ask the user if they are happy for their details to be shared, and if not, ask them why not.
+
+## Resources
+
+- Link to "Task list" page in prototype MVP
+- Link to "Public register consent" page in prototype MVP
+- Link to data dictionary
+- Design System: [Radios](https://design-system.service.gov.uk/components/radios/)
+- Design System: [Conditionally reveal a question](https://design-system.service.gov.uk/components/radios/#conditionally-revealing-a-related-question)
+- Design System: [Textarea](https://design-system.service.gov.uk/components/textarea/)
+- Design System: [Error for conditionally revealed text](https://design-system.service.gov.uk/components/radios/)
+
+## Out of Scope
+
+This story does not actually share the application details to the public register - that will be done under another story.
+
+This story does not cover the link to the public register.
+
+This story does not cover the link for the survey in the header.
+
+This story does not cover the links in the footer.
+
+Character count is currently out of scope for this ticket, but could be added separately later if needed.
+
+Minimum character count is out of scope for this ticket but could be added later if needed, to prevent users from just adding "." or similar.
+
+## Questions and Answers
+
+**Q.** How much text should we allow in the reason text field?
+
+**A.** Decision in refinement session to go with 1000 characters. We can check against Fivium DB to see if any of the existing notifications have more than 1000 characters.
+
+## Screenshots
+
+**Public register page showing:**
+
+**Screenshot 1 - Initial state:**
+- "Hammersmith pontoon construction" as page caption
+- "Public register" as H1 heading
+- Explanatory text about MMO publishing marine licence applications and exemptions
+- Radio button question: "Do you believe the information you have provided should be withheld from the public register?"
+- "Yes" and "No" radio options (neither selected)
+- "Save and continue" and "Cancel" buttons
+
+**Screenshot 2 - Conditional reveal:**
+- Same page with "Yes" radio button selected
+- Conditional text area revealed: "Provide details of why the information should be withheld"
+- Text area is empty and ready for user input
+
+## Acceptance Criteria
+
+### AC1 - Display "Public register" page
+
+**GIVEN** I am viewing the task list (see ticket ML-9: View the task list)
+
+**WHEN** I select the new "Public register" task (as per task list prototype)
+
+**THEN** the "Public register" page is displayed:
+- the page will appear as per the prototype
+- the project name will appear as the page caption
+- neither radio button will be defaulted initially
+- if I have previously saved information on this page then that data will be pre-populated
+
+### AC2 - Select "Yes" radio button
+
+**GIVEN** I am viewing the "Public register" page
+
+**WHEN** I choose to withhold my information from the public register (by selecting "Yes")
+
+**THEN** I am able to provide text on why I want to withhold my information  
+**AND** textbox will appear when "Yes" is selected and disappear when "No" is selected
+
+### AC3 - Validate the public register information
+
+**GIVEN** I am viewing the "Public register" page
+
+**WHEN** I select the "Save and continue" button
+
+**THEN** the following validation will be performed:
+- **Mandatory radio button** - if I have not selected a radio button, display the following error: "Select whether you believe your information should be withheld from the public register"
+- **Mandatory reason text** - if I have selected the "Yes" radio button and I have not provided a reason, display the following error: "Details of why the information should be withheld cannot be blank"
+- **Maximum length of reason text** - if I have entered more than 1000 characters for the reason, display the following error: "Details of why the information should be withheld must be 1000 characters or less"
+
+**NOTE** - the reason text error message will not be displayed if the user has selected the "No" radio button (i.e. if the reason textbox is not displayed)
+
+**NOTE** - see Resources section for information on how errors should be displayed for the conditionally revealed textbox.
+
+### AC4 - Save the public register information
+
+**GIVEN** I am viewing the "Public register" page
+
+**WHEN** I select the "Save and continue" button  
+**AND** all the validation in the previous AC is passed
+
+**THEN** the public register information will be saved  
+**AND** I will be returned to the task list  
+**AND** the "Public register" task will be marked as "Completed"
+
+### AC5 - "Cancel" option / "Back" link
+
+**GIVEN** I am viewing the "Public register" page
+
+**WHEN** I select the "Cancel" option or the "Back" link
+
+**THEN** I am returned to the task list:
+- the status of the task will not be updated
+- any changes I have made on the page during this visit are not saved
