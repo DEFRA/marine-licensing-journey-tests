@@ -230,8 +230,8 @@ Discover guidance gaps and usability barriers for users completely new to marine
 **Related Resources:**
 
 - **[ML-1 User Story](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)** - Requirements and acceptance criteria
-- **[Zofia Persona](../../test-strategy/domain-context/README.md#zofia-novice-applicant)** - Detailed persona background
-- **[Scenario Testing Framework](../../test-strategy/scenario-testing/README.md)** - Bolton's comprehensive approach
+- **[Zofia Persona](../../test-strategy/domain-context/README.md#zofia-novice-applicant---accessibility--guidance-testing)** - Detailed persona background
+- **[Domain Context](../../test-strategy/domain-context/README.md)** - Marine licensing user reality and testing implications
 - **[Traditional ML-1 Charters](./ML-1-happy-path.md)** - Complementary technical investigations
 
 _This scenario charter transforms testing from "does it work?" to "does it work for someone like Zofia under realistic conditions?"_

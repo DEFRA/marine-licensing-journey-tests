@@ -209,16 +209,16 @@ Wrap-up Phase (10-15 minutes):
 | ML-1       | Traditional  | [Validation](./ML-1/ML-1-validation.md)                               | High     | ✅ Ready |
 | ML-1       | Traditional  | [Accessibility](./ML-1/ML-1-accessibility.md)                         | Medium   | ✅ Ready |
 | ML-1       | Scenario     | [Zofia First-Timer](./ML-1/ML-1-zofia-first-timer.md)                 | High     | 🔄 Draft |
-| ML-1       | Scenario     | [Amy Efficiency](./ML-1/ML-1-amy-efficiency.md)                       | Medium   | 🔄 Draft |
+| ML-1       | Scenario     | [Amy Efficiency](./ML-1/ML-1-amy-efficiency.md)                       | Medium   | ✅ Ready |
 | ML-9       | Traditional  | [Navigation](./ML-9/ML-9-navigation.md)                               | High     | ✅ Ready |
 | ML-9       | Traditional  | [Usability](./ML-9/ML-9-usability.md)                                 | Medium   | ✅ Ready |
-| ML-9       | Scenario     | [Fatima Interruptions](./ML-9/ML-9-fatima-interruptions.md)           | High     | 🔄 Draft |
-| ML-9       | Scenario     | [Cross-Device Journey](./ML-9/ML-9-cross-device-journey.md)           | Medium   | 🔄 Draft |
+| ML-9       | Scenario     | [Fatima Interruptions](./ML-9/ML-9-fatima-interruptions.md)           | High     | ✅ Ready |
+| ML-9       | Scenario     | [Cross-Device Journey](./ML-9/ML-9-cross-device-journey.md)           | Medium   | ✅ Ready |
 | ML-12      | Traditional  | [Consent Workflow](./ML-12/ML-12-consent-workflow.md)                 | High     | ✅ Ready |
 | ML-12      | Traditional  | [Validation](./ML-12/ML-12-validation.md)                             | High     | ✅ Ready |
 | ML-12      | Traditional  | [Data Protection](./ML-12/ML-12-data-protection.md)                   | Medium   | ✅ Ready |
-| ML-12      | Scenario     | [Privacy Concerns](./ML-12/ML-12-privacy-concerns.md)                 | High     | 🔄 Draft |
-| ML-12      | Scenario     | [Consent Misunderstanding](./ML-12/ML-12-consent-misunderstanding.md) | Medium   | 🔄 Draft |
+| ML-12      | Scenario     | [Privacy Concerns](./ML-12/ML-12-privacy-concerns.md)                 | High     | ✅ Ready |
+| ML-12      | Scenario     | [Consent Misunderstanding](./ML-12/ML-12-consent-misunderstanding.md) | Medium   | ✅ Ready |
 
 ## 📋 Session Hopper
 
@@ -246,12 +246,12 @@ Rich, realistic user investigations (90-120 minutes):
 
 ```
 🎭 Scenario Hopper:
-- Execute "Zofia's First Marine Exemption" - novice user confusion patterns
-- Run "Amy's Efficient Repeat Application" - veteran user speed and shortcuts
-- Investigate "Fatima's Busy Afternoon" - case officer pressure testing
-- Explore "Cross-Device Application Resume" - mobile-to-desktop workflows
-- Test "Privacy Decision Under Time Pressure" - realistic consent scenarios
-- Simulate "Assistive Technology First-Timer" - accessibility under real usage
+- Execute "Zofia First-Timer" (ML-1) - novice user confusion patterns
+- Run "Amy Efficiency" (ML-1) - veteran user speed and shortcuts
+- Investigate "Fatima Interruptions" (ML-9) - case officer pressure testing
+- Explore "Cross-Device Journey" (ML-9) - mobile-to-desktop workflows
+- Test "Privacy Concerns" (ML-12) - realistic deadline pressure consent scenarios
+- Simulate "Consent Misunderstanding" (ML-12) - data protection confusion patterns
 - Run "Network Interruption Recovery" - connection issues during submission
 - Execute "Terminology Misunderstanding" - domain knowledge gaps
 ```

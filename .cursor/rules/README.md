@@ -173,6 +173,18 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - GOV.UK content design guidance
 - UK Government style manual compliance
 
+#### [`documentation.coherence.mdc`](./documentation.coherence.mdc) 🆕
+
+**Documentation Coherence & Quality Standards**
+
+- Cross-reference integrity and anchor link management across test strategy and charters
+- Status tracking accuracy and file organization validation
+- Dual charter system standards (traditional SBTM + scenario-enhanced approaches)
+- Bolton framework implementation requirements for scenario charters
+- Quality assurance practices and common coherence issue prevention
+- Professional British English standards with marine licensing context integration
+- Reference management patterns and maintenance responsibilities
+
 ### 🔧 **Refactoring & Code Safety**
 
 #### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬

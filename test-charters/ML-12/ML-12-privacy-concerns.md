@@ -226,7 +226,7 @@ Explore how users make privacy consent decisions under authentic pressures, inve
 **Related Resources:**
 
 - **[ML-12 User Story](../../.cursor/user-stories/ML-12.provide.public.register.content.mdc)** - Requirements and acceptance criteria
-- **[Privacy and Data Protection](../../test-strategy/domain-context/README.md#data-protection-context)** - Regulatory requirements and user rights
+- **[Domain Context](../../test-strategy/domain-context/README.md)** - Regulatory requirements and user rights
 - **[Traditional ML-12 Charters](./ML-12-consent-workflow.md)** - Complementary technical investigations
 - **[GOV.UK Privacy Patterns](https://design-system.service.gov.uk/patterns/)** - Government digital service privacy design patterns
 

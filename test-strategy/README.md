@@ -204,21 +204,53 @@ Behaviour            Users            Usability       User journey tests
 Data                 Platforms        Reliability     Error handling tests
 ```
 
-### **Automation Strategy**
+**Examples of HTSM in Practice:**
 
-Our **current automation approach** focuses on comprehensive UI testing:
+- **Structure Testing** - Page layout, navigation, form structure across browsers
+- **Behaviour Testing** - User interactions, error handling, workflow completion
+- **Data Testing** - Input validation, data persistence, integration accuracy
+
+### **Test Pyramid Strategy**
+
+Our **automation strategy** prioritises efficient feedback:
 
 ```
-UI Tests (Current)      → Complete user journeys, accessibility, cross-browser
-API Tests (Planned)     → Business logic validation in backend repository
-Static Analysis         → Code quality, security vulnerabilities
+🔺 Manual Exploratory Testing
+   ├── Scenario-based investigation
+   ├── Session-based testing
+   └── Accessibility validation
+
+🔺 UI Integration Tests (Current Focus)
+   ├── Complete user journeys
+   ├── Cross-browser compatibility
+   └── Accessibility automation
+
+🔺 API Tests (Future)
+   ├── Business logic validation
+   ├── Data integrity checks
+   └── Performance testing
+
+🔺 Unit Tests (Future)
+   ├── Component behaviour
+   ├── Validation logic
+   └── Error handling
 ```
+
+### **Scenario Testing Framework**
+
+Following **Michael Bolton's approach**, we investigate **realistic user conditions**:
+
+- **THEME** - Clear mission about authentic user situations
+- **SETUP** - Realistic context, pressures, and environment
+- **ACTIVITIES** - Guided but flexible realistic actions
+- **ORACLES** - Multiple quality indicators beyond pass/fail
+- **VARIATIONS** - Realistic turbulence and stress testing
 
 ### **Context-Driven Quality**
 
 Testing strategies **adapt to context**:
 
-- **Marine licensing domain** - Complex regulations and user needs
+- **Marine licensing domain** - Complex regulations and specialist user needs
 - **Government service** - Accessibility, inclusion, and public accountability
 - **BDD implementation** - Living documentation and collaboration
 - **Continuous delivery** - Fast feedback and quality gates
@@ -229,10 +261,11 @@ Testing strategies **adapt to context**:
 
 Our strategy incorporates evidence-based testing practices:
 
-- **Heuristic-driven exploration** - Systematic thinking frameworks
+- **Heuristic-driven exploration** - Systematic thinking frameworks guide discovery
 - **Risk-based test prioritisation** - Focus effort where it matters most
-- **Accessibility-first testing** - Inclusive design validation
+- **Accessibility-first testing** - Inclusive design validation from the start
 - **Cross-browser compatibility** - Reliable user experience across platforms
+- **Performance consciousness** - Testing with realistic network and device conditions
 
 ### **Quality Metrics That Matter**
 
@@ -240,6 +273,7 @@ Our strategy incorporates evidence-based testing practices:
 - **Mean time to recovery** - How fast do we detect and fix issues?
 - **Deployment frequency** - How often do we ship with confidence?
 - **User satisfaction** - Are we solving real user problems effectively?
+- **Accessibility compliance** - Meeting GOV.UK standards consistently
 
 ## 🎪 Integration with Project
 
@@ -249,6 +283,7 @@ This strategy builds on existing project foundations:
 - **[BDD Rules](../.cursor/rules/bdd.rules.mdc)** - Living documentation practices
 - **[Clean Code](../.cursor/rules/playbook.clean.code.mdc)** - Maintainable test code
 - **[User Stories](../.cursor/user-stories/README.md)** - Real user needs and acceptance criteria
+- **[Test Charters](../test-charters/README.md)** - Systematic exploration guidance
 
 ## 🚀 Getting Started
 
@@ -263,8 +298,9 @@ This strategy builds on existing project foundations:
 **Week 2: Practice**
 
 1. Create your first [Test Charter](../test-charters/README.md) for a marine licensing workflow
-2. Practice [Exploratory Testing](./exploratory/README.md) using the COP FLUNG GUN heuristic
-3. Document findings using the session note structure
+2. Practice [Exploratory Testing](./exploratory/README.md) using systematic heuristics
+3. Try a [Scenario Testing](./scenario-testing/README.md) session using Bolton's framework
+4. Document findings using the session note structure
 
 ### **For Developers**
 
@@ -279,6 +315,7 @@ This strategy builds on existing project foundations:
 1. Write BDD scenarios in Gherkin that match business language
 2. Follow page object patterns (locators only, no behaviour)
 3. Use the actor memory system for test data sharing
+4. Apply clean code principles to test automation
 
 ### **For Product Teams**
 
@@ -293,7 +330,31 @@ This strategy builds on existing project foundations:
 1. Include marine licensing personas in user story examples
 2. Reference regulatory requirements that need validation
 3. Consider cross-browser and accessibility acceptance criteria
+4. Think about realistic usage scenarios and edge cases
+
+## 📊 Success Measures
+
+### **Quality Indicators**
+
+- **Bug escape rate** - Issues found in production vs pre-production
+- **Test automation coverage** - Percentage of user journeys automated
+- **Accessibility compliance** - WCAG 2.1 AA standard achievement
+- **Cross-browser compatibility** - Consistent experience across target browsers
+
+### **Efficiency Indicators**
+
+- **Test execution time** - Speed of feedback from automated tests
+- **Test maintenance overhead** - Time spent maintaining vs creating tests
+- **Defect resolution time** - Speed of issue identification and fix
+- **Release confidence** - Team confidence in deployment readiness
+
+### **User-Centered Indicators**
+
+- **Persona coverage** - How well testing represents real user needs
+- **Realistic scenario validation** - Testing under authentic conditions
+- **Accessibility user feedback** - Real user experience with assistive technology
+- **Usability issue discovery** - Problems found through exploratory testing
 
 ---
 
-_Quality is everyone's responsibility. This strategy provides the framework for building quality into everything we do._
+_Quality is everyone's responsibility. This strategy provides the framework for building quality into everything we do while serving the real needs of marine licensing users._

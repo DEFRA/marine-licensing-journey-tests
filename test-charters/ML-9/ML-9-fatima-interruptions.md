@@ -227,8 +227,8 @@ Test system behaviour when case officers work under time pressure with multiple 
 **Related Resources:**
 
 - **[ML-9 User Story](../../.cursor/user-stories/ML-9.view.task.list.mdc)** - Requirements and acceptance criteria
-- **[Fatima Persona](../../test-strategy/domain-context/README.md#fatima-case-officer)** - Detailed persona background and workflow patterns
-- **[Case Officer Workflows](../../test-strategy/domain-context/README.md#case-officer-reality)** - Real MMO staff work patterns
+- **[Fatima Persona](../../test-strategy/domain-context/README.md#fatima-case-officer---integration-testing-focus)** - Detailed persona background and workflow patterns
+- **[Domain Context](../../test-strategy/domain-context/README.md)** - Real MMO staff work patterns
 - **[Traditional ML-9 Charters](./ML-9-navigation.md)** - Complementary technical investigations
 
 _This scenario charter reveals how the task list and navigation work under the authentic pressures of real case officer work._
