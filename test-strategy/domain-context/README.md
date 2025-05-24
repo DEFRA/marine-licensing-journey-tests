@@ -181,46 +181,6 @@ Marine activities have time-sensitive considerations:
 - **Tidal considerations** - Activity timing dependencies
 - **Environmental monitoring periods** - Data collection timing requirements
 
-## 🔄 Integration with Existing Project Structure
-
-### **Connecting to Current Implementation**
-
-This domain context enhances existing project elements:
-
-#### **User Stories** (`.cursor/user-stories/`)
-
-- **ML-1 Project Name** - Test with real marine project terminology
-- **ML-9 Task List** - Validate against actual marine licensing workflows
-- **ML-12 Public Register** - Test with realistic marine activity data
-
-#### **Screenplay Pattern** (`test-infrastructure/screenplay/`)
-
-- **Tasks** reflect real marine licensing workflows
-- **Interactions** handle domain-specific UI elements
-- **Abilities** include marine data validation capabilities
-
-#### **BDD Features** (`test/features/`)
-
-- **Scenarios** use authentic marine licensing language
-- **Examples** based on real regulatory requirements
-- **Tags** link to specific marine activity types
-
-### **Application Under Test Integration**
-
-Understanding the actual application structure:
-
-```
-Frontend Routes (/src/server/):
-├── /exemption/ → Test exemption notification workflows
-├── /home/ → Test dashboard and navigation
-└── /common/ → Test shared components and utilities
-
-Backend APIs (/src/routes/):
-├── /exemption → Test business logic validation
-├── /project-name → Test project registration
-└── /public-register → Test search and display functionality
-```
-
 ## 📊 Domain-Specific Quality Metrics
 
 ### **Marine Licensing Success Metrics**
