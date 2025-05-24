@@ -144,19 +144,21 @@ For marine licensing applications, focus exploration on:
 - **Non-functional aspects** - Performance, security, and accessibility considerations
 - **Error scenarios** - What happens when things go wrong or users make mistakes
 
-#### **COP FLUNG GUN** (General exploratory heuristic)
+#### **General Exploratory Testing Considerations**
 
-- **C**onsistency - Does the interface behave consistently?
-- **O**bvious - Are functions and features obvious to find and use?
-- **P**ositioning - Are elements positioned logically?
-- **F**unctional - Do features work as expected?
-- **L**anguage - Is language clear and appropriate for users?
-- **U**ser input - How does the system handle user input?
-- **N**avigation - Is navigation intuitive and efficient?
-- **G**raphs/Images - Are visual elements helpful and accurate?
-- **G**uidance - Is help and guidance available when needed?
-- **U**ndo - Can users recover from errors or wrong actions?
-- **N**etwork - How does the system behave with slow/unstable connections?
+Key areas to investigate during any exploratory session:
+
+- **Consistency** - Does the interface behave consistently across different areas?
+- **Usability** - Are functions and features obvious to find and use?
+- **Layout** - Are elements positioned logically and helpfully?
+- **Functionality** - Do features work as expected under different conditions?
+- **Language** - Is language clear and appropriate for the intended users?
+- **Input handling** - How does the system respond to different types of user input?
+- **Navigation** - Is navigation intuitive and efficient for user goals?
+- **Visual elements** - Are images, graphs, and visual aids helpful and accurate?
+- **Help and guidance** - Is support available when users need it?
+- **Error recovery** - Can users recover from mistakes without losing progress?
+- **Performance** - How does the system behave under different network conditions?
 
 ## 📝 Documentation & Note-Taking
 
