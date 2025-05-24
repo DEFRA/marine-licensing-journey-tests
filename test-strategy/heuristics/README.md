@@ -37,8 +37,6 @@ The **HTSM v6.3** provides a comprehensive framework for test thinking:
 #### **Value** - What the product means to stakeholders
 
 - **Users** - Different personas and their specific needs
-- **Market** - Competitive landscape and positioning
-- **Business** - Revenue, compliance, reputation impacts
 
 ### **Quality Criteria Applied to Marine Licensing**
 

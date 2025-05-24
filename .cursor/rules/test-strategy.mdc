@@ -5,6 +5,25 @@ alwaysApply: false
 ---
 # Test Strategy Documentation Standards
 
+## Project Context
+
+### **Government Service Context**
+This is a **UK Government service** for marine licensing, **not a commercial project**. This affects testing strategy considerations:
+
+- **No commercial revenue concerns** - Market competition, business profitability, and revenue generation are not applicable
+- **Public service focus** - User needs, accessibility, and regulatory compliance are primary concerns
+- **Statutory obligations** - Legal requirements and government standards apply
+- **Public value definition** - Value is measured by user outcomes, public benefit, and value for money to taxpayers
+- **Risk priorities** - Service availability, data protection, regulatory compliance, and delivery efficiency are key risks
+
+### **Testing Strategy Implications**
+When developing testing approaches:
+- Focus on **user value and public benefit** whilst ensuring **value for money**
+- Prioritise **accessibility and inclusion** as fundamental requirements
+- Consider **regulatory and legal compliance** as non-negotiable quality criteria
+- Emphasise **service reliability and efficiency** for public dependency and taxpayer value
+- Remove commercial market frameworks whilst retaining efficiency and cost-effectiveness considerations
+
 ## Core Principle: Strategy vs Implementation
 
 ### **Strategy Focus: Intent and Approach**
