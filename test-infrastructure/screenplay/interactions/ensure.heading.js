@@ -1,4 +1,5 @@
-import Task from '../tasks/task'
+import Task from '../base/task.js'
+import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 
 export default class EnsurePageHeadingIs extends Task {
   static is(expectation) {
@@ -12,6 +13,9 @@ export default class EnsurePageHeadingIs extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    await browseTheWeb.expectElementToContainText('h1', this.expectation)
+    await browseTheWeb.expectElementToContainText(
+      CommonElementsPage.mainHeading,
+      this.expectation
+    )
   }
 }

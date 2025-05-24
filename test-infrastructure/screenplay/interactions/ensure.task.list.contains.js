@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import TaskListPage from '~/test-infrastructure/pages/task.list.page'
-import Task from '../tasks/task'
+import Task from '../base/task.js'
 
 export default class EnsureTaskListContains extends Task {
   static exactly(count) {
@@ -30,8 +30,7 @@ export default class EnsureTaskListContains extends Task {
 
   async getTaskCount(ability) {
     const selector = TaskListPage.getAllTasks()
-    const elements = await ability.browser.$$(selector)
-    return elements.length
+    return await ability.countElements(selector)
   }
 
   verifyTaskCount(actualCount) {

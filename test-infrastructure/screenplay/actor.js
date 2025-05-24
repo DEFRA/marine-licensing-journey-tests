@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import { attachJson } from '../capture/json.js'
+import MemoryFormatter from './models/memory.formatter.js'
 
 export default class Actor {
   constructor(name) {
@@ -62,22 +63,9 @@ export default class Actor {
   }
 
   toJson() {
-    const memoryWithDescriptions = { ...this.memory }
-
-    if ('publicRegisterChoice' in memoryWithDescriptions) {
-      const value = memoryWithDescriptions.publicRegisterChoice
-      if (value.includes('consent-2')) {
-        memoryWithDescriptions.publicRegisterChoice =
-          'Allow information to be added to the public register'
-      } else if (value.includes('consent')) {
-        memoryWithDescriptions.publicRegisterChoice =
-          'Withhold information from the public register'
-      }
-    }
-
     return {
       name: this.name,
-      memory: memoryWithDescriptions
+      memory: MemoryFormatter.formatForDisplay(this.memory)
     }
   }
 }

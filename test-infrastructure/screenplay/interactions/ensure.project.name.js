@@ -1,5 +1,5 @@
-import Task from '../tasks/task'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
+import Task from '../base/task.js'
 
 export default class EnsureThatProjectName extends Task {
   static is(expectation) {

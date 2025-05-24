@@ -1,4 +1,5 @@
 import { expect } from '~/node_modules/@wdio/globals/build/index'
+import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import Ability from '../abilities/ability'
 
 export default class BrowseTheWeb extends Ability {
@@ -16,7 +17,7 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async getHeading() {
-    return await this.browser.$('h1').getText()
+    return await this.browser.$(CommonElementsPage.mainHeading).getText()
   }
 
   async getElement(locator) {
@@ -54,7 +55,7 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async clickSubmit() {
-    await this.click('button[type="submit"]')
+    await this.click(CommonElementsPage.submitButton)
   }
 
   async selectOption(locator, option) {
@@ -96,10 +97,15 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async clickBack() {
-    await this.click('//a[text()="Back"]')
+    await this.click(CommonElementsPage.backLink)
   }
 
   async clickCancel() {
-    await this.click('//a[text()="Cancel"]')
+    await this.click(CommonElementsPage.cancelLink)
+  }
+
+  async countElements(locator) {
+    const elements = await this.browser.$$(locator)
+    return elements.length
   }
 }

@@ -29,6 +29,8 @@ Research shows that 70% of a developer's time is spent understanding existing co
 - **Dropping entire branches**: Removing if-blocks and losing validation logic
 - **Inverting boolean logic**: Changing `a && b` to `!(a && b)` 
 - **JavaScript `this` errors**: Incorrectly extracting functions that rely on `this` context
+- **Missing imports**: Moving or extracting code without updating import statements
+- **Broken module dependencies**: Changing file structures without updating import paths
 - **Subtle bugs**: Changes that compile but alter program behaviour in non-obvious ways
 
 ### Safe AI-Assisted Refactoring Approach
@@ -68,6 +70,48 @@ After every refactoring:
 4. **Validate performance** - ensure no performance regressions
 5. **Document rationale** - briefly note why the change improves the code
 
+### Import Management During Refactoring
+
+**Critical Import Rules** - Always follow these when refactoring:
+
+**1. Extract and Move Operations**
+- When extracting code to new files, identify all dependencies and add corresponding imports
+- When moving existing code, update import statements in both source and destination files
+- Verify that extracted constants, classes, or functions are properly imported where used
+
+**2. File Structure Changes**
+- When moving files to different directories, update all import paths that reference them
+- Use project-wide search to find all references to moved files
+- Update both direct imports and re-exports in index files
+
+**3. Import Path Validation**
+- Always verify import paths are correct after structural changes
+- Check for both relative imports (`../`, `./`) and absolute imports (`~/`)
+- Ensure import statements match the actual file structure
+
+**4. Pre-Refactoring Import Audit**
+- Before starting refactoring, list all current imports in affected files
+- Plan which imports will need to be added, removed, or updated
+- Consider creating new common/shared modules for extracted code
+
+**5. Post-Refactoring Import Verification**
+- Run tests immediately after import changes to catch `ReferenceError` issues
+- Check browser/IDE error consoles for unresolved import warnings
+- Verify all imported items are actually used (remove unused imports)
+
+**Common Import Scenarios in This Codebase:**
+- **Moving base classes**: Update Task imports from `../tasks/task` to `../base/task.js`
+- **Extracting page objects**: Add new page object exports to `test-infrastructure/pages/index.js`
+- **Creating utility classes**: Import shared utilities in all files that use extracted functions
+- **Refactoring abilities**: Ensure all method extractions include necessary page object imports
+
+**Import Debugging Checklist:**
+- [ ] All new files have necessary imports at the top
+- [ ] All moved/extracted code imports are updated
+- [ ] File paths in imports match actual directory structure
+- [ ] Index files export new modules
+- [ ] Tests run without `ReferenceError` or `Module not found` errors
+
 ## Strategic Considerations
 
 ### Technical Debt Mitigation
@@ -94,7 +138,7 @@ This guidance incorporates research findings from:
 **Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
 *By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
 CodeScene Research Team  
-[Download PDF](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
+[Download PDF](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
 
 Key research findings referenced:
 - AI refactoring success rates and failure patterns

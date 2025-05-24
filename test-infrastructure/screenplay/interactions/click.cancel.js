@@ -1,4 +1,4 @@
-import Task from '../tasks/task'
+import Task from '../base/task.js'
 
 export default class ClickCancel extends Task {
   async performAs(actor) {

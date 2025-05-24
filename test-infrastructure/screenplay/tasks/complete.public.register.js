@@ -1,5 +1,5 @@
 import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
-import Task from './task'
+import Task from '../base/task.js'
 
 export default class CompletePublicRegisterTask extends Task {
   static andSavingWith(selector, withholdReason = '') {

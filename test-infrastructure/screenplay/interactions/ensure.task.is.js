@@ -1,4 +1,4 @@
-import Task from '../tasks/task'
+import Task from '../base/task.js'
 import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 
 export default class EnsureTaskStatus extends Task {

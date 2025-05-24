@@ -1,4 +1,4 @@
-import Task from '../tasks/task'
+import Task from '../base/task.js'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 
 export default class CompleteProjectName extends Task {

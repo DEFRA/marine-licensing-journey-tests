@@ -1,5 +1,5 @@
 import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
-import Task from '../tasks/task'
+import Task from '../base/task.js'
 
 export default class EnsurePublicRegisterTask extends Task {
   static hasBeenCompletedWith(option, withholdReason = '') {

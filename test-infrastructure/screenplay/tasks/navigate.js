@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 import TaskListPage from '~/test-infrastructure/pages/task.list.page'
-import Task from './task'
+import Task from '../base/task.js'
 
 export default class Navigate extends Task {
   static toPublicRegisterPage() {
