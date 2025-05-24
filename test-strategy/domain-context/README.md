@@ -108,8 +108,6 @@ Different activities require different testing approaches:
 ```
 UK Territorial Waters Testing:
 ├── England (Marine Management Organisation)
-├── Wales (Natural Resources Wales)
-├── Scotland (Marine Scotland)
 └── Northern Ireland (Department of Agriculture, Environment and Rural Affairs)
 
 Each jurisdiction may have:
