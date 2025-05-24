@@ -156,6 +156,7 @@ This strategy **complements existing organisational governance**:
 
 ### **👥 Human-Centred Testing**
 
+- **[Scenario Testing](./scenario-testing/README.md)** - Rich, realistic user investigations using Bolton's scenario framework
 - **[Test Charters](../test-charters/README.md)** - Systematic exploration of user stories and requirements
 - **[Session-Based Testing](./session-based-testing/README.md)** - Structured exploratory testing using time-boxed sessions
 - **[Exploratory Testing](./exploratory/README.md)** - Systematic exploration and investigation
@@ -177,6 +178,7 @@ This strategy **complements existing organisational governance**:
 
 | **I want to...**                                | **Go to...**                                               |
 | ----------------------------------------------- | ---------------------------------------------------------- |
+| Test with realistic user scenarios              | [Scenario Testing](./scenario-testing/README.md)           |
 | Explore systematically using test heuristics    | [Testing Heuristics](./heuristics/README.md)               |
 | Create exploratory charters for user stories    | [Test Charters](../test-charters/README.md)                |
 | Conduct structured exploratory testing sessions | [Session-Based Testing](./session-based-testing/README.md) |

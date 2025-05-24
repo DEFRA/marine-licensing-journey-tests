@@ -31,6 +31,180 @@ Exploratory testing is crucial for:
 - **Data quality issues** - Discovering validation gaps with real-world data
 - **Integration problems** - Finding issues between interconnected systems
 
+## 🎭 Scenario Testing - Rich, Realistic User Investigation
+
+> **📖 Source Attribution**  
+> The **scenario testing approach** described here is based on the work of **Michael Bolton** and **James Bach**, particularly their approach to breaking addiction to scripted test cases in favour of more exploratory, scenario-driven testing.
+
+### **What is Scenario Testing?**
+
+Scenario testing uses **rich, elaborate documentation** that guides testers to explore, experiment, and gain experience with the product through **realistic user roles and situations**. It goes beyond simple test charters to create comprehensive investigation frameworks.
+
+### **Core Principles**
+
+- **Real-world use patterns** - Including interruptions, distractions, and mistakes
+- **User role authenticity** - Detailed personas with specific contexts and pressures
+- **Operational coverage** - Testing how people actually use the product
+- **Guided flexibility** - Structured approach that encourages discovery
+
+### **Scenario Charter Structure**
+
+Each scenario follows a structured format:
+
+```
+THEME: [One to three-line mission statement]
+
+SETUP: [Specific preparation for this scenario]
+
+ACTIVITIES: [Guided but flexible actions]
+- Specific suggestions with room for variation
+- Focus areas for investigation
+- Realistic task patterns
+
+ORACLES: [How to recognise problems]
+- Specific consistency patterns to watch for
+- Domain-specific success criteria
+- Quality indicators
+
+VARIATIONS: [Ways to introduce turbulence]
+- Stress factors and edge conditions
+- Real-world friction simulation
+- Multiple user scenarios
+```
+
+### **Marine Licensing Scenario Examples**
+
+#### **Scenario: Fatima's Busy Afternoon (Case Officer Pressure Testing)**
+
+```
+THEME: Investigate system behaviour when case officers work under time pressure
+with multiple interruptions during complex exemption reviews
+
+SETUP:
+- Multiple exemption applications pending review
+- Phone calls and emails interrupting workflow
+- Browser tabs for different systems (planning, environmental, payment)
+- End-of-day deadline pressure
+
+ACTIVITIES:
+- Switch between 3-4 applications while reviewing details
+- Answer mock phone calls mid-task (leave forms partially completed)
+- Copy/paste information between systems and applications
+- Search for similar previous cases for consistency
+- For some applications, simulate urgent requests requiring immediate attention
+- Update application status in some way while maintaining record accuracy
+
+ORACLES:
+- Data doesn't get corrupted when switching between tasks
+- Partially completed forms are preserved properly
+- Search functionality remains accurate under pressure
+- System performance doesn't degrade with multiple tabs/sessions
+- Audit trail captures all actions correctly
+
+VARIATIONS:
+- Network interruptions during critical updates
+- Browser crashes with unsaved work
+- Multiple users accessing the same application simultaneously
+- Time-sensitive applications requiring same-day decisions
+- System updates/maintenance windows during busy periods
+```
+
+#### **Scenario: Zofia's First Marine Exemption (Novice User Journey)**
+
+```
+THEME: Discover usability barriers and guidance gaps for users completely
+new to marine licensing and government digital services
+
+SETUP:
+- First-time applicant with no marine licensing experience
+- Using screen reader or other assistive technology
+- Mobile device for some sessions, desktop for others
+- Real-world distractions (phone calls, children, poor connectivity)
+
+ACTIVITIES:
+- Start application without reading guidance thoroughly
+- Make deliberate misinterpretations of marine licensing terminology
+- Enter coordinates using various formats and reference systems
+- Upload documents in wrong formats initially, then correct
+- Attempt to save progress and return later
+- For some forms, enter data that's technically correct but misunderstands intent
+- Try to get help using available support channels
+
+ORACLES:
+- Error messages are comprehensible to non-experts
+- Required vs optional fields are clearly distinguished
+- Help content appears at the right moments
+- Recovery from mistakes doesn't lose significant progress
+- Accessibility features work consistently across all pages
+- Language and terminology are appropriate for target audience
+
+VARIATIONS:
+- Use different assistive technologies (screen readers, voice control)
+- Test on different devices with varying screen sizes
+- Simulate poor internet connections with frequent dropouts
+- Use with different browsers and operating systems
+- Test with users who have different levels of digital literacy
+```
+
+### **Activity Patterns for Marine Licensing**
+
+#### **Role-Based Investigation**
+
+- **Assume specific user roles** with authentic pressures and contexts
+- **Test for ease of learning** with genuinely novice users
+- **Test for ease of use** with experienced users seeking efficiency
+- **Make deliberate mistakes** that users in each role might reasonably make
+
+#### **Data Lifecycle Testing**
+
+Follow marine licensing data through complete lifecycles:
+
+- **Creating** - New exemption applications, environmental evidence uploads
+- **Revising** - Application amendments, additional information requests
+- **Retrieving** - Searching previous applications, status checking
+- **Updating** - Status changes, condition modifications
+- **Merging** - Combining related applications or evidence
+- **Archiving** - Completed applications, expired exemptions
+- **Recovering** - Retrieving archived data, audit trails
+
+#### **Turbulence & Friction Simulation**
+
+Introduce realistic friction:
+
+- **Interruptions** - Phone calls, urgent emails, system notifications
+- **Distractions** - Multiple browser tabs, background applications
+- **Technical obstacles** - Slow connections, browser crashes, system updates
+- **Process branching** - Changing requirements mid-application
+- **Time pressure** - End-of-season deadlines, urgent environmental concerns
+
+#### **Complex Integration Testing**
+
+- **Multiple system instances** - Different staff accessing same applications
+- **Competing priorities** - Resource contention, deadline conflicts
+- **Platform variations** - Different devices, browsers, network conditions
+- **Workflow reproduction** - Mimicking patterns from paper-based processes
+
+### **Debriefing & Coverage Validation**
+
+#### **Post-Scenario Review Process**
+
+After each scenario session:
+
+1. **Coverage Assessment** - Were the intended areas explored adequately?
+2. **Discovery Documentation** - What unexpected behaviours were found?
+3. **Pattern Recognition** - Are there recurring themes across scenarios?
+4. **Risk Evaluation** - Which findings represent the highest user impact?
+5. **Follow-up Planning** - What areas need deeper investigation?
+
+#### **Quality Evidence Collection**
+
+Document evidence beyond just bug reports:
+
+- **User experience insights** - Where do real workflows break down?
+- **Performance patterns** - How does the system behave under realistic load?
+- **Accessibility findings** - Real-world assistive technology compatibility
+- **Integration discoveries** - How well do connected systems actually work together?
+
 ## 🧠 Session-Based Test Management (SBTM)
 
 > **📖 For comprehensive guidance on session-based exploratory testing, see our detailed guide: [Session-Based Testing](../session-based-testing/README.md)**

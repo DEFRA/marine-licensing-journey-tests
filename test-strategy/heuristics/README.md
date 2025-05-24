@@ -209,6 +209,104 @@ Regular reviews of:
 - **New heuristics** we discover through experience
 - **Blind spots** our current heuristics might miss
 
+## 🎭 Integration with Scenario Testing
+
+### **Heuristics Inform Scenarios**
+
+Our **systematic heuristics feed into rich scenario development**:
+
+```
+HTSM Product Categories → Scenario Context → Realistic Investigation
+        ↓                      ↓                      ↓
+    Structure              Setup & Activities     Real-world testing
+    Behaviour             Oracles & Variations   Evidence collection
+    Value                 User roles & friction   Quality insights
+```
+
+### **Scenarios Validate Heuristics**
+
+**Scenario testing sessions** (see [Scenario Testing](../scenario-testing/README.md)) provide evidence for heuristic effectiveness:
+
+- **Do our marine licensing heuristics discover real problems?**
+- **Are we missing critical quality criteria in our HTSM application?**
+- **Which domain-specific considerations matter most to actual users?**
+
+### **Combined Approach Benefits**
+
+#### **Systematic Coverage**
+
+- **Heuristics ensure** we don't miss important test areas
+- **Scenarios ensure** our testing reflects realistic usage patterns
+- **Together** they provide comprehensive quality investigation
+
+#### **Adaptive Strategy**
+
+- **Heuristics guide** initial exploration and charter creation
+- **Scenario findings** refine and improve our heuristic models
+- **Continuous improvement** through evidence-based refinement
+
+### **Practical Integration**
+
+#### **Charter Development Process**
+
+```
+1. Use HTSM + Marine Licensing Heuristics → Identify test areas
+2. Apply Domain Context + User Personas → Create scenario themes
+3. Structure as Bolton Framework → Rich scenario charters
+4. Execute with Guided Flexibility → Discover quality insights
+5. Update Heuristics based on Findings → Improve future testing
+```
+
+#### **Example: From Heuristic to Scenario**
+
+**HTSM Application:**
+
+```
+Product: Exemption workflow (Behaviour)
+Quality: Usability
+Marine Context: First-time applicant confusion
+```
+
+**Becomes Scenario Charter:**
+
+```
+THEME: Discover guidance gaps for users completely new to marine licensing
+
+SETUP: Novice persona, assistive technology, realistic distractions
+
+ACTIVITIES: Misinterpret terminology, skip guidance, make plausible errors
+
+ORACLES: Error messages comprehensible, help contextual, recovery possible
+
+VARIATIONS: Different devices, connection issues, varying digital literacy
+```
+
+**Findings Feed Back:**
+
+- Update "Marine Context" heuristics based on discovered confusion patterns
+- Refine "Usability Quality" criteria for marine licensing domain
+- Enhance "First-time User" considerations with specific friction points
+
+## 🔄 Continuous Heuristic Evolution
+
+### **Evidence-Based Refinement**
+
+Our heuristics evolve through:
+
+- **Scenario session findings** - What patterns emerge from realistic testing?
+- **Production issues** - What did we miss that users encountered?
+- **User feedback** - What matters most to actual marine licensing users?
+- **Team retrospectives** - Which heuristics help vs hinder our testing?
+
+### **Domain-Specific Learning**
+
+As we understand marine licensing better:
+
+- **Add new domain heuristics** based on regulatory complexity discovered
+- **Refine existing considerations** with user journey insights
+- **Remove unhelpful models** that don't improve testing effectiveness
+- **Share insights** with other government digital service teams
+
 ---
 
 _Heuristics are thinking tools, not rigid rules. Adapt them to your context and use them to enhance your natural testing instincts._

@@ -95,6 +95,7 @@ Static Analysis         → Code quality, security vulnerabilities
 
 #### **👥 User-Centred Quality**
 
+- **[Scenario testing](test-strategy/scenario-testing/README.md)** - Rich, realistic user investigations using Bolton's framework
 - **[Real user personas](test-strategy/domain-context/README.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
 - **[Accessibility-first](test-strategy/accessibility/README.md)** - GOV.UK standards and inclusive design
 - **[Marine licensing domain expertise](test-strategy/domain-context/README.md)** - Testing grounded in regulatory reality
@@ -104,6 +105,7 @@ Static Analysis         → Code quality, security vulnerabilities
 | **I want to...**                            | **Go to...**                                                  |
 | ------------------------------------------- | ------------------------------------------------------------- |
 | Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)             |
+| Test with realistic user scenarios          | [Scenario Testing](test-strategy/scenario-testing/README.md)  |
 | Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)      |
 | Build robust test automation                | [Automation Architecture](test-strategy/automation/README.md) |
 | Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)      |
