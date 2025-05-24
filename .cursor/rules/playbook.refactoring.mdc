@@ -31,6 +31,7 @@ Research shows that 70% of a developer's time is spent understanding existing co
 - **JavaScript `this` errors**: Incorrectly extracting functions that rely on `this` context
 - **Missing imports**: Moving or extracting code without updating import statements
 - **Broken module dependencies**: Changing file structures without updating import paths
+- **URL corruption**: Search/replace operations accidentally modifying URLs and hyperlinks
 - **Subtle bugs**: Changes that compile but alter program behaviour in non-obvious ways
 
 ### Safe AI-Assisted Refactoring Approach
@@ -112,6 +113,41 @@ After every refactoring:
 - [ ] Index files export new modules
 - [ ] Tests run without `ReferenceError` or `Module not found` errors
 
+### URL and Hyperlink Management During Refactoring
+
+**Critical URL Rules** - Protect links during refactoring operations:
+
+**1. URL Structure Preservation**
+- URLs and hyperlinks require special handling during search/replace operations
+- Always exclude URLs from bulk find/replace operations that modify file paths
+- Use precise, targeted replacements rather than broad pattern matching near URLs
+
+**2. Common URL Corruption Scenarios**
+- **Markdown links**: Format `[text](mdc:marine-licensing-journey-tests/url)` can be corrupted by path-based search/replace
+- **Configuration URLs**: API endpoints, base URLs, and external references  
+- **Documentation links**: References to external resources, PDFs, and websites
+- **Asset paths**: Links to images, stylesheets, and other static resources
+
+**3. URL Validation During Refactoring**
+- Manually verify all URLs remain intact after structural changes
+- Test external links to ensure they resolve correctly
+- Check relative URLs when moving files between directories
+- Validate API endpoints in configuration files
+
+**4. Safe URL Refactoring Practices**
+- **Isolate URL changes**: Handle URL updates separately from code refactoring
+- **Use precise selectors**: Target specific occurrences rather than broad patterns
+- **Exclude URL patterns**: Add URL regex exclusions to find/replace operations
+- **Version control check**: Review diffs specifically for unintended URL changes
+
+**URL Debugging Checklist:**
+- [ ] All markdown links maintain proper `[text](mdc:marine-licensing-journey-tests/url)` format
+- [ ] External URLs (https://, http://) are unchanged
+- [ ] Relative file paths in URLs reflect actual file structure
+- [ ] Configuration URLs and API endpoints are intact
+- [ ] Documentation links resolve correctly
+- [ ] No URL prefixes or suffixes were accidentally added
+
 ## Strategic Considerations
 
 ### Technical Debt Mitigation
@@ -138,7 +174,7 @@ This guidance incorporates research findings from:
 **Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
 *By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
 CodeScene Research Team  
-[Download PDF](https://codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf)
+[Download PDF](mdc:marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf)
 
 Key research findings referenced:
 - AI refactoring success rates and failure patterns
