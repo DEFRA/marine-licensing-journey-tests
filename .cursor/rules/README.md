@@ -65,6 +65,16 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Key features and user journey guidance
 - Environment configuration and testing considerations
 
+#### [`personas.mdc`](./personas.mdc)
+
+**User Personas for Marine Licensing**
+
+- Internal MMO staff (Case Officers, Marine Officers)
+- External applicants (Veteran and novice users)
+- User needs, pain points, and accessibility considerations
+- Test implications and scenario guidance for different user types
+- Cross-cutting themes and digital divide considerations
+
 ### 📝 **Development Practices & Style**
 
 #### [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)
@@ -124,6 +134,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 | Implementing test automation         | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)         |
 | Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
 | Understanding the application        | [`application.under.test.mdc`](./application.under.test.mdc) |
+| Understanding users and their needs  | [`personas.mdc`](./personas.mdc)                             |
 | Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
 | Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
 | Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |

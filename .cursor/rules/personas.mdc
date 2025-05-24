@@ -1,0 +1,139 @@
+---
+description: This rule is useful when identifying test scenarios and assessing coverage
+globs: 
+alwaysApply: false
+---
+# Marine Licensing User Personas
+
+## Overview
+These personas represent the real users of the marine licensing system, based on user research. Use these to inform test scenarios, user journey design, and accessibility considerations.
+
+## Internal MMO Staff
+
+### **Fatima - Case Officer**
+**Role**: Marine Management Organisation business support team  
+**Quote**: *"It's a very manual process"*
+
+**Context:**
+- Expert user of the legacy system
+- Has to work through licensing applications as priority but also does manual keying of exemptions information from an application into another part of MCMS
+- Is under no obligation to verify exemption details
+- Might need to help some users with assisted digital support if they make an enquiry, particularly around location details
+
+**Core Needs:**
+- To see a view only summary of exemption details so I can support if somebody makes an enquiry (internally or externally)
+
+**Test Implications:**
+- Read-only views for case officer support
+- Integration between exemption and licensing systems
+- Assisted digital support workflows
+- Enquiry handling scenarios
+
+---
+
+### **Simon - Marine Officer**
+**Role**: Marine enforcement officer  
+**Quote**: *"My main focus is gathering evidence and investigating non-compliance"*  
+**Status**: *Awaiting further validation*
+
+**Context:**
+- Will patrol marine areas investigating areas of non compliance
+- Typically gathers evidence at the site then returns to an office before they can check what permissions are in place
+- Finds the legacy system hard to use to review submissions. Prefers to use a spreadsheet as it is easier to interrogate for data and update with inspection details
+
+**Core Needs:**
+- To gather evidence so that I can check that activities have been compliant and take enforcement action if necessary
+- To know the details of exemptions that have been submitted in a particular area so that I can assess risk and take enforcement action if necessary
+- To know which activities are the highest risk so that I can manage my workload and focus on the priorities
+
+**Test Implications:**
+- Mobile/field access patterns
+- Data export capabilities (spreadsheet preference)
+- Geographic/area-based searching
+- Risk assessment and prioritisation features
+- Field-to-office workflow transitions
+
+## External Applicants
+
+### **Amy - Veteran Applicant**
+**Role**: Research Associate at a University  
+**Quote**: *"I need to get through this quickly so I can get on with my job"*
+
+**Context:**
+- Tends to rely on own network for support
+- Guidance content is vast and sometimes the language used is ambiguous
+- Might still rely on a colleague to pull together the location details into a file
+- Might still refer to guidance content when doing a new type of survey
+
+**Core Needs:**
+- To take research samples from the sea so that I can complete scientific research studies
+- To supply accurate details of my project to the MMO so that I do not face enforcement action
+
+**Test Implications:**
+- Efficiency and speed of familiar processes
+- Clear, unambiguous guidance content
+- Collaborative features (colleague assistance)
+- Repeat user optimization
+- Different survey type variations
+
+---
+
+### **Zofia - Novice Individual Applicant**
+**Role**: Property owner  
+**Quote**: *"It's difficult to get my head around whether I need a licence"*
+
+**Context:**
+- Self-taught and rely on MMO or own network to understand what I need to do
+- Guidance content is vast and uses language I am unfamiliar with
+- It's hard for me to provide accurate location details because I've never used coordinates before
+
+**Core Needs:**
+- To complete a construction project in the sea so that I can repair or develop my property
+- To be aware if I am conducting a marine licensable activity so that I do not do an activity that negatively impacts the marine environment or face enforcement action
+- To know how long the exemption process takes so that I can plan my project
+- To supply accurate details of my project to the MMO so that I do not face enforcement action
+
+**Additional Considerations:**
+*For users who are digitally excluded or have lower skills and confidence:*
+- To be supported to provide activity details to the MMO so that I do not face enforcement action
+
+**Test Implications:**
+- Licence vs exemption decision guidance
+- Plain English content and terminology
+- Coordinate entry assistance and alternatives
+- Process timeline transparency
+- Digital inclusion and accessibility
+- Assisted digital support pathways
+- Error prevention and guidance
+
+## Cross-Cutting Themes
+
+### **Common Pain Points:**
+- **Location data complexity** - Multiple personas struggle with coordinate entry
+- **Process uncertainty** - Understanding licence vs exemption requirements
+- **System limitations** - Legacy system usability issues
+- **Manual workflows** - Integration gaps requiring manual intervention
+
+### **Digital Divide Considerations:**
+- **Expert users** (Fatima, Simon) - System efficiency and data interrogation
+- **Confident users** (Amy) - Speed and familiar pattern optimization  
+- **Novice users** (Zofia) - Guidance, support, and accessibility needs
+
+### **Support Patterns:**
+- **Network reliance** - Users depend on colleagues and professional networks
+- **MMO support** - Assisted digital and enquiry handling requirements
+- **Documentation preferences** - Spreadsheets vs system interfaces
+
+## Test Development Guidelines
+
+When creating test scenarios:
+
+1. **Cover the user journey spectrum** - From novice uncertainty to expert efficiency needs
+2. **Test decision points** - Licence vs exemption guidance and pathways
+3. **Include accessibility scenarios** - Digital inclusion and assisted support workflows  
+4. **Validate location entry** - Multiple approaches for coordinate input
+5. **Test cross-system integration** - Case officer views and enforcement workflows
+6. **Consider mobile/field usage** - Enforcement officer access patterns
+7. **Test time-pressured flows** - Veteran user efficiency requirements
+
+These personas should inform both happy path scenarios and edge cases, ensuring the marine licensing system serves all user types effectively.

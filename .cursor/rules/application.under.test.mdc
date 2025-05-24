@@ -12,10 +12,37 @@ alwaysApply: false
 - **Testing**: Jest for unit tests, WebDriverIO with Screenplay pattern for E2E tests
 
 ## Domain Context
-This is a UK Government (Defra) marine licensing application that handles:
-- Marine exemption notifications
-- Public register of marine licences and exemptions
-- User journey flows for marine licensing applications
+This is a UK Government (Defra) marine licensing application managed by the Marine Management Organisation (MMO) that handles:
+
+### Core Marine Licensing Activities
+- **Marine licence applications** - For activities in English marine areas
+- **Public register** - Searchable database of marine licence applications and decisions
+- **Exemption notifications** - For activities that qualify for exemptions from full licensing
+- **Project management** - Registration and tracking of marine projects
+
+### Types of Marine Activities Covered
+- **Offshore energy generation** - Wind farms, tidal, wave and other renewable energy projects
+- **Cable and pipeline laying** - Subsea cables, pipelines and associated infrastructure
+- **Dredging operations** - Including accelerated licensing pathways for routine dredging
+- **Marine construction** - Ports, harbours, coastal defence and marine infrastructure
+- **Seismic and geophysical surveys** - Marine surveys and investigations
+- **Material disposal** - Dredged material disposal at designated sites
+- **Marine wildlife activities** - Activities requiring marine wildlife licences
+
+### Regulatory Framework
+- **Marine and Coastal Access Act 2009** - Primary legislation governing marine licensing
+- **Nationally Significant Infrastructure Projects (NSIP)** - Major infrastructure requiring special consideration
+- **Environmental assessments** - Including sediment sampling and environmental impact assessments
+- **Compliance and enforcement** - Monitoring and enforcement of marine licence conditions
+- **Fee structure** - Standardised fees for different types of applications and activities
+
+### User Types and Journeys
+For detailed user personas including needs, pain points, and test implications, see `personas.mdc`.
+
+**Key user categories:**
+- **Internal MMO staff** - Case officers (enquiry support) and marine officers (enforcement)
+- **External applicants** - Veteran users (efficiency focus) and novice users (guidance needs)
+- **Cross-cutting considerations** - Digital divide, location data complexity, process uncertainty
 
 ## Application Under Test Structure
 
@@ -45,17 +72,21 @@ When helping with test development:
 
 4. **Check actual page structures** - When creating page objects or interactions, reference the actual Nunjucks templates and frontend components
 
-5. **Understand user journeys** - The application has specific marine licensing workflows that should be reflected in test scenarios
+5. **Understand user journeys** - The application has specific marine licensing workflows that should be reflected in test scenarios. Reference the personas in `personas.mdc` for realistic user behaviour patterns
 
 6. **API integration awareness** - Tests may need to interact with external marine licensing APIs and data sources
 
 ## Key Features to Test
-- Exemption notification submission journey
-- Public register search and display
-- Project name registration and validation  
-- User authentication and session management
-- Data persistence and retrieval from MongoDB
-- Integration with external marine licensing systems
+- **Marine licence application journeys** - Full application processes for different activity types
+- **Exemption notification workflows** - Simplified process for activities qualifying for exemptions
+- **Public register functionality** - Search, filter and display of marine licence applications and decisions
+- **Project management flows** - Project registration, naming, and progress tracking
+- **Application timeline tracking** - Status updates and progress monitoring through the licensing process
+- **Fee calculation and payment** - Dynamic fee calculation based on activity type and complexity
+- **Document upload and management** - Supporting documentation and evidence submission
+- **User authentication and session management** - Secure access for different user types
+- **Data persistence and retrieval** - MongoDB integration for application data
+- **Integration with external systems** - MMO systems, payment gateways, and regulatory databases
 
 ## Environment Configuration
 - Frontend runs on port 3000 (configurable via environment)
