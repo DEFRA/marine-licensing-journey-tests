@@ -123,11 +123,11 @@ git clone https://github.com/DEFRA/marine-licensing-journey-tests.git
 # └── marine-licensing-journey-tests/
 ```
 
-**Cursor IDE Setup:**
+**IDE Setup:**
 
-1. Open the `marine-licensing-workspace` folder in Cursor
-2. This enables the AI assistant to understand the full application context
-3. Journey test development will reference actual frontend routes and backend models
+1. Open the `marine-licensing-workspace` folder in your IDE
+2. This provides access to the full application context
+3. Journey test development can reference actual frontend routes and backend models
 
 ### **Requirements**
 
