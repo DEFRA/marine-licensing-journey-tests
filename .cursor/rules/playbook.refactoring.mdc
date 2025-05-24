@@ -3,8 +3,101 @@ description: refactoring
 globs: 
 alwaysApply: false
 ---
-# When reviewing and refactoring content:
-- Only make targeted improvements if it helps with the readability.
-- We do not want to lose content, so don't remove anything that would diminish the original ideas conveyed in the text.
-- Don't overly generalise things, make the content specific.
-- Keep the changes to content improvements. Do not change the structure.
+# Refactoring Playbook
+
+## Core Principles
+
+### Refactoring vs Refuctoring
+**Refactoring** is improving the design of existing code without changing its behaviour. **Refuctoring** is changing existing code whilst inadvertently altering the program's behaviour - essentially breaking the code.
+
+**Critical Requirements for True Refactoring:**
+- **Preserve behaviour**: The code must function identically after changes
+- **Improve design**: Changes must objectively make the code easier to understand or maintain
+- **Validate thoroughly**: Every refactoring must be verified to ensure no behaviour changes
+
+### The 70% Rule
+Research shows that 70% of a developer's time is spent understanding existing code rather than writing new code. This makes refactoring skills more valuable than new code generation abilities.
+
+## AI-Assisted Refactoring Guidelines
+
+### Current AI Limitations
+- Standard AI models (GPT-3.5, GPT-4, etc.) only achieve **37% correct refactoring** without validation
+- **63% of AI refactoring attempts break the code** by changing behaviour
+- AI tools are better used for inspiration rather than direct application
+
+### Common AI Refactoring Failures
+- **Dropping entire branches**: Removing if-blocks and losing validation logic
+- **Inverting boolean logic**: Changing `a && b` to `!(a && b)` 
+- **JavaScript `this` errors**: Incorrectly extracting functions that rely on `this` context
+- **Subtle bugs**: Changes that compile but alter program behaviour in non-obvious ways
+
+### Safe AI-Assisted Refactoring Approach
+
+**1. Use AI for Inspiration Only**
+- Treat AI suggestions as starting points, not final solutions
+- Always review and validate every AI-generated change manually
+
+**2. Implement Fact-Checking Layers**
+- Run comprehensive tests after every AI-suggested change
+- Verify Code Health metrics improve (if tools available)
+- Check for semantic equivalence between original and refactored code
+
+**3. Focus on High-Confidence Changes**
+- Prioritise simple, focused refactorings over complex transformations
+- Reject AI suggestions that modify multiple concerns simultaneously
+
+## Manual Refactoring Best Practices
+
+### When Reviewing and Refactoring Content:
+- **Make targeted improvements** only if they genuinely help with readability
+- **Preserve all content** - don't remove anything that would diminish the original ideas conveyed
+- **Avoid over-generalisation** - keep content specific and contextual
+- **Maintain structure** - focus on content improvements rather than structural changes
+
+### Code-Specific Refactoring Rules
+- **Single responsibility**: Each function/method should have one clear purpose
+- **Extract complex conditionals**: Replace complex if-statements with well-named methods
+- **Eliminate code duplication**: But preserve it if it improves test readability
+- **Improve naming**: Use expressive names that explain intent without comments
+
+### Validation Checklist
+After every refactoring:
+1. **Run all tests** - ensure behaviour is preserved
+2. **Check Code Health** - verify objective improvement metrics
+3. **Review readability** - confirm the code is easier to understand
+4. **Validate performance** - ensure no performance regressions
+5. **Document rationale** - briefly note why the change improves the code
+
+## Strategic Considerations
+
+### Technical Debt Mitigation
+- Refactoring is the primary tool for reducing technical debt
+- Automated refactoring (with proper validation) enables continuous improvement
+- Focus on refactorings that prevent future "shotgun surgery" changes
+
+### Business Impact
+- **90% of software lifecycle costs** are maintenance, not initial development
+- Clean, well-refactored code has proven business impact on development velocity
+- Prioritise refactorings that reduce cognitive load for future developers
+
+### Integration with Development Workflow
+- Refactor as part of feature development, not as separate initiatives
+- Use Code Health metrics to guide refactoring priorities
+- Apply refactoring techniques during code reviews
+
+**Remember**: The goal is not just cleaner code, but code that is genuinely easier to understand, modify, and maintain whilst preserving all existing functionality.
+
+## References
+
+This guidance incorporates research findings from:
+
+**Refactoring vs Refuctoring: Advancing the state of AI-automated code improvements** (2024)  
+*By Adam Tornhill, Markus Borg, PhD & Enys Mones, PhD*  
+CodeScene Research Team  
+[Download PDF](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/https:/codescene.com/hubfs/whitepapers/Refactoring-vs-Refuctoring-Advancing-the-state-of-AI-automated-code-improvements.pdf?utm_campaign=LinkedIn&utm_source=linkedin&utm_medium=paidsocial)
+
+Key research findings referenced:
+- AI refactoring success rates and failure patterns
+- The 70% rule about developer time spent understanding code
+- Statistical analysis of LLM performance on code refactoring tasks
+- Fact-checking methodologies for AI-generated code changes

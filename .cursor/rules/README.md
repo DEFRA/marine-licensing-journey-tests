@@ -105,14 +105,15 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - GOV.UK content design guidance
 - UK Government style manual compliance
 
-#### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)
+#### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬
 
-**Refactoring Guidelines**
+**Research-Backed Refactoring Guidelines**
 
-- Targeted improvement principles
-- Content preservation strategies
-- Readability enhancement focus
-- Structure maintenance rules
+- Evidence-based AI-assisted refactoring safety protocols
+- Manual refactoring best practices and validation checklists
+- Refactoring vs Refuctoring distinction and behaviour preservation
+- Strategic technical debt mitigation approaches
+- Complete research references and methodology
 
 ## How These Rules Work Together
 
@@ -140,7 +141,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 | Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
 | Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
 | Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
-| Refactoring existing content         | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)     |
+| Refactoring existing content         | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬  |
 
 ## Getting Started
 
