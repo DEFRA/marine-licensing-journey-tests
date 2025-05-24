@@ -118,8 +118,10 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 ```
 Strategic Level       →  HTSM guides what to test and why
+User-Centred Level    →  Personas inform who you're testing for and their real needs
 Writing Level         →  BDD ensures clear, maintainable scenarios
 Architecture Level    →  Project Structure + Screenplay Pattern organise implementation
+Application Context   →  Application Under Test provides technical and domain knowledge
 Code Level            →  Code Generation + Clean Code rules ensure quality and consistency
 Development Practices →  Playbook rules guide style, process, and refinement
 ```
@@ -143,10 +145,12 @@ Development Practices →  Playbook rules guide style, process, and refinement
 ## Getting Started
 
 1. **New to the project?** Start with [`project-structure.mdc`](./project-structure.mdc) to understand the layout
-2. **Writing scenarios?** Read [`bdd.rules.mdc`](./bdd.rules.mdc) for clear Gherkin
-3. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
-4. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking
-5. **Reviewing code quality?** Consult [`playbook.clean.code.mdc`](./playbook.clean.code.mdc) for clean code practices
+2. **Understanding the application?** Read [`application.under.test.mdc`](./application.under.test.mdc) for technical context
+3. **Understanding users?** Review [`personas.mdc`](./personas.mdc) to understand who you're testing for
+4. **Writing scenarios?** Read [`bdd.rules.mdc`](./bdd.rules.mdc) for clear Gherkin that reflects real user needs
+5. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
+6. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking
+7. **Reviewing code quality?** Consult [`playbook.clean.code.mdc`](./playbook.clean.code.mdc) for clean code practices
 
 ## Maintenance Notes
 
