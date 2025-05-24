@@ -238,6 +238,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
+**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
 **Previous Charter:** [ML-12 Consent Workflow Testing](./ML-12-consent-workflow.md)  
 **Next Charter:** [ML-12 Data Protection Testing](./ML-12-data-protection.md)

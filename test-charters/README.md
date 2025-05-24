@@ -90,10 +90,10 @@ Each charter considers marine licensing personas:
 
 ## 🔗 Related Resources
 
-- **[User Stories](../../.cursor/user-stories/README.md)** - Requirements and acceptance criteria
-- **[Marine Licensing Personas](../domain-context/README.md)** - User context and needs
-- **[Exploratory Testing Guide](../exploratory/README.md)** - Session management and techniques
-- **[Testing Heuristics](../heuristics/README.md)** - Systematic thinking frameworks
+- **[User Stories](../.cursor/user-stories/README.md)** - Requirements and acceptance criteria
+- **[Marine Licensing Personas](../test-strategy/domain-context/README.md)** - User context and needs
+- **[Exploratory Testing Guide](../test-strategy/exploratory/README.md)** - Session management and techniques
+- **[Testing Heuristics](../test-strategy/heuristics/README.md)** - Systematic thinking frameworks
 
 ---
 

@@ -122,7 +122,7 @@ This strategy **complements existing organisational governance**:
 
 ### **👥 Human-Centred Testing**
 
-- **[Test Charters](./test-charters/README.md)** - Systematic exploration of user stories and requirements
+- **[Test Charters](../test-charters/README.md)** - Systematic exploration of user stories and requirements
 - **[Session-Based Testing](./session-based-testing/README.md)** - Structured exploratory testing using time-boxed sessions
 - **[Exploratory Testing](./exploratory/README.md)** - Systematic exploration and investigation
 - **[Accessibility Testing](./accessibility/README.md)** - Inclusive design and GOV.UK compliance
@@ -144,7 +144,7 @@ This strategy **complements existing organisational governance**:
 | **I want to...**                                | **Go to...**                                               |
 | ----------------------------------------------- | ---------------------------------------------------------- |
 | Explore systematically using test heuristics    | [Testing Heuristics](./heuristics/README.md)               |
-| Create exploratory charters for user stories    | [Test Charters](./test-charters/README.md)                 |
+| Create exploratory charters for user stories    | [Test Charters](../test-charters/README.md)                |
 | Conduct structured exploratory testing sessions | [Session-Based Testing](./session-based-testing/README.md) |
 | Build robust test automation                    | [Automation Architecture](./automation/README.md)          |
 | Understand marine licensing user needs          | [Domain Context](./domain-context/README.md)               |

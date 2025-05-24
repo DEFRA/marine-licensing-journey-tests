@@ -212,6 +212,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-9.view.the.task.list.mdc](../../../.cursor/user-stories/ML-9.view.the.task.list.mdc)  
+**Related User Story:** [ML-9.view.the.task.list.mdc](../../.cursor/user-stories/ML-9.view.the.task.list.mdc)  
 **Previous Charter:** [ML-1 Accessibility Testing](../ML-1/ML-1-accessibility.md)  
 **Next Charter:** [ML-9 Usability Testing](./ML-9-usability.md)

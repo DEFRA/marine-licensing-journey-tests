@@ -226,6 +226,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)  
+**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)  
 **Previous Charter:** [ML-1 Validation Testing](./ML-1-validation.md)  
 **Next Charter:** [ML-9 Navigation Testing](../ML-9/ML-9-navigation.md)

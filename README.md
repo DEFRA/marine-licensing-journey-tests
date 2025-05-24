@@ -365,7 +365,7 @@ This project follows a **comprehensive modern test strategy** that combines syst
 ### **Core Framework**
 
 - **[Testing Heuristics](test-strategy/heuristics/README.md)** - HTSM and systematic exploration
-- **[Test Charters](test-strategy/test-charters/README.md)** - Systematic exploration of user stories and requirements
+- **[Test Charters](test-charters/README.md)** - Systematic exploration of user stories and requirements
 - **[Automation Architecture](test-strategy/automation/README.md)** - Test pyramid and quality engineering
 - **[Domain Context](test-strategy/domain-context/README.md)** - Marine licensing reality and user personas
 - **[Exploratory Testing](test-strategy/exploratory/README.md)** - Session-based investigation

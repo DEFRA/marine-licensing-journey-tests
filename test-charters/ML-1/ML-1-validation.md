@@ -183,6 +183,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)  
+**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)  
 **Previous Charter:** [ML-1 Happy Path Testing](./ML-1-happy-path.md)  
 **Next Charter:** [ML-1 Accessibility Testing](./ML-1-accessibility.md)

@@ -249,6 +249,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-9.view.the.task.list.mdc](../../../.cursor/user-stories/ML-9.view.the.task.list.mdc)  
+**Related User Story:** [ML-9.view.the.task.list.mdc](../../.cursor/user-stories/ML-9.view.the.task.list.mdc)  
 **Previous Charter:** [ML-9 Navigation Testing](./ML-9-navigation.md)  
 **Next Charter:** [ML-12 Consent Workflow Testing](../ML-12/ML-12-consent-workflow.md)

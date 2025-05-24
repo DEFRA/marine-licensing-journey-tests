@@ -231,6 +231,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
+**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
 **Previous Charter:** [ML-12 Validation Testing](./ML-12-validation.md)  
 **Charter Series Complete** - All ML-12 charters finished

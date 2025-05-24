@@ -242,6 +242,6 @@ Record:
 
 ---
 
-**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
+**Related User Story:** [ML-12.provide.or.withhold.public.register.content.mdc](../../.cursor/user-stories/ML-12.provide.or.withhold.public.register.content.mdc)  
 **Previous Charter:** [ML-9 Usability Testing](../ML-9/ML-9-usability.md)  
 **Next Charter:** [ML-12 Validation Testing](./ML-12-validation.md)
