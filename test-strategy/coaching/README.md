@@ -20,9 +20,9 @@ This section will cover:
 - **Training and development** for modern testing approaches
 - **Cross-functional coaching** for whole-team quality
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate coaching guidance:
+For coaching guidance:
 
 - **[Complete test strategy](../README.md)** provides comprehensive quality engineering framework
 - **[Testing Heuristics](../heuristics/README.md)** offer systematic thinking skill development
@@ -46,16 +46,16 @@ Key quality coaching foundations:
 - **Community of practice** development within the organisation
 - **External learning** integration and knowledge sharing
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project supports coaching through:
+Quality coaching should be supported through:
 
 - **Comprehensive strategy documentation** for learning and reference
 - **Practical examples** and real-world application guidance
-- **Heuristic frameworks** for systematic skill development
-- **Modern approaches** that build on traditional foundations
+- **Systematic frameworks** for skill development
+- **Modern approaches** that build on established foundations
 
-## 🔍 Coaching Approach
+## 🎯 Coaching Approach
 
 Planned coaching enhancement includes:
 

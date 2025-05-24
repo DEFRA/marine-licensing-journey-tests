@@ -20,13 +20,9 @@ This section will cover:
 - **Quality engineering KPIs** and team health indicators
 - **Alerting and feedback systems** for quality degradation
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate observability guidance:
-
-- **[Allure reporting](../../README.md#-production--deployment)** - Current test results and evidence capture
-- **[CDP Portal integration](../../README.md#cdp-portal)** - Automated test execution and results
-- **[Quality metrics](../automation/README.md#quality-gates--metrics)** - ROI measurement and quality gates
+For observability guidance:
 
 ## 🎯 Quality Metrics Framework
 
@@ -53,14 +49,14 @@ Planned quality observation includes:
 - **Accessibility compliance** and inclusion measures
 - **Performance and usability** indicators
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project currently provides observability through:
+Observability should be implemented through:
 
-- **Allure test reports** with rich test evidence and screenshots
-- **CDP Portal dashboards** for test execution tracking
-- **BrowserStack analytics** for cross-browser testing insights
-- **GitHub workflow monitoring** for CI/CD pipeline health
+- **Comprehensive test reports** with rich test evidence and screenshots
+- **Dashboard integration** for test execution tracking
+- **Cross-browser analytics** for testing insights
+- **Pipeline monitoring** for CI/CD health
 
 ## 🔍 Monitoring Approach
 

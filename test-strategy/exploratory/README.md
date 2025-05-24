@@ -201,14 +201,23 @@ Use mind maps to:
 - **Exploration fills gaps** - Discover unknown unknowns and usability issues
 - **Findings feed automation** - Turn discoveries into regression tests
 
-### **Session Planning Matrix**
+### **Session Planning Approach**
 
-| Feature Area           | Automation Coverage | Exploration Focus             | Persona   | Risk Level |
-| ---------------------- | ------------------- | ----------------------------- | --------- | ---------- |
-| Project Name Entry     | ✅ High             | Error messages, accessibility | Zofia     | Medium     |
-| Location Coordinates   | ⚠️ Partial          | Format variations, mobile UX  | Amy/Zofia | High       |
-| Public Register Search | ❌ Low              | Performance, usability        | Fatima    | High       |
-| Document Upload        | ⚠️ Partial          | File types, error handling    | All       | Medium     |
+Plan exploratory sessions based on:
+
+- **Risk level** - High-risk areas get priority attention
+- **Automation gaps** - Areas with limited automated coverage need exploration
+- **User personas** - Different users may uncover different issues
+- **Feature complexity** - Complex workflows benefit from exploratory investigation
+
+Example planning considerations:
+
+| Feature Area           | Exploration Focus             | Suggested Persona | Risk Level |
+| ---------------------- | ----------------------------- | ----------------- | ---------- |
+| Project Name Entry     | Error messages, accessibility | Zofia             | Medium     |
+| Location Coordinates   | Format variations, mobile UX  | Amy/Zofia         | High       |
+| Public Register Search | Performance, usability        | Fatima            | High       |
+| Document Upload        | File types, error handling    | All               | Medium     |
 
 ### **Risk-Based Session Prioritisation**
 

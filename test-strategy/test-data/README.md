@@ -6,7 +6,7 @@ This section covers **test data strategies**, **data factories**, and **reliable
 
 This section is under development. For now, refer to:
 
-- **[Code Generation rules](../../.cursor/rules/code.generation.mdc)** - Current test data guidance (#12)
+- **[Code Generation rules](../../.cursor/rules/code.generation.mdc)** - Test data guidance (#12)
 - **[Automation Architecture](../automation/README.md)** - For test data patterns and reliability strategies
 
 ## 🎯 Planned Content
@@ -20,18 +20,18 @@ This section will cover:
 - **Data privacy and compliance** considerations for government services
 - **Performance test data** generation and management
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate test data guidance:
+For test data guidance:
 
-- **Current plan**: Create exemption notification model and factory for testing
-- **Faker.js integration** - Already used in project for realistic test data
+- **Exemption notification model** and factory pattern
+- **Faker.js integration** for realistic test data
 - **Actor memory system** - Use `actor.remembers()` and `actor.recalls()` for test data sharing
 - **Environment-specific data** - Managed through `wdio.*.conf.js` configurations
 
-## 🎯 Current Practice
+## 🎯 Implementation Patterns
 
-The project currently uses:
+Test data should follow these patterns:
 
 ```javascript
 // Realistic test data generation
@@ -41,6 +41,8 @@ await this.actor.attemptsTo(CompleteProjectName.with(faker.lorem.words(5)))
 this.actor.remembers('projectName', 'Marine Works Project')
 const projectName = this.actor.recalls('projectName')
 ```
+
+## 🎯 Development Areas
 
 ## 🚀 Next Steps
 

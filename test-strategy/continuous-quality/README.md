@@ -20,9 +20,9 @@ This section will cover:
 - **Test result analysis** and intelligent test selection
 - **Environment management** for reliable continuous testing
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate continuous quality guidance:
+For continuous quality guidance:
 
 - Review **[Automation Architecture](../automation/README.md)** for quality engineering practices
 - Check existing **[GitHub workflow configurations](../../.github/workflows/)**

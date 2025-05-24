@@ -20,13 +20,9 @@ This section will cover:
 - **Performance budgets** and quality gates
 - **Optimisation techniques** for web application performance
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate performance guidance:
-
-- **[User journey testing](../user-journeys/README.md)** includes performance considerations
-- **[BrowserStack testing](../../README.md#browserstack-integration)** provides cross-browser performance insights
-- **[Observability strategy](../observability/README.md)** covers performance monitoring approaches
+For performance guidance:
 
 ## 🎯 Performance Requirements
 
@@ -46,9 +42,9 @@ Key performance expectations for marine licensing:
 - **File upload performance** for supporting documentation
 - **Integration performance** with government backend services
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project supports performance through:
+Performance should be supported through:
 
 - **Efficient automation design** with minimal wait times and smart selectors
 - **Cross-browser testing** to identify performance variations

@@ -189,18 +189,6 @@ Time-boxed Sessions → Specific charter → Chosen techniques → Test notes �
      90 minutes      Location entry    Data + UI + Personas    Mind map    Bug reports
 ```
 
-### **Coverage Tracking**
-
-Track which **heuristics** have been applied to which **product areas**:
-
-| Feature         | Structure | Behaviour | Value | Functional | Usability | Reliability |
-| --------------- | --------- | --------- | ----- | ---------- | --------- | ----------- |
-| Project Name    | ✅        | ✅        | ✅    | ✅         | ⚠️        | ❌          |
-| Public Register | ✅        | ⚠️        | ✅    | ✅         | ✅        | ❌          |
-| Location Entry  | ❌        | ✅        | ⚠️    | ✅         | ❌        | ❌          |
-
-**Legend**: ✅ Covered, ⚠️ Partially covered, ❌ Not covered
-
 ## 🎯 Practical Application
 
 ### **Daily Heuristic Practice**

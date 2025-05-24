@@ -20,9 +20,9 @@ This section will cover:
 - **Adaptive testing strategies** responsive to changing needs
 - **Failure learning** and blameless post-mortems
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate learning guidance:
+For learning guidance:
 
 - **[Testing Heuristics](../heuristics/README.md)** provide systematic learning frameworks
 - **[Exploratory Testing](../exploratory/README.md)** includes learning-focused investigation techniques
@@ -46,16 +46,16 @@ Key learning culture foundations:
 - **Testing effectiveness measurement** and improvement
 - **Risk learning** from production incidents and near-misses
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project supports learning through:
+Learning culture should be supported through:
 
-- **Modern testing strategy** that evolves based on outcomes
+- **Adaptive testing strategy** that evolves based on outcomes
 - **Heuristic-driven exploration** that generates new insights
 - **Persona-based testing** that deepens user understanding
 - **Evidence capture** that supports learning from test results
 
-## 🔍 Learning Approach
+## 🎯 Learning Approach
 
 Planned learning enhancement includes:
 

@@ -20,9 +20,9 @@ This section will cover:
 - **Accessibility personas** and user journey testing
 - **Accessibility-first development** practices and quality gates
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate accessibility guidance:
+For accessibility guidance:
 
 - **[Marine licensing personas](../domain-context/README.md#user-reality--testing-implications)** include accessibility considerations
 - **[User journey testing](../domain-context/README.md)** covers inclusive scenarios
@@ -38,11 +38,11 @@ Key accessibility requirements for marine licensing:
 - **Clear language and structure** - Accessible to users with cognitive differences
 - **Responsive design** - Works across devices and zoom levels
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project supports accessibility through:
+Accessibility should be supported through:
 
-- **User-centred design** with real personas including accessibility needs
+- **User-centred design** with personas including accessibility needs
 - **Semantic HTML** structure for screen reader compatibility
 - **Progressive enhancement** ensuring core functionality works for all users
 - **Clear error messages** and form validation feedback

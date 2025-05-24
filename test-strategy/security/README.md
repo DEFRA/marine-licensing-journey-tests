@@ -20,13 +20,9 @@ This section will cover:
 - **Security automation** and continuous security testing
 - **Penetration testing** coordination and security vulnerability assessment
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate security guidance:
-
-- **[Risk Models](../risk-models/README.md)** covers threat modelling approaches
-- **[Domain Context](../domain-context/README.md)** includes regulatory compliance considerations
-- **[Testing Heuristics](../heuristics/README.md)** include security-focused exploration techniques
+For security guidance:
 
 ## 🎯 Security Requirements
 
@@ -46,16 +42,16 @@ Key security expectations for marine licensing:
 - **Authorisation testing** ensuring users can only access appropriate data
 - **Administrative access** protection and audit trails
 
-## 🚀 Current Practice
+## 🚀 Implementation Approach
 
-The project supports security through:
+Security should be supported through:
 
 - **Secure test data practices** avoiding real personal or sensitive data
 - **Environment isolation** ensuring test data doesn't compromise production
 - **Access control testing** validating user permissions and data access
 - **Input validation testing** through comprehensive form testing
 
-## 🔍 Testing Approach
+## 🎯 Testing Approach
 
 Planned security testing includes:
 

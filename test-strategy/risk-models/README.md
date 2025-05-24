@@ -19,13 +19,13 @@ This section will cover:
 - **Security and compliance risk models**
 - **Integration with existing organisational risk management**
 
-## 📖 Current Resources
+## 📖 Resources
 
-For immediate risk-based testing guidance:
+For risk modelling guidance:
 
-- Use **[domain-specific testing considerations](../heuristics/README.md#marine-licensing-testing-considerations)** for systematic risk exploration
-- Reference **[Domain Context](../domain-context/README.md)** for regulatory and user risks
-- Apply **[HTSM quality criteria](../heuristics/README.md#heuristic-test-strategy-model-htsm)** for comprehensive risk coverage
+- **[Testing Heuristics](../heuristics/README.md)** provide systematic risk discovery techniques
+- **[Domain Context](../domain-context/README.md)** covers marine licensing regulatory complexity
+- **[Exploratory Testing](../exploratory/README.md)** includes risk-based session planning
 
 ---
 
