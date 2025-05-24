@@ -6,6 +6,32 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 ### 🎯 **Testing Strategy & Approach**
 
+#### **[Modern Test Strategy](../../test-strategy/README.md)** 🆕
+
+**Contemporary Quality Engineering Approach**
+
+- Modern testing philosophy with heuristic-driven exploration
+- Automation-first strategies with intelligent human insight
+- Context-driven testing adapted to marine licensing domain
+- Evidence-based quality engineering practices
+- Integration of traditional principles with modern outcomes
+
+**Key Components:**
+
+- **[Testing Heuristics](../../test-strategy/heuristics/README.md)** - HTSM and systematic exploration
+- **[Automation Architecture](../../test-strategy/automation/README.md)** - Test pyramid and quality engineering
+- **[Domain Context](../../test-strategy/domain-context/README.md)** - Marine licensing reality
+- **[Exploratory Testing](../../test-strategy/exploratory/README.md)** - Session-based investigation
+
+#### [`test-strategy.integration.mdc`](./test-strategy.integration.mdc) 🆕
+
+**Test Strategy Integration Rule**
+
+- Directive for AI assistants to use the comprehensive test strategy documentation
+- Guidelines for when and how to apply different strategy components
+- Examples of usage for test planning, implementation, and improvement
+- Key principles and authoritative source guidance for testing decisions
+
 #### [`htsm.mdc`](./htsm.mdc)
 
 **Heuristic Test Strategy Model (HTSM) v6.3**
@@ -171,15 +197,24 @@ This directory contains the complete set of rules and guidelines for the Marine 
 ## How These Rules Work Together
 
 ```
-Strategic Level       →  HTSM guides what to test and why
-Requirements Level    →  User Stories & Test Coverage link requirements to tests via @issue tags
-User-Centred Level    →  Personas inform who you're testing for and their real needs
+Strategic Level        →  Modern Test Strategy guides overall approach & philosophy
+                      →  HTSM provides systematic thinking frameworks
+
+User-Centred Level    →  Personas inform testing with real user needs
+                      →  User Stories & Test Coverage link requirements to tests
+
+Testing Execution     →  Testing Heuristics enable systematic exploration
+                      →  Automation Architecture defines quality engineering approach
+                      →  Exploratory Testing provides human insight and discovery
+
+Requirements Level    →  Domain Context grounds testing in marine licensing reality
+                      →  Application Under Test provides technical specifics
+
 Writing Level         →  BDD ensures clear, maintainable scenarios
 Architecture Level    →  Project Structure + Screenplay Pattern organise implementation
-Application Context   →  Application Under Test provides technical and domain knowledge
-Code Level            →  Code Generation + Clean Code rules ensure quality and consistency
+Code Level            →  Code Generation + Clean Code rules ensure quality
 Development Practices →  Playbook rules guide style, process, and refinement
-Refactoring Safety    →  Specialised refactoring guidance ensures safe code improvements
+Refactoring Safety    →  Specialised refactoring guidance ensures safe improvements
 ```
 
 ## User Stories Directory
@@ -193,25 +228,22 @@ The [`../.cursor/user-stories/`](../user-stories/) directory contains documented
 
 ## Quick Reference
 
-| **When you're...**                      | **Refer to...**                                                                                                                         |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Planning test strategy                  | [`htsm.mdc`](./htsm.mdc)                                                                                                                |
-| Working with user stories               | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)                                                            |
-| Assessing test coverage                 | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) + [`../user-stories/README.md`](../user-stories/README.md) |
-| Writing Gherkin scenarios               | [`bdd.rules.mdc`](./bdd.rules.mdc)                                                                                                      |
-| Adding new files or features            | [`project-structure.mdc`](./project-structure.mdc)                                                                                      |
-| Implementing test automation            | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)                                                                                    |
-| Writing JavaScript code                 | [`code.generation.mdc`](./code.generation.mdc)                                                                                          |
-| Understanding the application           | [`application.under.test.mdc`](./application.under.test.mdc)                                                                            |
-| Understanding users and their needs     | [`personas.mdc`](./personas.mdc)                                                                                                        |
-| Using AI assistance                     | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                                                                                    |
-| Reviewing code quality                  | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                                                                                  |
-| Following development best practices    | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)                                                                            |
-| Maintaining style and tone              | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)                                                                                  |
-| Refactoring existing content            | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬                                                                             |
-| Managing imports during refactoring     | [`import.dependency.management.mdc`](./import.dependency.management.mdc)                                                                |
-| Protecting URLs during refactoring      | [`url.hyperlink.management.mdc`](./url.hyperlink.management.mdc)                                                                        |
-| Avoiding dangerous refactoring commands | [`dangerous.url.commands.mdc`](./dangerous.url.commands.mdc)                                                                            |
+| **When you're...**                          | **Refer to...**                                                                                                                         |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Planning overall test strategy and approach | **[Modern Test Strategy](../../test-strategy/README.md)** + [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)          |
+| Learning systematic testing techniques      | **[Testing Heuristics](../../test-strategy/heuristics/README.md)** + [`htsm.mdc`](./htsm.mdc)                                           |
+| Building test automation                    | **[Automation Architecture](../../test-strategy/automation/README.md)**                                                                 |
+| Understanding marine licensing context      | **[Domain Context](../../test-strategy/domain-context/README.md)** + [`application.under.test.mdc`](./application.under.test.mdc)       |
+| Conducting exploratory testing              | **[Exploratory Testing](../../test-strategy/exploratory/README.md)**                                                                    |
+| Working with user stories                   | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)                                                            |
+| Assessing test coverage                     | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) + [`../user-stories/README.md`](../user-stories/README.md) |
+| Writing BDD scenarios                       | [`bdd.rules.mdc`](./bdd.rules.mdc)                                                                                                      |
+| Implementing screenplay pattern             | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)                                                                                    |
+| Understanding user needs and personas       | [`personas.mdc`](./personas.mdc)                                                                                                        |
+| Following coding standards                  | [`code.generation.mdc`](./code.generation.mdc)                                                                                          |
+| Maintaining code quality                    | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                                                                                  |
+| Refactoring safely                          | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)                                                                                |
+| Using AI assistance responsibly             | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                                                                                    |
 
 ## Getting Started
 

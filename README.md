@@ -39,6 +39,64 @@ This project implements automated tests for marine licensing user journeys. See 
 
 Each user story includes acceptance criteria, screenshots, and links to corresponding feature files tagged with `@issue=ML-{number}` for full traceability between requirements and tests.
 
+## 🧠 Modern Test Strategy
+
+This project implements a **contemporary quality engineering approach** that builds upon traditional testing principles whilst embracing modern practices for better outcomes.
+
+### **[📖 Complete Test Strategy Documentation →](test-strategy/README.md)**
+
+### **Key Principles**
+
+- 🎯 **Context-driven testing** - Strategy adapts to marine licensing domain specifics
+- 🔍 **Heuristic-based exploration** - Systematic thinking models guide test discovery
+- 🤖 **Automation-first approach** - Fast feedback through comprehensive automation
+- 👥 **Whole-team quality** - Testing is everyone's responsibility
+- 📊 **Evidence-based decisions** - Data and metrics drive testing investments
+- 🚀 **Continuous quality** - Quality built into the delivery pipeline
+
+### **Testing Approach Overview**
+
+#### **🔺 Test Automation Pyramid**
+
+```
+UI Tests (Few)          → Critical user journeys, accessibility
+API Tests (Many)        → Business logic, integrations, edge cases
+Unit Tests (Most)       → Component behaviour, domain logic
+Static Analysis         → Code quality, security vulnerabilities
+```
+
+#### **🧠 Heuristic-Driven Testing**
+
+- **[HTSM (Heuristic Test Strategy Model)](test-strategy/heuristics/README.md)** - Systematic exploration framework
+- **[Domain-specific heuristics](test-strategy/heuristics/README.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
+- **[Exploratory testing sessions](test-strategy/exploratory/README.md)** - Charter-driven investigation
+
+#### **👥 User-Centred Quality**
+
+- **[Real user personas](test-strategy/domain-context/README.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
+- **[Accessibility-first](test-strategy/accessibility/README.md)** - GOV.UK standards and inclusive design
+- **[Marine licensing domain expertise](test-strategy/domain-context/README.md)** - Testing grounded in regulatory reality
+
+### **Quick Access to Strategy**
+
+| **I want to...**                            | **Go to...**                                                  |
+| ------------------------------------------- | ------------------------------------------------------------- |
+| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)             |
+| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)      |
+| Build robust test automation                | [Automation Architecture](test-strategy/automation/README.md) |
+| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)      |
+| Practice exploratory testing                | [Exploratory Testing](test-strategy/exploratory/README.md)    |
+
+### **Evolution from Traditional Approaches**
+
+Our strategy **builds upon and modernises** established testing principles, preserving essential intentions whilst adopting contemporary practices:
+
+- ✅ **Same fundamental goals** - Quality software, risk management, regulatory compliance
+- ⚡ **Better delivery speed** - Faster feedback cycles and continuous quality
+- 🔍 **Enhanced discovery** - Systematic exploration uncovers risks automation might miss
+- 📊 **Evidence-based confidence** - Data-driven decisions rather than process compliance
+- 🤝 **Collaborative quality** - Whole-team responsibility rather than testing handoffs
+
 ## 🏗️ Architecture Overview
 
 ### **BDD + Screenplay Pattern**
@@ -298,14 +356,27 @@ export default class EnsurePageHeadingIs extends Task {
 
 ## 📊 Test Strategy
 
-The project follows **HTSM (Heuristic Test Strategy Model)** principles for comprehensive coverage:
+This project follows a **comprehensive modern test strategy** that combines systematic thinking with contemporary quality engineering practices.
 
-- **Risk-based testing** approaches
-- **Quality criteria** considerations
-- **Product factor** analysis
-- **Customer value** focus
+### **Complete Strategy Documentation**
 
-> 📖 See `.cursor/rules/` for complete standards and guidelines
+**[📖 Full Test Strategy →](test-strategy/README.md)** - Modern quality engineering approach
+
+### **Core Framework**
+
+- **[Testing Heuristics](test-strategy/heuristics/README.md)** - HTSM and systematic exploration
+- **[Automation Architecture](test-strategy/automation/README.md)** - Test pyramid and quality engineering
+- **[Domain Context](test-strategy/domain-context/README.md)** - Marine licensing reality and user personas
+- **[Exploratory Testing](test-strategy/exploratory/README.md)** - Session-based investigation
+
+### **Key Approaches**
+
+- **Risk-based testing** using systematic heuristics
+- **Quality criteria** considerations across product factors
+- **User-centred testing** with real marine licensing personas
+- **Evidence-based decisions** driven by metrics and outcomes
+
+> 📖 See complete strategy, heuristics, and guidelines in **[test-strategy/](test-strategy/README.md)**
 
 ## 🔧 Debugging
 
