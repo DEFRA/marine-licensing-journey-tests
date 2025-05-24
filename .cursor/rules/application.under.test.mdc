@@ -15,7 +15,6 @@ alwaysApply: false
 This is a UK Government (Defra) marine licensing application that handles:
 - Marine exemption notifications
 - Public register of marine licences and exemptions
-- Project name registration and management
 - User journey flows for marine licensing applications
 
 ## Application Under Test Structure
