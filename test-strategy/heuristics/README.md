@@ -185,8 +185,8 @@ To discover: Performance bottlenecks, search accuracy, error scenarios
 ### **Session Planning**
 
 ```
-Time-boxed Sessions → Specific charter → Chosen techniques → Test notes → Results
-     90 minutes      Location entry    Data + UI + Personas    Mind map    Bug reports
+Time-boxed Sessions → Specific charter → Chosen techniques →    Test notes → Results
+     90 minutes        Location entry    Data + UI + Personas    Mind map     Bug reports
 ```
 
 ## 🎯 Practical Application
