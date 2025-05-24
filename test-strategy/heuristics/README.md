@@ -2,6 +2,11 @@
 
 This section covers **heuristic-driven testing approaches** that guide systematic exploration and test discovery for marine licensing applications.
 
+> **📖 Source Attribution**  
+> The **Heuristic Test Strategy Model (HTSM)** and testing heuristics concepts are based on the foundational work of **James Bach**, a leading expert in exploratory testing and context-driven testing. James Bach has pioneered the use of systematic heuristics for test discovery and strategy.
+>
+> The HTSM framework and heuristic approaches described here have been adapted for marine licensing domain testing while preserving the core principles that make heuristic-driven testing effective.
+
 ## 🧠 What Are Testing Heuristics?
 
 Testing heuristics are **systematic thinking models** that help us:
