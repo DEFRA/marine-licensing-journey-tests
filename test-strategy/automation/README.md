@@ -146,9 +146,7 @@ CI/CD:          GitHub Actions + Docker
 
 ### **Quality Monitoring**
 
-- **Allure TestOps** - Test result analytics
 - **SonarQube** - Code coverage and quality metrics
-- **Lighthouse CI** - Performance and accessibility monitoring
 
 ## 🏗️ Automation Architecture Patterns
 
@@ -252,7 +250,6 @@ test-automation:
 - **Code coverage**: >80% for unit tests, >60% for integration
 - **Test execution time**: Unit <5min, API <10min, E2E <20min
 - **Test reliability**: >95% pass rate on main branch
-- **Accessibility score**: >90% Lighthouse accessibility score
 
 ### **Automation Health Monitoring**
 
