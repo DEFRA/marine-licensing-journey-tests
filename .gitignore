@@ -11,3 +11,4 @@ coverage
 allure-report/
 allure-results/
 FAILED
+*.code-workspace

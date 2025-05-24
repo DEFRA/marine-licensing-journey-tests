@@ -53,6 +53,18 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Error handling with Chai assertions
 - Tasks vs Interactions guidelines
 
+### 🎯 **Application Context & Integration**
+
+#### [`application.under.test.mdc`](./application.under.test.mdc)
+
+**Marine Licensing Application Context**
+
+- Application architecture (Hapi.js frontend/backend, MongoDB, Node.js ES modules)
+- Domain context for marine licensing, exemptions, and public register
+- Frontend and backend structure reference
+- Key features and user journey guidance
+- Environment configuration and testing considerations
+
 ### 📝 **Development Practices & Style**
 
 #### [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)
@@ -111,6 +123,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 | Adding new files or features         | [`project-structure.mdc`](./project-structure.mdc)           |
 | Implementing test automation         | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)         |
 | Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
+| Understanding the application        | [`application.under.test.mdc`](./application.under.test.mdc) |
 | Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
 | Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
 | Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
