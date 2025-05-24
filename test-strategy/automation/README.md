@@ -18,6 +18,45 @@ This section outlines our **automation-first approach** to quality engineering, 
 - **Collaboration over handoffs** - Whole team responsibility for test automation
 - **Continuous improvement** - Regular retrospection on automation effectiveness
 
+## 🔺 Test Automation Strategy
+
+Our current automation focuses on **UI-based end-to-end testing** with plans for future API layer testing:
+
+```
+           🎭 E2E Tests (Current Focus)
+         ┌─────────────────────────────────┐
+         │ Complete User Journeys          │  ← Current implementation
+         │ Cross-browser Compatibility     │     Fast execution via WebDriverIO
+         │ Accessibility Validation        │     Comprehensive coverage
+         │ Marine Licensing Workflows      │
+         └─────────────────────────────────┘
+              🔌 API Tests (Future)
+         ┌─────────────────────────────────────┐
+         │ Business Logic Validation           │  ← Planned for backend repo
+         │ Integration with Mocked Dependencies│     marine-licensing-backend
+         │ Data Validation & Error Handling   │     Fast feedback for logic
+         │ Service Contract Testing            │
+         └─────────────────────────────────────┘
+```
+
+### **Current Implementation: UI-First Testing**
+
+**Why UI-focused works well for us:**
+
+- ⚡ **Already extremely fast** - WebDriverIO + Cucumber provides rapid feedback
+- 🎯 **User-centric validation** - Tests real user journeys end-to-end
+- 🔄 **Complete integration** - Frontend, backend, and external services tested together
+- 🎭 **BDD alignment** - Gherkin scenarios match business requirements perfectly
+
+### **Future Enhancement: API Layer Testing**
+
+**Planned addition in `marine-licensing-backend` repository:**
+
+- 🔧 **Business logic isolation** - Test complex marine licensing rules independently
+- 🎭 **Mock external dependencies** - Reliable testing without external service dependencies
+- ⚡ **Fast feedback loops** - Quick validation of backend changes
+- 🧪 **Edge case exploration** - Easier to test complex data scenarios at API level
+
 ## 🔺 Test Automation Pyramid
 
 Our automation strategy follows the **test pyramid model** with marine licensing context:
@@ -45,7 +84,7 @@ Our automation strategy follows the **test pyramid model** with marine licensing
     └─────────────────────────────────────────┘
 ```
 
-### **E2E Tests (UI Layer) - Critical Journeys Only**
+### **Current E2E Tests (UI Layer) - Complete Journey Coverage**
 
 **Purpose**: Validate complete user workflows work together
 **Coverage**: Essential marine licensing user journeys
@@ -60,20 +99,21 @@ Feature: Complete exemption notification
     And the applicant receives confirmation
 ```
 
-**Tools & Technologies**:
+**Current Tools & Technologies**:
 
 - **WebDriverIO** with Screenplay pattern
 - **Cucumber** for BDD and living documentation
 - **Allure** for rich test reporting
 - **Cross-browser testing** for compatibility assurance
 
-### **API Tests (Service Layer) - Business Logic Focus**
+### **Future API Tests (Service Layer) - Business Logic Focus**
 
-**Purpose**: Test business rules, integrations, and data processing
-**Coverage**: All API endpoints, edge cases, error scenarios
+**Purpose**: Test business rules, integrations, and data processing independently  
+**Location**: `marine-licensing-backend` repository  
+**Coverage**: Business logic validation with mocked external dependencies
 
 ```javascript
-// Example: Marine activity validation
+// Example: Future API testing approach
 describe('Marine Activity Validation API', () => {
   it('should reject activities outside UK marine areas', async () => {
     const invalidLocation = { lat: 60.0, lng: -10.0 } // Outside UK waters
@@ -87,37 +127,11 @@ describe('Marine Activity Validation API', () => {
 })
 ```
 
-**Tools & Technologies**:
+**Planned Tools & Technologies**:
 
-- **API testing tools** for service integration testing
+- **API testing framework** for service integration testing
+- **Mock external services** for reliable, fast testing
 - **Test data builders** for complex domain objects
-- **Database fixtures** for integration testing
-
-### **Unit Tests (Component Layer) - Fast & Comprehensive**
-
-**Purpose**: Test individual components, functions, and domain logic
-**Coverage**: All business rules, calculations, validations
-
-```javascript
-// Example: Marine coordinates validation
-describe('MarineCoordinates', () => {
-  it('should validate UK territorial waters', () => {
-    const coordinates = new MarineCoordinates(51.5074, -0.1278) // London Thames
-    expect(coordinates.isInUKWaters()).toBe(true)
-  })
-
-  it('should handle coordinate format conversion', () => {
-    const dms = '51°30\'26.6"N 0°07\'39.1"W'
-    const decimal = MarineCoordinates.fromDMS(dms)
-    expect(decimal.latitude).toBeCloseTo(51.5074, 4)
-  })
-})
-```
-
-**Tools & Technologies**:
-
-- **Unit testing framework** for component testing
-- **Test data factories** for object creation
 
 ## 🛠️ Automation Toolchain
 
@@ -140,9 +154,9 @@ CI/CD:          GitHub Actions + Docker
 - **Docker** - Consistent test environments
 - **LocalStack** - AWS services simulation
 
-### **Quality Monitoring**
+### **Quality Monitoring (Project Ecosystem)**
 
-- **SonarQube** - Code coverage and quality metrics
+- **SonarQube** - Code coverage and quality metrics in `marine-licensing-frontend` and `marine-licensing-backend` repositories
 
 ## 🏗️ Automation Architecture Patterns
 
