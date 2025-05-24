@@ -57,32 +57,7 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
 - ⚡ **Fast feedback loops** - Quick validation of backend changes
 - 🧪 **Edge case exploration** - Easier to test complex data scenarios at API level
 
-## 🔺 Test Automation Pyramid
-
-Our automation strategy follows the **test pyramid model** with marine licensing context:
-
-```
-           🎭 E2E Tests (Few)
-         ┌─────────────────────┐
-         │ Critical User Flows │  ← 5-10% of tests
-         │ Cross-browser Tests │
-         │ Accessibility Tests │
-         └─────────────────────┘
-              🔌 API Tests (Many)
-         ┌─────────────────────────────┐
-         │ Business Logic Validation   │  ← 20-30% of tests
-         │ Integration Contracts       │
-         │ Data Validation             │
-         │ Security & Error Handling   │
-         └─────────────────────────────┘
-                🧩 Unit Tests (Most)
-    ┌─────────────────────────────────────────┐
-    │ Component Logic                         │  ← 60-70% of tests
-    │ Domain Models & Validation              │
-    │ Pure Functions & Calculations           │
-    │ Edge Cases & Boundary Conditions        │
-    └─────────────────────────────────────────┘
-```
+## 🧪 Current Testing Implementation
 
 ### **Current E2E Tests (UI Layer) - Complete Journey Coverage**
 
@@ -247,17 +222,14 @@ class ExemptionNotificationFactory {
 ```yaml
 # GitHub Actions workflow
 test-automation:
-  strategy:
-    matrix:
-      test-type: [unit, api, e2e]
   steps:
-    - name: Run tests
-      run: npm run test:${{ matrix.test-type }}
+    - name: Run E2E tests
+      run: npm run test
     - name: Quality gate
       run: |
-        # Fail if coverage drops below threshold
         # Fail if test execution time exceeds limit
-        # Fail if accessibility score drops
+        # Fail if accessibility tests fail
+        # Fail if critical user journeys fail
 ```
 
 ### **Quality Metrics**

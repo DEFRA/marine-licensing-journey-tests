@@ -170,12 +170,11 @@ Data               Platforms        Reliability     Error handling tests
 
 ### **Automation Strategy**
 
-Our **test automation pyramid** focuses on fast, reliable feedback:
+Our **current automation approach** focuses on comprehensive UI testing:
 
 ```
-UI Tests (Few)          → Critical user journeys, accessibility
-API Tests (Many)        → Business logic, integrations, edge cases
-Unit Tests (Most)       → Component behaviour, domain logic
+UI Tests (Current)      → Complete user journeys, accessibility, cross-browser
+API Tests (Planned)     → Business logic validation in backend repository
 Static Analysis         → Code quality, security vulnerabilities
 ```
 
@@ -219,21 +218,45 @@ This strategy builds on existing project foundations:
 
 ### **For Testers**
 
-1. Start with [Testing Heuristics](./heuristics/README.md) to understand systematic exploration
-2. Review [Domain Context](./domain-context/README.md) for marine licensing specifics
-3. Practice [Exploratory Testing](./exploratory/README.md) techniques
+**Week 1: Foundation**
+
+1. Read [Testing Heuristics](./heuristics/README.md) - Focus on HTSM and marine licensing applications
+2. Review [Domain Context](./domain-context/README.md) - Understand user personas and regulatory complexity
+3. Try a 90-minute [Session-Based Testing](./session-based-testing/README.md) session on an existing user story
+
+**Week 2: Practice**
+
+1. Create your first [Test Charter](../test-charters/README.md) for a marine licensing workflow
+2. Practice [Exploratory Testing](./exploratory/README.md) using the COP FLUNG GUN heuristic
+3. Document findings using the session note structure
 
 ### **For Developers**
 
-1. Understand [Automation Architecture](./automation/README.md) for TDD and testing practices
-2. Implement [Continuous Quality](./continuous-quality/README.md) in your workflow
-3. Review [Test Data Management](./test-data/README.md) for reliable tests
+**Immediate Actions**
+
+1. Review [Automation Architecture](./automation/README.md) - Understand current UI-first approach and future API testing
+2. Set up [Continuous Quality](./continuous-quality/README.md) practices in your workflow
+3. Read [Screenplay Pattern rules](../.cursor/rules/screenplay-pattern.mdc) for writing maintainable test code
+
+**Ongoing Practices**
+
+1. Write BDD scenarios in Gherkin that match business language
+2. Follow page object patterns (locators only, no behaviour)
+3. Use the actor memory system for test data sharing
 
 ### **For Product Teams**
 
-1. Review [User Journey Testing](./user-journeys/README.md) for user-centric validation
-2. Understand [Accessibility Testing](./accessibility/README.md) for inclusive design
-3. Use [Quality Intelligence](./observability/README.md) for informed decisions
+**Sprint Planning Integration**
+
+1. Use [User Journey Testing](./user-journeys/README.md) to validate story acceptance criteria
+2. Apply [Accessibility Testing](./accessibility/README.md) principles in definition of done
+3. Review [Quality Intelligence](./observability/README.md) metrics for informed prioritisation
+
+**Story Writing**
+
+1. Include marine licensing personas in user story examples
+2. Reference regulatory requirements that need validation
+3. Consider cross-browser and accessibility acceptance criteria
 
 ---
 
