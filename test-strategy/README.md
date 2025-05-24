@@ -2,6 +2,18 @@
 
 This directory contains the **modern test strategy** for marine licensing journey tests, emphasising **heuristic-driven testing**, **automation-first approaches**, and **context-driven quality engineering**.
 
+## 📖 Living Document
+
+This test strategy is a **living document** that:
+
+- 📝 **Evolves with our testing practices** - Updated as we learn and improve
+- 🔄 **Version controlled alongside our tests** - Changes tracked and reviewed like code
+- 🤝 **Collaborative** - Team contributions welcome through pull requests
+- 🎯 **Reflects current reality** - Kept in sync with actual testing approaches and tools
+- 📈 **Evidence-driven** - Updated based on testing effectiveness and team feedback
+
+The strategy grows with the team's understanding and the marine licensing domain complexity.
+
 ## 🧠 Modern Testing Philosophy
 
 Our testing approach is built on **contemporary quality engineering principles**:
