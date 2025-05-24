@@ -88,6 +88,36 @@ Each charter considers marine licensing personas:
 | ML-12      | Validation       | High     | ✅ Ready |
 | ML-12      | Data Protection  | Medium   | ✅ Ready |
 
+## 📋 Session Hopper
+
+Maintain a list of pre-planned session charters for testers to select from:
+
+```
+📋 Available Sessions (Hopper):
+- Explore exemption creation workflow edge cases
+- Investigate task list status management
+- Test public register consent validation
+- Analyse accessibility of project name page
+- Evaluate mobile responsiveness across user journeys
+- Validate error handling in project name entry
+- Test keyboard navigation across complete workflow
+- Investigate form data persistence and recovery
+- Explore cross-browser compatibility issues
+- Test location coordinate entry with various formats
+```
+
+### **Session Assignment**
+
+1. **Tester picks from hopper** - Self-service approach for available sessions
+2. **Manager assigns urgent sessions** - High-priority investigations take precedence
+3. **Tester suggests new charters** - Based on discoveries during exploration
+
+### **Session Prioritisation**
+
+When stakeholders request special testing:
+
+> "Here's our current session hopper. What priority should we give your request compared to these existing sessions?"
+
 ## 🔗 Related Resources
 
 - **[User Stories](../.cursor/user-stories/README.md)** - Requirements and acceptance criteria

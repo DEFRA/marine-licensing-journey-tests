@@ -7,6 +7,9 @@ A practical guide to **Session-Based Test Management (SBTM)** for marine licensi
 >
 > The original methodology has been adapted here for marine licensing domain testing while preserving the core principles and practices that make session-based testing effective.
 
+> **🎯 Ready to Start Testing?**  
+> **[View Available Test Charters](../../test-charters/README.md)** - Ready-to-use session charters for marine licensing testing
+
 ## 🎯 What is Session-Based Testing?
 
 Session-based testing organises exploratory testing into **manageable, accountable chunks** called **sessions**. Instead of ad hoc exploration, we use structured time blocks with clear charters and reviewable outcomes.
@@ -206,30 +209,9 @@ Use this structure for every session debrief:
 
 ## 🏗️ Session Management
 
-### **ToDo Session Hopper**
+### **Session Hopper**
 
-Maintain a list of pre-planned session charters:
-
-```
-📋 Available Sessions (Hopper):
-- Explore exemption creation workflow edge cases
-- Investigate task list status management
-- Test public register consent validation
-- Analyse accessibility of project name page
-- Evaluate mobile responsiveness across user journeys
-```
-
-### **Session Assignment**
-
-1. **Tester picks from hopper** - Self-service approach
-2. **Manager assigns urgent sessions** - High-priority investigations
-3. **Tester suggests new charters** - Based on discoveries
-
-### **Session Prioritisation**
-
-When clients request special testing:
-
-> "Here's our current session hopper. What priority should we give your request compared to these existing sessions?"
+For a current list of available session charters and assignment approach, see the **[Session Hopper in Test Charters](../../test-charters/README.md#-session-hopper)**.
 
 ## 🎭 Marine Licensing Personas in Sessions
 
