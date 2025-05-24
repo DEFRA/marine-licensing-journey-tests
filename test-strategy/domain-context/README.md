@@ -123,24 +123,33 @@ Each jurisdiction may have:
 
 ### **Regulatory Edge Case Testing**
 
-Using **property-based testing** for complex rule validation:
+Testing complex marine licensing rules with systematic validation:
 
 ```javascript
 // Example: Marine activity date validation
-const validApplicationWindow = jsc.record({
-  activityStartDate: jsc.datetime,
-  applicationSubmissionDate: jsc.datetime,
-  activityType: jsc.elements(['survey', 'construction', 'dredging'])
-})
+describe('Marine Activity Application Windows', () => {
+  const testCases = [
+    { activityType: 'survey', minimumNotice: 28 },
+    { activityType: 'construction', minimumNotice: 90 },
+    { activityType: 'dredging', minimumNotice: 60 }
+  ]
 
-jsc.assertForall(validApplicationWindow, (application) => {
-  const minimumNoticeRequired = getMinimumNotice(application.activityType)
-  const actualNotice = daysBetween(
-    application.applicationSubmissionDate,
-    application.activityStartDate
-  )
+  testCases.forEach(({ activityType, minimumNotice }) => {
+    it(`should require ${minimumNotice} days notice for ${activityType}`, () => {
+      const application = {
+        activityStartDate: new Date('2024-06-01'),
+        applicationSubmissionDate: new Date('2024-04-01'),
+        activityType
+      }
 
-  return actualNotice >= minimumNoticeRequired
+      const actualNotice = daysBetween(
+        application.applicationSubmissionDate,
+        application.activityStartDate
+      )
+
+      expect(actualNotice).toBeGreaterThanOrEqual(minimumNotice)
+    })
+  })
 })
 ```
 

@@ -65,7 +65,7 @@ Feature: Complete exemption notification
 - **WebDriverIO** with Screenplay pattern
 - **Cucumber** for BDD and living documentation
 - **Allure** for rich test reporting
-- **Visual regression testing** for UI consistency
+- **Cross-browser testing** for compatibility assurance
 
 ### **API Tests (Service Layer) - Business Logic Focus**
 
@@ -89,8 +89,7 @@ describe('Marine Activity Validation API', () => {
 
 **Tools & Technologies**:
 
-- **Supertest** for API testing
-- **Contract testing** with Pact or similar
+- **API testing tools** for service integration testing
 - **Test data builders** for complex domain objects
 - **Database fixtures** for integration testing
 
@@ -117,10 +116,8 @@ describe('MarineCoordinates', () => {
 
 **Tools & Technologies**:
 
-- **Jest** for unit testing framework
+- **Unit testing framework** for component testing
 - **Test data factories** for object creation
-- **Property-based testing** for edge case discovery
-- **Mutation testing** for test quality validation
 
 ## 🛠️ Automation Toolchain
 
@@ -130,8 +127,7 @@ describe('MarineCoordinates', () => {
 Language:       JavaScript (ES modules, no TypeScript)
 BDD Framework:  Cucumber with Gherkin
 UI Automation:  WebDriverIO + Screenplay Pattern
-API Testing:    Supertest + custom test builders
-Unit Testing:   Jest with extensive coverage
+Test Framework: Cucumber (via WebDriverIO)
 Reporting:      Allure with rich media capture
 CI/CD:          GitHub Actions + Docker
 ```
@@ -247,9 +243,9 @@ test-automation:
 
 ### **Quality Metrics**
 
-- **Code coverage**: >80% for unit tests, >60% for integration
-- **Test execution time**: Unit <5min, API <10min, E2E <20min
+- **Test execution time**: E2E tests <20min, smoke tests <5min
 - **Test reliability**: >95% pass rate on main branch
+- **Browser compatibility**: Cross-browser testing coverage
 
 ### **Automation Health Monitoring**
 

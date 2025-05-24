@@ -190,13 +190,14 @@ Testing strategies **adapt to context**:
 
 ## 🧪 Quality Engineering Practices
 
-### **Modern Testing Techniques**
+### **🔬 Modern Testing Techniques**
 
-- **Property-based testing** - Generate edge cases automatically
-- **Mutation testing** - Verify test suite effectiveness
-- **Contract testing** - API integration reliability
-- **Visual regression testing** - UI consistency and accessibility
-- **Chaos engineering** - Resilience and error handling
+Our strategy incorporates evidence-based testing practices:
+
+- **Heuristic-driven exploration** - Systematic thinking frameworks
+- **Risk-based test prioritisation** - Focus effort where it matters most
+- **Accessibility-first testing** - Inclusive design validation
+- **Cross-browser compatibility** - Reliable user experience across platforms
 
 ### **Quality Metrics That Matter**
 
