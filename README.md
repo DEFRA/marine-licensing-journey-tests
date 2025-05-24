@@ -102,12 +102,42 @@ Then('the task list page is displayed', async function () {
 
 ## 🚀 Getting Started
 
+### **Workspace Setup (Recommended)**
+
+For optimal development experience, set up a workspace with all related repositories:
+
+```bash
+# Create a workspace directory
+mkdir marine-licensing-workspace
+cd marine-licensing-workspace
+
+# Clone all repositories to the same level
+git clone https://github.com/DEFRA/marine-licensing-frontend.git
+git clone https://github.com/DEFRA/marine-licensing-backend.git
+git clone https://github.com/DEFRA/marine-licensing-journey-tests.git
+
+# Your structure should look like:
+# marine-licensing-workspace/
+# ├── marine-licensing-frontend/
+# ├── marine-licensing-backend/
+# └── marine-licensing-journey-tests/
+```
+
+**Cursor IDE Setup:**
+
+1. Open the `marine-licensing-workspace` folder in Cursor
+2. This enables the AI assistant to understand the full application context
+3. Journey test development will reference actual frontend routes and backend models
+
 ### **Requirements**
 
 - **Node.js** `>= v22.13.1` ([use nvm](https://github.com/creationix/nvm))
 - **npm** `>= v9`
 
 ```bash
+# Navigate to the journey tests
+cd marine-licensing-journey-tests
+
 # Use correct Node version
 nvm use
 
