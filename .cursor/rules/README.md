@@ -125,7 +125,7 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Manual refactoring best practices and validation checklists
 - Refactoring vs Refuctoring distinction and behaviour preservation
 - Strategic technical debt mitigation approaches
-- References to specialized refactoring guidance documents
+- References to specialised refactoring guidance documents
 - Complete research references and methodology
 
 #### [`import.dependency.management.mdc`](./import.dependency.management.mdc)
@@ -168,7 +168,7 @@ Architecture Level    →  Project Structure + Screenplay Pattern organise imple
 Application Context   →  Application Under Test provides technical and domain knowledge
 Code Level            →  Code Generation + Clean Code rules ensure quality and consistency
 Development Practices →  Playbook rules guide style, process, and refinement
-Refactoring Safety    →  Specialized refactoring guidance ensures safe code improvements
+Refactoring Safety    →  Specialised refactoring guidance ensures safe code improvements
 ```
 
 ## Quick Reference
@@ -200,7 +200,7 @@ Refactoring Safety    →  Specialized refactoring guidance ensures safe code im
 5. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
 6. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking
 7. **Reviewing code quality?** Consult [`playbook.clean.code.mdc`](./playbook.clean.code.mdc) for clean code practices
-8. **Refactoring existing code?** Start with [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) for core principles, then use specialized guidance for specific concerns
+8. **Refactoring existing code?** Start with [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) for core principles, then use specialised guidance for specific concerns
 
 ## Maintenance Notes
 
@@ -208,7 +208,7 @@ Refactoring Safety    →  Specialized refactoring guidance ensures safe code im
 - Rules are enforced through Cursor IDE integration
 - Updates should maintain backward compatibility where possible
 - Consider impact across all rule files when making changes
-- Refactoring guidance is modularized for targeted reference while maintaining cross-document consistency
+- Refactoring guidance is modularised for targeted reference while maintaining cross-document consistency
 
 ---
 
