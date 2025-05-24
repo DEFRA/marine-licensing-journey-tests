@@ -115,15 +115,48 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - GOV.UK content design guidance
 - UK Government style manual compliance
 
+### 🔧 **Refactoring & Code Safety**
+
 #### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬
 
 **Research-Backed Refactoring Guidelines**
 
-- Evidence-based AI-assisted refactoring safety protocols
+- Core refactoring principles and AI-assisted refactoring safety protocols
 - Manual refactoring best practices and validation checklists
 - Refactoring vs Refuctoring distinction and behaviour preservation
 - Strategic technical debt mitigation approaches
+- References to specialized refactoring guidance documents
 - Complete research references and methodology
+
+#### [`import.dependency.management.mdc`](./import.dependency.management.mdc)
+
+**Import and Dependency Management During Refactoring**
+
+- Critical import rules for extract, move, and restructure operations
+- Common import scenarios specific to this Screenplay-based codebase
+- Comprehensive import debugging checklists and troubleshooting guides
+- Prevention strategies for `ReferenceError` and module resolution issues
+- Integration workflows with other refactoring activities
+
+#### [`url.hyperlink.management.mdc`](./url.hyperlink.management.mdc)
+
+**URL and Hyperlink Protection During Refactoring**
+
+- Critical URL protection rules and best practices
+- Common corruption scenarios and prevention strategies
+- URL validation and debugging checklists
+- Pre, during, and post-refactoring URL management workflows
+- Safe markdown link handling and recovery procedures
+
+#### [`dangerous.url.commands.mdc`](./dangerous.url.commands.mdc)
+
+**Dangerous Commands and Tools During URL Refactoring**
+
+- Specific high-risk operations and tools that corrupt URLs
+- Real examples of command failures and compound corruption scenarios
+- Safe alternatives and recovery patterns for common refactoring operations
+- Command safety checklists and validation approaches
+- Tool-specific guidance for editors and search/replace operations
 
 ## How These Rules Work Together
 
@@ -135,24 +168,28 @@ Architecture Level    →  Project Structure + Screenplay Pattern organise imple
 Application Context   →  Application Under Test provides technical and domain knowledge
 Code Level            →  Code Generation + Clean Code rules ensure quality and consistency
 Development Practices →  Playbook rules guide style, process, and refinement
+Refactoring Safety    →  Specialized refactoring guidance ensures safe code improvements
 ```
 
 ## Quick Reference
 
-| **When you're...**                   | **Refer to...**                                              |
-| ------------------------------------ | ------------------------------------------------------------ |
-| Planning test strategy               | [`htsm.mdc`](./htsm.mdc)                                     |
-| Writing Gherkin scenarios            | [`bdd.rules.mdc`](./bdd.rules.mdc)                           |
-| Adding new files or features         | [`project-structure.mdc`](./project-structure.mdc)           |
-| Implementing test automation         | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)         |
-| Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
-| Understanding the application        | [`application.under.test.mdc`](./application.under.test.mdc) |
-| Understanding users and their needs  | [`personas.mdc`](./personas.mdc)                             |
-| Using AI assistance                  | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)         |
-| Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
-| Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
-| Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
-| Refactoring existing content         | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬  |
+| **When you're...**                      | **Refer to...**                                                          |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| Planning test strategy                  | [`htsm.mdc`](./htsm.mdc)                                                 |
+| Writing Gherkin scenarios               | [`bdd.rules.mdc`](./bdd.rules.mdc)                                       |
+| Adding new files or features            | [`project-structure.mdc`](./project-structure.mdc)                       |
+| Implementing test automation            | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)                     |
+| Writing JavaScript code                 | [`code.generation.mdc`](./code.generation.mdc)                           |
+| Understanding the application           | [`application.under.test.mdc`](./application.under.test.mdc)             |
+| Understanding users and their needs     | [`personas.mdc`](./personas.mdc)                                         |
+| Using AI assistance                     | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                     |
+| Reviewing code quality                  | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                   |
+| Following development best practices    | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)             |
+| Maintaining style and tone              | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)                   |
+| Refactoring existing content            | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬              |
+| Managing imports during refactoring     | [`import.dependency.management.mdc`](./import.dependency.management.mdc) |
+| Protecting URLs during refactoring      | [`url.hyperlink.management.mdc`](./url.hyperlink.management.mdc)         |
+| Avoiding dangerous refactoring commands | [`dangerous.url.commands.mdc`](./dangerous.url.commands.mdc)             |
 
 ## Getting Started
 
@@ -163,6 +200,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 5. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
 6. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking
 7. **Reviewing code quality?** Consult [`playbook.clean.code.mdc`](./playbook.clean.code.mdc) for clean code practices
+8. **Refactoring existing code?** Start with [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) for core principles, then use specialized guidance for specific concerns
 
 ## Maintenance Notes
 
@@ -170,6 +208,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 - Rules are enforced through Cursor IDE integration
 - Updates should maintain backward compatibility where possible
 - Consider impact across all rule files when making changes
+- Refactoring guidance is modularized for targeted reference while maintaining cross-document consistency
 
 ---
 
