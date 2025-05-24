@@ -131,18 +131,16 @@ Focus on data handling:
 
 ### **Heuristic-Based Investigation**
 
-#### **MARINE Heuristic Applied**
+#### **Domain-Specific Testing Focus**
 
-Using our domain-specific heuristic:
+For marine licensing applications, focus exploration on:
 
-```
-M - Marine activities: Test different activity types and requirements
-A - Applicant types: Explore with different user personas and needs
-R - Regulatory compliance: Investigate edge cases and legal requirements
-I - Integration points: Test connections with external systems
-N - Non-functional aspects: Performance, security, accessibility
-E - Error scenarios: What happens when things go wrong?
-```
+- **Marine activities** - Test different activity types and their specific requirements
+- **Applicant types** - Explore with different user personas and their varying needs
+- **Regulatory compliance** - Investigate edge cases and legal requirement boundaries
+- **Integration points** - Test connections with external systems and data sources
+- **Non-functional aspects** - Performance, security, and accessibility considerations
+- **Error scenarios** - What happens when things go wrong or users make mistakes
 
 #### **COP FLUNG GUN** (General exploratory heuristic)
 

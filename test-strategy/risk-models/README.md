@@ -23,7 +23,7 @@ This section will cover:
 
 For immediate risk-based testing guidance:
 
-- Use **[MARINE heuristic](../heuristics/README.md#marine-heuristic)** for systematic risk exploration
+- Use **[domain-specific testing considerations](../heuristics/README.md#marine-licensing-testing-considerations)** for systematic risk exploration
 - Reference **[Domain Context](../domain-context/README.md)** for regulatory and user risks
 - Apply **[HTSM quality criteria](../heuristics/README.md#heuristic-test-strategy-model-htsm)** for comprehensive risk coverage
 

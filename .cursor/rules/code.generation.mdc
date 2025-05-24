@@ -10,39 +10,40 @@ alwaysApply: true
 1. **No TypeScript** - this is a rule that is imposed centrally and not currently open to discussion
 2. **No JSDocs** - Code should be expressive and self documenting. Creating JSDocs for new code generates inconsistency. This documentation quickly goes out of date and becomes misleading.
 3. **No code comments** - code should be expressive and self documenting. In exceptional circumstances, use a comment for complex business logic or non-obvious workarounds.
+4. **No cheesy acronyms** - Avoid forced acronyms and mnemonics in documentation or testing guidance. Use straightforward, practical language instead of trying to be clever with acronyms like "MARINE" or "EXEMPTION" heuristics.
 
 ## Debugging & Reporting
 
-4. **No `console.log()`** - If something needs to be visible this should be attached to the allure report using one of the functions in `test-infrastructure/capture`
-5. **Do not use `throw Error`** - Any errors should use `chai` to fail an assertion. This causes test cases to fail properly and surfaces relevant information on the Allure report while allowing successful completion of the test run.
+5. **No `console.log()`** - If something needs to be visible this should be attached to the allure report using one of the functions in `test-infrastructure/capture`
+6. **Do not use `throw Error`** - Any errors should use `chai` to fail an assertion. This causes test cases to fail properly and surfaces relevant information on the Allure report while allowing successful completion of the test run.
 
 ## Architecture & Organization
 
-6. **Environment specifics** are controlled in the `wdio.*.conf.js` files. See `baseUrl:` configuration for environment-specific URLs.
-7. **Tasks vs Interactions**:
+7. **Environment specifics** are controlled in the `wdio.*.conf.js` files. See `baseUrl:` configuration for environment-specific URLs.
+8. **Tasks vs Interactions**:
    - Tasks should be high-level and represent user goals, not technical actions
    - Interactions should be small and focused on a single action
    - Interactions also encapsulate assertions using the `ensure` prefix
    
 ## Code Quality Standards
 
-8. **Prefer explicit imports** - Use named imports over default imports where possible for better IDE support and refactoring
-9. **Use meaningful variable names** - Variables and functions should clearly express their intent without requiring comments
-10. **Async/await over Promises** - Use async/await syntax consistently for better readability and error handling
-11. **Return early patterns** - Use guard clauses and early returns to reduce nesting and improve readability
+9. **Prefer explicit imports** - Use named imports over default imports where possible for better IDE support and refactoring
+10. **Use meaningful variable names** - Variables and functions should clearly express their intent without requiring comments
+11. **Async/await over Promises** - Use async/await syntax consistently for better readability and error handling
+12. **Return early patterns** - Use guard clauses and early returns to reduce nesting and improve readability
 
 ## Test Data Management
 
-12. **Test data guidance** - The current plan is to create a model for an exemption notification and a factory to create instances of this for testing. We may have to introduce an API to remove test data from the backend in future.
+13. **Test data guidance** - The current plan is to create a model for an exemption notification and a factory to create instances of this for testing. We may have to introduce an API to remove test data from the backend in future.
 
 ## Error Handling Patterns
 
-13. **Graceful degradation** - Tests should handle missing or changed elements gracefully and provide meaningful error messages
-14. **Prefer WDIO built-in assertions** - Use WDIO's native assertions when available, encapsulated within `browse.the.web.js` for consistency
-15. **Use chai assertions as fallback** - When WDIO does not provide suitable assertion methods, use chai's expressive assertions for clear test failures and better error reporting
+14. **Graceful degradation** - Tests should handle missing or changed elements gracefully and provide meaningful error messages
+15. **Prefer WDIO built-in assertions** - Use WDIO's native assertions when available, encapsulated within `browse.the.web.js` for consistency
+16. **Use chai assertions as fallback** - When WDIO does not provide suitable assertion methods, use chai's expressive assertions for clear test failures and better error reporting
 
 ## File Naming & Structure
 
-16. **Follow project structure** - All files must follow the organizational rules defined in `project-structure.mdc`
-17. **Use dot.case for JavaScript files** - Maintains consistency with screenplay pattern naming (e.g., `complete.project.name.js`)
+17. **Follow project structure** - All files must follow the organizational rules defined in `project-structure.mdc`
+18. **Use dot.case for JavaScript files** - Maintains consistency with screenplay pattern naming (e.g., `complete.project.name.js`)
 

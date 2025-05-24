@@ -63,34 +63,39 @@ Behaviour + Reliability → Test data persistence and backup/recovery
 Value + Reliability → Test service availability for critical user journeys
 ```
 
-## 🎯 Marine Licensing Heuristics
+## 🎯 Marine Licensing Testing Considerations
 
-### **Domain-Specific Exploration**
+### **Domain-Specific Areas to Explore**
 
-#### **MARINE Heuristic** (Marine Application Risk Investigation & Exploration)
+#### **Marine Licensing Applications**
 
-- **M**arine activities - Different types of licensing requirements
-- **A**pplicant types - Veteran vs novice users, internal vs external
-- **R**egulatory compliance - Legal requirements and edge cases
-- **I**ntegration points - External systems, APIs, data flows
-- **N**on-functional aspects - Performance, security, accessibility
-- **E**rror scenarios - What happens when things go wrong
+Key areas that need systematic testing attention:
 
-#### **EXEMPTION Heuristic** (Exemption eXploration & Edge-case Mapping)
+- **Different activity types** - Dredging, construction, cables, renewable energy projects
+- **User types and experience levels** - First-time applicants vs experienced operators, internal staff vs external users
+- **Regulatory requirements** - Environmental assessments, consultation periods, compliance validation
+- **Geographic complexity** - Territorial waters, overlapping jurisdictions, coordinate systems
+- **Integration points** - Planning systems, environmental databases, payment services
+- **Timing and deadlines** - Seasonal restrictions, consultation periods, decision timelines
+- **Document handling** - Upload validation, format requirements, evidence management
+- **Workflow variations** - Different application paths, amendment processes, appeals
 
-- **E**ligibility criteria - Who qualifies and who doesn't
-- **X**ceptions and edge cases - Boundary conditions
-- **E**nvironmental factors - Impact assessments and constraints
-- **M**ulti-user scenarios - Collaborative workflows
-- **P**rocess variations - Different application paths
-- **T**iming considerations - Deadlines, seasonal factors
-- **I**ntegration dependencies - External system requirements
-- **O**perational impacts - Support and maintenance needs
-- **N**otification workflows - Communication and alerts
+#### **Exemption Notifications**
 
-### **User-Centred Heuristics**
+Specific considerations for exemption testing:
 
-#### **PERSONAS Application** (From our marine licensing personas)
+- **Eligibility boundaries** - What qualifies, edge cases, exclusions
+- **Environmental impact thresholds** - When exemptions apply vs full licensing
+- **Documentation requirements** - Evidence needed, format validation
+- **Geographic constraints** - Location-specific rules, protected areas
+- **Timing factors** - Seasonal restrictions, advance notice requirements
+- **Process variations** - Different exemption types, amendment workflows
+- **Integration dependencies** - Environmental data sources, mapping services
+- **Communication flows** - Notifications, confirmations, follow-up actions
+
+### **User-Centred Testing**
+
+#### **Testing with Personas** (From our marine licensing personas)
 
 - **Fatima** (Case Officer) - Manual processes, system integration needs
 - **Simon** (Marine Officer) - Field access, evidence gathering, enforcement
@@ -140,34 +145,34 @@ With: Various search criteria, large datasets, API timeouts
 To discover: Performance bottlenecks, search accuracy, error scenarios
 ```
 
-## 🧪 Testing Mnemonics and Models
+## 🧪 Testing Techniques
 
-### **HICCUPPS** (for testing functional requirements)
+### **Functional Testing Areas**
 
-- **H**istory - What happened before affects current state
-- **I**mage - Visual representation and layout correctness
-- **C**omparable Products - How do other licensing systems work?
-- **C**laims - Do the marketing/documentation claims hold true?
-- **U**ser Expectations - Does it work as users expect?
-- **P**urpose - Does it fulfil its intended purpose?
-- **P**latform - Does it work across different environments?
-- **S**tatutes - Does it comply with legal/regulatory requirements?
+- **History and state** - How previous actions affect current behaviour
+- **Visual presentation** - Layout, formatting, and display correctness
+- **Comparison** - How does this compare to other licensing systems?
+- **Claims validation** - Do features work as documented?
+- **User expectations** - Does it behave as users would expect?
+- **Purpose alignment** - Does it achieve its intended goals?
+- **Platform compatibility** - Works across different browsers and devices
+- **Regulatory compliance** - Meets legal and statutory requirements
 
-### **CRUD** (for data operations)
+### **Data Operations Testing**
 
-- **C**reate - Can users create new applications/exemptions?
-- **R**ead - Can users view their submissions and status?
-- **U**pdate - Can users modify their applications?
-- **D**elete - Can users remove or withdraw applications?
+- **Creating data** - Can users create new applications and exemptions?
+- **Reading data** - Can users view their submissions and current status?
+- **Updating data** - Can users modify their applications appropriately?
+- **Deleting data** - Can users remove or withdraw applications when needed?
 
-### **SFDPOT** (for UI testing)
+### **User Interface Testing**
 
-- **S**tructure - HTML validity, accessibility markup
-- **F**unction - JavaScript functionality, form submissions
-- **D**ata - Field validation, data persistence
-- **P**latform - Browser compatibility, device responsiveness
-- **O**perations - User workflows and task completion
-- **T**ime - Performance, loading times, timeouts
+- **Structure** - HTML validity and accessibility markup
+- **Function** - JavaScript functionality and form submissions
+- **Data handling** - Field validation and data persistence
+- **Platform** - Browser compatibility and device responsiveness
+- **Operations** - User workflows and task completion
+- **Timing** - Performance, loading times, and timeouts
 
 ## 📊 Heuristic-Driven Test Planning
 
@@ -180,8 +185,8 @@ To discover: Performance bottlenecks, search accuracy, error scenarios
 ### **Session Planning**
 
 ```
-Time-boxed Sessions → Specific charter → Chosen heuristics → Test notes → Results
-     90 minutes      Location entry    CRUD + PERSONAS     Mind map    Bug reports
+Time-boxed Sessions → Specific charter → Chosen techniques → Test notes → Results
+     90 minutes      Location entry    Data + UI + Personas    Mind map    Bug reports
 ```
 
 ### **Coverage Tracking**
@@ -201,7 +206,7 @@ Track which **heuristics** have been applied to which **product areas**:
 ### **Daily Heuristic Practice**
 
 1. **Start with HTSM** - Choose a product category and quality criteria
-2. **Apply domain heuristics** - Use MARINE or EXEMPTION for marine licensing
+2. **Apply domain considerations** - Use the marine licensing testing areas above
 3. **Consider personas** - How would each user type interact with this feature?
 4. **Document discoveries** - Record interesting test ideas and potential risks
 
