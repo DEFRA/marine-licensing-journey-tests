@@ -77,6 +77,16 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 ### 📝 **Development Practices & Style**
 
+#### [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)
+
+**Responsible AI Use in Test Automation**
+
+- AI assistant limitations and appropriate use cases
+- Human verification requirements for domain-specific content
+- Test generation validation points and edge case handling
+- Marine licensing context awareness for realistic test scenarios
+- Based on NASA research on LLM limitations in safety-critical contexts
+
 #### [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)
 
 **Clean Code & Code Smells**
@@ -138,6 +148,7 @@ Development Practices →  Playbook rules guide style, process, and refinement
 | Writing JavaScript code              | [`code.generation.mdc`](./code.generation.mdc)               |
 | Understanding the application        | [`application.under.test.mdc`](./application.under.test.mdc) |
 | Understanding users and their needs  | [`personas.mdc`](./personas.mdc)                             |
+| Using AI assistance                  | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)         |
 | Reviewing code quality               | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)       |
 | Following development best practices | [`playbook.general.rules.mdc`](./playbook.general.rules.mdc) |
 | Maintaining style and tone           | [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)       |
