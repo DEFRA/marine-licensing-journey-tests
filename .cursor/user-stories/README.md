@@ -30,9 +30,9 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 
 ```
 .cursor/user-stories/
-├── README.md                                          # This file
-├── ML-1.provide.project.name.and.create.exemption.mdc # Project name entry
-├── ML-9.view.the.task.list.mdc                       # Task list functionality
+├── README.md                                             # This file
+├── ML-1.provide.project.name.and.create.exemption.mdc    # Project name entry
+├── ML-9.view.the.task.list.mdc                           # Task list functionality
 └── ML-12.provide.or.withhold.public.register.content.mdc # Public register consent
 ```
 
