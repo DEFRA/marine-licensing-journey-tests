@@ -132,6 +132,7 @@ describe('Marine Activity Validation API', () => {
 - **API testing framework** for service integration testing
 - **Mock external services** for reliable, fast testing
 - **Test data builders** for complex domain objects
+- **Mutation testing (Stryker)** - Validate unit test effectiveness and coverage quality
 
 ## 🛠️ Automation Toolchain
 
@@ -157,6 +158,10 @@ CI/CD:          GitHub Actions + Docker
 ### **Quality Monitoring (Project Ecosystem)**
 
 - **SonarQube** - Code coverage and quality metrics in `marine-licensing-frontend` and `marine-licensing-backend` repositories
+
+### **Planned Quality Enhancements**
+
+- **Stryker Mutator** - Mutation testing to validate unit test effectiveness in `marine-licensing-frontend` and `marine-licensing-backend` repositories
 
 ## 🏗️ Automation Architecture Patterns
 
