@@ -80,7 +80,7 @@ Our automation strategy follows the **test pyramid model** with marine licensing
     │ Component Logic                         │  ← 60-70% of tests
     │ Domain Models & Validation              │
     │ Pure Functions & Calculations           │
-    │ Edge Cases & Boundary Conditions       │
+    │ Edge Cases & Boundary Conditions        │
     └─────────────────────────────────────────┘
 ```
 
