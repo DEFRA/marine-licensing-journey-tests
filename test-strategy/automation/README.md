@@ -33,8 +33,8 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
               🔌 API Tests (Future)
          ┌──────────────────────────────────────┐
          │ Business Logic Validation            │  ← Planned for backend repo
-         │ Integration with Mocked Dependencies │     marine-licensing-backend
-         │ Data Validation & Error Handling     │     Fast feedback for logic
+         │ Integration with Mocked Dependencies │    marine-licensing-backend
+         │ Data Validation & Error Handling     │    Fast feedback for logic
          │ Service Contract Testing             │
          └──────────────────────────────────────┘
 ```
