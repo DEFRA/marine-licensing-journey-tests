@@ -33,6 +33,8 @@ Exploratory testing is crucial for:
 
 ## 🧠 Session-Based Test Management (SBTM)
 
+> **📖 For comprehensive guidance on session-based exploratory testing, see our detailed guide: [Session-Based Testing](../session-based-testing/README.md)**
+
 ### **Charter-Driven Sessions**
 
 Each exploratory session has a clear **charter** that defines:
