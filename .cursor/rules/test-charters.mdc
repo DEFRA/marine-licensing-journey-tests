@@ -1,0 +1,139 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Test Charter Organization and Maintenance
+
+## Core Structure
+
+### **Directory Organization**
+- Test charters are organized in `test-charters/` at repository root
+- Each user story gets its own subdirectory: `ML-{number}/`
+- Charter files follow naming pattern: `ML-{number}-{aspect}.md`
+
+### **Charter Naming Convention**
+```
+ML-{UserStoryNumber}-{TestingAspect}.md
+
+Examples:
+- ML-1-happy-path.md        (Core functionality)
+- ML-1-validation.md        (Error handling and edge cases)
+- ML-1-accessibility.md     (Inclusive design)
+- ML-9-navigation.md        (Navigation and workflow)
+- ML-9-usability.md         (User experience)
+```
+
+### **Charter Content Structure**
+Each charter must follow this format:
+```
+EXPLORE: [Area of the application]
+WITH: [Tools, data, personas, techniques]
+TO DISCOVER: [Types of information, risks, problems]
+
+Duration: [Recommended time allocation]
+Priority: [High/Medium/Low based on risk]
+User Personas: [Which marine licensing personas to consider]
+```
+
+## Maintenance Requirements
+
+### **Charter Status Table**
+The `test-charters/README.md` must maintain an accurate status table:
+
+1. **Add new entries** when creating charters
+2. **Link charter names** directly to files using relative paths
+3. **Update status** as charters are completed or revised
+4. **Indicate priority** based on risk assessment
+
+Required table format:
+```markdown
+| User Story | Charter          | Priority | Status   |
+| ---------- | ---------------- | -------- | -------- |
+| ML-X       | [Charter Name](./ML-X/ML-X-aspect.md) | High/Medium/Low | ✅ Ready / 🚧 Draft / ❌ Blocked |
+```
+
+### **Charter Organization Section**
+Must keep the "Charter Organisation" section synchronized:
+- Group charters by user story
+- Provide brief descriptions of each charter's focus
+- Maintain consistent linking format
+
+### **Session Hopper Updates**
+When adding new charters:
+1. **Add corresponding session ideas** to the hopper
+2. **Remove completed sessions** that are no longer relevant
+3. **Keep hopper realistic** - 8-12 active sessions maximum
+
+## Quality Standards
+
+### **Charter Completeness**
+Each charter must include:
+- Clear exploration objective
+- Specific tools and techniques
+- Target discoveries or risk areas
+- Realistic duration estimate
+- Appropriate persona consideration
+
+### **Linking Accuracy**
+- All table links must point to existing files
+- Relative paths must be correct from README location
+- Links must work when README is viewed from different contexts
+
+### **Status Accuracy**
+- ✅ Ready: Charter is complete and ready for use
+- 🚧 Draft: Charter exists but needs refinement
+- ❌ Blocked: Charter cannot be completed due to dependencies
+
+## File Management Rules
+
+### **When Adding New User Stories**
+1. Create new directory: `test-charters/ML-{number}/`
+2. Add charter files following naming convention
+3. Update Charter Status table with all new entries
+4. Update Charter Organisation section
+5. Add relevant sessions to Session Hopper
+
+### **When Updating Existing Charters**
+1. Update file content as needed
+2. Review and update priority if risk assessment changes
+3. Update status if charter moves between draft/ready states
+4. Ensure table links remain accurate
+
+### **When Removing Charters**
+1. Remove files from directory
+2. Remove entries from Charter Status table
+3. Remove links from Charter Organisation section
+4. Remove related sessions from Session Hopper
+5. Document reason for removal in commit message
+
+## Integration Requirements
+
+### **User Story Traceability**
+- Charter names must clearly reference user story numbers
+- Charter content should align with user story acceptance criteria
+- Priority should reflect user story business value and risk
+
+### **Persona Integration**
+Each charter should specify which marine licensing personas to consider:
+- Zofia (Novice Applicant) - Clarity and guidance
+- Amy (Veteran Applicant) - Efficiency and patterns
+- Fatima (Case Officer) - Back-office and data quality
+- Simon (Marine Officer) - Technical and compliance
+
+### **Testing Strategy Alignment**
+- High-priority charters should cover critical user journeys
+- Medium-priority charters should address edge cases and usability
+- Low-priority charters can explore nice-to-have scenarios
+- Charter coverage should complement automated test coverage
+
+## Validation Checklist
+
+Before committing charter changes:
+- [ ] All table links work correctly
+- [ ] Charter Status table is complete and accurate
+- [ ] Charter Organisation section is synchronized
+- [ ] Session Hopper reflects current priorities
+- [ ] New charters follow required content structure
+- [ ] File naming follows established convention
+- [ ] Priority levels are appropriate for business risk
