@@ -142,7 +142,7 @@ After every refactoring:
 
 **URL Debugging Checklist:**
 - [ ] All markdown links maintain proper `[text](mdc:marine-licensing-journey-tests/url)` format
-- [ ] External URLs (https://, http://) are unchanged
+- [ ] External URLs (https:///, http://) are unchanged
 - [ ] Relative file paths in URLs reflect actual file structure
 - [ ] Configuration URLs and API endpoints are intact
 - [ ] Documentation links resolve correctly
