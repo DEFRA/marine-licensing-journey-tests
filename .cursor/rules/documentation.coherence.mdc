@@ -1,0 +1,162 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Documentation Coherence & Quality Standards
+
+This rule ensures consistency and coherence across test strategy documentation and test charters, based on comprehensive review findings.
+
+## Core Coherence Requirements
+
+### **Cross-Reference Integrity**
+- **All referenced files must exist** - Every link to a charter, strategy document, or resource must point to an actual file
+- **Anchor links must match headings** - Use exact heading text for anchor references (e.g., `#amy-veteran-applicant---efficiency-testing`)
+- **Consistent naming patterns** - File names must match how they're referenced in READMEs and status tables
+- **Working navigation** - All "Quick Access" tables and navigation sections must have functional links
+
+### **Status Tracking Accuracy**
+- **Charter status table** must reflect actual file completion status
+- **Session hopper** must reference actual charter names, not placeholder descriptions
+- **File organization** sections must match actual directory structure
+- **Priority alignment** between status tables and actual implementation needs
+
+## Test Strategy Documentation Standards
+
+### **Structure Requirements**
+- **Complete sections** - No truncated content or mid-sentence cuts
+- **Proper integration** - All strategy components must reference each other appropriately
+- **Consistent terminology** - Use "scenario testing" (not "scenario-based testing"), "SBTM" consistently
+- **British English** throughout all documentation
+
+### **Content Quality Standards**
+- **Professional tone** - Understated, practical language serving user needs
+- **No forced acronyms** - Avoid cheesy mnemonics, use straightforward language
+- **Evidence-based** - Claims supported by methodology or research references
+- **Domain-appropriate** - Marine licensing context integrated naturally
+
+## Charter System Standards
+
+### **Dual Charter Approach**
+- **Traditional SBTM charters** - 60-90 minute focused technical investigation
+- **Scenario-enhanced charters** - 90-120 minute realistic user investigation using Bolton's framework
+- **Complementary coverage** - Both types should exist for high-priority user stories
+- **Clear differentiation** - Each type serves different investigation goals
+
+### **Scenario Charter Requirements**
+When creating scenario charters, ensure:
+
+#### **Bolton Framework Components:**
+- **THEME** - Clear mission about realistic user situation
+- **SETUP** - Authentic context, pressures, environment with specific persona details
+- **ACTIVITIES** - Guided but flexible realistic actions with specific examples
+- **ORACLES** - Multiple quality indicators beyond functional correctness
+- **VARIATIONS** - Realistic turbulence and stress testing approaches
+
+#### **Marine Licensing Context:**
+- **Persona authenticity** - Use Zofia, Amy, Fatima, Simon with realistic pressures
+- **Domain terminology** - Marine licensing language appropriate to user context
+- **Regulatory reality** - Reflect actual marine licensing constraints and requirements
+- **Technology friction** - Include realistic device, network, and accessibility challenges
+
+### **Charter File Structure**
+Every scenario charter must include:
+```
+Charter Definition (Charter statement, duration, priority, type)
+Scenario Context (Theme, Setup, Realistic Pressures)
+Scenario Activities (Guided actions, variations/turbulence)
+Scenario Oracles (Quality indicators organized by type)
+Evidence Collection Framework (Discovery documentation, problem classification)
+Follow-up Investigation Areas (Immediate follow-ups, suggested scenarios, automation implications)
+Session Structure (Setup, investigation, debrief phases with time allocations)
+Related Resources (Cross-references to user stories, personas, complementary charters)
+```
+
+## Reference Management
+
+### **Internal Link Patterns**
+- **Strategy to charters**: `../test-charters/README.md`
+- **Charters to strategy**: `../test-strategy/[component]/README.md`
+- **User story references**: `../../.cursor/user-stories/[story-file].mdc`
+- **Persona references**: Point to general domain context rather than specific anchors unless verified
+
+### **Anchor Link Standards**
+- **Use exact heading text** with proper markdown anchor format
+- **Prefer general section links** over specific anchors for external documents
+- **Verify anchor existence** before using specific fragment identifiers
+- **Update anchors** when headings change in referenced documents
+
+## Quality Assurance Practices
+
+### **Before Publishing Documentation**
+1. **Verify all links work** - Check every cross-reference resolves correctly
+2. **Confirm file existence** - Ensure all referenced charters and documents exist
+3. **Validate status tracking** - Status tables match actual file states
+4. **Check naming consistency** - References match actual file names
+5. **Review British English** - Consistent spelling and professional tone
+
+### **When Adding New Content**
+1. **Update cross-references** - Add new content to relevant navigation sections
+2. **Maintain status tables** - Update charter status and priority information
+3. **Preserve naming patterns** - Follow established file naming conventions
+4. **Test integration** - Ensure new content fits coherently with existing structure
+
+### **When Editing Existing Content**
+1. **Check dependent references** - Find what links to changed content
+2. **Update anchor links** - Modify references if headings change
+3. **Maintain coherence** - Ensure changes don't break narrative flow
+4. **Validate cross-references** - Confirm all links still work after changes
+
+## Common Coherence Issues (Avoid These)
+
+### **Reference Problems**
+- **Missing files** - Referencing charters or documents that don't exist
+- **Broken anchors** - Using anchor links that don't match actual headings
+- **Inconsistent naming** - Calling same charter different names in different places
+- **Stale references** - Links to content that has been moved or renamed
+
+### **Status Problems**
+- **Inaccurate status** - Marking drafts as ready or ready content as draft
+- **Inconsistent priorities** - Different priority ratings in different documents
+- **Outdated hoppers** - Session hoppers referencing old or incorrect charter names
+- **Missing updates** - Not updating status when files are created or completed
+
+### **Content Problems**
+- **Truncated sections** - Incomplete content that cuts off mid-sentence
+- **Inconsistent terminology** - Using different terms for same concepts
+- **Missing integration** - New content not linked from relevant navigation
+- **Quality gaps** - Content not meeting established professional standards
+
+## Integration with Existing Rules
+
+This rule works alongside:
+- **`playbook.styleguide.mdc`** - British English and professional tone standards
+- **`test-charters.mdc`** - Charter methodology and dual approach framework  
+- **`scenario-testing.mdc`** - Bolton framework implementation specifics
+- **`responsible.ai.use.mdc`** - Human verification for domain-specific content
+
+## Maintenance Responsibilities
+
+### **During Content Creation**
+- Apply coherence standards immediately
+- Check cross-references as you write
+- Update status tracking in real-time
+- Maintain quality standards throughout
+
+### **During Content Review**
+- Verify all cross-references work
+- Check naming consistency across documents
+- Validate status tracking accuracy
+- Ensure professional tone and British English
+
+### **During Major Updates**
+- Review entire documentation structure for coherence
+- Update all cross-references systematically
+- Refresh status tables and navigation sections
+- Validate integration between strategy and charters
+
+---
+
+**Purpose**: This rule prevents the documentation coherence issues discovered during comprehensive review, ensuring test strategy and charter documentation remains navigable, accurate, and professionally maintained.
+
+**Application**: Use when creating, editing, or reviewing any documentation in test-strategy or test-charters directories.
