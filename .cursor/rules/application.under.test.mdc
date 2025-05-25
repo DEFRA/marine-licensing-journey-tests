@@ -10,6 +10,8 @@ alwaysApply: false
 - **Backend**: Hapi.js REST API with MongoDB for data persistence  
 - **Stack**: Node.js ES modules, no TypeScript (JavaScript only)
 - **Testing**: Jest for unit tests, WebDriverIO with Screenplay pattern for E2E tests
+- **Hosting**: DEFRA Core Delivery Platform (CDP) on AWS infrastructure
+- **Security**: SonarQube SAST in CI/CD pipelines, Dependabot for dependency management, fully open source codebase
 
 ## Domain Context
 This is a UK Government (Defra) marine licensing application managed by the Marine Management Organisation (MMO) that handles:
@@ -93,5 +95,12 @@ When helping with test development:
 - Backend API runs on port 3001 (configurable via environment)  
 - MongoDB and Redis dependencies for data and session storage
 - Docker Compose setup available for local development and testing
+
+## Deployment & Infrastructure
+- **Platform**: DEFRA Core Delivery Platform (CDP) - Government cloud hosting platform
+- **Cloud Provider**: AWS (Amazon Web Services)
+- **Platform Benefits**: Automated CI/CD pipelines, built-in security features, government compliance standards
+- **Security Context**: CDP platform undergoes independent security assessment and penetration testing
+- **Reference**: [Platform-based delivery with DEFRA's Core Delivery Platform](https://technology.blog.gov.uk/2025/04/25/platform-based-delivery-with-defras-core-delivery-platform/) - GOV.UK Technology Blog
 
 When suggesting test scenarios, page objects, or interactions, always consider the actual application functionality and user needs for marine licensing workflows.
