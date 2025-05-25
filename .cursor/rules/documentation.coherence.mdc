@@ -187,6 +187,21 @@ All methodology references must properly credit original contributors:
 - Acknowledge adaptation: "respectfully builds upon", "adapts proven methodologies"
 - Professional tone: "foundational work", "established methodologies"
 
+#### **Focused Attribution Principle**
+**Only include attributions directly related to material provided or requests made.**
+
+- **Direct relevance only** - Attribute only the methodologies, frameworks, or ideas actually used in the specific work
+- **Avoid academic comprehensiveness** - Don't include extensive attribution for tangentially related work or general testing knowledge
+- **User-request driven** - When user provides specific material or makes specific requests, attribute only the relevant contributors to that specific work
+- **Practical focus** - Attribute the specific techniques, frameworks, or approaches being implemented, not the broader field
+- **Streamlined acknowledgment** - Keep attribution sections focused on the actual foundations being used rather than comprehensive testing literature reviews
+
+**Examples:**
+- ✅ **Good**: In investigative testing work using Bolton's scenario framework, Bach's HTSM, and J. Bach's SBTM → attribute only Bolton, James Bach, and John Bach
+- ❌ **Avoid**: Including Elisabeth Hendrickson, Cem Kaner, and extensive testing community attributions when they don't directly inform the specific approach being used
+- ✅ **Good**: When implementing specific automation patterns → attribute only the relevant automation thought leaders
+- ❌ **Avoid**: Comprehensive testing methodology attribution when working on focused implementation
+
 ### **Consistency Standards**
 
 #### **Cross-Reference Integrity**
