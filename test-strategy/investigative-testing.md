@@ -7,7 +7,7 @@
 
 Choose the guidance that matches your needs:
 
-- **[Investigation Examples](./investigative-testing-examples.md)** - Comprehensive scenario scripts with specific activities for different user types and situations
+- **[Test Charters](../test-charters/README.md)** - Ready-to-execute investigation plans with specific scenarios for different user stories
 - **[Advanced Techniques](./investigative-testing-advanced.md)** - Systematic heuristics and integration with HTSM for experienced practitioners
 - **[Session Templates](./investigative-testing-templates.md)** - Ready-to-use documentation and planning templates for facilitating sessions
 - **[Attribution & Foundations](./investigative-testing-attribution.md)** - Acknowledgments to testing thought leaders and theoretical foundations
