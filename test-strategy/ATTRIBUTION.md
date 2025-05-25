@@ -122,6 +122,27 @@ This document acknowledges the foundational work and thought leaders whose metho
 - "Agile Testing: A Practical Guide for Testers and Agile Teams"
 - "More Agile Testing: Learning Journeys for the Whole Team"
 
+### **AutomationPanda.com**
+
+**Contributions to our approach:**
+
+- **BDD Guidelines and Best Practices** - Foundational principles for writing effective Gherkin scenarios
+- **Behaviour-Driven Development** methodology guidance
+- **Clear scenario structure** principles and patterns
+- **Step definition best practices** for maintainable test automation
+
+**Where we apply this work:**
+
+- Core BDD principles throughout our feature files and scenarios
+- Gherkin writing guidelines adapted for marine licensing domain
+- Scenario structure and step integrity patterns
+- Integration of BDD with Screenplay pattern implementation
+
+**References:**
+
+- [AutomationPanda.com](https://automationpanda.com) - BDD and test automation guidance
+- BDD scenario writing best practices and tutorials
+
 ## 🎯 How We Build Upon These Foundations
 
 ### **Respectful Integration**

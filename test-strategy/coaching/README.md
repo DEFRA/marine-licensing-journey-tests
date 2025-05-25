@@ -58,6 +58,7 @@ Skills develop naturally through:
 
 - **Rapid Software Testing** courses (James Bach and Michael Bolton)
 - **Context-Driven Testing** community resources
+- **AutomationPanda.com** - BDD and test automation best practices
 - **GOV.UK Design System** accessibility guidance
 - **Marine licensing domain** knowledge and regulations
 

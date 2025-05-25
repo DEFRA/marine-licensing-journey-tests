@@ -1,0 +1,140 @@
+# Screenplay Pattern for Marine Licensing Tests
+
+This project implements the Screenplay pattern for end-to-end testing, which is a user-centric approach to UI automation that focuses on who does what and why.
+
+## Core Components
+
+- `actor.js` - Represents the user performing actions in the test
+
+  - Uses abilities to interact with the system (for example interacting with a web app using wdio or calling an api using an http client)
+  - Can remember and recall information using memory
+  - Performs tasks and interactions
+
+- `abilities/` - What the actor can do
+
+  - `ability.js` - Base class for all abilities
+  - `browse.the.web.js` - Ability to interact with web pages - encapsulates all WebDriverIO code - imagine we switched later to PlayWright and we only have to change one file
+
+- `tasks/` - High-level user activities
+
+  - `task.js` - Base class for all tasks
+  - Tasks should represent user goals (e.g., `navigate.js`, `complete.exemption.notification.js`)
+  - Tasks may be composed of multiple interactions
+
+- `interactions/` - Low-level actions the actor performs
+  - Simple, focused actions (e.g., `click.save.and.continue.js`, `ensure.heading.js`)
+  - Typically interact with a single element or perform a specific assertion
+
+## Implementation Rules
+
+1. All new screenplay components should follow the established naming pattern using dot.case
+2. Tasks should be high-level and represent user goals, not technical actions
+3. Interactions should be small and focused on a single action
+4. Actor should be the primary entry point for all test actions
+5. Page objects should only contain locators, functions to create locators dynamically, but not actions
+
+## Marine Licensing Context
+
+### Example Marine Licensing Tasks
+
+- `SubmitExemptionNotification.js` - Complete user goal of submitting notification
+- `RegisterPublicInterest.js` - Register interest in exemption notification
+- `SearchExemptionRegister.js` - Find exemptions on public register
+
+### Example Interactions
+
+- `EnterLicenceDetails.js` - Fill in licence information
+- `SelectExemptionType.js` - Choose appropriate exemption category
+- `EnsureConfirmationDisplayed.js` - Verify successful submission
+
+## Structure and Patterns
+
+### Actor
+
+```javascript
+// Instantiate actor
+const actor = new Actor('Applicant')
+actor.can(new BrowseTheWeb(browser))
+
+// Perform tasks
+await actor.attemptsTo(
+  Navigate.toExemptionNotificationPage(),
+  SubmitExemptionNotification.with(exemptionDetails),
+  EnsureConfirmation.isDisplayed()
+)
+
+// Remember and recall information
+actor.remembers('exemptionReference', 'EN123456')
+const reference = actor.recalls('exemptionReference')
+```
+
+### Abilities
+
+```javascript
+// Extend the base Ability class
+export default class BrowseTheWeb extends Ability {
+  constructor(browser) {
+    super()
+    this.browser = browser
+  }
+
+  // Implement specific abilities
+  async navigateTo(url) {
+    await this.browser.url(url)
+  }
+}
+```
+
+### Tasks
+
+```javascript
+// Extend the base Task class
+export default class SubmitExemptionNotification extends Task {
+  static with(exemptionDetails) {
+    return new SubmitExemptionNotification(exemptionDetails)
+  }
+
+  async performAs(actor) {
+    await actor.attemptsTo(
+      EnterLicenceDetails.from(this.exemptionDetails),
+      SelectExemptionType.matching(this.exemptionDetails.type),
+      ClickSaveAndContinue.button()
+    )
+  }
+}
+```
+
+### Interactions
+
+```javascript
+// Extend the base Task class (interactions are also tasks)
+export default class EnsureConfirmation extends Task {
+  static isDisplayed() {
+    return new EnsureConfirmation()
+  }
+
+  async performAs(actor) {
+    await actor.ability.expectElementToBeVisible(
+      ConfirmationPage.successMessage
+    )
+  }
+}
+```
+
+## Integration with BDD
+
+**BDD → Screenplay Pattern:**
+
+- **Given steps** → Set up initial state (often through tasks)
+- **When steps** → User actions that map to high-level **Tasks**
+- **Then steps** → Verification that maps to **Interactions** with `ensure` prefix
+
+> 📖 **See:** [BDD Rules](./bdd-rules.md) for scenario writing guidelines
+
+## File Organization
+
+- Feature files go in `test/features/`
+- Step definitions go in `test/steps/`
+- Screenplay implementation follows the patterns in `test-infrastructure/screenplay/`
+
+> 📖 **See:** [Project Structure](../project-structure.md) for complete organization rules

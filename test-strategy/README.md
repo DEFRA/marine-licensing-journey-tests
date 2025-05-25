@@ -101,20 +101,20 @@
 
 ## 📁 Strategy Structure
 
-| **Area**                                                          | **Purpose**                              | **Start Here**                                                          |
-| ----------------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------- |
-| **[Automation Approach](./automation/README.md)**                 | Test pyramid and tooling strategy        | **QE**: Review current foundation. **New**: Foundation learning         |
-| **[Investigative Testing](./investigative-testing/README.md)**    | Human-led exploration and discovery      | **Domain Experts**: 60-min sessions. **New**: Simple quick start        |
-| **[Testing Heuristics](./heuristics/README.md)**                  | Systematic thinking for test discovery   | **QE**: Use HTSM during investigation. **All**: Systematic thinking     |
-| **[Domain Context](./domain-context/README.md)**                  | Marine licensing user needs and reality  | **New**: Understand personas. **Domain Experts**: Context for testing   |
-| **[Accessibility Testing](./accessibility/README.md)**            | Inclusive design and GOV.UK compliance   | Review automation and manual checks                                     |
-| **[Security Testing](./security/README.md)**                      | Security-by-design and threat testing    | Plan external penetration testing integration                           |
-| **[Test Data Management](./test-data/README.md)**                 | Data strategies for reliable automation  | Set up test data for automation scenarios                               |
-| **[Quality Coaching](./coaching/README.md)**                      | Skills development and knowledge sharing | Plan learning goals aligned with strategy implementation                |
-| **[Screenplay Pattern](../.cursor/rules/screenplay-pattern.mdc)** | User-centric test automation             | **QE**: Implementation guidance and patterns                            |
-| **[BDD Rules](../.cursor/rules/bdd.rules.mdc)**                   | Living documentation practices           | **QE**: Clear scenario writing guidelines                               |
-| **[User Stories](../.cursor/user-stories/README.md)**             | Real user needs and acceptance criteria  | **PM**: Planning and requirements traceability                          |
-| **[Test Charters](../test-charters/README.md)**                   | Systematic exploration guidance          | **Domain Experts**: Specific scenarios. **QE**: Investigation structure |
+| **Area**                                                       | **Purpose**                              | **Start Here**                                                          |
+| -------------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------- |
+| **[Automation Approach](./automation/README.md)**              | Test pyramid and tooling strategy        | **QE**: Review current foundation. **New**: Foundation learning         |
+| **[Investigative Testing](./investigative-testing/README.md)** | Human-led exploration and discovery      | **Domain Experts**: 60-min sessions. **New**: Simple quick start        |
+| **[Testing Heuristics](./heuristics/README.md)**               | Systematic thinking for test discovery   | **QE**: Use HTSM during investigation. **All**: Systematic thinking     |
+| **[Domain Context](./domain-context/README.md)**               | Marine licensing user needs and reality  | **New**: Understand personas. **Domain Experts**: Context for testing   |
+| **[Accessibility Testing](./accessibility/README.md)**         | Inclusive design and GOV.UK compliance   | Review automation and manual checks                                     |
+| **[Security Testing](./security/README.md)**                   | Security-by-design and threat testing    | Plan external penetration testing integration                           |
+| **[Test Data Management](./test-data/README.md)**              | Data strategies for reliable automation  | Set up test data for automation scenarios                               |
+| **[Quality Coaching](./coaching/README.md)**                   | Skills development and knowledge sharing | Plan learning goals aligned with strategy implementation                |
+| **[Screenplay Pattern](./screenplay-pattern.md)**              | User-centric test automation             | **QE**: Implementation guidance and patterns                            |
+| **[BDD Rules](./bdd-rules.md)**                                | Living documentation practices           | **QE**: Clear scenario writing guidelines                               |
+| **[User Stories](../.cursor/user-stories/README.md)**          | Real user needs and acceptance criteria  | **PM**: Planning and requirements traceability                          |
+| **[Test Charters](../test-charters/README.md)**                | Systematic exploration guidance          | **Domain Experts**: Specific scenarios. **QE**: Investigation structure |
 
 ## 📊 Success Measures
 
@@ -150,8 +150,8 @@ This strategy builds respectfully on the work of testing thought leaders:
 
 This strategy works with existing project foundations:
 
-- **[Screenplay Pattern](../.cursor/rules/screenplay-pattern.mdc)** - User-centric test automation
-- **[BDD Rules](../.cursor/rules/bdd.rules.mdc)** - Living documentation practices
+- **[Screenplay Pattern](./screenplay-pattern.md)** - User-centric test automation
+- **[BDD Rules](./bdd-rules.md)** - Living documentation practices
 - **[User Stories](../.cursor/user-stories/README.md)** - Real user needs and acceptance criteria
 - **[Test Charters](../test-charters/README.md)** - Systematic exploration guidance
 
