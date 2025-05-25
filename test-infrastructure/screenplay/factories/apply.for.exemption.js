@@ -67,7 +67,7 @@ export default class ApplyForExemption {
     return this.createExemption({
       publicRegister: {
         consent: false,
-        reason: PublicRegisterModel.generateOversizedReason()
+        reason: PublicRegisterModel.generateReasonExceedingMaxLength()
       }
     })
   }

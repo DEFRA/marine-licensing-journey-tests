@@ -98,7 +98,7 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({
         consent: PublicRegisterPage.withhold,
-        reason: PublicRegisterModel.generateOversizedReason()
+        reason: PublicRegisterModel.generateReasonExceedingMaxLength()
       })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())

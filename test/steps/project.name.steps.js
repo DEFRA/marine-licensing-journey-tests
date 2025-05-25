@@ -44,10 +44,11 @@ When(
 )
 
 When('the project name is updated', async function () {
+  const newProjectName =
+    ApplyForExemption.withValidProjectName().getData().projectName
+
   this.actor.updates('exemption', (exemption) =>
-    exemption.updateProjectName(
-      ApplyForExemption.withValidProjectName().getData().projectName
-    )
+    exemption.updateProjectName(newProjectName)
   )
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(CompleteProjectName.now())
