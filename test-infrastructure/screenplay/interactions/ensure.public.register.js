@@ -3,32 +3,52 @@ import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page
 import Task from '../base/task.js'
 
 export default class EnsurePublicRegisterTask extends Task {
+  static MODES = {
+    COMPLETED_WITH_DATA: 'completed-with-data',
+    COMPLETED_NO_DATA: 'completed-no-data',
+    COMPLETED: 'completed',
+    NOT_STARTED: 'not-started',
+    PRE_POPULATED: 'pre-populated',
+    NOT_PRE_POPULATED: 'not-pre-populated'
+  }
+
   static hasBeenCompletedWith(option, withholdReason = '') {
     return new EnsurePublicRegisterTask(
-      'completed-with-data',
+      EnsurePublicRegisterTask.MODES.COMPLETED_WITH_DATA,
       option,
       withholdReason
     )
   }
 
   static hasNoInformationCompleted() {
-    return new EnsurePublicRegisterTask('completed-no-data')
+    return new EnsurePublicRegisterTask(
+      EnsurePublicRegisterTask.MODES.COMPLETED_NO_DATA
+    )
   }
 
   static isCompleted() {
-    return new EnsurePublicRegisterTask('completed')
+    return new EnsurePublicRegisterTask(
+      EnsurePublicRegisterTask.MODES.COMPLETED
+    )
   }
 
   static isNotStarted() {
-    return new EnsurePublicRegisterTask('not-started')
+    return new EnsurePublicRegisterTask(
+      EnsurePublicRegisterTask.MODES.NOT_STARTED
+    )
   }
 
   static isPrePopulated(consent) {
-    return new EnsurePublicRegisterTask('pre-populated', consent)
+    return new EnsurePublicRegisterTask(
+      EnsurePublicRegisterTask.MODES.PRE_POPULATED,
+      consent
+    )
   }
 
   static isNotPrePopulated() {
-    return new EnsurePublicRegisterTask('not-pre-populated')
+    return new EnsurePublicRegisterTask(
+      EnsurePublicRegisterTask.MODES.NOT_PRE_POPULATED
+    )
   }
 
   constructor(mode, option = null, withholdReason = '') {
@@ -42,22 +62,22 @@ export default class EnsurePublicRegisterTask extends Task {
     const browseTheWeb = actor.ability
 
     switch (this.mode) {
-      case 'completed-with-data':
+      case EnsurePublicRegisterTask.MODES.COMPLETED_WITH_DATA:
         await this.verifyPrepopulatedDetails(browseTheWeb)
         break
-      case 'completed-no-data':
+      case EnsurePublicRegisterTask.MODES.COMPLETED_NO_DATA:
         await this.verifyNoPrepopulatedDetails(browseTheWeb)
         break
-      case 'completed':
+      case EnsurePublicRegisterTask.MODES.COMPLETED:
         await this.verifyTaskCompleted(browseTheWeb)
         break
-      case 'not-started':
+      case EnsurePublicRegisterTask.MODES.NOT_STARTED:
         await this.verifyTaskNotStarted(browseTheWeb)
         break
-      case 'pre-populated':
+      case EnsurePublicRegisterTask.MODES.PRE_POPULATED:
         await this.verifyPrePopulated(browseTheWeb)
         break
-      case 'not-pre-populated':
+      case EnsurePublicRegisterTask.MODES.NOT_PRE_POPULATED:
         await this.verifyNoPrepopulatedDetails(browseTheWeb)
         break
       default:
