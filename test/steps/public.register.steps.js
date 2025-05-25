@@ -148,13 +148,12 @@ When(
   'changing the public register information to withhold but cancelling out',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({
-        consent: PublicRegisterPage.withhold,
-        reason: faker.lorem.words(5)
-      })
+    const browseTheWeb = this.actor.ability
+    await browseTheWeb.click(PublicRegisterPage.withhold)
+    await browseTheWeb.sendKeys(
+      PublicRegisterPage.withholdReason,
+      faker.lorem.words(5)
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickCancel.now())
   }
 )
@@ -163,13 +162,12 @@ When(
   'changing the public register information to withhold but selecting to go back',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({
-        consent: PublicRegisterPage.withhold,
-        reason: faker.lorem.words(5)
-      })
+    const browseTheWeb = this.actor.ability
+    await browseTheWeb.click(PublicRegisterPage.withhold)
+    await browseTheWeb.sendKeys(
+      PublicRegisterPage.withholdReason,
+      faker.lorem.words(5)
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickBack.now())
   }
 )
