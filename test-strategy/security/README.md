@@ -2,26 +2,212 @@
 
 This section covers **security testing**, **threat-based testing**, and **security-by-design** practices for marine licensing applications.
 
-## 🚧 Coming Soon
+## 🔒 External Penetration Testing
 
-This section is under development. For now, refer to:
+### **Penetration Testing Scope for Marine Licensing Application**
 
-- **[Automation Approach](../automation/README.md)** - For security testing integration in quality strategy
+**Application Context**: Government service for marine licensing exemption notifications handling sensitive environmental and personal data.
 
-## 🎯 Planned Content
+**Primary Testing Focus**:
 
-This section will cover:
+#### **1. OWASP Top 10 Vulnerabilities (2021)**
 
-- **Security testing strategy** for government services handling sensitive data
-- **Threat-based testing** and security risk assessment
-- **Authentication and authorisation** testing for marine licensing workflows
-- **Data protection testing** and GDPR compliance validation
-- **Security automation** and continuous security testing
-- **Penetration testing** coordination and security vulnerability assessment
+- **A01: Broken Access Control** - Test role-based access between public users and MMO staff
+- **A02: Cryptographic Failures** - Validate data encryption in transit and at rest
+- **A03: Injection** - SQL injection, NoSQL injection (MongoDB), command injection testing
+- **A04: Insecure Design** - Business logic flaws in exemption workflows
+- **A05: Security Misconfiguration** - Server configuration, headers, error handling
+- **A06: Vulnerable Components** - Third-party library and dependency scanning
+- **A07: Authentication Failures** - Session management, password policies, MFA validation
+- **A08: Software Integrity Failures** - Supply chain security and CI/CD pipeline integrity
+- **A09: Logging Failures** - Security event logging and monitoring gaps
+- **A10: Server-Side Request Forgery** - Internal network access and service enumeration
 
-## 📖 Resources
+#### **2. Government-Specific Security Requirements**
 
-For security guidance:
+**Data Protection & Privacy**:
+
+- **GDPR compliance** - Personal data handling, right to erasure, data minimisation
+- **Government data classification** - Appropriate handling of sensitive marine licensing data
+- **Data retention policies** - Compliance with government retention requirements
+- **Cross-border data transfer** - Validation of data sovereignty requirements
+
+**Authentication & Authorisation**:
+
+- **Multi-factor authentication** (if implemented) - Bypass attempts and token validation
+- **Role-based access control** - Privilege escalation testing between user types
+- **Session management** - Session fixation, hijacking, timeout validation
+- **Administrative access** - Elevated privilege testing and audit trail verification
+
+#### **3. Application-Specific Security Testing**
+
+**Marine Licensing Workflow Security**:
+
+- **Application state manipulation** - Bypass workflow stages, status modification
+- **Business logic vulnerabilities** - Invalid exemption submissions, data validation bypass
+- **File upload security** - Malicious file detection, file type validation, virus scanning
+- **External service integration** - API security with government backend services
+
+**Data Integrity & Validation**:
+
+- **Input validation** - Form field injection, boundary testing, special character handling
+- **Database security** - MongoDB injection, data exposure, backup security
+- **API security** - REST endpoint testing, parameter manipulation, rate limiting
+- **Cross-site scripting (XSS)** - Stored, reflected, and DOM-based XSS testing
+
+#### **4. Infrastructure & Platform Security**
+
+**Web Application Security**:
+
+- **HTTPS implementation** - TLS configuration, certificate validation, mixed content
+- **Security headers** - HSTS, CSP, X-Frame-Options, referrer policy
+- **Error handling** - Information disclosure through error messages
+- **Directory traversal** - File system access and path manipulation
+
+**Container & Deployment Security** (if applicable):
+
+- **Docker security** - Container escape, privilege escalation
+- **Environment variable exposure** - Secrets management and configuration security
+- **CI/CD pipeline security** - Build process integrity, deployment vulnerabilities
+
+### **Testing Methodology Requirements**
+
+#### **Testing Phases**
+
+1. **Reconnaissance & Information Gathering**
+
+   - Public information discovery (OSINT)
+   - Technology stack identification
+   - Attack surface mapping
+
+2. **Vulnerability Assessment**
+
+   - Automated scanning with manual validation
+   - False positive verification
+   - Risk assessment and prioritisation
+
+3. **Manual Penetration Testing**
+
+   - Business logic testing
+   - Complex attack chain development
+   - Custom payload development
+
+4. **Post-Exploitation Assessment**
+   - Data access evaluation
+   - Lateral movement potential
+   - Persistence mechanism testing
+
+#### **Reporting Requirements**
+
+**Executive Summary**:
+
+- **Risk overview** - High-level security posture assessment
+- **Business impact** - Potential consequences of identified vulnerabilities
+- **Compliance status** - Government security standard adherence
+- **Remediation priorities** - Risk-based vulnerability prioritisation
+
+**Technical Details**:
+
+- **Vulnerability descriptions** - Clear explanation of each finding
+- **Proof of concept** - Demonstrated exploitation where safe
+- **Remediation guidance** - Specific technical recommendations
+- **Evidence documentation** - Screenshots, logs, payload examples
+
+**Compliance Mapping**:
+
+- **GDPR compliance** - Data protection regulation adherence
+- **Government standards** - Cabinet Office security requirements
+- **Industry standards** - ISO 27001, NIST framework alignment
+
+### **Testing Constraints & Considerations**
+
+#### **Platform Security Context**
+
+**DEFRA Core Delivery Platform (CDP)**:
+
+- **Cloud-hosted platform** - Eliminates need for teams to build or understand underlying cloud infrastructure (AWS, Azure, GCP)
+- **Governance and security by design** - Platform strengthens overall governance and security requirements through common patterns
+- **Infrastructure security validated** - CDP platform has undergone independent security assessment and penetration testing
+- **Built-in security features** - Includes secure file upload and virus scanning service, authentication test harnesses
+- **Government compliance** - Designed to meet government cloud security standards and development standards
+
+**CDP Platform Capabilities**:
+
+- **CI/CD pipeline security** - Fundamental services for logs, metrics, test suites with self-service deployments
+- **Self-healing capabilities** - Automated rollback and recovery features reduce security incident impact
+- **Common security patterns** - Standardised approach ensures consistent security implementation across services
+- **Test infrastructure** - Built-in tools and patterns for various types of testing in local and deployed environments
+
+**Implications for Penetration Testing**:
+
+- **Reduced infrastructure scope** - Platform-level security already validated and maintained
+- **Application layer focus** - Concentrate on marine licensing application-specific vulnerabilities
+- **Integration point testing** - Focus on how application uses CDP services (file upload, authentication, CI/CD)
+- **Configuration validation** - Application deployment and configuration within the secure CDP framework
+
+**Reference**: [Platform-based delivery with DEFRA's Core Delivery Platform](https://technology.blog.gov.uk/2025/04/25/platform-based-delivery-with-defras-core-delivery-platform/) - GOV.UK Technology Blog
+
+#### **Testing Environment**
+
+- **Scope limitation** - Testing environments only, no production data exposure
+- **Data sensitivity** - Use of synthetic data, no real personal information
+- **Service availability** - Testing windows that minimise service disruption
+- **Backup validation** - Ensure testing doesn't affect system integrity
+
+#### **Legal & Compliance Requirements**
+
+- **Authorisation documentation** - Formal testing approval and scope agreement
+- **Data handling agreements** - GDPR-compliant testing data management
+- **Incident response** - Procedures for critical vulnerability discovery
+- **Disclosure timeline** - Responsible vulnerability disclosure process
+
+### **Success Criteria**
+
+#### **Testing Completeness**
+
+- **Coverage verification** - All identified attack vectors tested
+- **Compliance validation** - Government security requirements assessed
+- **Business logic testing** - Marine licensing workflow security validated
+- **Documentation quality** - Clear, actionable findings with remediation guidance
+
+#### **Quality Assurance**
+
+- **False positive management** - Manual verification of automated findings
+- **Risk assessment accuracy** - Appropriate vulnerability scoring (CVSS)
+- **Remediation feasibility** - Practical, implementable security recommendations
+- **Knowledge transfer** - Team briefing on findings and remediation approaches
+
+## 🛡️ Internal Security Testing Integration
+
+### **Ongoing Security Validation**
+
+**Continuous Security Testing** (beyond formal penetration testing):
+
+- **SonarQube Security Features** - Automated security scanning in CI/CD pipelines for both `marine-licensing-frontend` and `marine-licensing-backend` repositories
+  - **SAST (Static Application Security Testing)** - Code analysis for security vulnerabilities
+  - **Security hotspots detection** - Identification of security-sensitive code patterns
+  - **OWASP Top 10 coverage** - Automated detection of common web application vulnerabilities
+  - **Security debt tracking** - Monitoring and remediation of security technical debt
+- **Security regression testing** - Validation after code changes through automated pipeline checks
+- **Access control testing** - Regular validation of user permissions through journey tests
+- **Input validation testing** - Comprehensive form and API testing through automation approach
+
+**Investigative Security Testing**:
+
+- **Session-based security exploration** - Manual investigation of security concerns beyond automated scanning
+- **Business logic security testing** - Marine licensing workflow security validation that automated tools cannot detect
+- **User experience security** - Security that doesn't compromise usability through persona-based testing
+- **Cross-system security** - Integration point security validation between marine licensing services
+
+**Security Testing Coverage Matrix**:
+
+| **Security Area**            | **SonarQube SAST** | **Penetration Testing** | **Journey Testing**         |
+| ---------------------------- | ------------------ | ----------------------- | --------------------------- |
+| Code vulnerabilities         | ✅ Automated       | ✅ Manual validation    | ❌ Not applicable           |
+| Business logic flaws         | ❌ Limited         | ✅ Primary focus        | ✅ User workflow validation |
+| Authentication/Authorization | ⚠️ Partial         | ✅ Comprehensive        | ✅ User journey validation  |
+| Input validation             | ✅ Code patterns   | ✅ Dynamic testing      | ✅ Form testing             |
+| Workflow security            | ❌ Not covered     | ✅ Manual testing       | ✅ End-to-end validation    |
 
 ## 🎯 Security Requirements
 
