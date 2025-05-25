@@ -7,21 +7,21 @@
 
 ### **👩‍💻 For Quality Engineering**
 
-1. **This week**: Review [Automation Approach](./automation.md) - ensure UI tests cover critical journeys
-2. **Next week**: Plan first [Investigation Session](./investigative-testing.md) with MMO domain expert
-3. **This month**: Establish rhythm of automation + investigation
+1. Review [Automation Approach](./automation.md) - ensure UI tests cover critical journeys
+2. Plan first [Investigation Session](./investigative-testing.md) with MMO domain expert
+3. Establish rhythm of automation + investigation
 
 ### **🌊 For MMO Domain Experts**
 
-1. **This week**: Try 60-minute [Simple Investigation](./investigative-testing.md#-simple-investigation-sessions) on familiar workflow
-2. **Next week**: Share findings with team, identify next investigation area
-3. **This month**: Regular investigation sessions on high-risk areas
+1. Try 60-minute [Simple Investigation](./investigative-testing.md#-simple-investigation-sessions) on familiar workflow
+2. Share findings with team, identify next investigation area
+3. Regular investigation sessions on high-risk areas
 
 ### **👨‍💼 For Project Managers**
 
-1. **This week**: Review [Success Measures](#-success-measures) to understand quality indicators
-2. **Next week**: Include investigation time in sprint planning
-3. **This month**: Track automation health + investigation insights
+1. Review [Success Measures](#-success-measures) to understand quality indicators
+2. Include investigation time in sprint planning
+3. Track automation health + investigation insights
 
 ### **🆕 For New Team Members**
 
