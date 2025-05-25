@@ -22,7 +22,6 @@ This section provides **learning resources** for marine licensing testing skills
 
 ### **Professional Community**
 
-- **Association for Software Testing** resources and events
 - **Context-Driven Testing** community forums
 - **Government testing communities** and knowledge sharing
 
