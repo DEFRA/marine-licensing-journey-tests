@@ -199,16 +199,6 @@ This section covers **security testing**, **threat-based testing**, and **securi
 - **User experience security** - Security that doesn't compromise usability through persona-based testing
 - **Cross-system security** - Integration point security validation between marine licensing services
 
-**Security Testing Coverage Matrix**:
-
-| **Security Area**            | **SonarQube SAST** | **Penetration Testing** | **Journey Testing**         |
-| ---------------------------- | ------------------ | ----------------------- | --------------------------- |
-| Code vulnerabilities         | ✅ Automated       | ✅ Manual validation    | ❌ Not applicable           |
-| Business logic flaws         | ❌ Limited         | ✅ Primary focus        | ✅ User workflow validation |
-| Authentication/Authorization | ⚠️ Partial         | ✅ Comprehensive        | ✅ User journey validation  |
-| Input validation             | ✅ Code patterns   | ✅ Dynamic testing      | ✅ Form testing             |
-| Workflow security            | ❌ Not covered     | ✅ Manual testing       | ✅ End-to-end validation    |
-
 ## 🎯 Security Requirements
 
 Key security expectations for marine licensing:
