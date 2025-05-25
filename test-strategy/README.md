@@ -161,7 +161,6 @@ This strategy **complements existing organisational governance**:
 
 - **[Testing Heuristics](./heuristics/README.md)** - HTSM and systematic exploration techniques
 - **[Domain Context](./domain-context/README.md)** - Marine licensing specifics and user reality
-- **[Risk Models](./risk-models/README.md)** - Threat modelling and risk-based prioritisation
 
 ### **🤖 Automation Strategy**
 

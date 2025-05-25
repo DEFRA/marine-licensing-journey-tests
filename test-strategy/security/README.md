@@ -6,7 +6,6 @@ This section covers **security testing**, **threat-based testing**, and **securi
 
 This section is under development. For now, refer to:
 
-- **[Risk Models](../risk-models/README.md)** - For threat modelling and security risk assessment
 - **[Automation Approach](../automation/README.md)** - For security testing integration in quality strategy
 
 ## 🎯 Planned Content
