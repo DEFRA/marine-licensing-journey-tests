@@ -15,28 +15,12 @@ export default class ApplyForExemption {
     return new ApplyForExemption({ ...defaults, ...overrides })
   }
 
-  static now() {
-    return this.createExemption({
-      publicRegister: PublicRegisterModel.generatePublicRegisterData()
-    })
-  }
-
   static withValidProjectName() {
     return this.createExemption()
   }
 
   static withProjectName(projectName) {
     return this.createExemption({ projectName })
-  }
-
-  static withEmptyProjectName() {
-    return this.createExemption({ projectName: '' })
-  }
-
-  static withProjectNameThatIsTooLong() {
-    return this.createExemption({
-      projectName: MarineProjectModel.generateOversizedProjectName()
-    })
   }
 
   static withConsentToPublicRegister() {
@@ -54,44 +38,6 @@ export default class ApplyForExemption {
     })
   }
 
-  static withWithholdFromPublicRegisterButNoReason() {
-    return this.createExemption({
-      publicRegister: {
-        consent: false,
-        reason: ''
-      }
-    })
-  }
-
-  static withWithholdReasonThatIsTooLong() {
-    return this.createExemption({
-      publicRegister: {
-        consent: false,
-        reason: PublicRegisterModel.generateReasonExceedingMaxLength()
-      }
-    })
-  }
-
-  static withNoPublicRegisterChoice() {
-    return this.createExemption({
-      publicRegister: {
-        consent: null,
-        reason: null
-      },
-      projectNameTaskCompleted: true
-    })
-  }
-
-  static withTemporaryChanges() {
-    return this.createExemption({
-      publicRegister: {
-        consent: true,
-        reason: 'This will not be saved'
-      },
-      isTemporary: true
-    })
-  }
-
   getData() {
     return this.data
   }
@@ -102,9 +48,5 @@ export default class ApplyForExemption {
 
   getPublicRegisterData() {
     return this.data.publicRegister
-  }
-
-  isTemporary() {
-    return this.data.isTemporary || false
   }
 }
