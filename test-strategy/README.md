@@ -38,7 +38,23 @@ This focus ensures our testing strategy directly supports the successful deliver
 
 ## 🧠 Modern Testing Philosophy
 
-Our testing approach is built on **contemporary quality engineering principles**:
+Our testing approach is built on **contemporary quality engineering principles** and **foundational testing methodologies** developed by leading practitioners:
+
+### **Built on Proven Foundations**
+
+- **Context-Driven Testing** - _James Bach, Cem Kaner, Michael Bolton_ - Strategy adapts to the specific marine licensing domain
+- **Heuristic Test Strategy Model (HTSM)** - _James Bach_ - Systematic thinking models guide test discovery
+- **Session-Based Test Management** - _Jon Bach_ - Structured exploratory testing with accountability
+- **Scenario Testing** - _Michael Bolton_ - Rich, realistic user investigation breaking "test case addiction"
+- **Risk-Based Testing** - _Elisabeth Hendrickson, James Bach_ - Focus effort where it matters most
+- **Agile Testing Practices** - _Elisabeth Hendrickson, Janet Gregory, Lisa Crispin_ - Whole-team quality and continuous feedback
+
+These proven methodologies are adapted for marine licensing domain requirements whilst preserving their essential insights and principles.
+
+> **📚 Complete Attribution**  
+> See **[ATTRIBUTION.md](./ATTRIBUTION.md)** for comprehensive acknowledgments, references, and recommended reading from the thought leaders whose work we build upon.
+
+### **Modern Application Principles**
 
 - 🎯 **Context-driven testing** - Strategy adapts to the specific marine licensing domain
 - 🔍 **Heuristic-based exploration** - Systematic thinking models guide test discovery

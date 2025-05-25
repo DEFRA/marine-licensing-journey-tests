@@ -120,6 +120,19 @@ Our strategy **builds upon and modernises** established testing principles, pres
 - 📊 **Evidence-based confidence** - Data-driven decisions rather than process compliance
 - 🤝 **Collaborative quality** - Whole-team responsibility rather than testing handoffs
 
+### **Built on Proven Testing Foundations**
+
+Our approach respectfully builds upon methodologies developed by leading testing practitioners:
+
+- **Context-Driven Testing** - _James Bach, Cem Kaner, Michael Bolton_ - Adaptive strategies that respond to domain context
+- **Session-Based Test Management** - _Jon Bach_ - Structured time-boxed exploration with accountability
+- **Scenario Testing** - _Michael Bolton_ - Rich, realistic user investigations that break "test case addiction"
+- **Heuristic Test Strategy Model** - _James Bach_ - Systematic thinking frameworks for test discovery
+- **Risk-Based Testing** - _Elisabeth Hendrickson, James Bach_ - Focus effort where it matters most
+- **Agile Testing Practices** - _Elisabeth Hendrickson, Janet Gregory, Lisa Crispin_ - Whole-team quality and continuous feedback
+
+These proven methodologies are adapted for marine licensing domain requirements whilst preserving their essential insights and principles.
+
 ## 🏗️ Architecture Overview
 
 ### **BDD + Screenplay Pattern**

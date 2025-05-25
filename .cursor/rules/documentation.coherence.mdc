@@ -155,6 +155,130 @@ This rule works alongside:
 - Refresh status tables and navigation sections
 - Validate integration between strategy and charters
 
+## Attribution Standards
+
+### **Required Attribution**
+
+All methodology references must properly credit original contributors:
+
+#### **Core Testing Methodologies**
+- **Context-Driven Testing** - *James Bach, Cem Kaner, Michael Bolton*
+- **Session-Based Test Management (SBTM)** - *Jon Bach* 
+- **Heuristic Test Strategy Model (HTSM)** - *James Bach*
+- **Scenario Testing** - *Michael Bolton* (THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS)
+- **Risk-Based Testing** - *Elisabeth Hendrickson, James Bach*
+- **Agile Testing Practices** - *Elisabeth Hendrickson, Janet Gregory, Lisa Crispin*
+
+#### **Attribution Placement**
+1. **Major methodology introductions** - Dedicated attribution section with contributor names in strategy documents
+2. **Strategy overviews** - "Built on Proven Foundations" sections in main strategy files
+3. **Framework integrations** - Clear crediting when combining approaches in investigative testing documentation
+4. **Charter references** - Simple link to investigative testing framework, not detailed attribution (charters focus on execution)
+
+#### **Attribution Scope**
+- **Strategy documents** - Full attribution with contributor names and contributions
+- **Charter documents** - Simple framework reference link only (keep execution-focused)
+- **Main project documentation** - Overview attribution acknowledging foundational work
+- **Dedicated attribution file** - Comprehensive acknowledgments with references and reading lists
+
+#### **Attribution Language Standards**
+- Use full names with italics: *Michael Bolton*, *James Bach*
+- Be specific about contributions: "HTSM systematic heuristics from *James Bach's* Heuristic Test Strategy Model"
+- Acknowledge adaptation: "respectfully builds upon", "adapts proven methodologies"
+- Professional tone: "foundational work", "established methodologies"
+
+### **Consistency Standards**
+
+#### **Cross-Reference Integrity**
+- All internal links must resolve to existing sections or files
+- Anchor links (`#section-name`) must point to actual heading anchors
+- File references must use correct relative paths from current location
+- Update all cross-references when moving or renaming files
+
+#### **Status Tracking Accuracy**
+- Status tables must reflect actual file states (Draft/Ready/Complete)
+- Session hoppers must reference real charter names, not placeholder descriptions
+- Priority assignments must align with actual business risk assessments
+- Progress indicators must match current development state
+
+## Quality Assurance Practices
+
+### **Documentation Review Checklist**
+- [ ] All methodology references include proper attribution
+- [ ] Cross-references resolve correctly
+- [ ] Status tracking reflects reality
+- [ ] Bolton framework structure followed in scenario charters
+- [ ] Professional British English maintained throughout
+- [ ] Marine licensing domain context appropriate
+
+### **Common Coherence Issues**
+
+#### **Attribution Problems**
+- Missing contributor names when referencing methodologies
+- Vague references like "established practices" without specific attribution
+- Claiming originality for adapted existing methodologies
+- Inconsistent attribution across different documents
+
+#### **Cross-Reference Failures**
+- Broken anchor links from content reorganisation
+- File moves without updating references
+- Placeholder text left in production documentation
+- Generic section references that don't exist
+
+#### **Status Inconsistencies**
+- Completed files marked as "Draft" in tracking tables
+- Session hoppers describing non-existent charters
+- Priority levels not aligned with actual risk assessment
+- Out-of-date progress indicators
+
+### **British English Professional Standards**
+
+- Use "whilst" not "while" for formal contexts
+- Use "optimisation" not "optimization"
+- Use "realise" not "realize"
+- Professional, understated tone throughout
+- Avoid forced acronyms and cheesy mnemonics
+- Follow GOV.UK content design principles
+
+## Charter-Specific Standards
+
+### **Bolton Framework Implementation**
+All scenario charters must follow Michael Bolton's structure:
+- **THEME** - Rich user context and authentic situation
+- **SETUP** - Realistic pressures, friction, and environment
+- **ACTIVITIES** - Guided but flexible actions following user patterns  
+- **ORACLES** - Quality indicators and evidence frameworks
+- **VARIATIONS** - Turbulence and realistic complications
+
+### **Session-Based Structure** (Jon Bach's SBTM)
+- 90-minute time-boxed sessions
+- Clear charter statements
+- Structured debrief and documentation
+- Evidence collection frameworks
+- Follow-up investigation planning
+
+### **Heuristic Integration** (James Bach's HTSM)
+- Systematic thinking models throughout charters
+- HTSM categories applied appropriately
+- Evidence-based discovery approaches
+- Context-driven adaptation
+
+## Maintenance Practices
+
+### **Regular Coherence Audits**
+1. **Cross-reference validation** - Monthly link checking
+2. **Attribution completeness** - Quarterly methodology review
+3. **Status accuracy** - Bi-weekly status table updates
+4. **Framework consistency** - Ongoing charter structure validation
+
+### **Change Impact Assessment**
+When updating documentation:
+1. Identify all files referencing changed content
+2. Update cross-references and status tracking
+3. Maintain attribution accuracy
+4. Preserve professional tone and British English standards
+5. Validate Bolton framework structure in charters
+
 ---
 
 **Purpose**: This rule prevents the documentation coherence issues discovered during comprehensive review, ensuring test strategy and charter documentation remains navigable, accurate, and professionally maintained.
