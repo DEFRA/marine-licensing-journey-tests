@@ -45,35 +45,6 @@ Then the "Public register" task status is "Completed"
 Then the project name is displayed on the Public register page
 ```
 
-## Implementation Mapping
-
-**BDD → Screenplay Pattern:**
-
-- **Given** → Setup tasks
-- **When** → User **Tasks**
-- **Then** → **Interactions** with `ensure` prefix
-
-> 📖 **See:** [Automation Approach](./automation.md) for screenplay implementation details
-
-### Real Step Definition Examples
-
-```javascript
-// Given step - Setup context
-Given('the project name page is displayed', async function () {
-  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
-})
-
-// When step - User action
-When('entering and saving a project with a valid name', async function () {
-  await this.actor.attemptsTo(CompleteProjectName.with('My Project'))
-})
-
-// Then step - Verification
-Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is('My Project'))
-})
-```
-
 ## Quality Standards
 
 ✅ Title clearly describes business value
