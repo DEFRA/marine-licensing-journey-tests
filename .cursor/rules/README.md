@@ -34,6 +34,15 @@ Developed a methodical approach that catches issues other reviews miss:
 - Validate logical consistency at each layer
 - Test after each fix to ensure nothing breaks
 
+### 🛠️ **4. "Remove, Don't Repair" - The PowerShell Lesson**
+
+When PowerShell kept crashing on macOS, instead of fighting it for 10+ commands, the right answer was **removal**:
+
+- **Fighting broken tools wastes more time than the original task**
+- **Sometimes the best engineering decision is subtraction, not addition**
+- **Environmental mismatches should trigger removal, not workarounds**
+- **Native tools are almost always better than foreign tools on their home platform**
+
 **These discoveries show that quality engineering is about systematic thinking, not just fixing bugs.**
 
 ## The Big Lesson: Simple Beats Clever, Every Time
@@ -169,16 +178,17 @@ AI can help with structure and patterns, but marine licensing workflows, user jo
 
 ### 📝 **Code Quality & Standards**
 
-| Rule                                                                         | What I Learned                                       |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------- |
-| [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                       | Code smells and how to fix them                      |
-| [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)                 | General development practices                        |
-| [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)                       | British English and GOV.UK standards                 |
-| [`test.error.handling.mdc`](./test.error.handling.mdc)                       | Proper assertions vs throwing generic errors         |
-| [`test.execution.patience.mdc`](./test.execution.patience.mdc)               | Waiting for systems properly in tests                |
-| [`defensive.coding.patterns.mdc`](./defensive.coding.patterns.mdc)           | Validate once, trust after - proper defensive coding |
-| [`duplicate.action.prevention.mdc`](./duplicate.action.prevention.mdc)       | Preventing duplicate actions in test automation      |
-| [`logical.consistency.validation.mdc`](./logical.consistency.validation.mdc) | Ensuring data models reflect real-world logic        |
+| Rule                                                                         | What I Learned                                           |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------- |
+| [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                       | Code smells and how to fix them                          |
+| [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)                 | General development practices                            |
+| [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)                       | British English and GOV.UK standards                     |
+| [`test.error.handling.mdc`](./test.error.handling.mdc)                       | Proper assertions vs throwing generic errors             |
+| [`test.execution.patience.mdc`](./test.execution.patience.mdc)               | Waiting for systems properly in tests                    |
+| [`defensive.coding.patterns.mdc`](./defensive.coding.patterns.mdc)           | Validate once, trust after - proper defensive coding     |
+| [`duplicate.action.prevention.mdc`](./duplicate.action.prevention.mdc)       | Preventing duplicate actions in test automation          |
+| [`logical.consistency.validation.mdc`](./logical.consistency.validation.mdc) | Ensuring data models reflect real-world logic            |
+| [`environmental.tool.selection.mdc`](./environmental.tool.selection.mdc)     | Choosing the right tools for the environment and context |
 
 ### 📚 **Documentation & Communication**
 
