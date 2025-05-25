@@ -175,7 +175,6 @@ This strategy **complements existing organisational governance**:
 
 ### **📊 Quality Intelligence**
 
-- **[Performance Engineering](./performance/README.md)** - Performance testing and optimisation
 - **[Security Testing](./security/README.md)** - Security-by-design and threat testing
 
 ### **🔄 Continuous Improvement**
@@ -192,7 +191,6 @@ This strategy **complements existing organisational governance**:
 | Build robust test automation                 | [Automation Approach](./automation/README.md)              |
 | Understand marine licensing user needs       | [Domain Context](./domain-context/README.md)               |
 | Test accessibility and inclusion             | [Accessibility Testing](./accessibility/README.md)         |
-| Test performance and scalability             | [Performance Engineering](./performance/README.md)         |
 
 ## 🔬 Testing Approach
 
@@ -261,6 +259,21 @@ Testing strategies **adapt to context**:
 - **Government service** - Accessibility, inclusion, and public accountability
 - **BDD implementation** - Living documentation and collaboration
 - **Continuous delivery** - Fast feedback and quality gates
+
+### **Performance Approach for Low-Volume Applications**
+
+**Context**: Marine licensing exemptions (~20 per month) are **low-volume, high-complexity** applications requiring **user experience focus** rather than **load testing**.
+
+**Performance Strategy**:
+
+- **User experience performance** - Validated through automation approach (page responsiveness, form efficiency)
+- **Accessibility performance** - Inclusive speed across devices and assistive technologies
+- **Data integrity under concurrent access** - Addressed through investigative testing scenarios
+- **Technical complexity handling** - Covered in domain-specific heuristics and user journey validation
+
+**Why no dedicated performance testing**: Load and scalability testing provide minimal value for ~20 monthly applications. Resources are better invested in **user experience quality** and **technical complexity validation** that serve actual user needs.
+
+**Adaptive approach**: This performance strategy will be **reviewed and adapted** as the project progresses. Should volume increase significantly, user patterns change, or new performance requirements emerge, we will adjust our approach accordingly whilst maintaining focus on **context-driven quality** that serves real user needs.
 
 ## 🧪 Quality Engineering Practices
 
