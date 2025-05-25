@@ -279,6 +279,27 @@ When updating documentation:
 4. Preserve professional tone and British English standards
 5. Validate Bolton framework structure in charters
 
+## Team Context for Strategy Development
+
+### **Resource-Aware Strategy Planning**
+
+When developing test strategy content, ensure recommendations are:
+
+- **Achievable with limited quality engineering resources** - Focus on high-impact, low-maintenance approaches
+- **Suitable for domain experts to contribute** - Make investigative testing accessible to MMO staff and business analysts
+- **Automation-first by necessity** - Emphasise automation as primary quality assurance given resource constraints
+- **Pragmatic over comprehensive** - Prioritise essential activities that deliver maximum value
+- **Scalable and sustainable** - Approaches that can grow with team capacity over time
+
+### **Practical Implementation Focus**
+
+- **Simple, effective techniques** over complex methodologies
+- **Clear guidance** for non-testing specialists to contribute effectively
+- **Realistic timeframes** and expectations for delivery
+- **Focus on core user journeys** rather than exhaustive coverage
+- **Leverage domain expertise** from permanent staff who understand user needs
+- **Gradual adoption** of advanced techniques as capacity allows
+
 ---
 
 **Purpose**: This rule prevents the documentation coherence issues discovered during comprehensive review, ensuring test strategy and charter documentation remains navigable, accurate, and professionally maintained.

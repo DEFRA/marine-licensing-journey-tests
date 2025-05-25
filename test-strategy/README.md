@@ -224,20 +224,20 @@ Data                 Platforms        Reliability     Error handling tests
 
 ### **Test Pyramid Strategy**
 
-Our **automation strategy** prioritises efficient feedback:
+Our **automation strategy** prioritises efficient feedback and sustainable quality assurance:
 
 ```
-🔺 Manual Investigative Testing
-   ├── Scenario-based exploration
-   ├── Session-based investigation
-   └── Accessibility validation
+🔺 Strategic Investigative Testing
+   ├── Domain expert-led exploration
+   ├── Risk-focused scenarios
+   └── Accessible investigation techniques
 
-🔺 UI Integration Tests (Current Focus)
+🔺 UI Integration Tests (Primary Focus)
    ├── Complete user journeys
    ├── Cross-browser compatibility
    └── Accessibility automation
 
-🔺 API Tests (Planned)
+🔺 API Tests (Planned - High ROI)
    ├── Business logic validation
    ├── Data integrity checks
    └── Performance testing
@@ -248,14 +248,18 @@ Our **automation strategy** prioritises efficient feedback:
    └── Error handling and edge cases
 ```
 
+**Automation-First Philosophy**: Given the critical nature of marine licensing and the need for sustainable quality assurance, automation provides the foundation for reliable, repeatable validation whilst freeing up time for high-value investigative work.
+
 ### **Investigative Testing Framework**
 
-We combine the best aspects of multiple testing approaches:
+We use a **pragmatic approach** that combines automation confidence with targeted human insight:
 
-- **Session-based structure** - Time-boxed 90-minute investigation sessions with clear charters
-- **Scenario-based content** - Rich, realistic user contexts following Bolton's framework (THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS)
-- **Heuristic-driven discovery** - Systematic exploration using HTSM and domain-specific models
-- **User journey focus** - Testing complete workflows through BDD automation and manual investigation
+- **Automation provides the foundation** - Comprehensive automated validation of known scenarios
+- **Domain experts lead investigation** - MMO staff and business analysts bring essential context
+- **Risk-focused exploration** - Concentrate investigative effort where it matters most
+- **Accessible techniques** - Investigation methods that work for non-testing specialists
+
+**Key Principle**: Investigative testing complements automation by exploring areas where human insight and domain knowledge are essential - not replacing systematic validation that automation does better.
 
 ### **Context-Driven Quality**
 
@@ -298,50 +302,47 @@ This strategy builds on existing project foundations:
 
 ## 🚀 Getting Started
 
-### **For Testers**
+### **For Quality Engineering**
 
-**Week 1: Foundation**
+**Immediate Focus**
 
-1. Read [Testing Heuristics](./heuristics/README.md) - Focus on HTSM and marine licensing applications
-2. Review [Domain Context](./domain-context/README.md) - Understand user personas and regulatory complexity
-3. Try a 90-minute [Investigative Testing](./investigative-testing/README.md) session on an existing user story
+1. **Strengthen automation foundation** - Prioritise UI integration tests for critical user journeys
+2. **Establish baseline coverage** - Ensure core exemption workflow is comprehensively automated
+3. **Create investigation framework** - Simple, accessible approaches for domain expert collaboration
 
-**Week 2: Practice**
+**Ongoing Development**
 
-1. Create your first [Test Charter](../test-charters/README.md) for a marine licensing workflow
-2. Practice investigative sessions combining scenario content with session-based structure
-3. Document findings using the structured debrief framework
-4. Apply systematic heuristics during exploration
+1. **Gradual API testing adoption** - Plan API test layer when development capacity allows
+2. **Collaborative investigation** - Work with MMO staff on targeted risk areas
+3. **Continuous improvement** - Refine approaches based on what delivers most value
 
-### **For Developers**
+### **For Domain Experts**
 
-**Immediate Actions**
+**Contributing to Quality Assurance**
 
-1. Review [Automation Architecture](./automation/README.md) - Understand current UI-first approach and future API testing
-2. Set up [Continuous Quality](./continuous-quality/README.md) practices in your workflow
-3. Read [Screenplay Pattern rules](../.cursor/rules/screenplay-pattern.mdc) for writing maintainable test code
+1. **Review automated test scenarios** - Validate that BDD scenarios match real-world usage
+2. **Lead targeted investigations** - Apply marine licensing expertise to explore risk areas
+3. **Provide user perspective** - Help identify scenarios automation might miss
 
-**Ongoing Practices**
+**Practical Participation**
 
-1. Write BDD scenarios in Gherkin that match business language
-2. Follow page object patterns (locators only, no behaviour)
-3. Use the actor memory system for test data sharing
-4. Apply clean code principles to test automation
+1. **Start with familiar areas** - Investigate workflows you know well
+2. **Focus on user experience** - Apply domain knowledge to assess usability and accuracy
+3. **Document insights** - Share findings to improve both automation and user guidance
 
-### **For Product Teams**
+### **For Development Team**
 
-**Work Planning Integration**
+**Quality-First Development**
 
-1. Use [Investigative Testing](./investigative-testing/README.md) to validate story acceptance criteria through realistic user scenarios
-2. Apply [Accessibility Testing](./accessibility/README.md) principles in definition of done
-3. Review [Quality Intelligence](./observability/README.md) metrics for informed prioritisation
+1. **BDD scenario review** - Ensure Gherkin scenarios reflect actual business requirements
+2. **Automation-friendly design** - Build with testability in mind
+3. **Collaborative testing** - Work with domain experts during feature development
 
-**Story Writing**
+**Sustainable Practices**
 
-1. Include marine licensing personas in user story examples
-2. Reference regulatory requirements that need validation
-3. Consider cross-browser and accessibility acceptance criteria
-4. Think about realistic usage scenarios and edge cases
+1. **Maintain automation health** - Keep tests reliable and fast
+2. **Support investigation needs** - Provide test data and environments for exploration
+3. **Quality gate integration** - Use automation results for deployment confidence
 
 ## 📊 Success Measures
 

@@ -49,82 +49,71 @@ This approach integrates the best aspects of multiple testing methodologies:
 
 ## 🎭 What is Investigative Testing?
 
-**Investigative testing** is **simultaneous learning, test design, and test execution** within structured sessions that use realistic user scenarios to uncover insights that scripted tests and automation miss.
+**Investigative testing** is **focused exploration** that leverages domain expertise to discover insights that automation cannot find. It's designed to be accessible to marine licensing specialists whilst providing systematic approaches to quality validation.
 
-### **Why This Integrated Approach?**
+### **Why This Practical Approach?**
 
-**Session-based structure provides:**
+**Domain Expert Leadership:**
 
-- ✅ **Time management** - Focused 90-minute investigations
-- ✅ **Accountability** - Clear charters and reviewable outcomes
-- ✅ **Team coordination** - Trackable work that integrates with project planning
-- ✅ **Progress measurement** - Systematic coverage and discovery tracking
+- ✅ **Leverage existing knowledge** - MMO staff understand user needs and regulatory requirements
+- ✅ **Accessible techniques** - Investigation methods that work for non-testing specialists
+- ✅ **Focused exploration** - Concentrate effort on high-risk areas where human insight is essential
+- ✅ **Collaborative validation** - Combine domain expertise with systematic thinking
 
-**Scenario-based content provides:**
+**Automation Foundation:**
 
-- ✅ **Rich user context** - Authentic pressures and realistic friction
-- ✅ **Guided flexibility** - Structured approach that encourages discovery
-- ✅ **Evidence collection** - Multiple quality indicators beyond pass/fail
-- ✅ **Operational coverage** - How people actually use the system
+- ✅ **Reliable regression protection** - Automated tests handle repetitive validation
+- ✅ **Fast feedback cycles** - Immediate validation of known scenarios
+- ✅ **Comprehensive coverage** - Systematic validation of user journeys
+- ✅ **Sustainable quality** - Maintainable validation that scales with the application
 
-**Heuristic-driven discovery provides:**
+**Strategic Investigation:**
 
-- ✅ **Systematic exploration** - HTSM categories ensure comprehensive coverage
-- ✅ **Domain-specific focus** - Marine licensing models guide investigation
-- ✅ **Quality criteria thinking** - Multiple perspectives on what "good" means
-- ✅ **Risk identification** - Structured approaches to finding problems
+- ✅ **Risk-focused exploration** - Human effort applied where it delivers most value
+- ✅ **User experience validation** - Real-world usage patterns and pain points
+- ✅ **Edge case discovery** - Scenarios that structured testing might miss
+- ✅ **Regulatory compliance** - Domain-specific validation using specialist knowledge
 
-## 🏗️ Session Structure
+## 🏗️ Simple Investigation Sessions
 
-### **90-Minute Investigation Sessions**
-
-```
-📋 Preparation (10 minutes)
-├── Review charter and scenario context
-├── Set up realistic user environment (devices, tools, friction)
-├── Prepare test data and persona materials
-└── Configure evidence collection tools
-
-🔍 Investigation (70 minutes)
-├── Execute scenario activities with guided flexibility
-├── Apply systematic heuristics during exploration
-├── Follow authentic user behaviour patterns
-├── Document discoveries and evidence in real-time
-└── Adapt approach based on findings
-
-📝 Debrief (10 minutes)
-├── Assess session goals and scenario completion
-├── Document key discoveries and evidence
-├── Identify follow-up investigations needed
-└── Update charter tracking and coverage
-```
-
-### **Session Charter Framework**
-
-Enhanced charters that combine SBTM structure with scenario richness:
+### **Flexible 60-90 Minute Exploration**
 
 ```
-SESSION CHARTER: [Clear mission statement]
+📋 Quick Setup (10 minutes)
+├── Review the area you want to explore
+├── Set up realistic user context (actual data, typical environment)
+└── Decide what questions you want to answer
 
-SCENARIO CONTEXT:
-THEME: [Rich user context - what authentic situation are we investigating?]
-SETUP: [Realistic pressures, friction, and environment]
-PERSONA: [Which marine licensing user type - Zofia, Amy, Fatima, Simon]
+🔍 Focused Exploration (45-70 minutes)
+├── Follow realistic user workflows
+├── Try variations and edge cases you've encountered
+├── Note anything that seems odd, slow, or confusing
+└── Test scenarios automation might miss
 
-INVESTIGATION FOCUS:
-EXPLORE: [Area of application or workflow]
-WITH: [Tools, techniques, heuristics, realistic conditions]
-TO DISCOVER: [Types of insights and evidence we seek]
+📝 Quick Debrief (5-10 minutes)
+├── Document key findings
+├── Identify any issues that need follow-up
+└── Share insights with the team
+```
 
-REALISTIC ACTIVITIES:
-- [Guided but flexible actions following authentic user patterns]
-- [Include friction, interruptions, and real-world behaviour]
-- [Test edge cases and stress conditions]
+### **Simple Investigation Framework**
 
-EVIDENCE FRAMEWORK:
-- [Specific quality indicators to monitor]
-- [Success patterns and warning signs]
-- [Performance and usability measures]
+Rather than complex charters, use this accessible approach:
+
+```
+EXPLORE: [Area you want to investigate]
+AS: [Type of user - MMO staff, applicant, etc.]
+BECAUSE: [What you're concerned about or want to validate]
+LOOKING FOR: [Types of problems or insights you hope to find]
+```
+
+**Example:**
+
+```
+EXPLORE: Exemption project name entry
+AS: First-time applicant with limited marine licensing knowledge
+BECAUSE: We've had support queries about project naming confusion
+LOOKING FOR: Guidance gaps, terminology issues, validation problems
 ```
 
 ## 🎬 Scenario Investigation Framework
@@ -455,33 +444,44 @@ BDD Automated Tests           Investigative Sessions        Combined Coverage
 
 ## 🚀 Getting Started with Investigative Testing
 
-### **Week 1: Foundation**
+### **For Domain Experts (MMO Staff, Business Analysts)**
 
-1. **Choose one user story** - Start with medium complexity
-2. **Pick appropriate persona** - Zofia for usability, Amy for efficiency, Fatima for workflow
-3. **Create enhanced charter** - Combine SBTM structure with scenario content
-4. **Run 90-minute session** - Follow preparation → investigation → debrief structure
+**Start Simple - Week 1**
 
-### **Week 2: Develop Technique**
+1. **Pick a familiar workflow** - Choose something you know well and have seen users struggle with
+2. **Set aside 60 minutes** - Block time when you won't be interrupted
+3. **Try the simple framework** - Use the EXPLORE/AS/BECAUSE/LOOKING FOR template
+4. **Focus on user experience** - What would confuse or frustrate someone using this?
 
-1. **Add realistic friction** - Interruptions, device switching, time pressure
-2. **Apply systematic heuristics** - Use HTSM categories during exploration
-3. **Enhance evidence collection** - Screenshot interesting findings, time interactions
-4. **Practice scenario variations** - Try different turbulence and stress factors
+**Build Confidence - Week 2**
 
-### **Week 3: Integration**
+1. **Try different user perspectives** - Explore as a novice, then as an experienced user
+2. **Document 2-3 key findings** - What surprised you or seemed problematic?
+3. **Share insights with the team** - Brief discussion of what you discovered
+4. **Plan next investigation** - What other areas would benefit from exploration?
 
-1. **Link with automation** - Identify gaps where investigation adds value
-2. **Coordinate with team** - Share findings and plan follow-up work
-3. **Refine scenarios** - Update based on what worked well vs poorly
-4. **Plan ongoing sessions** - Integrate with work planning and release preparation
+### **For Quality Engineering**
 
-### **Common Pitfalls to Avoid**
+**Foundation Setup**
 
-- **Scripted execution** - Scenarios should guide, not constrain exploration
-- **Shallow investigation** - Take time to really understand what you discover
-- **Poor evidence collection** - Document findings thoroughly for team review
-- **Isolation from team** - Share insights and integrate with development workflow
+1. **Create simple investigation templates** - Make it easy for domain experts to contribute
+2. **Establish lightweight documentation** - Focus on actionable findings, not extensive reports
+3. **Plan collaborative sessions** - Work with MMO staff to explore high-risk areas
+4. **Track investigation coverage** - Ensure key user journeys get domain expert attention
+
+**Ongoing Support**
+
+1. **Facilitate rather than lead** - Help domain experts apply their knowledge effectively
+2. **Connect findings to automation** - Use insights to improve automated test scenarios
+3. **Maintain investigation momentum** - Regular but achievable rhythm of exploration
+4. **Focus on high-impact areas** - Prioritise investigations that reveal critical insights
+
+### **Making It Sustainable**
+
+- **Little and often** - 60-minute sessions are more sustainable than 90-minute marathons
+- **Build on existing knowledge** - Leverage what domain experts already know
+- **Focus on actionable insights** - Findings that lead to improvements or automation gaps
+- **Keep it collaborative** - Investigation should feel like valuable contribution, not testing burden
 
 ---
 
