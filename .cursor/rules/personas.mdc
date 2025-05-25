@@ -1,5 +1,5 @@
 ---
-description: This rule is useful when identifying test scenarios and assessing coverage and also when generating test charters or thinking about test strategy
+description: when designing user-focused tests, creating realistic test scenarios, understanding user needs and constraints, or planning persona-driven testing approaches
 globs: 
 alwaysApply: false
 ---

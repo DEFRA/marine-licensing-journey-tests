@@ -1,7 +1,7 @@
 ---
-description: 
+description: when organizing files and directories, following project structure standards, creating new components, or understanding the codebase architecture
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Project Structure Standards
 

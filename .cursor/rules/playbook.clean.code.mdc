@@ -1,7 +1,7 @@
 ---
-description: 
+description: when reviewing code quality, refactoring existing code, identifying code smells, maintaining clean code standards, or conducting code reviews
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Clean Code
 - Clean code is obvious for other programmers

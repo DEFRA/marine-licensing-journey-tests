@@ -1,7 +1,7 @@
 ---
-description: 
+description: when writing any code, implementing test automation, creating new files, following coding standards, or working with JavaScript and testing frameworks
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Rules to follow when generating code
 

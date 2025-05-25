@@ -1,5 +1,5 @@
 ---
-description: any time we are updating documentation with links
+description: when using search-and-replace tools on documentation, running commands that might affect URLs, or performing bulk documentation updates
 globs: 
 alwaysApply: false
 ---

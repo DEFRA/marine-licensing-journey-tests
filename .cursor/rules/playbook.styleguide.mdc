@@ -1,7 +1,7 @@
 ---
-description: 
+description: when writing documentation, following British English standards, maintaining professional tone, or ensuring GOV.UK content design compliance
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 Context: This is a playbook for the UK Government Department for Environment, Food & Rural Affairs (Defra) that outlines the best practices for using AI tools and techniques in the Software Development Lifecycle (SDLC). This is a playbook for professional use.
 

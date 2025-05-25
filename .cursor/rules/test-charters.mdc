@@ -1,5 +1,5 @@
 ---
-description: when working with investigative testing, session based testing and test charters
+description: when creating test charters, planning investigative testing sessions, designing session-based test management, or structuring exploratory testing activities
 globs: 
 alwaysApply: false
 ---
@@ -176,8 +176,8 @@ Required table format:
 ```markdown
 | User Story | Charter Type | Charter Name | Priority | Status |
 | ---------- | ------------ | ------------ | -------- | ------ |
-| ML-X | Traditional | [Charter Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-aspect.md) | High | ✅ Ready |
-| ML-X | Scenario | [Scenario Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-persona-scenario.md) | High | 🔄 Draft |
+| ML-X | Traditional | [Charter Name](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/ML-X/ML-X-aspect.md) | High | ✅ Ready |
+| ML-X | Scenario | [Scenario Name](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/ML-X/ML-X-persona-scenario.md) | High | 🔄 Draft |
 ```
 
 Status indicators:

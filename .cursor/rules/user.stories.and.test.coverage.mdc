@@ -1,5 +1,5 @@
 ---
-description: when we are creating new tests, assessing user stories, creating new coverage, reviewing existing test coverage, talking about strategy, test sessions
+description: when working with user stories, assessing test coverage, linking requirements to tests, planning test implementation, or reviewing coverage gaps
 globs: 
 alwaysApply: false
 ---

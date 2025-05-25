@@ -2,6 +2,8 @@
 
 This directory contains the complete set of rules and guidelines for the Marine Licensing Journey Tests project. These rules ensure consistency, quality, and maintainability across the codebase.
 
+**📖 For practical guidance on using these rules together, see [examples.md](examples.md) - it shows how different rules combine for common scenarios like writing code, planning test strategy, creating documentation, and more.**
+
 ## Rule Files Overview
 
 ### 🎯 **Testing Strategy & Approach**

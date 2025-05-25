@@ -1,5 +1,5 @@
 ---
-description: when working with test strategy, test coverage, exploratory, investigative testing, session based testing and test charters
+description: when applying systematic testing techniques, using heuristic models for test discovery, planning comprehensive test coverage, or conducting risk-based testing
 globs: 
 alwaysApply: false
 ---

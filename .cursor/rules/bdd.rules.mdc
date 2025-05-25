@@ -1,5 +1,5 @@
 ---
-description: any time we are writing feature files and assessing test coverage and acceptance criteria
+description: when writing feature files, creating Gherkin scenarios, implementing BDD practices, or ensuring clear acceptance criteria and test scenarios
 globs: 
 alwaysApply: false
 ---

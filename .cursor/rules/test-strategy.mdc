@@ -1,5 +1,5 @@
 ---
-description: any time we are considering test strategy, implementation, coverage, charters, exploratory testing or test sessions
+description: when considering overall test strategy, test implementation approaches, coverage planning, or exploratory testing sessions
 globs: 
 alwaysApply: false
 ---

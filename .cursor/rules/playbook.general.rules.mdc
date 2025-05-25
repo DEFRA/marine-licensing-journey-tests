@@ -1,7 +1,7 @@
 ---
-description: 
+description: when making any code or documentation changes, following general development practices, ensuring quality standards, or applying systematic thinking approaches
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # General Rules
 - Think step by step and plan before making any additions or changes to the code.

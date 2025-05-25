@@ -1,5 +1,5 @@
 ---
-description: This rule provides essential context about the marine licensing application architecture, domain terminology, and actual routes/features. Use this when you need to understand the real application structure, create domain-specific tests, or ensure test scenarios reflect actual user journeys for marine licensing workflows.
+description: when needing context about the marine licensing application, understanding domain terminology, referencing actual application features, or creating domain-specific tests
 globs: 
 alwaysApply: false
 ---
@@ -101,6 +101,6 @@ When helping with test development:
 - **Cloud Provider**: AWS (Amazon Web Services)
 - **Platform Benefits**: Automated CI/CD pipelines, built-in security features, government compliance standards
 - **Security Context**: CDP platform undergoes independent security assessment and penetration testing
-- **Reference**: [Platform-based delivery with DEFRA's Core Delivery Platform](https://technology.blog.gov.uk/2025/04/25/platform-based-delivery-with-defras-core-delivery-platform/) - GOV.UK Technology Blog
+- **Reference**: [Platform-based delivery with DEFRA's Core Delivery Platform](mdc:marine-licensing-journey-tests/https:/technology.blog.gov.uk/2025/04/25/platform-based-delivery-with-defras-core-delivery-platform) - GOV.UK Technology Blog
 
 When suggesting test scenarios, page objects, or interactions, always consider the actual application functionality and user needs for marine licensing workflows.

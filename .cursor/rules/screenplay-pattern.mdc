@@ -1,5 +1,5 @@
 ---
-description: when writing test code, implementing steps, abilities, tasks, interactions
+description: when implementing the screenplay pattern, writing test automation code, creating actors/tasks/interactions, or structuring user-centric test automation
 globs: 
 alwaysApply: false
 ---

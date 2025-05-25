@@ -1,5 +1,5 @@
 ---
-description: any time we are creating or updating documentation
+description: when creating or updating documentation, ensuring cross-reference integrity, maintaining documentation quality, or managing complex documentation structures
 globs: 
 alwaysApply: false
 ---
