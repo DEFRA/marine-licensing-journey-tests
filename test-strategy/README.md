@@ -330,7 +330,7 @@ This strategy builds on existing project foundations:
 
 ### **For Product Teams**
 
-**Sprint Planning Integration**
+**Work Planning Integration**
 
 1. Use [Investigative Testing](./investigative-testing/README.md) to validate story acceptance criteria through realistic user scenarios
 2. Apply [Accessibility Testing](./accessibility/README.md) principles in definition of done

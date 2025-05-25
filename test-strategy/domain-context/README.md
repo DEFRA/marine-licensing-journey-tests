@@ -217,7 +217,7 @@ When planning testing activities, consider:
 3. **What regulatory requirements** might be impacted?
 4. **Which integration points** could be affected?
 
-### **Sprint Planning Context**
+### **Work Planning Context**
 
 Include domain expertise in planning:
 

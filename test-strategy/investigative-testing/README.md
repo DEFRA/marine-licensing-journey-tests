@@ -425,7 +425,7 @@ BDD Automated Tests           Investigative Sessions        Combined Coverage
 
 ### **Session Scheduling Integration**
 
-- **Sprint planning** - Include investigation sessions in story completion criteria
+- **Work planning** - Include investigation sessions in story completion criteria
 - **Release preparation** - Risk-focused scenarios before major releases
 - **User feedback response** - Targeted scenarios based on user research findings
 - **Accessibility audits** - Regular scenario-based accessibility investigation
@@ -474,7 +474,7 @@ BDD Automated Tests           Investigative Sessions        Combined Coverage
 1. **Link with automation** - Identify gaps where investigation adds value
 2. **Coordinate with team** - Share findings and plan follow-up work
 3. **Refine scenarios** - Update based on what worked well vs poorly
-4. **Plan ongoing sessions** - Integrate with sprint planning and release preparation
+4. **Plan ongoing sessions** - Integrate with work planning and release preparation
 
 ### **Common Pitfalls to Avoid**
 
