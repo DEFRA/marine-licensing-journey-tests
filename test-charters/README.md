@@ -22,6 +22,17 @@ Test charters bridge the gap between:
 | **Veteran User Efficiency**     | [Expert Workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
 | **Form Behaviour & Validation** | [Form Interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
 
+### **Charter Lifecycle**
+
+**Charters are refreshed on every release** to ensure they remain aligned with current system functionality:
+
+- **New features** → New charters created to investigate user experience and integration
+- **Changed features** → Existing charters updated to reflect new behaviour and workflows
+- **Removed features** → Obsolete charters archived to maintain focus on delivered functionality
+- **User feedback** → Charter priorities and focus areas adjusted based on real user insights
+
+This approach ensures our investigation sessions always target the **actual delivered system** rather than outdated assumptions about functionality.
+
 ## 🏗️ Charter Structure
 
 All charters follow the **Investigative Testing framework**:
