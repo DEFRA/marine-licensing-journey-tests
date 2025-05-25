@@ -133,5 +133,7 @@ To discover: Data validation gaps, user confusion points, error handling
 #### **User Journey Charter**
 
 ```
-
+Explore: Complete exemption notification workflow for first-time applicant
+With: Realistic project data, interruptions, mobile/desktop switching
+To discover: Guidance gaps, workflow friction, accessibility barriers
 ```
