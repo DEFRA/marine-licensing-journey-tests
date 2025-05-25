@@ -8,6 +8,11 @@ export default class CompleteProjectName extends Task {
 
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
+    if (!exemption) {
+      expect.fail(
+        'Exemption data must be initialized before completing project name'
+      )
+    }
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(
       ProjectNamePage.projectNameInput,
