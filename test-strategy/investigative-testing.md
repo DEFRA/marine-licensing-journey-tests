@@ -165,15 +165,6 @@ BDD Automated Tests          Investigation Sessions       Combined Result
 
 ---
 
-## 📚 More Resources
-
-- **[Detailed Investigation Examples](./investigative-testing-examples.md)** - Comprehensive scenario scripts with specific activities
-- **[Advanced Techniques](./investigative-testing-advanced.md)** - Systematic heuristics and integration with HTSM
-- **[Session Templates](./investigative-testing-templates.md)** - Ready-to-use documentation and planning templates
-- **[Attribution & Foundations](./investigative-testing-attribution.md)** - Acknowledgments to testing thought leaders
-
----
-
 _**Remember**: The goal isn't perfect testing - it's practical insight that makes the marine licensing service better for real users._
 
 **🎯 Success**: Domain experts regularly discover valuable insights that improve both automation and user experience.
