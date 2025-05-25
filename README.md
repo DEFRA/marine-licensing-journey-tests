@@ -102,14 +102,13 @@ Static Analysis         → Code quality, security vulnerabilities
 
 ### **Quick Access to Strategy**
 
-| **I want to...**                            | **Go to...**                                                  |
-| ------------------------------------------- | ------------------------------------------------------------- |
-| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)             |
-| Test with realistic user scenarios          | [Scenario Testing](test-strategy/scenario-testing/README.md)  |
-| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)      |
-| Build robust test automation                | [Automation Architecture](test-strategy/automation/README.md) |
-| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)      |
-| Practice exploratory testing                | [Exploratory Testing](test-strategy/exploratory/README.md)    |
+| **I want to...**                            | **Go to...**                                                           |
+| ------------------------------------------- | ---------------------------------------------------------------------- |
+| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)                      |
+| Investigate with realistic user scenarios   | [Investigative Testing](test-strategy/investigative-testing/README.md) |
+| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)               |
+| Build robust test automation                | [Automation Architecture](test-strategy/automation/README.md)          |
+| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)               |
 
 ### **Evolution from Traditional Approaches**
 

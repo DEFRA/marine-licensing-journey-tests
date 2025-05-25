@@ -156,12 +156,9 @@ This strategy **complements existing organisational governance**:
 
 ### **👥 Human-Centred Testing**
 
-- **[Scenario Testing](./scenario-testing/README.md)** - Rich, realistic user investigations using Bolton's scenario framework
+- **[Investigative Testing](./investigative-testing/README.md)** - Session-based exploration using scenario investigations and systematic heuristics
 - **[Test Charters](../test-charters/README.md)** - Systematic exploration of user stories and requirements
-- **[Session-Based Testing](./session-based-testing/README.md)** - Structured exploratory testing using time-boxed sessions
-- **[Exploratory Testing](./exploratory/README.md)** - Systematic exploration and investigation
 - **[Accessibility Testing](./accessibility/README.md)** - Inclusive design and GOV.UK compliance
-- **[User Journey Testing](./user-journeys/README.md)** - Real-world scenarios and persona-driven testing
 
 ### **📊 Quality Intelligence**
 
@@ -176,19 +173,17 @@ This strategy **complements existing organisational governance**:
 
 ## 🎯 Quick Access
 
-| **I want to...**                                | **Go to...**                                               |
-| ----------------------------------------------- | ---------------------------------------------------------- |
-| Test with realistic user scenarios              | [Scenario Testing](./scenario-testing/README.md)           |
-| Explore systematically using test heuristics    | [Testing Heuristics](./heuristics/README.md)               |
-| Create exploratory charters for user stories    | [Test Charters](../test-charters/README.md)                |
-| Conduct structured exploratory testing sessions | [Session-Based Testing](./session-based-testing/README.md) |
-| Build robust test automation                    | [Automation Architecture](./automation/README.md)          |
-| Understand marine licensing user needs          | [Domain Context](./domain-context/README.md)               |
-| Test accessibility and inclusion                | [Accessibility Testing](./accessibility/README.md)         |
-| Investigate and explore the application         | [Exploratory Testing](./exploratory/README.md)             |
-| Set up quality monitoring and metrics           | [Observability](./observability/README.md)                 |
-| Implement continuous testing in pipelines       | [Continuous Quality](./continuous-quality/README.md)       |
-| Test performance and scalability                | [Performance Engineering](./performance/README.md)         |
+| **I want to...**                             | **Go to...**                                               |
+| -------------------------------------------- | ---------------------------------------------------------- |
+| Explore systematically using test heuristics | [Testing Heuristics](./heuristics/README.md)               |
+| Investigate with realistic user scenarios    | [Investigative Testing](./investigative-testing/README.md) |
+| Create exploratory charters for user stories | [Test Charters](../test-charters/README.md)                |
+| Build robust test automation                 | [Automation Architecture](./automation/README.md)          |
+| Understand marine licensing user needs       | [Domain Context](./domain-context/README.md)               |
+| Test accessibility and inclusion             | [Accessibility Testing](./accessibility/README.md)         |
+| Set up quality monitoring and metrics        | [Observability](./observability/README.md)                 |
+| Implement continuous testing in pipelines    | [Continuous Quality](./continuous-quality/README.md)       |
+| Test performance and scalability             | [Performance Engineering](./performance/README.md)         |
 
 ## 🔬 Testing Approach
 
@@ -215,9 +210,9 @@ Data                 Platforms        Reliability     Error handling tests
 Our **automation strategy** prioritises efficient feedback:
 
 ```
-🔺 Manual Exploratory Testing
-   ├── Scenario-based investigation
-   ├── Session-based testing
+🔺 Manual Investigative Testing
+   ├── Scenario-based exploration
+   ├── Session-based investigation
    └── Accessibility validation
 
 🔺 UI Integration Tests (Current Focus)
@@ -236,15 +231,14 @@ Our **automation strategy** prioritises efficient feedback:
    └── Error handling and edge cases
 ```
 
-### **Scenario Testing Framework**
+### **Investigative Testing Framework**
 
-Following **Michael Bolton's approach**, we investigate **realistic user conditions**:
+We combine the best aspects of multiple testing approaches:
 
-- **THEME** - Clear mission about authentic user situations
-- **SETUP** - Realistic context, pressures, and environment
-- **ACTIVITIES** - Guided but flexible realistic actions
-- **ORACLES** - Multiple quality indicators beyond pass/fail
-- **VARIATIONS** - Realistic turbulence and stress testing
+- **Session-based structure** - Time-boxed 90-minute investigation sessions with clear charters
+- **Scenario-based content** - Rich, realistic user contexts following Bolton's framework (THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS)
+- **Heuristic-driven discovery** - Systematic exploration using HTSM and domain-specific models
+- **User journey focus** - Testing complete workflows through BDD automation and manual investigation
 
 ### **Context-Driven Quality**
 
@@ -293,14 +287,14 @@ This strategy builds on existing project foundations:
 
 1. Read [Testing Heuristics](./heuristics/README.md) - Focus on HTSM and marine licensing applications
 2. Review [Domain Context](./domain-context/README.md) - Understand user personas and regulatory complexity
-3. Try a 90-minute [Session-Based Testing](./session-based-testing/README.md) session on an existing user story
+3. Try a 90-minute [Investigative Testing](./investigative-testing/README.md) session on an existing user story
 
 **Week 2: Practice**
 
 1. Create your first [Test Charter](../test-charters/README.md) for a marine licensing workflow
-2. Practice [Exploratory Testing](./exploratory/README.md) using systematic heuristics
-3. Try a [Scenario Testing](./scenario-testing/README.md) session using Bolton's framework
-4. Document findings using the session note structure
+2. Practice investigative sessions combining scenario content with session-based structure
+3. Document findings using the structured debrief framework
+4. Apply systematic heuristics during exploration
 
 ### **For Developers**
 
@@ -321,7 +315,7 @@ This strategy builds on existing project foundations:
 
 **Sprint Planning Integration**
 
-1. Use [User Journey Testing](./user-journeys/README.md) to validate story acceptance criteria
+1. Use [Investigative Testing](./investigative-testing/README.md) to validate story acceptance criteria through realistic user scenarios
 2. Apply [Accessibility Testing](./accessibility/README.md) principles in definition of done
 3. Review [Quality Intelligence](./observability/README.md) metrics for informed prioritisation
 
