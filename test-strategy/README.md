@@ -138,13 +138,10 @@
 
 This strategy builds respectfully on the work of testing thought leaders:
 
-- **Context-Driven Testing** _(Cem Kaner, James Bach, Michael Bolton)_ - Adaptive approaches
+- **Context-Driven Testing** _(James Bach, Michael Bolton)_ - Adaptive approaches
 - **Heuristic Test Strategy Model** _(James Bach)_ - Systematic thinking frameworks
-- **Session-Based Test Management** _(Jon Bach)_ - Structured exploratory testing
+- **Session-Based Test Management** _(John Bach)_ - Structured exploratory testing
 - **Scenario Testing** _(Michael Bolton)_ - Rich, realistic user investigation
-- **Risk-Based Testing** _(Elisabeth Hendrickson)_ - Focus effort where it matters
-
-> **📚 Complete Attribution**: See [ATTRIBUTION.md](./ATTRIBUTION.md) for comprehensive references and recommended reading.
 
 ## 🎪 Integration with Project
 
