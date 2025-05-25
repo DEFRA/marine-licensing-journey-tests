@@ -43,6 +43,7 @@ Investigate how well form interactions work across the marine licensing applicat
 - Copy-paste content from Word documents, emails, PDFs with hidden formatting
 - Test empty submission and whitespace-only entries
 - Enter project descriptions instead of names (common user mistake)
+- **Use problematic strings** from the [Big List of Naughty Strings](https://github.com/minimaxir/big-list-of-naughty-strings) to test validation robustness
 
 #### **Error Handling and Recovery**
 
