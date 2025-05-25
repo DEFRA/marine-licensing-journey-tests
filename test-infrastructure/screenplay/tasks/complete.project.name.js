@@ -1,3 +1,4 @@
+import { expect } from 'chai'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 import Task from '../base/task.js'
 
