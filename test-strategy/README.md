@@ -155,26 +155,6 @@ This strategy works with existing project foundations:
 - **[User Stories](../.cursor/user-stories/README.md)** - Real user needs and acceptance criteria
 - **[Test Charters](../test-charters/README.md)** - Systematic exploration guidance
 
-## 🚀 Next Steps
-
-### **This Week**
-
-1. **Review automation foundation** - Ensure critical user journeys are reliably automated
-2. **Identify investigation candidate** - Pick one workflow domain experts know well
-3. **Plan first session** - 60-minute exploration with MMO staff member
-
-### **Next Sprint**
-
-1. **Run first investigation session** - Use simple framework, document findings
-2. **Assess automation gaps** - Use investigation insights to improve automation
-3. **Establish rhythm** - Plan regular investigation + automation review cycle
-
-### **This Month**
-
-1. **Measure baseline** - Current automation coverage, investigation frequency
-2. **Refine approaches** - Adjust based on what delivers most value
-3. **Build team confidence** - Evidence-based quality metrics and transparent reporting
-
 ---
 
 **💡 Remember**: Quality is everyone's responsibility. This strategy provides the framework for building quality into everything we do while serving the real needs of marine licensing users.
