@@ -53,7 +53,7 @@
          🎯 STRATEGY CORE
                  ↓
 ┌─────────────────┬─────────────────┬─────────────────┐
-│   🤖 AUTOMATE   │  🔍 INVESTIGATE │  🧠 UNDERSTAND  │
+│    AUTOMATE     │   INVESTIGATE   │   UNDERSTAND    │
 │                 │                 │                 │
 │ Known Scenarios │  Unknown Risks  │ Domain Context  │
 │ Fast Feedback   │  Human Insight  │ User Needs      │
@@ -78,8 +78,8 @@
                     ↓                     ↓
            🤖 AUTOMATION FIRST    🔍 INVESTIGATION FIRST
            ├── Write UI tests           ├── Run 60-min session
-           ├── Cover happy path        ├── Involve domain expert
-           └── Add edge cases          └── Document findings
+           ├── Cover happy path         ├── Involve domain expert
+           └── Add edge cases           └── Document findings
                     ↓                     ↓
            Monitor for failures    Do findings suggest automation?
                     ↓                     ↙         ↘

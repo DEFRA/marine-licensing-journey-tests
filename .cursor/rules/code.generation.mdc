@@ -47,3 +47,8 @@ alwaysApply: true
 17. **Follow project structure** - All files must follow the organizational rules defined in `project-structure.mdc`
 18. **Use dot.case for JavaScript files** - Maintains consistency with screenplay pattern naming (e.g., `complete.project.name.js`)
 
+## Documentation Formatting Standards
+
+19. **No emojis in ASCII tables** - Variable emoji widths break column alignment in tables. Use clean text for headers and cells, place emojis in surrounding text instead.
+20. **Test table alignment** - Verify ASCII tables render correctly in different terminals and editors before finalising documentation.
+
