@@ -5,7 +5,7 @@
 - **Golden Rule**: Write Gherkin so people unfamiliar with marine licensing will understand it
 - **Cardinal Rule**: One Scenario, One Behaviour
 - **Structure**: Always use Given-When-Then in that order, no repetition
-- **Brevity**: Keep scenarios under 10 steps
+- **Brevity**: Keep scenarios under 5 steps, only have more in exceptional circumstances
 - **Step Integrity**: Given = setup, When = action, Then = verification
 - **Business Value**: Titles clearly describe the business value being delivered
 - **Domain Context**: Use realistic marine licensing terminology and workflows
