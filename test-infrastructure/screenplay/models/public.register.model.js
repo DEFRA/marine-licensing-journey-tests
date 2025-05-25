@@ -21,17 +21,4 @@ export default class PublicRegisterModel {
     const longText = faker.lorem.paragraphs(10, ' ')
     return longText.substring(0, this.REASON_MAX_LENGTH + 1) // 1001 characters
   }
-
-  static generatePublicRegisterData(options = {}) {
-    const { withhold = faker.datatype.boolean() } = options
-
-    const consent = withhold ? 'yes' : 'no'
-    const data = { consent }
-
-    if (consent === 'yes') {
-      data.reason = this.generateWithholdingReason()
-    }
-
-    return data
-  }
 }
