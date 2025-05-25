@@ -4,13 +4,13 @@ import { browser } from '@wdio/globals'
 import { ProjectNamePage } from '~/test-infrastructure/pages'
 import {
   Actor,
+  ApplyForExemption,
   BrowseTheWeb,
   CompleteProjectName,
   EnsureErrorDisplayed,
   EnsureThatProjectName,
   Navigate,
-  SelectTheTask,
-  generateTestData
+  SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
 Given('the project name page is displayed', async function () {
@@ -25,7 +25,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    this.actor.remembers('projectName', generateTestData.projectName())
+    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))
     )
@@ -33,7 +33,7 @@ Given(
 )
 
 When('entering and saving a project with a valid name', async function () {
-  this.actor.remembers('projectName', generateTestData.projectName())
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(
     CompleteProjectName.with(this.actor.recalls('projectName'))
   )
@@ -50,7 +50,7 @@ When(
 )
 
 When('the project name is updated', async function () {
-  this.actor.remembers('projectName', generateTestData.projectName())
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(
     CompleteProjectName.with(this.actor.recalls('projectName'))

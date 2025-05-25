@@ -5,6 +5,7 @@ import { browser } from '@wdio/globals'
 import { PublicRegisterPage } from '~/test-infrastructure/pages'
 import {
   Actor,
+  ApplyForExemption,
   BrowseTheWeb,
   ClickBack,
   ClickCancel,
@@ -19,10 +20,7 @@ import {
   Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
-import {
-  generateTestData,
-  PublicRegisterModel
-} from '~/test-infrastructure/screenplay/models'
+import { PublicRegisterModel } from '~/test-infrastructure/screenplay/models'
 
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
@@ -37,12 +35,11 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    this.actor.remembers('projectName', generateTestData.projectName())
+    this.actor.intendsTo(ApplyForExemption.withConsentToPublicRegister())
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))
     )
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.consent)
     await this.actor.attemptsTo(
       CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice')
@@ -57,16 +54,11 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    this.actor.remembers('projectName', faker.lorem.words(5))
+    this.actor.intendsTo(ApplyForExemption.withWithholdFromPublicRegister())
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))
     )
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    this.actor.remembers('publicRegisterChoice', PublicRegisterPage.withhold)
-    this.actor.remembers(
-      'publicRegisterWithholdReason',
-      PublicRegisterModel.generateWithholdingReason()
-    )
     await this.actor.attemptsTo(
       CompletePublicRegisterTask.andSavingWith(
         this.actor.recalls('publicRegisterChoice'),

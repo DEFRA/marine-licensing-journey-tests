@@ -19,6 +19,32 @@ export default class Actor {
     }
   }
 
+  intendsTo(applyForExemption) {
+    const data = applyForExemption.getData()
+
+    if (data.projectName !== undefined) {
+      this.remembers('projectName', data.projectName)
+    }
+
+    if (data.publicRegister) {
+      if (data.publicRegister.consent !== undefined) {
+        this.remembers('publicRegisterChoice', data.publicRegister.consent)
+      }
+      if (data.publicRegister.reason !== undefined) {
+        this.remembers(
+          'publicRegisterWithholdReason',
+          data.publicRegister.reason
+        )
+      }
+    }
+
+    if (data.isTemporary) {
+      this.remembers('isTemporaryData', true)
+    }
+
+    return this
+  }
+
   remembers(key, value) {
     this.memory[key] = value
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
