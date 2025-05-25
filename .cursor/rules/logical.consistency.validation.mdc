@@ -1,0 +1,293 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Logical Consistency Validation
+
+*Lessons learned from fixing logical inconsistencies in data models*
+
+## Context
+This rule addresses logical inconsistencies in data models, particularly when related fields should have consistent values but don't due to mapping errors or misunderstanding of business logic.
+
+## The Problem We Found
+
+### Inconsistent Consent/Withhold Mapping
+```javascript
+// BAD: Logical inconsistency
+static generatePublicRegisterData(options = {}) {
+  const withhold = faker.datatype.boolean()
+  return {
+    consent: withhold ? 'yes' : 'no',  // WRONG! withhold=true should mean consent=false
+    reason: withhold ? this.generateWithholdingReason() : null // WRONG! reason needed when consent=false
+  }
+}
+```
+
+**The Logic Error:**
+- If `withhold = true`, then `consent` should be `false` (or 'no')
+- If `withhold = false`, then `consent` should be `true` (or 'yes')
+- A withholding reason should be provided when `consent = false`, not when `consent = true`
+
+## 🚨 CRITICAL: UI Concerns vs Business Data
+
+### The CSS Selector Data Contamination Bug
+**NEVER store UI implementation details as business data!**
+
+```javascript
+// 🚨 CRITICAL BUG: CSS selectors stored as business data
+this.actor.updates('exemption', (exemption) =>
+  exemption.updatePublicRegister({ consent: PublicRegisterPage.consent }) // '#consent-2'
+)
+
+// ✅ CORRECT: Store semantic business values
+this.actor.updates('exemption', (exemption) =>
+  exemption.updatePublicRegister({ consent: true }) // boolean value
+)
+```
+
+**Why This Is Critical:**
+- Business data should represent **real-world concepts** (true/false, amounts, names)
+- UI selectors are **implementation details** that can change
+- Mixing layers violates separation of concerns
+- Makes data meaningless and untestable
+
+**The Rule:** Business data must be **semantically meaningful**, not technically convenient.
+
+## Core Principles
+
+### 1. Understand Business Logic First
+Before implementing data relationships, understand what they mean:
+
+```javascript
+// CORRECT: Understanding the relationship
+// withhold = true  → user wants to withhold → consent = false → reason required
+// withhold = false → user doesn't withhold → consent = true  → no reason needed
+
+static generatePublicRegisterData(options = {}) {
+  const withhold = faker.datatype.boolean()
+  return {
+    consent: withhold ? false : true,  // withhold=true means consent=false
+    reason: withhold ? this.generateWithholdingReason() : null // reason when withholding
+  }
+}
+```
+
+### 2. Validate Related Fields Together
+```javascript
+// Good: Validate logical consistency
+validatePublicRegisterData(data) {
+  if (data.consent === false && !data.reason) {
+    expect.fail('Withholding reason required when consent is false')
+  }
+  
+  if (data.consent === true && data.reason) {
+    expect.fail('Withholding reason should not be provided when consent is true')
+  }
+}
+```
+
+### 3. Use Clear, Unambiguous Field Names
+```javascript
+// BAD: Ambiguous
+{ consent: 'yes', withhold: true } // Contradictory!
+
+// GOOD: Clear
+{ consentToPublish: true, withholdFromPublic: false }
+// OR
+{ publishOnRegister: true, reasonForWithholding: null }
+```
+
+## Common Logical Inconsistency Patterns
+
+### 1. Boolean Relationship Errors
+```javascript
+// BAD: Inverted logic
+const isVisible = !isHidden  // Should be: const isVisible = !isHidden
+const canEdit = isReadOnly   // Should be: const canEdit = !isReadOnly
+
+// GOOD: Clear relationships
+const isVisible = !isHidden
+const canEdit = !isReadOnly
+```
+
+### 2. Conditional Field Requirements
+```javascript
+// BAD: Missing validation
+if (user.type === 'premium') {
+  // Should validate that premium features are available
+  user.features = getAllFeatures()
+}
+
+// GOOD: Validate consistency
+if (user.type === 'premium') {
+  if (!user.subscriptionDate) {
+    expect.fail('Premium users must have subscription date')
+  }
+  user.features = getPremiumFeatures()
+}
+```
+
+### 3. State Transition Logic
+```javascript
+// BAD: Inconsistent state
+task.status = 'completed'
+task.completedDate = null  // Should be set when completed!
+
+// GOOD: Consistent state
+task.status = 'completed'
+task.completedDate = new Date()
+task.completedBy = currentUser.id
+```
+
+## How to Prevent Logical Inconsistencies
+
+### 1. Write Tests for Edge Cases
+```javascript
+describe('Public Register Data Logic', () => {
+  it('should require reason when withholding consent', () => {
+    const data = { consent: false, reason: null }
+    expect(() => validateData(data)).to.throw('Reason required when withholding')
+  })
+  
+  it('should not allow reason when giving consent', () => {
+    const data = { consent: true, reason: 'Some reason' }
+    expect(() => validateData(data)).to.throw('Reason not allowed when consenting')
+  })
+})
+```
+
+### 2. Use Type Systems or Validation
+```javascript
+// Good: Validation function
+function createPublicRegisterData(consent, reason = null) {
+  if (!consent && !reason) {
+    throw new Error('Reason required when withholding consent')
+  }
+  
+  if (consent && reason) {
+    throw new Error('Reason not needed when giving consent')
+  }
+  
+  return { consent, reason }
+}
+```
+
+### 3. Document Business Rules
+```javascript
+/**
+ * Public Register Consent Logic:
+ * - consent: true  → publish on register, reason must be null
+ * - consent: false → withhold from register, reason must be provided
+ * 
+ * This maps to the UI where:
+ * - "No" radio button → consent: false, reason required
+ * - "Yes" radio button → consent: true, no reason field shown
+ */
+class PublicRegisterModel {
+  // implementation
+}
+```
+
+## Validation Strategies
+
+### 1. Cross-Field Validation
+```javascript
+validateExemptionData(exemption) {
+  // Check project name consistency
+  if (exemption.projectNameTaskCompleted && !exemption.projectName) {
+    expect.fail('Project name required when task marked complete')
+  }
+  
+  // Check public register consistency
+  if (exemption.publicRegisterTaskCompleted && !exemption.publicRegister) {
+    expect.fail('Public register data required when task marked complete')
+  }
+}
+```
+
+### 2. State Machine Validation
+```javascript
+const validTransitions = {
+  'incomplete': ['in-progress', 'completed'],
+  'in-progress': ['incomplete', 'completed'],
+  'completed': ['in-progress'] // Can edit completed tasks
+}
+
+function validateStatusTransition(from, to) {
+  if (!validTransitions[from]?.includes(to)) {
+    expect.fail(`Invalid transition from ${from} to ${to}`)
+  }
+}
+```
+
+### 3. Business Rule Enforcement
+```javascript
+class ExemptionModel {
+  updatePublicRegister(data) {
+    // Enforce business rule: withholding requires reason
+    if (data.consent === false && !data.reason) {
+      expect.fail('Withholding reason required when consent is false')
+    }
+    
+    // Enforce business rule: consent doesn't need reason
+    if (data.consent === true) {
+      data.reason = null // Clear any existing reason
+    }
+    
+    this.publicRegister = data
+  }
+}
+```
+
+## Red Flags to Watch For
+
+1. **Contradictory boolean fields** (e.g., `isVisible: false, isHidden: false`)
+2. **Missing required fields** for certain states
+3. **Unexpected null values** in related fields
+4. **State transitions that don't make sense**
+5. **UI behaviour that doesn't match data model**
+
+## Testing Logical Consistency
+
+### 1. Property-Based Testing
+```javascript
+// Test that consent and withhold are always opposite
+it('should maintain consent/withhold consistency', () => {
+  for (let i = 0; i < 100; i++) {
+    const data = generateRandomPublicRegisterData()
+    expect(data.consent).to.equal(!data.withhold)
+  }
+})
+```
+
+### 2. State Invariant Testing
+```javascript
+// Test that completed tasks always have required data
+it('should maintain task completion invariants', () => {
+  const exemption = createExemption()
+  exemption.markProjectNameTaskCompleted()
+  
+  expect(exemption.projectName).to.not.be.empty
+  expect(exemption.projectNameTaskCompleted).to.be.true
+})
+```
+
+### 3. Integration Testing
+```javascript
+// Test that UI and data model agree
+it('should match UI behaviour with data model', () => {
+  // When UI shows "withhold" selected
+  const uiState = { withholdSelected: true, reasonProvided: true }
+  
+  // Data model should reflect this
+  const dataModel = mapUIToData(uiState)
+  expect(dataModel.consent).to.be.false
+  expect(dataModel.reason).to.not.be.null
+})
+```
+
+## Remember
+> "Data relationships should reflect real-world logic. If it doesn't make sense in the domain, it won't make sense in the code." - Quality Engineering Lesson
+
+The goal is data models that accurately represent business rules and maintain logical consistency across all related fields.

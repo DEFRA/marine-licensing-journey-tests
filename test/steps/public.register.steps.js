@@ -62,7 +62,7 @@ When(
   'choosing not to withhold information from the public register',
   async function () {
     this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
+      exemption.updatePublicRegister({ consent: true })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
@@ -73,7 +73,7 @@ When(
   async function () {
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({
-        consent: PublicRegisterPage.withhold,
+        consent: false,
         reason: 'Sensitive information'
       })
     )
@@ -85,7 +85,7 @@ When(
   'the Save and continue button is selected after choosing Yes without providing a reason',
   async function () {
     this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({ consent: PublicRegisterPage.withhold })
+      exemption.updatePublicRegister({ consent: false })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
@@ -96,7 +96,7 @@ When(
   async function (numberOfCharacters) {
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({
-        consent: PublicRegisterPage.withhold,
+        consent: false,
         reason: PublicRegisterModel.generateReasonExceedingMaxLength()
       })
     )
@@ -108,7 +108,7 @@ When(
   'choosing to allow information to be added to the public register',
   async function () {
     this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
+      exemption.updatePublicRegister({ consent: true })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
@@ -125,7 +125,7 @@ When(
   'completing the public register task but cancelling out',
   async function () {
     this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
+      exemption.updatePublicRegister({ consent: true })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickCancel.now())
@@ -136,7 +136,7 @@ When(
   'completing the public register task but selecting to go back',
   async function () {
     this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
+      exemption.updatePublicRegister({ consent: true })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickBack.now())
@@ -175,7 +175,7 @@ When('changing the public register information to withhold', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   this.actor.updates('exemption', (exemption) =>
     exemption.updatePublicRegister({
-      consent: PublicRegisterPage.withhold,
+      consent: false,
       reason: faker.lorem.words(5)
     })
   )
@@ -185,7 +185,7 @@ When('changing the public register information to withhold', async function () {
 When('changing the public register information to consent', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   this.actor.updates('exemption', (exemption) =>
-    exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
+    exemption.updatePublicRegister({ consent: true })
   )
   await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
 })

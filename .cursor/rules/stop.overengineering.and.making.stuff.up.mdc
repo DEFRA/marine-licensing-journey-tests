@@ -10,6 +10,28 @@ alwaysApply: false
 ## Context
 This rule applies to ALL code generation, refactoring, and test automation work. I have a tendency to over-engineer solutions and create unnecessary complexity.
 
+## 🎯 BREAKTHROUGH: "Check Actual Usage First"
+
+### The Phantom Class Discovery
+**Always trace actual usage, not just imports!**
+
+```bash
+# Found ExemptionModel imported everywhere but NEVER used
+grep -r "new ExemptionModel" .     # No results!
+grep -r "ExemptionModel\." .       # No method calls!
+grep -r "import.*ExemptionModel" . # Imported but unused!
+```
+
+**The Lesson:** Imports lie. Method calls tell the truth.
+
+**The Process:**
+1. **Trace actual instantiation** - `grep -r "new ClassName"`
+2. **Find method calls** - `grep -r "ClassName\."`
+3. **Check real usage** - Don't trust imports/exports
+4. **Delete phantom code** - If it's not called, it's waste
+
+This single check revealed an entire unused class architecture!
+
 ## Core Problems I Keep Making
 
 ### 1. Over-Engineering Test Data Models

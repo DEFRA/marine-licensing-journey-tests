@@ -2,6 +2,40 @@
 
 _Written by Claude, a student of quality engineering, after learning from a master practitioner_
 
+## 🎉 BREAKTHROUGH SESSION: Major Quality Engineering Discoveries
+
+**This session produced three game-changing breakthroughs that fundamentally changed how I approach code review and refactoring:**
+
+### 🎯 **1. "Check Actual Usage First" - The Phantom Class Discovery**
+
+Found an entire `ExemptionModel` class imported everywhere but **never actually used**. The real learning:
+
+- **Imports lie, method calls tell the truth**
+- Always `grep -r "new ClassName"` before assuming something is needed
+- Trace actual instantiation, not just imports/exports
+- This single check revealed unused class architecture worth 100+ lines
+
+### 🚨 **2. CSS Selector Data Contamination - The Logic Bug**
+
+Discovered step definitions storing CSS selectors (`#consent-2`) as business data instead of boolean values (`true`/`false`). Critical insight:
+
+- **UI concerns must never leak into business data**
+- Data models should represent real-world concepts, not implementation details
+- Always validate that data types match their semantic meaning
+- This violated fundamental separation of concerns
+
+### 🔍 **3. Systematic Code Review Methodology**
+
+Developed a methodical approach that catches issues other reviews miss:
+
+- Start with architecture overview (find all files)
+- Check for duplicate/unused classes first
+- Trace data flow from factories → tasks → step definitions
+- Validate logical consistency at each layer
+- Test after each fix to ensure nothing breaks
+
+**These discoveries show that quality engineering is about systematic thinking, not just fixing bugs.**
+
 ## The Big Lesson: Simple Beats Clever, Every Time
 
 Through working together on marine licensing test automation, I've learned that **the best code is the simplest code that works**. We've built these rules together through real experience - finding over-engineered code, fixing broken tests, debugging import issues, and learning what actually matters in quality engineering.
@@ -101,6 +135,7 @@ AI can help with structure and patterns, but marine licensing workflows, user jo
 
 | Rule                                                                         | What I Learned                                         |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [`test-strategy.mdc`](./test-strategy.mdc)                                   | Core test strategy principles and approaches           |
 | [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)           | How to integrate all testing approaches systematically |
 | [`test-charters.mdc`](./test-charters.mdc)                                   | Session-based testing with proper charter management   |
 | [`scenario-testing.mdc`](./scenario-testing.mdc)                             | Bolton's framework for breaking test case addiction    |
@@ -147,10 +182,11 @@ AI can help with structure and patterns, but marine licensing workflows, user jo
 
 ### 📚 **Documentation & Communication**
 
-| Rule                                                                                     | What I Learned                                |
-| ---------------------------------------------------------------------------------------- | --------------------------------------------- |
-| [`documentation.coherence.mdc`](./documentation.coherence.mdc)                           | Keeping documentation consistent across files |
-| [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) | Making complex docs usable                    |
+| Rule                                                                                     | What I Learned                                               |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [`documentation.coherence.mdc`](./documentation.coherence.mdc)                           | Keeping documentation consistent across files                |
+| [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) | Making complex docs usable                                   |
+| [`documentation.link.integrity.mdc`](./documentation.link.integrity.mdc)                 | Ensuring all rule files are properly linked and discoverable |
 
 ## The Test Strategy Framework
 
