@@ -3,19 +3,34 @@ import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 import Task from '../base/task.js'
 
 export default class EnsureTaskListContains extends Task {
+  static MODES = {
+    EXACTLY: 'exactly',
+    AT_LEAST: 'at-least',
+    AT_MOST: 'at-most'
+  }
+
   static exactly(count) {
-    return new EnsureTaskListContains(count)
+    return new EnsureTaskListContains(
+      count,
+      EnsureTaskListContains.MODES.EXACTLY
+    )
   }
 
   static atLeast(count) {
-    return new EnsureTaskListContains(count, 'at-least')
+    return new EnsureTaskListContains(
+      count,
+      EnsureTaskListContains.MODES.AT_LEAST
+    )
   }
 
   static atMost(count) {
-    return new EnsureTaskListContains(count, 'at-most')
+    return new EnsureTaskListContains(
+      count,
+      EnsureTaskListContains.MODES.AT_MOST
+    )
   }
 
-  constructor(count, mode = 'exactly') {
+  constructor(count, mode = EnsureTaskListContains.MODES.EXACTLY) {
     super()
     this.count = count
     this.mode = mode
@@ -35,13 +50,13 @@ export default class EnsureTaskListContains extends Task {
 
   verifyTaskCount(actualCount) {
     switch (this.mode) {
-      case 'exactly':
+      case EnsureTaskListContains.MODES.EXACTLY:
         this.checkExactCount(actualCount)
         break
-      case 'at-least':
+      case EnsureTaskListContains.MODES.AT_LEAST:
         this.checkAtLeastCount(actualCount)
         break
-      case 'at-most':
+      case EnsureTaskListContains.MODES.AT_MOST:
         this.checkAtMostCount(actualCount)
         break
     }
