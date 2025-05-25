@@ -12,6 +12,7 @@ This document acknowledges the foundational work and thought leaders whose metho
 - **"Breaking the Test Case Addiction"** series - Philosophy underlying our move from scripted to scenario-based testing
 - **Realistic user investigation** principles that guide our charter development
 - **Context-Driven Testing** school co-founder
+- **Rapid Software Testing** methodology co-founder (with James Bach)
 
 **Where we apply this work:**
 
@@ -22,7 +23,8 @@ This document acknowledges the foundational work and thought leaders whose metho
 **References:**
 
 - [Michael Bolton's blog](https://www.developsense.com/)
-- "Lessons Learned in Software Testing" (co-authored with Cem Kaner)
+- **Rapid Software Testing** methodology (co-founded with James Bach)
+- "Breaking the Test Case Addiction" blog series
 
 ### **James Bach**
 
@@ -160,12 +162,13 @@ Our **Investigative Testing** approach:
 
 - "Lessons Learned in Software Testing" - Kaner, Bach, Pettichord
 - "Perfect Software and Other Illusions About Testing" - Gerald Weinberg
-- "Rapid Software Testing" methodology - James Bach
+- **Rapid Software Testing** methodology - James Bach and Michael Bolton
 
 ### **Scenario and Exploratory Testing**
 
 - "Explore It!" - Elisabeth Hendrickson
-- Michael Bolton's "Breaking the Test Case Addiction" series
+- Michael Bolton's "Breaking the Test Case Addiction" blog series
+- **Rapid Software Testing** courses and materials - James Bach and Michael Bolton
 - "A Context-Driven Approach to Automation in Testing" - James Bach and Michael Bolton
 
 ### **Agile and Risk-Based Testing**
@@ -180,7 +183,7 @@ Our **Investigative Testing** approach:
 
 To deepen understanding of the methodologies we build upon:
 
-1. **Rapid Software Testing** courses (James Bach, Michael Bolton)
+1. **Rapid Software Testing** courses (James Bach and Michael Bolton)
 2. **Context-Driven Testing** workshops and conferences
 3. **Agile Testing** training (Elisabeth Hendrickson, Lisa Crispin)
 4. **SBTM** practice groups and communities

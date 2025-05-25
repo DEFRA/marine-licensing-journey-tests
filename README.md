@@ -124,10 +124,11 @@ Our strategy **builds upon and modernises** established testing principles, pres
 
 Our approach respectfully builds upon methodologies developed by leading testing practitioners:
 
-- **Context-Driven Testing** - _James Bach, Cem Kaner, Michael Bolton_ - Adaptive strategies that respond to domain context
+- **Context-Driven Testing** - _Cem Kaner, James Bach, Michael Bolton_ - Adaptive strategies that respond to domain context
 - **Session-Based Test Management** - _Jon Bach_ - Structured time-boxed exploration with accountability
 - **Scenario Testing** - _Michael Bolton_ - Rich, realistic user investigations that break "test case addiction"
 - **Heuristic Test Strategy Model** - _James Bach_ - Systematic thinking frameworks for test discovery
+- **Rapid Software Testing** - _James Bach, Michael Bolton_ - Methodology and training approach for effective testing
 - **Risk-Based Testing** - _Elisabeth Hendrickson, James Bach_ - Focus effort where it matters most
 - **Agile Testing Practices** - _Elisabeth Hendrickson, Janet Gregory, Lisa Crispin_ - Whole-team quality and continuous feedback
 

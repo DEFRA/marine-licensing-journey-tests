@@ -12,6 +12,8 @@ This investigative testing approach builds upon the foundational work of several
 - **Scenario Testing Framework** - The THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS structure
 - **"Breaking the Test Case Addiction"** series - Moving beyond scripted test cases to rich exploration
 - **Realistic user investigation** principles that guide our scenario-based content
+- **Context-Driven Testing** school co-founder
+- **Rapid Software Testing** methodology co-founder (with James Bach)
 
 ### **James Bach**
 
