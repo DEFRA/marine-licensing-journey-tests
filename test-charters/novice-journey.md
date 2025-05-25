@@ -101,7 +101,7 @@ Investigate the complete marine licensing exemption notification journey for use
 
 ## Evidence Framework
 
-### **Positive Signals:**
+### **✅ Positive Signals:**
 
 - **Guidance clarity** - Terminology explained in plain English, help available when needed
 - **Error prevention** - Clear guidance prevents common mistakes
@@ -109,7 +109,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - **Accessibility support** - Screen readers, keyboard navigation work effectively
 - **Confidence building** - Interface helps users feel capable of completing process
 
-### **Warning Signs:**
+### **⚠️ Warning Signs:**
 
 - **Terminology confusion** - Marine licensing terms unclear or unexplained
 - **Navigation disorientation** - Users lost in process or unsure how to proceed
@@ -117,19 +117,19 @@ Investigate the complete marine licensing exemption notification journey for use
 - **Accessibility barriers** - Screen readers, keyboard navigation fail
 - **Abandonment risk** - Users likely to give up due to complexity or confusion
 
-### **Questions to Investigate:**
+### **🤔 Questions to Investigate:**
 
-? How does the application compare to other government services novices might know?
-? What happens when users need to gather additional information mid-application?
-? How well does the interface support users who are uncertain about decisions?
-? Are there cultural or language barriers that affect comprehension?
+- How does the application compare to other government services novices might know?
+- What happens when users need to gather additional information mid-application?
+- How well does the interface support users who are uncertain about decisions?
+- Are there cultural or language barriers that affect comprehension?
 
-### **Ideas to Explore:**
+### **💡 Ideas to Explore:**
 
-! Could terminology be explained more clearly or contextually?
-! Are there opportunities for progressive disclosure of complex information?
-! How might the interface better support uncertain or anxious users?
-! What patterns from familiar services could improve the experience?
+- Could terminology be explained more clearly or contextually?
+- Are there opportunities for progressive disclosure of complex information?
+- How might the interface better support uncertain or anxious users?
+- What patterns from familiar services could improve the experience?
 
 ## Session Notes Template
 

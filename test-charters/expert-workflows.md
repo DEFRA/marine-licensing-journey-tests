@@ -98,7 +98,7 @@ Investigate how well the marine licensing application supports experienced users
 
 ## Evidence Framework
 
-### **Positive Signals:**
+### **✅ Positive Signals:**
 
 - **Keyboard navigation fluency** - Tab order logical, shortcuts work intuitively
 - **Recognition over recall** - Previous patterns easy to apply, smart suggestions available
@@ -106,7 +106,7 @@ Investigate how well the marine licensing application supports experienced users
 - **Multi-application support** - Easy to handle several projects simultaneously
 - **Professional presentation** - Interface supports confident client interaction
 
-### **Warning Signs:**
+### **⚠️ Warning Signs:**
 
 - **Efficiency barriers** - Required steps that slow down experienced users unnecessarily
 - **Pattern disruption** - Workflows that conflict with established government service conventions
@@ -114,19 +114,19 @@ Investigate how well the marine licensing application supports experienced users
 - **Multi-tab conflicts** - Session handling problems when managing multiple applications
 - **Professional friction** - Interface elements that undermine client confidence
 
-### **Questions to Investigate:**
+### **🤔 Questions to Investigate:**
 
-? How does application speed compare to other government services professionals use?
-? What happens when users need to manage multiple applications simultaneously?
-? How well does the interface support professional client interaction patterns?
-? Are there opportunities for data reuse between related applications?
+- How does application speed compare to other government services professionals use?
+- What happens when users need to manage multiple applications simultaneously?
+- How well does the interface support professional client interaction patterns?
+- Are there opportunities for data reuse between related applications?
 
-### **Ideas to Explore:**
+### **💡 Ideas to Explore:**
 
-! Could keyboard shortcuts be added for common professional workflows?
-! Are there opportunities for smart defaults based on user behaviour patterns?
-! How might the interface better support multi-application management?
-! What efficiency features would enhance professional confidence?
+- Could keyboard shortcuts be added for common professional workflows?
+- Are there opportunities for smart defaults based on user behaviour patterns?
+- How might the interface better support multi-application management?
+- What efficiency features would enhance professional confidence?
 
 ## Session Notes Template
 

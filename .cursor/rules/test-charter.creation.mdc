@@ -1,0 +1,134 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Test Charter Creation and Management
+
+## Context
+This rule captures learnings from restructuring the marine licensing test charter library from story-based to theme-based charters, providing guidance for creating effective investigative testing plans.
+
+## Core Principles
+
+### Theme-Based Charter Design
+- **Focus on testing themes** rather than individual user stories
+- **One theme per charter** - single testing concern (novice experience, efficiency, form behaviour)
+- **Cross-feature coverage** - test multiple delivered features together in realistic workflows
+- **Persona alignment** - themes should clearly serve specific user types and their needs
+
+### Delivered Features Focus
+- **Test what exists, not what's planned** - charters should only cover delivered functionality
+- **State delivered features clearly** - each charter must list which features it covers
+- **Cross-feature integration** - most valuable insights come from testing how features work together
+- **Real user workflows** - structure around authentic user behaviour patterns, not technical test steps
+
+## Charter Structure Standards
+
+### Investigation Plan Framework
+Use this consistent structure for all charters:
+```
+EXPLORE: [Area of application or workflow]
+AS: [Type of user - specific persona]
+BECAUSE: [What you're concerned about or want to validate]
+LOOKING FOR: [Types of problems or insights you hope to find]
+```
+
+### Session Parameters
+- **Duration: 60-90 minutes** - keep sessions practical and focused
+- **Priority: High/Medium/Low** - based on risk and user impact
+- **Personas: Specific users** - Zofia (Novice), Amy (Veteran), Fatima (Case Officer), Simon (Marine Officer)
+
+### Evidence Framework
+Use emoji headers for clear visual scanning:
+- **✅ Positive Signals** - what good looks like
+- **⚠️ Warning Signs** - problems and barriers to watch for
+- **🤔 Questions to Investigate** - areas of uncertainty to explore
+- **💡 Ideas to Explore** - improvement opportunities and innovations
+
+### Content Quality Standards
+- **Realistic pressures** - include authentic environmental and cognitive pressures
+- **Actionable evidence** - focus on insights that lead to specific improvements
+- **Session notes template** - provide practical documentation structure
+- **Delivered features reference** - link to actual feature files and user stories
+
+## Charter Lifecycle Management
+
+### Release-Driven Updates
+- **Refresh charters with every release** to ensure alignment with current functionality
+- **New features** → create new charters to investigate user experience and integration
+- **Changed features** → update existing charters to reflect new behaviour and workflows
+- **Removed features** → archive obsolete charters to maintain focus on delivered functionality
+
+### User Feedback Integration
+- **Adjust priorities** based on real user insights and support queries
+- **Update scenarios** based on observed user behaviour patterns
+- **Refine evidence frameworks** based on what investigations actually discover
+
+## Anti-Patterns to Avoid
+
+### ❌ Story-by-Story Charters
+- Creates too many granular documents
+- Increases cognitive overhead for investigators
+- Misses cross-feature integration issues
+- **Instead**: Group related functionality into meaningful themes
+
+### ❌ Testing Planned Features
+- Charters become outdated when plans change
+- Investigators waste time on non-existent functionality
+- **Instead**: Focus exclusively on delivered, testable features
+
+### ❌ Abstract Test Scenarios
+- Technical test steps don't reflect real user behaviour
+- Miss authentic user pressures and environmental factors
+- **Instead**: Structure around realistic user behaviour patterns and pressures
+
+### ❌ Complex Evidence Notation
+- Cryptic symbols (+/-/?/!) reduce readability
+- Make documentation harder to scan during sessions
+- **Instead**: Use clear emoji headers and standard bullet points
+
+### ❌ Fixed Charter Library
+- Charters become stale and disconnected from actual system
+- Miss opportunities to investigate new functionality
+- **Instead**: Evolve charters continuously with system changes
+
+## Implementation Guidelines
+
+### When Creating New Charters
+1. **Identify the testing theme** - what specific concern does this address?
+2. **Map to delivered features** - which actual features will be tested?
+3. **Select primary personas** - who are the main users for this theme?
+4. **Define realistic scenarios** - what authentic pressures and workflows apply?
+5. **Structure evidence framework** - what signals, warnings, questions, and ideas are relevant?
+
+### When Updating Existing Charters
+1. **Review delivered features** - what has changed since last update?
+2. **Update scenarios** - do activities still reflect current functionality?
+3. **Refresh evidence framework** - are we looking for the right signals?
+4. **Validate persona alignment** - do scenarios still serve the intended users?
+
+### Charter Review Triggers
+- **Every release** - systematic review of all charters
+- **User feedback** - when support queries suggest charter gaps
+- **Feature changes** - when delivered functionality changes significantly
+- **Investigation insights** - when sessions reveal charter improvements needed
+
+## Success Indicators
+
+### Effective Charter Library
+- **Investigators can quickly select** appropriate charters for current concerns
+- **Sessions consistently discover** actionable insights about user experience
+- **Charters remain current** with delivered functionality
+- **Cross-feature integration issues** are identified through realistic workflows
+
+### Quality Investigation Sessions
+- **60-90 minute duration** allows thorough but focused exploration
+- **Realistic scenarios** reveal authentic user experience issues
+- **Evidence collection** leads to specific improvement actions
+- **Documentation** supports follow-up work and automation planning
+
+## Related Rules
+- **investigative-testing** - overall framework and methodology
+- **personas** - user types and realistic pressures
+- **test-strategy** - integration with broader testing approach
+- **user.stories.and.test.coverage** - alignment with delivered functionality

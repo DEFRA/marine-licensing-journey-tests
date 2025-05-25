@@ -116,7 +116,7 @@ Investigate how well form interactions work across the marine licensing applicat
 
 ## Evidence Framework
 
-### **Positive Signals:**
+### **✅ Positive Signals:**
 
 - **Validation clarity** - Error messages are helpful and actionable
 - **Interaction fluency** - Forms respond predictably to user input
@@ -124,7 +124,7 @@ Investigate how well form interactions work across the marine licensing applicat
 - **State preservation** - Form data maintained appropriately during navigation
 - **Conditional logic clarity** - Dynamic behaviour is obvious and expected
 
-### **Warning Signs:**
+### **⚠️ Warning Signs:**
 
 - **Validation confusion** - Error messages unclear or unhelpful
 - **Interaction friction** - Forms behave unexpectedly or inconsistently
@@ -132,19 +132,19 @@ Investigate how well form interactions work across the marine licensing applicat
 - **Data loss risk** - Form information lost during navigation or errors
 - **Conditional logic problems** - Dynamic behaviour confusing or broken
 
-### **Questions to Investigate:**
+### **🤔 Questions to Investigate:**
 
-? How do validation patterns compare across different forms?
-? What happens when users interact with forms in unexpected ways?
-? How well do forms work with assistive technology and different input methods?
-? Are there consistency issues in form behaviour across the application?
+- How do validation patterns compare across different forms?
+- What happens when users interact with forms in unexpected ways?
+- How well do forms work with assistive technology and different input methods?
+- Are there consistency issues in form behaviour across the application?
 
-### **Ideas to Explore:**
+### **💡 Ideas to Explore:**
 
-! Could validation feedback be more helpful or timely?
-! Are there opportunities to prevent common user errors?
-! How might conditional logic be made clearer or more intuitive?
-! What form interaction patterns could improve efficiency?
+- Could validation feedback be more helpful or timely?
+- Are there opportunities to prevent common user errors?
+- How might conditional logic be made clearer or more intuitive?
+- What form interaction patterns could improve efficiency?
 
 ## Session Notes Template
 
