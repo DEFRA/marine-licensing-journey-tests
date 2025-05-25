@@ -3,25 +3,14 @@
 > **🎯 Simple Approach**  
 > **60-90 minute sessions** where **domain experts explore** realistic user scenarios to discover insights automation cannot find.
 
-## 🚀 Quick Start (Pick Your Experience Level)
+## 📚 Investigative Testing Resources
 
-### **🆕 Never Done This Before?**
+Choose the guidance that matches your needs:
 
-1. **This week**: Read [Simple Framework](#-simple-investigation-framework) (5 minutes)
-2. **Next week**: Try first 60-minute session on familiar workflow
-3. **Document 2-3 findings** and share with team
-
-### 🧠 **Ready for More Structure?**
-
-1. **Use detailed scenarios**: See [Investigation Examples](./investigative-testing-examples.md)
-2. **Apply systematic thinking**: See [Advanced Techniques](./investigative-testing-advanced.md)
-3. **Integrate with team workflow**
-
-### **🎯 Want to Lead Team Sessions?**
-
-1. **Facilitate domain expert sessions** using [Session Templates](./investigative-testing-templates.md)
-2. **Connect findings to automation** improvements
-3. **Track investigation effectiveness** and refine approach
+- **[Investigation Examples](./investigative-testing-examples.md)** - Comprehensive scenario scripts with specific activities for different user types and situations
+- **[Advanced Techniques](./investigative-testing-advanced.md)** - Systematic heuristics and integration with HTSM for experienced practitioners
+- **[Session Templates](./investigative-testing-templates.md)** - Ready-to-use documentation and planning templates for facilitating sessions
+- **[Attribution & Foundations](./investigative-testing-attribution.md)** - Acknowledgments to testing thought leaders and theoretical foundations
 
 ## 🎭 What is Investigative Testing?
 
