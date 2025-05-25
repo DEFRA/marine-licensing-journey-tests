@@ -53,15 +53,23 @@ Then the project name is displayed on the Public register page
 - **When** → User **Tasks**
 - **Then** → **Interactions** with `ensure` prefix
 
-```gherkin
-Given the project name page is displayed
-# → ApplyForExemption.where(ProjectNamePage.url)
+### Real Step Definition Examples
 
-When entering and saving a project with a valid name
-# → CompleteProjectName.with(this.actor.recalls('projectName'))
+```javascript
+// Given step - Setup context
+Given('the project name page is displayed', async function () {
+  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+})
 
-Then the error "Enter the project name" is displayed
-# → EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
+// When step - User action
+When('entering and saving a project with a valid name', async function () {
+  await this.actor.attemptsTo(CompleteProjectName.with('My Project'))
+})
+
+// Then step - Verification
+Then('the task list page is displayed', async function () {
+  await this.actor.attemptsTo(EnsureThatPageHeading.is('My Project'))
+})
 ```
 
 ## Quality Standards
