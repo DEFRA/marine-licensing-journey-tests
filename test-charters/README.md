@@ -100,6 +100,10 @@ Priority: [High/Medium/Low based on risk and user impact]
 - **[Testing Heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
 - **[Feature Files](../test/features/)** - Automated test scenarios that validate delivered functionality
 
+## 🛠️ Testing Tools & Resources
+
+- **[Big List of Naughty Strings](https://github.com/minimaxir/big-list-of-naughty-strings)** - Comprehensive collection of problematic input strings for testing form validation and edge cases
+
 ---
 
 _Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how delivered features actually serve marine licensing users under authentic conditions._
