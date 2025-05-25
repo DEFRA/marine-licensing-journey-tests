@@ -49,13 +49,6 @@ Test data tools also support investigative testing:
 
 _Self-sufficient test data supports both automated reliability and investigative flexibility._
 
-## 🚧 Coming Soon
-
-This section is under development. For now, refer to:
-
-- **[Code Generation rules](../../.cursor/rules/code.generation.mdc)** - Test data guidance (#12)
-- **[Automation Approach](../automation/README.md)** - For test data patterns and reliability strategies
-
 ## 🎯 Planned Content
 
 This section will cover:
