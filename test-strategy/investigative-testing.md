@@ -11,15 +11,15 @@
 2. **Next week**: Try first 60-minute session on familiar workflow
 3. **Document 2-3 findings** and share with team
 
-### **🧠 Ready for More Structure?**
+### 🧠 **Ready for More Structure?**
 
-1. **Use detailed scenarios**: See [Investigation Examples](./EXAMPLES.md)
-2. **Apply systematic thinking**: See [Advanced Techniques](./ADVANCED.md)
-3. **Integrate with team workflow**: Plan regular sessions
+1. **Use detailed scenarios**: See [Investigation Examples](./investigative-testing-examples.md)
+2. **Apply systematic thinking**: See [Advanced Techniques](./investigative-testing-advanced.md)
+3. **Integrate with team workflow**
 
 ### **🎯 Want to Lead Team Sessions?**
 
-1. **Facilitate domain expert sessions** using [Session Templates](./TEMPLATES.md)
+1. **Facilitate domain expert sessions** using [Session Templates](./investigative-testing-templates.md)
 2. **Connect findings to automation** improvements
 3. **Track investigation effectiveness** and refine approach
 
@@ -110,7 +110,7 @@ LOOKING FOR: Guidance gaps, terminology issues, validation problems
 - Test with poor internet connectivity
 - **Look for**: Progress preservation, error recovery, device compatibility
 
-> **📚 Detailed Scenarios**: See [Investigation Examples](./EXAMPLES.md) for comprehensive scenario scripts
+> **📚 Detailed Scenarios**: See [Investigation Examples](./investigative-testing-examples.md) for comprehensive scenario scripts
 
 ## 📝 Simple Documentation
 
@@ -221,10 +221,10 @@ BDD Automated Tests          Investigation Sessions       Combined Result
 
 ## 📚 More Resources
 
-- **[Detailed Investigation Examples](./EXAMPLES.md)** - Comprehensive scenario scripts with specific activities
-- **[Advanced Techniques](./ADVANCED.md)** - Systematic heuristics and integration with HTSM
-- **[Session Templates](./TEMPLATES.md)** - Ready-to-use documentation and planning templates
-- **[Attribution & Foundations](./ATTRIBUTION.md)** - Acknowledgments to testing thought leaders
+- **[Detailed Investigation Examples](./investigative-testing-examples.md)** - Comprehensive scenario scripts with specific activities
+- **[Advanced Techniques](./investigative-testing-advanced.md)** - Systematic heuristics and integration with HTSM
+- **[Session Templates](./investigative-testing-templates.md)** - Ready-to-use documentation and planning templates
+- **[Attribution & Foundations](./investigative-testing-attribution.md)** - Acknowledgments to testing thought leaders
 
 ---
 

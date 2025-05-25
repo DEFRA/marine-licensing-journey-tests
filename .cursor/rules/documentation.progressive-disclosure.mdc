@@ -195,6 +195,135 @@ ADVANCED.md (if needed)
 ❌ **Theory-heavy sections** - Extensive background before actionable content
 ❌ **Missing timeframes** - Vague guidance without specific next steps
 
+## Folder Structure & Navigation Usability
+
+### **Key Learning: Complexity Creates Barriers**
+**Folder structure complexity can be a barrier to usability.** When documentation is spread across many subdirectories, it creates navigation friction and cognitive overhead that prevents teams from actually using the guidance.
+
+### **Flat vs Nested Structure Trade-offs**
+
+**❌ Over-nested Structure Problems:**
+- **Discovery friction** - Users can't see what's available without deep exploration
+- **Cognitive overhead** - Mental effort spent navigating rather than consuming content
+- **Link complexity** - References become brittle and hard to maintain
+- **Maintenance burden** - Updates require changes across multiple directory levels
+
+**✅ Flat Structure Benefits:**
+- **Immediate visibility** - All content discoverable in single directory view
+- **Reduced cognitive load** - Focus on content rather than navigation
+- **Reliable linking** - Simple, predictable file references
+- **Easier maintenance** - Straightforward content organisation
+
+### **When to Consolidate Directory Structure**
+
+**Triggers for consolidation:**
+- **More than 3 directory levels** for documentation
+- **Many README.md files** that just point elsewhere
+- **Frequent navigation confusion** in team feedback
+- **Maintenance friction** when updating cross-references
+
+**Consolidation approach:**
+1. **Preserve all content** - Nothing should be lost in consolidation
+2. **Flatten to topic-based files** - One primary topic per file
+3. **Use descriptive filenames** - Clear, searchable file naming
+4. **Maintain logical grouping** - Related content stays together through naming patterns
+
+### **Practical Consolidation Pattern**
+
+**Before consolidation:**
+```
+strategy/
+├── investigative-testing/
+│   ├── README.md
+│   ├── EXAMPLES.md
+│   ├── ADVANCED.md
+│   └── TEMPLATES.md
+├── automation/
+│   └── README.md
+└── domain-context/
+    └── README.md
+```
+
+**After consolidation:**
+```
+strategy/
+├── README.md (main entry point)
+├── investigative-testing.md
+├── investigative-testing-examples.md
+├── investigative-testing-advanced.md
+├── investigative-testing-templates.md
+├── automation.md
+└── domain-context.md
+```
+
+**Benefits achieved:**
+- **One-glance overview** of all available strategy content
+- **Simple file references** in links and documentation
+- **Reduced maintenance** for cross-references
+- **Better discoverability** for new team members
+
+### **Structure Usability Guidelines**
+
+1. **Prefer descriptive filenames over directory nesting** for documentation
+2. **Use consistent naming patterns** to maintain logical grouping
+3. **Keep directory depth to 2 levels maximum** for documentation trees
+4. **Test navigation with new team members** to identify friction points
+5. **Monitor maintenance overhead** as indicator of over-complexity
+
+## Comprehensive Link Verification
+
+### **Key Learning: Verify ALL Links, Don't Sample**
+When restructuring documentation or consolidating folders, **comprehensive link verification is essential**. Sampling links creates risk of broken references that users will encounter, requiring manual discovery and fixing.
+
+### **Systematic Link Verification Process**
+
+**For documentation restructuring:**
+1. **Extract all markdown links** from affected files using grep or similar tools
+2. **Verify each internal link** points to existing files at correct paths
+3. **Check section anchors** work correctly (e.g., `#-simple-investigation-sessions`)
+4. **Test external links** where practical and relevant
+5. **Verify relative path accuracy** after folder structure changes
+
+**Link verification commands:**
+```bash
+# Find all markdown links in documentation
+grep -r "\](" docs/ --include="*.md"
+
+# Check for broken internal links (files that don't exist)
+grep -o "\]\(\.\/[^)]*\)" docs/*.md | while read link; do
+  file=$(echo $link | sed 's/](\.\///' | sed 's/)//')
+  [ ! -f "docs/$file" ] && echo "BROKEN: $link"
+done
+```
+
+### **Common Link Verification Oversights**
+
+**❌ Verification gaps that cause problems:**
+- **Sampling instead of comprehensively checking** - Missing broken links
+- **Not testing anchor links** - Section references that don't work
+- **Ignoring relative path changes** - Links that worked before consolidation break
+- **Skipping cross-reference verification** - Files that reference each other
+
+**✅ Comprehensive verification includes:**
+- **Every single markdown link** in all affected files
+- **Section anchor accuracy** for internal navigation
+- **Relative path correctness** after structural changes
+- **Bidirectional references** between related files
+
+### **Link Health Maintenance**
+
+**Regular verification practices:**
+- **Include link checking in documentation reviews**
+- **Automate link verification where possible** in CI/CD pipelines
+- **Test navigation paths** with fresh eyes (new team members)
+- **Document link patterns** for consistency across files
+
+**Quality indicators:**
+- [ ] All internal links resolve to existing files
+- [ ] Section anchors work correctly
+- [ ] Relative paths accurate after restructuring
+- [ ] No orphaned references from old structure
+
 ## Integration with Existing Rules
 
 ### **Works Alongside**
