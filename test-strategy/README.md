@@ -91,28 +91,6 @@
               ✅ CONTINUOUS IMPROVEMENT LOOP ✅
 ```
 
-### **Team Activity Flow**
-
-```
-🗓️ SPRINT RHYTHM
-
-Week 1-2: Foundation Building
-├── 🤖 Quality Engineering: Build/maintain automation
-├── 🌊 Domain Experts: Run investigation sessions
-└── 👥 Team: Review findings, plan improvements
-
-Week 3-4: Integration & Refinement
-├── 🤖 Add automation for investigation discoveries
-├── 🔍 Investigate areas where automation struggles
-└── 📊 Measure success indicators, adjust approach
-
-📋 DAILY FLOW
-Morning: Check automation health (5 mins)
-Development: TDD with automation-first mindset
-Blockers: Investigation session for unclear requirements
-Review: Share findings, update automation
-```
-
 ### **Success Feedback Loops**
 
 ```
