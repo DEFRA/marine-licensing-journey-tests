@@ -1,5 +1,5 @@
-import Task from '../base/task.js'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
+import Task from '../base/task.js'
 
 export default class CompleteProjectName extends Task {
   static with(projectName) {
@@ -18,5 +18,11 @@ export default class CompleteProjectName extends Task {
       this.projectName
     )
     await browseTheWeb.click(ProjectNamePage.saveAndContinue)
+
+    const exemption = actor.recalls('exemption')
+    if (exemption) {
+      exemption.projectNameTaskCompleted = true
+      actor.remembers('exemption', exemption)
+    }
   }
 }

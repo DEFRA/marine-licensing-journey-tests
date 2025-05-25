@@ -28,6 +28,12 @@ export default class CompletePublicRegisterTask extends Task {
     }
     if (this.saveAndContinue) {
       await browseTheWeb.click(PublicRegisterPage.saveAndContinue)
+
+      const exemption = actor.recalls('exemption')
+      if (exemption) {
+        exemption.publicRegisterTaskCompleted = true
+        actor.remembers('exemption', exemption)
+      }
     }
   }
 }

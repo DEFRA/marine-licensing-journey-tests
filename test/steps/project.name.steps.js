@@ -27,7 +27,7 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
     await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('projectName'))
+      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
     )
   }
 )
@@ -35,16 +35,16 @@ Given(
 When('entering and saving a project with a valid name', async function () {
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('projectName'))
+    CompleteProjectName.with(this.actor.recalls('exemption').projectName)
   )
 })
 
 When(
   'entering and saving the project with name {string}',
   async function (projectName) {
-    this.actor.remembers('projectName', projectName)
+    this.actor.remembers('exemption', { projectName })
     await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('projectName'))
+      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
     )
   }
 )
@@ -53,7 +53,7 @@ When('the project name is updated', async function () {
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('projectName'))
+    CompleteProjectName.with(this.actor.recalls('exemption').projectName)
   )
 })
 
@@ -65,13 +65,13 @@ Then('the error {string} is displayed', async function (errorMessage) {
 
 Then('the project name is pre-populated', async function () {
   await this.actor.attemptsTo(
-    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+    EnsureThatProjectName.is(this.actor.recalls('exemption').projectName)
   )
 })
 
 Then('the new project name is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(
-    EnsureThatProjectName.is(this.actor.recalls('projectName'))
+    EnsureThatProjectName.is(this.actor.recalls('exemption').projectName)
   )
 })
