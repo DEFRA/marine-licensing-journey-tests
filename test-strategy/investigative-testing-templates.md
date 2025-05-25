@@ -267,29 +267,31 @@ REALISTIC VARIATIONS:
 
 ## 📊 Session Planning Templates
 
-### **Sprint Investigation Planner**
+### **Work Investigation Planner**
+
+**Template for planning investigation activities within Kanban workflow:**
 
 ```
-SPRINT INVESTIGATION PLANNING
+WORK INVESTIGATION PLANNING
 
-Sprint: [Sprint number/name]
+Current Focus: [Current work items/features in progress]
 Investigation capacity: [Available time/people]
 Priority areas: [High-risk areas needing investigation]
 
-INVESTIGATION SCHEDULE:
-Week 1: [Area 1 - who, when, duration]
-Week 2: [Area 2 - who, when, duration]
-Week 3: [Area 3 - who, when, duration]
+INVESTIGATION QUEUE:
+□ [Work Item 1] - [Investigation type, who, estimated duration]
+□ [Work Item 2] - [Investigation type, who, estimated duration]
+□ [Work Item 3] - [Investigation type, who, estimated duration]
 
-INTEGRATION WITH DEVELOPMENT:
-□ New feature investigations planned before release
+INTEGRATION WITH WORKFLOW:
+□ New feature investigations planned before "Done"
 □ High-risk area sessions scheduled
 □ Automation gap investigations included
 □ Cross-functional team involvement arranged
 
 SUCCESS CRITERIA:
-□ [Number] investigation sessions completed
-□ [Number] actionable findings documented
+□ Investigation sessions completed for each work item
+□ Actionable findings documented
 □ Findings integrated into automation or user guidance
 □ Risk areas validated before release
 ```

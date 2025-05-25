@@ -252,7 +252,7 @@ TO DISCOVER: [Types of issues or insights you're seeking]
 
 ### **Integration with Team Workflow**
 
-- **Sprint planning**: Choose examples that match current development focus
+- **Work planning**: Choose examples that match current development focus
 - **Risk areas**: Use examples that explore your highest concern areas
 - **User feedback**: Adapt examples based on real support queries and user reports
 - **Release preparation**: Select examples that validate release readiness

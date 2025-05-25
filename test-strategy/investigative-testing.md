@@ -142,7 +142,7 @@ BDD Automated Tests          Investigation Sessions       Combined Result
 
 ### **Planning Investigation Sessions**
 
-- **Sprint planning** - Include investigation time for new features
+- **Work planning** - Include investigation time for new features
 - **Release preparation** - Risk-focused sessions before major releases
 - **User feedback response** - Investigate reported problems systematically
 - **Regular rhythm** - Monthly investigation of different application areas

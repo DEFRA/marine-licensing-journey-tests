@@ -20,7 +20,7 @@
 ### **👨‍💼 For Project Managers**
 
 1. Review [Success Measures](#-success-measures) to understand quality indicators
-2. Include investigation time in sprint planning
+2. Include investigation time in work planning
 3. Track automation health + investigation insights
 
 ### **🆕 For New Team Members**
