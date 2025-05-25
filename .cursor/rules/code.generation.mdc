@@ -51,4 +51,6 @@ alwaysApply: true
 
 19. **No emojis in ASCII tables** - Variable emoji widths break column alignment in tables. Use clean text for headers and cells, place emojis in surrounding text instead.
 20. **Test table alignment** - Verify ASCII tables render correctly in different terminals and editors before finalising documentation.
+21. **Default to simplicity and conciseness** - Avoid over-zealous section creation. Challenge whether new sections are truly needed or if content overlaps with existing sections.
+22. **Prevent content duplication** - Before adding new sections, check if the information fits better in existing sections or replaces redundant content.
 
