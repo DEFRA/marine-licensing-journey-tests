@@ -29,6 +29,14 @@
 2. **Understand context**: [Domain Context](./domain-context/README.md) (20 minutes)
 3. **Pick your role**: Follow relevant path above
 
+## 🎯 Key Principles
+
+1. **Context-driven testing** - Strategy adapts to marine licensing domain needs
+2. **Automation-first foundation** - Reliable regression protection and fast feedback
+3. **Strategic human insight** - Investigation where domain expertise matters most
+4. **Whole-team quality** - Testing is everyone's responsibility
+5. **Evidence-based decisions** - Data and metrics guide testing investments
+
 ## 📋 Current Focus: Private Beta Exemption Notifications
 
 **What we're building**: Public exemption notification service for Marine Management Organisation (MMO)
@@ -107,14 +115,6 @@
 | **[BDD Rules](../.cursor/rules/bdd.rules.mdc)**                   | Living documentation practices           | **QE**: Clear scenario writing guidelines                               |
 | **[User Stories](../.cursor/user-stories/README.md)**             | Real user needs and acceptance criteria  | **PM**: Planning and requirements traceability                          |
 | **[Test Charters](../test-charters/README.md)**                   | Systematic exploration guidance          | **Domain Experts**: Specific scenarios. **QE**: Investigation structure |
-
-## 🎯 Key Principles
-
-1. **Context-driven testing** - Strategy adapts to marine licensing domain needs
-2. **Automation-first foundation** - Reliable regression protection and fast feedback
-3. **Strategic human insight** - Investigation where domain expertise matters most
-4. **Whole-team quality** - Testing is everyone's responsibility
-5. **Evidence-based decisions** - Data and metrics guide testing investments
 
 ## 📊 Success Measures
 
