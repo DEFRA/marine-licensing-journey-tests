@@ -41,14 +41,14 @@ export default class ApplyForExemption {
 
   static withConsentToPublicRegister() {
     return this.createExemption({
-      publicRegister: { consent: '#consent-2' }
+      publicRegister: { consent: true }
     })
   }
 
   static withWithholdFromPublicRegister() {
     return this.createExemption({
       publicRegister: {
-        consent: '#consent',
+        consent: false,
         reason: PublicRegisterModel.generateWithholdingReason()
       }
     })
@@ -57,7 +57,7 @@ export default class ApplyForExemption {
   static withWithholdFromPublicRegisterButNoReason() {
     return this.createExemption({
       publicRegister: {
-        consent: '#consent',
+        consent: false,
         reason: ''
       }
     })
@@ -66,7 +66,7 @@ export default class ApplyForExemption {
   static withWithholdReasonThatIsTooLong() {
     return this.createExemption({
       publicRegister: {
-        consent: '#consent',
+        consent: false,
         reason: PublicRegisterModel.generateOversizedReason()
       }
     })
@@ -85,7 +85,7 @@ export default class ApplyForExemption {
   static withTemporaryChanges() {
     return this.createExemption({
       publicRegister: {
-        consent: 'yes',
+        consent: true,
         reason: 'This will not be saved'
       },
       isTemporary: true

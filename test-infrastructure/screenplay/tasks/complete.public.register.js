@@ -18,7 +18,10 @@ export default class CompletePublicRegisterTask extends Task {
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     const browseTheWeb = actor.ability
-    await browseTheWeb.click(exemption.publicRegister.consent)
+    const consentSelector = PublicRegisterPage.getConsentSelector(
+      exemption.publicRegister.consent
+    )
+    await browseTheWeb.click(consentSelector)
     if (
       exemption.publicRegister.reason &&
       exemption.publicRegister.reason.length > 0

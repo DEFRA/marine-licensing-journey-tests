@@ -2,21 +2,33 @@ export default class MemoryFormatter {
   static formatForDisplay(memory) {
     const formatted = { ...memory }
 
-    if ('publicRegisterChoice' in formatted) {
-      formatted.publicRegisterChoice = this.formatPublicRegisterChoice(
-        formatted.publicRegisterChoice
-      )
+    if (
+      'exemption' in formatted &&
+      formatted.exemption?.publicRegister?.consent !== undefined
+    ) {
+      formatted.exemption = {
+        ...formatted.exemption,
+        publicRegister: {
+          ...formatted.exemption.publicRegister,
+          consent: this.formatPublicRegisterChoice(
+            formatted.exemption.publicRegister.consent
+          )
+        }
+      }
     }
 
     return formatted
   }
 
   static formatPublicRegisterChoice(value) {
-    if (value.includes('consent-2')) {
+    if (value === true) {
       return 'Allow information to be added to the public register'
     }
-    if (value.includes('consent')) {
+    if (value === false) {
       return 'Withhold information from the public register'
+    }
+    if (value === null) {
+      return 'No choice made'
     }
     return value
   }

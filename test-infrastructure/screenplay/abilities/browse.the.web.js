@@ -8,6 +8,10 @@ export default class BrowseTheWeb extends Ability {
     this.browser = browser
   }
 
+  static using(browser) {
+    return new BrowseTheWeb(browser)
+  }
+
   async navigateTo(url) {
     await this.browser.url(url)
   }

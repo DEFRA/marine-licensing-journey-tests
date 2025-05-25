@@ -15,7 +15,7 @@ import {
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
-  this.actor.can(new BrowseTheWeb(browser))
+  this.actor.can(BrowseTheWeb.using(browser))
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
 })
 
@@ -23,7 +23,7 @@ Given(
   'a notification has been created with a valid project name',
   async function () {
     this.actor = new Actor('Alice')
-    this.actor.can(new BrowseTheWeb(browser))
+    this.actor.can(BrowseTheWeb.using(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
     await this.actor.attemptsTo(CompleteProjectName.now())
