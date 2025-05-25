@@ -7,6 +7,9 @@
 - **Structure**: Always use Given-When-Then in that order, no repetition
 - **Brevity**: Keep scenarios under 10 steps
 - **Step Integrity**: Given = setup, When = action, Then = verification
+- **Business Value**: Titles clearly describe the business value being delivered
+- **Domain Context**: Use realistic marine licensing terminology and workflows
+- **User-Centred**: Cover important journeys from personas (Zofia, Amy, Fatima)
 
 ## Marine Licensing Example
 
@@ -44,20 +47,6 @@ Then the task list page is displayed
 Then the "Public register" task status is "Completed"
 Then the project name is displayed on the Public register page
 ```
-
-## Quality Standards
-
-✅ Title clearly describes business value
-
-✅ Steps follow Given-When-Then order
-
-✅ Each scenario tests one specific behaviour
-
-✅ Language accessible to domain experts
-
-✅ Realistic marine licensing context
-
-✅ Covers important user journeys from personas
 
 ## Common Patterns
 
