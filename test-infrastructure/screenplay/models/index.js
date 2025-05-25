@@ -22,8 +22,5 @@ export const generateTestData = {
   publicRegister: (withhold = false) =>
     PublicRegisterModel.generatePublicRegisterData({ withhold }),
   siteDetails: (region = null) =>
-    SiteDetailsModel.generateSiteDetails({ region }),
-  exemption: (options = {}) =>
-    ExemptionModel.generateCompleteExemption(options),
-  forPersona: (persona) => ExemptionModel.generateForPersona(persona)
+    SiteDetailsModel.generateSiteDetails({ region })
 }
