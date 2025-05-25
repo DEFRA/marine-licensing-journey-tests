@@ -1,322 +1,285 @@
-# Cursor Rules - Master Index
+# What I've Learned: A Quality Engineer's Student Guide
 
-This directory contains the complete set of rules and guidelines for the Marine Licensing Journey Tests project. These rules ensure consistency, quality, and maintainability across the codebase.
+_Written by Claude, a student of quality engineering, after learning from a master practitioner_
 
-**📖 For practical guidance on using these rules together, see [examples.md](examples.md) - it shows how different rules combine for common scenarios like writing code, planning test strategy, creating documentation, and more.**
+## The Big Lesson: Simple Beats Clever, Every Time
 
-## Rule Files Overview
+Through working together on marine licensing test automation, I've learned that **the best code is the simplest code that works**. We've built these rules together through real experience - finding over-engineered code, fixing broken tests, debugging import issues, and learning what actually matters in quality engineering.
 
-### 🎯 **Testing Strategy & Approach**
+> "As little as possible, as much as necessary" - Shane Kelly
 
-#### **[Modern Test Strategy](../../test-strategy/README.md)** 🆕
+This isn't just about refactoring. It's about **thinking like a quality engineer** across development, analysis, coding, debugging, and testing.
 
-**Contemporary Quality Engineering Approach**
+## Core Principles I've Learned
 
-- Modern testing philosophy with heuristic-driven exploration
-- Automation-first strategies with intelligent human insight
-- Context-driven testing adapted to marine licensing domain
-- Evidence-based quality engineering practices
-- Integration of traditional principles with modern outcomes
+### 1. **Always Check Actual Usage First**
 
-**Key Components:**
+Before building anything, grep for it. Before documenting features, verify they exist. Before creating comprehensive APIs, check what's actually needed.
 
-- **[Testing Heuristics](../../test-strategy/heuristics.md)** - HTSM and systematic exploration
-- **[Automation Approach](../../test-strategy/automation.md)** - Test pyramid and quality engineering
-- **[Domain Context](../../test-strategy/domain-context.md)** - Marine licensing reality
-- **[Investigative Testing](../../test-strategy/investigative-testing.md)** - Session-based investigation
-- **[Accessibility Testing](../../test-strategy/accessibility.md)** - Inclusive design and GOV.UK compliance
-- **[Security Testing](../../test-strategy/security.md)** - Security-by-design and threat testing
-- **[Test Data Management](../../test-strategy/test-data.md)** - Data strategies for reliable automation
-- **[Quality Coaching](../../test-strategy/coaching.md)** - Skills development and knowledge sharing
-- **[BDD Rules](../../test-strategy/bdd-rules.md)** - Living documentation practices
-- **[Team Presentation](../../test-strategy/team-presentation.md)** - 30-minute session introducing investigative testing approach
+**The Pattern**: `grep -r "methodName" .` before writing `methodName()`
 
-#### [`test-strategy.integration.mdc`](./test-strategy.integration.mdc) 🆕
+### 2. **YAGNI is Sacred**
 
-**Test Strategy Integration Rule**
+You Aren't Gonna Need It. I learned this the hard way when we found:
 
-- Directive for AI assistants to use the comprehensive test strategy documentation
-- Guidelines for when and how to apply different strategy components
-- Examples of usage for test planning, implementation, and improvement
-- Key principles and authoritative source guidance for testing decisions
+- 309-line models with 2 used methods
+- READMEs documenting non-existent features
+- Factory classes with 11 methods where only 4 were called
+- Comprehensive test scenarios that no tests actually used
 
-#### [`scenario-testing.mdc`](./scenario-testing.mdc) 🆕
+### 3. **Documentation Must Match Reality**
 
-**Scenario Testing Methodology - Bolton's Framework**
+The most dangerous documentation is the kind that describes features that don't exist. I learned to audit code before writing docs, not the other way around.
 
-- Michael Bolton's approach to breaking test case addiction
-- THEME, SETUP, ACTIVITIES, ORACLES, VARIATIONS framework
-- Marine licensing context implementation with realistic pressures
-- Evidence collection and problem classification systems
-- Integration with session-based testing and persona-driven investigation
-- Quality assurance principles for authentic user experience testing
+### 4. **Test Code is Still Code**
 
-#### [`test-charters.mdc`](./test-charters.mdc) ⚡️ **Enhanced**
+Test infrastructure follows the same quality principles as production code:
 
-**Test Charter Creation and Enhanced Testing Methodology**
+- Single responsibility
+- No duplication
+- Clear naming
+- Proper error handling
+- Simple over complex
 
-- Dual charter system: Traditional SBTM + Scenario-enhanced investigations
-- Theme-based charter design with cross-feature coverage
-- Charter lifecycle management and release-driven updates
-- Bolton's framework integration with marine licensing personas
-- Evidence collection and anti-patterns guidance
-- Implementation guidelines and success indicators
+### 5. **Domain Knowledge Requires Human Validation**
 
-#### [`htsm.mdc`](./htsm.mdc)
+AI can help with structure and patterns, but marine licensing workflows, user journeys, and regulatory requirements need validation by humans who understand the domain.
 
-**Heuristic Test Strategy Model (HTSM) v6.3**
+## What I've Learned About Each Aspect
 
-- Strategic framework for test thinking and planning
-- Risk-based testing approaches
-- Quality criteria categories and product factors
-- Contextual guidance for comprehensive test coverage
+### **Development & Analysis**
 
-#### [`bdd.rules.mdc`](./bdd.rules.mdc)
+- Start with user needs, not technical possibilities
+- Use personas to ground technical decisions in real user problems
+- Apply HTSM (Heuristic Test Strategy Model) for systematic thinking
+- Context-driven testing beats one-size-fits-all approaches
+- Evidence-based decisions over assumptions
 
-**BDD Guidelines**
+### **Coding & Architecture**
 
-- Golden Rule: Write Gherkin for clarity and understanding
-- Cardinal Rule: One Scenario, One Behaviour
-- Given/When/Then integrity and ordering
-- Best practices for scenario writing
+- Screenplay pattern for maintainable test automation
+- Project structure that reflects how people actually work
+- Import management that prevents `ReferenceError` disasters
+- Clean code principles applied to test code
+- BDD scenarios that read like real user stories
 
-#### [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)
+### **Refactoring & Debugging**
 
-**User Stories and Test Coverage**
+- Safe refactoring with validation at each step
+- URL and hyperlink protection during documentation changes
+- Import dependency management during code restructuring
+- Test-driven refactoring to ensure behaviour preservation
+- Systematic debugging approaches
 
-- User story structure and organisation in `.cursor/user-stories/`
-- @issue tag linkage between stories and feature files
-- Coverage assessment methods and gap analysis
-- Quality guidelines for stories and test implementation
-- Maintenance processes for requirements traceability
+### **Testing Strategy**
 
-### 🏗️ **Architecture & Implementation**
+- Modern quality engineering with automation-first mindset
+- Investigative testing for human insight and discovery
+- Session-based test management with proper charters
+- Scenario testing using Bolton's framework
+- Risk-based testing with heuristic models
 
-#### [`project-structure.mdc`](./project-structure.mdc)
+### **Quality Engineering**
 
-**Project Structure Standards**
+- Responsible AI use with proper human oversight
+- Progressive disclosure for complex documentation
+- Documentation coherence across large projects
+- Error handling with proper test assertions
+- Patient test execution that waits for systems
 
-- Directory organization and file placement rules
-- Naming conventions (dot.case for JS files, kebab-case for assets)
-- Clear separation between features, steps, pages, and screenplay components
+## The Rules We've Built Together
 
-#### [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)
+### 🚨 **Critical Anti-Over-Engineering Rules**
 
-**Screenplay Pattern Standards**
+| Rule                                                                                             | What I Learned                                                         |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| [`stop.overengineering.and.making.stuff.up.mdc`](./stop.overengineering.and.making.stuff.up.mdc) | The master rule - comprehensive guide to avoiding every mistake I made |
+| [`avoid.over.engineering.mdc`](./avoid.over.engineering.mdc)                                     | Specific patterns for test code over-engineering                       |
+| [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                                             | How to use AI assistance properly without making stuff up              |
 
-- Actor, Abilities, Tasks, and Interactions implementation
-- Code examples and usage patterns
-- Encapsulation of WebDriverIO for framework flexibility
-- User-centric approach to test automation
+### 🧪 **Testing & Quality Strategy**
 
-#### [`code.generation.mdc`](./code.generation.mdc)
+| Rule                                                                         | What I Learned                                         |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)           | How to integrate all testing approaches systematically |
+| [`test-charters.mdc`](./test-charters.mdc)                                   | Session-based testing with proper charter management   |
+| [`scenario-testing.mdc`](./scenario-testing.mdc)                             | Bolton's framework for breaking test case addiction    |
+| [`htsm.mdc`](./htsm.mdc)                                                     | Heuristic Test Strategy Model for systematic thinking  |
+| [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) | Linking requirements to tests properly                 |
 
-**Code Generation Rules**
+### 🏗️ **Development & Architecture**
 
-- JavaScript-only approach (no TypeScript)
-- Self-documenting code principles
-- Allure reporting integration
-- Error handling with Chai assertions
-- Tasks vs Interactions guidelines
-
-### 🎯 **Application Context & Integration**
-
-#### [`application.under.test.mdc`](./application.under.test.mdc)
-
-**Marine Licensing Application Context**
-
-- Application architecture (Hapi.js frontend/backend, MongoDB, Node.js ES modules)
-- Domain context for marine licensing, exemptions, and public register
-- Frontend and backend structure reference
-- Key features and user journey guidance
-- Environment configuration and testing considerations
-
-#### [`personas.mdc`](./personas.mdc)
-
-**User Personas for Marine Licensing**
-
-- Internal MMO staff (Case Officers, Marine Officers)
-- External applicants (Veteran and novice users)
-- User needs, pain points, and accessibility considerations
-- Test implications and scenario guidance for different user types
-- Cross-cutting themes and digital divide considerations
-
-### 📝 **Development Practices & Style**
-
-#### [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)
-
-**Responsible AI Use in Test Automation**
-
-- AI assistant limitations and appropriate use cases
-- Human verification requirements for domain-specific content
-- Test generation validation points and edge case handling
-- Marine licensing context awareness for realistic test scenarios
-- Based on NASA research on LLM limitations in safety-critical contexts
-
-#### [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)
-
-**Clean Code & Code Smells**
-
-- Clean code principles and maintainability standards
-- Comprehensive code smell identification and remediation
-- Context-specific examples for test automation
-- Screenplay pattern-specific smells and solutions
-- Detection tips and pragmatic guidance
-
-#### [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)
-
-**General Rules**
-
-- Step-by-step thinking and planning approach
-- Targeted editing practices
-- Validation and change summarisation
-- Code quality assurance
-
-#### [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)
-
-**Style Guide**
-
-- British English standards for DEFRA
-- Professional tone requirements
-- GOV.UK content design guidance
-- UK Government style manual compliance
-
-#### [`documentation.coherence.mdc`](./documentation.coherence.mdc) 🆕
-
-**Documentation Coherence & Quality Standards**
-
-- Cross-reference integrity and anchor link management across test strategy and charters
-- Status tracking accuracy and file organization validation
-- Dual charter system standards (traditional SBTM + scenario-enhanced approaches)
-- Bolton framework implementation requirements for scenario charters
-- Quality assurance practices and common coherence issue prevention
-- Professional British English standards with marine licensing context integration
-- Reference management patterns and maintenance responsibilities
-
-#### [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) 🆕
-
-**Progressive Disclosure & Readability Patterns**
-
-- Patterns for making complex documentation immediately usable whilst preserving comprehensive content
-- 60% reduction target for overwhelming documentation (200+ lines → ~150 lines + supporting files)
-- Three-layer content structure: README (practical) → EXAMPLES/DETAILED → ADVANCED
-- Role-based entry points with timebound actions ("This week", "Next week", "This month")
-- Content simplification techniques and framework presentation standards
-- Template-first approach with copy-paste frameworks and success-oriented language
-- Anti-patterns to avoid and quality indicators for readability success
+| Rule                                                 | What I Learned                                        |
+| ---------------------------------------------------- | ----------------------------------------------------- |
+| [`project-structure.mdc`](./project-structure.mdc)   | How to organise code so people can find things        |
+| [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) | User-centric test automation architecture             |
+| [`code.generation.mdc`](./code.generation.mdc)       | JavaScript standards for maintainable test code       |
+| [`bdd.rules.mdc`](./bdd.rules.mdc)                   | Writing Gherkin that actually helps people understand |
 
 ### 🔧 **Refactoring & Code Safety**
 
-#### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬
+| Rule                                                                     | What I Learned                                    |
+| ------------------------------------------------------------------------ | ------------------------------------------------- |
+| [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)                 | Research-backed safe refactoring practices        |
+| [`import.dependency.management.mdc`](./import.dependency.management.mdc) | How to not break imports when moving code         |
+| [`url.hyperlink.management.mdc`](./url.hyperlink.management.mdc)         | Protecting links during documentation refactoring |
+| [`dangerous.url.commands.mdc`](./dangerous.url.commands.mdc)             | Specific commands that will destroy your URLs     |
 
-**Research-Backed Refactoring Guidelines**
+### 🎯 **Domain & Context**
 
-- Core refactoring principles and AI-assisted refactoring safety protocols
-- Manual refactoring best practices and validation checklists
-- Refactoring vs Refuctoring distinction and behaviour preservation
-- Strategic technical debt mitigation approaches
-- References to specialised refactoring guidance documents
-- Complete research references and methodology
+| Rule                                                         | What I Learned                                 |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| [`application.under.test.mdc`](./application.under.test.mdc) | Understanding the marine licensing application |
+| [`personas.mdc`](./personas.mdc)                             | Real user needs for marine licensing workflows |
 
-#### [`import.dependency.management.mdc`](./import.dependency.management.mdc)
+### 📝 **Code Quality & Standards**
 
-**Import and Dependency Management During Refactoring**
+| Rule                                                           | What I Learned                               |
+| -------------------------------------------------------------- | -------------------------------------------- |
+| [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)         | Code smells and how to fix them              |
+| [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)   | General development practices                |
+| [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)         | British English and GOV.UK standards         |
+| [`test.error.handling.mdc`](./test.error.handling.mdc)         | Proper assertions vs throwing generic errors |
+| [`test.execution.patience.mdc`](./test.execution.patience.mdc) | Waiting for systems properly in tests        |
 
-- Critical import rules for extract, move, and restructure operations
-- Common import scenarios specific to this Screenplay-based codebase
-- Comprehensive import debugging checklists and troubleshooting guides
-- Prevention strategies for `ReferenceError` and module resolution issues
-- Integration workflows with other refactoring activities
+### 📚 **Documentation & Communication**
 
-#### [`url.hyperlink.management.mdc`](./url.hyperlink.management.mdc)
+| Rule                                                                                     | What I Learned                                |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------- |
+| [`documentation.coherence.mdc`](./documentation.coherence.mdc)                           | Keeping documentation consistent across files |
+| [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) | Making complex docs usable                    |
 
-**URL and Hyperlink Protection During Refactoring**
+## The Test Strategy Framework
 
-- Critical URL protection rules and best practices
-- Common corruption scenarios and prevention strategies
-- URL validation and debugging checklists
-- Pre, during, and post-refactoring URL management workflows
-- Safe markdown link handling and recovery procedures
+We've built a comprehensive testing approach that combines:
 
-#### [`dangerous.url.commands.mdc`](./dangerous.url.commands.mdc)
+### **Strategic Level** ([`test-strategy/`](../test-strategy/))
 
-**Dangerous Commands and Tools During URL Refactoring**
+- [`README.md`](../test-strategy/README.md) - Modern quality engineering philosophy
+- [`automation.md`](../test-strategy/automation.md) - Test pyramid and automation strategy
+- [`heuristics.md`](../test-strategy/heuristics.md) - Systematic exploration techniques
+- [`domain-context.md`](../test-strategy/domain-context.md) - Marine licensing reality
+- [`security.md`](../test-strategy/security.md) - Security testing approaches
+- [`accessibility.md`](../test-strategy/accessibility.md) - Inclusive design testing
 
-- Specific high-risk operations and tools that corrupt URLs
-- Real examples of command failures and compound corruption scenarios
-- Safe alternatives and recovery patterns for common refactoring operations
-- Command safety checklists and validation approaches
-- Tool-specific guidance for editors and search/replace operations
+### **Execution Level**
 
-## How These Rules Work Together
+- [`investigative-testing.md`](../test-strategy/investigative-testing.md) - Human insight and discovery
+- [`investigative-testing-templates.md`](../test-strategy/investigative-testing-templates.md) - Practical templates
+- [`investigative-testing-advanced.md`](../test-strategy/investigative-testing-advanced.md) - Advanced techniques
+- [`bdd-rules.md`](../test-strategy/bdd-rules.md) - Living documentation practices
 
+### **Support Level**
+
+- [`test-data.md`](../test-strategy/test-data.md) - Self-sufficient test data strategies
+- [`coaching.md`](../test-strategy/coaching.md) - Skills development
+- [`team-presentation.md`](../test-strategy/team-presentation.md) - Introducing investigative testing
+
+## Real Examples of What I've Learned
+
+### **Before I Learned (Over-Engineered)**
+
+```javascript
+// 309 lines of unused complexity
+class ExemptionModel {
+  static generateCompleteExemption(options = {}) {
+    /* 50 lines */
+  }
+  static generateTestScenarios() {
+    /* 100 lines */
+  }
+  static generateForPersona(persona) {
+    /* 80 lines */
+  }
+  static generateBoundaryTestData() {
+    /* 60 lines */
+  }
+  // ... 8 more unused methods
+}
 ```
-Strategic Level        →  Modern Test Strategy guides overall approach & philosophy
-                      →  HTSM provides systematic thinking frameworks
 
-User-Centred Level    →  Personas inform testing with real user needs
-                      →  User Stories & Test Coverage link requirements to tests
+### **After I Learned (Simple & Focused)**
 
-Testing Execution     →  Testing Heuristics enable systematic exploration
-                      →  Automation Approach defines quality engineering approach
-                      →  Exploratory Testing provides human insight and discovery
+```javascript
+// 35 lines of what's actually needed
+class ExemptionModel {
+  constructor(data = {}) {
+    this.projectName = data.projectName || null
+    this.publicRegister = data.publicRegister || null
+  }
 
-Requirements Level    →  Domain Context grounds testing in marine licensing reality
-                      →  Application Under Test provides technical specifics
-
-Writing Level         →  BDD ensures clear, maintainable scenarios
-Architecture Level    →  Project Structure + Screenplay Pattern organise implementation
-Code Level            →  Code Generation + Clean Code rules ensure quality
-Development Practices →  Playbook rules guide style, process, and refinement
-Refactoring Safety    →  Specialised refactoring guidance ensures safe improvements
+  updateProjectName(projectName) {
+    this.projectName = projectName
+    return this
+  }
+}
 ```
 
-## User Stories Directory
+### **Documentation Before vs After**
 
-The [`../.cursor/user-stories/`](../user-stories/) directory contains documented user stories with their README.md providing:
+- **Before**: 220-line README documenting features that didn't exist
+- **After**: 39-line README that accurately describes what's actually there
 
-- Story overview and status tracking
-- Links between user stories and feature files
-- Coverage assessment and navigation
-- Integration with the test coverage rule above
+## My Quality Engineering Checklist
 
-## Quick Reference
+When I'm working on anything now, I ask:
 
-| **When you're...**                          | **Refer to...**                                                                                                                         |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Planning overall test strategy and approach | **[Modern Test Strategy](../../test-strategy/README.md)** + [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)          |
-| Learning systematic testing techniques      | **[Testing Heuristics](../../test-strategy/heuristics.md)** + [`htsm.mdc`](./htsm.mdc)                                                  |
-| Building test automation                    | **[Automation Approach](../../test-strategy/automation.md)**                                                                            |
-| Understanding marine licensing context      | **[Domain Context](../../test-strategy/domain-context.md)** + [`application.under.test.mdc`](./application.under.test.mdc)              |
-| Conducting investigative testing            | **[Investigative Testing](../../test-strategy/investigative-testing.md)**                                                               |
-| Working with user stories                   | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)                                                            |
-| Assessing test coverage                     | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) + [`../user-stories/README.md`](../user-stories/README.md) |
-| Writing BDD scenarios                       | [`bdd.rules.mdc`](./bdd.rules.mdc)                                                                                                      |
-| Implementing screenplay pattern             | [`screenplay-pattern.mdc`](./screenplay-pattern.mdc)                                                                                    |
-| Understanding user needs and personas       | [`personas.mdc`](./personas.mdc)                                                                                                        |
-| Following coding standards                  | [`code.generation.mdc`](./code.generation.mdc)                                                                                          |
-| Maintaining code quality                    | [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                                                                                  |
-| Refactoring safely                          | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc)                                                                                |
-| Using AI assistance responsibly             | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                                                                                    |
+### **Development & Analysis**
 
-## Getting Started
+- [ ] Do I understand the actual user need?
+- [ ] Have I checked what already exists?
+- [ ] Am I building for today's requirements, not imaginary future ones?
+- [ ] Does this align with the personas and their real workflows?
 
-1. **New to the project?** Start with [`project-structure.mdc`](./project-structure.mdc) to understand the layout
-2. **Understanding the application?** Read [`application.under.test.mdc`](./application.under.test.mdc) for technical context
-3. **Understanding users?** Review [`personas.mdc`](./personas.mdc) to understand who you're testing for
-4. **Understanding requirements?** Check [`../user-stories/README.md`](../user-stories/README.md) for current user stories and test coverage
-5. **Writing scenarios?** Read [`bdd.rules.mdc`](./bdd.rules.mdc) for clear Gherkin that reflects real user needs
-6. **Building test automation?** Follow [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation
-7. **Planning test coverage?** Use [`htsm.mdc`](./htsm.mdc) for strategic thinking and [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) for coverage assessment
+### **Coding**
 
-## Maintenance Notes
+- [ ] Is this the simplest thing that could work?
+- [ ] Have I checked if this method/class is actually used?
+- [ ] Are my imports correct and will they survive refactoring?
+- [ ] Am I using proper test assertions instead of throwing generic errors?
 
-- Each rule file is independently maintained
-- Rules are enforced through Cursor IDE integration
-- Updates should maintain backward compatibility where possible
-- Consider impact across all rule files when making changes
-- Refactoring guidance is modularised for targeted reference while maintaining cross-document consistency
+### **Testing**
+
+- [ ] Does this test reflect a real user journey?
+- [ ] Is my test data realistic but not over-engineered?
+- [ ] Am I testing behaviour, not implementation details?
+- [ ] Will this test help someone understand what the system should do?
+
+### **Refactoring & Debugging**
+
+- [ ] Have I validated that my changes preserve behaviour?
+- [ ] Are my imports still correct after moving code?
+- [ ] Have I protected URLs and links during documentation changes?
+- [ ] Am I using safe refactoring practices?
+
+### **Documentation**
+
+- [ ] Does this documentation describe what actually exists?
+- [ ] Is it coherent with other documentation?
+- [ ] Can someone use this immediately without reading 200 lines?
+- [ ] Am I using progressive disclosure for complex topics?
+
+## When to Use Which Rules
+
+| **I'm doing...**              | **I need...**                                                                                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Planning testing approach** | [`test-strategy.integration.mdc`](./test-strategy.integration.mdc) + [`test-strategy/README.md`](../test-strategy/README.md)                              |
+| **Writing any code**          | [`stop.overengineering.and.making.stuff.up.mdc`](./stop.overengineering.and.making.stuff.up.mdc) + [`code.generation.mdc`](./code.generation.mdc)         |
+| **Refactoring anything**      | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) + [`import.dependency.management.mdc`](./import.dependency.management.mdc)                       |
+| **Writing documentation**     | [`documentation.coherence.mdc`](./documentation.coherence.mdc) + [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) |
+| **Using AI assistance**       | [`responsible.ai.use.mdc`](./responsible.ai.use.mdc)                                                                                                      |
+| **Debugging test failures**   | [`test.error.handling.mdc`](./test.error.handling.mdc) + [`test.execution.patience.mdc`](./test.execution.patience.mdc)                                   |
+| **Understanding users**       | [`personas.mdc`](./personas.mdc) + [`application.under.test.mdc`](./application.under.test.mdc)                                                           |
+| **Investigative testing**     | [`scenario-testing.mdc`](./scenario-testing.mdc) + [`test-charters.mdc`](./test-charters.mdc)                                                             |
+
+## The Most Important Thing I've Learned
+
+**Quality engineering is about thinking, not typing.**
+
+The hard part isn't writing the code - it's understanding what should be tested, how users actually behave, what problems really need solving, and what's the simplest way to solve them.
+
+Every rule we've built together comes back to this: **Start with the problem, build the minimum that solves it, and validate that it actually works for real people.**
 
 ---
 
-_These rules represent the collective knowledge and best practices for maintaining high-quality, maintainable test automation in the Marine Licensing Journey Tests project._
+_These rules represent everything I've learned about quality engineering from working with a master practitioner. They're not just about testing - they're about thinking systematically, building simply, and always keeping real users at the centre of everything we do._
