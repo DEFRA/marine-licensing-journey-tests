@@ -88,7 +88,6 @@ When(
       exemption.updatePublicRegister({ consent: PublicRegisterPage.withhold })
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
 
