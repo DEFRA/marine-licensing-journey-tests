@@ -11,29 +11,38 @@
 ## Marine Licensing Example
 
 ```gherkin
-Feature: Exemption Notification Submission
+@issue=ML-1 @issue=ML-9
+Feature: Starting a new exemption notification by providing a project name
 
-Scenario: Applicant submits valid exemption notification
-  Given I am a marina operator with a valid marine licence
-  When I submit an exemption notification for maintenance dredging
-  Then I should receive a confirmation with reference number
-  And the exemption should appear on the public register
+  Scenario: Provide a valid project name for a new exemption notification
+    Given the project name page is displayed
+    When entering and saving a project with a valid name
+    Then the task list page is displayed
+
+  Scenario: Allowing information to be added to the public register
+    Given the Public register page is displayed
+    When choosing not to withhold information from the public register
+    Then the "Public register" task status is "Completed"
+    And the public register information is saved
 ```
 
 ### Step Patterns
 
 ```gherkin
 # Context setup
-Given I am a [persona] with [licence type]
-Given the exemption register contains [existing exemptions]
+Given the project name page is displayed
+Given a notification has been created with a valid project name
+Given the Public register task has been completed with consent
 
 # User actions
-When I submit an exemption notification for [activity type]
-When I search the public register for [search criteria]
+When entering and saving a project with a valid name
+When choosing not to withhold information from the public register
+When the "Public register" task is selected
 
 # Outcomes
-Then I should receive confirmation within [timeframe]
-Then the exemption should appear on the public register
+Then the task list page is displayed
+Then the "Public register" task status is "Completed"
+Then the project name is displayed on the Public register page
 ```
 
 ## Implementation Mapping
@@ -45,14 +54,14 @@ Then the exemption should appear on the public register
 - **Then** → **Interactions** with `ensure` prefix
 
 ```gherkin
-Given I am a marina operator with a valid marine licence
-# → SetupUserWithLicence.task()
+Given the project name page is displayed
+# → ApplyForExemption.where(ProjectNamePage.url)
 
-When I submit an exemption notification for maintenance dredging
-# → SubmitExemptionNotification.forMaintenanceDredging()
+When entering and saving a project with a valid name
+# → CompleteProjectName.with(this.actor.recalls('projectName'))
 
-Then I should receive a confirmation with reference number
-# → EnsureConfirmation.isDisplayedWithReference()
+Then the error "Enter the project name" is displayed
+# → EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
 ```
 
 ## Quality Standards
