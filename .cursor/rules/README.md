@@ -19,7 +19,7 @@ This directory contains the complete set of rules and guidelines for the Marine 
 **Key Components:**
 
 - **[Testing Heuristics](../../test-strategy/heuristics/README.md)** - HTSM and systematic exploration
-- **[Automation Architecture](../../test-strategy/automation/README.md)** - Test pyramid and quality engineering
+- **[Automation Approach](../../test-strategy/automation/README.md)** - Test pyramid and quality engineering
 - **[Domain Context](../../test-strategy/domain-context/README.md)** - Marine licensing reality
 - **[Exploratory Testing](../../test-strategy/exploratory/README.md)** - Session-based investigation
 - **[Scenario Testing](../../test-strategy/scenario-testing/README.md)** - Bolton's realistic user investigation framework
@@ -238,7 +238,7 @@ User-Centred Level    →  Personas inform testing with real user needs
                       →  User Stories & Test Coverage link requirements to tests
 
 Testing Execution     →  Testing Heuristics enable systematic exploration
-                      →  Automation Architecture defines quality engineering approach
+                      →  Automation Approach defines quality engineering approach
                       →  Exploratory Testing provides human insight and discovery
 
 Requirements Level    →  Domain Context grounds testing in marine licensing reality
@@ -266,7 +266,7 @@ The [`../.cursor/user-stories/`](../user-stories/) directory contains documented
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Planning overall test strategy and approach | **[Modern Test Strategy](../../test-strategy/README.md)** + [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)          |
 | Learning systematic testing techniques      | **[Testing Heuristics](../../test-strategy/heuristics/README.md)** + [`htsm.mdc`](./htsm.mdc)                                           |
-| Building test automation                    | **[Automation Architecture](../../test-strategy/automation/README.md)**                                                                 |
+| Building test automation                    | **[Automation Approach](../../test-strategy/automation/README.md)**                                                                     |
 | Understanding marine licensing context      | **[Domain Context](../../test-strategy/domain-context/README.md)** + [`application.under.test.mdc`](./application.under.test.mdc)       |
 | Conducting exploratory testing              | **[Exploratory Testing](../../test-strategy/exploratory/README.md)**                                                                    |
 | Working with user stories                   | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)                                                            |

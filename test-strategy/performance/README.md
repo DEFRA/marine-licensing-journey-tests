@@ -6,7 +6,7 @@ This section covers **performance testing**, **scalability assessment**, and **p
 
 This section is under development. For now, refer to:
 
-- **[Automation Architecture](../automation/README.md)** - For performance testing integration in quality strategy
+- **[Automation Approach](../automation/README.md)** - For performance testing integration in quality strategy
 - **[User Journey Testing](../user-journeys/README.md)** - For user experience performance validation
 
 ## 🎯 Planned Content
@@ -81,3 +81,7 @@ Performance aligned with:
 ---
 
 _This section will be developed based on team needs and feedback. Contributions welcome!_
+
+## 🔗 Related Sections
+
+- **[Automation Approach](../automation/README.md)** - For performance testing integration in quality strategy

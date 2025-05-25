@@ -74,7 +74,6 @@ This project implements a **contemporary quality engineering approach** that bui
 - 🤖 **Automation-first approach** - Fast feedback through comprehensive automation
 - 👥 **Whole-team quality** - Testing is everyone's responsibility
 - 📊 **Evidence-based decisions** - Data and metrics drive testing investments
-- 🚀 **Continuous quality** - Quality built into the delivery pipeline
 
 ### **Testing Approach Overview**
 
@@ -107,7 +106,7 @@ Static Analysis         → Code quality, security vulnerabilities
 | Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)                      |
 | Investigate with realistic user scenarios   | [Investigative Testing](test-strategy/investigative-testing/README.md) |
 | Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)               |
-| Build robust test automation                | [Automation Architecture](test-strategy/automation/README.md)          |
+| Build robust test automation                | [Automation Approach](test-strategy/automation/README.md)              |
 | Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)               |
 
 ### **Evolution from Traditional Approaches**
@@ -115,7 +114,7 @@ Static Analysis         → Code quality, security vulnerabilities
 Our strategy **builds upon and modernises** established testing principles, preserving essential intentions whilst adopting contemporary practices:
 
 - ✅ **Same fundamental goals** - Quality software, risk management, regulatory compliance
-- ⚡ **Better delivery speed** - Faster feedback cycles and continuous quality
+- ⚡ **Better delivery speed** - Faster feedback cycles and automated quality gates
 - 🔍 **Enhanced discovery** - Systematic exploration uncovers risks automation might miss
 - 📊 **Evidence-based confidence** - Data-driven decisions rather than process compliance
 - 🤝 **Collaborative quality** - Whole-team responsibility rather than testing handoffs
@@ -403,7 +402,7 @@ This project follows a **comprehensive modern test strategy** that combines syst
 
 - **[Testing Heuristics](test-strategy/heuristics/README.md)** - HTSM and systematic exploration
 - **[Test Charters](test-charters/README.md)** - Systematic exploration of user stories and requirements
-- **[Automation Architecture](test-strategy/automation/README.md)** - Test pyramid and quality engineering
+- **[Automation Approach](test-strategy/automation/README.md)** - Test pyramid and quality engineering
 - **[Domain Context](test-strategy/domain-context/README.md)** - Marine licensing reality and user personas
 - **[Exploratory Testing](test-strategy/exploratory/README.md)** - Session-based investigation
 

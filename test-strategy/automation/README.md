@@ -1,6 +1,6 @@
-# Automation Architecture - Modern Test Automation Strategy
+# Automation Approach - Modern Test Automation Strategy
 
-This section outlines our **automation-first approach** to quality engineering, focusing on fast feedback, reliable automation, and sustainable test suites.
+This section covers **test automation strategy**, **quality engineering practices**, and **continuous testing approaches** for marine licensing applications.
 
 ## 🚀 Automation Philosophy
 
@@ -138,7 +138,7 @@ CI/CD:          GitHub Actions + Docker
 
 - **Stryker Mutator** - Mutation testing to validate unit test effectiveness in `marine-licensing-frontend` and `marine-licensing-backend` repositories
 
-## 🏗️ Automation Architecture Patterns
+## 🏗️ Automation Approach Patterns
 
 ### **Page Object Model (Locators Only)**
 

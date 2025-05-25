@@ -7,7 +7,7 @@ This section covers **test data strategies**, **data factories**, and **reliable
 This section is under development. For now, refer to:
 
 - **[Code Generation rules](../../.cursor/rules/code.generation.mdc)** - Test data guidance (#12)
-- **[Automation Architecture](../automation/README.md)** - For test data patterns and reliability strategies
+- **[Automation Approach](../automation/README.md)** - For test data patterns and reliability strategies
 
 ## 🎯 Planned Content
 
@@ -56,3 +56,7 @@ Planned improvements:
 ---
 
 _This section will be developed based on team needs and feedback. Contributions welcome!_
+
+## �� Related Sections
+
+- **[Automation Approach](../automation/README.md)** - For test data patterns and reliability strategies

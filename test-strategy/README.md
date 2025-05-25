@@ -62,7 +62,6 @@ These proven methodologies are adapted for marine licensing domain requirements 
 - 🤖 **Automation as a foundation** - Fast feedback through comprehensive automation
 - 👥 **Whole-team quality** - Testing is everyone's responsibility, not just testers
 - 📊 **Evidence-based decisions** - Data and metrics drive testing investments
-- 🚀 **Continuous quality** - Quality built into the delivery pipeline, not bolted on
 
 ## 🔄 Evolution from Traditional Testing Approaches
 
@@ -84,7 +83,7 @@ This strategy **builds upon and modernises** established testing principles from
 | ---------------------------- | ----------------------------------------------------- | ------------------------------------------------ |
 | **Manual test execution**    | **Automation-first with strategic human insight**     | ⚡ Faster feedback, 🔄 continuous validation     |
 | **Document-heavy planning**  | **Living documentation and collaborative planning**   | 📈 Always current, 🤝 team alignment             |
-| **Phase-gate approvals**     | **Continuous quality metrics and evidence**           | 🚀 Faster delivery, 📊 better decisions          |
+| **Phase-gate approvals**     | **Automated quality metrics and evidence**            | 🚀 Faster delivery, 📊 better decisions          |
 | **Risk register management** | **Heuristic-driven exploration and discovery**        | 🔍 Uncover unknown risks, 💡 systematic thinking |
 | **Test case libraries**      | **Context-driven scenarios and exploratory charters** | 🎯 Relevant testing, 🧠 adaptive approach        |
 | **Formal defect lifecycle**  | **Fast feedback loops and continuous improvement**    | 🏃 Quick resolution, 📈 prevention focus         |
@@ -143,7 +142,6 @@ The **modern approach achieves these goals more effectively** through:
 
 - **Faster feedback cycles** - Issues found and fixed quickly
 - **Better user understanding** - Real personas and accessibility focus
-- **Continuous quality** - Built-in rather than inspected-in
 - **Adaptive strategies** - Responsive to changing needs and discoveries
 - **Evidence-based decisions** - Data and metrics guide investments
 - **Sustainable practices** - Maintainable automation and effective human insight
@@ -167,8 +165,7 @@ This strategy **complements existing organisational governance**:
 
 ### **🤖 Automation Strategy**
 
-- **[Automation Architecture](./automation/README.md)** - Test pyramid, tooling, and automation strategy
-- **[Continuous Quality](./continuous-quality/README.md)** - Pipeline integration and feedback loops
+- **[Automation Approach](./automation/README.md)** - Test pyramid, tooling, and automation strategy
 - **[Test Data Management](./test-data/README.md)** - Data strategies for reliable automation
 
 ### **👥 Human-Centred Testing**
@@ -195,11 +192,10 @@ This strategy **complements existing organisational governance**:
 | Explore systematically using test heuristics | [Testing Heuristics](./heuristics/README.md)               |
 | Investigate with realistic user scenarios    | [Investigative Testing](./investigative-testing/README.md) |
 | Create exploratory charters for user stories | [Test Charters](../test-charters/README.md)                |
-| Build robust test automation                 | [Automation Architecture](./automation/README.md)          |
+| Build robust test automation                 | [Automation Approach](./automation/README.md)              |
 | Understand marine licensing user needs       | [Domain Context](./domain-context/README.md)               |
 | Test accessibility and inclusion             | [Accessibility Testing](./accessibility/README.md)         |
 | Set up quality monitoring and metrics        | [Observability](./observability/README.md)                 |
-| Implement continuous testing in pipelines    | [Continuous Quality](./continuous-quality/README.md)       |
 | Test performance and scalability             | [Performance Engineering](./performance/README.md)         |
 
 ## 🔬 Testing Approach
@@ -370,3 +366,13 @@ This strategy builds on existing project foundations:
 ---
 
 _Quality is everyone's responsibility. This strategy provides the framework for building quality into everything we do while serving the real needs of marine licensing users._
+
+| **Strategy Area**                 | **Documentation**                                          |
+| --------------------------------- | ---------------------------------------------------------- |
+| Build domain expertise            | [Domain Context](./domain-context/README.md)               |
+| Run regular investigative testing | [Investigative Testing](./investigative-testing/README.md) |
+| Automate repetitive scenarios     | [Automation](./automation/README.md)                       |
+| Ensure accessibility compliance   | [Accessibility](./accessibility/README.md)                 |
+| Coach quality skills              | [Coaching](./coaching/README.md)                           |
+| Monitor quality in production     | [Observability](./observability/README.md)                 |
+| Document investigation sessions   | [Test Charters](../test-charters/README.md)                |

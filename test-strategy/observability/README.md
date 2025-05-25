@@ -6,8 +6,7 @@ This section covers **observability practices**, **quality monitoring**, and **m
 
 This section is under development. For now, refer to:
 
-- **[Automation Architecture](../automation/README.md)** - For quality metrics and ROI measurement
-- **[Continuous Quality](../continuous-quality/README.md)** - For pipeline monitoring and feedback loops
+- **[Automation Approach](../automation/README.md)** - For quality metrics and ROI measurement
 
 ## 🎯 Planned Content
 
@@ -75,6 +74,11 @@ Quality engineering decisions driven by:
 - **Risk coverage analysis** - Are we testing the right things?
 - **User journey health** - How well do we serve real user needs?
 - **Team productivity indicators** - What improves testing efficiency?
+
+## 🔗 Related Sections
+
+- **[Testing Heuristics](../heuristics/README.md)** - For risk discovery and systematic investigation
+- **[Automation Approach](../automation/README.md)** - For test automation metrics and health
 
 ---
 
