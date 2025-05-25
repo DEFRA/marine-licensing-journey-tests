@@ -1,0 +1,246 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Documentation Progressive Disclosure & Readability
+
+This rule captures patterns for making complex documentation immediately usable whilst preserving comprehensive content through progressive disclosure.
+
+**Context**: Based on successful restructuring of investigative testing documentation (489 lines → 162 lines + structured supporting files) and main test strategy README simplification (387 lines → 144 lines).
+
+## Core Progressive Disclosure Principles
+
+### **1. Immediate Actionability Over Complete Coverage**
+- **Start with what people need to DO, not what they need to KNOW**
+- **Lead with role-based entry points** - "For Quality Engineering", "For Domain Experts", "For Project Managers"
+- **Include timebound actions** - "This week", "Next week", "This month" rather than abstract principles
+- **Show success measures** - "You'll know this is working when..." sections
+
+### **2. 60% Reduction Target for Overwhelming Documentation**
+- **When main document exceeds ~200 lines, apply progressive disclosure**
+- **Target reduction to ~150 lines for primary README**
+- **Move detailed content to focused supporting files**
+- **Preserve all content, but restructure for discoverability**
+
+### **3. Three-Layer Content Structure**
+```
+README.md (150 lines max)
+├── Practical quick start with role-based paths
+├── Simple frameworks anyone can use immediately
+├── Clear success indicators and next steps
+└── Links to detailed content when ready
+
+EXAMPLES.md / DETAILED.md 
+├── Comprehensive scenarios and case studies
+├── Copy-paste templates and frameworks
+└── In-depth guidance for experienced users
+
+ADVANCED.md (if needed)
+├── Systematic approaches and integration
+├── Complex methodology applications
+└── Expert-level techniques and facilitation
+```
+
+## Readability Transformation Patterns
+
+### **Opening Section Restructuring**
+**Replace abstract philosophy with practical paths:**
+
+❌ **Before**: Long theoretical introductions and comprehensive overviews
+✅ **After**: "Quick Start (Choose Your Path)" with immediate role-based guidance
+
+### **Content Reorganisation Hierarchy**
+1. **Role-based quick start** (first 30 lines)
+2. **Current focus/context** (what we're building right now)
+3. **Simple approach overview** (how it works in practice)
+4. **Key principles** (essential concepts, not comprehensive theory)
+5. **Success measures** (how to know it's working)
+6. **Next steps** (concrete actions with timeframes)
+
+### **Supporting File Strategy**
+- **EXAMPLES.md** - Detailed scenarios, comprehensive templates, case studies
+- **ADVANCED.md** - Systematic approaches, heuristic integration, complex techniques
+- **TEMPLATES.md** - Copy-paste frameworks, session planners, documentation sheets
+- **ATTRIBUTION.md** - Comprehensive acknowledgments, reading lists, foundational theory
+
+## Role-Based Entry Point Patterns
+
+### **Experience-Level Differentiation**
+```
+🆕 Never Done This Before?
+1. This week: [Simple 5-minute action]
+2. Next week: [First practical session]
+3. Document findings and share
+
+🧠 Ready for More Structure?
+1. Use detailed examples: [Link to EXAMPLES.md]
+2. Apply systematic thinking: [Link to ADVANCED.md]
+3. Integrate with team workflow
+
+🎯 Want to Lead Team Sessions?
+1. Facilitate using templates: [Link to TEMPLATES.md]
+2. Connect findings to improvements
+3. Track effectiveness and refine
+```
+
+### **Role-Specific Paths**
+- **For Quality Engineering** - Technical implementation focus
+- **For Domain Experts** - Practical contribution without testing jargon
+- **For Project Managers** - Success measures and planning integration
+- **For New Team Members** - Learning pathway and context building
+
+## Content Simplification Techniques
+
+### **Framework Presentation**
+**Replace complex methodology descriptions with simple visual structures:**
+
+❌ **Complex**: Paragraph explanations of multi-step processes
+✅ **Simple**: 
+```
+📋 Setup (10 minutes)
+├── Pick area to explore
+├── Choose realistic context
+└── Decide questions to answer
+
+🔍 Exploration (60 minutes)  
+├── Follow realistic workflows
+├── Try variations and edge cases
+└── Note anything confusing
+
+📝 Wrap-up (10 minutes)
+├── Document key findings
+└── Share insights with team
+```
+
+### **Template-First Approach**
+- **Provide copy-paste templates** before explaining theory
+- **Include filled examples** alongside blank templates
+- **Focus on practical application** over comprehensive understanding
+- **Link to theory** for those who want deeper context
+
+### **Success-Oriented Language**
+**Frame content around positive outcomes:**
+- "You'll know this is working when..."
+- "This approach delivers..."
+- "Success looks like..."
+- "Teams achieve..."
+
+## File Structure Standards
+
+### **Main README Structure (150 lines max)**
+```
+# Title - Practical Tagline
+
+> Brief value proposition
+
+## Quick Start (Choose Your Path)
+[Role-based entry points with concrete actions]
+
+## Current Focus
+[What we're building/doing right now]
+
+## Our Approach
+[Simple explanation with visual structure]
+
+## Key Principles
+[3-5 essential concepts]
+
+## Success Measures
+[How to know it's working]
+
+## Integration with Project
+[How this fits with existing work]
+
+## Next Steps
+[Concrete actions with timeframes]
+
+## More Resources
+[Links to detailed supporting files]
+```
+
+### **Supporting File Purposes**
+- **EXAMPLES.md** - Scenarios, case studies, detailed demonstrations
+- **ADVANCED.md** - Systematic approaches, methodology integration
+- **TEMPLATES.md** - Copy-paste frameworks, planning tools
+- **ATTRIBUTION.md** - Acknowledgments, theory, reading lists
+
+## Quality Indicators
+
+### **Readability Success Metrics**
+- **10-minute rule** - New team member understands approach in 10 minutes
+- **Week 1 implementation** - Can start practical application within a week
+- **Progressive depth** - Can access advanced content when ready
+- **Practical focus** - Every section has immediate actionable content
+
+### **Structure Validation**
+- [ ] Main README under 200 lines
+- [ ] Role-based entry points in first 50 lines
+- [ ] Timebound actions ("this week", "next week")
+- [ ] Success measures clearly stated
+- [ ] Supporting files linked appropriately
+- [ ] No content duplication between files
+
+## Common Anti-Patterns to Avoid
+
+### **Front-Loading Problems**
+❌ **Dense theory first** - Starting with comprehensive background
+❌ **Complete attribution upfront** - Detailed acknowledgments in opening sections
+❌ **Exhaustive comparisons** - Traditional vs modern approaches before practical guidance
+❌ **Complex methodology** - Full framework explanation before simple application
+
+### **Structure Problems**
+❌ **Single massive file** - Everything in one document regardless of length
+❌ **Abstract navigation** - "Strategy Structure" without practical entry points
+❌ **Theory-heavy sections** - Extensive background before actionable content
+❌ **Missing timeframes** - Vague guidance without specific next steps
+
+## Integration with Existing Rules
+
+### **Works Alongside**
+- **`documentation.coherence.mdc`** - Cross-reference integrity and attribution standards
+- **`playbook.styleguide.mdc`** - British English and professional tone
+- **`responsible.ai.use.mdc`** - Human verification for domain-specific content
+
+### **Enhances**
+- **Test strategy documentation** - Makes comprehensive approaches immediately accessible
+- **Charter development** - Progressive complexity from simple to advanced investigation
+- **Team onboarding** - Clear learning pathways for different experience levels
+
+## Application Guidelines
+
+### **When to Apply Progressive Disclosure**
+- **Main document exceeds 200 lines** and serves multiple audiences
+- **Content serves different experience levels** (beginners, experienced, facilitators)
+- **Complex methodology** needs both practical application and theoretical depth
+- **Team includes non-testing specialists** who need accessible entry points
+
+### **Implementation Process**
+1. **Identify primary audience actions** - What do people need to do immediately?
+2. **Create role-based entry points** - Clear paths for different team members
+3. **Extract detailed content** to focused supporting files
+4. **Add timebound guidance** - This week, next week, this month
+5. **Include success measures** - How to know the approach is working
+6. **Test with target audience** - Can new team members get started quickly?
+
+## Marine Licensing Context Applications
+
+### **Domain Expert Accessibility**
+- **Remove testing jargon** from main guidance
+- **Emphasise practical contribution** rather than technical expertise
+- **Provide simple frameworks** that leverage existing domain knowledge
+- **Focus on outcomes** that matter to marine licensing specialists
+
+### **Government Service Standards**
+- **Maintain professional tone** whilst improving accessibility
+- **Support inclusive practices** through progressive complexity
+- **Enable diverse team contributions** regardless of testing background
+- **Deliver practical value** for public service delivery
+
+---
+
+**Purpose**: Enable complex documentation to be immediately usable whilst preserving comprehensive content through structured progressive disclosure.
+
+**Application**: Use when creating or restructuring documentation that serves multiple audiences or exceeds ~200 lines in length.
+
+**Success measure**: New team members can understand and begin applying approaches within 10 minutes of reading main README.

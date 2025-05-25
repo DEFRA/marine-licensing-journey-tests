@@ -185,6 +185,18 @@ This directory contains the complete set of rules and guidelines for the Marine 
 - Professional British English standards with marine licensing context integration
 - Reference management patterns and maintenance responsibilities
 
+#### [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) 🆕
+
+**Progressive Disclosure & Readability Patterns**
+
+- Patterns for making complex documentation immediately usable whilst preserving comprehensive content
+- 60% reduction target for overwhelming documentation (200+ lines → ~150 lines + supporting files)
+- Three-layer content structure: README (practical) → EXAMPLES/DETAILED → ADVANCED
+- Role-based entry points with timebound actions ("This week", "Next week", "This month")
+- Content simplification techniques and framework presentation standards
+- Template-first approach with copy-paste frameworks and success-oriented language
+- Anti-patterns to avoid and quality indicators for readability success
+
 ### 🔧 **Refactoring & Code Safety**
 
 #### [`playbook.refactoring.mdc`](./playbook.refactoring.mdc) 🔬
