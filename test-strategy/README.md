@@ -95,8 +95,8 @@
                     ↓                   ↓            ↓
               🔍 INVESTIGATE      🤖 AUTOMATE    🧠 UNDERSTAND
               findings gaps        new insights   domain better
-                    ↓                   ↓            ↓
-              ✅ CONTINUOUS IMPROVEMENT LOOP ✅
+                       ↓               ↓            ↓
+                     ✅ CONTINUOUS IMPROVEMENT LOOP ✅
 ```
 
 ## 📁 Strategy Structure
