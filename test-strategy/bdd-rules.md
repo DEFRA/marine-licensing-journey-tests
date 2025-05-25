@@ -99,12 +99,12 @@ Then I should receive a confirmation with reference number
 
 ### Scenario Quality Checklist
 
-- [ ] Title clearly describes the business value
-- [ ] Steps follow Given-When-Then order
-- [ ] Each scenario tests one specific behaviour
-- [ ] Language is accessible to domain experts
-- [ ] Realistic marine licensing context
-- [ ] Covers important user journeys from personas
+✅ Title clearly describes the business value
+✅ Steps follow Given-When-Then order
+✅ Each scenario tests one specific behaviour
+✅ Language is accessible to domain experts
+✅ Realistic marine licensing context
+✅ Covers important user journeys from personas
 
 ### Common Marine Licensing Patterns
 
