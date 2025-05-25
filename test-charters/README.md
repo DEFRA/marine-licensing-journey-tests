@@ -1,9 +1,9 @@
 # Test Charters - Investigative Testing Plans
 
-This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **90-minute investigation sessions** that combine systematic exploration with realistic user scenarios.
+This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios.
 
 > **🔗 Powered by Investigative Testing**  
-> These charters implement the **[Investigative Testing](../test-strategy/investigative-testing/README.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
+> These charters implement the **[Investigative Testing](../test-strategy/investigative-testing.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
 
 ## 🧠 Charter Purpose
 
@@ -13,6 +13,14 @@ Test charters bridge the gap between:
 - **Systematic investigation** - How we discover what it actually does through realistic scenarios
 - **Real user needs** - Whether it serves marine licensing personas effectively
 - **Evidence collection** - Actionable insights for development teams
+
+## 📋 Available Investigation Sessions
+
+| Theme                           | Charter Name                                | Focus                                                    | Personas | Priority | Status   |
+| ------------------------------- | ------------------------------------------- | -------------------------------------------------------- | -------- | -------- | -------- |
+| **First-Time User Experience**  | [Novice Journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers | Zofia    | High     | 🔄 Ready |
+| **Veteran User Efficiency**     | [Expert Workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
+| **Form Behaviour & Validation** | [Form Interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
 
 ## 🏗️ Charter Structure
 
@@ -73,30 +81,14 @@ Priority: [High/Medium/Low based on risk and user impact]
 3. **Identify automation opportunities** - What scenarios should automated tests validate?
 4. **Plan follow-up sessions** - Which areas need deeper investigation or different persona perspectives?
 
-## 📋 Available Investigation Sessions
-
-| User Story | Charter Name                                                          | Focus                                    | Priority | Status   |
-| ---------- | --------------------------------------------------------------------- | ---------------------------------------- | -------- | -------- |
-| ML-1       | [Novice Discovery](./ML-1/ML-1-novice-discovery.md)                   | First-time user journey & accessibility  | High     | 🔄 Ready |
-| ML-1       | [Efficiency Patterns](./ML-1/ML-1-efficiency-patterns.md)             | Veteran user workflows & data reuse      | Medium   | 🔄 Ready |
-| ML-1       | [Validation Scenarios](./ML-1/ML-1-validation-scenarios.md)           | Error handling under realistic pressure  | High     | 🔄 Ready |
-| ML-9       | [Navigation Workflows](./ML-9/ML-9-navigation.md)                     | Task list patterns & status management   | High     | 🔄 Ready |
-| ML-9       | [Interruption Resilience](./ML-9/ML-9-interruption-resilience.md)     | Multitasking & workflow disruption       | High     | 🔄 Ready |
-| ML-9       | [Cross-Device Journey](./ML-9/ML-9-cross-device-journey.md)           | Mobile-to-desktop transitions            | Medium   | 🔄 Ready |
-| ML-9       | [Usability Patterns](./ML-9/ML-9-usability.md)                        | User experience and interaction patterns | Medium   | 🔄 Ready |
-| ML-12      | [Consent Misunderstanding](./ML-12/ML-12-consent-misunderstanding.md) | Privacy decision confusion scenarios     | High     | 🔄 Ready |
-| ML-12      | [Privacy Concerns](./ML-12/ML-12-privacy-concerns.md)                 | User privacy anxiety and decision-making | High     | 🔄 Ready |
-| ML-12      | [Data Protection](./ML-12/ML-12-data-protection.md)                   | Information clarity & user understanding | High     | 🔄 Ready |
-| ML-12      | [Consent Workflow](./ML-12/ML-12-consent-workflow.md)                 | Form behaviour & conditional logic       | Medium   | 🔄 Ready |
-| ML-12      | [Validation Testing](./ML-12/ML-12-validation.md)                     | Error handling and form validation       | Medium   | 🔄 Ready |
-
 ## 🔗 Related Resources
 
-- **[User Stories](../.cursor/user-stories/README.md)** - Requirements and acceptance criteria
-- **[Investigative Testing Guide](../test-strategy/investigative-testing/README.md)** - Complete framework and methodology
-- **[Marine Licensing Personas](../test-strategy/domain-context/README.md)** - User context and realistic pressures
-- **[Testing Heuristics](../test-strategy/heuristics/README.md)** - Systematic thinking frameworks for investigation
+- **[User Stories](../.cursor/user-stories/README.md)** - Requirements and acceptance criteria for delivered features
+- **[Investigative Testing Guide](../test-strategy/investigative-testing.md)** - Complete framework and methodology
+- **[Domain Context](../test-strategy/domain-context.md)** - Marine licensing personas and user context
+- **[Testing Heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
+- **[Feature Files](../test/features/)** - Automated test scenarios that validate delivered functionality
 
 ---
 
-_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how features actually serve marine licensing users under authentic conditions._
+_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how delivered features actually serve marine licensing users under authentic conditions._
