@@ -13,3 +13,4 @@ allure-results/
 FAILED
 *.code-workspace
 .cursor/rules/common.commands.md
+COMMANDS.md
