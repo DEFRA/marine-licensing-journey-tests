@@ -17,7 +17,7 @@
 2. Share findings with team, identify next investigation area
 3. Regular investigation sessions on high-risk areas
 
-### **👨‍💼 For Project Managers**
+### **👨‍💼 For Project Managers and Stakeholders**
 
 1. Review [Success Measures](#-success-measures) to understand quality indicators
 2. Include investigation time in work planning
