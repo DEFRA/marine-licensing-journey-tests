@@ -23,6 +23,15 @@ export default class ApplyForExemption {
     })
   }
 
+  static withProjectName(projectName) {
+    return new ApplyForExemption({
+      projectName,
+      publicRegister: null,
+      projectNameTaskCompleted: false,
+      publicRegisterTaskCompleted: false
+    })
+  }
+
   static withEmptyProjectName() {
     return new ApplyForExemption({
       projectName: '',

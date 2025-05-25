@@ -2,37 +2,39 @@ import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page
 import Task from '../base/task.js'
 
 export default class CompletePublicRegisterTask extends Task {
-  static andSavingWith(selector, withholdReason = '') {
-    return new CompletePublicRegisterTask(selector, withholdReason, true)
+  static andSaving() {
+    return new CompletePublicRegisterTask(true)
   }
 
-  static andNotSavingWith(selector, withholdReason = '') {
-    return new CompletePublicRegisterTask(selector, withholdReason, false)
+  static andNotSaving() {
+    return new CompletePublicRegisterTask(false)
   }
 
-  constructor(selector, withholdReason = '', saveAndContinue) {
+  constructor(saveAndContinue) {
     super()
-    this.selector = selector
-    this.withholdReason = withholdReason
     this.saveAndContinue = saveAndContinue
   }
 
   async performAs(actor) {
+    const exemption = actor.recalls('exemption')
     const browseTheWeb = actor.ability
-    await browseTheWeb.click(this.selector)
-    if (this.withholdReason.length > 0) {
+    await browseTheWeb.click(exemption.publicRegister.consent)
+    if (
+      exemption.publicRegister.reason &&
+      exemption.publicRegister.reason.length > 0
+    ) {
       await browseTheWeb.sendKeys(
         PublicRegisterPage.withholdReason,
-        this.withholdReason
+        exemption.publicRegister.reason
       )
     }
     if (this.saveAndContinue) {
       await browseTheWeb.click(PublicRegisterPage.saveAndContinue)
 
-      const exemption = actor.recalls('exemption')
-      if (exemption) {
-        exemption.publicRegisterTaskCompleted = true
-        actor.remembers('exemption', exemption)
+      if (actor.hasMemoryOf('exemption')) {
+        actor.updates('exemption', (exemption) =>
+          exemption.markPublicRegisterTaskCompleted()
+        )
       }
     }
   }

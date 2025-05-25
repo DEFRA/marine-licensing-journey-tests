@@ -2,27 +2,23 @@ import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 import Task from '../base/task.js'
 
 export default class CompleteProjectName extends Task {
-  static with(projectName) {
-    return new CompleteProjectName(projectName)
-  }
-
-  constructor(projectName) {
-    super()
-    this.projectName = projectName
+  static now() {
+    return new CompleteProjectName()
   }
 
   async performAs(actor) {
+    const exemption = actor.recalls('exemption')
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(
       ProjectNamePage.projectNameInput,
-      this.projectName
+      exemption.projectName
     )
     await browseTheWeb.click(ProjectNamePage.saveAndContinue)
 
-    const exemption = actor.recalls('exemption')
-    if (exemption) {
-      exemption.projectNameTaskCompleted = true
-      actor.remembers('exemption', exemption)
+    if (actor.hasMemoryOf('exemption')) {
+      actor.updates('exemption', (exemption) =>
+        exemption.markProjectNameTaskCompleted()
+      )
     }
   }
 }

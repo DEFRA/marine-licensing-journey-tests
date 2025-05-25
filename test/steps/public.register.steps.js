@@ -27,9 +27,7 @@ Given('the Public register page is displayed', async function () {
   this.actor.can(new BrowseTheWeb(browser))
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-  )
+  await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
 })
@@ -41,15 +39,9 @@ Given(
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withConsentToPublicRegister())
-    await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-    )
+    await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
-    )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
@@ -60,62 +52,42 @@ Given(
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withWithholdFromPublicRegister())
-    await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-    )
+    await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent,
-        this.actor.recalls('exemption').publicRegister.reason
-      )
-    )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
 When(
   'choosing not to withhold information from the public register',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = { consent: PublicRegisterPage.consent }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
 When(
   'choosing to withhold information from the public register',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = {
-      consent: PublicRegisterPage.withhold,
-      reason: 'Sensitive information'
-    }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent,
-        this.actor.recalls('exemption').publicRegister.reason
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({
+        consent: PublicRegisterPage.withhold,
+        reason: 'Sensitive information'
+      })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
 When(
   'the Save and continue button is selected after choosing Yes without providing a reason',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = { consent: PublicRegisterPage.withhold }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({ consent: PublicRegisterPage.withhold })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
@@ -123,33 +95,23 @@ When(
 When(
   'the Save and continue button is selected with a reason exceeding {int} characters',
   async function (numberOfCharacters) {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = {
-      consent: PublicRegisterPage.withhold,
-      reason: PublicRegisterModel.generateOversizedReason()
-    }
-    this.actor.remembers('exemption', exemption)
-
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent,
-        this.actor.recalls('exemption').publicRegister.reason
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({
+        consent: PublicRegisterPage.withhold,
+        reason: PublicRegisterModel.generateOversizedReason()
+      })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
 When(
   'choosing to allow information to be added to the public register',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = { consent: PublicRegisterPage.consent }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
   }
 )
 
@@ -163,14 +125,10 @@ When(
 When(
   'completing the public register task but cancelling out',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = { consent: PublicRegisterPage.consent }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andNotSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickCancel.now())
   }
 )
@@ -178,14 +136,10 @@ When(
 When(
   'completing the public register task but selecting to go back',
   async function () {
-    const exemption = this.actor.recalls('exemption')
-    exemption.publicRegister = { consent: PublicRegisterPage.consent }
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andNotSavingWith(
-        this.actor.recalls('exemption').publicRegister.consent
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickBack.now())
   }
 )
@@ -194,12 +148,13 @@ When(
   'changing the public register information to withhold but cancelling out',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andNotSavingWith(
-        PublicRegisterPage.withhold,
-        faker.lorem.words(5)
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({
+        consent: PublicRegisterPage.withhold,
+        reason: faker.lorem.words(5)
+      })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickCancel.now())
   }
 )
@@ -208,43 +163,34 @@ When(
   'changing the public register information to withhold but selecting to go back',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      CompletePublicRegisterTask.andNotSavingWith(
-        PublicRegisterPage.withhold,
-        faker.lorem.words(5)
-      )
+    this.actor.updates('exemption', (exemption) =>
+      exemption.updatePublicRegister({
+        consent: PublicRegisterPage.withhold,
+        reason: faker.lorem.words(5)
+      })
     )
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
     await this.actor.attemptsTo(ClickBack.now())
   }
 )
 
 When('changing the public register information to withhold', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  const exemption = this.actor.recalls('exemption')
-  exemption.publicRegister = {
-    consent: PublicRegisterPage.withhold,
-    reason: faker.lorem.words(5)
-  }
-  this.actor.remembers('exemption', exemption)
-  await this.actor.attemptsTo(
-    CompletePublicRegisterTask.andSavingWith(
-      this.actor.recalls('exemption').publicRegister.consent,
-      this.actor.recalls('exemption').publicRegister.reason
-    )
+  this.actor.updates('exemption', (exemption) =>
+    exemption.updatePublicRegister({
+      consent: PublicRegisterPage.withhold,
+      reason: faker.lorem.words(5)
+    })
   )
+  await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
 })
 
 When('changing the public register information to consent', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  const exemption = this.actor.recalls('exemption')
-  exemption.publicRegister = { consent: PublicRegisterPage.consent }
-  this.actor.remembers('exemption', exemption)
-  await this.actor.attemptsTo(
-    CompletePublicRegisterTask.andSavingWith(
-      this.actor.recalls('exemption').publicRegister.consent,
-      this.actor.recalls('exemption').publicRegister.reason || ''
-    )
+  this.actor.updates('exemption', (exemption) =>
+    exemption.updatePublicRegister({ consent: PublicRegisterPage.consent })
   )
+  await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
 })
 
 Then('the public register information is saved', async function () {

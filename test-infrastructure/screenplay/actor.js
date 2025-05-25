@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import { attachJson } from '../capture/json.js'
+import ExemptionData from './models/exemption.data.js'
 import MemoryFormatter from './models/memory.formatter.js'
 
 export default class Actor {
@@ -19,14 +20,28 @@ export default class Actor {
     }
   }
 
-  intendsTo(applyForExemption) {
-    this.remembers('exemption', applyForExemption.getData())
+  intendsTo(factory) {
+    const data = new ExemptionData(factory.getData())
+    data.markAsStored()
+    this.remembers('exemption', data)
     return this
   }
 
   remembers(key, value) {
+    if (this.hasMemoryOf(key) && this.memory[key]?._isStored) {
+      assert.fail(
+        `Cannot replace stored ${key} data. Use updates() method instead.`
+      )
+    }
     this.memory[key] = value
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
+  }
+
+  updates(key, updateFunction) {
+    const item = this.recalls(key)
+    updateFunction(item)
+    attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
+    return this
   }
 
   recalls(key) {

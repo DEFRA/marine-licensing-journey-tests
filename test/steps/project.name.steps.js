@@ -26,35 +26,31 @@ Given(
     this.actor.can(new BrowseTheWeb(browser))
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-    )
+    await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
 
 When('entering and saving a project with a valid name', async function () {
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-  )
+  await this.actor.attemptsTo(CompleteProjectName.now())
 })
 
 When(
   'entering and saving the project with name {string}',
   async function (projectName) {
-    this.actor.remembers('exemption', { projectName })
-    await this.actor.attemptsTo(
-      CompleteProjectName.with(this.actor.recalls('exemption').projectName)
-    )
+    this.actor.intendsTo(ApplyForExemption.withProjectName(projectName))
+    await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
 
 When('the project name is updated', async function () {
-  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(
-    CompleteProjectName.with(this.actor.recalls('exemption').projectName)
+  this.actor.updates('exemption', (exemption) =>
+    exemption.updateProjectName(
+      ApplyForExemption.withValidProjectName().getData().projectName
+    )
   )
+  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
+  await this.actor.attemptsTo(CompleteProjectName.now())
 })
 
 Then('the error {string} is displayed', async function (errorMessage) {
