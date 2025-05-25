@@ -3,50 +3,6 @@
 > **🎯 Core Philosophy**  
 > Combine **session-based structure** with **rich scenario content** and **systematic heuristics** to discover insights that automation cannot find.
 
-## 🙏 Attribution & Foundations
-
-This investigative testing approach builds upon the foundational work of several key contributors to the testing community:
-
-### **Michael Bolton**
-
-- **Scenario Testing Framework** - The THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS structure
-- **"Breaking the Test Case Addiction"** series - Moving beyond scripted test cases to rich exploration
-- **Realistic user investigation** principles that guide our scenario-based content
-- **Context-Driven Testing** school co-founder
-- **Rapid Software Testing** methodology co-founder (with James Bach)
-
-### **James Bach**
-
-- **Heuristic Test Strategy Model (HTSM)** - Systematic thinking frameworks for test discovery
-- **Exploratory Testing** methodologies and principles
-- **Context-Driven Testing** philosophy that underlies our adaptive approach
-
-### **Jon Bach**
-
-- **Session-Based Test Management (SBTM)** - Time-boxed testing sessions with clear charters and accountability
-- **Structured exploratory testing** approaches that provide our session framework
-
-### **Elisabeth Hendrickson**
-
-- **Agile Testing** principles that inform our integration with development workflows
-- **Risk-based testing** approaches that guide our prioritisation strategies
-
-### **Cem Kaner**
-
-- **Context-Driven Testing** school foundational principles
-- **Testing as investigation** rather than verification mindset
-
-Our **Investigative Testing** approach respectfully combines these proven methodologies into a unified framework suited to marine licensing domain testing while preserving the essential insights and principles from each contributor.
-
----
-
-This approach integrates the best aspects of multiple testing methodologies:
-
-- **Session-Based Testing Management (SBTM)** - Time-boxed structure with clear accountability
-- **Scenario Testing (Bolton's approach)** - Rich, realistic user contexts with guided flexibility
-- **Heuristic-Driven Exploration** - Systematic discovery using HTSM and domain models
-- **User Journey Investigation** - Complete workflow testing from authentic user perspectives
-
 ## 🎭 What is Investigative Testing?
 
 **Investigative testing** is **focused exploration** that leverages domain expertise to discover insights that automation cannot find. It's designed to be accessible to marine licensing specialists whilst providing systematic approaches to quality validation.
@@ -486,3 +442,47 @@ BDD Automated Tests           Investigative Sessions        Combined Coverage
 ---
 
 _Investigative testing combines the accountability of session-based testing with the richness of scenario testing and the systematic approach of heuristic exploration. The result is human-centred discovery that complements automation and provides confidence in real-world user success._
+
+## 🙏 Attribution & Foundations
+
+This investigative testing approach builds upon the foundational work of several key contributors to the testing community:
+
+### **Michael Bolton**
+
+- **Scenario Testing Framework** - The THEME → SETUP → ACTIVITIES → ORACLES → VARIATIONS structure
+- **"Breaking the Test Case Addiction"** series - Moving beyond scripted test cases to rich exploration
+- **Realistic user investigation** principles that guide our scenario-based content
+- **Context-Driven Testing** school co-founder
+- **Rapid Software Testing** methodology co-founder (with James Bach)
+
+### **James Bach**
+
+- **Heuristic Test Strategy Model (HTSM)** - Systematic thinking frameworks for test discovery
+- **Exploratory Testing** methodologies and principles
+- **Context-Driven Testing** philosophy that underlies our adaptive approach
+
+### **Jon Bach**
+
+- **Session-Based Test Management (SBTM)** - Time-boxed testing sessions with clear charters and accountability
+- **Structured exploratory testing** approaches that provide our session framework
+
+### **Elisabeth Hendrickson**
+
+- **Agile Testing** principles that inform our integration with development workflows
+- **Risk-based testing** approaches that guide our prioritisation strategies
+
+### **Cem Kaner**
+
+- **Context-Driven Testing** school foundational principles
+- **Testing as investigation** rather than verification mindset
+
+Our **Investigative Testing** approach respectfully combines these proven methodologies into a unified framework suited to marine licensing domain testing while preserving the essential insights and principles from each contributor.
+
+---
+
+This approach integrates the best aspects of multiple testing methodologies:
+
+- **Session-Based Testing Management (SBTM)** - Time-boxed structure with clear accountability
+- **Scenario Testing (Bolton's approach)** - Rich, realistic user contexts with guided flexibility
+- **Heuristic-Driven Exploration** - Systematic discovery using HTSM and domain models
+- **User Journey Investigation** - Complete workflow testing from authentic user perspectives
