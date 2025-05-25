@@ -265,20 +265,28 @@ await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
 #### **3. Logical Consistency in Data Models**
 
 ```javascript
-// LEARNED: Data relationships must reflect real-world logic
-// BAD: withhold=true but consent='yes' - makes no sense!
+// LEARNED: Boolean relationships must be logically consistent
+// BAD: Contradictory boolean relationships
 const data = {
-  withhold: true,
-  consent: 'yes', // Contradictory!
-  reason: null // Missing when withholding!
+  isHidden: true,
+  isVisible: true, // Contradicts isHidden!
+  isReadOnly: true,
+  canEdit: true // Contradicts isReadOnly!
 }
 
-// GOOD: withhold=true means consent=false and reason required
+// GOOD: Consistent boolean relationships
 const data = {
-  withhold: true,
-  consent: false, // Consistent!
-  reason: 'Commercial sensitivity'
+  isHidden: true,
+  isVisible: false, // Correctly inverse of isHidden
+  isReadOnly: true,
+  canEdit: false // Correctly inverse of isReadOnly
 }
+
+// EVEN BETTER: Derive inverse booleans
+const isHidden = true
+const isVisible = !isHidden // Explicitly show the relationship
+const isReadOnly = true
+const canEdit = !isReadOnly // Makes the logic clear
 ```
 
 ### **Key Breakthrough: I Automatically Used expect.fail()!**
