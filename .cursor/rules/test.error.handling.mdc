@@ -1,0 +1,119 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Test Error Handling
+
+*Based on refactoring experience with CompleteProjectName and EnsurePublicRegisterTask*
+
+## Context
+This rule applies when handling errors, validation failures, or unexpected conditions in test automation code. Test code should use proper test framework assertions rather than generic error throwing.
+
+## Core Principles
+
+### 1. Never Use `throw Error` in Test Code
+- **Don't**: `throw new Error('Something went wrong')`
+- **Do**: `expect.fail('Something went wrong')`
+- **Why**: Test frameworks need proper assertion failures, not generic exceptions
+
+### 2. Use Test Framework Assertions
+- **Chai assertions**: `expect.fail(message)` for validation failures
+- **Clear messages**: Provide descriptive failure messages that help debugging
+- **Consistent patterns**: Follow the same approach across all test files
+
+### 3. Validation Patterns for Test Code
+
+#### Data Validation
+```javascript
+// ❌ Wrong - throws generic error
+if (!exemption) {
+  throw new Error('Exemption data must be initialized')
+}
+
+// ✅ Right - uses test assertion
+if (!exemption) {
+  expect.fail('Exemption data must be initialized before completing project name')
+}
+```
+
+#### Unknown Mode/State Handling
+```javascript
+// ❌ Wrong - throws generic error
+default:
+  throw new Error(`Unknown mode: ${this.mode}`)
+
+// ✅ Right - uses test assertion
+default:
+  expect.fail(`Unknown EnsurePublicRegisterTask mode: ${this.mode}`)
+```
+
+### 4. When to Use Different Assertion Types
+
+#### `expect.fail()` - For Validation Failures
+- Missing required data
+- Invalid configuration
+- Unknown modes or states
+- Pre-condition failures
+
+#### Regular Chai Assertions - For Test Expectations
+- `expect(element).to.be.visible`
+- `expect(text).to.equal('Expected value')`
+- `expect(status).to.not.be.null`
+
+### 5. Error Message Guidelines
+- **Be specific**: Include context about what failed
+- **Be helpful**: Explain what should have happened
+- **Include values**: Show actual vs expected when relevant
+
+```javascript
+// ❌ Vague
+expect.fail('Data missing')
+
+// ✅ Specific and helpful
+expect.fail('Exemption data must be initialized before completing project name')
+```
+
+## Import Requirements
+Always import `expect` from chai when using `expect.fail()`:
+
+```javascript
+import { expect } from 'chai'
+```
+
+## Common Scenarios
+
+### 1. Actor Memory Validation
+```javascript
+const exemption = actor.recalls('exemption')
+if (!exemption) {
+  expect.fail('Exemption data must be initialized before completing project name')
+}
+```
+
+### 2. Unknown Mode Handling
+```javascript
+switch (this.mode) {
+  case 'valid-mode':
+    // handle valid case
+    break
+  default:
+    expect.fail(`Unknown TaskName mode: ${this.mode}`)
+}
+```
+
+### 3. Configuration Validation
+```javascript
+if (!this.requiredConfig) {
+  expect.fail('Required configuration must be provided')
+}
+```
+
+## Benefits
+- **Better test output**: Failures show up properly in test reports
+- **Framework integration**: Works correctly with test runners
+- **Consistent patterns**: Same approach across all test files
+- **Clear debugging**: Descriptive messages help identify issues quickly
+
+## Remember
+Test code is different from application code. In tests, we want assertion failures that integrate with the test framework, not generic exceptions that might be caught and handled unexpectedly.
