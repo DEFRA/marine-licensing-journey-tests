@@ -125,7 +125,7 @@ This section covers **security testing**, **threat-based testing**, and **securi
 
 **DEFRA Core Delivery Platform (CDP)**:
 
-- **Cloud-hosted platform** - Eliminates need for teams to build or understand underlying cloud infrastructure (AWS, Azure, GCP)
+- **AWS cloud-hosted platform** - Eliminates need for teams to build or understand underlying AWS infrastructure
 - **Governance and security by design** - Platform strengthens overall governance and security requirements through common patterns
 - **Infrastructure security validated** - CDP platform has undergone independent security assessment and penetration testing
 - **Built-in security features** - Includes secure file upload and virus scanning service, authentication test harnesses
