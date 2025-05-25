@@ -53,6 +53,8 @@ Then the project name is displayed on the Public register page
 - **When** → User **Tasks**
 - **Then** → **Interactions** with `ensure` prefix
 
+> 📖 **See:** [Automation Approach](./automation.md) for screenplay implementation details
+
 ### Real Step Definition Examples
 
 ```javascript
