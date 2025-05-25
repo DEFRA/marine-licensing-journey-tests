@@ -49,6 +49,7 @@ Skills develop naturally through:
 **Recommended Reading:**
 
 - "Lessons Learned in Software Testing" - Kaner, Bach, Pettichord
+- "Perfect Software and Other Illusions About Testing" - Gerald Weinberg
 - "Explore It!" - Elisabeth Hendrickson
 - Michael Bolton's "Breaking the Test Case Addiction" blog series
 - "Agile Testing: A Practical Guide" - Crispin and Gregory
@@ -66,40 +67,6 @@ Skills develop naturally through:
 - **Agile Testing Days** conferences and workshops
 - **Context-Driven Testing** community forums
 - **Government testing communities** and knowledge sharing
-
-## 🎯 Practical Skill Building
-
-### **Weekly Learning Focus Areas**
-
-**Month 1: Foundation Skills**
-
-- Week 1: Understanding testing heuristics and systematic thinking
-- Week 2: Investigative testing techniques and session structure
-- Week 3: Marine licensing domain knowledge and user personas
-- Week 4: Automation principles and quality engineering basics
-
-**Month 2: Application Skills**
-
-- Week 1: Accessibility testing with assistive technology
-- Week 2: Cross-browser compatibility and mobile testing
-- Week 3: Performance awareness and user experience validation
-- Week 4: Risk-based testing and prioritisation
-
-**Month 3: Advanced Techniques**
-
-- Week 1: Advanced investigative testing scenarios
-- Week 2: Test strategy refinement and adaptation
-- Week 3: Team collaboration and knowledge sharing
-- Week 4: Continuous improvement and reflection
-
-### **Learning Measurement**
-
-**Simple Progress Indicators:**
-
-- **Confidence growth** - Increasing comfort with testing approaches
-- **Skill application** - Successfully using techniques in real situations
-- **Knowledge sharing** - Ability to help others with testing challenges
-- **Strategy contribution** - Ideas for improving testing approaches
 
 ## 🚀 Getting Started
 
