@@ -2,13 +2,9 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { faker } from '@faker-js/faker'
 import { browser } from '@wdio/globals'
 
-import {
-  ProjectNamePage,
-  PublicRegisterPage
-} from '~/test-infrastructure/pages'
+import { PublicRegisterPage } from '~/test-infrastructure/pages'
 import {
   Actor,
-  ApplyForExemption,
   BrowseTheWeb,
   ClickBack,
   ClickCancel,
@@ -40,7 +36,7 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
-    await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.remembers('projectName', generateTestData.projectName())
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))
@@ -60,7 +56,7 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
-    await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.remembers('projectName', faker.lorem.words(5))
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))

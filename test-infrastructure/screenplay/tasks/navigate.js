@@ -4,6 +4,17 @@ import TaskListPage from '~/test-infrastructure/pages/task.list.page'
 import Task from '../base/task.js'
 
 export default class Navigate extends Task {
+  static toTheMarineLicensingApp = {
+    now: () => new Navigate().justNavigateTo(ProjectNamePage.url),
+    andCompleteProjectName: () =>
+      new Navigate().startAt(ProjectNamePage.url).completeProjectName(),
+    andSelectPublicRegisterTask: () =>
+      new Navigate()
+        .startAt(ProjectNamePage.url)
+        .completeProjectName()
+        .selectTask('Public register')
+  }
+
   static toPublicRegisterPage() {
     return new Navigate()
       .startAt(ProjectNamePage.url)
@@ -12,7 +23,7 @@ export default class Navigate extends Task {
   }
 
   static toProjectNamePage() {
-    return new Navigate().startAt(ProjectNamePage.url)
+    return new Navigate().justNavigateTo(ProjectNamePage.url)
   }
 
   static toTaskListPage() {
@@ -30,6 +41,11 @@ export default class Navigate extends Task {
     return this
   }
 
+  justNavigateTo(url) {
+    this.justNavigateUrl = url
+    return this
+  }
+
   completeProjectName(projectName = null) {
     this.projectNameValue = projectName
     return this
@@ -41,6 +57,11 @@ export default class Navigate extends Task {
   }
 
   async performAs(actor) {
+    if (this.justNavigateUrl) {
+      await actor.ability.navigateTo(this.justNavigateUrl)
+      return
+    }
+
     await actor.ability.navigateTo(this.startUrl)
 
     if (this.projectNameValue || !this.startUrl.includes('task-list')) {

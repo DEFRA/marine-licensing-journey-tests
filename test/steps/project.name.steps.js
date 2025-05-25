@@ -4,11 +4,11 @@ import { browser } from '@wdio/globals'
 import { ProjectNamePage } from '~/test-infrastructure/pages'
 import {
   Actor,
-  ApplyForExemption,
   BrowseTheWeb,
   CompleteProjectName,
   EnsureErrorDisplayed,
   EnsureThatProjectName,
+  Navigate,
   SelectTheTask,
   generateTestData
 } from '~/test-infrastructure/screenplay'
@@ -16,7 +16,7 @@ import {
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
 })
 
 Given(
@@ -24,7 +24,7 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
-    await this.actor.attemptsTo(ApplyForExemption.where(ProjectNamePage.url))
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.remembers('projectName', generateTestData.projectName())
     await this.actor.attemptsTo(
       CompleteProjectName.with(this.actor.recalls('projectName'))
