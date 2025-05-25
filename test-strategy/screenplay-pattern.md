@@ -136,5 +136,3 @@ export default class EnsureConfirmation extends Task {
 - Feature files go in `test/features/`
 - Step definitions go in `test/steps/`
 - Screenplay implementation follows the patterns in `test-infrastructure/screenplay/`
-
-> 📖 **See:** [Project Structure](../project-structure.md) for complete organization rules
