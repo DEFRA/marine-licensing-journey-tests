@@ -1,290 +1,155 @@
-# Test Charters - Systematic Exploration of User Stories
+# Test Charters - Investigative Testing Plans
 
-This section contains **exploratory testing charters** derived from marine licensing user stories. Each charter provides structured guidance for investigating specific aspects of functionality through systematic exploration.
+This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **90-minute investigation sessions** that combine systematic exploration with realistic user scenarios.
 
-> **🎬 Enhanced with Scenario Testing**  
-> Our charters now integrate **[Scenario Testing](../test-strategy/scenario-testing/README.md)** approaches, providing both traditional SBTM structure and rich, realistic user investigation frameworks.
+> **🔗 Powered by Investigative Testing**  
+> These charters implement the **[Investigative Testing](../test-strategy/investigative-testing/README.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
 
 ## 🧠 Charter Purpose
 
 Test charters bridge the gap between:
 
 - **User story requirements** - What the feature should do
-- **Systematic exploration** - How we discover what it actually does
+- **Systematic investigation** - How we discover what it actually does through realistic scenarios
 - **Real user needs** - Whether it serves marine licensing personas effectively
-- **Realistic usage patterns** - How people actually use the system under real-world conditions
+- **Evidence collection** - Actionable insights for development teams
 
-## 🎯 Charter Types & Structure
+## 🏗️ Charter Structure
 
-We provide **two complementary charter approaches**:
-
-### **🧭 Traditional SBTM Charters**
-
-Standard exploratory testing charters for focused investigation:
+All charters follow the **Investigative Testing framework**:
 
 ```
-EXPLORE: [Area of the application]
-WITH: [Tools, data, personas, techniques]
-TO DISCOVER: [Types of information, risks, problems]
-
-Duration: [Recommended time allocation]
-Priority: [High/Medium/Low based on risk]
-User Personas: [Which marine licensing personas to consider]
-```
-
-### **🎭 Scenario-Enhanced Charters**
-
-Rich, realistic user investigation using Bolton's framework:
-
-```
-CHARTER: [Investigation mission]
+SESSION CHARTER: [Clear mission statement]
 
 SCENARIO CONTEXT:
-THEME: [Clear mission statement about realistic user situation]
-SETUP: [Authentic user context, pressures, environment]
-REALISTIC PRESSURES: [Interruptions, time pressure, friction elements]
+THEME: [Rich user context - what authentic situation are we investigating?]
+SETUP: [Realistic pressures, friction, and environment]
+PERSONA: [Which marine licensing user type - Zofia, Amy, Fatima, Simon]
 
-ACTIVITIES: [Guided but flexible realistic actions]
-ORACLES: [How to recognise problems and quality indicators]
-VARIATIONS: [Ways to introduce turbulence and stress]
+INVESTIGATION FOCUS:
+EXPLORE: [Area of application or workflow]
+WITH: [Tools, techniques, heuristics, realistic conditions]
+TO DISCOVER: [Types of insights and evidence we seek]
 
-Duration: [Time allocation - often longer for rich scenarios]
-User Personas: [Primary persona with authentic context]
+REALISTIC ACTIVITIES:
+- [Guided but flexible actions following authentic user patterns]
+- [Include friction, interruptions, and real-world behaviour]
+- [Test edge cases and stress conditions]
+
+EVIDENCE FRAMEWORK:
+- [Specific quality indicators to monitor]
+- [Success patterns and warning signs]
+- [Performance and usability measures]
+
+Duration: 90 minutes
+Priority: [High/Medium/Low based on risk and user impact]
 ```
 
-### **🔄 Integration Benefits**
-
-**Combining both approaches provides:**
-
-- **Focused Investigation** - Traditional charters for specific technical areas
-- **Realistic Context** - Scenario charters for authentic user experience
-- **Comprehensive Coverage** - Multiple perspectives on the same functionality
-- **Evidence Quality** - Both technical validation and user experience insights
-
-## 📁 Charter Organisation
+## 📁 Charter Library
 
 ### **ML-1: Project Name & Exemption Creation**
 
-#### **Traditional SBTM Charters:**
+- **[ML-1-novice-discovery.md](./ML-1/ML-1-novice-discovery.md)** - First-time user journey with accessibility focus
+- **[ML-1-efficiency-patterns.md](./ML-1/ML-1-efficiency-patterns.md)** - Veteran user workflows and data reuse
+- **[ML-1-validation-scenarios.md](./ML-1/ML-1-validation-scenarios.md)** - Error handling and edge cases under realistic pressure
 
-- **[ML-1-happy-path.md](./ML-1/ML-1-happy-path.md)** - Core functionality validation
-- **[ML-1-validation.md](./ML-1/ML-1-validation.md)** - Error handling and edge cases
-- **[ML-1-accessibility.md](./ML-1/ML-1-accessibility.md)** - Inclusive design validation
+### **ML-9: Task List Navigation**
 
-#### **Scenario-Enhanced Charters:**
+- **[ML-9-navigation-workflows.md](./ML-9/ML-9-navigation-workflows.md)** - Task list interaction patterns and status management
+- **[ML-9-interruption-resilience.md](./ML-9/ML-9-interruption-resilience.md)** - Multitasking and workflow disruption scenarios
+- **[ML-9-cross-device-continuity.md](./ML-9/ML-9-cross-device-continuity.md)** - Mobile-to-desktop workflow transitions
 
-- **[ML-1-zofia-first-timer.md](./ML-1/ML-1-zofia-first-timer.md)** - Novice user realistic journey
-- **[ML-1-amy-efficiency.md](./ML-1/ML-1-amy-efficiency.md)** - Veteran user speed and reuse patterns
+### **ML-12: Public Register Consent**
 
-### **ML-9: Task List Viewing**
-
-#### **Traditional SBTM Charters:**
-
-- **[ML-9-navigation.md](./ML-9/ML-9-navigation.md)** - Task list navigation and status
-- **[ML-9-usability.md](./ML-9/ML-9-usability.md)** - User experience and workflow
-
-#### **Scenario-Enhanced Charters:**
-
-- **[ML-9-fatima-interruptions.md](./ML-9/ML-9-fatima-interruptions.md)** - Case officer multitasking scenario
-- **[ML-9-cross-device-journey.md](./ML-9/ML-9-cross-device-journey.md)** - Mobile-to-desktop workflow reality
-
-### **ML-12: Public Register Content**
-
-#### **Traditional SBTM Charters:**
-
-- **[ML-12-consent-workflow.md](./ML-12/ML-12-consent-workflow.md)** - Radio button behaviour and conditional logic
-- **[ML-12-validation.md](./ML-12/ML-12-validation.md)** - Form validation and error scenarios
-- **[ML-12-data-protection.md](./ML-12/ML-12-data-protection.md)** - Privacy and data handling
-
-#### **Scenario-Enhanced Charters:**
-
-- **[ML-12-privacy-concerns.md](./ML-12/ML-12-privacy-concerns.md)** - User privacy decision-making under pressure
-- **[ML-12-consent-misunderstanding.md](./ML-12/ML-12-consent-misunderstanding.md)** - Data protection confusion scenarios
-
-## 🎭 Persona Integration
-
-Each charter considers marine licensing personas with **authentic context**:
-
-### **Enhanced Persona Application:**
-
-- **Zofia (Novice Applicant)** - First-time confusion, assistive technology, mobile-first approach
-- **Amy (Veteran Applicant)** - Efficiency focus, keyboard shortcuts, data reuse expectations
-- **Fatima (Case Officer)** - Multitasking pressure, interruptions, data integrity concerns
-- **Simon (Marine Officer)** - Technical review focus, compliance validation, field access needs
-
-### **Realistic Pressures:**
-
-- **Time pressure** - Seasonal deadlines, end-of-day urgency
-- **Interruptions** - Phone calls, emails, colleague questions
-- **Technical friction** - Slow connections, device switching, browser issues
-- **Cognitive load** - Complex regulations, unfamiliar terminology, multiple tasks
-
-## 🎬 Scenario Testing Integration
-
-> **📖 Complete Framework**  
-> See **[Scenario Testing](../test-strategy/scenario-testing/README.md)** for Bolton's comprehensive approach and **[Session-Based Testing Integration](../test-strategy/session-based-testing/README.md#-integration-with-scenario-testing)** for implementation guidance.
-
-### **How to Use Scenario-Enhanced Charters**
-
-#### **Session Planning (90-120 minutes)**
-
-1. **Choose scenario charter** - Pick based on risk areas and persona focus
-2. **Set up realistic context** - Configure devices, personas, friction elements
-3. **Execute with guided flexibility** - Follow activities but adapt to discoveries
-4. **Document evidence** - Use scenario oracles and evidence frameworks
-5. **Debrief insights** - Include scenario-specific findings in session review
-
-#### **Scenario Charter Execution**
-
-```
-Setup Phase (10-15 minutes):
-├── Configure persona context and realistic pressures
-├── Set up devices, assistive technology, interruption simulations
-└── Prepare scenario-specific test data and materials
-
-Investigation Phase (75-90 minutes):
-├── Execute scenario activities with guided flexibility
-├── Follow realistic user patterns and friction simulation
-├── Apply scenario oracles and quality indicators
-└── Document discoveries using scenario evidence framework
-
-Wrap-up Phase (10-15 minutes):
-├── Assess scenario completion and key discoveries
-├── Note which variations were most revealing
-└── Identify follow-up investigations needed
-```
-
-### **Charter Selection Guide**
-
-| **When you want to...**                    | **Use...**                |
-| ------------------------------------------ | ------------------------- |
-| **Test specific functionality quickly**    | Traditional SBTM charter  |
-| **Understand real user experience deeply** | Scenario-enhanced charter |
-| **Find technical edge cases and bugs**     | Traditional SBTM charter  |
-| **Discover usability and workflow issues** | Scenario-enhanced charter |
-| **Validate against acceptance criteria**   | Traditional SBTM charter  |
-| **Test under realistic user pressures**    | Scenario-enhanced charter |
-| **Cover lots of ground quickly**           | Traditional SBTM charter  |
-| **Investigate one persona deeply**         | Scenario-enhanced charter |
+- **[ML-12-consent-decision.md](./ML-12/ML-12-consent-decision.md)** - Privacy decision-making under realistic pressures
+- **[ML-12-data-protection-clarity.md](./ML-12/ML-12-data-protection-clarity.md)** - Information clarity and user understanding
+- **[ML-12-workflow-validation.md](./ML-12/ML-12-workflow-validation.md)** - Form behaviour and conditional logic testing
 
 ## 🚀 Using Test Charters
 
-### **Before Starting**
+### **Charter Execution (90 minutes)**
 
-1. **Choose charter type** - Traditional SBTM or scenario-enhanced based on investigation goals
-2. **Review context** - User story, acceptance criteria, persona background
-3. **Set up appropriately** - Tools for traditional testing or full scenario context
-4. **Allocate time** - 60-90 minutes for traditional, 90-120 minutes for scenarios
+```
+📋 Preparation (10 minutes)
+├── Review charter scenario context and investigation focus
+├── Set up realistic user environment (devices, tools, friction)
+├── Prepare test data and persona materials
+└── Configure evidence collection tools
 
-### **During Exploration**
+🔍 Investigation (70 minutes)
+├── Execute scenario activities with guided flexibility
+├── Apply systematic heuristics during exploration
+├── Follow authentic user behaviour patterns
+├── Document discoveries and evidence in real-time
+└── Adapt approach based on findings
 
-#### **Traditional Charter Execution:**
-
-1. Follow the charter systematically
-2. Document discoveries as you go
-3. Note unexpected behaviours or questions
-4. Take screenshots of interesting findings
-
-#### **Scenario Charter Execution:**
-
-1. Maintain persona authenticity throughout
-2. Simulate realistic pressures and friction
-3. Apply scenario oracles for problem detection
-4. Document evidence using scenario frameworks
-5. Adapt activities based on discoveries while staying in character
+📝 Debrief (10 minutes)
+├── Assess session goals and scenario completion
+├── Document key discoveries and evidence
+├── Identify follow-up investigations needed
+└── Update charter tracking and coverage
+```
 
 ### **After Completion**
 
-1. **Summarise key discoveries** - Both technical and user experience insights
-2. **Create bug reports** - Include context about how issues were discovered
-3. **Identify automation gaps** - What scenarios should automation validate?
-4. **Share insights** - Include persona and scenario insights with team
-5. **Plan follow-up** - Traditional charter findings may suggest scenario investigations and vice versa
+1. **Summarise key discoveries** - Include both technical and user experience insights
+2. **Create actionable reports** - Link findings to specific user impact and business risk
+3. **Identify automation opportunities** - What scenarios should automated tests validate?
+4. **Plan follow-up sessions** - Which areas need deeper investigation or different persona perspectives?
 
 ## 📊 Charter Status
 
-| User Story | Charter Type | Charter Name                                                          | Priority | Status   |
-| ---------- | ------------ | --------------------------------------------------------------------- | -------- | -------- |
-| ML-1       | Traditional  | [Happy Path](./ML-1/ML-1-happy-path.md)                               | High     | ✅ Ready |
-| ML-1       | Traditional  | [Validation](./ML-1/ML-1-validation.md)                               | High     | ✅ Ready |
-| ML-1       | Traditional  | [Accessibility](./ML-1/ML-1-accessibility.md)                         | Medium   | ✅ Ready |
-| ML-1       | Scenario     | [Zofia First-Timer](./ML-1/ML-1-zofia-first-timer.md)                 | High     | 🔄 Draft |
-| ML-1       | Scenario     | [Amy Efficiency](./ML-1/ML-1-amy-efficiency.md)                       | Medium   | ✅ Ready |
-| ML-9       | Traditional  | [Navigation](./ML-9/ML-9-navigation.md)                               | High     | ✅ Ready |
-| ML-9       | Traditional  | [Usability](./ML-9/ML-9-usability.md)                                 | Medium   | ✅ Ready |
-| ML-9       | Scenario     | [Fatima Interruptions](./ML-9/ML-9-fatima-interruptions.md)           | High     | ✅ Ready |
-| ML-9       | Scenario     | [Cross-Device Journey](./ML-9/ML-9-cross-device-journey.md)           | Medium   | ✅ Ready |
-| ML-12      | Traditional  | [Consent Workflow](./ML-12/ML-12-consent-workflow.md)                 | High     | ✅ Ready |
-| ML-12      | Traditional  | [Validation](./ML-12/ML-12-validation.md)                             | High     | ✅ Ready |
-| ML-12      | Traditional  | [Data Protection](./ML-12/ML-12-data-protection.md)                   | Medium   | ✅ Ready |
-| ML-12      | Scenario     | [Privacy Concerns](./ML-12/ML-12-privacy-concerns.md)                 | High     | ✅ Ready |
-| ML-12      | Scenario     | [Consent Misunderstanding](./ML-12/ML-12-consent-misunderstanding.md) | Medium   | ✅ Ready |
+| User Story | Charter Name                                                        | Focus                                       | Priority | Status   |
+| ---------- | ------------------------------------------------------------------- | ------------------------------------------- | -------- | -------- |
+| ML-1       | [Novice Discovery](./ML-1/ML-1-novice-discovery.md)                 | First-time user journey & accessibility     | High     | 🔄 Ready |
+| ML-1       | [Efficiency Patterns](./ML-1/ML-1-efficiency-patterns.md)           | Veteran user workflows & data reuse         | Medium   | 🔄 Ready |
+| ML-1       | [Validation Scenarios](./ML-1/ML-1-validation-scenarios.md)         | Error handling under realistic pressure     | High     | 🔄 Ready |
+| ML-9       | [Navigation Workflows](./ML-9/ML-9-navigation-workflows.md)         | Task list patterns & status management      | High     | 🔄 Ready |
+| ML-9       | [Interruption Resilience](./ML-9/ML-9-interruption-resilience.md)   | Multitasking & workflow disruption          | High     | 🔄 Ready |
+| ML-9       | [Cross-Device Continuity](./ML-9/ML-9-cross-device-continuity.md)   | Mobile-to-desktop transitions               | Medium   | 🔄 Ready |
+| ML-12      | [Consent Decision](./ML-12/ML-12-consent-decision.md)               | Privacy decisions under realistic pressures | High     | 🔄 Ready |
+| ML-12      | [Data Protection Clarity](./ML-12/ML-12-data-protection-clarity.md) | Information clarity & user understanding    | High     | 🔄 Ready |
+| ML-12      | [Workflow Validation](./ML-12/ML-12-workflow-validation.md)         | Form behaviour & conditional logic          | Medium   | 🔄 Ready |
 
 ## 📋 Session Hopper
 
-### **Traditional SBTM Sessions Available**
+### **Available Investigation Sessions**
 
-Quick-focus technical investigations (60-90 minutes):
-
-```
-📋 SBTM Hopper:
-- Explore exemption creation workflow edge cases
-- Investigate task list status management
-- Test public register consent validation
-- Analyse accessibility of project name page
-- Evaluate mobile responsiveness across user journeys
-- Validate error handling in project name entry
-- Test keyboard navigation across complete workflow
-- Investigate form data persistence and recovery
-- Explore cross-browser compatibility issues
-- Test location coordinate entry with various formats
-```
-
-### **Scenario-Enhanced Sessions Available**
-
-Rich, realistic user investigations (90-120 minutes):
+Pick a charter based on current risk areas and investigation priorities:
 
 ```
-🎭 Scenario Hopper:
-- Execute "Zofia First-Timer" (ML-1) - novice user confusion patterns
-- Run "Amy Efficiency" (ML-1) - veteran user speed and shortcuts
-- Investigate "Fatima Interruptions" (ML-9) - case officer pressure testing
-- Explore "Cross-Device Journey" (ML-9) - mobile-to-desktop workflows
-- Test "Privacy Concerns" (ML-12) - realistic deadline pressure consent scenarios
-- Simulate "Consent Misunderstanding" (ML-12) - data protection confusion patterns
-- Run "Network Interruption Recovery" - connection issues during submission
-- Execute "Terminology Misunderstanding" - domain knowledge gaps
+🎭 Current Hopper (90-minute sessions):
+├── ML-1 Novice Discovery - first-time user confusion and accessibility barriers
+├── ML-1 Efficiency Patterns - veteran user workflows and speed optimisation
+├── ML-1 Validation Scenarios - error handling under realistic user pressure
+├── ML-9 Navigation Workflows - task list interaction patterns and status clarity
+├── ML-9 Interruption Resilience - multitasking and workflow disruption testing
+├── ML-9 Cross-Device Continuity - mobile-to-desktop transition effectiveness
+├── ML-12 Consent Decision - privacy decision-making under realistic pressures
+├── ML-12 Data Protection Clarity - information understanding and compliance
+└── ML-12 Workflow Validation - form behaviour and conditional logic testing
 ```
 
 ### **Session Assignment Strategy**
 
-#### **Risk-Based Selection:**
+#### **Priority-Based Selection:**
 
-1. **High-risk functionality** → Scenario charter for realistic discovery + Traditional charter for technical validation
-2. **Medium-risk functionality** → Traditional charter initially, scenario follow-up if issues found
-3. **Low-risk functionality** → Traditional charter focus
+1. **High-risk, user-facing functionality** → ML-1 Novice Discovery, ML-9 Interruption Resilience, ML-12 Consent Decision
+2. **Efficiency and workflow optimisation** → ML-1 Efficiency Patterns, ML-9 Navigation Workflows
+3. **Technical validation and edge cases** → ML-1 Validation Scenarios, ML-12 Workflow Validation
+4. **Cross-platform and accessibility** → ML-1 Novice Discovery, ML-9 Cross-Device Continuity
 
-#### **Time-Based Selection:**
+#### **When Stakeholders Request Testing:**
 
-- **Short sessions (60 minutes)** → Traditional SBTM charters
-- **Standard sessions (90 minutes)** → Traditional or lightweight scenarios
-- **Extended sessions (120+ minutes)** → Full scenario investigations
-
-### **Session Prioritisation**
-
-When stakeholders request special testing:
-
-> "Here's our current session hopper with both traditional and scenario options. What priority should we give your request, and would you prefer technical validation or realistic user investigation?"
+> "Here's our current session hopper with investigative charters that combine technical validation with realistic user scenarios. Which area would you like us to prioritise for investigation?"
 
 ## 🔗 Related Resources
 
 - **[User Stories](../.cursor/user-stories/README.md)** - Requirements and acceptance criteria
+- **[Investigative Testing Guide](../test-strategy/investigative-testing/README.md)** - Complete framework and methodology
 - **[Marine Licensing Personas](../test-strategy/domain-context/README.md)** - User context and realistic pressures
-- **[Scenario Testing](../test-strategy/scenario-testing/README.md)** - Bolton's comprehensive framework
-- **[Session-Based Testing](../test-strategy/session-based-testing/README.md)** - SBTM structure and scenario integration
-- **[Exploratory Testing Guide](../test-strategy/exploratory/README.md)** - Investigation techniques and approaches
-- **[Testing Heuristics](../test-strategy/heuristics/README.md)** - Systematic thinking frameworks
+- **[Testing Heuristics](../test-strategy/heuristics/README.md)** - Systematic thinking frameworks for investigation
 
 ---
 
-_Test charters bridge user stories and systematic exploration - now enhanced with realistic scenarios that reveal how features actually serve users under authentic conditions._
+_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how features actually serve marine licensing users under authentic conditions._

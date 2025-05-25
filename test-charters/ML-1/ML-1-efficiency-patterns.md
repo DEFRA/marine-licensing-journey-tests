@@ -1,12 +1,11 @@
-# ML-1 Scenario Charter: Amy's Efficient Repeat Application
+# ML-1 Investigative Charter: Efficiency Patterns
 
-## Charter Definition
+## Session Charter
 
-**CHARTER:** Investigate project name workflow through veteran user lens to discover efficiency barriers and workflow friction for experienced marine licensing applicants
+**SESSION CHARTER:** Investigate project name workflow through veteran user lens to discover efficiency barriers and workflow friction for experienced marine licensing applicants
 
 **Duration:** 90 minutes  
-**Priority:** Medium  
-**Charter Type:** Scenario-Enhanced Investigation
+**Priority:** Medium
 
 ## Scenario Context
 
@@ -198,37 +197,7 @@ Discover workflow inefficiencies and missed optimisation opportunities for users
 - What performance benchmarks are needed for professional usage?
 - How can automated tests verify keyboard navigation completeness?
 
-## Session Structure
-
-### **Setup Phase (15 minutes)**
-
-- Configure multiple browser tabs and professional workspace simulation
-- Set up client application simulation (multiple projects, deadlines)
-- Prepare realistic project information reflecting professional naming patterns
-- Review Amy persona background and typical efficiency expectations
-
-### **Investigation Phase (60 minutes)**
-
-- Execute scenario activities with authentic professional efficiency focus
-- Maintain veteran user perspective throughout investigation
-- Document discoveries focusing on efficiency and workflow optimization
-- Test both rapid completion and multi-application management patterns
-- Simulate realistic professional interruptions and task switching
-
-### **Debrief Phase (15 minutes)**
-
-- Assess scenario realism and professional workflow authenticity
-- Document key evidence using efficiency framework categories
-- Identify efficiency improvements that would benefit veteran users
-- Plan follow-up investigations and automation efficiency validation
-
 ---
 
-**Related Resources:**
-
-- **[ML-1 User Story](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)** - Requirements and acceptance criteria
-- **[Amy Persona](../../test-strategy/domain-context/README.md#amy-veteran-applicant---efficiency-testing)** - Detailed persona background and efficiency expectations
-- **[Domain Context](../../test-strategy/domain-context/README.md)** - Real professional user patterns
-- **[Traditional ML-1 Charters](./ML-1-happy-path.md)** - Complementary technical investigations
-
-_This scenario charter explores whether the project name workflow supports professional efficiency and workflow optimization for experienced marine licensing users._
+**Investigative Testing Approach:** This charter implements the **[Investigative Testing](../../test-strategy/investigative-testing/README.md)** framework  
+**Related User Story:** [ML-1.provide.project.name.and.create.exemption.mdc](../../.cursor/user-stories/ML-1.provide.project.name.and.create.exemption.mdc)
