@@ -1,13 +1,18 @@
+import { expect } from 'chai'
 import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
 import Task from '../base/task.js'
 
 export default class EnsurePublicRegisterTask extends Task {
   static hasBeenCompletedWith(option, withholdReason = '') {
-    return new EnsurePublicRegisterTask(true, option, withholdReason)
+    return new EnsurePublicRegisterTask(
+      'completed-with-data',
+      option,
+      withholdReason
+    )
   }
 
   static hasNoInformationCompleted() {
-    return new EnsurePublicRegisterTask(false, '')
+    return new EnsurePublicRegisterTask('completed-no-data')
   }
 
   static isCompleted() {
@@ -37,10 +42,10 @@ export default class EnsurePublicRegisterTask extends Task {
     const browseTheWeb = actor.ability
 
     switch (this.mode) {
-      case true:
+      case 'completed-with-data':
         await this.verifyPrepopulatedDetails(browseTheWeb)
         break
-      case false:
+      case 'completed-no-data':
         await this.verifyNoPrepopulatedDetails(browseTheWeb)
         break
       case 'completed':
@@ -55,6 +60,8 @@ export default class EnsurePublicRegisterTask extends Task {
       case 'not-pre-populated':
         await this.verifyNoPrepopulatedDetails(browseTheWeb)
         break
+      default:
+        expect.fail(`Unknown EnsurePublicRegisterTask mode: ${this.mode}`)
     }
   }
 
