@@ -175,7 +175,6 @@ This strategy **complements existing organisational governance**:
 
 ### **📊 Quality Intelligence**
 
-- **[Observability](./observability/README.md)** - Monitoring, logging, and quality metrics
 - **[Performance Engineering](./performance/README.md)** - Performance testing and optimisation
 - **[Security Testing](./security/README.md)** - Security-by-design and threat testing
 
@@ -193,7 +192,6 @@ This strategy **complements existing organisational governance**:
 | Build robust test automation                 | [Automation Approach](./automation/README.md)              |
 | Understand marine licensing user needs       | [Domain Context](./domain-context/README.md)               |
 | Test accessibility and inclusion             | [Accessibility Testing](./accessibility/README.md)         |
-| Set up quality monitoring and metrics        | [Observability](./observability/README.md)                 |
 | Test performance and scalability             | [Performance Engineering](./performance/README.md)         |
 
 ## 🔬 Testing Approach
@@ -372,5 +370,4 @@ _Quality is everyone's responsibility. This strategy provides the framework for 
 | Automate repetitive scenarios     | [Automation](./automation/README.md)                       |
 | Ensure accessibility compliance   | [Accessibility](./accessibility/README.md)                 |
 | Coach quality skills              | [Coaching](./coaching/README.md)                           |
-| Monitor quality in production     | [Observability](./observability/README.md)                 |
 | Document investigation sessions   | [Test Charters](../test-charters/README.md)                |
