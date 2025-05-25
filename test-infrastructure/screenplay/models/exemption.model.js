@@ -18,21 +18,21 @@ export default class ExemptionModel {
 
   updateProjectName(projectName) {
     this.projectName = projectName
-    this.taskList.projectName = this.TASK_STATUSES.COMPLETED
+    this.taskList.projectName = ExemptionModel.TASK_STATUSES.COMPLETED
     this.updatedAt = new Date()
     return this
   }
 
   updatePublicRegister(publicRegisterData) {
     this.publicRegister = publicRegisterData
-    this.taskList.publicRegister = this.TASK_STATUSES.COMPLETED
+    this.taskList.publicRegister = ExemptionModel.TASK_STATUSES.COMPLETED
     this.updatedAt = new Date()
     return this
   }
 
   updateSiteDetails(siteDetailsData) {
     this.siteDetails = siteDetailsData
-    this.taskList.siteDetails = this.TASK_STATUSES.COMPLETED
+    this.taskList.siteDetails = ExemptionModel.TASK_STATUSES.COMPLETED
     this.updatedAt = new Date()
     return this
   }

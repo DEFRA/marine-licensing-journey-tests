@@ -53,7 +53,7 @@ export default class EnsurePublicRegisterTask extends Task {
         await this.verifyPrePopulated(browseTheWeb)
         break
       case 'not-pre-populated':
-        await this.verifyNotPrePopulated(browseTheWeb)
+        await this.verifyNoPrepopulatedDetails(browseTheWeb)
         break
     }
   }
@@ -92,10 +92,5 @@ export default class EnsurePublicRegisterTask extends Task {
   async verifyPrePopulated(browseTheWeb) {
     const selector = PublicRegisterPage.getConsentSelector(this.option)
     await browseTheWeb.isSelected(selector)
-  }
-
-  async verifyNotPrePopulated(browseTheWeb) {
-    await browseTheWeb.isNotSelected(PublicRegisterPage.consent)
-    await browseTheWeb.isNotSelected(PublicRegisterPage.withhold)
   }
 }
