@@ -1,6 +1,6 @@
 ---
-description: 
-globs: *.feature,*.steps.js
+description: any time we are writing feature files and assessing test coverage and acceptance criteria
+globs: 
 alwaysApply: false
 ---
 # BDD Guidelines
@@ -25,7 +25,7 @@ alwaysApply: false
 - **When steps** → User actions that map to high-level **Tasks** 
 - **Then steps** → Verification that maps to **Interactions** with `ensure` prefix
 
-> 📖 **See:** [`screenplay-pattern.mdc`](./screenplay-pattern.mdc) for implementation details
+> 📖 **See:** [`screenplay-pattern.mdc`](mdc:marine-licensing-journey-tests/screenplay-pattern.mdc) for implementation details
 
 ## Strategic Context
 
@@ -34,7 +34,7 @@ alwaysApply: false
 - Consider risk areas and product factors when designing scenarios
 - Focus on customer value and real user workflows
 
-> 📖 **See:** [`htsm.mdc`](./htsm.mdc) for strategic test thinking
+> 📖 **See:** [`htsm.mdc`](mdc:marine-licensing-journey-tests/htsm.mdc) for strategic test thinking
 
 ## File Organization
 
@@ -42,4 +42,4 @@ alwaysApply: false
 - Step definitions go in `test/steps/`
 - Screenplay implementation follows the patterns in `test-infrastructure/screenplay/`
 
-> 📖 **See:** [`project-structure.mdc`](./project-structure.mdc) for complete organization rules
+> 📖 **See:** [`project-structure.mdc`](mdc:marine-licensing-journey-tests/project-structure.mdc) for complete organization rules

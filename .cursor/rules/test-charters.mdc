@@ -1,11 +1,18 @@
 ---
-description: any time we are thinking about tests or test charters, test design, test strategy
+description: when working with investigative testing, session based testing and test charters
 globs: 
 alwaysApply: false
 ---
-# Test Charter Organization and Enhanced Testing Methodology
+# Test Charter Creation and Enhanced Testing Methodology
 
 ## Charter Philosophy: Beyond Traditional Test Cases
+
+### **Theme-Based Charter Design**
+- **Focus on testing themes** rather than individual user stories
+- **One theme per charter** - single testing concern (novice experience, efficiency, form behaviour)
+- **Cross-feature coverage** - test multiple delivered features together in realistic workflows
+- **Persona alignment** - themes should clearly serve specific user types and their needs
+- **Delivered features focus** - test what exists, not what's planned
 
 ### **Scenario Testing Integration**
 Our test charters implement both **traditional Session-Based Test Management (SBTM)** and **Michael Bolton's scenario testing framework**. This dual approach provides:
@@ -169,8 +176,8 @@ Required table format:
 ```markdown
 | User Story | Charter Type | Charter Name | Priority | Status |
 | ---------- | ------------ | ------------ | -------- | ------ |
-| ML-X | Traditional | [Charter Name](./ML-X/ML-X-aspect.md) | High | ✅ Ready |
-| ML-X | Scenario | [Scenario Name](./ML-X/ML-X-persona-scenario.md) | High | 🔄 Draft |
+| ML-X | Traditional | [Charter Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-aspect.md) | High | ✅ Ready |
+| ML-X | Scenario | [Scenario Name](mdc:marine-licensing-journey-tests/ML-X/ML-X-persona-scenario.md) | High | 🔄 Draft |
 ```
 
 Status indicators:
@@ -311,5 +318,81 @@ Before committing charter changes:
 - Design improvements benefit from scenario insights
 - Automation strategies incorporate both evidence types
 - Risk assessment considers both technical and user experience factors
+
+## Charter Lifecycle Management
+
+### **Release-Driven Updates**
+- **Refresh charters with every release** to ensure alignment with current functionality
+- **New features** → create new charters to investigate user experience and integration
+- **Changed features** → update existing charters to reflect new behaviour and workflows
+- **Removed features** → archive obsolete charters to maintain focus on delivered functionality
+
+### **User Feedback Integration**
+- **Adjust priorities** based on real user insights and support queries
+- **Update scenarios** based on observed user behaviour patterns
+- **Refine evidence frameworks** based on what investigations actually discover
+
+### **Charter Review Triggers**
+- **Every release** - systematic review of all charters
+- **User feedback** - when support queries suggest charter gaps
+- **Feature changes** - when delivered functionality changes significantly
+- **Investigation insights** - when sessions reveal charter improvements needed
+
+## Anti-Patterns to Avoid
+
+### **❌ Story-by-Story Charters**
+- Creates too many granular documents
+- Increases cognitive overhead for investigators
+- Misses cross-feature integration issues
+- **Instead**: Group related functionality into meaningful themes
+
+### **❌ Testing Planned Features**
+- Charters become outdated when plans change
+- Investigators waste time on non-existent functionality
+- **Instead**: Focus exclusively on delivered, testable features
+
+### **❌ Abstract Test Scenarios**
+- Technical test steps don't reflect real user behaviour
+- Miss authentic user pressures and environmental factors
+- **Instead**: Structure around realistic user behaviour patterns and pressures
+
+### **❌ Complex Evidence Notation**
+- Cryptic symbols (+/-/?/!) reduce readability
+- Make documentation harder to scan during sessions
+- **Instead**: Use clear emoji headers and standard bullet points
+
+### **❌ Fixed Charter Library**
+- Charters become stale and disconnected from actual system
+- Miss opportunities to investigate new functionality
+- **Instead**: Evolve charters continuously with system changes
+
+## Implementation Guidelines
+
+### **When Creating New Charters**
+1. **Identify the testing theme** - what specific concern does this address?
+2. **Map to delivered features** - which actual features will be tested?
+3. **Select primary personas** - who are the main users for this theme?
+4. **Define realistic scenarios** - what authentic pressures and workflows apply?
+5. **Structure evidence framework** - what signals, warnings, questions, and ideas are relevant?
+
+### **When Updating Existing Charters**
+1. **Review delivered features** - what has changed since last update?
+2. **Update scenarios** - do activities still reflect current functionality?
+3. **Refresh evidence framework** - are we looking for the right signals?
+4. **Validate persona alignment** - do scenarios still serve the intended users?
+
+## Success Indicators
+
+### **Effective Charter Library**
+- **Investigators can quickly select** appropriate charters for current concerns
+- **Sessions consistently discover** actionable insights about user experience
+- **Charters remain current** with delivered functionality
+- **Cross-feature integration issues** are identified through realistic workflows
+
+### **Quality Investigation Sessions**
+- **60-90 minute duration** allows thorough but focused exploration
+- **Realistic scenarios** reveal authentic user experience issues
+- **Evidence collection** leads to specific improvement actions
+- **Documentation** supports follow-up work and automation planning
 
 This enhanced framework ensures our test charters provide both **technical validation** and **realistic user investigation**, delivering comprehensive evidence for quality decisions that serve real users effectively.

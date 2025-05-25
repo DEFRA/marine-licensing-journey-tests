@@ -1,6 +1,6 @@
 ---
-description: 
-globs: *.feature
+description: when working with test strategy, test coverage, exploratory, investigative testing, session based testing and test charters
+globs: 
 alwaysApply: false
 ---
 # Heuristic Test Strategy Model — Context for Development and Testing Support

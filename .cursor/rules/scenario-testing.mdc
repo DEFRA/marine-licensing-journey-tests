@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: when talking about session based testing, investigative testing and test charters
+globs: 
 alwaysApply: false
 ---
 # Scenario Testing Methodology - Bolton's Framework

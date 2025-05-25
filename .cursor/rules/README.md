@@ -18,11 +18,16 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 **Key Components:**
 
-- **[Testing Heuristics](../../test-strategy/heuristics/README.md)** - HTSM and systematic exploration
-- **[Automation Approach](../../test-strategy/automation/README.md)** - Test pyramid and quality engineering
-- **[Domain Context](../../test-strategy/domain-context/README.md)** - Marine licensing reality
-- **[Exploratory Testing](../../test-strategy/exploratory/README.md)** - Session-based investigation
-- **[Scenario Testing](../../test-strategy/scenario-testing/README.md)** - Bolton's realistic user investigation framework
+- **[Testing Heuristics](../../test-strategy/heuristics.md)** - HTSM and systematic exploration
+- **[Automation Approach](../../test-strategy/automation.md)** - Test pyramid and quality engineering
+- **[Domain Context](../../test-strategy/domain-context.md)** - Marine licensing reality
+- **[Investigative Testing](../../test-strategy/investigative-testing.md)** - Session-based investigation
+- **[Accessibility Testing](../../test-strategy/accessibility.md)** - Inclusive design and GOV.UK compliance
+- **[Security Testing](../../test-strategy/security.md)** - Security-by-design and threat testing
+- **[Test Data Management](../../test-strategy/test-data.md)** - Data strategies for reliable automation
+- **[Quality Coaching](../../test-strategy/coaching.md)** - Skills development and knowledge sharing
+- **[BDD Rules](../../test-strategy/bdd-rules.md)** - Living documentation practices
+- **[Team Presentation](../../test-strategy/team-presentation.md)** - 30-minute session introducing investigative testing approach
 
 #### [`test-strategy.integration.mdc`](./test-strategy.integration.mdc) 🆕
 
@@ -46,13 +51,14 @@ This directory contains the complete set of rules and guidelines for the Marine 
 
 #### [`test-charters.mdc`](./test-charters.mdc) ⚡️ **Enhanced**
 
-**Test Charter Organization and Enhanced Testing Methodology**
+**Test Charter Creation and Enhanced Testing Methodology**
 
 - Dual charter system: Traditional SBTM + Scenario-enhanced investigations
-- Charter selection strategy based on risk, time, and investigation goals
-- Enhanced charter status tracking and session hopper management
+- Theme-based charter design with cross-feature coverage
+- Charter lifecycle management and release-driven updates
 - Bolton's framework integration with marine licensing personas
-- Evidence collection and cross-charter integration guidance
+- Evidence collection and anti-patterns guidance
+- Implementation guidelines and success indicators
 
 #### [`htsm.mdc`](./htsm.mdc)
 
@@ -277,10 +283,10 @@ The [`../.cursor/user-stories/`](../user-stories/) directory contains documented
 | **When you're...**                          | **Refer to...**                                                                                                                         |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Planning overall test strategy and approach | **[Modern Test Strategy](../../test-strategy/README.md)** + [`test-strategy.integration.mdc`](./test-strategy.integration.mdc)          |
-| Learning systematic testing techniques      | **[Testing Heuristics](../../test-strategy/heuristics/README.md)** + [`htsm.mdc`](./htsm.mdc)                                           |
-| Building test automation                    | **[Automation Approach](../../test-strategy/automation/README.md)**                                                                     |
-| Understanding marine licensing context      | **[Domain Context](../../test-strategy/domain-context/README.md)** + [`application.under.test.mdc`](./application.under.test.mdc)       |
-| Conducting exploratory testing              | **[Exploratory Testing](../../test-strategy/exploratory/README.md)**                                                                    |
+| Learning systematic testing techniques      | **[Testing Heuristics](../../test-strategy/heuristics.md)** + [`htsm.mdc`](./htsm.mdc)                                                  |
+| Building test automation                    | **[Automation Approach](../../test-strategy/automation.md)**                                                                            |
+| Understanding marine licensing context      | **[Domain Context](../../test-strategy/domain-context.md)** + [`application.under.test.mdc`](./application.under.test.mdc)              |
+| Conducting investigative testing            | **[Investigative Testing](../../test-strategy/investigative-testing.md)**                                                               |
 | Working with user stories                   | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc)                                                            |
 | Assessing test coverage                     | [`user.stories.and.test.coverage.mdc`](./user.stories.and.test.coverage.mdc) + [`../user-stories/README.md`](../user-stories/README.md) |
 | Writing BDD scenarios                       | [`bdd.rules.mdc`](./bdd.rules.mdc)                                                                                                      |

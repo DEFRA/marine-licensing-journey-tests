@@ -88,26 +88,26 @@ Static Analysis         → Code quality, security vulnerabilities
 
 #### **🧠 Heuristic-Driven Testing**
 
-- **[HTSM (Heuristic Test Strategy Model)](test-strategy/heuristics/README.md)** - Systematic exploration framework
-- **[Domain-specific heuristics](test-strategy/heuristics/README.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
-- **[Exploratory testing sessions](test-strategy/exploratory/README.md)** - Charter-driven investigation
+- **[HTSM (Heuristic Test Strategy Model)](test-strategy/heuristics.md)** - Systematic exploration framework
+- **[Domain-specific heuristics](test-strategy/heuristics.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
+- **[Investigative testing sessions](test-strategy/investigative-testing.md)** - Charter-driven investigation
 
 #### **👥 User-Centred Quality**
 
-- **[Scenario testing](test-strategy/scenario-testing/README.md)** - Rich, realistic user investigations using Bolton's framework
-- **[Real user personas](test-strategy/domain-context/README.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
-- **[Accessibility-first](test-strategy/accessibility/README.md)** - GOV.UK standards and inclusive design
-- **[Marine licensing domain expertise](test-strategy/domain-context/README.md)** - Testing grounded in regulatory reality
+- **[Investigative testing](test-strategy/investigative-testing.md)** - Rich, realistic user investigations using structured exploration
+- **[Real user personas](test-strategy/domain-context.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
+- **[Accessibility-first](test-strategy/accessibility.md)** - GOV.UK standards and inclusive design
+- **[Marine licensing domain expertise](test-strategy/domain-context.md)** - Testing grounded in regulatory reality
 
 ### **Quick Access to Strategy**
 
-| **I want to...**                            | **Go to...**                                                           |
-| ------------------------------------------- | ---------------------------------------------------------------------- |
-| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)                      |
-| Investigate with realistic user scenarios   | [Investigative Testing](test-strategy/investigative-testing/README.md) |
-| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics/README.md)               |
-| Build robust test automation                | [Automation Approach](test-strategy/automation/README.md)              |
-| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context/README.md)               |
+| **I want to...**                            | **Go to...**                                                    |
+| ------------------------------------------- | --------------------------------------------------------------- |
+| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)               |
+| Investigate with realistic user scenarios   | [Investigative Testing](test-strategy/investigative-testing.md) |
+| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics.md)               |
+| Build robust test automation                | [Automation Approach](test-strategy/automation.md)              |
+| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context.md)               |
 
 ### **Evolution from Traditional Approaches**
 

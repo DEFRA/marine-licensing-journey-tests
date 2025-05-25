@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: any time we are creating or updating documentation
+globs: 
 alwaysApply: false
 ---
 # Documentation Progressive Disclosure & Readability

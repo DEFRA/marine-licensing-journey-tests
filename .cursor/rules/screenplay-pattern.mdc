@@ -1,7 +1,7 @@
 ---
-description: 
+description: when writing test code, implementing steps, abilities, tasks, interactions
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 # Screenplay Pattern Standards
 

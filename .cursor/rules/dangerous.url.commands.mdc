@@ -1,5 +1,5 @@
 ---
-description: 
+description: any time we are updating documentation with links
 globs: 
 alwaysApply: false
 ---
@@ -25,7 +25,7 @@ alwaysApply: false
 ## 4. Real Examples That Caused Corruption
 Based on actual issues encountered during marine licensing test refactoring:
 - ✗ `search_replace` with path patterns near markdown links
-- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:url)`
+- ✗ Broad sed patterns: `sed 's|../|newpath|g'` affecting `[text](mdc:marine-licensing-journey-tests/url)`
 - ✗ Project-wide find/replace of directory names within URLs
 - ✗ Edit tools adding project prefixes to URLs mistaken for relative paths
 
@@ -45,9 +45,9 @@ Based on actual issues encountered during marine licensing test refactoring:
 ## Recovery Patterns for Corrupted URLs
 - Remove project prefixes: `sed 's|projectname/https://|https://|g'`
 - Fix protocol damage: `sed 's|https:/\b|https://|g'`
-- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/url)|g'`
+- Clean markdown links: `sed 's|\[text\](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/projectname/url)|[text](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/url)|g'`
 - Always verify URLs resolve after cleanup
 
 ## Related Guidance
-- See [refactoring playbook](mdc:marine-licensing-journey-tests/playbook.refactoring.mdc) for general refactoring principles
+- See [refactoring playbook](mdc:marine-licensing-journey-tests/marine-licensing-journey-tests/playbook.refactoring.mdc) for general refactoring principles
 - See URL and Hyperlink Management section for prevention strategies
