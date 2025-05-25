@@ -182,7 +182,6 @@ This strategy **complements existing organisational governance**:
 
 ### **🔄 Continuous Improvement**
 
-- **[Learning Culture](./learning/README.md)** - Retrospectives, experimentation, and adaptation
 - **[Quality Coaching](./coaching/README.md)** - Skills development and knowledge sharing
 
 ## 🎯 Quick Access
