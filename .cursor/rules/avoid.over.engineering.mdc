@@ -47,6 +47,12 @@ This rule applies when creating test data models, factories, or any test infrast
 - **Configuration files** for hardcoded test values
 - **Comprehensive error handling** in test utilities
 
+### Code Quality Issues
+- **Duplicate methods** with different names doing the same thing
+- **Inconsistent APIs** mixing parameter types (boolean vs string)
+- **Mixed error handling** using both `throw Error` and `expect.fail()`
+- **Inconsistent naming** for similar functionality across classes
+
 ## Better Approaches
 
 ### Start with the Minimum
@@ -105,8 +111,10 @@ static withEmptyProjectName() {
 1. **Audit actual usage** - grep for method calls, check imports
 2. **Identify the core** - what's actually being used?
 3. **Strip ruthlessly** - delete everything unused
-4. **Simplify remaining** - reduce complexity in what's left
-5. **Test thoroughly** - ensure refactoring doesn't break tests
+4. **Eliminate duplication** - remove duplicate methods, consolidate similar logic
+5. **Standardise APIs** - use consistent parameter types and naming
+6. **Simplify remaining** - reduce complexity in what's left
+7. **Test thoroughly** - ensure refactoring doesn't break tests
 
 ## Red Flags During Code Review
 
@@ -115,6 +123,9 @@ static withEmptyProjectName() {
 - "Do we have tests that use these scenarios?"
 - "Could this be simpler and still meet the need?"
 - "Are we building for hypothetical future requirements?"
+- "Are there duplicate methods doing the same thing?"
+- "Is the API consistent across similar classes?"
+- "Are we using proper test assertions instead of throwing errors?"
 
 ### Immediate Actions
 - **Delete unused code** - don't leave it "just in case"
