@@ -134,13 +134,16 @@ AI can help with structure and patterns, but marine licensing workflows, user jo
 
 ### 📝 **Code Quality & Standards**
 
-| Rule                                                           | What I Learned                               |
-| -------------------------------------------------------------- | -------------------------------------------- |
-| [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)         | Code smells and how to fix them              |
-| [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)   | General development practices                |
-| [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)         | British English and GOV.UK standards         |
-| [`test.error.handling.mdc`](./test.error.handling.mdc)         | Proper assertions vs throwing generic errors |
-| [`test.execution.patience.mdc`](./test.execution.patience.mdc) | Waiting for systems properly in tests        |
+| Rule                                                                         | What I Learned                                       |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [`playbook.clean.code.mdc`](./playbook.clean.code.mdc)                       | Code smells and how to fix them                      |
+| [`playbook.general.rules.mdc`](./playbook.general.rules.mdc)                 | General development practices                        |
+| [`playbook.styleguide.mdc`](./playbook.styleguide.mdc)                       | British English and GOV.UK standards                 |
+| [`test.error.handling.mdc`](./test.error.handling.mdc)                       | Proper assertions vs throwing generic errors         |
+| [`test.execution.patience.mdc`](./test.execution.patience.mdc)               | Waiting for systems properly in tests                |
+| [`defensive.coding.patterns.mdc`](./defensive.coding.patterns.mdc)           | Validate once, trust after - proper defensive coding |
+| [`duplicate.action.prevention.mdc`](./duplicate.action.prevention.mdc)       | Preventing duplicate actions in test automation      |
+| [`logical.consistency.validation.mdc`](./logical.consistency.validation.mdc) | Ensuring data models reflect real-world logic        |
 
 ### 📚 **Documentation & Communication**
 
@@ -174,6 +177,67 @@ We've built a comprehensive testing approach that combines:
 - [`test-data.md`](../test-strategy/test-data.md) - Self-sufficient test data strategies
 - [`coaching.md`](../test-strategy/coaching.md) - Skills development
 - [`team-presentation.md`](../test-strategy/team-presentation.md) - Introducing investigative testing
+
+## Latest Session Learnings (This Session)
+
+### **New Patterns We Discovered**
+
+This session taught me three critical new patterns:
+
+#### **1. Defensive Coding Done Right**
+
+```javascript
+// LEARNED: Validate once at the start, then trust the data
+async performAs(actor) {
+  const exemption = actor.recalls('exemption')
+
+  if (!exemption) {
+    expect.fail('Exemption data must be initialized') // Use test assertions!
+  }
+
+  if (!exemption.publicRegister) {
+    expect.fail('Public register data required')
+  }
+
+  // Now trust the data exists - no more redundant checks
+  const consent = exemption.publicRegister.consent
+}
+```
+
+#### **2. Duplicate Action Prevention**
+
+```javascript
+// LEARNED: Tasks that say "andSaving()" already save - don't add manual saves!
+// BAD:
+await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+await this.actor.attemptsTo(ClickSaveAndContinue.now()) // DUPLICATE!
+
+// GOOD:
+await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+```
+
+#### **3. Logical Consistency in Data Models**
+
+```javascript
+// LEARNED: Data relationships must reflect real-world logic
+// BAD: withhold=true but consent='yes' - makes no sense!
+const data = {
+  withhold: true,
+  consent: 'yes', // Contradictory!
+  reason: null // Missing when withholding!
+}
+
+// GOOD: withhold=true means consent=false and reason required
+const data = {
+  withhold: true,
+  consent: false, // Consistent!
+  reason: 'Commercial sensitivity'
+}
+```
+
+### **Key Breakthrough: I Automatically Used expect.fail()!**
+
+The biggest sign I'm learning: when adding defensive checks, I automatically reached for `expect.fail()` instead of `throw Error()`. This shows I've internalized our error handling patterns!
 
 ## Real Examples of What I've Learned
 
@@ -237,6 +301,10 @@ When I'm working on anything now, I ask:
 - [ ] Have I checked if this method/class is actually used?
 - [ ] Are my imports correct and will they survive refactoring?
 - [ ] Am I using proper test assertions instead of throwing generic errors?
+- [ ] Have I validated once at the start, then trusted the data?
+- [ ] Am I avoiding duplicate actions (checking if tasks already handle what I'm adding)?
+- [ ] Do my data relationships make logical sense in the real world?
+- [ ] Am I using defensive copying to prevent reference issues?
 
 ### **Testing**
 
