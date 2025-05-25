@@ -40,34 +40,142 @@
 - ✅ **Essential functionality** - Reliable operation of notification features
 - ✅ **Beta readiness** - Quality validation for limited user testing
 
-## 🏗️ Our Testing Approach
+## 🗺️ Strategy Overview: How Everything Connects
 
-### **Foundation: Reliable Automation**
+### **The Complete Strategy Map**
 
 ```
-🔺 Strategic Investigation (Human insight where it matters)
-   ├── Domain expert-led exploration
-   ├── Risk-focused scenarios
-   └── 60-90 minute sessions
-
-🔺 UI Integration Tests (Our primary focus)
-   ├── Complete user journeys
-   ├── Cross-browser compatibility
-   └── Accessibility automation
-
-🔺 Unit Tests (Excellent existing coverage)
-   ├── Component behaviour validation
-   └── Business logic and validation rules
+🌊 Marine Licensing Domain Context
+├── User Personas (Zofia, Amy, Fatima)
+├── Regulatory Requirements
+└── Real-world Constraints
+                 ↓
+         🎯 STRATEGY CORE
+                 ↓
+┌─────────────────┬─────────────────┬─────────────────┐
+│   🤖 AUTOMATE   │  🔍 INVESTIGATE │  🧠 UNDERSTAND  │
+│                 │                 │                 │
+│ Known Scenarios │  Unknown Risks  │ Domain Context  │
+│ Fast Feedback   │  Human Insight  │ User Needs      │
+│ Regression      │  Edge Cases     │ Business Rules  │
+│ Protection      │  Usability      │ Accessibility   │
+└─────────────────┴─────────────────┴─────────────────┘
+                 ↓
+         📊 SUCCESS MEASURES
+         ├── Faster delivery
+         ├── Better user experience
+         └── Higher confidence
 ```
 
-**Philosophy**: Automation handles known scenarios reliably. Humans explore where domain expertise and insight matter most.
+### **Decision Flow: What Should I Do Next?**
 
-### **Strategic Investigation**
+```
+🚀 Starting Point: "I need to ensure quality for [specific area]"
+                          ↓
+              Are the user journeys known and stable?
+                     ↙               ↘
+                   YES                 NO/UNSURE
+                    ↓                     ↓
+           🤖 AUTOMATION FIRST    🔍 INVESTIGATION FIRST
+           ├── Write UI tests           ├── Run 60-min session
+           ├── Cover happy path        ├── Involve domain expert
+           └── Add edge cases          └── Document findings
+                    ↓                     ↓
+           Monitor for failures    Do findings suggest automation?
+                    ↓                     ↙         ↘
+           Need investigation?         YES          NO
+                    ↓                   ↓            ↓
+              🔍 INVESTIGATE      🤖 AUTOMATE    🧠 UNDERSTAND
+              findings gaps        new insights   domain better
+                    ↓                   ↓            ↓
+              ✅ CONTINUOUS IMPROVEMENT LOOP ✅
+```
 
-- **Domain experts lead** - MMO staff bring essential marine licensing context
-- **Risk-focused** - Concentrate effort on high-impact areas
-- **Accessible techniques** - 60-minute sessions anyone can run
-- **Practical outcomes** - Findings that improve automation or user guidance
+### **Team Activity Flow**
+
+```
+🗓️ SPRINT RHYTHM
+
+Week 1-2: Foundation Building
+├── 🤖 Quality Engineering: Build/maintain automation
+├── 🌊 Domain Experts: Run investigation sessions
+└── 👥 Team: Review findings, plan improvements
+
+Week 3-4: Integration & Refinement
+├── 🤖 Add automation for investigation discoveries
+├── 🔍 Investigate areas where automation struggles
+└── 📊 Measure success indicators, adjust approach
+
+📋 DAILY FLOW
+Morning: Check automation health (5 mins)
+Development: TDD with automation-first mindset
+Blockers: Investigation session for unclear requirements
+Review: Share findings, update automation
+```
+
+### **Success Feedback Loops**
+
+```
+🔄 AUTOMATION → INVESTIGATION → IMPROVEMENT
+
+🤖 Automation finds regression
+         ↓
+🔍 Investigation discovers why it happened
+         ↓
+🧠 Understanding leads to better test design
+         ↓
+🤖 Improved automation catches more issues
+         ↓
+🔍 Investigation focuses on new risk areas
+         ↓
+📈 Overall quality and confidence increases
+
+🔄 INVESTIGATION → AUTOMATION → COVERAGE
+
+🔍 Investigation discovers edge case
+         ↓
+🤖 Automation added for repeatable scenarios
+         ↓
+📊 Coverage increases for known issues
+         ↓
+🔍 Investigation moves to unexplored areas
+         ↓
+🧠 Domain understanding deepens
+         ↓
+🎯 Strategy becomes more targeted and effective
+```
+
+### **Strategy Navigation Map**
+
+```
+📍 WHERE AM I? → 🎯 WHAT DO I NEED? → 📁 GO HERE
+
+🆕 New to testing
+   ├── Understanding → Domain Context + Personas
+   ├── Quick start → Investigative Testing (simple sessions)
+   └── Foundation → Automation Approach
+
+👩‍💻 Quality Engineering
+   ├── Test strategy → Heuristics + Automation Approach
+   ├── Implementation → Screenplay Pattern + BDD Rules
+   └── Investigation → Investigative Testing + Test Charters
+
+🌊 Domain Expert
+   ├── Contributing → Investigative Testing (60-min sessions)
+   ├── Understanding testing → Domain Context
+   └── Specific scenarios → Test Charters
+
+👨‍💼 Project Management
+   ├── Strategy overview → This document
+   ├── Success measures → Key Metrics section
+   └── Planning → Test Charters + User Stories
+
+🔧 Looking for specific guidance
+   ├── Accessibility → Accessibility Testing
+   ├── Security → Security Testing
+   ├── Data → Test Data Management
+   └── Skills → Quality Coaching
+```
 
 ## 📁 Strategy Structure
 
