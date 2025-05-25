@@ -1,217 +1,152 @@
 # ML-9 Navigation Charter: Task List Navigation & Status
 
-## Charter Definition
+## Investigation Plan
 
 **EXPLORE:** Task list display, navigation, and status management  
-**WITH:** Completed and incomplete tasks, navigation patterns, status updates  
-**TO DISCOVER:** Whether task list effectively guides users through the marine licensing process
+**AS:** Marine licensing applicants (novice and veteran) and case officers  
+**BECAUSE:** Task list is critical for user orientation and process completion  
+**LOOKING FOR:** Navigation barriers, status confusion, workflow disruption
 
 **Duration:** 75 minutes  
-**Priority:** High  
-**User Personas:** Amy (Veteran), Zofia (Novice), Fatima (Case Officer)
+**Priority:** High
 
-## Background Context
+## Scenario Context
 
-**User Story:** ML-9 - View the Task List  
-**Key Flow:** Successful project name save → Task list display → Task navigation
+### **THEME**
 
-**Acceptance Criteria Focus:**
+Investigate how effectively the task list guides users through marine licensing workflows under realistic conditions
 
-- AC1: Display task list with project name as heading
-- AC2: Project name task shows as "Completed" and is navigable
-- AC3: Other tasks are present but non-functional
+### **SETUP**
 
-## Investigation Areas
+- **Primary Personas:** Amy (Veteran), Zofia (Novice), Fatima (Case Officer)
+- **User Context:** Mid-application workflow, returning to continue work, reviewing progress
+- **Technology Context:** Mixed device usage, browser navigation patterns
+- **Environmental Context:** Interruptions, multitasking, time pressure
 
-### **Task List Display**
+### **REALISTIC PRESSURES**
 
-- Does the project name appear correctly as the H1 heading?
-- Is the "Project name" task marked as "Completed"?
-- Are other tasks visible but appropriately non-functional?
-- How clear is the overall page structure and hierarchy?
+- **Workflow interruptions** - Phone calls, emails, urgent tasks requiring attention
+- **Device switching** - Moving between mobile and desktop during application
+- **Time constraints** - Deadline pressure for application submission
+- **Cognitive load** - Managing multiple applications or complex requirements
+- **Navigation expectations** - Patterns learned from other government services
 
-### **Task Status Representation**
+## Realistic Activities
 
-- How obviously is task completion status communicated?
-- What visual cues indicate completed vs incomplete tasks?
-- Do status indicators follow GOV.UK Design System patterns?
-- How well do status states serve different user types?
+### **Navigation Flow Testing**
 
-### **Navigation Between Tasks**
+#### **Forward Navigation (Task List → Project Name)**
 
-- Can users navigate back to the "Project name" task?
-- Does the project name page pre-populate correctly when returning?
-- How smooth is the navigation flow between task list and tasks?
-- What happens when users navigate using browser back/forward?
+- Start from task list page with realistic user context
+- Click "Project name" task link while multitasking
+- Verify page loads with saved project name under time pressure
+- Make changes to project name with interruptions
+- Save and return to task list using different navigation methods
+- Test with browser back button and direct navigation
 
-### **Task List as Process Guide**
+#### **Status Understanding Patterns**
 
-- Does the task list effectively communicate what needs to be done?
-- How well does it support users who are partway through the process?
-- Is the overall progress clear and motivating?
-- Does the interface support resuming work after breaks?
+- Scan task list quickly to understand current progress
+- Identify what's completed vs what needs attention
+- Test understanding of "Completed" and incomplete task states
+- Verify visual cues work for users with different accessibility needs
+- Check status clarity when returning after breaks
 
-## Navigation Flow Testing
+#### **Real-World Navigation Scenarios**
 
-### **Forward Navigation (Task List → Project Name)**
+- Navigate while referencing external documents or emails
+- Switch between task list and other browser tabs
+- Handle phone interruptions mid-navigation
+- Test navigation with poor internet connectivity
+- Use keyboard navigation exclusively for efficiency
 
-1. Start from task list page
-2. Click "Project name" task link
-3. Verify page loads with saved project name
-4. Make changes to project name
-5. Save and return to task list
-6. Verify status remains "Completed"
+### **Persona-Specific Investigation**
 
-### **Backward Navigation (Project Name → Task List)**
+#### **Amy (Veteran Applicant) - Efficiency Focus**
 
-1. Complete project name successfully
-2. Arrive at task list
-3. Verify project name appears as heading
-4. Verify "Project name" task shows "Completed"
-5. Use browser back button
-6. Test navigation consistency
+- Quick scanning for completed vs remaining tasks
+- Efficient navigation between task list and individual tasks
+- Expectation matching with other professional systems
+- Speed of status recognition and next action identification
 
-### **Incomplete Task Behaviour**
+#### **Zofia (Novice Applicant) - Guidance Focus**
 
-1. Attempt to click other task links
-2. Verify they remain on task list (AC3)
-3. Check for any user feedback about unavailable tasks
-4. Ensure users understand which tasks are available
+- Understanding what the task list represents in the process
+- Clarity of next steps and overall progress
+- Confidence building through clear status communication
+- Help-seeking behaviour when uncertain about navigation
 
-## Personas & Navigation Scenarios
+#### **Fatima (Case Officer) - Review Focus**
 
-### **Amy (Veteran Applicant)**
+- Quick assessment of applicant progress
+- Understanding application status for case management
+- Information layout effectiveness for professional review
+- Integration with case management workflows
 
-**Navigation Style:** Efficient, task-focused
+## Evidence Framework
 
-- Can she quickly identify what's completed vs what's next?
-- Does the task list support her efficient working style?
-- Can she navigate between tasks without confusion?
-- How well does the interface match her expectations from other systems?
+### **Positive Signals:**
 
-### **Zofia (Novice Applicant)**
+- **Navigation clarity** - Users understand how to move between tasks
+- **Status transparency** - Completion states are obvious and accurate
+- **Process orientation** - Users know where they are and what's next
+- **Efficiency support** - Experienced users can navigate quickly
+- **Guidance effectiveness** - Novice users feel confident about progress
 
-**Navigation Style:** Careful, guidance-seeking
+### **Warning Signs:**
 
-- Is it clear what she needs to do next?
-- Does the task list provide enough guidance for someone new to marine licensing?
-- Can she understand the overall process from the task list?
-- How does the interface help her feel confident about progress?
+- **Navigation confusion** - Users uncertain about how to proceed
+- **Status ambiguity** - Unclear what's completed vs what needs attention
+- **Process disorientation** - Users lost in the overall workflow
+- **Efficiency barriers** - Unnecessary steps or unclear paths
+- **Guidance gaps** - Insufficient support for decision-making
 
-### **Fatima (Case Officer)**
+### **Questions to Investigate:**
 
-**Navigation Style:** Reviewing, assessing
+? How does task list navigation compare to user expectations?
+? What happens when users navigate unexpectedly (back button, direct links)?
+? How well does the interface support resuming work after interruptions?
+? Are there any accessibility barriers in navigation or status communication?
 
-- Can she quickly see application progress and status?
-- How well does the task list support her review workflow?
-- Is the information layout helpful for case management?
-- Can she easily understand the applicant's progress?
+### **Ideas to Explore:**
 
-## Visual Design & Information Architecture
+! Could status communication be clearer or more motivating?
+! Are there opportunities to improve navigation efficiency?
+! How might the task list better support different user mental models?
+! What navigation patterns from other services could be beneficial?
 
-### **Heading Hierarchy**
+## Session Notes Template
 
-- Is the project name prominently displayed as H1?
-- Are task headings appropriately structured?
-- Does the visual hierarchy support easy scanning?
-- How well does the layout work across devices?
+```
+SESSION: ML-9 Navigation Testing - [Date]
+DURATION: [Actual time]
+INVESTIGATOR: [Name]
 
-### **Status Communication**
+NAVIGATION OBSERVATIONS:
++ Effective patterns:
+- Navigation barriers:
+? Unclear behaviours:
+! Improvement opportunities:
 
-- Are "Completed" and "Incomplete" states visually distinct?
-- Do status indicators use appropriate colour and iconography?
-- Is status information accessible to users with colour vision differences?
-- How clear are the status labels for non-technical users?
+PERSONA INSIGHTS:
+Amy (Veteran): [Efficiency and expectation observations]
+Zofia (Novice): [Guidance and confidence observations]
+Fatima (Case Officer): [Review and assessment observations]
 
-### **Task Organisation**
+TECHNICAL FINDINGS:
+Browser behaviour: [Cross-browser navigation consistency]
+Device differences: [Mobile vs desktop navigation]
+Performance: [Page load and response times]
+Accessibility: [Keyboard navigation, screen reader compatibility]
 
-- Is the task list organised logically?
-- Does the order make sense for the marine licensing process?
-- Are related tasks grouped appropriately?
-- How well does the structure support progressive disclosure?
-
-## Edge Cases & Error Scenarios
-
-### **Session & State Management**
-
-- What happens if user refreshes the task list page?
-- How does the task list behave after browser restart?
-- Does task status persist correctly across sessions?
-- What happens if project name gets corrupted or lost?
-
-### **Navigation Edge Cases**
-
-- How does deep linking to task list work?
-- What happens if user navigates directly to task list without completing project name?
-- How does the interface handle unexpected navigation patterns?
-- Are there any broken link scenarios?
-
-### **Cross-Browser Navigation**
-
-- Does navigation work consistently across browsers?
-- Are there any browser-specific navigation issues?
-- How does mobile navigation compare to desktop?
-- Do navigation states persist across different browsers?
-
-## Discovery Questions
-
-### **User Experience**
-
-- How motivating is the task list for completing the process?
-- Does it feel overwhelming or manageable?
-- Can users easily understand where they are in the process?
-- How does the task list compare to other government services?
-
-### **Information Architecture**
-
-- Is the task organisation intuitive?
-- Does the navigation support different mental models?
-- How well does the structure scale if more tasks are added?
-- Are there any confusing or misleading elements?
-
-### **Process Flow**
-
-- Does the task list effectively guide users through marine licensing?
-- How well does it support non-linear work patterns?
-- Can users easily resume work after interruptions?
-- Does the interface encourage task completion?
-
-## Success Indicators
-
-### **Effective Navigation**
-
-- Users can easily move between task list and individual tasks
-- Task completion status is clear and accurately represented
-- Navigation feels natural and predictable
-- Project name displays correctly as page heading
-
-### **Good Process Guidance**
-
-- Users understand what they need to do next
-- Task list provides appropriate overview of the process
-- Status information helps users track progress
-- Interface supports both linear and non-linear workflows
-
-## Documentation Focus
-
-Record:
-
-- **Navigation flow observations** - Ease and clarity of movement
-- **Status representation effectiveness** - How well completion is communicated
-- **Visual hierarchy assessment** - Information architecture success
-- **Cross-browser consistency** - Navigation behaviour differences
-- **User experience insights** - Motivation and process clarity
-
-## Follow-up Actions
-
-- Document any navigation issues or confusing flows
-- Identify opportunities for status communication improvements
-- Note any automation gaps for task list scenarios
-- Provide feedback on information architecture effectiveness
-- Create bug reports for navigation problems
+IMMEDIATE ACTIONS:
+□ [Action 1 - who will address]
+□ [Action 2 - who will address]
+□ [Action 3 - who will address]
 
 ---
 
-**Related User Story:** [ML-9.view.the.task.list.mdc](../../.cursor/user-stories/ML-9.view.the.task.list.mdc)  
-**Previous Charter:** [ML-1 Accessibility Testing](../ML-1/ML-1-accessibility.md)  
+**Related User Story:** [ML-9.view.the.task.list.mdc](../../.cursor/user-stories/ML-9.view.the.task.list.mdc)
+**Previous Charter:** [ML-1 Accessibility Testing](../ML-1/ML-1-accessibility.md)
 **Next Charter:** [ML-9 Usability Testing](./ML-9-usability.md)
+```

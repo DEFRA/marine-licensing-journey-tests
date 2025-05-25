@@ -1,8 +1,11 @@
 # ML-1 Investigative Charter: Efficiency Patterns
 
-## Session Charter
+## Investigation Plan
 
-**SESSION CHARTER:** Investigate project name workflow through veteran user lens to discover efficiency barriers and workflow friction for experienced marine licensing applicants
+**EXPLORE:** Project name workflow efficiency barriers and optimisation opportunities  
+**AS:** Veteran marine licensing applicants familiar with government digital services  
+**BECAUSE:** Experienced users expect streamlined workflows and efficiency features  
+**LOOKING FOR:** Workflow friction, missing shortcuts, efficiency barriers, professional workflow gaps
 
 **Duration:** 90 minutes  
 **Priority:** Medium

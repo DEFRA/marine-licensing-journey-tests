@@ -19,17 +19,15 @@ Test charters bridge the gap between:
 All charters follow the **Investigative Testing framework**:
 
 ```
-SESSION CHARTER: [Clear mission statement]
+EXPLORE: [Area of application or workflow]
+AS: [Type of user - MMO staff, applicant, etc.]
+BECAUSE: [What you're concerned about or want to validate]
+LOOKING FOR: [Types of problems or insights you hope to find]
 
 SCENARIO CONTEXT:
 THEME: [Rich user context - what authentic situation are we investigating?]
 SETUP: [Realistic pressures, friction, and environment]
 PERSONA: [Which marine licensing user type - Zofia, Amy, Fatima, Simon]
-
-INVESTIGATION FOCUS:
-EXPLORE: [Area of application or workflow]
-WITH: [Tools, techniques, heuristics, realistic conditions]
-TO DISCOVER: [Types of insights and evidence we seek]
 
 REALISTIC ACTIVITIES:
 - [Guided but flexible actions following authentic user patterns]
@@ -37,37 +35,35 @@ REALISTIC ACTIVITIES:
 - [Test edge cases and stress conditions]
 
 EVIDENCE FRAMEWORK:
-- [Specific quality indicators to monitor]
-- [Success patterns and warning signs]
-- [Performance and usability measures]
++ Things that worked well
+- Problems discovered
+? Questions raised
+! Ideas for improvement
 
-Duration: 90 minutes
+Duration: 60-90 minutes
 Priority: [High/Medium/Low based on risk and user impact]
 ```
 
 ## 🚀 Using Test Charters
 
-### **Charter Execution (90 minutes)**
+### **Charter Execution (60-90 minutes)**
 
 ```
-📋 Preparation (10 minutes)
-├── Review charter scenario context and investigation focus
-├── Set up realistic user environment (devices, tools, friction)
-├── Prepare test data and persona materials
-└── Configure evidence collection tools
+📋 Setup (10 minutes)
+├── Pick area to explore
+├── Choose realistic user context
+└── Decide what questions to answer
 
-🔍 Investigation (70 minutes)
-├── Execute scenario activities with guided flexibility
-├── Apply systematic heuristics during exploration
-├── Follow authentic user behaviour patterns
-├── Document discoveries and evidence in real-time
-└── Adapt approach based on findings
+🔍 Exploration (45-70 minutes)
+├── Follow realistic user workflows
+├── Try variations and edge cases
+├── Note anything odd, slow, or confusing
+└── Test scenarios automation might miss
 
-📝 Debrief (10 minutes)
-├── Assess session goals and scenario completion
-├── Document key discoveries and evidence
-├── Identify follow-up investigations needed
-└── Update charter tracking and coverage
+📝 Wrap-up (5-10 minutes)
+├── Document key findings
+├── Identify follow-up actions
+└── Share insights with team
 ```
 
 ### **After Completion**
@@ -79,17 +75,20 @@ Priority: [High/Medium/Low based on risk and user impact]
 
 ## 📋 Available Investigation Sessions
 
-| User Story | Charter Name                                                        | Focus                                       | Priority | Status   |
-| ---------- | ------------------------------------------------------------------- | ------------------------------------------- | -------- | -------- |
-| ML-1       | [Novice Discovery](./ML-1/ML-1-novice-discovery.md)                 | First-time user journey & accessibility     | High     | 🔄 Ready |
-| ML-1       | [Efficiency Patterns](./ML-1/ML-1-efficiency-patterns.md)           | Veteran user workflows & data reuse         | Medium   | 🔄 Ready |
-| ML-1       | [Validation Scenarios](./ML-1/ML-1-validation-scenarios.md)         | Error handling under realistic pressure     | High     | 🔄 Ready |
-| ML-9       | [Navigation Workflows](./ML-9/ML-9-navigation-workflows.md)         | Task list patterns & status management      | High     | 🔄 Ready |
-| ML-9       | [Interruption Resilience](./ML-9/ML-9-interruption-resilience.md)   | Multitasking & workflow disruption          | High     | 🔄 Ready |
-| ML-9       | [Cross-Device Continuity](./ML-9/ML-9-cross-device-continuity.md)   | Mobile-to-desktop transitions               | Medium   | 🔄 Ready |
-| ML-12      | [Consent Decision](./ML-12/ML-12-consent-decision.md)               | Privacy decisions under realistic pressures | High     | 🔄 Ready |
-| ML-12      | [Data Protection Clarity](./ML-12/ML-12-data-protection-clarity.md) | Information clarity & user understanding    | High     | 🔄 Ready |
-| ML-12      | [Workflow Validation](./ML-12/ML-12-workflow-validation.md)         | Form behaviour & conditional logic          | Medium   | 🔄 Ready |
+| User Story | Charter Name                                                          | Focus                                    | Priority | Status   |
+| ---------- | --------------------------------------------------------------------- | ---------------------------------------- | -------- | -------- |
+| ML-1       | [Novice Discovery](./ML-1/ML-1-novice-discovery.md)                   | First-time user journey & accessibility  | High     | 🔄 Ready |
+| ML-1       | [Efficiency Patterns](./ML-1/ML-1-efficiency-patterns.md)             | Veteran user workflows & data reuse      | Medium   | 🔄 Ready |
+| ML-1       | [Validation Scenarios](./ML-1/ML-1-validation-scenarios.md)           | Error handling under realistic pressure  | High     | 🔄 Ready |
+| ML-9       | [Navigation Workflows](./ML-9/ML-9-navigation.md)                     | Task list patterns & status management   | High     | 🔄 Ready |
+| ML-9       | [Interruption Resilience](./ML-9/ML-9-interruption-resilience.md)     | Multitasking & workflow disruption       | High     | 🔄 Ready |
+| ML-9       | [Cross-Device Journey](./ML-9/ML-9-cross-device-journey.md)           | Mobile-to-desktop transitions            | Medium   | 🔄 Ready |
+| ML-9       | [Usability Patterns](./ML-9/ML-9-usability.md)                        | User experience and interaction patterns | Medium   | 🔄 Ready |
+| ML-12      | [Consent Misunderstanding](./ML-12/ML-12-consent-misunderstanding.md) | Privacy decision confusion scenarios     | High     | 🔄 Ready |
+| ML-12      | [Privacy Concerns](./ML-12/ML-12-privacy-concerns.md)                 | User privacy anxiety and decision-making | High     | 🔄 Ready |
+| ML-12      | [Data Protection](./ML-12/ML-12-data-protection.md)                   | Information clarity & user understanding | High     | 🔄 Ready |
+| ML-12      | [Consent Workflow](./ML-12/ML-12-consent-workflow.md)                 | Form behaviour & conditional logic       | Medium   | 🔄 Ready |
+| ML-12      | [Validation Testing](./ML-12/ML-12-validation.md)                     | Error handling and form validation       | Medium   | 🔄 Ready |
 
 ## 🔗 Related Resources
 
