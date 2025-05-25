@@ -21,10 +21,8 @@ export default class CompleteProjectName extends Task {
     )
     await browseTheWeb.click(ProjectNamePage.saveAndContinue)
 
-    if (actor.hasMemoryOf('exemption')) {
-      actor.updates('exemption', (exemption) =>
-        exemption.markProjectNameTaskCompleted()
-      )
-    }
+    actor.updates('exemption', (exemption) =>
+      exemption.markProjectNameTaskCompleted()
+    )
   }
 }

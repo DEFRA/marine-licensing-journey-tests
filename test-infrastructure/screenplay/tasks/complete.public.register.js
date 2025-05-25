@@ -50,11 +50,9 @@ export default class CompletePublicRegisterTask extends Task {
     if (this.saveAndContinue) {
       await browseTheWeb.click(PublicRegisterPage.saveAndContinue)
 
-      if (actor.hasMemoryOf('exemption')) {
-        actor.updates('exemption', (exemption) =>
-          exemption.markPublicRegisterTaskCompleted()
-        )
-      }
+      actor.updates('exemption', (exemption) =>
+        exemption.markPublicRegisterTaskCompleted()
+      )
     }
   }
 }
