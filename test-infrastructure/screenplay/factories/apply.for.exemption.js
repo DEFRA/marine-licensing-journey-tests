@@ -2,7 +2,7 @@ import { MarineProjectModel, PublicRegisterModel } from '../models/index.js'
 
 export default class ApplyForExemption {
   constructor(data) {
-    this.data = { ...data } // Create a copy to avoid reference issues
+    this.data = { ...data }
   }
 
   static withValidProjectName() {

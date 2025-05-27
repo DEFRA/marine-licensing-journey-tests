@@ -26,8 +26,8 @@ import { PublicRegisterModel } from '~/test-infrastructure/screenplay/models'
 Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
