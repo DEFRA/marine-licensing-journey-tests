@@ -24,8 +24,8 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
@@ -61,14 +61,10 @@ Then('the error {string} is displayed', async function (errorMessage) {
 })
 
 Then('the project name is pre-populated', async function () {
-  await this.actor.attemptsTo(
-    EnsureThatProjectName.is(this.actor.recalls('exemption').projectName)
-  )
+  await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
 })
 
 Then('the new project name is saved', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(
-    EnsureThatProjectName.is(this.actor.recalls('exemption').projectName)
-  )
+  await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
 })

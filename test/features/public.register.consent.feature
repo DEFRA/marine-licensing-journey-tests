@@ -56,9 +56,9 @@ Feature: Public Register Consent
     When the Save and continue button is clicked without choosing a radio option
     Then the consent error message "Select whether you believe your information should be withheld from the public register" is displayed
 
-  Scenario: Validate maximum length of reason text
+  Scenario: Validate maximum length of reason text (1000 characters)
     Given the Public register page is displayed
-    When the Save and continue button is selected with a reason exceeding 1000 characters
+    When the reason text provided is too long
     Then the reason error message "Details of why the information should be witheld must be 1000 characters or less" is displayed
 
   Scenario: Cancelling out of the public register task when no information has previously been saved

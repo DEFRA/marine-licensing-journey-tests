@@ -3,11 +3,11 @@ import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page
 import Task from '../base/task.js'
 
 export default class CompletePublicRegisterTask extends Task {
-  static andSaving() {
+  static andSave() {
     return new CompletePublicRegisterTask(true)
   }
 
-  static andNotSaving() {
+  static withoutSaving() {
     return new CompletePublicRegisterTask(false)
   }
 

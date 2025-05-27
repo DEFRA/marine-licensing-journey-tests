@@ -17,6 +17,7 @@ import {
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
   EnsureThatPageHeading,
+  FillForm,
   Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
@@ -41,7 +42,7 @@ Given(
     this.actor.intendsTo(ApplyForExemption.withConsentToPublicRegister())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
@@ -54,7 +55,7 @@ Given(
     this.actor.intendsTo(ApplyForExemption.withWithholdFromPublicRegister())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
@@ -64,7 +65,7 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({ consent: true })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
@@ -77,7 +78,7 @@ When(
         reason: 'Sensitive information'
       })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
@@ -87,22 +88,19 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({ consent: false })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
-When(
-  'the Save and continue button is selected with a reason exceeding {int} characters',
-  async function (numberOfCharacters) {
-    this.actor.updates('exemption', (exemption) =>
-      exemption.updatePublicRegister({
-        consent: false,
-        reason: PublicRegisterModel.generateReasonExceedingMaxLength()
-      })
-    )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
-  }
-)
+When('the reason text provided is too long', async function () {
+  this.actor.updates('exemption', (exemption) =>
+    exemption.updatePublicRegister({
+      consent: false,
+      reason: PublicRegisterModel.generateReasonExceedingMaxLength()
+    })
+  )
+  await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
+})
 
 When(
   'choosing to allow information to be added to the public register',
@@ -110,7 +108,7 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({ consent: true })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
@@ -127,7 +125,7 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({ consent: true })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
     await this.actor.attemptsTo(ClickCancel.now())
   }
 )
@@ -138,7 +136,7 @@ When(
     this.actor.updates('exemption', (exemption) =>
       exemption.updatePublicRegister({ consent: true })
     )
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andNotSaving())
+    await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
     await this.actor.attemptsTo(ClickBack.now())
   }
 )
@@ -147,11 +145,8 @@ When(
   'changing the public register information to withhold but cancelling out',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    const browseTheWeb = this.actor.ability
-    await browseTheWeb.click(PublicRegisterPage.withhold)
-    await browseTheWeb.sendKeys(
-      PublicRegisterPage.withholdReason,
-      faker.lorem.words(5)
+    await this.actor.attemptsTo(
+      FillForm.publicRegisterWithhold(faker.lorem.words(5))
     )
     await this.actor.attemptsTo(ClickCancel.now())
   }
@@ -161,11 +156,8 @@ When(
   'changing the public register information to withhold but selecting to go back',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    const browseTheWeb = this.actor.ability
-    await browseTheWeb.click(PublicRegisterPage.withhold)
-    await browseTheWeb.sendKeys(
-      PublicRegisterPage.withholdReason,
-      faker.lorem.words(5)
+    await this.actor.attemptsTo(
+      FillForm.publicRegisterWithhold(faker.lorem.words(5))
     )
     await this.actor.attemptsTo(ClickBack.now())
   }
@@ -179,7 +171,7 @@ When('changing the public register information to withhold', async function () {
       reason: faker.lorem.words(5)
     })
   )
-  await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+  await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
 })
 
 When('changing the public register information to consent', async function () {
@@ -187,7 +179,7 @@ When('changing the public register information to consent', async function () {
   this.actor.updates('exemption', (exemption) =>
     exemption.updatePublicRegister({ consent: true })
   )
-  await this.actor.attemptsTo(CompletePublicRegisterTask.andSaving())
+  await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
 })
 
 Then('the public register information is saved', async function () {
