@@ -18,7 +18,7 @@ export default class PublicRegisterModel {
 
   static generateReasonExceedingMaxLength() {
     // Generate exactly 1001 characters for boundary testing
-    const longText = faker.lorem.paragraphs(10, ' ')
+    const longText = faker.lorem.paragraphs(30, ' ')
     return longText.substring(0, this.REASON_MAX_LENGTH + 1) // 1001 characters
   }
 }
