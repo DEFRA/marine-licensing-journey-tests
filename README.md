@@ -457,15 +457,3 @@ The following attribution statement MUST be cited in your products and applicati
 The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable information providers in the public sector to license the use and re-use of their information under a common open licence.
 
 It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.
-
-## Development Tips
-
-### Personal Command Rules
-
-If you're using Cursor as your IDE, consider creating your own custom command rules file at `.cursor/rules/common.commands.md`. This can help you:
-
-- Document commonly used commands and aliases
-- Provide context for AI assistance
-- Keep track of useful development workflows
-
-Add your personal rules file to `.gitignore` to keep it specific to your workflow.
