@@ -39,7 +39,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withCircleOSGB36()
+      ApplyForExemption.withValidProjectName().andSiteDetails.withBoundaryWGS84()
     )
   }
 )
@@ -50,7 +50,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withCircleOSGB36()
+      ApplyForExemption.withValidProjectName().andSiteDetails.withBoundaryOSGB36()
     )
   }
 )

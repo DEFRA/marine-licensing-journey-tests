@@ -79,6 +79,22 @@ export default class ApplyForExemption {
           }
         }
         return this
+      },
+      withBoundaryWGS84: () => {
+        this.data.siteDetails = {
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'boundary',
+          coordinateSystem: 'WGS84'
+        }
+        return this
+      },
+      withBoundaryOSGB36: () => {
+        this.data.siteDetails = {
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'boundary',
+          coordinateSystem: 'OSGB36'
+        }
+        return this
       }
     }
   }
