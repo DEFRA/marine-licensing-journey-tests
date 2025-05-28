@@ -1,4 +1,6 @@
 export { default as CompleteProjectName } from './complete.project.name'
 export { default as CompletePublicRegisterTask } from './complete.public.register'
+export { default as EnterTheCoordinatesManually } from './enter.coordinates.manually'
+export { default as UploadCoordinates } from './upload.coordinates'
 export { default as FillForm } from './fill.form'
 export { default as Navigate } from './navigate'
