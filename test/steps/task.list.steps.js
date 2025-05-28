@@ -1,7 +1,7 @@
 import { Then, When } from '@cucumber/cucumber'
 import {
+  EnsurePageHeading,
   EnsureTaskStatus,
-  EnsureThatPageHeading,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
@@ -14,7 +14,7 @@ Then('the task list page is displayed', async function () {
   const expectedHeading = exemption?.projectNameTaskCompleted
     ? exemption.projectName
     : 'Task list'
-  await this.actor.attemptsTo(EnsureThatPageHeading.is(expectedHeading))
+  await this.actor.attemptsTo(EnsurePageHeading.is(expectedHeading))
 })
 
 Then(

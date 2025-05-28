@@ -47,4 +47,24 @@ export default class ApplyForExemption {
   getData() {
     return this.data
   }
+
+  get andSiteDetails() {
+    return {
+      withCircleWGS84: () => {
+        this.data.siteDetails = {
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'WGS84',
+          circleData: {
+            latitude: 51.507412,
+            longitude: -0.127812,
+            radiusMeters: 20,
+            easting: null,
+            northing: null
+          }
+        }
+        return this
+      }
+    }
+  }
 }

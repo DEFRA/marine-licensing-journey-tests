@@ -1,9 +1,9 @@
 import Task from '../base/task.js'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 
-export default class EnsurePageHeadingIs extends Task {
+export default class EnsurePageHeading extends Task {
   static is(expectation) {
-    return new EnsurePageHeadingIs(expectation)
+    return new EnsurePageHeading(expectation)
   }
 
   constructor(expectation) {

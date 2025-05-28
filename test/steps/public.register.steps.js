@@ -13,10 +13,10 @@ import {
   CompleteProjectName,
   CompletePublicRegisterTask,
   EnsureErrorDisplayed,
+  EnsurePageHeading,
   EnsureProjectNameDisplayedAsCaption,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
-  EnsureThatPageHeading,
   FillForm,
   Navigate,
   SelectTheTask
@@ -30,7 +30,7 @@ Given('the Public register page is displayed', async function () {
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  await this.actor.attemptsTo(EnsureThatPageHeading.is('Public register'))
+  await this.actor.attemptsTo(EnsurePageHeading.is('Public register'))
 })
 
 Given(

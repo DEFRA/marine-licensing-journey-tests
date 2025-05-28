@@ -201,7 +201,7 @@ When('entering and saving a project with a valid name', async function () {
 
 // Maps to verification Interactions
 Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatPageHeading.is('Task List'))
+  await this.actor.attemptsTo(EnsurePageHeading.is('Task List'))
 })
 ```
 
@@ -375,9 +375,9 @@ export default class CompleteProjectName extends Task {
 
 ```javascript
 // Single verification action
-export default class EnsurePageHeadingIs extends Task {
+export default class EnsurePageHeading extends Task {
   static is(expectation) {
-    return new EnsurePageHeadingIs(expectation)
+    return new EnsurePageHeading(expectation)
   }
 
   async performAs(actor) {

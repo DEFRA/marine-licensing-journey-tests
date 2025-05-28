@@ -1,9 +1,9 @@
 export default class SiteDetailsModel {
   constructor(initialData = {}) {
     this._data = {
-      coordinateEntryMethod: null, // 'file' or 'manual'
-      siteType: null, // 'circle' or 'boundary'
-      coordinateSystem: null, // 'WGS84' or 'OSGB36'
+      coordinatesEntryMethod: null,
+      siteType: null,
+      coordinateSystem: null,
       circleData: {
         // For WGS84
         latitude: null,
@@ -17,11 +17,11 @@ export default class SiteDetailsModel {
     }
   }
 
-  setCoordinateEntryMethod(method) {
+  setCoordinatesEntryMethod(method) {
     if (!['file', 'manual'].includes(method)) {
       expect.fail('Coordinate entry method must be either "file" or "manual"')
     }
-    this._data.coordinateEntryMethod = method
+    this._data.coordinatesEntryMethod = method
     return this
   }
 
