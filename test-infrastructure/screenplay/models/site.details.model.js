@@ -1,3 +1,5 @@
+import { expect } from 'chai'
+
 export default class SiteDetailsModel {
   constructor(initialData = {}) {
     this._data = {
@@ -18,7 +20,7 @@ export default class SiteDetailsModel {
   }
 
   setCoordinatesEntryMethod(method) {
-    if (!['file', 'manual'].includes(method)) {
+    if (!['file-upload', 'enter-manually'].includes(method)) {
       expect.fail('Coordinate entry method must be either "file" or "manual"')
     }
     this._data.coordinatesEntryMethod = method
@@ -44,7 +46,7 @@ export default class SiteDetailsModel {
   setCircleWGS84(latitude, longitude, radiusMeters) {
     this._data.coordinateSystem = 'WGS84'
     this._data.siteType = 'circle'
-    this._data.coordinateEntryMethod = 'manual'
+    this._data.coordinatesEntryMethod = 'enter-manually'
     this._data.circleData = {
       latitude,
       longitude,
@@ -58,7 +60,7 @@ export default class SiteDetailsModel {
   setCircleOSGB36(easting, northing, radiusMeters) {
     this._data.coordinateSystem = 'OSGB36'
     this._data.siteType = 'circle'
-    this._data.coordinateEntryMethod = 'manual'
+    this._data.coordinatesEntryMethod = 'enter-manually'
     this._data.circleData = {
       easting,
       northing,
