@@ -1,8 +1,5 @@
 @issue=ML-16 @issue=ML-17 @issue=ML-18 @run-only
-Feature: Choose File Upload or Manual Coordinate Entry
-  As an applicant
-  I want to choose whether to upload a file with my coordinates or enter them manually
-  So that I can provide my project location details in the most convenient way
+Feature: The user can enter the details of a circular site manually using WGS84 or OSGB36 coordinates
 
   Scenario: Selecting a circular site using WGS84 (World Geodetic System 1984)
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
