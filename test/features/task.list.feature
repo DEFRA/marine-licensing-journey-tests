@@ -1,5 +1,5 @@
 @issue=ML-9
-Feature: View exemption task details
+Feature: Task list: The user can view the details of what they need to provide for their exemption
   As an applicant
   I want to view the details of what I need to provide for my exemption
   So that I can provide the information when I have it

@@ -1,5 +1,5 @@
 @issue=ML-16 @issue=ML-17 @issue=ML-18
-Feature: The user marks the boundary of a site manually using WGS84 or OSGB36 coordinates
+Feature: Site details: The user marks the boundary of a site manually using WGS84 or OSGB36 coordinates
 
   Scenario: Marking out the boundary of a site using WGS84 (World Geodetic System 1984) coordinates
     Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates

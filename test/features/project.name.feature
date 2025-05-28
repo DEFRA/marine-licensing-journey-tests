@@ -1,5 +1,5 @@
 @issue=ML-1 @issue=ML-9
-Feature: Starting a new exemption notification by providing a project name
+Feature: Project name: Starting a new exemption notification by providing a project name
 
   Scenario: Provide a valid project name for a new exemption notification
   As the first step in creating an exemption notification,

@@ -1,5 +1,5 @@
 @issue=ML-12
-Feature: Public Register Consent
+Feature: Public register:The user can consent or withhold from sharing information on the public register
   As an applicant
   I want to state whether I consent for my marine project to be shared on the public register
   So that my notification will only be shared if I consent
