@@ -1,4 +1,4 @@
-@issue=ML-16 @issue=ML-17 @issue=ML-18
+@issue=ML-16 @issue=ML-17 @issue=ML-18 @run-only
 Feature: Choose File Upload or Manual Coordinate Entry
   As an applicant
   I want to choose whether to upload a file with my coordinates or enter them manually
@@ -9,7 +9,6 @@ Feature: Choose File Upload or Manual Coordinate Entry
     When the site details task is completed
     Then the Which coordinate system do you want to use page is displayed
 
-  @wip
   Scenario: Selecting a circular site using OSGB36 (National Grid)
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     When the site details task is completed

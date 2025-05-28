@@ -64,6 +64,21 @@ export default class ApplyForExemption {
           }
         }
         return this
+      },
+      withCircleOSGB36: () => {
+        this.data.siteDetails = {
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'OSGB36',
+          circleData: {
+            easting: 432675,
+            northing: 181310,
+            radiusMeters: 20,
+            latitude: null,
+            longitude: null
+          }
+        }
+        return this
       }
     }
   }

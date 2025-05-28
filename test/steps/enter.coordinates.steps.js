@@ -25,6 +25,20 @@ Given(
   }
 )
 
+Given(
+  'the user wants to apply for an exemption for a circular site using OSGB36 coordinates',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.withCircleOSGB36()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+  }
+)
+
 When('the site details task is completed', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
 })

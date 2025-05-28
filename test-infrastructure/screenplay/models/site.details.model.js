@@ -43,34 +43,6 @@ export default class SiteDetailsModel {
     return this
   }
 
-  setCircleWGS84(latitude, longitude, radiusMeters) {
-    this._data.coordinateSystem = 'WGS84'
-    this._data.siteType = 'circle'
-    this._data.coordinatesEntryMethod = 'enter-manually'
-    this._data.circleData = {
-      latitude,
-      longitude,
-      radiusMeters,
-      easting: null,
-      northing: null
-    }
-    return this
-  }
-
-  setCircleOSGB36(easting, northing, radiusMeters) {
-    this._data.coordinateSystem = 'OSGB36'
-    this._data.siteType = 'circle'
-    this._data.coordinatesEntryMethod = 'enter-manually'
-    this._data.circleData = {
-      easting,
-      northing,
-      radiusMeters,
-      latitude: null,
-      longitude: null
-    }
-    return this
-  }
-
   getData() {
     return { ...this._data }
   }
