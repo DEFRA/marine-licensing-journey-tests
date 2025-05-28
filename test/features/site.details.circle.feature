@@ -4,14 +4,13 @@ Feature: Choose File Upload or Manual Coordinate Entry
   I want to choose whether to upload a file with my coordinates or enter them manually
   So that I can provide my project location details in the most convenient way
 
-  @run-only
   Scenario: Selecting a circular site using WGS84 (World Geodetic System 1984)
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     When the site details task is completed
-    Then the What coordinate system page is displayed
+    Then the Which coordinate system do you want to use page is displayed
 
   @wip
   Scenario: Selecting a circular site using OSGB36 (National Grid)
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     When the site details task is completed
-    Then the What coordinate system page is displayed
+    Then the Which coordinate system do you want to use page is displayed

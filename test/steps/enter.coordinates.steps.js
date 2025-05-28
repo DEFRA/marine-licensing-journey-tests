@@ -29,8 +29,11 @@ When('the site details task is completed', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
 })
 
-Then('the What coordinate system page is displayed', async function () {
-  await this.actor.attemptsTo(
-    EnsurePageHeading.is('Which coordinate system do you want to use?')
-  )
-})
+Then(
+  'the Which coordinate system do you want to use page is displayed',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Which coordinate system do you want to use?')
+    )
+  }
+)
