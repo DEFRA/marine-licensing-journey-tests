@@ -335,7 +335,7 @@ npm run test:github:browserstack
 
 - **JavaScript files**: `dot.case.js`
 - **Assets**: `kebab-case` (static files)
-- **Features**: `descriptive.name.feature`
+- **Features**: `descriptive.name.feature` (e.g., `project.name.feature`, `validation.project.name.feature`, `task.list.feature`, `public.register.feature`)
 
 ## 🎭 Screenplay Pattern Usage
 

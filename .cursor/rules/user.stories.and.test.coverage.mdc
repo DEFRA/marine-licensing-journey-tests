@@ -56,9 +56,9 @@ Use this approach to assess coverage:
 
 | Story | Feature Files | Coverage Status |
 |-------|---------------|-----------------|
-| ML-1 | `project.name.feature` | ✅ Complete |
-| ML-9 | `view.task.list.feature`, `project.name.feature` | ✅ Complete |
-| ML-12 | `public.register.consent.feature` | ✅ Complete |
+| ML-1 | `project.name.feature`, `validation.project.name.feature` | ✅ Complete |
+| ML-9 | `task.list.feature`, `project.name.feature` | ✅ Complete |
+| ML-12 | `public.register.feature`, `validation.public.register.feature`, `back.and.cancel.public.register.feature` | ✅ Complete |
 
 ## Using This for Test Development
 

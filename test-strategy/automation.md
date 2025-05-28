@@ -68,10 +68,21 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
 # Example: Critical exemption notification journey
 Feature: Complete exemption notification
   Scenario: Successful exemption submission
-    Given a valid marine project
-    When completing the exemption notification
-    Then the application is submitted successfully
-    And the applicant receives confirmation
+    Given the project name page is displayed
+    When entering and saving a project with a valid name
+    Then the task list page is displayed
+    And the project name task is marked as completed
+
+  Scenario: Validating project name input
+    Given the project name page is displayed
+    When entering an invalid project name
+    Then appropriate validation errors are displayed
+
+  Scenario: Managing public register consent
+    Given the Public register page is displayed
+    When choosing not to withhold information from the public register
+    Then the "Public register" task status is "Completed"
+    And the public register information is saved
 ```
 
 **Current Tools & Technologies**:

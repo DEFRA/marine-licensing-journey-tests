@@ -184,4 +184,4 @@ IMMEDIATE ACTIONS:
 ---
 
 **Delivered Features Tested:** Project name entry, task list navigation, public register consent  
-**Related Features:** [project.name.feature](../test/features/project.name.feature), [view.task.list.feature](../test/features/view.task.list.feature), [public.register.consent.feature](../test/features/public.register.consent.feature)
+**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature)

@@ -22,11 +22,21 @@ Feature: Starting a new exemption notification by providing a project name
     When entering and saving a project with a valid name
     Then the task list page is displayed
 
+  Scenario: Validating project name input
+    Given the project name page is displayed
+    When entering an invalid project name
+    Then appropriate validation errors are displayed
+
   Scenario: Allowing information to be added to the public register
     Given the Public register page is displayed
     When choosing not to withhold information from the public register
     Then the "Public register" task status is "Completed"
     And the public register information is saved
+
+  Scenario: Validating public register consent
+    Given the Public register page is displayed
+    When attempting to proceed without making a selection
+    Then appropriate validation errors are displayed
 ```
 
 ### Step Patterns
