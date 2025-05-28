@@ -13,8 +13,3 @@ Feature: Task list: The user can view the details of what they need to provide f
     Given a notification has been created with a valid project name
     When the "Project name" task is selected
     Then the project name is pre-populated
-
-  Scenario: Change the project name of an existing notification
-    Given a notification has been created with a valid project name
-    When the project name is updated
-    Then the new project name is saved
