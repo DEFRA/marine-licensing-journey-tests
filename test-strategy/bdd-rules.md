@@ -5,11 +5,41 @@
 - **Golden Rule**: Write Gherkin so people unfamiliar with marine licensing will understand it
 - **Cardinal Rule**: One Scenario, One Behaviour
 - **Structure**: Always use Given-When-Then in that order, no repetition
-- **Brevity**: Keep scenarios under 5 steps, only have more in exceptional circumstances
+- **Brevity**: Keep scenarios under 5 steps, only have more than 3 in exceptional circumstances
 - **Step Integrity**: Given = setup, When = action, Then = verification
 - **Business Value**: Titles clearly describe the business value being delivered
 - **Domain Context**: Use realistic marine licensing terminology and workflows
 - **User-Centred**: Cover important journeys from personas (Zofia, Amy, Fatima)
+- **Test Smart, Not Everything**: Prioritize scenarios based on risk and value, not completeness
+
+## Test Prioritization
+
+### High Priority
+
+- Complex user journeys with multiple steps
+- Business-critical validations and edge cases
+- Scenarios with high risk of defects
+- Back/cancel tests that verify important state changes or preservation
+- Navigation scenarios that affect data persistence
+
+### Low Priority
+
+- Basic page display tests when pages are traversed in other scenarios
+- Simple navigational tests with limited business logic
+- Scenarios that are implicitly tested through other flows
+- Navigation tests without state change verification
+
+## Implicit vs. Explicit Testing
+
+- **Implicit Testing**: When features are indirectly verified through other test flows
+
+  - Example: If a page display is verified as part of a validation scenario, a separate "page display" scenario is unnecessary
+  - Page transitions are implicitly tested in user journey scenarios
+
+- **Explicit Testing**: Specifically testing a feature as the primary focus
+  - Validation scenarios should be explicit tests
+  - Complex business rules require explicit verification
+  - State preservation/change during navigation requires explicit tests
 
 ## Marine Licensing Example
 
@@ -64,6 +94,16 @@ Then the project name is displayed on the Public register page
 - **Public register interactions** - Search and view exemption information
 - **Compliance verification** - Environmental and regulatory checks
 - **Multi-stakeholder flows** - Applicant, MMO, and public interactions
+
+## Feature Organization
+
+To maintain separation of concerns, we organize feature files by test type:
+
+- **Standard journey features** (`*.feature`) - Happy path user flows and core functionality
+- **Validation features** (`validation.*.feature`) - Error validation scenarios
+- **Back and cancel features** (`back.and.cancel.*.feature`) - Navigation behavior when users go back or cancel
+
+This structure ensures scenarios have a single responsibility and makes it easier to locate specific types of tests.
 
 ---
 
