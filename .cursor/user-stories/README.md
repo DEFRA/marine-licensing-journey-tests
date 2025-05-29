@@ -4,14 +4,14 @@ This directory contains user stories for the marine licensing application under 
 
 ## User Stories Overview
 
-| Story ID | Title                                         | User Story File                                                                                                      | Feature Files                                                                                                                                                                                                                                                                |
-| -------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ML-1     | Provide Project Name and Create Exemption     | [ML-1.provide.project.name.and.create.exemption.mdc](./ML-1.provide.project.name.and.create.exemption.mdc)           | [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature)                                                                                                                     |
-| ML-9     | View the Task List                            | [ML-9.view.the.task.list.mdc](./ML-9.view.the.task.list.mdc)                                                         | [task.list.feature](../../test/features/task.list.feature), [project.name.feature](../../test/features/project.name.feature)                                                                                                                                                 |
-| ML-12    | Provide or Withhold Public Register Content   | [ML-12.provide.or.withhold.public.register.content.mdc](./ML-12.provide.or.withhold.public.register.content.mdc)     | [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature) |
-| ML-16    | Choose File Upload or Manual Coordinate Entry | [ML-16.choose.file.upload.or.manual.coordinate.entry.mdc](./ML-16.choose.file.upload.or.manual.coordinate.entry.mdc) | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature)                                                                                 |
-| ML-17    | Choose Circle or Coordinate List Entry        | [ML-17.choose.circle.or.coordinate.list.entry.mdc](./ML-17.choose.circle.or.coordinate.list.entry.mdc)               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature)                                                                                 |
-| ML-18    | Choose Coordinate System                      | [ML-18.choose.coordinate.system.mdc](./ML-18.choose.coordinate.system.mdc)                                           | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature)                                                                                 |
+| Story ID | Title                                         | User Story File                                                                                                      | Feature Files                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ML-1     | Provide Project Name and Create Exemption     | [ML-1.provide.project.name.and.create.exemption.mdc](./ML-1.provide.project.name.and.create.exemption.mdc)           | [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature)                                                                                                                                                                                                                                                 |
+| ML-9     | View the Task List                            | [ML-9.view.the.task.list.mdc](./ML-9.view.the.task.list.mdc)                                                         | [task.list.feature](../../test/features/task.list.feature), [project.name.feature](../../test/features/project.name.feature)                                                                                                                                                                                                                                                                             |
+| ML-12    | Provide or Withhold Public Register Content   | [ML-12.provide.or.withhold.public.register.content.mdc](./ML-12.provide.or.withhold.public.register.content.mdc)     | [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature)                                                                                                                             |
+| ML-16    | Choose File Upload or Manual Coordinate Entry | [ML-16.choose.file.upload.or.manual.coordinate.entry.mdc](./ML-16.choose.file.upload.or.manual.coordinate.entry.mdc) | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) (not implemented) |
+| ML-17    | Choose Circle or Coordinate List Entry        | [ML-17.choose.circle.or.coordinate.list.entry.mdc](./ML-17.choose.circle.or.coordinate.list.entry.mdc)               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) (not implemented) |
+| ML-18    | Choose Coordinate System                      | [ML-18.choose.coordinate.system.mdc](./ML-18.choose.coordinate.system.mdc)                                           | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) (not implemented) |
 
 ## Story Status
 
@@ -19,12 +19,24 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-9**: Task list display and navigation
 - ✅ **ML-12**: Public register consent and withholding
 - 🔄 **ML-16**: Choose file upload or manual coordinate entry
+  - ✅ Happy path implemented
+  - ✅ Validation implemented
+  - 🚧 Back and cancel functionality not implemented
 - 🔄 **ML-17**: Choose how to enter site coordinates
+  - ✅ Happy path implemented
+  - ✅ Validation implemented
+  - 🚧 Back and cancel functionality not implemented
 - 🔄 **ML-18**: Choose coordinate system for site location
+  - ✅ Happy path implemented
+  - ✅ Validation implemented
+  - 🚧 Back and cancel functionality not implemented
 
 ## Feature File Tags
 
 Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user story number. This allows for easy tracking between requirements and test implementation.
+
+- `@wip` tags are used for features currently under development
+- `@run-only` can be used to specifically target features during development
 
 ## Usage
 
