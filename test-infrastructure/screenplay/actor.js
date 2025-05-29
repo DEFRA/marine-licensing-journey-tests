@@ -34,13 +34,13 @@ export default class Actor {
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
   }
 
-  updates(updaterFn) {
+  updates(updateFunction) {
     const exemption = this.recalls('exemption')
     if (!exemption) {
       assert.fail('Cannot update exemption data that has not been initialized')
     }
 
-    updaterFn(exemption)
+    updateFunction(exemption)
 
     attachJson(this.toJson(), 'actor-memory-updated-exemption.json')
     return this
