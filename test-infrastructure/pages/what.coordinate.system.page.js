@@ -2,6 +2,7 @@ export default class WhatCoordinateSystemPage {
   static wgs84 = '#coordinateSystem'
   static osgb36 = '#coordinateSystem-2'
   static saveAndContinue = 'button[type="submit"]'
+  static coordinatesSystemError = '#coordinateSystem-error'
 
   static getCoordinateSystemSelector(system) {
     if (system === 'WGS84') return this.wgs84

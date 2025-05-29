@@ -1,0 +1,130 @@
+import { Given, Then, When } from '@cucumber/cucumber'
+import { browser } from '@wdio/globals'
+import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
+import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
+import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
+
+import {
+  Actor,
+  ApplyForExemption,
+  BrowseTheWeb,
+  ClickSaveAndContinue,
+  CompleteProjectName,
+  EnsureErrorDisplayed,
+  EnsurePageHeading,
+  FillForm,
+  Navigate,
+  SelectTheTask
+} from '~/test-infrastructure/screenplay'
+
+Given(
+  'the "How do you want to provide the site location?" page is displayed',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('How do you want to provide the site location?')
+    )
+  }
+)
+
+Given(
+  'the "How do you want to enter the coordinates?" page is displayed',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+
+    await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('How do you want to enter the coordinates?')
+    )
+  }
+)
+
+Given(
+  'the "Which coordinate system do you want to use?" page is displayed',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+
+    await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+
+    await this.actor.attemptsTo(FillForm.provideASinglePointForACircularSite())
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Which coordinate system do you want to use?')
+    )
+  }
+)
+
+When(
+  'the Continue button is clicked without selecting a site location option',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When(
+  'the Continue button is clicked without selecting a coordinate entry method',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When(
+  'the Continue button is clicked without selecting a coordinate system',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+Then(
+  'the coordinates type error: {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(
+        HowDoYouWantToProvideCoordinatesPage.coordinatesTypeError,
+        errorMessage
+      )
+    )
+  }
+)
+
+Then(
+  'the coordinates entry method error: {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(
+        HowDoYouWantToEnterTheCoordinatesPage.coordinatesEntryError,
+        errorMessage
+      )
+    )
+  }
+)
+
+Then(
+  'the coordinates system error {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(
+        WhatCoordinateSystemPage.coordinatesSystemError,
+        errorMessage
+      )
+    )
+  }
+)

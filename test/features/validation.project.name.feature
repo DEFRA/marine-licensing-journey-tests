@@ -4,7 +4,7 @@ Feature: Validation of Project name: the project name is validated
   Scenario Outline: Error when project name is <projectName>
     Given the project name page is displayed
     When entering and saving the project with name "<projectName>"
-    Then the error "<errorMessage>" is displayed
+    Then the project name error "<errorMessage>" is displayed
 
     Examples:
       | errorMessage                                  | projectName                                                                                                                                                                                                                                                                        |

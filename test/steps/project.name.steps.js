@@ -54,11 +54,14 @@ When('the project name is updated', async function () {
   await this.actor.attemptsTo(CompleteProjectName.now())
 })
 
-Then('the error {string} is displayed', async function (errorMessage) {
-  await this.actor.attemptsTo(
-    EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
-  )
-})
+Then(
+  'the project name error {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
+    )
+  }
+)
 
 Then('the project name is pre-populated', async function () {
   await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())

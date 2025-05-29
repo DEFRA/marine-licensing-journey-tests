@@ -1,27 +1,10 @@
 import Task from '../base/task.js'
 
-/**
- * A generic task for filling out forms without saving/submitting them.
- * This is particularly useful for testing cancel/back behaviors.
- */
 export default class FillForm extends Task {
-  /**
-   * Creates a task to fill out a form by performing a series of interactions
-   * without saving or submitting the form.
-   *
-   * @param {Function} formFiller - A function that takes an actor and performs the form filling interactions
-   * @returns {FillForm} A new FillForm task
-   */
   static withInteractions(formFiller) {
     return new FillForm(formFiller)
   }
 
-  /**
-   * Creates a task to fill out a public register form with withholding information
-   *
-   * @param {string} reason - The reason for withholding information
-   * @returns {FillForm} A new FillForm task
-   */
   static publicRegisterWithhold(reason) {
     return new FillForm(async (actor) => {
       const PublicRegisterPage = (
@@ -34,6 +17,36 @@ export default class FillForm extends Task {
       if (reason && reason.length > 0) {
         await browseTheWeb.sendKeys(PublicRegisterPage.withholdReason, reason)
       }
+    })
+  }
+
+  static chooseToEnterCoordinatesManually() {
+    return new FillForm(async (actor) => {
+      const HowDoYouWantToProvideCoordinatesPage = (
+        await import(
+          '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
+        )
+      ).default
+      const browseTheWeb = actor.ability
+
+      await browseTheWeb.click(
+        HowDoYouWantToProvideCoordinatesPage.enterCoordinates
+      )
+    })
+  }
+
+  static provideASinglePointForACircularSite() {
+    return new FillForm(async (actor) => {
+      const HowDoYouWantToEnterTheCoordinatesPage = (
+        await import(
+          '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js'
+        )
+      ).default
+      const browseTheWeb = actor.ability
+
+      await browseTheWeb.click(
+        HowDoYouWantToEnterTheCoordinatesPage.circularSite
+      )
     })
   }
 
