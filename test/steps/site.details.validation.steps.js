@@ -123,11 +123,11 @@ Then(
 )
 
 Then('the manual coordinate entry method is selected', async function () {
-  this.actor.attemptsTo(
+  await this.actor.attemptsTo(
     EnsureThatCoordinateEntryMethodSelected.is('enter-manually')
   )
 })
 
 Then('the circular site option is selected', async function () {
-  this.actor.attemptsTo(EnsureThatSiteTypeSelected.is('circle'))
+  await this.actor.attemptsTo(EnsureThatSiteTypeSelected.is('circle'))
 })
