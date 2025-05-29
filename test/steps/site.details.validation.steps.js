@@ -41,7 +41,6 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-
     await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
     await this.actor.attemptsTo(
@@ -59,13 +58,10 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-
     await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
-
     await this.actor.attemptsTo(FillForm.provideASinglePointForACircularSite())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
-
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Which coordinate system do you want to use?')
     )
