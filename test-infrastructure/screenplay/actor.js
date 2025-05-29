@@ -1,6 +1,5 @@
 import { assert } from 'chai'
 import { attachJson } from '../capture/json.js'
-import Memory from './memory.js'
 import MemoryFormatter from './models/memory.formatter.js'
 
 export default class Actor {
@@ -82,23 +81,10 @@ export default class Actor {
     return key in this.memory
   }
 
-  getMemorySnapshot() {
-    return { ...this.memory }
-  }
-
   toJson() {
     return {
       name: this.name,
       memory: MemoryFormatter.formatForDisplay(this.memory)
     }
-  }
-
-  getTaskStatus(taskName) {
-    if (!this.hasMemoryOf('exemption')) {
-      return 'Incomplete'
-    }
-
-    const exemption = this.recalls('exemption')
-    return Memory.taskStatus(taskName)(exemption)
   }
 }
