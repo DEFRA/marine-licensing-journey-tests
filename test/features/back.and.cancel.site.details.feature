@@ -1,44 +1,52 @@
 @issue=ML-16 @issue=ML-17 @issue=ML-18
 Feature: Back and Cancel from Site details: State management when clicking back or cancel
 
-  @wip
   Scenario: Cancelling out of the site details task when no information has previously been saved
-    Given the "How do you want to provide the site location?" page is displayed
+    Given a user is providing site details
+    And the "How do you want to provide the site location?" page has been reached
     When the Cancel button is clicked
-    Then the task list is displayed with "Site details" status as "Incomplete" and no changes saved
+    Then the task list page is displayed
+    And the "Site details" task status is "Incomplete"
 
-  @wip
   Scenario: Using the back link from the site location page
-    Given the "How do you want to provide the site location?" page is displayed
+    Given a user is providing site details
+    And the "How do you want to provide the site location?" page has been reached
     When the Back link is clicked
-    Then the task list is displayed with "Site details" status as "Incomplete" and no changes saved
+    Then the task list page is displayed
+    And the "Site details" task status is "Incomplete"
 
   @wip
   Scenario: Using the back link from the coordinate entry method page preserves selections
-    Given the "How do you want to enter the coordinates?" page is displayed with "Enter the coordinates of the site manually" previously selected
+    Given a user is providing site details
+    And the "How do you want to enter the coordinates?" page has been reached
     When the Back link is clicked
-    Then the "How do you want to provide the site location?" page is displayed with previous selection preserved
+    Then the previous selections are preserved
 
   @wip
   Scenario: Using the back link from the coordinate system page preserves selections
-    Given the "Which coordinate system do you want to use?" page is displayed with "Enter multiple sets of coordinates to mark the boundary of the site" previously selected
+    Given a user is providing site details
+    And the "Which coordinate system do you want to use?" page has been reached
     When the Back link is clicked
-    Then the "How do you want to enter the coordinates?" page is displayed with previous selection preserved
+    Then the previous selections are preserved
 
-  @wip
   Scenario: Cancelling out of the coordinate entry method page discards changes
-    Given the "How do you want to enter the coordinates?" page is displayed with a selection made
+    Given a user is providing site details
+    And the "Which coordinate system do you want to use?" page has been reached
     When the Cancel button is clicked
-    Then the task list is displayed with "Site details" status as "Incomplete" and no changes saved
+    Then the task list page is displayed
+    And the "Site details" task status is "Incomplete"
 
-  @wip
   Scenario: Cancelling out of the coordinate system page discards changes
-    Given the "Which coordinate system do you want to use?" page is displayed with a selection made
+    Given a user is providing site details
+    And the "Which coordinate system do you want to use?" page has been reached
     When the Cancel button is clicked
-    Then the task list is displayed with "Site details" status as "Incomplete" and no changes saved
+    Then the task list page is displayed
+    And the "Site details" task status is "Incomplete"
 
   @wip
   Scenario: Partially completed site details are not saved when cancelling
-    Given the user has navigated through multiple site details pages with selections made
+    Given a user is providing site details
+    And the "Which coordinate system do you want to use?" page has been completed but not saved
     When the Cancel button is clicked
-    Then the task list is displayed with "Site details" status as "Incomplete" and all selections discarded
+    Then the task list page is displayed
+    And the "Site details" task status is "Incomplete"
