@@ -1,5 +1,7 @@
 export { default as CommonElementsPage } from './common.elements.page'
+export { default as HowDoYouWantToEnterTheCoordinatesPage } from './how.do.you.want.to.enter.the.coordinates.page'
+export { default as HowDoYouWantToProvideCoordinatesPage } from './how.do.you.want.to.provide.coordinates.page'
 export { default as ProjectNamePage } from './project.name.page'
 export { default as PublicRegisterPage } from './public.register.page'
 export { default as TaskListPage } from './task.list.page'
-export { default as HowDoYouWantToProvideCoordinatesPage } from './how.do.you.want.to.provide.coordinates.page'
+export { default as WhatCoordinateSystemPage } from './what.coordinate.system.page'
