@@ -6,6 +6,190 @@ This document outlines the design and implementation plan for a custom Model Con
 
 The Progressive Rules MCP server will provide intelligent, context-efficient rule loading for AI assistants, ensuring the most relevant guidance is available while minimizing token usage. It implements the three-tier approach (metadata, summaries, full content) as first-class MCP tools.
 
+## Continuous Learning from Agent Interactions
+
+A key enhancement to the standard MCP server design is a system for continuous learning and improvement based on actual agent interactions. This allows the system to become more efficient and relevant over time.
+
+### Interaction History Storage
+
+```
+┌────────────────────────────────────┐
+│     Agent Interaction Database     │
+├────────────────────────────────────┤
+│ ┌──────────────┐ ┌──────────────┐  │
+│ │ Chat Context │ │ Rule Usage   │  │
+│ └──────────────┘ └──────────────┘  │
+│ ┌──────────────┐ ┌──────────────┐  │
+│ │ Effectiveness│ │ Follow-up    │  │
+│ │   Metrics    │ │  Patterns    │  │
+│ └──────────────┘ └──────────────┘  │
+└────────────────────────────────────┘
+```
+
+The system will capture and store:
+
+- Which rules were requested in which contexts
+- Whether the full rule was needed after seeing the summary
+- The co-occurrence patterns between different rules
+- Effectiveness of rule recommendations based on subsequent interactions
+
+### Usage Pattern Analysis
+
+The system will analyze interaction history to identify patterns:
+
+1. **Rule Co-occurrence**: Identify which rules are frequently used together
+
+   ```typescript
+   // Example co-occurrence analysis
+   interface CoOccurrenceMap {
+     [ruleName: string]: {
+       [coOccurringRule: string]: number // frequency count
+     }
+   }
+   ```
+
+2. **Context Clustering**: Group similar chat contexts that lead to similar rule usage
+
+   ```typescript
+   interface ContextCluster {
+     id: string
+     contextFeatures: string[] // key terms or topics
+     commonRules: string[] // frequently used rules in this context
+     typicalDetailLevel: DetailLevel // typically required detail level
+   }
+   ```
+
+3. **Detail Level Prediction**: Predict which rules typically need full content vs. just summaries
+   ```typescript
+   interface DetailLevelPredictor {
+     predictDetailLevel(ruleName: string, context: string): DetailLevel
+     updateModel(
+       ruleName: string,
+       context: string,
+       actualDetailLevel: DetailLevel
+     ): void
+   }
+   ```
+
+### Adaptive Rule Selection
+
+Based on the learned patterns, the system will:
+
+1. **Pre-cache Likely Rules**: Predictively load rules that might be needed based on context
+
+   ```typescript
+   // src/services/predictiveLoader.ts
+   export class PredictiveLoader {
+     async preloadLikelyRules(contextFeatures: string[]): Promise<void> {
+       const predictedRules = this.predictRulesForContext(contextFeatures)
+       // Pre-cache these rules at appropriate detail levels
+     }
+   }
+   ```
+
+2. **Dynamic Bundle Creation**: Automatically create and refine rule bundles based on usage patterns
+
+   ```typescript
+   // src/services/dynamicBundler.ts
+   export class DynamicBundler {
+     async createBundleFromUsagePattern(
+       contextFeatures: string[]
+     ): Promise<RuleBundle> {
+       // Analyze past usage to create an optimized bundle
+     }
+   }
+   ```
+
+3. **Smart Detail Level Selection**: Automatically choose the most appropriate detail level based on historical needs
+   ```typescript
+   // Example decision logic
+   function selectOptimalDetailLevel(
+     rule: string,
+     context: string,
+     history: InteractionHistory
+   ): DetailLevel {
+     // Use historical data to determine optimal detail level
+   }
+   ```
+
+### Feedback Loop Integration
+
+The system will implement a feedback loop for continuous improvement:
+
+1. **Explicit Feedback Collection**: Add a mechanism for the agent to provide feedback on rule relevance
+
+   ```javascript
+   {
+     "name": "provideRuleFeedback",
+     "description": "Provide feedback on the relevance and usefulness of previously loaded rules",
+     "parameters": {
+       "type": "object",
+       "properties": {
+         "ruleName": {
+           "type": "string",
+           "description": "Name of the rule receiving feedback"
+         },
+         "relevanceScore": {
+           "type": "integer",
+           "minimum": 1,
+           "maximum": 5,
+           "description": "How relevant the rule was (1-5)"
+         },
+         "wasDetailLevelAppropriate": {
+           "type": "boolean",
+           "description": "Whether the detail level was appropriate"
+         },
+         "comments": {
+           "type": "string",
+           "description": "Optional comments about the rule's usefulness"
+         }
+       },
+       "required": ["ruleName", "relevanceScore"]
+     }
+   }
+   ```
+
+2. **Implicit Feedback Tracking**: Infer feedback based on agent behavior
+
+   ```typescript
+   // Types of implicit feedback to track
+   enum ImplicitFeedbackType {
+     REQUESTED_MORE_DETAIL, // Agent needed more detail after seeing summary
+     IGNORED_RULE, // Agent didn't use a provided rule
+     REPEATED_REQUEST, // Agent requested similar rules later
+     SUCCESSFUL_COMPLETION // Task completed successfully with provided rules
+   }
+   ```
+
+3. **Continuous Model Updating**: Regularly update recommendation models based on feedback
+   ```typescript
+   // Update schedule
+   interface ModelUpdateConfig {
+     updateFrequency: 'real-time' | 'hourly' | 'daily'
+     minInteractionsBeforeUpdate: number
+     weightDecayFactor: number // How quickly to discount old interactions
+   }
+   ```
+
+### Implementation Approach
+
+1. **Storage Layer**:
+
+   - Use a lightweight database (SQLite for development, PostgreSQL for production)
+   - Store interactions with metadata including timestamps, context features, and outcomes
+   - Implement data retention policies and privacy controls
+
+2. **Analysis Pipeline**:
+
+   - Create background jobs to analyze interaction patterns
+   - Implement simple statistical models for initial version
+   - Prepare for more sophisticated ML models in future versions
+
+3. **Integration with Existing Components**:
+   - Modify the rule fetching module to consult the learning system
+   - Add hooks in MCP tools to record interaction data
+   - Create new endpoints for explicit feedback
+
 ## Architecture
 
 ### System Components
