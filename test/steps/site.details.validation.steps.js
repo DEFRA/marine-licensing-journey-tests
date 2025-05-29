@@ -61,6 +61,10 @@ Given(
   }
 )
 
+Given('the WGS84 coordinate system has been selected', async function () {
+  await this.actor.attemptsTo(FillForm.selectWGS84CoordinateSystem())
+})
+
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {

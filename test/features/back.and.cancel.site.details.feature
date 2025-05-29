@@ -41,10 +41,10 @@ Feature: Back and Cancel from Site details: State management when clicking back 
     Then the task list page is displayed
     And the "Site details" task status is "Incomplete"
 
-  @wip
   Scenario: Partially completed site details are not saved when cancelling
     Given a user is providing site details
-    And the "Which coordinate system do you want to use?" page has been completed but not saved
+    And the "Which coordinate system do you want to use?" page has been reached
+    And the WGS84 coordinate system has been selected
     When the Cancel button is clicked
     Then the task list page is displayed
     And the "Site details" task status is "Incomplete"

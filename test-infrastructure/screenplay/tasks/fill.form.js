@@ -50,6 +50,17 @@ export default class FillForm extends Task {
     })
   }
 
+  static selectWGS84CoordinateSystem() {
+    return new FillForm(async (actor) => {
+      const WhatCoordinateSystemPage = (
+        await import('~/test-infrastructure/pages/what.coordinate.system.page')
+      ).default
+      const browseTheWeb = actor.ability
+
+      await browseTheWeb.click(WhatCoordinateSystemPage.wgs84)
+    })
+  }
+
   constructor(formFiller) {
     super()
     this.formFiller = formFiller
@@ -57,8 +68,5 @@ export default class FillForm extends Task {
 
   async performAs(actor) {
     await this.formFiller(actor)
-
-    // Note: This task deliberately does not save changes or update actor memory
-    // as it's designed for edge cases where the user cancels or goes back
   }
 }
