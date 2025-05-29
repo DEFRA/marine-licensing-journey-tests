@@ -4,6 +4,16 @@ This directory contains rules for Cursor AI to follow when assisting with the ma
 
 See [EXAMPLES.md](./EXAMPLES.md) for practical examples of user prompts and which rules to apply in different scenarios.
 
+## Optimized Context Window Usage
+
+We use a progressive loading approach to maximize the efficiency of the context window:
+
+1. **Metadata-first**: Rules are initially loaded as metadata only (from cursor.rules.json)
+2. **Summaries**: Standardized summaries in the `summaries/` directory provide key information with ~85% fewer tokens
+3. **Full content**: Complete rule content is loaded only when specific details are needed
+
+For more information, see [RULES-OPTIMIZATION.md](..//RULES-OPTIMIZATION.md).
+
 ## Core Principles
 
 - **Simple beats clever** - Write the simplest code that works
