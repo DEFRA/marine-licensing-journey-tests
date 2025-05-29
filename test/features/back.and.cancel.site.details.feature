@@ -15,19 +15,17 @@ Feature: Back and Cancel from Site details: State management when clicking back 
     Then the task list page is displayed
     And the "Site details" task status is "Incomplete"
 
-  @wip
   Scenario: Using the back link from the coordinate entry method page preserves selections
     Given a user is providing site details
     And the "How do you want to enter the coordinates?" page has been reached
     When the Back link is clicked
-    Then the previous selections are preserved
+    Then the manual coordinate entry method is selected
 
-  @wip
   Scenario: Using the back link from the coordinate system page preserves selections
     Given a user is providing site details
     And the "Which coordinate system do you want to use?" page has been reached
     When the Back link is clicked
-    Then the previous selections are preserved
+    Then the circular site option is selected
 
   Scenario: Cancelling out of the coordinate entry method page discards changes
     Given a user is providing site details

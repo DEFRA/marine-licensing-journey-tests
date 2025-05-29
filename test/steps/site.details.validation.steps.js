@@ -1,8 +1,8 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
-import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
+import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
 
 import {
   Actor,
@@ -12,6 +12,8 @@ import {
   CompleteProjectName,
   EnsureErrorDisplayed,
   EnsurePageHeading,
+  EnsureThatCoordinateEntryMethodSelected,
+  EnsureThatSiteTypeSelected,
   FillForm,
   Navigate,
   SelectTheTask
@@ -115,3 +117,13 @@ Then(
     )
   }
 )
+
+Then('the manual coordinate entry method is selected', async function () {
+  this.actor.attemptsTo(
+    EnsureThatCoordinateEntryMethodSelected.is('enter-manually')
+  )
+})
+
+Then('the circular site option is selected', async function () {
+  this.actor.attemptsTo(EnsureThatSiteTypeSelected.is('circle'))
+})
