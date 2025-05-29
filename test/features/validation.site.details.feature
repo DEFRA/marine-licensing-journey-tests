@@ -5,16 +5,19 @@ Feature: Validation of Site details: the user is prevented from proceeding with 
   So that I can correct errors before submitting my marine licence application
 
   Scenario: User is prevented from proceeding without selecting a site location input method
-    Given the "How do you want to provide the site location?" page is displayed
+    Given a user is providing site details
+    And the "How do you want to provide the site location?" page has been reached
     When the Continue button is clicked without selecting a site location option
     Then the coordinates type error: "Select how you want to provide the site location" is displayed
 
   Scenario: User is prevented from proceeding without selecting a coordinate entry method
-    Given the "How do you want to enter the coordinates?" page is displayed
+    Given a user is providing site details
+    And the "How do you want to enter the coordinates?" page has been reached
     When the Continue button is clicked without selecting a coordinate entry method
     Then the coordinates entry method error: "Select how you want to enter the coordinates" is displayed
 
   Scenario: User is prevented from proceeding without selecting a coordinate system
-    Given the "Which coordinate system do you want to use?" page is displayed
+    Given a user is providing site details
+    And the "Which coordinate system do you want to use?" page has been reached
     When the Continue button is clicked without selecting a coordinate system
     Then the coordinates system error "Select which coordinate system you want to use" is displayed

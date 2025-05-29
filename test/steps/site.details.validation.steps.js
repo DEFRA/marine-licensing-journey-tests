@@ -17,15 +17,18 @@ import {
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
+Given('a user is providing site details', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
 Given(
-  'the "How do you want to provide the site location?" page is displayed',
+  'the "How do you want to provide the site location?" page has been reached',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(new BrowseTheWeb(browser))
-    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    await this.actor.attemptsTo(CompleteProjectName.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(
       EnsurePageHeading.is('How do you want to provide the site location?')
     )
@@ -33,14 +36,8 @@ Given(
 )
 
 Given(
-  'the "How do you want to enter the coordinates?" page is displayed',
+  'the "How do you want to enter the coordinates?" page has been reached',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(new BrowseTheWeb(browser))
-    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    await this.actor.attemptsTo(CompleteProjectName.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
     await this.actor.attemptsTo(
@@ -50,14 +47,8 @@ Given(
 )
 
 Given(
-  'the "Which coordinate system do you want to use?" page is displayed',
+  'the "Which coordinate system do you want to use?" page has been reached',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(new BrowseTheWeb(browser))
-    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    await this.actor.attemptsTo(CompleteProjectName.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
     await this.actor.attemptsTo(FillForm.provideASinglePointForACircularSite())
