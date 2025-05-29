@@ -1,5 +1,6 @@
 export { default as Actor } from './actor'
 export { default as BrowseTheWeb } from './abilities/browse.the.web'
+export { default as Memory } from './memory'
 export * from './interactions'
 export * from './tasks'
 export * from './models'

@@ -18,6 +18,7 @@ import {
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
   FillForm,
+  Memory,
   Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
@@ -62,10 +63,7 @@ Given(
 When(
   'choosing not to withhold information from the public register',
   async function () {
-    this.actor.updates(
-      'exemption',
-      (exemption) => (exemption.publicRegister = { consent: true })
-    )
+    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
@@ -74,12 +72,10 @@ When(
   'choosing to withhold information from the public register',
   async function () {
     this.actor.updates(
-      'exemption',
-      (exemption) =>
-        (exemption.publicRegister = {
-          consent: false,
-          reason: 'Sensitive information'
-        })
+      Memory.ofPublicRegisterWithConsentAndReason(
+        false,
+        'Sensitive information'
+      )
     )
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
@@ -88,22 +84,17 @@ When(
 When(
   'the Save and continue button is selected after choosing Yes without providing a reason',
   async function () {
-    this.actor.updates(
-      'exemption',
-      (exemption) => (exemption.publicRegister = { consent: false })
-    )
+    this.actor.updates(Memory.ofPublicRegisterWithConsent(false))
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
 
 When('the reason text provided is too long', async function () {
   this.actor.updates(
-    'exemption',
-    (exemption) =>
-      (exemption.publicRegister = {
-        consent: false,
-        reason: PublicRegisterModel.generateReasonExceedingMaxLength()
-      })
+    Memory.ofPublicRegisterWithConsentAndReason(
+      false,
+      PublicRegisterModel.generateReasonExceedingMaxLength()
+    )
   )
   await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
 })
@@ -111,10 +102,7 @@ When('the reason text provided is too long', async function () {
 When(
   'choosing to allow information to be added to the public register',
   async function () {
-    this.actor.updates(
-      'exemption',
-      (exemption) => (exemption.publicRegister = { consent: true })
-    )
+    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
     await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 )
@@ -129,10 +117,7 @@ When(
 When(
   'completing the public register task but cancelling out',
   async function () {
-    this.actor.updates(
-      'exemption',
-      (exemption) => (exemption.publicRegister = { consent: true })
-    )
+    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
     await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
     await this.actor.attemptsTo(ClickCancel.now())
   }
@@ -141,10 +126,7 @@ When(
 When(
   'completing the public register task but selecting to go back',
   async function () {
-    this.actor.updates(
-      'exemption',
-      (exemption) => (exemption.publicRegister = { consent: true })
-    )
+    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
     await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
     await this.actor.attemptsTo(ClickBack.now())
   }
@@ -175,22 +157,14 @@ When(
 When('changing the public register information to withhold', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   this.actor.updates(
-    'exemption',
-    (exemption) =>
-      (exemption.publicRegister = {
-        consent: false,
-        reason: faker.lorem.words(5)
-      })
+    Memory.ofPublicRegisterWithConsentAndReason(false, faker.lorem.words(5))
   )
   await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
 })
 
 When('changing the public register information to consent', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  this.actor.updates(
-    'exemption',
-    (exemption) => (exemption.publicRegister = { consent: true })
-  )
+  this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
   await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
 })
 

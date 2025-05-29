@@ -35,7 +35,20 @@ export default class Actor {
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
   }
 
-  updates(key, updateFunction) {
+  updates(keyOrUpdater, updateFunction) {
+    // If the first parameter is a function, it's a Memory helper
+    if (typeof keyOrUpdater === 'function') {
+      const updater = keyOrUpdater
+      if (!this.hasMemoryOf('exemption')) {
+        this.remembers('exemption', {})
+      }
+      updater(this.memory.exemption)
+      attachJson(this.toJson(), 'actor-memory-changed-exemption.json')
+      return this
+    }
+
+    // Otherwise, handle it as before with a key and update function
+    const key = keyOrUpdater
     const item = this.recalls(key)
     updateFunction(item)
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
