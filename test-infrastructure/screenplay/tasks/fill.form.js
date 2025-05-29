@@ -5,60 +5,62 @@ export default class FillForm extends Task {
     return new FillForm(formFiller)
   }
 
-  static publicRegisterWithhold(reason) {
-    return new FillForm(async (actor) => {
-      const PublicRegisterPage = (
-        await import('~/test-infrastructure/pages/public.register.page')
-      ).default
+  static async _importPage(pagePath) {
+    return (await import(pagePath)).default
+  }
+
+  static _createClickHandler(pagePath, selector, additionalActions = null) {
+    return async (actor) => {
+      const page = await this._importPage(pagePath)
       const browseTheWeb = actor.ability
 
-      await browseTheWeb.click(PublicRegisterPage.withhold)
+      await browseTheWeb.click(page[selector])
 
-      if (reason && reason.length > 0) {
-        await browseTheWeb.sendKeys(PublicRegisterPage.withholdReason, reason)
+      if (additionalActions) {
+        await additionalActions(actor, browseTheWeb, page)
       }
-    })
+    }
+  }
+
+  static publicRegisterWithhold(reason) {
+    return new FillForm(
+      this._createClickHandler(
+        '~/test-infrastructure/pages/public.register.page',
+        'withhold',
+        async (actor, browseTheWeb, page) => {
+          if (reason && reason.length > 0) {
+            return await browseTheWeb.sendKeys(page.withholdReason, reason)
+          }
+        }
+      )
+    )
   }
 
   static chooseToEnterCoordinatesManually() {
-    return new FillForm(async (actor) => {
-      const HowDoYouWantToProvideCoordinatesPage = (
-        await import(
-          '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
-        )
-      ).default
-      const browseTheWeb = actor.ability
-
-      await browseTheWeb.click(
-        HowDoYouWantToProvideCoordinatesPage.enterCoordinates
+    return new FillForm(
+      this._createClickHandler(
+        '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page',
+        'enterCoordinates'
       )
-    })
+    )
   }
 
   static provideASinglePointForACircularSite() {
-    return new FillForm(async (actor) => {
-      const HowDoYouWantToEnterTheCoordinatesPage = (
-        await import(
-          '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js'
-        )
-      ).default
-      const browseTheWeb = actor.ability
-
-      await browseTheWeb.click(
-        HowDoYouWantToEnterTheCoordinatesPage.circularSite
+    return new FillForm(
+      this._createClickHandler(
+        '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js',
+        'circularSite'
       )
-    })
+    )
   }
 
   static selectWGS84CoordinateSystem() {
-    return new FillForm(async (actor) => {
-      const WhatCoordinateSystemPage = (
-        await import('~/test-infrastructure/pages/what.coordinate.system.page')
-      ).default
-      const browseTheWeb = actor.ability
-
-      await browseTheWeb.click(WhatCoordinateSystemPage.wgs84)
-    })
+    return new FillForm(
+      this._createClickHandler(
+        '~/test-infrastructure/pages/what.coordinate.system.page',
+        'wgs84'
+      )
+    )
   }
 
   constructor(formFiller) {
