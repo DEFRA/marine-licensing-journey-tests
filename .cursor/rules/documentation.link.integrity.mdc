@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule ensures that when creating new `.mdc` rule files, they are properly linked in the main README so they can be discovered and used.
+globs: 
 alwaysApply: false
 ---
 # Documentation Link Integrity
@@ -71,24 +71,24 @@ fi
 Don't just link the file - explain what someone learns from it:
 
 ```markdown
-| [`new-rule.mdc`](./new-rule.mdc) | What specific problem this solves or pattern it teaches |
+| [`new-rule.mdc`](mdc:marine-licensing-journey-tests/new-rule.mdc) | What specific problem this solves or pattern it teaches |
 ```
 
 ## Link Format Standards
 
 ### Table Format
 ```markdown
-| [`rule-name.mdc`](./rule-name.mdc) | Brief description of what it teaches |
+| [`rule-name.mdc`](mdc:marine-licensing-journey-tests/rule-name.mdc) | Brief description of what it teaches |
 ```
 
 ### Inline Format (for references)
 ```markdown
-See [`rule-name.mdc`](./rule-name.mdc) for details on...
+See [`rule-name.mdc`](mdc:marine-licensing-journey-tests/rule-name.mdc) for details on...
 ```
 
 ### Cross-References
 ```markdown
-This works with [`related-rule.mdc`](./related-rule.mdc) to provide...
+This works with [`related-rule.mdc`](mdc:marine-licensing-journey-tests/related-rule.mdc) to provide...
 ```
 
 ## Automation Opportunities
@@ -114,7 +114,7 @@ Consider automating the link generation:
 # Generate links for all .mdc files
 for file in .cursor/rules/*.mdc; do
   name=$(basename "$file")
-  echo "| [\`$name\`](./$name) | TODO: Add description |"
+  echo "| [\`$name\`](mdc:marine-licensing-journey-tests/$name) | TODO: Add description |"
 done
 ```
 

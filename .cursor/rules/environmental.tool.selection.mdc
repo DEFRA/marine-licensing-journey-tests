@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule addresses the importance of selecting tools that match the environment and context, rather than blindly using whatever happens to be available.
+globs: 
 alwaysApply: false
 ---
 # Environmental Tool Selection

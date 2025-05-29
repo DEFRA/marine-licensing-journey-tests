@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule applies to ALL code generation, refactoring, and test automation work. I have a tendency to over-engineer solutions and create unnecessary complexity.
+globs: 
 alwaysApply: false
 ---
 # Stop Over-Engineering and Making Stuff Up

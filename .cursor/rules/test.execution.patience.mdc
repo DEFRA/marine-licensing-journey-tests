@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule applies to running tests in the marine licensing test automation project, particularly end-to-end tests that take time to execute.
+globs: 
 alwaysApply: false
 ---
 # Test Execution Patience

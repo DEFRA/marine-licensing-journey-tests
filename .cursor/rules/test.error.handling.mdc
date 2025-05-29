@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule applies when handling errors, validation failures, or unexpected conditions in test automation code. Test code should use proper test framework assertions rather than generic error throwing.
+globs: 
 alwaysApply: false
 ---
 # Test Error Handling

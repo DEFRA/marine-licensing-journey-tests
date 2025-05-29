@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule addresses the problem of duplicate actions in test automation, particularly when tasks already handle certain actions internally but additional actions are added manually.
+globs: 
 alwaysApply: false
 ---
 # Duplicate Action Prevention

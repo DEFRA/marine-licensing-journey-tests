@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule addresses logical inconsistencies in data models, particularly when related fields should have consistent values but don't due to mapping errors or misunderstanding of business logic.
+globs: 
 alwaysApply: false
 ---
 # Logical Consistency Validation

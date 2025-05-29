@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule covers defensive coding practices discovered while refactoring test automation code. We found patterns of both good and bad defensive coding that need clear guidelines.
+globs: 
 alwaysApply: false
 ---
 # Defensive Coding Patterns

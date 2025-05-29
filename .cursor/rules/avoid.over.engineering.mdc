@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: This rule applies when creating test data models, factories, or any test infrastructure code. It's easy to get excited and create comprehensive, feature-rich test utilities that end up being unused.
+globs: 
 alwaysApply: false
 ---
 # Avoid Over-Engineering in Test Code
