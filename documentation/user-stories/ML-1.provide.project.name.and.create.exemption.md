@@ -1,6 +1,6 @@
-# ML-1: Provide Project Name and Create Exemption
+# ML-1: Provide project name and create exemption
 
-## User Story
+## User story
 
 **AS** an applicant  
 **I WANT** to provide a name for my marine project  
@@ -16,7 +16,7 @@ The project name page allows the user to define a freetext name for their projec
 - Link to data dictionary
 - [GitHub - defra-design/marine-licensing-prototype](https://github.com/defra-design/marine-licensing-prototype)
 
-## Out of Scope
+## Out of scope
 
 This story does not cover the use of the project name elsewhere within the service, for example on an applicant dashboard or in Dynamics.
 
@@ -24,7 +24,7 @@ This story does not cover editing the project name from the task list.
 
 This story does not cover navigating to the task list after saving the page.
 
-## Questions and Answers
+## Questions and answers
 
 **Q.** How many characters should be allowed for the project name?
 
@@ -44,7 +44,7 @@ This story does not cover navigating to the task list after saving the page.
 - "Save and continue" button
 - Standard GOV.UK page layout with Beta banner
 
-## Acceptance Criteria
+## Acceptance criteria
 
 ### AC1 - Display "Project name" page
 
@@ -77,7 +77,7 @@ This story does not cover navigating to the task list after saving the page.
 **AND** the project name will be saved against that notification  
 **AND** I will remain on the "Project name" page (the next story will cover navigation to the task list following a successful save)
 
-## Standard Behaviour
+## Standard behaviour
 
 **"Back" link** - when I select the "Back" link (if present), I will be returned to the page I was on immediately prior to the current page. Any changes I made on the current page will be discarded.
 

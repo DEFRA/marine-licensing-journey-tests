@@ -1,6 +1,6 @@
-# Test Data Management - Self-Sufficient Test Data Strategy
+# Test data management - Self-sufficient test data strategy
 
-**Core Principle**: Automated tests create all the data they need to execute without dependencies on external data sources.
+**Core principle**: Automated tests create all the data they need to execute without dependencies on external data sources.
 
 ## 🎯 Benefits
 
@@ -11,7 +11,7 @@
 
 ## 🏗️ Implementation
 
-### **Test Data Creation**
+### **Test data creation**
 
 ```javascript
 // Create realistic data using faker.js
@@ -24,13 +24,13 @@ await this.actor.attemptsTo(
 )
 ```
 
-### **Data Lifecycle**
+### **Data lifecycle**
 
 - **Scenario-scoped** - Data created and used within single test scenario
 - **Automatic cleanup** - Tests clean up after themselves
 - **No persistent state** - Tests don't rely on data from previous runs
 
-## 🔍 Supporting Investigation
+## 🔍 Supporting investigation
 
 Test data tools also support investigative testing:
 

@@ -1,10 +1,10 @@
-# Domain Context - Marine Licensing Testing Reality
+# Domain context - Marine licensing testing reality
 
 This section bridges **modern testing approaches** with the **specific realities** of marine licensing applications, ensuring our strategy serves real user needs.
 
-## 🌊 Marine Licensing Domain Understanding
+## 🌊 Marine licensing domain understanding
 
-### **Regulatory Complexity**
+### **Regulatory complexity**
 
 Marine licensing involves **intricate regulatory requirements**:
 
@@ -14,7 +14,7 @@ Marine licensing involves **intricate regulatory requirements**:
 - **Activity classifications** - Different rules for different marine activities
 - **Compliance monitoring** - Ongoing enforcement and validation
 
-### **Real-World Consequences**
+### **Real-world consequences**
 
 Testing failures in marine licensing can lead to:
 
@@ -23,89 +23,89 @@ Testing failures in marine licensing can lead to:
 - **Economic impact** - Delayed projects costing millions
 - **Public trust erosion** - Government service reliability questioned
 
-## 👥 User Reality & Testing Implications
+## 👥 User reality & testing implications
 
-### **From Personas to Test Strategy**
+### **From personas to test strategy**
 
 Our [detailed personas](../personas/README.md) inform our testing approach:
 
-#### **[Fatima (Case Officer)](../personas/fatima-case-officer.md) - Integration Testing Focus**
+#### **[Fatima (Case officer)](../personas/fatima-case-officer.md) - Integration testing focus**
 
 **Reality**: Manual processes, system switching, interruption-heavy environment
 
-**Testing Implications**:
+**Testing implications**:
 
 ```
-🔍 Exploratory Focus: Workflow efficiency under pressure
-🤖 Automation Focus: Data consistency across systems
-📊 Metrics Focus: Task completion time, error recovery
-🎯 Risk Focus: Information gaps leading to poor user support
+🔍 Exploratory focus: Workflow efficiency under pressure
+🤖 Automation focus: Data consistency across systems
+📊 Metrics focus: Task completion time, error recovery
+🎯 Risk focus: Information gaps leading to poor user support
 ```
 
-#### **[Simon (Marine Officer)](../personas/simon-marine-officer.md) - Field & Mobile Testing**
+#### **[Simon (Marine officer)](../personas/simon-marine-officer.md) - Field & mobile testing**
 
 **Reality**: Outdoor enforcement, limited connectivity, evidence gathering
 
-**Testing Implications**:
+**Testing implications**:
 
 ```
-🔍 Exploratory Focus: Mobile usability, offline capabilities
-🤖 Automation Focus: Data synchronisation, performance on slow networks
-📊 Metrics Focus: Mobile page load times, offline data integrity
-🎯 Risk Focus: Evidence loss, enforcement delays
+🔍 Exploratory focus: Mobile usability, offline capabilities
+🤖 Automation focus: Data synchronisation, performance on slow networks
+📊 Metrics focus: Mobile page load times, offline data integrity
+🎯 Risk focus: Evidence loss, enforcement delays
 ```
 
-#### **[Amy (Veteran Applicant)](../personas/amy-veteran-applicant.md) - Efficiency Testing**
+#### **[Amy (Veteran applicant)](../personas/amy-veteran-applicant.md) - Efficiency testing**
 
 **Reality**: Repeated applications, time pressure, domain expertise
 
-**Testing Implications**:
+**Testing implications**:
 
 ```
-🔍 Exploratory Focus: Workflow shortcuts, data reuse opportunities
-🤖 Automation Focus: Form pre-population, validation accuracy
-📊 Metrics Focus: Task completion speed, keystroke efficiency
-🎯 Risk Focus: Regression in familiar workflows
+🔍 Exploratory focus: Workflow shortcuts, data reuse opportunities
+🤖 Automation focus: Form pre-population, validation accuracy
+📊 Metrics focus: Task completion speed, keystroke efficiency
+🎯 Risk focus: Regression in familiar workflows
 ```
 
-#### **[Zofia (Novice Applicant)](../personas/zofia-novice-applicant.md) - Accessibility & Guidance Testing**
+#### **[Zofia (Novice applicant)](../personas/zofia-novice-applicant.md) - Accessibility & guidance testing**
 
 **Reality**: Unfamiliar terminology, location data confusion, digital skills gaps
 
-**Testing Implications**:
+**Testing implications**:
 
 ```
-🔍 Exploratory Focus: Guidance clarity, error message helpfulness
-🤖 Automation Focus: Validation messages, accessibility compliance
-📊 Metrics Focus: Task abandonment rates, help usage patterns
-🎯 Risk Focus: Incorrect submissions, user exclusion
+🔍 Exploratory focus: Guidance clarity, error message helpfulness
+🤖 Automation focus: Validation messages, accessibility compliance
+📊 Metrics focus: Task abandonment rates, help usage patterns
+🎯 Risk focus: Incorrect submissions, user exclusion
 ```
 
-## 🎯 Domain-Driven Test Strategy
+## 🎯 Domain-driven test strategy
 
-### **Marine Activity Classification Testing**
+### **Marine activity classification testing**
 
 Different activities require different testing approaches:
 
-#### **High-Risk Activities** (Offshore wind farms, major infrastructure)
+#### **High-risk activities** (Offshore wind farms, major infrastructure)
 
 - **Extensive validation** - Complex environmental and technical requirements
 - **Integration testing** - Multiple system and stakeholder interactions
 - **Performance testing** - Large datasets and concurrent users
 - **Compliance testing** - Strict regulatory adherence validation
 
-#### **Medium-Risk Activities** (Cable laying, marine surveys)
+#### **Medium-risk activities** (Cable laying, marine surveys)
 
 - **Workflow testing** - Standard processes with variations
 - **Data quality testing** - Accurate location and activity data
 - **User journey testing** - Efficient application processes
 
-#### **Low-Risk Activities** (Minor repairs, routine maintenance)
+#### **Low-risk activities** (Minor repairs, routine maintenance)
 
 - **Smoke testing** - Basic functionality validation
 - **Regression testing** - Ensure changes don't break simple workflows
 
-### **Geographical Complexity Testing**
+### **Geographical complexity testing**
 
 ```
 UK Territorial Waters Testing:
@@ -119,9 +119,9 @@ Each jurisdiction may have:
 - Separate integration points
 ```
 
-## 🧪 Context-Specific Testing Techniques
+## 🧪 Context-specific testing techniques
 
-### **Regulatory Edge Case Testing**
+### **Regulatory edge case testing**
 
 Testing complex marine licensing rules with systematic validation:
 
@@ -153,7 +153,7 @@ describe('Marine Activity Application Windows', () => {
 })
 ```
 
-### **Location Data Testing**
+### **Location data testing**
 
 Marine coordinates present unique challenges:
 
@@ -174,7 +174,7 @@ const marineLocationTests = [
 ]
 ```
 
-### **Seasonal & Temporal Testing**
+### **Seasonal & temporal testing**
 
 Marine activities have time-sensitive considerations:
 
@@ -183,23 +183,23 @@ Marine activities have time-sensitive considerations:
 - **Tidal considerations** - Activity timing dependencies
 - **Environmental monitoring periods** - Data collection timing requirements
 
-## 📊 Domain-Specific Quality Metrics
+## 📊 Domain-specific quality metrics
 
-### **Marine Licensing Success Metrics**
+### **Marine licensing success metrics**
 
 - **Application completion rate** - Percentage of started applications submitted
 - **Data accuracy rate** - Correct location and activity information
 - **Time to approval** - Efficiency of processing workflows
 - **User satisfaction** - Especially for accessibility and guidance
 
-### **Risk-Based Quality Indicators**
+### **Risk-based quality indicators**
 
 - **Compliance validation accuracy** - Correct regulatory requirement checking
 - **Environmental data integrity** - Accurate impact assessment information
 - **Integration reliability** - Successful data exchange with external systems
 - **User journey completion** - Successful task completion across all personas
 
-### **Context-Aware Test Coverage**
+### **Context-aware test coverage**
 
 Track coverage by:
 
@@ -208,9 +208,9 @@ Track coverage by:
 - **Regulatory requirement** - Compliance rule validation
 - **Integration point** - External system connection testing
 
-## 🚀 Practical Domain Application
+## 🚀 Practical domain application
 
-### **Daily Testing Decisions**
+### **Daily testing decisions**
 
 When planning testing activities, consider:
 
@@ -219,7 +219,7 @@ When planning testing activities, consider:
 3. **What regulatory requirements** might be impacted?
 4. **Which integration points** could be affected?
 
-### **Work Planning Context**
+### **Work planning context**
 
 Include domain expertise in planning:
 
@@ -228,7 +228,7 @@ Include domain expertise in planning:
 - **Regulatory updates** drive compliance testing priorities
 - **Integration dependencies** influence testing sequencing
 
-### **Production Readiness Criteria**
+### **Production readiness criteria**
 
 Before release, validate:
 

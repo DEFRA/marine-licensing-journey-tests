@@ -4,12 +4,12 @@
 
 > _"It's difficult to get my head around whether I need a licence"_
 
-## Role & Context
+## Role & context
 
 **Role**: Property owner  
-**Primary Responsibility**: Completing a construction project that requires marine licensing consideration
+**Primary responsibility**: Completing a construction project that requires marine licensing consideration
 
-### Daily Reality
+### Daily reality
 
 Zofia is completely new to marine licensing and has no prior experience with the regulatory process. Her situation involves:
 
@@ -19,33 +19,33 @@ Zofia is completely new to marine licensing and has no prior experience with the
 - Navigating technical requirements like coordinate entry with no prior experience
 - Managing project timelines alongside regulatory compliance
 
-### Key Challenges
+### Key challenges
 
-- **Knowledge Gap**: Unfamiliar with marine licensing terminology and processes
-- **Uncertainty**: Unclear whether her project needs a license or exemption
-- **Technical Barriers**: Struggles with providing accurate location details
-- **Time Pressure**: Needs to understand how long the process takes to plan her project
-- **Guidance Complexity**: Finds existing documentation overwhelming and full of unfamiliar terms
-- **Digital Confidence**: May have varying levels of digital skills and confidence
+- **Knowledge gap**: Unfamiliar with marine licensing terminology and processes
+- **Uncertainty**: Unclear whether her project needs a licence or exemption
+- **Technical barriers**: Struggles with providing accurate location details
+- **Time pressure**: Needs to understand how long the process takes to plan her project
+- **Guidance complexity**: Finds existing documentation overwhelming and full of unfamiliar terms
+- **Digital confidence**: May have varying levels of digital skills and confidence
 
-## Core Needs
+## Core needs
 
-1. **Clear Decision Guidance**:
+1. **Clear decision guidance**:
 
-   - To understand if she needs a license or exemption
+   - To understand if she needs a licence or exemption
    - To confidently determine regulatory requirements
 
-2. **Plain Language Assistance**:
+2. **Plain language assistance**:
 
    - To navigate unfamiliar terminology
    - To understand technical requirements in accessible terms
 
-3. **Timeline Transparency**:
+3. **Timeline transparency**:
 
    - To know how long the process will take
    - To plan her project around regulatory timelines
 
-4. **Technical Support**:
+4. **Technical support**:
 
    - To provide accurate location details despite unfamiliarity with coordinates
    - To complete all requirements correctly to avoid enforcement issues
@@ -54,43 +54,43 @@ Zofia is completely new to marine licensing and has no prior experience with the
    - To feel confident she's following the correct process
    - To understand the consequences of her choices
 
-## Testing Implications
+## Testing implications
 
-### Critical Scenarios
+### Critical scenarios
 
 - **First-time user journey**: Complete application flow for newcomers
-- **Decision support tools**: License vs. exemption guidance
+- **Decision support tools**: Licence vs. exemption guidance
 - **Plain English content**: Terminology explanation and simplification
 - **Location data assistance**: Alternative methods for coordinate entry
 - **Process transparency**: Clear timelines and next steps
 - **Digital inclusion**: Support for users with varying digital skills
 
-### UX Requirements
+### UX requirements
 
-- **Progressive Disclosure**: Information presented in manageable chunks
-- **Context-Sensitive Help**: Guidance available exactly when needed
-- **Error Prevention**: Proactive help before mistakes happen
-- **Plain Language**: Technical terms explained in everyday language
-- **Visual Aids**: Maps and visual tools for location specification
-- **Progress Tracking**: Clear indication of completion status
+- **Progressive disclosure**: Information presented in manageable chunks
+- **Context-sensitive help**: Guidance available exactly when needed
+- **Error prevention**: Proactive help before mistakes happen
+- **Plain language**: Technical terms explained in everyday language
+- **Visual aids**: Maps and visual tools for location specification
+- **Progress tracking**: Clear indication of completion status
 
-### Edge Cases
+### Edge cases
 
-- **Digital Exclusion**: Alternative pathways for users with limited digital access
-- **Terminology Confusion**: Recovery from misunderstandings of technical terms
-- **Assisted Digital**: Support pathways for users who need help
-- **Partial Completion**: Saving progress and returning later
-- **Decision Reconsideration**: Changing from exemption to license path mid-process
+- **Digital exclusion**: Alternative pathways for users with limited digital access
+- **Terminology confusion**: Recovery from misunderstandings of technical terms
+- **Assisted digital**: Support pathways for users who need help
+- **Partial completion**: Saving progress and returning later
+- **Decision reconsideration**: Changing from exemption to licence path mid-process
 
-## Persona Background
+## Persona background
 
-Zofia has no previous experience with marine licensing or similar regulatory processes. Her property renovation project has unexpectedly brought her into contact with marine regulations, and she's determined to do things properly while minimizing delays to her project.
+Zofia has no previous experience with marine licensing or similar regulatory processes. Her property renovation project has unexpectedly brought her into contact with marine regulations, and she's determined to do things properly while minimising delays to her project.
 
-She's reasonably comfortable with everyday technology but becomes anxious when faced with unfamiliar technical requirements or specialized terminology. She values clear explanations and reassurance that she's following the correct process.
+She's reasonably comfortable with everyday technology but becomes anxious when faced with unfamiliar technical requirements or specialised terminology. She values clear explanations and reassurance that she's following the correct process.
 
-## Test Charter Connections
+## Test charter connections
 
-This persona directly informs the [Novice Journey](../test-charters/novice-journey.md) test charter, which explores:
+This persona directly informs the [Novice journey](../test-charters/novice-journey.md) test charter, which explores:
 
 - First-time user experience and onboarding
 - Terminology comprehension and guidance effectiveness

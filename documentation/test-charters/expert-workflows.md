@@ -12,11 +12,11 @@
 
 ## Scenario Context
 
-### **THEME**
+### **Theme**
 
 Investigate how well the marine licensing application supports experienced users who need to complete applications efficiently, often managing multiple projects simultaneously.
 
-### **SETUP**
+### **Setup**
 
 - **Primary Persona:** Amy (Veteran Applicant, Maritime Consultant)
 - **User Context:** Third marine licensing application this year, familiar with regulatory requirements
@@ -24,19 +24,19 @@ Investigate how well the marine licensing application supports experienced users
 - **Environmental Context:** Client deadlines, multiple applications, interruption-heavy office environment
 - **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
 
-### **REALISTIC PRESSURES**
+### **Realistic pressures**
 
-- **Time efficiency expectations** - Process should be faster than first-time users
+- **Time efficiency expectations** - Process should be faster than for first-time users
 - **Pattern recognition** - Expects familiar workflows from other government services
-- **Multi-application management** - Handling several client projects simultaneously
+- **Multi-application management** - Handling several client projects at once
 - **Professional presentation** - Interface must support confident client interaction
 - **Keyboard navigation preference** - Minimal mouse usage for speed
 
 ## Realistic Activities
 
-### **Efficient Application Completion**
+### **Efficient application completion**
 
-#### **Speed-Focused Project Name Entry**
+#### **Speed-focused project name entry**
 
 - Navigate quickly to project name field using keyboard shortcuts
 - Apply naming conventions learned from previous applications
@@ -44,7 +44,7 @@ Investigate how well the marine licensing application supports experienced users
 - Use browser autofill and form memory features
 - Attempt to reuse project naming patterns for consistency
 
-#### **Professional Task List Usage**
+#### **Professional task list usage**
 
 - Quick scanning for completed vs remaining tasks
 - Efficient navigation between task list and individual tasks
@@ -52,7 +52,7 @@ Investigate how well the marine licensing application supports experienced users
 - Attempt to bookmark specific application states for later return
 - Handle multiple client applications in different browser tabs
 
-#### **Streamlined Consent Decisions**
+#### **Streamlined consent decisions**
 
 - Make consent decisions quickly based on client requirements
 - Test rapid switching between consent options
@@ -60,7 +60,7 @@ Investigate how well the marine licensing application supports experienced users
 - Navigate conditional form behaviour at professional speed
 - Maintain consistency across multiple client applications
 
-#### **Professional Site Details Selection**
+#### **Professional site details selection**
 
 - Navigate site details selection screens with established professional workflows
 - Quickly select appropriate coordinate system based on professional knowledge
@@ -69,9 +69,9 @@ Investigate how well the marine licensing application supports experienced users
 - Apply professional geospatial knowledge to method and coordinate system selection
 - Test back and cancel functionality during selection process
 
-### **Multi-Application Workflow Testing**
+### **Multi-application workflow testing**
 
-#### **Concurrent Application Management**
+#### **Concurrent application management**
 
 - Open multiple applications in different tabs for comparison
 - Switch between different client applications requiring different approaches
@@ -79,7 +79,7 @@ Investigate how well the marine licensing application supports experienced users
 - Handle interruptions while managing multiple projects
 - Test session handling across multiple browser tabs
 
-#### **Professional Efficiency Patterns**
+#### **Professional efficiency patterns**
 
 - Use keyboard shortcuts expected from other government services
 - Minimise mouse usage throughout entire workflow
@@ -87,9 +87,9 @@ Investigate how well the marine licensing application supports experienced users
 - Look for bulk operations or multi-application features
 - Expect smart defaults based on user history
 
-### **Client Service Scenarios**
+### **Client service scenarios**
 
-#### **Real-Time Client Consultation**
+#### **Real-time client consultation**
 
 - Complete application while on phone with client
 - Navigate interface confidently during client meetings
@@ -97,7 +97,7 @@ Investigate how well the marine licensing application supports experienced users
 - Make real-time changes based on client feedback
 - Demonstrate professional competence through interface mastery
 
-#### **Deadline Pressure Testing**
+#### **Deadline pressure testing**
 
 - Complete application under extreme time pressure
 - Handle multiple applications due same day
@@ -107,7 +107,7 @@ Investigate how well the marine licensing application supports experienced users
 
 ## Evidence Framework
 
-### **✅ Positive Signals:**
+### **✅ Positive signals:**
 
 - **Keyboard navigation fluency** - Tab order logical, shortcuts work intuitively
 - **Recognition over recall** - Previous patterns easy to apply, smart suggestions available
@@ -115,7 +115,7 @@ Investigate how well the marine licensing application supports experienced users
 - **Multi-application support** - Easy to handle several projects simultaneously
 - **Professional presentation** - Interface supports confident client interaction
 
-### **⚠️ Warning Signs:**
+### **⚠️ Warning signs:**
 
 - **Efficiency barriers** - Required steps that slow down experienced users unnecessarily
 - **Pattern disruption** - Workflows that conflict with established government service conventions
@@ -123,14 +123,14 @@ Investigate how well the marine licensing application supports experienced users
 - **Multi-tab conflicts** - Session handling problems when managing multiple applications
 - **Professional friction** - Interface elements that undermine client confidence
 
-### **🤔 Questions to Investigate:**
+### **🤔 Questions to investigate:**
 
 - How does application speed compare to other government services professionals use?
 - What happens when users need to manage multiple applications simultaneously?
 - How well does the interface support professional client interaction patterns?
 - Are there opportunities for data reuse between related applications?
 
-### **💡 Ideas to Explore:**
+### **💡 Ideas to explore:**
 
 - Could keyboard shortcuts be added for common professional workflows?
 - Are there opportunities for smart defaults based on user behaviour patterns?
@@ -172,5 +172,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered Features Tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
-**Related Features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)
+**Delivered features tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
+**Related features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)

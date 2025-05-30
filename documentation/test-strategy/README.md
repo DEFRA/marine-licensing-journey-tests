@@ -1,35 +1,35 @@
 # Marine Licensing Journey Tests - Test Strategy
 
-> **🎯 Modern Quality Engineering**  
+> **🎯 Modern quality engineering**  
 > **Automation-first foundation** + **Strategic human insight** = **Reliable marine licensing service**
 
-## 🚀 Quick Start (Choose Your Path)
+## 🚀 Quick start (Choose your path)
 
-### **👩‍💻 For Quality Engineering**
+### **👩‍💻 For quality engineering**
 
-1. Review [Automation Approach](./automation.md) - ensure UI tests cover critical journeys
-2. Plan first [Investigation Session](./investigative-testing.md) with MMO domain expert
+1. Review [Automation approach](./automation.md) - ensure UI tests cover critical journeys
+2. Plan first [Investigation session](./investigative-testing.md) with MMO domain expert
 3. Establish rhythm of automation + investigation
 
-### **🌊 For MMO Domain Experts**
+### **🌊 For MMO domain experts**
 
-1. Try 60-minute [Simple Investigation](./investigative-testing.md#-simple-investigation-sessions) on familiar workflow
+1. Try 60-minute [Simple investigation](./investigative-testing.md#-simple-investigation-sessions) on familiar workflow
 2. Share findings with team, identify next investigation area
 3. Regular investigation sessions on high-risk areas
 
-### **👨‍💼 For Project Managers and Stakeholders**
+### **👨‍💼 For project managers and stakeholders**
 
-1. Review [Success Measures](#-success-measures) to understand quality indicators
+1. Review [Success measures](#-success-measures) to understand quality indicators
 2. Include investigation time in work planning
 3. Track automation health + investigation insights
 
-### **🆕 For New Team Members**
+### **🆕 For new team members**
 
 1. **Start here**: Read this overview (10 minutes)
-2. **Understand context**: [Domain Context](./domain-context.md) (20 minutes)
+2. **Understand context**: [Domain context](./domain-context.md) (20 minutes)
 3. **Pick your role**: Follow relevant path above
 
-## 🎯 Key Principles
+## 🎯 Key principles
 
 1. **Context-driven testing** - Strategy adapts to marine licensing domain needs
 2. **Automation-first foundation** - Reliable regression protection and fast feedback
@@ -37,7 +37,7 @@
 4. **Whole-team quality** - Testing is everyone's responsibility
 5. **Evidence-based decisions** - Data and metrics guide testing investments
 
-## 📋 Current Focus: Private Beta Exemption Notifications
+## 📋 Current focus: Private beta exemption notifications
 
 **What we're building**: Public exemption notification service for Marine Management Organisation (MMO)
 
@@ -48,9 +48,9 @@
 - ✅ **Essential functionality** - Reliable operation of notification features
 - ✅ **Beta readiness** - Quality validation for limited user testing
 
-## 🗺️ Strategy Overview: How Everything Connects
+## 🗺️ Strategy overview: How everything connects
 
-### **The Complete Strategy Map**
+### **The complete strategy map**
 
 ```
 🌊 Marine Licensing Domain Context
@@ -75,7 +75,7 @@
          └── Higher confidence
 ```
 
-### **Decision Flow: What Should I Do Next?**
+### **Decision flow: What should I do next?**
 
 ```
 🚀 Starting Point: "I need to ensure quality for [specific area]"
@@ -99,26 +99,26 @@
                      ✅ CONTINUOUS IMPROVEMENT LOOP ✅
 ```
 
-## 📁 Strategy Structure
+## 📁 Strategy structure
 
-| **Area**                                                               | **Purpose**                                    | **Start Here**                                                        |
+| **Area**                                                               | **Purpose**                                    | **Start here**                                                        |
 | ---------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| **[Automation Approach](./automation.md)**                             | Test pyramid, tooling, and screenplay patterns | **QE**: Review current foundation. **New**: Foundation learning       |
-| **[Investigative Testing](./investigative-testing.md)**                | Human-led exploration and discovery            | **Domain Experts**: 60-min sessions. **New**: Simple quick start      |
-| **[Testing Heuristics](./heuristics.md)**                              | Systematic thinking for test discovery         | **QE**: Use HTSM during investigation. **All**: Systematic thinking   |
-| **[Domain Context](./domain-context.md)**                              | Marine licensing user needs and reality        | **New**: Understand personas. **Domain Experts**: Context for testing |
-| **[Accessibility Testing](./accessibility.md)**                        | Inclusive design and GOV.UK compliance         | Review automation and manual checks                                   |
-| **[Security Testing](./security.md)**                                  | Security-by-design and threat testing          | Plan external penetration testing integration                         |
-| **[Test Data Management](./test-data.md)**                             | Data strategies for reliable automation        | Set up test data for automation scenarios                             |
-| **[Quality Coaching](./coaching.md)**                                  | Skills development and knowledge sharing       | Plan learning goals aligned with strategy implementation              |
-| **[BDD Rules](./bdd-rules.md)**                                        | Living documentation practices                 | **QE**: Clear scenario writing guidelines                             |
-| **[Test Charters](../test-charters/README.md)**                        | Guided investigative testing plans             | **All**: Discovering edge cases and usability issues                  |
-| **[User Stories](../user-stories/README.md)**                          | Real user needs and acceptance criteria        | **PM**: Planning and requirements traceability                        |
+| **[Automation approach](./automation.md)**                             | Test pyramid, tooling, and screenplay patterns | **QE**: Review current foundation. **New**: Foundation learning       |
+| **[Investigative testing](./investigative-testing.md)**                | Human-led exploration and discovery            | **Domain experts**: 60-min sessions. **New**: Simple quick start      |
+| **[Testing heuristics](./heuristics.md)**                              | Systematic thinking for test discovery         | **QE**: Use HTSM during investigation. **All**: Systematic thinking   |
+| **[Domain context](./domain-context.md)**                              | Marine licensing user needs and reality        | **New**: Understand personas. **Domain experts**: Context for testing |
+| **[Accessibility testing](./accessibility.md)**                        | Inclusive design and GOV.UK compliance         | Review automation and manual checks                                   |
+| **[Security testing](./security.md)**                                  | Security-by-design and threat testing          | Plan external penetration testing integration                         |
+| **[Test data management](./test-data.md)**                             | Data strategies for reliable automation        | Set up test data for automation scenarios                             |
+| **[Quality coaching](./coaching.md)**                                  | Skills development and knowledge sharing       | Plan learning goals aligned with strategy implementation              |
+| **[BDD rules](./bdd-rules.md)**                                        | Living documentation practices                 | **QE**: Clear scenario writing guidelines                             |
+| **[Test charters](../test-charters/README.md)**                        | Guided investigative testing plans             | **All**: Discovering edge cases and usability issues                  |
+| **[User stories](../user-stories/README.md)**                          | Real user needs and acceptance criteria        | **PM**: Planning and requirements traceability                        |
 | **[Personas](./domain-context.md#user-reality--testing-implications)** | Representative target user types               | **Design**: Understanding user needs and testing scenarios            |
 
-## 📊 Success Measures
+## 📊 Success measures
 
-### **🏆 You'll Know This Is Working When:**
+### **🏆 You'll know this is working when:**
 
 - **Domain experts regularly run investigation sessions** and find valuable insights
 - **Automation catches regressions instantly** with actionable failures
@@ -126,7 +126,7 @@
 - **Team confidence in releases increases** based on comprehensive validation
 - **Accessibility compliance is automatic** through built-in validation
 
-### **📈 Key Metrics**
+### **📈 Key metrics**
 
 - **Lead time for changes** - How quickly can we deliver quality features?
 - **Bug escape rate** - Issues found in production vs pre-production
@@ -134,22 +134,22 @@
 - **Accessibility compliance** - WCAG 2.1 AA standard achievement
 - **Investigation session frequency** - Regular domain expert-led exploration
 
-## 🧠 Built on Proven Foundations
+## 🧠 Built on proven foundations
 
 This strategy builds respectfully on the work of testing thought leaders:
 
-- **Context-Driven Testing** _(James Bach, Michael Bolton)_ - Adaptive approaches
-- **Heuristic Test Strategy Model** _(James Bach)_ - Systematic thinking frameworks
-- **Session-Based Test Management** _(John Bach)_ - Structured exploratory testing
-- **Scenario Testing** _(Michael Bolton)_ - Rich, realistic user investigation
+- **Context-driven testing** _(James Bach, Michael Bolton)_ - Adaptive approaches
+- **Heuristic test strategy model** _(James Bach)_ - Systematic thinking frameworks
+- **Session-based test management** _(John Bach)_ - Structured exploratory testing
+- **Scenario testing** _(Michael Bolton)_ - Rich, realistic user investigation
 
-## 🎪 Integration with Project
+## 🎪 Integration with project
 
 This strategy works with existing project foundations:
 
-- **[BDD Rules](./bdd-rules.md)** - Living documentation practices
-- **[Test Charters](../test-charters/README.md)** - Guided investigative testing plans
-- **[User Stories](../user-stories/README.md)** - Real user needs and acceptance criteria
+- **[BDD rules](./bdd-rules.md)** - Living documentation practices
+- **[Test charters](../test-charters/README.md)** - Guided investigative testing plans
+- **[User stories](../user-stories/README.md)** - Real user needs and acceptance criteria
 - **[Personas](./domain-context.md#user-reality--testing-implications)** - Representative target user types
 
 ---

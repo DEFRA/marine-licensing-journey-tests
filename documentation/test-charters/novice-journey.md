@@ -12,11 +12,11 @@
 
 ## Scenario Context
 
-### **THEME**
+### **Theme**
 
 Investigate the complete marine licensing exemption notification journey for users completely new to marine licensing, government digital services, and regulatory processes.
 
-### **SETUP**
+### **Setup**
 
 - **Primary Persona:** Zofia (Environmental Consultant, Marine Licensing Novice)
 - **User Context:** First marine licensing application, unfamiliar with regulatory terminology
@@ -24,7 +24,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - **Environmental Context:** Time pressure, terminology confusion, help-seeking behaviour
 - **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
 
-### **REALISTIC PRESSURES**
+### **Realistic pressures**
 
 - **Domain knowledge gaps** - Unfamiliar with marine licensing terminology and processes
 - **Technology barriers** - May use assistive technology or have varying digital literacy
@@ -34,9 +34,9 @@ Investigate the complete marine licensing exemption notification journey for use
 
 ## Realistic Activities
 
-### **Complete Application Flow**
+### **Complete application flow**
 
-#### **Starting the Journey (Project Name)**
+#### **Starting the journey (Project name)**
 
 - Navigate to application start without reading all guidance first (realistic behaviour)
 - Attempt to understand "project name" in marine licensing context
@@ -44,7 +44,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - Test validation messages and error recovery
 - Use help features when confused about requirements
 
-#### **Understanding Progress (Task List)**
+#### **Understanding progress (Task list)**
 
 - Interpret task list structure and what it means for the process
 - Understand "Completed" vs incomplete task status
@@ -52,7 +52,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - Assess confidence about overall progress and next steps
 - Test resuming work after interruptions or breaks
 
-#### **Making Consent Decisions (Public Register)**
+#### **Making consent decisions (Public register)**
 
 - Understand what "public register" means in marine licensing context
 - Comprehend implications of consent vs withholding information
@@ -60,7 +60,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - Provide appropriate reasoning when withholding information
 - Handle uncertainty about privacy implications
 
-#### **Entering Site Location (Site Details)**
+#### **Entering site location (Site details)**
 
 - Understand concepts of file upload vs. manual coordinate entry
 - Interpret the difference between circle and polygon site representations
@@ -69,39 +69,39 @@ Investigate the complete marine licensing exemption notification journey for use
 - Cope with unfamiliar coordinate system terminology
 - Use help features to understand unfamiliar geospatial concepts
 
-### **Accessibility and Inclusion Testing**
+### **Accessibility and inclusion testing**
 
-#### **Screen Reader Navigation**
+#### **Screen reader navigation**
 
 - Complete entire flow using screen reader (NVDA/JAWS)
 - Test form labels, error announcements, and navigation landmarks
 - Verify conditional content is properly announced
 - Check task status communication for screen reader users
 
-#### **Keyboard Navigation**
+#### **Keyboard navigation**
 
 - Navigate entire application using only keyboard
 - Test tab order, focus indicators, and skip links
 - Verify all interactive elements are reachable
 - Test form submission and error handling with keyboard only
 
-#### **Cognitive Load Management**
+#### **Cognitive load management**
 
 - Test with browser zoom at 200% and 400%
 - Handle interruptions mid-task (phone calls, emails)
 - Test memory aids and progress preservation
 - Assess guidance effectiveness under pressure
 
-### **Real-World Complications**
+### **Real-world complications**
 
-#### **Information Gathering Challenges**
+#### **Information gathering challenges**
 
 - Switch between application and external guidance documents
 - Handle incomplete information and need to return later
 - Test saving progress and resuming work
 - Navigate while consulting with colleagues or clients
 
-#### **Error Recovery Patterns**
+#### **Error recovery patterns**
 
 - Make common novice mistakes and test recovery paths
 - Test browser back button usage and data preservation
@@ -110,7 +110,7 @@ Investigate the complete marine licensing exemption notification journey for use
 
 ## Evidence Framework
 
-### **✅ Positive Signals:**
+### **✅ Positive signals:**
 
 - **Guidance clarity** - Terminology explained in plain English, help available when needed
 - **Error prevention** - Clear guidance prevents common mistakes
@@ -118,7 +118,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - **Accessibility support** - Screen readers, keyboard navigation work effectively
 - **Confidence building** - Interface helps users feel capable of completing process
 
-### **⚠️ Warning Signs:**
+### **⚠️ Warning signs:**
 
 - **Terminology confusion** - Marine licensing terms unclear or unexplained
 - **Navigation disorientation** - Users lost in process or unsure how to proceed
@@ -126,14 +126,14 @@ Investigate the complete marine licensing exemption notification journey for use
 - **Accessibility barriers** - Screen readers, keyboard navigation fail
 - **Abandonment risk** - Users likely to give up due to complexity or confusion
 
-### **🤔 Questions to Investigate:**
+### **🤔 Questions to investigate:**
 
 - How does the application compare to other government services novices might know?
 - What happens when users need to gather additional information mid-application?
 - How well does the interface support users who are uncertain about decisions?
 - Are there cultural or language barriers that affect comprehension?
 
-### **💡 Ideas to Explore:**
+### **💡 Ideas to explore:**
 
 - Could terminology be explained more clearly or contextually?
 - Are there opportunities for progressive disclosure of complex information?
@@ -175,5 +175,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered Features Tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
-**Related Features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)
+**Delivered features tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
+**Related features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)

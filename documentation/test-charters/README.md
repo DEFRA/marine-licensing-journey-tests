@@ -2,10 +2,10 @@
 
 This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios.
 
-> **🔗 Powered by Investigative Testing**  
-> These charters implement the **[Investigative Testing](../test-strategy/investigative-testing.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
+> **🔗 Powered by investigative testing**  
+> These charters implement the **[investigative testing](../test-strategy/investigative-testing.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
 
-## 🧠 Charter Purpose
+## 🧠 Charter purpose
 
 Test charters bridge the gap between:
 
@@ -14,16 +14,16 @@ Test charters bridge the gap between:
 - **Real user needs** - Whether it serves marine licensing personas effectively
 - **Evidence collection** - Actionable insights for development teams
 
-## 📋 Available Investigation Sessions
+## 📋 Available investigation sessions
 
-| Theme                           | Charter Name                                | Focus                                                    | Personas | Priority | Status   |
+| Theme                           | Charter name                                | Focus                                                    | Personas | Priority | Status   |
 | ------------------------------- | ------------------------------------------- | -------------------------------------------------------- | -------- | -------- | -------- |
-| **First-Time User Experience**  | [Novice Journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers | Zofia    | High     | 🔄 Ready |
-| **Veteran User Efficiency**     | [Expert Workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
-| **Form Behaviour & Validation** | [Form Interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
-| **Spatial Data Entry**          | [Site Details](./site-details.md)           | Coordinate system selection and location data entry      | All      | High     | 🔄 Ready |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers | Zofia    | High     | 🔄 Ready |
+| **Veteran user efficiency**     | [Expert workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
+| **Spatial data entry**          | [Site details](./site-details.md)           | Coordinate system selection and location data entry      | All      | High     | 🔄 Ready |
 
-### **Charter Lifecycle**
+### **Charter lifecycle**
 
 **Charters are refreshed on every release** to ensure they remain aligned with current system functionality:
 
@@ -34,9 +34,9 @@ Test charters bridge the gap between:
 
 This approach ensures our investigation sessions always target the **actual delivered system** rather than outdated assumptions about functionality.
 
-## 🏗️ Charter Structure
+## 🏗️ Charter structure
 
-All charters follow the **Investigative Testing framework**:
+All charters follow the **investigative testing framework**:
 
 ```
 EXPLORE: [Area of application or workflow]
@@ -64,9 +64,9 @@ Duration: 60-90 minutes
 Priority: [High/Medium/Low based on risk and user impact]
 ```
 
-## 🚀 Using Test Charters
+## 🚀 Using test charters
 
-### **Charter Execution (60-90 minutes)**
+### **Charter execution (60-90 minutes)**
 
 ```
 📋 Setup (10 minutes)
@@ -86,24 +86,24 @@ Priority: [High/Medium/Low based on risk and user impact]
 └── Share insights with team
 ```
 
-### **After Completion**
+### **After completion**
 
 1. **Summarise key discoveries** - Include both technical and user experience insights
 2. **Create actionable reports** - Link findings to specific user impact and business risk
 3. **Identify automation opportunities** - What scenarios should automated tests validate?
 4. **Plan follow-up sessions** - Which areas need deeper investigation or different persona perspectives?
 
-## 🔗 Related Resources
+## 🔗 Related resources
 
-- **[User Stories](../user-stories/README.md)** - Requirements and acceptance criteria for delivered features
-- **[Investigative Testing Guide](../test-strategy/investigative-testing.md)** - Complete framework and methodology
-- **[Domain Context](../test-strategy/domain-context.md)** - Marine licensing personas and user context
-- **[Testing Heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
-- **[Feature Files](../../test/features/)** - Automated test scenarios that validate delivered functionality
+- **[User stories](../user-stories/README.md)** - Requirements and acceptance criteria for delivered features
+- **[Investigative testing guide](../test-strategy/investigative-testing.md)** - Complete framework and methodology
+- **[Domain context](../test-strategy/domain-context.md)** - Marine licensing personas and user context
+- **[Testing heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
+- **[Feature files](../../test/features/)** - Automated test scenarios that validate delivered functionality
 
-## 🛠️ Testing Tools & Resources
+## 🛠️ Testing tools & resources
 
-- **[Big List of Naughty Strings](https://github.com/minimaxir/big-list-of-naughty-strings)** - Comprehensive collection of problematic input strings for testing form validation and edge cases
+- **[Big list of naughty strings](https://github.com/minimaxir/big-list-of-naughty-strings)** - Comprehensive collection of problematic input strings for testing form validation and edge cases
 
 ---
 

@@ -4,7 +4,7 @@ This section covers **test automation strategy**, **quality engineering practice
 
 ## 🚀 Automation Philosophy
 
-### **Automation-First Principles**
+### **Automation-first principles**
 
 - 🤖 **Automate by default** - Manual testing is the exception, not the rule
 - ⚡ **Fast feedback loops** - Tests run in minutes, not hours
@@ -12,7 +12,7 @@ This section covers **test automation strategy**, **quality engineering practice
 - 🏗️ **Test pyramid thinking** - Right tests at the right level
 - 📊 **Data-driven decisions** - Metrics guide automation investments
 
-### **Quality Engineering Mindset**
+### **Quality engineering mindset**
 
 - **Prevention over detection** - Build quality in, don't inspect it in
 - **Collaboration over handoffs** - Whole team responsibility for test automation
@@ -39,7 +39,7 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
          └──────────────────────────────────────┘
 ```
 
-### **Current Implementation: UI-First Testing**
+### **Current implementation: UI-first testing**
 
 **Why UI-focused works well for us:**
 
@@ -48,7 +48,7 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
 - 🔄 **Complete integration** - Frontend, backend, and external services tested together
 - 🎭 **BDD alignment** - Gherkin scenarios match business requirements perfectly
 
-### **Future Enhancement: API Layer Testing**
+### **Future enhancement: API layer testing**
 
 **Planned addition in `marine-licensing-backend` repository:**
 
@@ -59,7 +59,7 @@ Our current automation focuses on **UI-based end-to-end testing** with plans for
 
 ## 🧪 Current Testing Implementation
 
-### **Current E2E Tests (UI Layer) - Complete Journey Coverage**
+### **Current E2E tests (UI layer) - Complete journey coverage**
 
 **Purpose**: Validate complete user workflows work together
 **Coverage**: Essential marine licensing user journeys
@@ -85,14 +85,14 @@ Feature: Complete exemption notification
     And the public register information is saved
 ```
 
-**Current Tools & Technologies**:
+**Current tools & technologies**:
 
 - **WebDriverIO** with Screenplay pattern
 - **Cucumber** for BDD and living documentation
 - **Allure** for rich test reporting
 - **Cross-browser testing** for compatibility assurance
 
-### **Future API Tests (Service Layer) - Business Logic Focus**
+### **Future API tests (Service layer) - Business logic focus**
 
 **Purpose**: Test business rules, integrations, and data processing independently  
 **Location**: `marine-licensing-backend` repository  
@@ -113,7 +113,7 @@ describe('Marine Activity Validation API', () => {
 })
 ```
 
-**Planned Tools & Technologies**:
+**Planned tools & technologies**:
 
 - **API testing framework** for service integration testing
 - **Mock external services** for reliable, fast testing
@@ -122,7 +122,7 @@ describe('Marine Activity Validation API', () => {
 
 ## 🛠️ Automation Toolchain
 
-### **Core Testing Stack**
+### **Core testing stack**
 
 ```
 Language:       JavaScript (ES modules, no TypeScript)
@@ -133,7 +133,7 @@ Reporting:      Allure with rich media capture
 CI/CD:          GitHub Actions + Docker
 ```
 
-### **Supporting Tools**
+### **Supporting tools**
 
 - **ESLint** - Code quality and consistency
 - **Prettier** - Code formatting
@@ -141,17 +141,17 @@ CI/CD:          GitHub Actions + Docker
 - **Docker** - Consistent test environments
 - **LocalStack** - AWS services simulation
 
-### **Quality Monitoring (Project Ecosystem)**
+### **Quality monitoring (Project ecosystem)**
 
 - **SonarQube** - Code coverage and quality metrics in `marine-licensing-frontend` and `marine-licensing-backend` repositories
 
-### **Planned Quality Enhancements**
+### **Planned quality enhancements**
 
 - **Stryker Mutator** - Mutation testing to validate unit test effectiveness in `marine-licensing-frontend` and `marine-licensing-backend` repositories
 
 ## 🏗️ Automation Approach Patterns
 
-### **Page Object Model (Locators Only)**
+### **Page object model (Locators only)**
 
 Page objects contain **only locators and dynamic selectors**:
 
@@ -169,7 +169,7 @@ export default class ProjectNamePage {
 }
 ```
 
-### **Screenplay Pattern (Actions & Intentions)**
+### **Screenplay pattern (Actions & intentions)**
 
 User actions organised by **intent and abstraction level**:
 
@@ -200,7 +200,7 @@ class EnterProjectName extends Interaction {
 }
 ```
 
-### **Test Data Management**
+### **Test data management**
 
 **Factory pattern** for creating domain objects:
 
@@ -228,7 +228,7 @@ class ExemptionNotificationFactory {
 
 ## 🚦 Automation Quality Gates
 
-### **Pipeline Integration**
+### **Pipeline integration**
 
 ```yaml
 # GitHub Actions workflow
@@ -243,13 +243,13 @@ test-automation:
         # Fail if critical user journeys fail
 ```
 
-### **Quality Metrics**
+### **Quality metrics**
 
 - **Test execution time**: E2E tests <20min, smoke tests <5min
 - **Test reliability**: >95% pass rate on main branch
 - **Browser compatibility**: Cross-browser testing coverage
 
-### **Automation Health Monitoring**
+### **Automation health monitoring**
 
 - **Flaky test detection** - Identify unreliable tests
 - **Test execution trends** - Monitor performance over time
@@ -258,21 +258,21 @@ test-automation:
 
 ## 🎯 Automation Best Practices
 
-### **Reliable Test Design**
+### **Reliable test design**
 
 - **Independent tests** - No dependencies between test cases
 - **Idempotent tests** - Same result regardless of execution order
 - **Fast tests** - Quick feedback for developers
 - **Clear failures** - Obvious error messages and debugging info
 
-### **Maintainable Test Code**
+### **Maintainable test code**
 
 - **DRY principle** - Reusable components and utilities
 - **Single responsibility** - Each test validates one behaviour
 - **Meaningful names** - Tests document expected behaviour
 - **Layered abstraction** - Page objects, interactions, tasks
 
-### **Environmental Consistency**
+### **Environmental consistency**
 
 - **Dockerised environments** - Consistent test execution
 - **Test data isolation** - Each test gets clean data
@@ -281,20 +281,20 @@ test-automation:
 
 ## 📊 Automation ROI Measurement
 
-### **Investment Tracking**
+### **Investment tracking**
 
 - **Development time** - Hours spent creating/maintaining tests
 - **Infrastructure costs** - CI/CD resources and tooling
 - **Training investment** - Team skill development
 
-### **Value Delivery**
+### **Value delivery**
 
 - **Defect prevention** - Issues caught before production
 - **Faster delivery** - Reduced manual testing cycles
 - **Confidence increase** - Safe refactoring and feature delivery
 - **Documentation value** - Living specification via BDD
 
-### **Success Metrics**
+### **Success metrics**
 
 - **Deployment frequency** - How often can we ship safely?
 - **Lead time reduction** - Faster feature delivery
