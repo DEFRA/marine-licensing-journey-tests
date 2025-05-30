@@ -77,7 +77,7 @@ Each rule summary follows this consistent structure:
 ...
 
 ## Related Rules
-- [related-rule-1](../related-rule-1.mdc) - How it relates
+- [code.generation](../code.generation.mdc) - Standards for writing maintainable JavaScript test automation code
 ...
 ```
 

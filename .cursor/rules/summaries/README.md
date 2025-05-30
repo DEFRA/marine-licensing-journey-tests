@@ -39,8 +39,8 @@ Each rule summary follows this consistent format:
 | Example 2 | How to apply in this case |
 
 ## Related Rules
-- [related-rule-1](../related-rule-1.mdc) - How it relates
-- [related-rule-2](../related-rule-2.mdc) - How it relates
+- [code.generation](../code.generation.mdc) - Standards for writing maintainable JavaScript test automation code
+- [playbook.clean.code](../playbook.clean.code.mdc) - Guidelines for maintaining clean, readable, and maintainable code
 ```
 
 ## Usage

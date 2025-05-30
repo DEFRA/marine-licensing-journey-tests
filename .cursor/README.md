@@ -113,8 +113,7 @@ Rule summaries follow a consistent format:
 ...
 
 ## Related Rules
-- [related-rule-1](../related-rule-1.mdc) - How it relates
-...
+- [code.generation](../code.generation.mdc) - Standards for writing maintainable JavaScript test automation code
 ```
 
 For full documentation, see [rules/README.md](./rules/README.md).
