@@ -51,7 +51,7 @@ This testing suite validates the complete end-to-end journey for exemption notif
 
 This project implements automated tests for marine licensing user journeys. See what functionality has been delivered:
 
-**[📖 View Current User Stories & Test Coverage →](.cursor/user-stories/README.md)**
+**[📖 View Current User Stories & Test Coverage →](documentation/user-stories/README.md)**
 
 **Currently Implemented:**
 
@@ -65,7 +65,7 @@ Each user story includes acceptance criteria, screenshots, and links to correspo
 
 This project implements a **contemporary quality engineering approach** that builds upon traditional testing principles whilst embracing modern practices for better outcomes.
 
-### **[📖 Complete Test Strategy Documentation →](test-strategy/README.md)**
+### **[📖 Complete Test Strategy Documentation →](documentation/test-strategy/README.md)**
 
 ### **Key Principles**
 
@@ -88,26 +88,26 @@ Static Analysis         → Code quality, security vulnerabilities
 
 #### **🧠 Heuristic-Driven Testing**
 
-- **[HTSM (Heuristic Test Strategy Model)](test-strategy/heuristics.md)** - Systematic exploration framework
-- **[Domain-specific heuristics](test-strategy/heuristics.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
-- **[Investigative testing sessions](test-strategy/investigative-testing.md)** - Charter-driven investigation
+- **[HTSM (Heuristic Test Strategy Model)](documentation/test-strategy/heuristics.md)** - Systematic exploration framework
+- **[Domain-specific heuristics](documentation/test-strategy/heuristics.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
+- **[Investigative testing sessions](documentation/test-strategy/investigative-testing.md)** - Charter-driven investigation
 
 #### **👥 User-Centred Quality**
 
-- **[Investigative testing](test-strategy/investigative-testing.md)** - Rich, realistic user investigations using structured exploration
-- **[Real user personas](test-strategy/domain-context.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
-- **[Accessibility-first](test-strategy/accessibility.md)** - GOV.UK standards and inclusive design
-- **[Marine licensing domain expertise](test-strategy/domain-context.md)** - Testing grounded in regulatory reality
+- **[Investigative testing](documentation/test-strategy/investigative-testing.md)** - Rich, realistic user investigations using structured exploration
+- **[Real user personas](documentation/test-strategy/domain-context.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
+- **[Accessibility-first](documentation/test-strategy/accessibility.md)** - GOV.UK standards and inclusive design
+- **[Marine licensing domain expertise](documentation/test-strategy/domain-context.md)** - Testing grounded in regulatory reality
 
 ### **Quick Access to Strategy**
 
-| **I want to...**                            | **Go to...**                                                    |
-| ------------------------------------------- | --------------------------------------------------------------- |
-| Understand our testing philosophy           | [Test Strategy Overview](test-strategy/README.md)               |
-| Investigate with realistic user scenarios   | [Investigative Testing](test-strategy/investigative-testing.md) |
-| Learn systematic exploration techniques     | [Testing Heuristics](test-strategy/heuristics.md)               |
-| Build robust test automation                | [Automation Approach](test-strategy/automation.md)              |
-| Understand marine licensing testing context | [Domain Context](test-strategy/domain-context.md)               |
+| **I want to...**                            | **Go to...**                                                                  |
+| ------------------------------------------- | ----------------------------------------------------------------------------- |
+| Understand our testing philosophy           | [Test Strategy Overview](documentation/test-strategy/README.md)               |
+| Investigate with realistic user scenarios   | [Investigative Testing](documentation/test-strategy/investigative-testing.md) |
+| Learn systematic exploration techniques     | [Testing Heuristics](documentation/test-strategy/heuristics.md)               |
+| Build robust test automation                | [Automation Approach](documentation/test-strategy/automation.md)              |
+| Understand marine licensing testing context | [Domain Context](documentation/test-strategy/domain-context.md)               |
 
 ### **Evolution from Traditional Approaches**
 
@@ -393,15 +393,15 @@ This project follows a **comprehensive modern test strategy** that combines syst
 
 ### **Complete Strategy Documentation**
 
-**[📖 Full Test Strategy →](test-strategy/README.md)** - Modern quality engineering approach
+**[📖 Full Test Strategy →](documentation/test-strategy/README.md)** - Modern quality engineering approach
 
 ### **Core Framework**
 
-- **[Testing Heuristics](test-strategy/heuristics/README.md)** - HTSM and systematic exploration
-- **[Test Charters](test-charters/README.md)** - Systematic exploration of user stories and requirements
-- **[Automation Approach](test-strategy/automation/README.md)** - Test pyramid and quality engineering
-- **[Domain Context](test-strategy/domain-context/README.md)** - Marine licensing reality and user personas
-- **[Exploratory Testing](test-strategy/exploratory/README.md)** - Session-based investigation
+- **[Testing Heuristics](documentation/test-strategy/heuristics.md)** - HTSM and systematic exploration
+- **[Test Charters](documentation/test-charters/README.md)** - Systematic exploration of user stories and requirements
+- **[Automation Approach](documentation/test-strategy/automation.md)** - Test pyramid and quality engineering
+- **[Domain Context](documentation/test-strategy/domain-context.md)** - Marine licensing reality and user personas
+- **[Exploratory Testing](documentation/test-strategy/investigative-testing.md)** - Session-based investigation
 
 ### **Key Approaches**
 
@@ -410,7 +410,7 @@ This project follows a **comprehensive modern test strategy** that combines syst
 - **User-centred testing** with real marine licensing personas
 - **Evidence-based decisions** driven by metrics and outcomes
 
-> 📖 See complete strategy, heuristics, and guidelines in **[test-strategy/](test-strategy/README.md)**
+> 📖 See complete strategy, heuristics, and guidelines in **[documentation/test-strategy/](documentation/test-strategy/README.md)**
 
 ## 🔧 Debugging
 
@@ -432,12 +432,14 @@ cat wdio.local.conf.js
 
 ## 📚 Documentation
 
-- **🎯 BDD Guidelines**: `.cursor/rules/bdd.rules.mdc`
+- **[📖 Complete Documentation](documentation/README.md)** - Comprehensive documentation hub
+- **[📋 User Stories](documentation/user-stories/README.md)** - Requirements and acceptance criteria
+- **[🧠 Test Strategy](documentation/test-strategy/README.md)** - Quality engineering approach
+- **[🎯 Test Charters](documentation/test-charters/README.md)** - Investigative testing plans
 - **🎭 Screenplay Pattern**: `.cursor/rules/screenplay-pattern.mdc`
 - **🏗️ Project Structure**: `.cursor/rules/project-structure.mdc`
 - **💻 Coding Standards**: `.cursor/rules/code.generation.mdc`
 - **🧹 Clean Code & Code Smells**: `.cursor/rules/playbook.clean.code.mdc`
-- **📋 Test Strategy**: `.cursor/rules/htsm.mdc`
 - **📝 Style Guide**: `.cursor/rules/playbook.styleguide.mdc`
 - **🔄 Refactoring Guidelines**: `.cursor/rules/playbook.refactoring.mdc`
 - **📖 Complete Rules Index**: `.cursor/rules/README.md`
