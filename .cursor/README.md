@@ -11,6 +11,41 @@ This directory contains configuration and utilities for Cursor AI assistance wit
 - **`fetch_rule.js`**: Utility for progressive rule loading
 - **`generate_summaries.js`**: Script to create standardised rule summaries
 - **`mcp.json`**: Configuration for Model Context Protocol servers
+- **`add_these_rules_to_cursor.txt`**: Instructions for adding updated rules to Cursor
+- **`examples.md`**: Comprehensive examples of rule application for different scenarios
+
+## Core Principles
+
+- **Simple beats clever** - Write the simplest code that works
+- **YAGNI** (You Aren't Gonna Need It) - Don't build features "just in case"
+- **Check actual usage first** - Verify what's actually used before making changes
+- **Match documentation to reality** - Document what exists, not what you wish existed
+- **Test code is still code** - Apply the same quality principles to test code as production code
+
+## Rule Application
+
+See [examples.md](./examples.md) for practical examples of user prompts and which rules to apply in different scenarios.
+
+We use a progressive loading approach to maximise the efficiency of the context window:
+
+1. **Metadata-first**: Rules are initially loaded as metadata only (from cursor.rules.json)
+2. **Summaries**: Standardised summaries in the `summaries/` directory provide key information with ~85% fewer tokens
+3. **Full content**: Complete rule content is loaded only when specific details are needed
+
+For more information, see [RULES-OPTIMISATION.md](./RULES-OPTIMISATION.md).
+
+## When to Use Which Rules
+
+| Task                             | Recommended Rules                                                 |
+| -------------------------------- | ----------------------------------------------------------------- |
+| Planning testing approach        | `test-strategy.integration`, `test-strategy`                      |
+| Writing any code                 | `stop.overengineering.and.making.stuff.up`, `code.generation`     |
+| Refactoring code                 | `playbook.refactoring`, `import.dependency.management`            |
+| Writing documentation            | `documentation.coherence`, `documentation.progressive-disclosure` |
+| Using AI assistance              | `responsible.ai.use`                                              |
+| Debugging test failures          | `test.error.handling`, `test.execution.patience`                  |
+| Understanding users              | `personas`, `application.under.test`                              |
+| Conducting investigative testing | `scenario-testing`, `test-charters`                               |
 
 ## Key Features
 
@@ -43,6 +78,18 @@ It also defines rule bundles for common scenarios like:
 - `test_creation`
 - `code_refactoring`
 - `domain_understanding`
+- `risk_focused_testing`
+- `automation_efficiency`
+- `cursor_efficiency`
+
+### Rule Updates and Additions
+
+See `add_these_rules_to_cursor.txt` for instructions on adding updated rules focused on:
+
+- Risk-based testing that identifies threats to product value
+- Code readability for non-technical stakeholders
+- Automation ROI evaluation
+- Efficient LLM token usage with rule bundles
 
 ### Using Optimised Rule Summaries
 
@@ -82,3 +129,10 @@ This project includes MCP (Model Context Protocol) server configuration for enha
 - Additional MCP servers can be configured in `mcp.json`
 
 For MCP server design documentation, see [MCP-SERVER-DESIGN.md](./MCP-SERVER-DESIGN.md).
+
+### Useful zsh aliases to implement
+
+```
+alias testrunonly='npm run test:local -- --cucumberOpts.tags "@run-only"'
+alias testrunall='npm run test:local'
+```

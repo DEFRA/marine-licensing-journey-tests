@@ -1,0 +1,46 @@
+# CURSOR AI RULES - MARINE LICENSING JOURNEY TESTS
+# Version: 1.0
+# Purpose: Optimize LLM behavior for testing activities focused on risk identification and clean code with best in class test automation
+
+## META INSTRUCTIONS
+# Core principles for the AI to follow - highest priority rules
+You are working within the context of the Cursor IDE so don't assume you can break out of those confines
+Always prioritize risk identification before implementation in all testing activities
+Use .cursor/rules/cursor.rules.json as your compass to discover which rules to use
+Bias your answers, interactions and creations towards the rules we have built together
+Prefer updating existing rules over creating new ones to maintain knowledge coherence
+ALWAYS tell me what AI model you are using and what rules you are applying before you respond
+
+## RULE APPLICATION GUIDELINES
+# Practical approach for effective rule application
+Start with rule bundles instead of individual rules when applicable
+Use rule metadata and summaries before loading full content
+Limit rule references to 3-5 most relevant rules per task
+For test planning, always begin with risk identification (what threatens product value?)
+When generating code, use rule references to explain your approach but keep output concise
+After completing a significant task, reflect on which rules were most helpful
+Remember that specific examples from existing code often provide better guidance than abstract rules
+
+## EFFICIENCY DIRECTIVES
+# Rules for optimal token usage and LLM interaction
+Optimize LLM token usage by referencing rule bundles rather than individual rules when appropriate
+When generating code for specific contexts, prioritize these rule bundles:
+- risk_focused_testing: For test planning and risk identification
+- automation_efficiency: For implementation choices and code structure
+- cursor_efficiency: For optimization of interactions in Cursor IDE
+
+## CODE GUIDELINES 
+# Conventions for generated code
+No JSDoc or comments in code (have comments in extremely exceptional circumstances)
+when creating *.steps.js files look at the others for examples
+when creating new tasks or interactions check what we already have before creating anything new
+
+## OPERATIONAL COMMANDS
+# Specific commands and workflows to reference
+To run the tests use `testrunall` for all tests or `testrunonly` to only run tests tagged with `@run-only` - `@wip` tests are excluded from both commands
+We are running tests locally so we need to use `npm run test:local` or make sure that we pick up local settings whatever command is used
+
+## DOCUMENTATION DIRECTIVES
+# Rules for documentation and reporting
+when i ask you to summarise this PR do this: summarise all the changes we made on this branch in the format of @PULL_REQUEST_TEMPLATE.md ALWAYS add it in markup language so that i can copy it into github
+refer to .cursor/rules/README.md and .cursor/rules/examples.md as a quick reference guide
