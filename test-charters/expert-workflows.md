@@ -22,7 +22,7 @@ Investigate how well the marine licensing application supports experienced users
 - **User Context:** Third marine licensing application this year, familiar with regulatory requirements
 - **Technology Context:** Desktop with multiple tabs, keyboard shortcuts preference, professional tools
 - **Environmental Context:** Client deadlines, multiple applications, interruption-heavy office environment
-- **Delivered Features:** Project name entry, task list navigation, public register consent
+- **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
 
 ### **REALISTIC PRESSURES**
 
@@ -59,6 +59,15 @@ Investigate how well the marine licensing application supports experienced users
 - Efficiently provide withholding reasons when required
 - Navigate conditional form behaviour at professional speed
 - Maintain consistency across multiple client applications
+
+#### **Professional Site Details Selection**
+
+- Navigate site details selection screens with established professional workflows
+- Quickly select appropriate coordinate system based on professional knowledge
+- Efficiently move through multi-step selection process
+- Test keyboard shortcuts and rapid navigation through selection screens
+- Apply professional geospatial knowledge to method and coordinate system selection
+- Test back and cancel functionality during selection process
 
 ### **Multi-Application Workflow Testing**
 
@@ -145,6 +154,7 @@ FEATURE-SPECIFIC FINDINGS:
 Project Name: [Speed, shortcuts, pattern recognition]
 Task List: [Navigation efficiency, multi-tab handling]
 Public Register: [Decision speed, consistency tools]
+Site Details: [Selection efficiency, navigation speed, system selection]
 
 PROFESSIONAL WORKFLOW FINDINGS:
 Keyboard Navigation: [Completeness, speed, shortcuts]
@@ -162,5 +172,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered Features Tested:** Project name entry, task list navigation, public register consent  
-**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature)
+**Delivered Features Tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
+**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../test/features/back.and.cancel.site.details.feature)

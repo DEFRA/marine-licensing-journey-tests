@@ -22,7 +22,7 @@ Investigate the complete marine licensing exemption notification journey for use
 - **User Context:** First marine licensing application, unfamiliar with regulatory terminology
 - **Technology Context:** Mixed device usage, potential assistive technology needs
 - **Environmental Context:** Time pressure, terminology confusion, help-seeking behaviour
-- **Delivered Features:** Project name entry, task list navigation, public register consent
+- **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
 
 ### **REALISTIC PRESSURES**
 
@@ -59,6 +59,15 @@ Investigate the complete marine licensing exemption notification journey for use
 - Navigate conditional form behaviour (text area appearing/disappearing)
 - Provide appropriate reasoning when withholding information
 - Handle uncertainty about privacy implications
+
+#### **Entering Site Location (Site Details)**
+
+- Understand concepts of file upload vs. manual coordinate entry
+- Interpret the difference between circle and polygon site representations
+- Navigate coordinate system selection with limited geospatial knowledge
+- Make selections with varying levels of confidence about technical terms
+- Cope with unfamiliar coordinate system terminology
+- Use help features to understand unfamiliar geospatial concepts
 
 ### **Accessibility and Inclusion Testing**
 
@@ -148,6 +157,7 @@ FEATURE-SPECIFIC FINDINGS:
 Project Name: [Terminology, validation, guidance effectiveness]
 Task List: [Progress understanding, navigation clarity]
 Public Register: [Decision comprehension, consent implications]
+Site Details: [Coordinate concepts, system selection, entry confidence]
 
 ACCESSIBILITY FINDINGS:
 Screen Reader: [Announcements, navigation, form interaction]
@@ -165,5 +175,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered Features Tested:** Project name entry, task list navigation, public register consent  
-**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature)
+**Delivered Features Tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
+**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../test/features/back.and.cancel.site.details.feature)

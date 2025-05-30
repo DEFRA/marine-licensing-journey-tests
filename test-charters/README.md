@@ -21,6 +21,7 @@ Test charters bridge the gap between:
 | **First-Time User Experience**  | [Novice Journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers | Zofia    | High     | 🔄 Ready |
 | **Veteran User Efficiency**     | [Expert Workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
 | **Form Behaviour & Validation** | [Form Interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
+| **Spatial Data Entry**          | [Site Details](./site-details.md)           | Coordinate system selection and location data entry      | All      | High     | 🔄 Ready |
 
 ### **Charter Lifecycle**
 

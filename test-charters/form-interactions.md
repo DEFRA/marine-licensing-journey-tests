@@ -22,7 +22,7 @@ Investigate how well form interactions work across the marine licensing applicat
 - **User Context:** Various form interaction scenarios across application features
 - **Technology Context:** Different browsers, devices, input methods, assistive technology
 - **Environmental Context:** Real-world data entry patterns, interruptions, error conditions
-- **Delivered Features:** Project name entry, task list navigation, public register consent
+- **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
 
 ### **REALISTIC PRESSURES**
 
@@ -78,6 +78,32 @@ Investigate how well form interactions work across the marine licensing applicat
 - Test browser refresh behaviour with partially completed forms
 - Check session timeout handling with unsaved changes
 - Test cancel/back button behaviour with form changes
+
+### **Site Details Form Testing**
+
+#### **Coordinate System Selection**
+
+- Test radio button behaviour for coordinate system options
+- Verify system selection validation and error handling
+- Test keyboard navigation through coordinate system options
+- Assess help text and guidance clarity
+- Verify selection persistence when navigating away and returning
+
+#### **Location Method Selection**
+
+- Test radio button behaviour for location method options (file/manual)
+- Verify validation when no option is selected
+- Test keyboard navigation between options
+- Assess error messaging for missing selections
+- Verify form state after validation errors
+
+#### **Circle vs. Polygon Selection**
+
+- Test radio button behaviour for shape selection
+- Verify validation when no option is selected
+- Test keyboard navigation between shape options
+- Test switching between options and selection persistence
+- Verify error handling for incomplete selections
 
 ### **Cross-Form Interaction Testing**
 
@@ -163,6 +189,7 @@ FORM BEHAVIOUR OBSERVATIONS:
 VALIDATION FINDINGS:
 Project Name: [Character limits, error messages, recovery patterns]
 Public Register: [Radio buttons, conditional logic, text area behaviour]
+Site Details: [Selection validation, radio buttons, error messages]
 Cross-Form: [Consistency, navigation, state preservation]
 
 ACCESSIBILITY FINDINGS:
@@ -183,5 +210,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered Features Tested:** Project name entry, task list navigation, public register consent  
-**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature)
+**Delivered Features Tested:** Project name entry, task list navigation, public register consent, site details entry (coordinate system, circle/polygon)  
+**Related Features:** [project.name.feature](../test/features/project.name.feature), [validation.project.name.feature](../test/features/validation.project.name.feature), [task.list.feature](../test/features/task.list.feature), [public.register.feature](../test/features/public.register.feature), [validation.public.register.feature](../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../test/features/back.and.cancel.site.details.feature)
