@@ -24,7 +24,7 @@ This guide shows examples of user prompts and which rules would be used when wor
 
 - `test-strategy.integration.mdc` - Overall modern testing approach and quality engineering
 - `htsm.mdc` - Systematic risk-based thinking and coverage models
-- `personas.mdc` - Understanding different user needs and expertise levels
+- Use `documentation/personas/` - Understanding different user needs and expertise levels
 - `application.under.test.mdc` - Actual exemption workflow context and domain terminology
 - `responsible.ai.use.mdc` - Acknowledging domain complexity, recommending expert review
 
@@ -38,7 +38,7 @@ This guide shows examples of user prompts and which rules would be used when wor
 
 - `test-charters.mdc` - Dual charter system (traditional SBTM + scenario-enhanced)
 - `scenario-testing.mdc` - Bolton's THEME/SETUP/ACTIVITIES/ORACLES framework
-- `personas.mdc` - Testing from different user perspectives
+- Use `documentation/personas/` - Testing from different user perspectives
 - `application.under.test.mdc` - Understanding actual validation rules and error handling
 - `htsm.mdc` - Systematic exploration using quality criteria and risk factors
 
@@ -53,7 +53,7 @@ This guide shows examples of user prompts and which rules would be used when wor
 - `bdd.rules.mdc` - Golden Rule (clarity), Cardinal Rule (one behaviour), Given/When/Then integrity
 - `user.stories.and.test.coverage.mdc` - Linking to user stories with @issue tags, coverage assessment
 - `application.under.test.mdc` - Correct marine licensing terminology and capabilities
-- `personas.mdc` - Writing scenarios from different user perspectives
+- Use `documentation/personas/` - Writing scenarios from different user perspectives
 - `responsible.ai.use.mdc` - Ensuring scenarios reflect actual application behaviour
 
 **Example output:** Feature file with clear scenarios like "Given I am completing my exemption application, When I provide valid public register details, Then I should be able to continue to the next section" with proper domain terminology.
@@ -108,7 +108,7 @@ This guide shows examples of user prompts and which rules would be used when wor
 
 - `responsible.ai.use.mdc` - Acknowledging AI limitations with marine licensing domain knowledge
 - `application.under.test.mdc` - Understanding exemptions, actual workflows and requirements
-- `personas.mdc` - Realistic user constraints and expectations
+- Use `documentation/personas/` - Realistic user constraints and expectations
 - `scenario-testing.mdc` - Bolton's framework for authentic user investigations
 - `test-strategy.integration.mdc` - Risk-based testing appropriate for regulatory context
 
@@ -130,7 +130,7 @@ This guide shows examples of user prompts and which rules would be used when wor
 
 - Example user prompt: "Write documentation for our test approach" → British English + cross-reference integrity + layered information
 
-**Domain Tasks:** Always combine `application.under.test.mdc` + `personas.mdc` + `responsible.ai.use.mdc`
+**Domain Tasks:** Always combine `application.under.test.mdc` + `documentation/personas/` + `responsible.ai.use.mdc`
 
 - Example user prompt: "Explain how marine licensing works" → Technical context + user perspectives + AI limitation awareness
 
@@ -166,12 +166,12 @@ This guide shows examples of user prompts and which rules would be used when wor
 
 - `test-strategy.integration.mdc` (strategic) vs `htsm.mdc` (tactical thinking)
 - `documentation.coherence.mdc` (accuracy) vs `documentation.progressive-disclosure.mdc` (usability)
-- `personas.mdc` (user focus) vs `application.under.test.mdc` (technical focus)
+- `documentation/personas/` (user focus) vs `application.under.test.mdc` (technical focus)
 
 **Real example user prompt:** "How should we test the exemption workflow?"
 
 - Start with `test-strategy.integration.mdc` for overall approach
 - Add `htsm.mdc` for systematic risk thinking
-- Include `personas.mdc` for user perspectives
+- Include `documentation/personas/` for user perspectives
 - Use `application.under.test.mdc` for technical accuracy
 - Always add `responsible.ai.use.mdc` for domain complexity acknowledgement

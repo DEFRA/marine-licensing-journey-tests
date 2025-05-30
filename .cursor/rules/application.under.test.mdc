@@ -39,11 +39,11 @@ This is a UK Government (Defra) marine licensing application managed by the Mari
 - **Fee structure** - Standardised fees for different types of applications and activities
 
 ### User Types and Journeys
-For detailed user personas including needs, pain points, and test implications, see `personas.mdc`.
+For detailed user personas including needs, pain points, and test implications, see the official personas in `documentation/personas/`.
 
 **Key user categories:**
-- **Internal MMO staff** - Case officers (enquiry support) and marine officers (enforcement)
-- **External applicants** - Veteran users (efficiency focus) and novice users (guidance needs)
+- **Internal MMO staff** - Case officers (Fatima) and marine officers (Simon)
+- **External applicants** - Veteran users (Amy) and novice users (Zofia)
 - **Cross-cutting considerations** - Digital divide, location data complexity, process uncertainty
 
 ## Application Under Test Structure
@@ -74,7 +74,7 @@ When helping with test development:
 
 4. **Check actual page structures** - When creating page objects or interactions, reference the actual Nunjucks templates and frontend components
 
-5. **Understand user journeys** - The application has specific marine licensing workflows that should be reflected in test scenarios. Reference the personas in `personas.mdc` for realistic user behaviour patterns
+5. **Understand user journeys** - The application has specific marine licensing workflows that should be reflected in test scenarios. Reference the personas in `documentation/personas/` for realistic user behaviour patterns
 
 6. **API integration awareness** - Tests may need to interact with external marine licensing APIs and data sources
 

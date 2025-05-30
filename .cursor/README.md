@@ -5,23 +5,24 @@ This directory contains configuration and utilities for Cursor AI assistance wit
 ## Directory Structure
 
 - **`rules/`**: Contains guidelines and standards for working with this codebase
-  - **`rules/summaries/`**: Optimized summaries of rules for efficient context window usage
+  - **`rules/summaries/`**: Optimised summaries of rules for efficient context window usage
 - **`user-stories/`**: User stories and requirements used for test coverage
 - **`cursor.rules.json`**: Index of rules with metadata for efficient loading
 - **`fetch_rule.js`**: Utility for progressive rule loading
-- **`generate_summaries.js`**: Script to create standardized rule summaries
+- **`generate_summaries.js`**: Script to create standardised rule summaries
+- **`mcp.json`**: Configuration for Model Context Protocol servers
 
 ## Key Features
 
-### Context Window Optimization
+### Context Window Optimisation
 
-We use a progressive loading approach for rules to maximize context window efficiency:
+We use a progressive loading approach for rules to maximise context window efficiency:
 
 1. **Metadata-first**: Rules are initially loaded as metadata only
-2. **Summaries**: Standardized summaries provide key information with ~85% fewer tokens
+2. **Summaries**: Standardised summaries provide key information with ~85% fewer tokens
 3. **Full content**: Complete rule content is loaded only when specific details are needed
 
-For more information, see [RULES-OPTIMIZATION.md](./RULES-OPTIMIZATION.md) and the current implementation status in [IMPLEMENTATION-STATUS.md](./IMPLEMENTATION-STATUS.md).
+For more information, see [RULES-OPTIMISATION.md](./RULES-OPTIMISATION.md) and the current implementation status in [IMPLEMENTATION-STATUS.md](./IMPLEMENTATION-STATUS.md).
 
 ## Usage
 
@@ -43,7 +44,7 @@ It also defines rule bundles for common scenarios like:
 - `code_refactoring`
 - `domain_understanding`
 
-### Using Optimized Rule Summaries
+### Using Optimised Rule Summaries
 
 Rule summaries follow a consistent format:
 
@@ -71,3 +72,13 @@ Rule summaries follow a consistent format:
 ```
 
 For full documentation, see [rules/README.md](./rules/README.md).
+
+### Model Context Protocol Integration
+
+This project includes MCP (Model Context Protocol) server configuration for enhanced AI functionality:
+
+- Sequential thinking for complex problem-solving
+- Progressive rule loading for context efficiency
+- Additional MCP servers can be configured in `mcp.json`
+
+For MCP server design documentation, see [MCP-SERVER-DESIGN.md](./MCP-SERVER-DESIGN.md).

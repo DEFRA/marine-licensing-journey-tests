@@ -2,17 +2,17 @@
 
 This directory contains rules for Cursor AI to follow when assisting with the marine licensing journey tests codebase.
 
-See [EXAMPLES.md](./EXAMPLES.md) for practical examples of user prompts and which rules to apply in different scenarios.
+See [EXAMPLES.md](./examples.md) for practical examples of user prompts and which rules to apply in different scenarios.
 
-## Optimized Context Window Usage
+## Optimised Context Window Usage
 
-We use a progressive loading approach to maximize the efficiency of the context window:
+We use a progressive loading approach to maximise the efficiency of the context window:
 
 1. **Metadata-first**: Rules are initially loaded as metadata only (from cursor.rules.json)
-2. **Summaries**: Standardized summaries in the `summaries/` directory provide key information with ~85% fewer tokens
+2. **Summaries**: Standardised summaries in the `summaries/` directory provide key information with ~85% fewer tokens
 3. **Full content**: Complete rule content is loaded only when specific details are needed
 
-For more information, see [RULES-OPTIMIZATION.md](..//RULES-OPTIMIZATION.md).
+For more information, see [RULES-OPTIMISATION.md](../RULES-OPTIMISATION.md).
 
 ## Core Principles
 
@@ -94,7 +94,7 @@ For more information, see [RULES-OPTIMIZATION.md](..//RULES-OPTIMIZATION.md).
 
 | Task                             | Recommended Rules                                                                                                                                        |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Planning testing approach        | [`test-strategy.integration.mdc`](./test-strategy.integration.mdc), [`test-strategy/README.md`](../test-strategy/README.md)                              |
+| Planning testing approach        | [`test-strategy.integration.mdc`](./test-strategy.integration.mdc), [`test-strategy.mdc`](./test-strategy.mdc)                                           |
 | Writing any code                 | [`stop.overengineering.and.making.stuff.up.mdc`](./stop.overengineering.and.making.stuff.up.mdc), [`code.generation.mdc`](./code.generation.mdc)         |
 | Refactoring code                 | [`playbook.refactoring.mdc`](./playbook.refactoring.mdc), [`import.dependency.management.mdc`](./import.dependency.management.mdc)                       |
 | Writing documentation            | [`documentation.coherence.mdc`](./documentation.coherence.mdc), [`documentation.progressive-disclosure.mdc`](./documentation.progressive-disclosure.mdc) |

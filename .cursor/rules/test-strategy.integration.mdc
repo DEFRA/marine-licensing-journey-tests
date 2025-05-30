@@ -34,13 +34,13 @@ This rule applies to:
 
 ### **[Domain Context](mdc:test-strategy/domain-context/README.md)**
 - Ground testing in **marine licensing reality** and regulatory requirements
-- Use **real user personas** (Fatima, Simon, Amy, Zofia) for test design
+- Use **real user personas** (Fatima, Simon, Amy, Zofia) from `documentation/personas/` for test design
 - Apply **activity classification testing** based on risk levels
 - Consider **geographical complexity** and jurisdictional differences
 
 ### **[Exploratory Testing](mdc:test-strategy/exploratory/README.md)**
 - Conduct **session-based test management** (SBTM) with clear charters
-- Use **persona-driven exploration** for user-centric investigation
+- Use **persona-driven exploration** for user-centric investigation using established personas
 - Apply **systematic testing techniques** (tours, heuristics, documentation)
 - **Complement automation** with human insight and discovery
 

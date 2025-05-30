@@ -11,7 +11,7 @@ alwaysApply: false
 - **Focus on testing themes** rather than individual user stories
 - **One theme per charter** - single testing concern (novice experience, efficiency, form behaviour)
 - **Cross-feature coverage** - test multiple delivered features together in realistic workflows
-- **Persona alignment** - themes should clearly serve specific user types and their needs
+- **Persona alignment** - themes should clearly serve specific user types and their needs as defined in `documentation/personas/`
 - **Delivered features focus** - test what exists, not what's planned
 
 ### **Scenario Testing Integration**
@@ -69,7 +69,7 @@ TO DISCOVER: [Types of information, risks, problems]
 Duration: [60-90 minutes]
 Priority: [High/Medium/Low based on risk]
 Charter Type: Traditional SBTM Investigation
-User Personas: [Which personas to consider]
+User Personas: [Reference specific personas from `documentation/personas/`]
 ```
 
 #### **Scenario-Enhanced Charters (90-120 minutes)**
@@ -265,7 +265,7 @@ Must maintain clear separation and cross-referencing:
 - Scenario charters explore realistic usage of acceptance criteria
 
 ### **Enhanced Persona Integration**
-Each charter type leverages personas differently:
+Each charter type leverages the official personas from `documentation/personas/` differently:
 
 #### **Traditional Charters**
 - Consider persona needs for usability insights

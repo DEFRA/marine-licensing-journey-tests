@@ -19,7 +19,7 @@ This rule applies when creating test data models, factories, or any test infrast
 
 ### 2. Follow YAGNI (You Aren't Gonna Need It)
 - Don't create comprehensive test scenarios until they're actually used
-- Don't build persona-based data generators unless personas are actively used in tests
+- Don't build persona-based data generators unless personas from `documentation/personas/` are actively used in tests
 - Don't create boundary testing utilities until boundary tests exist
 
 ### 3. Align with Actual Usage Patterns

@@ -119,7 +119,7 @@ comm -13 stories.txt tested.txt
 
 This rule works alongside:
 - **application.under.test**: Provides domain context for realistic test scenarios
-- **personas**: Informs test scenarios with realistic user behaviour patterns
+- **personas**: Informs test scenarios with realistic user behaviour patterns using personas from `documentation/personas/`
 - **screenplay-pattern**: Defines how tests should be structured and implemented
 - **project-structure**: Defines where files should be located
 

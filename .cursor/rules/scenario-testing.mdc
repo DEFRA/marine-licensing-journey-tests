@@ -37,7 +37,7 @@ Scenario testing reveals **how well features serve real users under authentic co
 - Authentic user background and knowledge levels
 
 #### **Marine Licensing Context Elements:**
-- **Persona authenticity** - Deep understanding of Zofia/Amy/Fatima/Simon realities
+- **Persona authenticity** - Deep understanding of the official personas in `documentation/personas/` (Zofia/Amy/Fatima/Simon)
 - **Environmental pressures** - Office noise, mobile usage, poor Wi-Fi, interruptions
 - **Technology context** - Assistive technology, device switching, browser limitations
 - **Regulatory complexity** - Unfamiliar terminology, multiple guidance documents
@@ -134,6 +134,7 @@ Scenario testing reveals **how well features serve real users under authentic co
 ## Marine Licensing Scenario Implementation
 
 ### **Persona-Driven Scenarios**
+Using the established personas from `documentation/personas/` to create authentic scenarios:
 
 #### **Zofia (Novice Applicant) Scenarios**
 - **Authentic confusion** - First marine licensing application, unfamiliar terminology

@@ -38,7 +38,7 @@ This single check revealed an entire unused class architecture!
 **What I do wrong**:
 - Create massive arrays of fake data that aren't used
 - Build complex generation methods for "all possible scenarios"
-- Add persona-based generators when tests don't use personas
+- Add persona-based generators when tests don't use the established personas from `documentation/personas/`
 - Create comprehensive validation methods that aren't called
 
 **What I should do**:

@@ -1,6 +1,6 @@
-# Rules Optimization for Context Window Efficiency
+# Rules Optimisation for Context Window Efficiency
 
-This document explains the optimized approach for handling rules in the Cursor context window, designed to maximize information availability while minimizing token usage.
+This document explains the optimised approach for handling rules in the Cursor context window, designed to maximise information availability while minimising token usage.
 
 ## The Problem
 

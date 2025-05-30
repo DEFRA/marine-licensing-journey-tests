@@ -121,7 +121,7 @@
       "category": "user-experience",
       "priority": "high",
       "tags": ["personas", "user-needs", "scenarios", "user-testing"],
-      "summary": "Defined personas for marine licensing users, with characteristics, needs, and constraints to inform realistic test scenarios.",
+      "summary": "References established personas from the documentation directory to ensure consistent user representation across testing activities.",
       "summary_file": ".cursor/rules/summaries/personas.summary.md",
       "complexity": "medium"
     },

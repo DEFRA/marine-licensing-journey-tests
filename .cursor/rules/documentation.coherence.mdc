@@ -54,7 +54,7 @@ When creating scenario charters, ensure:
 - **VARIATIONS** - Realistic turbulence and stress testing approaches
 
 #### **Marine Licensing Context:**
-- **Persona authenticity** - Use Zofia, Amy, Fatima, Simon with realistic pressures
+- **Persona authenticity** - Use Zofia, Amy, Fatima, Simon with realistic pressures as defined in `documentation/personas/`
 - **Domain terminology** - Marine licensing language appropriate to user context
 - **Regulatory reality** - Reflect actual marine licensing constraints and requirements
 - **Technology friction** - Include realistic device, network, and accessibility challenges
@@ -314,6 +314,13 @@ When developing test strategy content, ensure recommendations are:
 - **Focus on core user journeys** rather than exhaustive coverage
 - **Leverage domain expertise** from permanent staff who understand user needs
 - **Gradual adoption** of advanced techniques as capacity allows
+
+### **Documentation Resource Reuse**
+- **Use established resources** - Reference existing documentation resources rather than duplicating them
+- **Point to official definitions** - For personas, user stories, and domain concepts, point to their canonical locations
+- **Maintain single source of truth** - Ensure there's only one authoritative definition of key concepts
+- **Cross-reference properly** - Use correct relative paths when referencing other documentation files
+- **Update references when moving files** - Ensure references are updated if source files are reorganized
 
 ---
 
