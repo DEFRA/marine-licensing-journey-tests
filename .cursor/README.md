@@ -5,7 +5,6 @@ This directory contains configuration and utilities for Cursor AI assistance wit
 ## Directory Structure
 
 - **`rules/`**: Contains guidelines and standards for working with this codebase
-  - **`rules/summaries/`**: Optimised summaries of rules for efficient context window usage
 - **`user-stories/`**: User stories and requirements used for test coverage
 - **`cursor.rules.json`**: Index of rules with metadata for efficient loading
 - **`fetch_rule.js`**: Utility for progressive rule loading
