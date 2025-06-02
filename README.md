@@ -436,13 +436,12 @@ cat wdio.local.conf.js
 - **[📋 User Stories](documentation/user-stories/README.md)** - Requirements and acceptance criteria
 - **[🧠 Test Strategy](documentation/test-strategy/README.md)** - Quality engineering approach
 - **[🎯 Test Charters](documentation/test-charters/README.md)** - Investigative testing plans
-- **🎭 Screenplay Pattern**: `.cursor/rules/screenplay-pattern.mdc`
-- **🏗️ Project Structure**: `.cursor/rules/project-structure.mdc`
-- **💻 Coding Standards**: `.cursor/rules/code.generation.mdc`
-- **🧹 Clean Code & Code Smells**: `.cursor/rules/playbook.clean.code.mdc`
-- **📝 Style Guide**: `.cursor/rules/playbook.styleguide.mdc`
-- **🔄 Refactoring Guidelines**: `.cursor/rules/playbook.refactoring.mdc`
-- **📖 Complete Rules Index**: `.cursor/rules/README.md`
+- **🎭 Screenplay Pattern**: Implemented using actor-task-interaction pattern
+- **🏗️ Project Structure**: Clear separation of concerns with test infrastructure
+- **💻 Coding Standards**: Self-documenting code with expressive naming
+- **🧹 Clean Code**: No comments, no JSDoc, clear intent through naming
+- **📝 Style Guide**: JavaScript-only, dot.case.js naming convention
+- **🔄 Refactoring Guidelines**: Follow single responsibility and clear abstractions
 
 ## 📜 Licence
 
