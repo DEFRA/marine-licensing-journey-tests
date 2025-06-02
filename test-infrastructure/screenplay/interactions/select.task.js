@@ -13,6 +13,6 @@ export default class SelectTheTask extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    browseTheWeb.click(TaskListPage.getTaskLink(this.taskName))
+    await browseTheWeb.click(TaskListPage.getTaskLink(this.taskName))
   }
 }

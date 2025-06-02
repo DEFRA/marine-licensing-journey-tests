@@ -14,13 +14,32 @@ module.exports = {
     'eslint:recommended',
     'plugin:wdio/recommended'
   ],
-  overrides: [],
+  overrides: [
+    {
+      files: ['test-infrastructure/**/*.js', 'test/steps/**/*.js'],
+      rules: {
+        'no-throw-literal': 'error',
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'ThrowStatement',
+            message:
+              'Do not use throw in test-infrastructure or step definitions. Use assertion libraries instead.'
+          }
+        ],
+        'promise/catch-or-return': 'error',
+        'require-await': 'error'
+      }
+    }
+  ],
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  plugins: ['prettier', 'wdio'],
+  plugins: ['prettier', 'wdio', 'promise'],
   rules: {
     'prettier/prettier': 'error',
-    'no-console': 'error'
+    'no-console': 'error',
+    'no-unused-expressions': 'error',
+    'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }]
   }
 }

@@ -12,4 +12,4 @@ allure-report/
 allure-results/
 FAILED
 *.code-workspace
-.cursor/private-rules/*
+.cursor/mcp.json

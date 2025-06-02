@@ -3,17 +3,17 @@ import { browser } from '@wdio/globals'
 import {
   Actor,
   ApplyForExemption,
-  CompleteSiteDetails,
   BrowseTheWeb,
   CompleteProjectName,
+  CompleteSiteDetails,
+  EnsurePageHeading,
   Navigate,
-  SelectTheTask,
-  EnsurePageHeading
+  SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
 Given(
   'the user wants to apply for an exemption for a circular site using WGS84 coordinates',
-  async function () {
+  function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
@@ -24,7 +24,7 @@ Given(
 
 Given(
   'the user wants to apply for an exemption for a circular site using OSGB36 coordinates',
-  async function () {
+  function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
@@ -35,7 +35,7 @@ Given(
 
 Given(
   'the user wants to apply for an exemption for a polygonal site using WGS84 coordinates',
-  async function () {
+  function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
@@ -46,7 +46,7 @@ Given(
 
 Given(
   'the user wants to apply for an exemption for a polygonal site using OSGB36 coordinates',
-  async function () {
+  function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(

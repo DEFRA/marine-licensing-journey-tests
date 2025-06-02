@@ -3,137 +3,56 @@
 ## Investigation Plan
 
 **EXPLORE:** Complete application flow from novice perspective  
-**AS:** First-time marine licensing applicants unfamiliar with regulatory processes  
+**AS:** First-time marine licensing applicants (see References)  
 **BECAUSE:** Novice users are most likely to abandon applications or make errors  
 **LOOKING FOR:** Confusion points, guidance gaps, accessibility barriers, terminology issues
 
 **Duration:** 90 minutes  
 **Priority:** High
 
+## References
+
+- **Requirements:**
+  - [ML-1: Project name & exemption creation](../user-stories/ML-1.provide.project.name.and.create.exemption.md)
+  - [ML-9: Task list navigation](../user-stories/ML-9.view.the.task.list.md)
+  - [ML-12: Public register content](../user-stories/ML-12.provide.or.withhold.public.register.content.md)
+  - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
+  - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
+  - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
+- **Personas:**
+  - [Zofia - Novice applicant](../personas/zofia-novice-applicant.md)
+
 ## Scenario Context
 
-### **Theme**
-
-Investigate the complete marine licensing exemption notification journey for users completely new to marine licensing, government digital services, and regulatory processes.
-
-### **Setup**
-
-- **Primary Persona:** Zofia (Environmental Consultant, Marine Licensing Novice)
-- **User Context:** First marine licensing application, unfamiliar with regulatory terminology
-- **Technology Context:** Mixed device usage, potential assistive technology needs
-- **Environmental Context:** Time pressure, terminology confusion, help-seeking behaviour
-- **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
-
-### **Realistic pressures**
-
-- **Domain knowledge gaps** - Unfamiliar with marine licensing terminology and processes
-- **Technology barriers** - May use assistive technology or have varying digital literacy
-- **Time pressure** - Deadline for environmental impact assessment submission
-- **Cognitive load** - Learning new system while understanding regulatory requirements
-- **Uncertainty anxiety** - Fear of making mistakes with regulatory implications
+- Focus: The complete exemption notification journey for users new to marine licensing and government digital services.
+- For detailed requirements and persona context, see References above.
 
 ## Realistic Activities
 
-### **Complete application flow**
-
-#### **Starting the journey (Project name)**
-
-- Navigate to application start without reading all guidance first (realistic behaviour)
-- Attempt to understand "project name" in marine licensing context
-- Enter project description instead of concise name (common mistake)
-- Test validation messages and error recovery
-- Use help features when confused about requirements
-
-#### **Understanding progress (Task list)**
-
-- Interpret task list structure and what it means for the process
-- Understand "Completed" vs incomplete task status
-- Navigate back to completed tasks to review/change information
-- Assess confidence about overall progress and next steps
-- Test resuming work after interruptions or breaks
-
-#### **Making consent decisions (Public register)**
-
-- Understand what "public register" means in marine licensing context
-- Comprehend implications of consent vs withholding information
-- Navigate conditional form behaviour (text area appearing/disappearing)
-- Provide appropriate reasoning when withholding information
-- Handle uncertainty about privacy implications
-
-#### **Entering site location (Site details)**
-
-- Understand concepts of file upload vs. manual coordinate entry
-- Interpret the difference between circle and polygon site representations
-- Navigate coordinate system selection with limited geospatial knowledge
-- Make selections with varying levels of confidence about technical terms
-- Cope with unfamiliar coordinate system terminology
-- Use help features to understand unfamiliar geospatial concepts
-
-### **Accessibility and inclusion testing**
-
-#### **Screen reader navigation**
-
-- Complete entire flow using screen reader (NVDA/JAWS)
-- Test form labels, error announcements, and navigation landmarks
-- Verify conditional content is properly announced
-- Check task status communication for screen reader users
-
-#### **Keyboard navigation**
-
-- Navigate entire application using only keyboard
-- Test tab order, focus indicators, and skip links
-- Verify all interactive elements are reachable
-- Test form submission and error handling with keyboard only
-
-#### **Cognitive load management**
-
-- Test with browser zoom at 200% and 400%
-- Handle interruptions mid-task (phone calls, emails)
-- Test memory aids and progress preservation
-- Assess guidance effectiveness under pressure
-
-### **Real-world complications**
-
-#### **Information gathering challenges**
-
-- Switch between application and external guidance documents
-- Handle incomplete information and need to return later
-- Test saving progress and resuming work
-- Navigate while consulting with colleagues or clients
-
-#### **Error recovery patterns**
-
-- Make common novice mistakes and test recovery paths
-- Test browser back button usage and data preservation
-- Handle form validation errors with realistic user responses
-- Test help-seeking behaviour and guidance effectiveness
+- Attempt to complete the journey without reading all guidance first.
+- Test understanding of project name, task list, public register, and site details.
+- Use help features when confused; test error recovery and accessibility.
+- Simulate interruptions, incomplete information, and resuming work.
+- Test with assistive technology and different devices.
 
 ## Evidence Framework
 
-### **✅ Positive signals:**
+### ✅ Positive signals
 
-- **Guidance clarity** - Terminology explained in plain English, help available when needed
-- **Error prevention** - Clear guidance prevents common mistakes
-- **Progress transparency** - Users understand where they are and what's next
-- **Accessibility support** - Screen readers, keyboard navigation work effectively
-- **Confidence building** - Interface helps users feel capable of completing process
+- Guidance clarity, error prevention, progress transparency, accessibility support, confidence building.
 
-### **⚠️ Warning signs:**
+### ⚠️ Warning signs
 
-- **Terminology confusion** - Marine licensing terms unclear or unexplained
-- **Navigation disorientation** - Users lost in process or unsure how to proceed
-- **Error frustration** - Validation messages unhelpful or confusing
-- **Accessibility barriers** - Screen readers, keyboard navigation fail
-- **Abandonment risk** - Users likely to give up due to complexity or confusion
+- Terminology confusion, navigation disorientation, error frustration, accessibility barriers, abandonment risk.
 
-### **🤔 Questions to investigate:**
+### 🤔 Questions to investigate
 
 - How does the application compare to other government services novices might know?
 - What happens when users need to gather additional information mid-application?
 - How well does the interface support users who are uncertain about decisions?
 - Are there cultural or language barriers that affect comprehension?
 
-### **💡 Ideas to explore:**
+### 💡 Ideas to explore
 
 - Could terminology be explained more clearly or contextually?
 - Are there opportunities for progressive disclosure of complex information?
@@ -172,8 +91,3 @@ IMMEDIATE ACTIONS:
 □ [Action 2 - who will address]
 □ [Action 3 - who will address]
 ```
-
----
-
-**Delivered features tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
-**Related features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)

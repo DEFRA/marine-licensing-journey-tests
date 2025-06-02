@@ -52,6 +52,7 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeFileUploadFlow(browseTheWeb, siteDetails) {
+    await Promise.resolve()
     expect.fail('File upload flow not implemented')
   }
 

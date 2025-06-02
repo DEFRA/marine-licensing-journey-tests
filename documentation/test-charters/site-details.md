@@ -3,128 +3,57 @@
 ## Investigation Plan
 
 **EXPLORE:** Site location selection options and coordinate system choices  
-**AS:** Marine licensing applicants with various levels of geospatial knowledge  
+**AS:** Marine licensing applicants (see References)  
 **BECAUSE:** Spatial data selection is critical to application accuracy  
 **LOOKING FOR:** Usability issues in selection screens, navigation problems, validation clarity
 
 **Duration:** 85 minutes  
 **Priority:** High
 
+## References
+
+- **Requirements:**
+  - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
+  - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
+  - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
+- **Personas:**
+  - [Zofia - Novice applicant](../personas/zofia-novice-applicant.md)
+  - [Amy - Veteran applicant](../personas/amy-veteran-applicant.md)
+
 ## Scenario Context
 
-### **Theme**
-
-Investigate how different users interact with site details selection screens, focusing on coordinate system selection, shape type selection (circle vs. polygon), and understanding the options available.
-
-### **Setup**
-
-- **All Personas:** Zofia (Novice), Amy (Veteran), Fatima (Case Officer)
-- **User Context:** Various levels of geospatial knowledge and confidence
-- **Technology Context:** Different browsers, devices, with both desktop and mobile interactions
-- **Environmental Context:** User decision-making about site location representation
-- **Delivered Features:** Location method selection (file/manual), circle/polygon choice, coordinate system selection
-
-### **Realistic pressures**
-
-- **Spatial knowledge variations** - Some users familiar with coordinates, others completely new
-- **Technical terminology** - Understanding coordinate systems and geospatial concepts
-- **Decision uncertainty** - Choosing the most appropriate input method and coordinate system
-- **Navigation expectations** - Moving between selection screens logically
-- **Session persistence** - Expecting selections to be preserved during navigation
+- Focus: How users with varying geospatial knowledge interact with site details selection screens (location method, shape type, coordinate system).
+- For detailed requirements and persona context, see References above.
 
 ## Realistic Activities
 
-### **Entry method selection**
-
-#### **Understanding file upload vs. manual entry**
-
-- Interpret the choice between file upload and manual coordinate entry
-- Assess guidance quality for users unfamiliar with coordinate data
-- Test decision-making with different levels of technical knowledge
-- Evaluate confidence in method selection for different personas
-- Test navigation between options and possibility to change mind
-
-#### **Circle vs. polygon decision making**
-
-- Evaluate understanding of when to use circle vs. coordinate list
-- Test selection guidance for different project types
-- Assess conceptual clarity of the two spatial representation methods
-- Test switching between methods after initial selection
-- Verify error recovery if wrong method is initially chosen
-
-#### **Coordinate system selection**
-
-- Test understanding of different coordinate system options
-- Evaluate guidance for users unfamiliar with coordinate references
-- Assess system selection based on available reference materials
-- Test ability to change system after initial selection
-- Verify selection persistence when navigating using Back links
-
-### **Navigation and flow testing**
-
-#### **Multi-screen navigation**
-
-- Test navigation sequence through all selection screens
-- Verify Back link functionality preserves previous selections
-- Test Cancel button at different stages of the process
-- Assess clarity of progress through the selection sequence
-- Verify consistent UI patterns across selection screens
-
-#### **Task list integration**
-
-- Verify site details task status on task list
-- Test partial completion and navigation back to task list
-- Assess clarity of progress indication
-- Test resuming partially completed site details selections
-- Verify data persistence when navigating away and returning
-
-### **Validation testing**
-
-#### **Selection validation**
-
-- Test validation when no location method is selected
-- Verify validation when no shape type is selected
-- Test validation when no coordinate system is selected
-- Assess error message clarity and positioning
-- Test keyboard and screen reader accessibility of validation messages
-
-#### **Error recovery patterns**
-
-- Test clear error messages and recovery guidance
-- Verify selection preservation when validation fails
-- Test browser back button with partial selections
-- Verify cancellation behaviour at different selection stages
-- Test error focus management and keyboard navigation
+- Test switching between file upload and manual entry.
+- Evaluate understanding and guidance for circle vs. polygon.
+- Assess coordinate system selection and help features.
+- Test navigation, back/cancel, and error recovery patterns.
+- Try with different levels of user confidence and technical knowledge.
 
 ## Evidence Framework
 
-### **✅ Positive signals:**
+### ✅ Positive signals
 
-- **Conceptual clarity** - Users understand spatial options and coordinate systems
-- **Selection confidence** - Users make informed choices between options
-- **Navigation fluency** - Movement between selection screens is intuitive
-- **Validation helpfulness** - Error messages guide users to correct selections
-- **Selection persistence** - Choices are preserved during navigation
+- Conceptual clarity, selection confidence, navigation fluency, validation helpfulness, selection persistence.
 
-### **⚠️ Warning signs:**
+### ⚠️ Warning signs
 
-- **Terminology confusion** - Geospatial terms unclear or unexplained
-- **Selection uncertainty** - Users uncertain which options to choose
-- **Navigation disorientation** - Users lose context between screens
-- **Validation frustration** - Error messages unhelpful or confusing
-- **Session issues** - Selections lost during navigation
+- Terminology confusion, selection uncertainty, navigation disorientation, validation frustration, session issues.
 
-### **🤔 Questions to investigate:**
+### 🤔 Questions to investigate
 
-- How do users with different levels of geospatial knowledge approach the selection screens?
+- How do users with different geospatial knowledge approach the screens?
 - What mental models do users have about site boundaries and locations?
-- How do users decide between circle and polygon representations?
+- How do users decide between circle and polygon?
 - What factors influence coordinate system selection?
 
-### **💡 Ideas to explore:**
+### 💡 Ideas to explore
 
 - Could selection guidance be improved for non-technical users?
-- Are there opportunities for smarter defaults based on common scenarios?
+- Are there opportunities for smarter defaults?
 - How might the interface better support coordinate system selection?
 - What additional context would help users make informed selections?
 

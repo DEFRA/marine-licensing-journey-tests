@@ -1,5 +1,74 @@
 # Test Charters - Investigative Testing Plans
 
+> **Charter structure update:**
+> Charters now focus on investigation context, activities, and evidence collection. Requirements and persona details are referenced, not restated. See the template below for new charters.
+
+---
+
+## Charter Template (for new charters)
+
+```
+# [Charter Title]: [Short Description]
+
+## Investigation Plan
+
+**EXPLORE:** [Area or workflow to investigate]
+**AS:** [Persona or user type] (see References)
+**BECAUSE:** [Why this investigation matters]
+**LOOKING FOR:** [Problems, risks, or insights sought]
+
+**Duration:** [e.g. 60-90 minutes]
+**Priority:** [High/Medium/Low]
+
+## References
+- **Requirements:**
+  - [User story 1](../user-stories/...)
+  - [User story 2](../user-stories/...)
+- **Personas:**
+  - [Persona 1](../personas/...)
+  - [Persona 2](../personas/...)
+
+## Scenario Context
+- [Short summary of the investigation context. For detailed requirements and persona context, see References above.]
+
+## Realistic Activities
+- [List the main investigation activities, not acceptance criteria.]
+
+## Evidence Framework
+
+### ✅ Positive signals
+- [What good looks like.]
+
+### ⚠️ Warning signs
+- [What problems or risks look like.]
+
+### 🤔 Questions to investigate
+- [Key questions for the session.]
+
+### 💡 Ideas to explore
+- [Improvement or automation ideas.]
+
+## Session Notes Template
+
+```
+
+SESSION: [Charter Title] - [Date]
+DURATION: [Actual time]
+INVESTIGATOR: [Name]
+
+[OBSERVATIONS/NOTES STRUCTURE]
+
+IMMEDIATE ACTIONS:
+□ [Action 1 - who will address]
+□ [Action 2 - who will address]
+□ [Action 3 - who will address]
+
+```
+
+```
+
+---
+
 This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios.
 
 > **🔗 Powered by investigative testing**  

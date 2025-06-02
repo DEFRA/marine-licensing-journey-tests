@@ -3,134 +3,56 @@
 ## Investigation Plan
 
 **EXPLORE:** Efficiency patterns and workflow optimisation across delivered features  
-**AS:** Experienced marine licensing applicants and maritime consultants  
+**AS:** Experienced marine licensing applicants and maritime consultants (see References)  
 **BECAUSE:** Veteran users expect streamlined workflows and professional efficiency  
 **LOOKING FOR:** Workflow friction, missing shortcuts, efficiency barriers, professional workflow gaps
 
 **Duration:** 75 minutes  
 **Priority:** High
 
+## References
+
+- **Requirements:**
+  - [ML-1: Project name & exemption creation](../user-stories/ML-1.provide.project.name.and.create.exemption.md)
+  - [ML-9: Task list navigation](../user-stories/ML-9.view.the.task.list.md)
+  - [ML-12: Public register content](../user-stories/ML-12.provide.or.withhold.public.register.content.md)
+  - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
+  - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
+  - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
+- **Personas:**
+  - [Amy - Veteran applicant](../personas/amy-veteran-applicant.md)
+
 ## Scenario Context
 
-### **Theme**
-
-Investigate how well the marine licensing application supports experienced users who need to complete applications efficiently, often managing multiple projects simultaneously.
-
-### **Setup**
-
-- **Primary Persona:** Amy (Veteran Applicant, Maritime Consultant)
-- **User Context:** Third marine licensing application this year, familiar with regulatory requirements
-- **Technology Context:** Desktop with multiple tabs, keyboard shortcuts preference, professional tools
-- **Environmental Context:** Client deadlines, multiple applications, interruption-heavy office environment
-- **Delivered Features:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)
-
-### **Realistic pressures**
-
-- **Time efficiency expectations** - Process should be faster than for first-time users
-- **Pattern recognition** - Expects familiar workflows from other government services
-- **Multi-application management** - Handling several client projects at once
-- **Professional presentation** - Interface must support confident client interaction
-- **Keyboard navigation preference** - Minimal mouse usage for speed
+- Focus: How experienced users complete applications efficiently, often managing multiple projects simultaneously.
+- For detailed requirements and persona context, see References above.
 
 ## Realistic Activities
 
-### **Efficient application completion**
-
-#### **Speed-focused project name entry**
-
-- Navigate quickly to project name field using keyboard shortcuts
-- Apply naming conventions learned from previous applications
-- Test rapid completion without careful reading of guidance
-- Use browser autofill and form memory features
-- Attempt to reuse project naming patterns for consistency
-
-#### **Professional task list usage**
-
-- Quick scanning for completed vs remaining tasks
-- Efficient navigation between task list and individual tasks
-- Test browser back/forward button usage without losing work
-- Attempt to bookmark specific application states for later return
-- Handle multiple client applications in different browser tabs
-
-#### **Streamlined consent decisions**
-
-- Make consent decisions quickly based on client requirements
-- Test rapid switching between consent options
-- Efficiently provide withholding reasons when required
-- Navigate conditional form behaviour at professional speed
-- Maintain consistency across multiple client applications
-
-#### **Professional site details selection**
-
-- Navigate site details selection screens with established professional workflows
-- Quickly select appropriate coordinate system based on professional knowledge
-- Efficiently move through multi-step selection process
-- Test keyboard shortcuts and rapid navigation through selection screens
-- Apply professional geospatial knowledge to method and coordinate system selection
-- Test back and cancel functionality during selection process
-
-### **Multi-application workflow testing**
-
-#### **Concurrent application management**
-
-- Open multiple applications in different tabs for comparison
-- Switch between different client applications requiring different approaches
-- Copy information between applications for consistency
-- Handle interruptions while managing multiple projects
-- Test session handling across multiple browser tabs
-
-#### **Professional efficiency patterns**
-
-- Use keyboard shortcuts expected from other government services
-- Minimise mouse usage throughout entire workflow
-- Test rapid form completion with tab navigation
-- Look for bulk operations or multi-application features
-- Expect smart defaults based on user history
-
-### **Client service scenarios**
-
-#### **Real-time client consultation**
-
-- Complete application while on phone with client
-- Navigate interface confidently during client meetings
-- Handle client questions about process and requirements
-- Make real-time changes based on client feedback
-- Demonstrate professional competence through interface mastery
-
-#### **Deadline pressure testing**
-
-- Complete application under extreme time pressure
-- Handle multiple applications due same day
-- Balance speed requirements with accuracy for professional reputation
-- Coordinate project names across planning applications and marine licensing
-- Manage client expectations about process timing
+- Test rapid navigation and keyboard shortcuts.
+- Attempt to reuse information from previous applications.
+- Simulate multi-application management and interruptions.
+- Test professional site details selection and consent decisions.
+- Evaluate workflow for speed, accuracy, and professional presentation.
 
 ## Evidence Framework
 
-### **✅ Positive signals:**
+### ✅ Positive signals
 
-- **Keyboard navigation fluency** - Tab order logical, shortcuts work intuitively
-- **Recognition over recall** - Previous patterns easy to apply, smart suggestions available
-- **Workflow continuity** - Smooth transitions between related tasks and sections
-- **Multi-application support** - Easy to handle several projects simultaneously
-- **Professional presentation** - Interface supports confident client interaction
+- Keyboard navigation fluency, recognition over recall, workflow continuity, multi-application support, professional presentation.
 
-### **⚠️ Warning signs:**
+### ⚠️ Warning signs
 
-- **Efficiency barriers** - Required steps that slow down experienced users unnecessarily
-- **Pattern disruption** - Workflows that conflict with established government service conventions
-- **Navigation inefficiency** - Mouse required for actions that should support keyboard shortcuts
-- **Multi-tab conflicts** - Session handling problems when managing multiple applications
-- **Professional friction** - Interface elements that undermine client confidence
+- Efficiency barriers, pattern disruption, navigation inefficiency, multi-tab conflicts, professional friction.
 
-### **🤔 Questions to investigate:**
+### 🤔 Questions to investigate
 
 - How does application speed compare to other government services professionals use?
 - What happens when users need to manage multiple applications simultaneously?
 - How well does the interface support professional client interaction patterns?
 - Are there opportunities for data reuse between related applications?
 
-### **💡 Ideas to explore:**
+### 💡 Ideas to explore
 
 - Could keyboard shortcuts be added for common professional workflows?
 - Are there opportunities for smart defaults based on user behaviour patterns?
