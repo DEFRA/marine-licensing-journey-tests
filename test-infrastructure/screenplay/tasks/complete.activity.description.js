@@ -19,10 +19,10 @@ export default class CompleteActivityDescription extends Task {
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(
       ActivityDescriptionPage.activityDescriptionInput,
-      exemption.notificationDescription
+      exemption.activityDescription
     )
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
 
-    actor.updates(Memory.markTaskCompleted('notificationDescription'))
+    actor.updates(Memory.markTaskCompleted('activityDescription'))
   }
 }

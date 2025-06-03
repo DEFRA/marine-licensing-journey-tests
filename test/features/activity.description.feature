@@ -24,7 +24,7 @@ Feature: Activity description: The user can provide a description of their plann
   Scenario: Validate maximum length of activity description
     Given a notification has been created with a valid project name
     When the "activity description" task is selected and text over 4000 characters is entered
-    Then the activity description error "activity description must be 4000 characters or less" is displayed
+    Then the activity description error "Activity description must be 4000 characters or less" is displayed
 
   @wip
   Scenario: Cancel preserves previously saved data

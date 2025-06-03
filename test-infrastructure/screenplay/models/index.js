@@ -4,8 +4,8 @@ import PublicRegisterModel from './public.register.model.js'
 import SiteDetailsModel from './site.details.model.js'
 
 export {
+  ActivityDescriptionModel,
   MarineProjectModel,
-  ActivityDescriptionModel as NotificationDescriptionModel,
   PublicRegisterModel,
   SiteDetailsModel
 }
