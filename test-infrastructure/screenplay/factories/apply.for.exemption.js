@@ -9,55 +9,48 @@ export default class ApplyForExemption {
     this.data = { ...data }
   }
 
-  static withValidProjectName() {
-    return new ApplyForExemption({
+  /**
+   * Creates the base exemption object with default values
+   * @private
+   */
+  static _createBaseExemption(overrides = {}) {
+    return {
       projectName: MarineProjectModel.generateProjectName(),
       activityDescription:
         ActivityDescriptionModel.generateActivityDescription(),
       publicRegister: null,
       projectNameTaskCompleted: false,
       activityDescriptionTaskCompleted: false,
-      publicRegisterTaskCompleted: false
-    })
+      publicRegisterTaskCompleted: false,
+      ...overrides
+    }
+  }
+
+  static withValidProjectName() {
+    return new ApplyForExemption(this._createBaseExemption())
   }
 
   static withProjectName(projectName) {
-    return new ApplyForExemption({
-      projectName,
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      publicRegister: null,
-      projectNameTaskCompleted: false,
-      activityDescriptionTaskCompleted: false,
-      publicRegisterTaskCompleted: false
-    })
+    return new ApplyForExemption(this._createBaseExemption({ projectName }))
   }
 
   static withConsentToPublicRegister() {
-    return new ApplyForExemption({
-      projectName: MarineProjectModel.generateProjectName(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      publicRegister: { consent: true },
-      projectNameTaskCompleted: false,
-      activityDescriptionTaskCompleted: false,
-      publicRegisterTaskCompleted: false
-    })
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        publicRegister: { consent: true }
+      })
+    )
   }
 
   static withWithholdFromPublicRegister() {
-    return new ApplyForExemption({
-      projectName: MarineProjectModel.generateProjectName(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      publicRegister: {
-        consent: false,
-        reason: PublicRegisterModel.generateWithholdingReason()
-      },
-      projectNameTaskCompleted: false,
-      activityDescriptionTaskCompleted: false,
-      publicRegisterTaskCompleted: false
-    })
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        publicRegister: {
+          consent: false,
+          reason: PublicRegisterModel.generateWithholdingReason()
+        }
+      })
+    )
   }
 
   getData() {
