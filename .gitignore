@@ -13,3 +13,4 @@ allure-results/
 FAILED
 *.code-workspace
 .cursor/mcp.json
+.cursor/*.mdc
