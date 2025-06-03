@@ -1,4 +1,8 @@
-import { MarineProjectModel, PublicRegisterModel } from '../models/index.js'
+import {
+  MarineProjectModel,
+  NotificationDescriptionModel as ActivityDescriptionModel,
+  PublicRegisterModel
+} from '../models/index.js'
 
 export default class ApplyForExemption {
   constructor(data) {
@@ -8,8 +12,11 @@ export default class ApplyForExemption {
   static withValidProjectName() {
     return new ApplyForExemption({
       projectName: MarineProjectModel.generateProjectName(),
+      notificationDescription:
+        ActivityDescriptionModel.generateActivityDescription(),
       publicRegister: null,
       projectNameTaskCompleted: false,
+      notificationDescriptionTaskCompleted: false,
       publicRegisterTaskCompleted: false
     })
   }
@@ -17,8 +24,11 @@ export default class ApplyForExemption {
   static withProjectName(projectName) {
     return new ApplyForExemption({
       projectName,
+      notificationDescription:
+        ActivityDescriptionModel.generateActivityDescription(),
       publicRegister: null,
       projectNameTaskCompleted: false,
+      notificationDescriptionTaskCompleted: false,
       publicRegisterTaskCompleted: false
     })
   }
@@ -26,8 +36,11 @@ export default class ApplyForExemption {
   static withConsentToPublicRegister() {
     return new ApplyForExemption({
       projectName: MarineProjectModel.generateProjectName(),
+      notificationDescription:
+        ActivityDescriptionModel.generateActivityDescription(),
       publicRegister: { consent: true },
       projectNameTaskCompleted: false,
+      notificationDescriptionTaskCompleted: false,
       publicRegisterTaskCompleted: false
     })
   }
@@ -35,11 +48,14 @@ export default class ApplyForExemption {
   static withWithholdFromPublicRegister() {
     return new ApplyForExemption({
       projectName: MarineProjectModel.generateProjectName(),
+      notificationDescription:
+        ActivityDescriptionModel.generateActivityDescription(),
       publicRegister: {
         consent: false,
         reason: PublicRegisterModel.generateWithholdingReason()
       },
       projectNameTaskCompleted: false,
+      notificationDescriptionTaskCompleted: false,
       publicRegisterTaskCompleted: false
     })
   }

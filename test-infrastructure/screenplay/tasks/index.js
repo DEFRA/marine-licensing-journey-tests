@@ -1,5 +1,6 @@
 export { default as CompleteProjectName } from './complete.project.name'
 export { default as CompletePublicRegisterTask } from './complete.public.register'
 export { default as CompleteSiteDetails } from './complete.site.details'
+export { default as CompleteActivityDescription } from './complete.activity.description'
 export { default as FillForm } from './fill.form'
 export { default as Navigate } from './navigate'

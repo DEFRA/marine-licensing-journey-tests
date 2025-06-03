@@ -20,6 +20,11 @@ export default class Memory {
     }
   }
 
+  static ofActivityDescriptionWith(newActivityDescription) {
+    return (exemption) =>
+      (exemption.activityDescription = newActivityDescription)
+  }
+
   static markTaskCompleted(taskName) {
     return (exemption) => {
       exemption[`${taskName}TaskCompleted`] = true
