@@ -15,6 +15,7 @@
 - **Requirements:**
   - [ML-1: Project name & exemption creation](../user-stories/ML-1.provide.project.name.and.create.exemption.md)
   - [ML-9: Task list navigation](../user-stories/ML-9.view.the.task.list.md)
+  - [ML-11: Activity description](../user-stories/ML-11.provide.activity.description.md)
   - [ML-12: Public register content](../user-stories/ML-12.provide.or.withhold.public.register.content.md)
   - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
@@ -75,6 +76,7 @@ EFFICIENCY OBSERVATIONS:
 FEATURE-SPECIFIC FINDINGS:
 Project Name: [Speed, shortcuts, pattern recognition]
 Task List: [Navigation efficiency, multi-tab handling]
+Activity Description: [Text entry efficiency, auto-save, character count]
 Public Register: [Decision speed, consistency tools]
 Site Details: [Selection efficiency, navigation speed, system selection]
 
@@ -94,5 +96,5 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered features tested:** Project name entry, task list navigation, public register consent, site details selection screens (location method, shape type, coordinate system)  
-**Related features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)
+**Delivered features tested:** Project name entry, task list navigation, activity description, public register consent, site details selection screens (location method, shape type, coordinate system)  
+**Related features:** [project.name.feature](../../test/features/project.name.feature), [validation.project.name.feature](../../test/features/validation.project.name.feature), [task.list.feature](../../test/features/task.list.feature), [activity.description.feature](../../test/features/activity.description.feature), [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature), [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)

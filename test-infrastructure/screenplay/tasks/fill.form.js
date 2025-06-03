@@ -1,6 +1,5 @@
 import Task from '../base/task.js'
 
-// Direct imports using the ~ alias convention
 import ActivityDescriptionPage from '~/test-infrastructure/pages/activity.description.page'
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'

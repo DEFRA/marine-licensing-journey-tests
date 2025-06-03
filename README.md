@@ -53,13 +53,7 @@ This project implements automated tests for marine licensing user journeys. See 
 
 **[📖 View Current User Stories & Test Coverage →](documentation/user-stories/README.md)**
 
-**Currently Implemented:**
-
-- ✅ **ML-1**: Provide project name and create exemption
-- ✅ **ML-9**: View the task list and navigate between tasks
-- ✅ **ML-12**: Provide or withhold public register content
-
-Each user story includes acceptance criteria, screenshots, and links to corresponding feature files tagged with `@issue=ML-{number}` for full traceability between requirements and tests.
+Each user story includes acceptance criteria, descriptions of screenshots, and links to corresponding feature files tagged with `@issue=ML-{number}` for full traceability between requirements and tests.
 
 ## 🧠 Modern Test Strategy
 

@@ -4,7 +4,6 @@ export default class ActivityDescriptionModel {
   static NOTIFICATION_DESCRIPTION_MAX_LENGTH = 4000
 
   static generateActivityDescription() {
-    // Realistic marine project activities for testing
     const activities = [
       'Installation of temporary mooring equipment for marine research vessel operations.',
       'Construction of permanent jetty structure with associated dredging activities.',
@@ -32,7 +31,6 @@ export default class ActivityDescriptionModel {
   }
 
   static withOver4000Characters() {
-    // Generate text that exceeds the 4000 character limit
     const longText = faker.lorem.paragraphs(50, ' ')
     return longText.substring(0, this.NOTIFICATION_DESCRIPTION_MAX_LENGTH + 1) // 4001 characters
   }
