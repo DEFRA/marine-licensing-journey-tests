@@ -1,4 +1,3 @@
-export { default as NotificationDescriptionPage } from './activity.description.page'
 export { default as CommonElementsPage } from './common.elements.page'
 export { default as HowDoYouWantToEnterTheCoordinatesPage } from './how.do.you.want.to.enter.the.coordinates.page'
 export { default as HowDoYouWantToProvideCoordinatesPage } from './how.do.you.want.to.provide.coordinates.page'
