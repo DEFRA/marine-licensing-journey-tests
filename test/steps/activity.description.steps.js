@@ -1,9 +1,13 @@
 import { Given, When, Then } from '@cucumber/cucumber'
+import { faker } from '@faker-js/faker'
 import { ActivityDescriptionPage } from '~/test-infrastructure/pages'
 import {
+  ActivityDescriptionModel,
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickCancel,
+  ClickSaveAndContinue,
   CompleteProjectName,
   CompleteActivityDescription,
   EnsureErrorDisplayed,
@@ -11,7 +15,7 @@ import {
   Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
-import ClickSaveAndContinue from '~/test-infrastructure/screenplay/interactions/click.save.and.continue'
+import FillForm from '~/test-infrastructure/screenplay/tasks/fill.form'
 
 Given(
   'the activity description task has been completed with valid information',
@@ -21,6 +25,8 @@ Given(
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
+    await this.actor.attemptsTo(CompleteActivityDescription.now())
   }
 )
 
@@ -45,6 +51,27 @@ When(
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
+
+When(
+  'the Activity description task is selected and text over 4000 characters is entered',
+  async function () {
+    await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
+    this.actor.updates(
+      Memory.ofActivityDescriptionWith(
+        ActivityDescriptionModel.withOver4000Characters()
+      )
+    )
+    await this.actor.attemptsTo(CompleteActivityDescription.now())
+  }
+)
+
+When('changing the activity description but cancelling out', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
+  await this.actor.attemptsTo(
+    FillForm.activityDescription(faker.lorem.words(5))
+  )
+  await this.actor.attemptsTo(ClickCancel.now())
+})
 
 Then(
   'the Activity description error {string} is displayed',

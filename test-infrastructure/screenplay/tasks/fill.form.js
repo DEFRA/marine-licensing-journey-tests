@@ -22,6 +22,19 @@ export default class FillForm extends Task {
     }
   }
 
+  static activityDescription(description) {
+    return new FillForm(async (actor) => {
+      const page = await FillForm._importPage(
+        '~/test-infrastructure/pages/activity.description.page'
+      )
+      const browseTheWeb = actor.ability
+
+      if (description && description.length > 0) {
+        await browseTheWeb.sendKeys(page.activityDescriptionInput, description)
+      }
+    })
+  }
+
   static publicRegisterWithhold(reason) {
     return new FillForm(
       this._createClickHandler(

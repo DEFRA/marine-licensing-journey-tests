@@ -15,5 +15,8 @@ export const ERROR_MESSAGES = {
   ABSTRACT_CLASS_INSTANTIATION:
     'Ability is an abstract class and cannot be instantiated directly.',
   MISSING_PERFORM_AS:
-    'Tasks and interactions must implement the performAs method.'
+    'Tasks and interactions must implement the performAs method.',
+  LOCATOR_UNDEFINED: 'Locator cannot be null or undefined',
+  LOCATOR_NOT_FOUND: (primary, fallback) =>
+    `Neither primary locator '${primary}' nor fallback locator '${fallback}' could be found`
 }

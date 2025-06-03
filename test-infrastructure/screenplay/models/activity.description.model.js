@@ -31,7 +31,7 @@ export default class ActivityDescriptionModel {
     return `${activity} ${detail}`
   }
 
-  static generateOversizedActivityDescription() {
+  static withOver4000Characters() {
     // Generate text that exceeds the 4000 character limit
     const longText = faker.lorem.paragraphs(50, ' ')
     return longText.substring(0, this.NOTIFICATION_DESCRIPTION_MAX_LENGTH + 1) // 4001 characters

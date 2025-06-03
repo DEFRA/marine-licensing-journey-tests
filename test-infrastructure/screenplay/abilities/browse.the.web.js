@@ -29,6 +29,11 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async getElement(locator) {
+    // Validate locator before proceeding
+    if (!locator) {
+      expect.fail(ERROR_MESSAGES.LOCATOR_UNDEFINED)
+    }
+
     if (typeof locator === 'object' && locator.primary) {
       try {
         const element = await this.browser.$(locator.primary)
@@ -41,9 +46,13 @@ export default class BrowseTheWeb extends Ability {
       }
 
       if (locator.fallback) {
-        // no console so no feedback
         return await this.browser.$(locator.fallback)
       }
+
+      // If we have a complex locator object but no working primary/fallback
+      expect.fail(
+        ERROR_MESSAGES.LOCATOR_NOT_FOUND(locator.primary, locator.fallback)
+      )
     }
 
     return await this.browser.$(locator)
