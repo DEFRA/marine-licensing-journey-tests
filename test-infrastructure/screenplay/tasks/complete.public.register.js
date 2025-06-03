@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
 import Task from '../base/task.js'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Memory from '../memory.js'
 
 export default class CompletePublicRegisterTask extends Task {
@@ -21,14 +22,12 @@ export default class CompletePublicRegisterTask extends Task {
     const exemption = actor.recalls('exemption')
 
     if (!exemption) {
-      expect.fail(
-        'Exemption data must be initialized before completing public register task'
-      )
+      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('public register task'))
     }
 
     if (!exemption.publicRegister) {
       expect.fail(
-        'Public register data must be initialized before completing public register task'
+        ERROR_MESSAGES.MISSING_DATA('Public register', 'public register task')
       )
     }
 

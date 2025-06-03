@@ -1,10 +1,14 @@
 import { expect } from '~/node_modules/@wdio/globals/build/index'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import Ability from '../abilities/ability'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 
 export default class BrowseTheWeb extends Ability {
   constructor(browser) {
     super()
+    if (!browser) {
+      expect.fail(ERROR_MESSAGES.MISSING_BROWSER)
+    }
     this.browser = browser
   }
 
@@ -37,6 +41,7 @@ export default class BrowseTheWeb extends Ability {
       }
 
       if (locator.fallback) {
+        // no console so no feedback
         return await this.browser.$(locator.fallback)
       }
     }

@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import ActivityDescriptionPage from '~/test-infrastructure/pages/activity.description.page.js'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page'
 import Task from '../base/task.js'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Memory from '../memory.js'
 
 export default class CompleteActivityDescription extends Task {
@@ -12,9 +13,7 @@ export default class CompleteActivityDescription extends Task {
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     if (!exemption) {
-      expect.fail(
-        'Exemption data must be initialized before completing activity description'
-      )
+      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
     }
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(

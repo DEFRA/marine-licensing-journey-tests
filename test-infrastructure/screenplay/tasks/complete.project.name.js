@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Task from '../base/task.js'
 import Memory from '../memory.js'
 
@@ -11,9 +12,7 @@ export default class CompleteProjectName extends Task {
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     if (!exemption) {
-      expect.fail(
-        'Exemption data must be initialized before completing project name'
-      )
+      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('project name'))
     }
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(

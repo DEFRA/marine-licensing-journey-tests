@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
 import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page.js'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Task from '../base/task.js'
 
 export default class CompleteSiteDetails extends Task {
@@ -19,7 +20,7 @@ export default class CompleteSiteDetails extends Task {
     } else if (siteDetails.coordinatesEntryMethod === 'enter-manually') {
       await this.completeManualEntryFlow(browseTheWeb, siteDetails)
     } else {
-      expect.fail('Invalid coordinates input method')
+      expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
     }
   }
 
@@ -53,19 +54,17 @@ export default class CompleteSiteDetails extends Task {
 
   async completeFileUploadFlow(browseTheWeb, siteDetails) {
     await Promise.resolve()
-    expect.fail('File upload flow not implemented')
+    expect.fail(ERROR_MESSAGES.FILE_UPLOAD_NOT_IMPLEMENTED)
   }
 
   validateTestData(actor) {
     const exemption = actor.recalls('exemption')
     if (!exemption) {
-      expect.fail(
-        'Exemption data must be initialized before completing project name'
-      )
+      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('site details'))
     }
 
     if (!exemption.siteDetails) {
-      expect.fail('Site details must be set before completing site details')
+      expect.fail(ERROR_MESSAGES.MISSING_DATA('Site details', 'site details'))
     }
     return exemption
   }
