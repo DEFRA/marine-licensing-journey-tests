@@ -11,18 +11,18 @@ This directory contains user stories for the marine licensing application under 
 | ML-12    | Provide or withhold public register content   | [ML-12.provide.or.withhold.public.register.content.md](./ML-12.provide.or.withhold.public.register.content.md)     | [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature)                                                                                                           |
 | ML-16    | Choose file upload or manual coordinate entry | [ML-16.choose.file.upload.or.manual.coordinate.entry.md](./ML-16.choose.file.upload.or.manual.coordinate.entry.md) | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
 | ML-17    | Choose circle or coordinate list entry        | [ML-17.choose.circle.or.coordinate.list.entry.md](./ML-17.choose.circle.or.coordinate.list.entry.md)               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
+| ML-11    | Provide notification description              | [ML-11.provide.notification.description.md](./ML-11.provide.notification.description.md)                           | TBD - Feature files to be created                                                                                                                                                                                                                                                                                                                                                      |
 | ML-18    | Choose coordinate system                      | [ML-18.choose.coordinate.system.md](./ML-18.choose.coordinate.system.md)                                           | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
-| ML-19    | Provide activity description                  | [ML-19.provide.activity.description.md](./ML-19.provide.activity.description.md)                                   | TBD - Feature files to be created                                                                                                                                                                                                                                                                                                                                                      |
 
 ## Story status
 
 - ✅ **ML-1**: Project name entry and exemption creation
 - ✅ **ML-9**: Task list display and navigation
 - ✅ **ML-12**: Public register consent and withholding
+- 🚧 **ML-11**: Provide notification description
 - ✅ **ML-16**: Choose file upload or manual coordinate entry
 - ✅ **ML-17**: Choose how to enter site coordinates
 - ✅ **ML-18**: Choose coordinate system for site location
-- 🚧 **ML-19**: Provide activity description
 
 ## Feature file tags
 
@@ -45,10 +45,10 @@ documentation/user-stories/
 ├── ML-1.provide.project.name.and.create.exemption.md      # Project name entry
 ├── ML-9.view.the.task.list.md                             # Task list functionality
 ├── ML-12.provide.or.withhold.public.register.content.md   # Public register consent
+├── ML-11.provide.notification.description.md               # Notification description entry
 ├── ML-16.choose.file.upload.or.manual.coordinate.entry.md # Site location options
 ├── ML-17.choose.circle.or.coordinate.list.entry.md        # Coordinate entry options
-├── ML-18.choose.coordinate.system.md                      # Coordinate system selection
-└── ML-19.provide.activity.description.md                  # Activity description entry
+└── ML-18.choose.coordinate.system.md                      # Coordinate system selection
 ```
 
 ## Adding new user stories
