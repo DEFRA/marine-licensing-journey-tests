@@ -14,17 +14,16 @@ Feature: Activity description: The user can provide a description of their plann
     When updating the activity description with "New activity description"
     Then the "Activity description" task status is "Completed"
 
-  @wip
   Scenario: Validate mandatory activity description field
     Given a notification has been created with a valid project name
-    When the "activity description" task is selected and saved without entering text
-    Then the activity description error "Enter the activity description" is displayed
+    When the Activity description task is selected and saved without entering text
+    Then the Activity description error "Enter the activity description" is displayed
 
   @wip
   Scenario: Validate maximum length of activity description
     Given a notification has been created with a valid project name
-    When the "activity description" task is selected and text over 4000 characters is entered
-    Then the activity description error "Activity description must be 4000 characters or less" is displayed
+    When the Activity description task is selected and text over 4000 characters is entered
+    Then the Activity description error "Activity description must be 4000 characters or less" is displayed
 
   @wip
   Scenario: Cancel preserves previously saved data

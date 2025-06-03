@@ -13,7 +13,7 @@ export default class CompleteActivityDescription extends Task {
     const exemption = actor.recalls('exemption')
     if (!exemption) {
       expect.fail(
-        'Exemption data must be initialized before completing project name'
+        'Exemption data must be initialized before completing activity description'
       )
     }
     const browseTheWeb = actor.ability
