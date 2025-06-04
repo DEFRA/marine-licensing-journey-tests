@@ -13,6 +13,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-16    | Choose file upload or manual coordinate entry | [ML-16.choose.file.upload.or.manual.coordinate.entry.md](./ML-16.choose.file.upload.or.manual.coordinate.entry.md) | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
 | ML-17    | Choose circle or coordinate list entry        | [ML-17.choose.circle.or.coordinate.list.entry.md](./ML-17.choose.circle.or.coordinate.list.entry.md)               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
 | ML-18    | Choose coordinate system                      | [ML-18.choose.coordinate.system.md](./ML-18.choose.coordinate.system.md)                                           | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature) |
+| ML-35    | Enter centre point of a circle                | [ML-35.enter.centre.point.of.a.circle.md](./ML-35.enter.centre.point.of.a.circle.md)                               | TBC                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ## Story status
 
@@ -23,6 +24,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-16**: Choose file upload or manual coordinate entry
 - ✅ **ML-17**: Choose how to enter site coordinates
 - ✅ **ML-18**: Choose coordinate system for site location
+- 🚧 **ML-35**: Enter centre point of a circle
 
 ## Feature file tags
 
@@ -48,7 +50,8 @@ documentation/user-stories/
 ├── ML-11.provide.activity.description.md                   # Activity description entry
 ├── ML-16.choose.file.upload.or.manual.coordinate.entry.md # Site location options
 ├── ML-17.choose.circle.or.coordinate.list.entry.md        # Coordinate entry options
-└── ML-18.choose.coordinate.system.md                      # Coordinate system selection
+├── ML-18.choose.coordinate.system.md                      # Coordinate system selection
+└── ML-35.enter.centre.point.of.a.circle.md               # Enter centre point of a circle
 ```
 
 ## Adding new user stories
