@@ -44,14 +44,14 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 ```
 documentation/user-stories/
 ├── README.md                                               # This file
-├── ML-1.provide.project.name.and.create.exemption.md      # Project name entry
-├── ML-9.view.the.task.list.md                             # Task list functionality
-├── ML-12.provide.or.withhold.public.register.content.md   # Public register consent
+├── ML-1.provide.project.name.and.create.exemption.md       # Project name entry
+├── ML-9.view.the.task.list.md                              # Task list functionality
+├── ML-12.provide.or.withhold.public.register.content.md    # Public register consent
 ├── ML-11.provide.activity.description.md                   # Activity description entry
-├── ML-16.choose.file.upload.or.manual.coordinate.entry.md # Site location options
-├── ML-17.choose.circle.or.coordinate.list.entry.md        # Coordinate entry options
-├── ML-18.choose.coordinate.system.md                      # Coordinate system selection
-└── ML-35.enter.centre.point.of.a.circle.md               # Enter centre point of a circle
+├── ML-16.choose.file.upload.or.manual.coordinate.entry.md  # Site location options
+├── ML-17.choose.circle.or.coordinate.list.entry.md         # Coordinate entry options
+├── ML-18.choose.coordinate.system.md                       # Coordinate system selection
+└── ML-35.enter.centre.point.of.a.circle.md                 # Enter centre point of a circle
 ```
 
 ## Adding new user stories
