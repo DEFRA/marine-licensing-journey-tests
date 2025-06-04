@@ -17,21 +17,29 @@
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
 - **Personas:**
-  - [Zofia - Novice applicant](../personas/zofia-novice-applicant.md)
-  - [Amy - Veteran applicant](../personas/amy-veteran-applicant.md)
+  - [Sarah - Discovery-First User](../personas/sarah-discovery-first-user.md)
+  - [Elena - Multi-Project Coordinator](../personas/elena-multi-project-coordinator.md)
+  - [Dr. James - Research Practitioner](../personas/dr-james-research-practitioner.md)
 
 ## Scenario Context
 
-- Focus: How users with varying geospatial knowledge interact with site details selection screens (location method, shape type, coordinate system).
-- For detailed requirements and persona context, see References above.
+**Beta Research Insights**:
+
+- _"Even organisational pro users find providing location details the most challenging"_
+- _"Some pro users would like to draw on a map and most users we spoke to ask a GIS specialist to prepare their shapefile"_
+- _"I can do it if it's lat/long or x/y, otherwise I'd have to look it up. In portal you get various options, it's confusing"_
+- _"They wouldn't typically enter the system without this information ready"_
+
+**Critical Finding**: Location details are universally challenging across all user types, with significant reliance on external specialists.
 
 ## Realistic Activities
 
-- Test switching between file upload and manual entry.
-- Evaluate understanding and guidance for circle vs. polygon.
-- Assess coordinate system selection and help features.
-- Test navigation, back/cancel, and error recovery patterns.
-- Try with different levels of user confidence and technical knowledge.
+- Test decision-making between file upload and manual coordinate entry based on delivered functionality
+- Investigate understanding of circle vs coordinate list options (delivered choice points)
+- Test coordinate system selection confidence (WGS84 vs OSGB36) across different user technical backgrounds
+- Evaluate help text effectiveness for coordinate system guidance
+- Test navigation flow through the delivered site details selection screens
+- Simulate scenarios where users have existing coordinate data but are unsure how to proceed
 
 ## Evidence Framework
 
@@ -77,8 +85,9 @@ Coordinate System: [Selection confidence, system comprehension]
 Navigation: [Flow between screens, back/cancel functionality]
 
 PERSONA INSIGHTS:
-Zofia (Novice): [Selection understanding, terminology comprehension]
-Amy (Veteran): [Efficiency, professional expectations]
+Sarah (Discovery-First): [Guidance needs, confidence building, decision support]
+Elena (Multi-Project): [Professional efficiency, terminology expectations]
+Dr. James (Research): [Technical precision, scientific coordinate understanding]
 
 VALIDATION FINDINGS:
 Error Messages: [Clarity, helpfulness, positioning]

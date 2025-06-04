@@ -52,6 +52,7 @@
 
 ```
 
+```
 SESSION: [Charter Title] - [Date]
 DURATION: [Actual time]
 INVESTIGATOR: [Name]
@@ -62,9 +63,6 @@ IMMEDIATE ACTIONS:
 □ [Action 1 - who will address]
 □ [Action 2 - who will address]
 □ [Action 3 - who will address]
-
-```
-
 ```
 
 ---
@@ -85,12 +83,12 @@ Test charters bridge the gap between:
 
 ## 📋 Available investigation sessions
 
-| Theme                           | Charter name                                | Focus                                                    | Personas | Priority | Status   |
-| ------------------------------- | ------------------------------------------- | -------------------------------------------------------- | -------- | -------- | -------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers | Zofia    | High     | 🔄 Ready |
-| **Veteran user efficiency**     | [Expert workflows](./expert-workflows.md)   | Speed, shortcuts, and professional patterns              | Amy      | High     | 🔄 Ready |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling, conditional logic      | All      | High     | 🔄 Ready |
-| **Spatial data entry**          | [Site details](./site-details.md)           | Coordinate system selection and location data entry      | All      | High     | 🔄 Ready |
+| Theme                           | Charter name                                | Focus                                                     | Personas             | Priority | Status     |
+| ------------------------------- | ------------------------------------------- | --------------------------------------------------------- | -------------------- | -------- | ---------- |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers  | Sarah                | High     | 🔄 Updated |
+| **Professional workflows**      | [Expert workflows](./expert-workflows.md)   | Professional user patterns within delivered functionality | Elena, Marcus, James | High     | 🔄 Updated |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling, conditional logic       | All                  | High     | 🔄 Ready   |
+| **Spatial data entry**          | [Site details](./site-details.md)           | Coordinate system selection and location method choices   | All                  | High     | 🔄 Updated |
 
 ### **Charter lifecycle**
 
@@ -100,6 +98,8 @@ Test charters bridge the gap between:
 - **Changed features** → Existing charters updated to reflect new behaviour and workflows
 - **Removed features** → Obsolete charters archived to maintain focus on delivered functionality
 - **User feedback** → Charter priorities and focus areas adjusted based on real user insights
+
+**Beta Research Integration**: Current charters incorporate relevant beta research insights that apply to delivered functionality, while insights about undelivered features are captured for future charter development.
 
 This approach ensures our investigation sessions always target the **actual delivered system** rather than outdated assumptions about functionality.
 
@@ -116,7 +116,7 @@ LOOKING FOR: [Types of problems or insights you hope to find]
 SCENARIO CONTEXT:
 THEME: [Rich user context - what authentic situation are we investigating?]
 SETUP: [Realistic pressures, friction, and environment]
-PERSONA: [Which marine licensing user type - Zofia, Amy, Fatima, Simon]
+PERSONA: [Which marine licensing user type - Sarah, Elena, Marcus, Dr. James, Rachel, David]
 
 REALISTIC ACTIVITIES:
 - [Guided but flexible actions following authentic user patterns]
@@ -161,6 +161,30 @@ Priority: [High/Medium/Low based on risk and user impact]
 2. **Create actionable reports** - Link findings to specific user impact and business risk
 3. **Identify automation opportunities** - What scenarios should automated tests validate?
 4. **Plan follow-up sessions** - Which areas need deeper investigation or different persona perspectives?
+
+## 🔮 Future Charter Considerations (Beta Research Insights)
+
+The following insights from beta user research will inform future charter development as new functionality is delivered:
+
+### **Multiple Sites Workflow (Not Yet Delivered)**
+
+- _"Two users were uncertain if it was acceptable to provide a single location polygon where the activity occurs or if they needed to provide separate sites for each"_
+- **Future Charter Need**: Complex multi-site project management testing once this functionality is built
+
+### **Collaboration and Dependencies (Not Yet Delivered)**
+
+- _"Even frequent organisational users struggle with providing location details and rely on colleagues to supply this"_
+- **Future Charter Need**: Team-based workflow testing when collaboration features are implemented
+
+### **File Upload Functionality (Not Yet Delivered)**
+
+- _"Shapefiles are the preferred format. KML is seen as less accurate and more for public use"_
+- **Future Charter Need**: File upload testing across different professional workflows once implemented
+
+### **Map Drawing (Not Yet Delivered)**
+
+- _"Some pro users would like to draw on a map and most users we spoke to ask a GIS specialist to prepare their shapefile"_
+- **Future Charter Need**: Map-based interface testing when drawing functionality is available
 
 ## 🔗 Related resources
 

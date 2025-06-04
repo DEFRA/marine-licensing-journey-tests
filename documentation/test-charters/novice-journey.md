@@ -21,7 +21,7 @@
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
 - **Personas:**
-  - [Zofia - Novice applicant](../personas/zofia-novice-applicant.md)
+  - [Sarah - Discovery-First User](../personas/sarah-discovery-first-user.md)
 
 ## Scenario Context
 
@@ -86,7 +86,7 @@ Keyboard Navigation: [Tab order, focus management, interaction]
 Cognitive Load: [Information processing, memory support]
 
 PERSONA INSIGHTS:
-Zofia (Novice): [Confidence, comprehension, completion likelihood]
+Sarah (Discovery-First): [Confidence building, comprehension patterns, completion likelihood]
 
 IMMEDIATE ACTIONS:
 □ [Action 1 - who will address]

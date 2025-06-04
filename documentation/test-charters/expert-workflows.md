@@ -1,13 +1,13 @@
-# Expert Workflows Charter: Veteran User Efficiency
+# Expert Workflows Charter: Professional User Patterns
 
 ## Investigation Plan
 
-**EXPLORE:** Efficiency patterns and workflow optimisation across delivered features  
-**AS:** Experienced marine licensing applicants and maritime consultants (see References)  
-**BECAUSE:** Veteran users expect streamlined workflows and professional efficiency  
-**LOOKING FOR:** Workflow friction, missing shortcuts, efficiency barriers, professional workflow gaps
+**EXPLORE:** How professional users navigate the delivered task list and coordinate entry workflows  
+**AS:** Organisational applicants, consultants, and experienced users (see References)  
+**BECAUSE:** Professional users may have different patterns and expectations for government service interactions  
+**LOOKING FOR:** Efficiency barriers, professional workflow mismatches, terminology confusion, decision friction
 
-**Duration:** 75 minutes  
+**Duration:** 90 minutes  
 **Priority:** High
 
 ## References
@@ -21,44 +21,52 @@
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
 - **Personas:**
-  - [Amy - Veteran applicant](../personas/amy-veteran-applicant.md)
+  - [Elena - Multi-Project Coordinator](../personas/elena-multi-project-coordinator.md)
+  - [Marcus - Infrastructure Professional](../personas/marcus-infrastructure-professional.md)
+  - [Dr. James - Research Practitioner](../personas/dr-james-research-practitioner.md)
 
 ## Scenario Context
 
-- Focus: How experienced users complete applications efficiently, often managing multiple projects simultaneously.
-- For detailed requirements and persona context, see References above.
+**Focus**: How professional users complete the delivered exemption notification workflow efficiently, working within their organisational contexts and professional constraints.
+
+**Beta Research Note**: Research shows professional users struggle with location details and coordinate concepts - even though file upload isn't implemented, test the decision-making and confidence in the current coordinate system selection.
 
 ## Realistic Activities
 
-- Test rapid navigation and keyboard shortcuts.
-- Attempt to reuse information from previous applications.
-- Simulate multi-application management and interruptions.
-- Test professional site details selection and consent decisions.
-- Evaluate workflow for speed, accuracy, and professional presentation.
+- Test rapid completion of the delivered task list workflow (project name → activity description → public register → site details selection)
+- Simulate professional context: client deadlines, interruptions, working with prepared information
+- Test coordinate system decision-making with realistic professional scenarios (survey data, GIS outputs, existing planning documentation)
+- Investigate terminology comprehension and confidence across coordinate entry choices
+- Test professional expectations around data validation and error messaging
+- Simulate scenarios where professionals need to gather additional information mid-application
 
 ## Evidence Framework
 
 ### ✅ Positive signals
 
-- Keyboard navigation fluency, recognition over recall, workflow continuity, multi-application support, professional presentation.
+- **Professional efficiency**: Clear task progression, appropriate terminology, efficient form completion
+- **Decision confidence**: Good guidance for coordinate system selection, clear consequences of choices
+- **Professional integration**: Terminology aligns with industry standards, validation supports professional data quality
 
 ### ⚠️ Warning signs
 
-- Efficiency barriers, pattern disruption, navigation inefficiency, multi-tab conflicts, professional friction.
+- **Workflow friction**: Forced linear progression that conflicts with professional working patterns, unclear progress saving
+- **Terminology barriers**: Coordinate system descriptions that don't match professional usage, unclear technical requirements
+- **Decision uncertainty**: Unclear consequences of coordinate system choices, lack of guidance for professional use cases
 
 ### 🤔 Questions to investigate
 
-- How does application speed compare to other government services professionals use?
-- What happens when users need to manage multiple applications simultaneously?
-- How well does the interface support professional client interaction patterns?
-- Are there opportunities for data reuse between related applications?
+- How do professional users approach coordinate system selection when they have existing GIS data?
+- What happens when professionals need to consult colleagues or documentation during the application?
+- How well does the current workflow support professional patterns of gathering and validating information?
+- Are there mismatches between professional terminology and system language?
 
 ### 💡 Ideas to explore
 
-- Could keyboard shortcuts be added for common professional workflows?
-- Are there opportunities for smart defaults based on user behaviour patterns?
-- How might the interface better support multi-application management?
-- What efficiency features would enhance professional confidence?
+- Could coordinate system guidance better reflect professional mapping workflows?
+- Are there opportunities for clearer technical validation messages that align with professional quality standards?
+- How might the interface better communicate the current state and next steps to professional users?
+- What patterns from professional planning workflows could inform the current design?
 
 ## Session Notes Template
 
@@ -67,26 +75,28 @@ SESSION: Expert Workflows Testing - [Date]
 DURATION: [Actual time]
 INVESTIGATOR: [Name]
 
-EFFICIENCY OBSERVATIONS:
-+ Effective speed and workflow patterns:
+WORKFLOW OBSERVATIONS:
++ Effective professional patterns:
 - Friction and barrier points:
-? Unclear or inconsistent behaviours:
-! Professional enhancement opportunities:
+? Unexpected behaviors or hesitations:
+! Enhancement opportunities:
 
-FEATURE-SPECIFIC FINDINGS:
-Project Name: [Speed, shortcuts, pattern recognition]
-Task List: [Navigation efficiency, multi-tab handling]
-Activity Description: [Text entry efficiency, auto-save, character count]
-Public Register: [Decision speed, consistency tools]
-Site Details: [Selection efficiency, navigation speed, system selection]
+DELIVERED FEATURE FINDINGS:
+Project Name: [Professional naming patterns, validation expectations]
+Activity Description: [Professional detail levels, character limits, context needs]
+Public Register: [Professional consent decision patterns, risk understanding]
+Site Details: [Coordinate system decision confidence, terminology clarity]
 
-PROFESSIONAL WORKFLOW FINDINGS:
-Keyboard Navigation: [Completeness, speed, shortcuts]
-Multi-Application: [Session handling, data consistency]
-Client Interaction: [Interface confidence, professional presentation]
+PROFESSIONAL CONTEXT IMPACT:
+Client Pressure: [How time pressure affects completion quality]
+Information Gathering: [Patterns when additional data is needed]
+Quality Expectations: [Professional validation and accuracy standards]
+Workflow Integration: [How this fits with existing professional processes]
 
 PERSONA INSIGHTS:
-Amy (Veteran): [Efficiency satisfaction, professional confidence, time savings]
+Elena (Multi-Project): [Efficiency across delivered features, client context needs]
+Marcus (Infrastructure): [Port authority requirements, system integration expectations]
+Dr. James (Research): [Academic precision needs within delivered functionality]
 
 IMMEDIATE ACTIONS:
 □ [Action 1 - who will address]
