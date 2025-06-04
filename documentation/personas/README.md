@@ -1,59 +1,108 @@
-# Marine Licensing User Personas
+# User Personas
 
-This directory contains user personas developed from research with actual marine licensing users. These personas help ground our test scenarios, feature development, and user journeys in the real needs and challenges of the people who will use the service.
+This directory contains user personas based on comprehensive user research conducted with real marine licensing system users. These personas represent actual user behaviors, needs, and pain points discovered through direct research rather than assumptions.
 
-## 👥 Persona overview
+## 🔬 Research-Based Approach
 
-| Persona    | Role                        | Key needs                                               | Persona file                                            |
-| ---------- | --------------------------- | ------------------------------------------------------- | ------------------------------------------------------- |
-| **Fatima** | Case officer (MMO staff)    | View-only access to support enquiries                   | [Fatima - Case officer](./fatima-case-officer.md)       |
-| **Simon**  | Marine officer (MMO staff)  | Check compliance, assess risk, take enforcement actions | [Simon - Marine officer](./simon-marine-officer.md)     |
-| **Amy**    | Veteran applicant           | Complete applications efficiently, ensure compliance    | [Amy - Veteran applicant](./amy-veteran-applicant.md)   |
-| **Zofia**  | Novice individual applicant | Understand requirements, complete unfamiliar process    | [Zofia - Novice applicant](./zofia-novice-applicant.md) |
+All personas in this collection are derived from:
 
-## 🔍 Using personas in testing
+- Direct user interviews and testing sessions
+- Observational research with MMO staff
+- Live service testing with real applicants
+- Organisational visits and workflow analysis
+- Marine Licensing Champion feedback
+- Beta service research and feedback
 
-Our personas inform our testing approach in several ways:
+Each persona includes direct quotes from research participants and specific behavioral patterns observed during research sessions.
 
-### 1. **User journey testing**
+## 👥 Current Personas
 
-Each persona represents a unique path through the system with different priorities:
+### External Users (Applicants)
 
-- **Fatima** → Case management and support workflows
-- **Simon** → Enforcement and compliance verification
-- **Amy** → Efficient repeat application process
-- **Zofia** → First-time user onboarding and guidance
+#### [Marcus - Infrastructure Professional](./marcus-infrastructure-professional.md)
 
-### 2. **Accessibility considerations**
+- **Context**: Port authority environment specialist with 27+ years experience
+- **Key Need**: System continuity and technical coordination
+- **Research Quote**: _"Best thing MMO ever did was introduce the self service tool"_
 
-- **Zofia** highlights digital inclusion needs and assisted digital pathways
-- **Amy** shows professional user efficiency requirements
-- **Fatima** represents internal system integration needs
-- **Simon** demonstrates mobile and field access patterns
+#### [Elena - Multi-Project Coordinator](./elena-multi-project-coordinator.md)
 
-### 3. **Test charter selection**
+- **Context**: Consultant applying on behalf of multiple clients
+- **Key Need**: Project linking and collaboration tools
+- **Research Quote**: _"One of the pain points is repeating info. Very glad to see this."_
 
-Specific [test charters](../test-charters/README.md) are designed around persona journeys:
+#### [Dr. James - Research Practitioner](./dr-james-research-practitioner.md)
 
-- [Novice journey](../test-charters/novice-journey.md) focuses on **Zofia's** experience
-- [Expert workflows](../test-charters/expert-workflows.md) explores **Amy's** needs
-- Internal staff charters will be developed for **Fatima** and **Simon**
+- **Context**: University researcher conducting marine studies
+- **Key Need**: Scientific precision and academic documentation standards
+- **Research Quote**: _"I would have a summary doc to copy from which would give context of the research"_
 
-## 🔄 Persona development
+#### [Sarah - Discovery-First User](./sarah-discovery-first-user.md)
 
-These personas are living documents based on ongoing user research. As we learn more about our users, we will:
+- **Context**: Individual property owner with infrequent licensing needs
+- **Key Need**: Discovery support and confidence building
+- **Research Quote**: _"I thought it was really easy... The coordinates threw me off a bit"_
 
-1. Update persona details and needs
-2. Add new personas if significant user groups are identified
-3. Refine testing strategies based on new insights
-4. Develop more targeted test charters
+### Internal Users (MMO Staff)
 
-## 📚 Related documentation
+#### [Rachel - Enforcement Coordinator](./rachel-enforcement-coordinator.md)
 
-- [Test strategy](../test-strategy/README.md) - How personas inform our testing approach
-- [Test charters](../test-charters/README.md) - Investigative testing plans based on personas
-- [User stories](../user-stories/README.md) - Requirements informed by persona needs
+- **Context**: Dual role enforcement officer and regional workbasket coordinator
+- **Key Need**: Workload separation and geographic assignment tools
+- **Research Quote**: _"All of these exemptions and license cases are mixed up with her own assigned workload"_
+
+#### [David - Compliance Specialist](./david-compliance-specialist.md)
+
+- **Context**: Central processing case officer handling initial reviews
+- **Key Need**: System integration and decision support
+- **Research Quote**: _"Usually there is no action to take but they are supposed to check with the Principal Officer"_
+
+## 🎯 How to Use These Personas
+
+### For Testing
+
+Each persona includes specific "Testing Implications" sections with:
+
+- Critical scenarios to validate
+- UX requirements to meet
+- Edge cases to consider
+
+### For Design Decisions
+
+Use personas to:
+
+- Validate feature priorities against real user needs
+- Check if proposed solutions address actual pain points
+- Ensure designs work for the full spectrum of users
+
+### For Product Planning
+
+Consider how features serve:
+
+- Different experience levels (Marcus vs. Sarah)
+- Various organisational contexts (individual vs. consultant vs. port authority)
+- Multiple use cases (one-off vs. ongoing vs. complex projects)
+
+## 📊 Research Evidence
+
+Each persona file includes:
+
+- **Direct quotes** from research participants
+- **Behavioral patterns** observed during testing
+- **Pain points** identified through research
+- **Testing implications** based on actual user needs
+
+## 🔄 Persona Maintenance
+
+These personas should be updated as new research becomes available. The research-based approach means they reflect real user needs rather than assumptions, making them more reliable for design and testing decisions.
+
+When conducting new research:
+
+1. Compare findings against existing personas
+2. Update personas with new insights and quotes
+3. Add new personas if distinct user types are discovered
+4. Remove or merge personas if research shows overlap
 
 ---
 
-_Our personas represent real people with real needs. By keeping them at the centre of our testing approach, we ensure the marine licensing service works for everyone who needs to use it._
+_These personas replace previous assumption-based personas and represent a shift toward evidence-based user understanding. All quotes and behaviors are derived from actual research sessions with real marine licensing system users._
