@@ -101,5 +101,4 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered features tested:** Location method selection (file/manual), circle/polygon choice, coordinate system selection  
-**Related features:** [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.and.cancel.site.details.feature](../../test/features/back.and.cancel.site.details.feature)
+**Delivered features tested:** Location method selection (file/manual), circle/polygon choice, coordinate system selection
