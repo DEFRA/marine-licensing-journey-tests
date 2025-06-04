@@ -1,14 +1,20 @@
-@issue=ML-16 @issue=ML-17 @issue=ML-18
+@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35
 Feature: Site details: The user enters the details of a circular site manually using WGS84 or OSGB36 coordinates
 
-  Scenario: Selecting a circular site using WGS84 (World Geodetic System 1984)
+  Scenario: Successfully completing circular site details using WGS84 coordinates
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the Which coordinate system do you want to use page is displayed
+    Then the "Site details" task status is "Complete"
 
-  Scenario: Selecting a circular site using OSGB36 (National Grid)
+  Scenario: Successfully completing circular site details using OSGB36 coordinates
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the Which coordinate system do you want to use page is displayed
+    Then the "Site details" task status is "Complete"
+
+  @wip
+  Scenario: Pre-populating previously entered coordinate data
+    Given the user has previously entered coordinates for a circular site
+    When the site details task is repeated
+    Then the previously entered coordinate data is displayed
