@@ -5,10 +5,10 @@ Feature: Site details: The user enters the details of a circular site manually u
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the Which coordinate system do you want to use page is displayed
+    Then the Enter the coordinates at the centre point of the site page is displayed
 
   Scenario: Selecting a circular site using OSGB36 (National Grid)
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the Which coordinate system do you want to use page is displayed
+    Then the Enter the coordinates at the centre point of the site page is displayed
