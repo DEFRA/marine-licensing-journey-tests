@@ -73,3 +73,14 @@ Then(
     )
   }
 )
+
+Then(
+  'the Enter the coordinates at the centre point of the site page is displayed',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is(
+        'Enter the coordinates at the centre point of the site'
+      )
+    )
+  }
+)

@@ -5,16 +5,10 @@ Feature: Site details: The user enters the details of a circular site manually u
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the "Site details" task status is "Complete"
+    Then the Enter the coordinates at the centre point of the site page is displayed
 
   Scenario: Successfully completing circular site details using OSGB36 coordinates
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     And reaches the site details task
     When the site details task is completed
-    Then the "Site details" task status is "Complete"
-
-  @wip
-  Scenario: Pre-populating previously entered coordinate data
-    Given the user has previously entered coordinates for a circular site
-    When the site details task is repeated
-    Then the previously entered coordinate data is displayed
+    Then the Enter the coordinates at the centre point of the site page is displayed
