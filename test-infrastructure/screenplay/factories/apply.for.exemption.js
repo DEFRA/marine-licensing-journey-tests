@@ -9,10 +9,6 @@ export default class ApplyForExemption {
     this.data = { ...data }
   }
 
-  /**
-   * Creates the base exemption object with default values
-   * @private
-   */
   static _createBaseExemption(overrides = {}) {
     return {
       projectName: MarineProjectModel.generateProjectName(),
@@ -55,6 +51,41 @@ export default class ApplyForExemption {
 
   getData() {
     return this.data
+  }
+
+  latitude(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.latitude = value
+    }
+    return this
+  }
+
+  longitude(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.longitude = value
+    }
+    return this
+  }
+
+  radius(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.radiusMeters = value
+    }
+    return this
+  }
+
+  eastings(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.eastings = value
+    }
+    return this
+  }
+
+  northings(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.northings = value
+    }
+    return this
   }
 
   get andSiteDetails() {
