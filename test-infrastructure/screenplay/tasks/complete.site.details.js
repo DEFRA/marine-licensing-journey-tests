@@ -1,11 +1,12 @@
 import { expect } from 'chai'
-import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
-import EnterCoordinatesCentrePointPage from '~/test-infrastructure/pages/enter.coordinates.centre.point.js'
-import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js'
-import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
-import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page.js'
 import Task from '../base/task.js'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
+import {
+  EnterCoordinatesCentrePointPageInteractions,
+  HowDoYouWantToEnterTheCoordinatesPageInteractions,
+  HowDoYouWantToProvideCoordinatesPageInteractions,
+  WhatCoordinateSystemPageInteractions
+} from '../page-interactions/index.js'
 
 export default class CompleteSiteDetails extends Task {
   static now() {
@@ -27,110 +28,29 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeManualEntryFlow(browseTheWeb, siteDetails) {
-    await this.selectCoordinatesInputMethod(browseTheWeb, siteDetails)
-    await this.selectSiteType(browseTheWeb, siteDetails)
-    await this.selectCoordinateSystem(browseTheWeb, siteDetails)
+    await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
+      browseTheWeb,
+      siteDetails.coordinatesEntryMethod
+    )
+    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
+      browseTheWeb,
+      siteDetails.siteType
+    )
+    await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
+      browseTheWeb,
+      siteDetails.coordinateSystem
+    )
     await this.enterCoordinateData(browseTheWeb, siteDetails)
-  }
-
-  async selectCoordinatesInputMethod(browseTheWeb, siteDetails) {
-    await this.selectOptionAndContinue(
-      browseTheWeb,
-      HowDoYouWantToProvideCoordinatesPage.getCoordinatesInputMethodSelector(
-        siteDetails.coordinatesEntryMethod
-      ),
-      HowDoYouWantToProvideCoordinatesPage.saveAndContinue
-    )
-  }
-
-  async selectSiteType(browseTheWeb, siteDetails) {
-    await this.selectOptionAndContinue(
-      browseTheWeb,
-      HowDoYouWantToEnterTheCoordinatesPage.getSiteTypeSelector(
-        siteDetails.siteType
-      ),
-      HowDoYouWantToEnterTheCoordinatesPage.saveAndContinue
-    )
-  }
-
-  async selectCoordinateSystem(browseTheWeb, siteDetails) {
-    await this.selectOptionAndContinue(
-      browseTheWeb,
-      WhatCoordinateSystemPage.getCoordinateSystemSelector(
-        siteDetails.coordinateSystem
-      ),
-      HowDoYouWantToEnterTheCoordinatesPage.saveAndContinue
-    )
   }
 
   async enterCoordinateData(browseTheWeb, siteDetails) {
     if (this.isCircleSite(siteDetails)) {
-      await this.enterCircleCoordinates(browseTheWeb, siteDetails)
+      await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
+        browseTheWeb,
+        siteDetails.coordinateSystem,
+        siteDetails.circleData
+      )
     }
-  }
-
-  async enterCircleCoordinates(browseTheWeb, siteDetails) {
-    const coordinateMapping = this.getCoordinateFieldMapping(
-      siteDetails.coordinateSystem
-    )
-    const siteCoordinateData = siteDetails.circleData
-
-    await this.enterCoordinatePair(browseTheWeb, [
-      {
-        input: coordinateMapping.primaryCoordinate.inputSelector,
-        value:
-          siteCoordinateData[coordinateMapping.primaryCoordinate.dataProperty]
-      },
-      {
-        input: coordinateMapping.secondaryCoordinate.inputSelector,
-        value:
-          siteCoordinateData[coordinateMapping.secondaryCoordinate.dataProperty]
-      }
-    ])
-  }
-
-  getCoordinateFieldMapping(coordinateSystem) {
-    const coordinateSystemMappings = {
-      WGS84: {
-        primaryCoordinate: {
-          inputSelector: EnterCoordinatesCentrePointPage.latitudeInput,
-          dataProperty: 'latitude'
-        },
-        secondaryCoordinate: {
-          inputSelector: EnterCoordinatesCentrePointPage.longitudeInput,
-          dataProperty: 'longitude'
-        }
-      },
-      OSGB36: {
-        primaryCoordinate: {
-          inputSelector: EnterCoordinatesCentrePointPage.eastingsInput,
-          dataProperty: 'eastings'
-        },
-        secondaryCoordinate: {
-          inputSelector: EnterCoordinatesCentrePointPage.northingsInput,
-          dataProperty: 'northings'
-        }
-      }
-    }
-
-    const mapping = coordinateSystemMappings[coordinateSystem]
-    if (!mapping) {
-      expect.fail(`Unsupported coordinate system: ${coordinateSystem}`)
-    }
-
-    return mapping
-  }
-
-  async selectOptionAndContinue(browseTheWeb, optionSelector, continueButton) {
-    await browseTheWeb.click(optionSelector)
-    await browseTheWeb.click(continueButton)
-  }
-
-  async enterCoordinatePair(browseTheWeb, coordinateInputs) {
-    for (const coordinate of coordinateInputs) {
-      await browseTheWeb.sendKeys(coordinate.input, coordinate.value)
-    }
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
   }
 
   isCircleSite(siteDetails) {

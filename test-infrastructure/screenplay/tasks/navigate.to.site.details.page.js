@@ -1,9 +1,10 @@
-import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
-import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page.js'
-import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page.js'
-import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page.js'
-import Task from '../base/task.js'
 import { expect } from 'chai'
+import Task from '../base/task.js'
+import {
+  HowDoYouWantToEnterTheCoordinatesPageInteractions,
+  HowDoYouWantToProvideCoordinatesPageInteractions,
+  WhatCoordinateSystemPageInteractions
+} from '../page-interactions/index.js'
 
 export default class NavigateToSiteDetailsPage extends Task {
   static coordinatesEntryMethod() {
@@ -28,37 +29,31 @@ export default class NavigateToSiteDetailsPage extends Task {
 
     switch (this.targetPage) {
       case 'coordinates-entry-method':
-        await this.navigateToCoordinatesEntryMethod(browseTheWeb)
+        await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
+          browseTheWeb
+        )
         break
       case 'coordinate-system':
         await this.navigateToCoordinateSystem(browseTheWeb)
         break
       case 'coordinate-system-with-wgs84':
         await this.navigateToCoordinateSystem(browseTheWeb)
-        await this.selectWGS84CoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectWGS84(browseTheWeb)
         break
       case 'select-wgs84-only':
-        await this.selectWGS84CoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectWGS84(browseTheWeb)
         break
       default:
         expect.fail(`Unknown target page: ${this.targetPage}`)
     }
   }
 
-  async navigateToCoordinatesEntryMethod(browseTheWeb) {
-    await browseTheWeb.click(
-      HowDoYouWantToProvideCoordinatesPage.enterCoordinates
-    )
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
-  }
-
   async navigateToCoordinateSystem(browseTheWeb) {
-    await this.navigateToCoordinatesEntryMethod(browseTheWeb)
-    await browseTheWeb.click(HowDoYouWantToEnterTheCoordinatesPage.circularSite)
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
-  }
-
-  async selectWGS84CoordinateSystem(browseTheWeb) {
-    await browseTheWeb.click(WhatCoordinateSystemPage.wgs84)
+    await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
+      browseTheWeb
+    )
+    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectCircularSiteAndContinue(
+      browseTheWeb
+    )
   }
 }
