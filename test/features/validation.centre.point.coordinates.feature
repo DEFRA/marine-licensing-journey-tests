@@ -4,7 +4,6 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
   I want to be notified when I have provided invalid coordinate values
   So that I can correct errors before submitting my marine licence application
 
-  @run-only
   Scenario: Error when no WGS84 coordinates are entered
     Given a user is providing site details
     And the enter WGS84 coordinates at the centre point of the site page is displayed
