@@ -1,4 +1,5 @@
 import allure from 'allure-commandline'
+import { attachRichFeatureContext } from './test-infrastructure/capture/index.js'
 
 const debug = process.env.DEBUG
 const oneMinute = 60 * 1000
@@ -54,8 +55,9 @@ export const config = {
       }
     ]
   ],
-  beforeScenario: async function () {
+  beforeScenario: async function (world, context) {
     await browser.reloadSession()
+    attachRichFeatureContext(world)
   },
   afterStep: async function () {
     await browser.takeScreenshot()

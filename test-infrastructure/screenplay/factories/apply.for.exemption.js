@@ -80,8 +80,8 @@ export default class ApplyForExemption {
           siteType: 'circle',
           coordinateSystem: 'OSGB36',
           circleData: {
-            easting: 432675,
-            northing: 181310,
+            eastings: 432675,
+            northings: 181310,
             radiusMeters: 20,
             latitude: null,
             longitude: null
