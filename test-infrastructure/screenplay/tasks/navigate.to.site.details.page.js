@@ -46,7 +46,6 @@ export default class NavigateToSiteDetailsPage extends Task {
   }
 
   async navigateToCoordinatesEntryMethod(browseTheWeb) {
-    // Choose to enter coordinates manually and continue
     await browseTheWeb.click(
       HowDoYouWantToProvideCoordinatesPage.enterCoordinates
     )
@@ -54,7 +53,6 @@ export default class NavigateToSiteDetailsPage extends Task {
   }
 
   async navigateToCoordinateSystem(browseTheWeb) {
-    // Navigate through: manual entry -> circular site -> coordinate system page
     await this.navigateToCoordinatesEntryMethod(browseTheWeb)
     await browseTheWeb.click(HowDoYouWantToEnterTheCoordinatesPage.circularSite)
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
