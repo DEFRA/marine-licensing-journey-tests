@@ -3,6 +3,7 @@ import { browser } from '@wdio/globals'
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
 import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
+import EnterCoordinatesCentrePointPage from '~/test-infrastructure/pages/enter.coordinates.centre.point'
 
 import {
   Actor,
@@ -63,6 +64,20 @@ Given('the WGS84 coordinate system has been selected', async function () {
   await this.actor.attemptsTo(NavigateToSiteDetailsPage.andSelectWGS84())
 })
 
+Given(
+  'the enter WGS84 coordinates at the centre point of the site page is displayed',
+  async function () {
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is(
+        'Enter the coordinates at the centre point of the site'
+      )
+    )
+  }
+)
+
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {
@@ -79,6 +94,13 @@ When(
 
 When(
   'the Continue button is clicked without selecting a coordinate system',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When(
+  'the Continue button is clicked with providing any coordinates',
   async function () {
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
@@ -129,3 +151,24 @@ Then('the manual coordinate entry method is selected', async function () {
 Then('the circular site option is selected', async function () {
   await this.actor.attemptsTo(EnsureThatSiteTypeSelected.is('circle'))
 })
+
+Then('the latitude error {string} is displayed', async function (errorMessage) {
+  await this.actor.attemptsTo(
+    EnsureErrorDisplayed.is(
+      EnterCoordinatesCentrePointPage.latitudeError,
+      errorMessage
+    )
+  )
+})
+
+Then(
+  'the longitude error {string} is displayed',
+  async function (errorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(
+        EnterCoordinatesCentrePointPage.longitudeError,
+        errorMessage
+      )
+    )
+  }
+)

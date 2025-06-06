@@ -19,6 +19,10 @@ export default class NavigateToSiteDetailsPage extends Task {
     return new NavigateToSiteDetailsPage('select-wgs84-only')
   }
 
+  static enterWGS84Coordinates() {
+    return new NavigateToSiteDetailsPage('enter-wgs84-coordinates')
+  }
+
   constructor(targetPage) {
     super()
     this.targetPage = targetPage
@@ -36,12 +40,14 @@ export default class NavigateToSiteDetailsPage extends Task {
       case 'coordinate-system':
         await this.navigateToCoordinateSystem(browseTheWeb)
         break
-      case 'coordinate-system-with-wgs84':
-        await this.navigateToCoordinateSystem(browseTheWeb)
-        await WhatCoordinateSystemPageInteractions.selectWGS84(browseTheWeb)
-        break
       case 'select-wgs84-only':
         await WhatCoordinateSystemPageInteractions.selectWGS84(browseTheWeb)
+        break
+      case 'enter-wgs84-coordinates':
+        await this.navigateToCoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
+          browseTheWeb
+        )
         break
       default:
         expect.fail(`Unknown target page: ${this.targetPage}`)
