@@ -65,38 +65,45 @@ export default class CompleteSiteDetails extends Task {
 
   async enterCoordinateData(browseTheWeb, siteDetails) {
     if (this.isCircleSite(siteDetails)) {
-      if (this.isWGS84CoordinateSystem(siteDetails)) {
-        await this.enterWGS84CircleCoordinates(browseTheWeb, siteDetails)
-      } else if (this.isOSGB36CoordinateSystem(siteDetails)) {
-        await this.enterOSGB36CircleCoordinates(browseTheWeb, siteDetails)
-      }
+      await this.enterCircleCoordinates(browseTheWeb, siteDetails)
     }
   }
 
-  async enterWGS84CircleCoordinates(browseTheWeb, siteDetails) {
+  async enterCircleCoordinates(browseTheWeb, siteDetails) {
+    const coordinateConfig = this.getCoordinateInputConfig(
+      siteDetails.coordinateSystem
+    )
+    const coordinateData = siteDetails.circleData
+
     await this.enterCoordinatePair(browseTheWeb, [
       {
-        input: EnterCoordinatesCentrePointPage.latitudeInput,
-        value: siteDetails.circleData.latitude
+        input: coordinateConfig.firstInput,
+        value: coordinateData[coordinateConfig.firstProperty]
       },
       {
-        input: EnterCoordinatesCentrePointPage.longitudeInput,
-        value: siteDetails.circleData.longitude
+        input: coordinateConfig.secondInput,
+        value: coordinateData[coordinateConfig.secondProperty]
       }
     ])
   }
 
-  async enterOSGB36CircleCoordinates(browseTheWeb, siteDetails) {
-    await this.enterCoordinatePair(browseTheWeb, [
-      {
-        input: EnterCoordinatesCentrePointPage.eastingsInput,
-        value: siteDetails.circleData.eastings
+  getCoordinateInputConfig(coordinateSystem) {
+    const coordinateConfigs = {
+      WGS84: {
+        firstInput: EnterCoordinatesCentrePointPage.latitudeInput,
+        firstProperty: 'latitude',
+        secondInput: EnterCoordinatesCentrePointPage.longitudeInput,
+        secondProperty: 'longitude'
       },
-      {
-        input: EnterCoordinatesCentrePointPage.northingsInput,
-        value: siteDetails.circleData.northings
+      OSGB36: {
+        firstInput: EnterCoordinatesCentrePointPage.eastingsInput,
+        firstProperty: 'eastings',
+        secondInput: EnterCoordinatesCentrePointPage.northingsInput,
+        secondProperty: 'northings'
       }
-    ])
+    }
+
+    return coordinateConfigs[coordinateSystem]
   }
 
   async selectOptionAndContinue(browseTheWeb, optionSelector, continueButton) {
@@ -113,14 +120,6 @@ export default class CompleteSiteDetails extends Task {
 
   isCircleSite(siteDetails) {
     return siteDetails.siteType === 'circle'
-  }
-
-  isWGS84CoordinateSystem(siteDetails) {
-    return siteDetails.coordinateSystem === 'WGS84'
-  }
-
-  isOSGB36CoordinateSystem(siteDetails) {
-    return siteDetails.coordinateSystem === 'OSGB36'
   }
 
   async completeFileUploadFlow(browseTheWeb, siteDetails) {
