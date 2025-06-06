@@ -14,8 +14,8 @@ import {
   EnsurePageHeading,
   EnsureThatCoordinateEntryMethodSelected,
   EnsureThatSiteTypeSelected,
-  FillForm,
   Navigate,
+  NavigateToSiteDetailsPage,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
@@ -40,8 +40,9 @@ Given(
 Given(
   'the "How do you want to enter the coordinates?" page has been reached',
   async function () {
-    await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.coordinatesEntryMethod()
+    )
     await this.actor.attemptsTo(
       EnsurePageHeading.is('How do you want to enter the coordinates?')
     )
@@ -51,10 +52,7 @@ Given(
 Given(
   'the "Which coordinate system do you want to use?" page has been reached',
   async function () {
-    await this.actor.attemptsTo(FillForm.chooseToEnterCoordinatesManually())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
-    await this.actor.attemptsTo(FillForm.provideASinglePointForACircularSite())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(NavigateToSiteDetailsPage.coordinateSystem())
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Which coordinate system do you want to use?')
     )
@@ -62,7 +60,7 @@ Given(
 )
 
 Given('the WGS84 coordinate system has been selected', async function () {
-  await this.actor.attemptsTo(FillForm.selectWGS84CoordinateSystem())
+  await this.actor.attemptsTo(NavigateToSiteDetailsPage.andSelectWGS84())
 })
 
 When(
