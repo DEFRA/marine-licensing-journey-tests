@@ -250,6 +250,9 @@ npm install
 npm run test:local
 npm run test:local:debug
 
+# Smoke testing - Run core user journey tests quickly
+npm run test:local -- --cucumberOpts.tags "@smoke"
+
 # Linting and formatting
 npm run lint
 npm run lint:fix
@@ -271,6 +274,43 @@ npx prettier --write .
 | `wdio.conf.js`              | Default environment  | CDP environment    |
 | `wdio.github.conf.js`       | GitHub Actions       | Docker compose     |
 | `wdio.browserstack.conf.js` | BrowserStack testing | CDP + BrowserStack |
+
+### **🚀 Smoke Testing - Fast Core Journey Validation**
+
+For rapid feedback during development, run only the core user journey scenarios tagged with `@smoke`:
+
+```bash
+# Run smoke tests locally (≈2-3 minutes vs full suite ≈15+ minutes)
+npm run test:local -- --cucumberOpts.tags "@smoke"
+
+# Run smoke tests against any environment
+npm run test -- --cucumberOpts.tags "@smoke"
+
+# Combine with other tags
+npm run test:local -- --cucumberOpts.tags "@smoke and not @wip"
+```
+
+**What's included in @smoke:**
+
+- ✅ **Project name creation** - Core exemption start journey
+- ✅ **Task list navigation** - Main application flow
+- ✅ **Activity description** - Essential task completion
+- ✅ **Public register decisions** - Both consent and withhold paths
+- ✅ **Site details coordinate entry** - Both WGS84 and OSGB36 systems
+
+**What's excluded:**
+
+- ❌ **Validation scenarios** - Error handling and edge cases
+- ❌ **Back/cancel navigation** - Secondary user flows
+- ❌ **@wip scenarios** - Work in progress features
+- ❌ **Data persistence edge cases** - Advanced state management
+
+**Use smoke tests for:**
+
+- 🔄 **Quick feedback loops** - Verify changes don't break core journeys
+- 🚀 **Pre-commit checks** - Validate main user paths before push
+- 🔧 **Environment validation** - Confirm deployment health
+- 👥 **Pull request validation** - Ensure core functionality intact
 
 ## 🏭 Production & Deployment
 

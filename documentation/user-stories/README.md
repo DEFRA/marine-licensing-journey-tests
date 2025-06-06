@@ -30,8 +30,26 @@ This directory contains user stories for the marine licensing application under 
 
 Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user story number. This allows for easy tracking between requirements and test implementation.
 
-- `@wip` tags are used for features currently under development
-- `@run-only` can be used to specifically target features during development
+- `@issue=ML-n` - Links scenarios to specific user stories
+- `@smoke` - Core user journey scenarios for fast feedback (run with `npm run test:local -- --cucumberOpts.tags "@smoke"`)
+- `@wip` - Features currently under development
+- `@run-only` - Can be used to specifically target features during development
+
+### Smoke Test Coverage (@smoke)
+
+The `@smoke` tag identifies core user journey scenarios that provide fast feedback on essential functionality:
+
+**Tagged scenarios (7 core journeys):**
+
+- Project name creation (ML-1)
+- Task list display (ML-9)
+- Activity description completion (ML-11)
+- Public register consent decision (ML-12)
+- Public register withhold decision (ML-12)
+- Site details with WGS84 coordinates (ML-16,17,18,35)
+- Site details with OSGB36 coordinates (ML-16,17,18,35)
+
+**Execution time:** ~2-3 minutes vs full suite ~15+ minutes
 
 ### Current @wip Scenarios
 

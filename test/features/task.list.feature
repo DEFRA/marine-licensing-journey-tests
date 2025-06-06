@@ -4,6 +4,7 @@ Feature: Task list: The user can view the details of what they need to provide f
   I want to view the details of what I need to provide for my exemption
   So that I can provide the information when I have it
 
+  @smoke
   Scenario: Display the task list page
     Given the project name page is displayed
     When entering and saving a project with a valid name

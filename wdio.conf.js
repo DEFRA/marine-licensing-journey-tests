@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { attachRichFeatureContext } from './test-infrastructure/capture/index.js'
 
 let chromeProxyConfig = {}
 if (process.env.HTTP_PROXY) {
@@ -83,8 +84,9 @@ export const config = {
       }
     ]
   ],
-  beforeScenario: async function () {
+  beforeScenario: async function (world, context) {
     await browser.reloadSession()
+    attachRichFeatureContext(world)
   },
   afterStep: async function () {
     await browser.takeScreenshot()

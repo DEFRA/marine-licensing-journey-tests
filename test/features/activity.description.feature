@@ -4,6 +4,7 @@ Feature: Activity description: The user can provide a description of their plann
   I want to provide a description of the activity that I will be undertaking
   So that I can ensure that MMO understands the activity that will be covered by the exemption
 
+  @smoke
   Scenario: Save a valid activity description
     Given a notification has been created with a valid project name
     When entering and saving a valid activity description

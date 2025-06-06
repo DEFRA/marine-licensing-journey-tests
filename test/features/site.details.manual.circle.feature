@@ -8,12 +8,14 @@ Feature: Site details: The user enters the details of a circular site manually u
   - ML-18: Choosing the coordinate system for latitude/longitude (WGS84) or eastings/northings (OSGB36)
   - ML-35: Entering a single set of coordinates representing the centre point of the site
 
+  @smoke
   Scenario: Successfully completing circular site details using WGS84 coordinates
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     And reaches the site details task
     When the site details task is completed
     Then the Enter the coordinates at the centre point of the site page is displayed
 
+  @smoke
   Scenario: Successfully completing circular site details using OSGB36 coordinates
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     And reaches the site details task

@@ -1,6 +1,7 @@
 @issue=ML-1 @issue=ML-9
 Feature: Project name: Starting a new exemption notification by providing a project name
 
+  @smoke
   Scenario: Provide a valid project name for a new exemption notification (less than 250 characters)
     Given the project name page is displayed
     When entering and saving a project with a valid name
