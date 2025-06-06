@@ -70,40 +70,55 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async enterCircleCoordinates(browseTheWeb, siteDetails) {
-    const coordinateConfig = this.getCoordinateInputConfig(
+    const coordinateMapping = this.getCoordinateFieldMapping(
       siteDetails.coordinateSystem
     )
-    const coordinateData = siteDetails.circleData
+    const siteCoordinateData = siteDetails.circleData
 
     await this.enterCoordinatePair(browseTheWeb, [
       {
-        input: coordinateConfig.firstInput,
-        value: coordinateData[coordinateConfig.firstProperty]
+        input: coordinateMapping.primaryCoordinate.inputSelector,
+        value:
+          siteCoordinateData[coordinateMapping.primaryCoordinate.dataProperty]
       },
       {
-        input: coordinateConfig.secondInput,
-        value: coordinateData[coordinateConfig.secondProperty]
+        input: coordinateMapping.secondaryCoordinate.inputSelector,
+        value:
+          siteCoordinateData[coordinateMapping.secondaryCoordinate.dataProperty]
       }
     ])
   }
 
-  getCoordinateInputConfig(coordinateSystem) {
-    const coordinateConfigs = {
+  getCoordinateFieldMapping(coordinateSystem) {
+    const coordinateSystemMappings = {
       WGS84: {
-        firstInput: EnterCoordinatesCentrePointPage.latitudeInput,
-        firstProperty: 'latitude',
-        secondInput: EnterCoordinatesCentrePointPage.longitudeInput,
-        secondProperty: 'longitude'
+        primaryCoordinate: {
+          inputSelector: EnterCoordinatesCentrePointPage.latitudeInput,
+          dataProperty: 'latitude'
+        },
+        secondaryCoordinate: {
+          inputSelector: EnterCoordinatesCentrePointPage.longitudeInput,
+          dataProperty: 'longitude'
+        }
       },
       OSGB36: {
-        firstInput: EnterCoordinatesCentrePointPage.eastingsInput,
-        firstProperty: 'eastings',
-        secondInput: EnterCoordinatesCentrePointPage.northingsInput,
-        secondProperty: 'northings'
+        primaryCoordinate: {
+          inputSelector: EnterCoordinatesCentrePointPage.eastingsInput,
+          dataProperty: 'eastings'
+        },
+        secondaryCoordinate: {
+          inputSelector: EnterCoordinatesCentrePointPage.northingsInput,
+          dataProperty: 'northings'
+        }
       }
     }
 
-    return coordinateConfigs[coordinateSystem]
+    const mapping = coordinateSystemMappings[coordinateSystem]
+    if (!mapping) {
+      expect.fail(`Unsupported coordinate system: ${coordinateSystem}`)
+    }
+
+    return mapping
   }
 
   async selectOptionAndContinue(browseTheWeb, optionSelector, continueButton) {
