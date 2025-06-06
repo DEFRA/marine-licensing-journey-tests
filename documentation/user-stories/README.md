@@ -24,7 +24,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-16**: Choose file upload or manual coordinate entry
 - ✅ **ML-17**: Choose how to enter site coordinates
 - ✅ **ML-18**: Choose coordinate system for site location
-- 🚧 **ML-35**: Enter centre point of a circle
+- ✅ **ML-35**: Enter centre point of a circle (NEW: Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
 
 ## Feature file tags
 
@@ -32,6 +32,15 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 
 - `@wip` tags are used for features currently under development
 - `@run-only` can be used to specifically target features during development
+
+### Current @wip Scenarios
+
+**ML-35 Related @wip scenarios:**
+
+- Back navigation from coordinate entry pages preserving coordinate system selection (2 scenarios)
+- Cancel functionality from coordinate entry pages with data discard validation (2 scenarios)
+
+**Note:** These @wip scenarios represent edge cases in the navigation flow that require additional step definitions and are planned for future completion.
 
 ## Usage
 

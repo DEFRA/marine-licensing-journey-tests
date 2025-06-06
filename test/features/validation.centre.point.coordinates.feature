@@ -11,7 +11,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
     Then the latitude error "Enter the latitude" is displayed
     And the longitude error "Enter the longitude" is displayed
 
-  Scenario: Error when no WGS84 coordinates are entered
+  Scenario: Error when no OSGB36 coordinates are entered
     Given a user is providing site details
     And the enter OSGB36 coordinates at the centre point of the site page is displayed
     When the Continue button is clicked with providing any coordinates
