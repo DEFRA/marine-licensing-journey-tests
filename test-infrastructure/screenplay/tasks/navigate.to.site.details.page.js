@@ -23,6 +23,10 @@ export default class NavigateToSiteDetailsPage extends Task {
     return new NavigateToSiteDetailsPage('enter-wgs84-coordinates')
   }
 
+  static enterOSGB36Coordinates() {
+    return new NavigateToSiteDetailsPage('enter-osgb36-coordinates')
+  }
+
   constructor(targetPage) {
     super()
     this.targetPage = targetPage
@@ -46,6 +50,12 @@ export default class NavigateToSiteDetailsPage extends Task {
       case 'enter-wgs84-coordinates':
         await this.navigateToCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
+          browseTheWeb
+        )
+        break
+      case 'enter-osgb36-coordinates':
+        await this.navigateToCoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
         break

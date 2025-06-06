@@ -130,6 +130,20 @@ Given(
   }
 )
 
+Given(
+  'the enter OSGB36 coordinates at the centre point of the site page is displayed',
+  async function () {
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterOSGB36Coordinates()
+    )
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is(
+        'Enter the coordinates at the centre point of the site'
+      )
+    )
+  }
+)
+
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {

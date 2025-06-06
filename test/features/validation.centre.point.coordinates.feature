@@ -11,6 +11,13 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
     Then the latitude error "Enter the latitude" is displayed
     And the longitude error "Enter the longitude" is displayed
 
+  Scenario: Error when no WGS84 coordinates are entered
+    Given a user is providing site details
+    And the enter OSGB36 coordinates at the centre point of the site page is displayed
+    When the Continue button is clicked with providing any coordinates
+    Then the eastings error "Enter the eastings" is displayed
+    And the northings error "Enter the northings" is displayed
+
   Scenario Outline: Error when invalid WGS84 latitude <latitude> is entered
     Given the user wants to apply for an exemption for a circular site using "<latitude>" latitude
     And reaches the site details task
@@ -64,11 +71,3 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
       |   -654321 | Northings must be a positive 6 or 7-digit number, like 123456 |
       |     12345 | Northings must be 6 or 7 digits                               |
       |  12345678 | Northings must be 6 or 7 digits                               |
-
-  @wip
-  Scenario: User is prevented from proceeding with blank OSGB36 coordinates
-    Given a user is providing centre point coordinates
-    And the "Enter the coordinates at the centre point of the site" page has been reached with OSGB36 selected
-    When the Continue button is clicked with blank coordinates
-    Then the eastings error "Enter the eastings" is displayed
-    And the northings error "Enter the northings" is displayed

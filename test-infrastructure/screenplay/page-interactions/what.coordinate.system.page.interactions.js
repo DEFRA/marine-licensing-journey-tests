@@ -22,4 +22,9 @@ export default class WhatCoordinateSystemPageInteractions {
     await browseTheWeb.click(WhatCoordinateSystemPage.wgs84)
     await browseTheWeb.click(WhatCoordinateSystemPage.saveAndContinue)
   }
+
+  static async selectOSGB36AndContinue(browseTheWeb) {
+    await browseTheWeb.click(WhatCoordinateSystemPage.osgb36)
+    await browseTheWeb.click(WhatCoordinateSystemPage.saveAndContinue)
+  }
 }
