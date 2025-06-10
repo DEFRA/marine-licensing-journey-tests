@@ -2,4 +2,5 @@ import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page
 
 export default class WidthOfCircularSitePage extends CommonElementsPage {
   static widthInput = '#width'
+  static widthError = '#width-error'
 }

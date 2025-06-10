@@ -88,6 +88,13 @@ export default class ApplyForExemption {
     return this
   }
 
+  width(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.width = value
+    }
+    return this
+  }
+
   get andSiteDetails() {
     return {
       withCircleWGS84: () => {

@@ -1,6 +1,6 @@
+import { expect } from 'chai'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import EnterCoordinatesCentrePointPage from '~/test-infrastructure/pages/enter.coordinates.centre.point.js'
-import { expect } from 'chai'
 
 export default class EnterCoordinatesCentrePointPageInteractions {
   static async enterCoordinatePair(browseTheWeb, coordinateInputs) {
@@ -10,21 +10,25 @@ export default class EnterCoordinatesCentrePointPageInteractions {
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
   }
 
-  static async enterCircleCoordinates(
-    browseTheWeb,
-    coordinateSystem,
-    circleData
-  ) {
-    const coordinateMapping = this.getCoordinateFieldMapping(coordinateSystem)
+  static async enterCircleCoordinates(browseTheWeb, siteDetails) {
+    const coordinateMapping = this.getCoordinateFieldMapping(
+      siteDetails.coordinateSystem
+    )
 
     const coordinateInputs = [
       {
         input: coordinateMapping.primaryCoordinate.inputSelector,
-        value: circleData[coordinateMapping.primaryCoordinate.dataProperty]
+        value:
+          siteDetails.circleData[
+            coordinateMapping.primaryCoordinate.dataProperty
+          ]
       },
       {
         input: coordinateMapping.secondaryCoordinate.inputSelector,
-        value: circleData[coordinateMapping.secondaryCoordinate.dataProperty]
+        value:
+          siteDetails.circleData[
+            coordinateMapping.secondaryCoordinate.dataProperty
+          ]
       }
     ]
 

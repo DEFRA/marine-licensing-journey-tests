@@ -4,6 +4,7 @@ import EnterCoordinatesCentrePointPage from '~/test-infrastructure/pages/enter.c
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
 import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
+import WidthOfCircularSitePage from '~/test-infrastructure/pages/width.of.circular.site.page'
 
 import {
   Actor,
@@ -23,7 +24,9 @@ import {
 Given('a user is providing site details', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  this.actor.intendsTo(
+    ApplyForExemption.withValidProjectName().andSiteDetails.withCircleWGS84()
+  )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
@@ -82,6 +85,19 @@ Given(
 )
 
 Given(
+  'the user wants to apply for an exemption for a circular site using {string} width',
+  function (width) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName()
+        .andSiteDetails.withCircleWGS84()
+        .width(width)
+    )
+  }
+)
+
+Given(
   'the "How do you want to provide the site location?" page has been reached',
   async function () {
     await this.actor.attemptsTo(
@@ -120,7 +136,7 @@ Given(
   'the enter WGS84 coordinates at the centre point of the site page is displayed',
   async function () {
     await this.actor.attemptsTo(
-      NavigateToSiteDetailsPage.enterWGS84Coordinates()
+      NavigateToSiteDetailsPage.enterWGS84CoordinatesPageOnly()
     )
     await this.actor.attemptsTo(
       EnsurePageHeading.is(
@@ -134,12 +150,24 @@ Given(
   'the enter OSGB36 coordinates at the centre point of the site page is displayed',
   async function () {
     await this.actor.attemptsTo(
-      NavigateToSiteDetailsPage.enterOSGB36Coordinates()
+      NavigateToSiteDetailsPage.enterOSGB36CoordinatesPageOnly()
     )
     await this.actor.attemptsTo(
       EnsurePageHeading.is(
         'Enter the coordinates at the centre point of the site'
       )
+    )
+  }
+)
+
+Given(
+  'the "Enter the width of the circular site in metres" is displayed',
+  async function () {
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Enter the width of the circular site in metres')
     )
   }
 )
@@ -239,12 +267,6 @@ Then(
   }
 )
 
-When('an invalid latitude of {string} is entered', async function (latitude) {
-  await this.actor.attemptsTo(
-    EnterCoordinatesCentrePointPage.enterLatitude(latitude)
-  )
-})
-
 Then('the eastings error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
     EnsureErrorDisplayed.is(
@@ -265,3 +287,16 @@ Then(
     )
   }
 )
+
+When(
+  'the Continue button is clicked without providing any width',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+Then('the width error {string} is displayed', async function (errorMessage) {
+  await this.actor.attemptsTo(
+    EnsureErrorDisplayed.is(WidthOfCircularSitePage.widthError, errorMessage)
+  )
+})
