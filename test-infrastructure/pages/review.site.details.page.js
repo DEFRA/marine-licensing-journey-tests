@@ -7,24 +7,23 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     'dt.govuk-summary-list__key*=Method of providing site location'
 
   static methodOfProvidingSiteLocationValue =
-    'dt.govuk-summary-list__key*=Method of providing site location + dd.govuk-summary-list__value'
+    'dt.govuk-summary-list__key*=Method of providing site location'
 
   static coordinateSystemKey = 'dt.govuk-summary-list__key*=Coordinate system'
 
-  static coordinateSystemValue =
-    'dt.govuk-summary-list__key*=Coordinate system + dd.govuk-summary-list__value'
+  static coordinateSystemValue = 'dt.govuk-summary-list__key*=Coordinate system'
 
   static coordinatesAtCentreOfSiteKey =
     'dt.govuk-summary-list__key*=Coordinates at centre of site'
 
   static coordinatesAtCentreOfSiteValue =
-    'dt.govuk-summary-list__key*=Coordinates at centre of site + dd.govuk-summary-list__value'
+    'dt.govuk-summary-list__key*=Coordinates at centre of site'
 
   static widthOfCircularSiteKey =
     'dt.govuk-summary-list__key*=Width of circular site'
 
   static widthOfCircularSiteValue =
-    'dt.govuk-summary-list__key*=Width of circular site + dd.govuk-summary-list__value'
+    'dt.govuk-summary-list__key*=Width of circular site'
 
   static saveAndContinueButton = 'button*=Save and continue'
 

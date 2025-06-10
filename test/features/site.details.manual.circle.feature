@@ -9,18 +9,16 @@ Feature: Site details: The user enters the details of a circular site manually u
   - ML-36: Entering the width of the circular site in metres
   - ML-37: Reviewing the circular site details before saving
 
-  @smoke
   Scenario: Successfully completing circular site details using WGS84 coordinates
     Given the user wants to apply for an exemption for a circular site using WGS84 coordinates
     And reaches the site details task
     When the site details task is completed
     Then the site details review page shows the site details
-    And the "Site Details" task status is "Completed"
+    And the "Site details" task status is "Completed"
 
-  @smoke
   Scenario: Successfully completing circular site details using OSGB36 coordinates
     Given the user wants to apply for an exemption for a circular site using OSGB36 coordinates
     And reaches the site details task
     When the site details task is completed
     Then the site details review page shows the site details
-    And the "Site Details" task status is "Completed"
+    And the "Site details" task status is "Completed"
