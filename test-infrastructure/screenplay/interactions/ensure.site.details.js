@@ -1,5 +1,5 @@
 import Task from '../base/task.js'
-import expect from 'chai'
+import { expect } from 'chai'
 
 export default class EnsureSiteDetails extends Task {
   static areCorrect() {
