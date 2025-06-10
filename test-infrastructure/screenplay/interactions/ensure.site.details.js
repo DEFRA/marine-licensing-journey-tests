@@ -8,14 +8,14 @@ export default class EnsureSiteDetails extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    const siteDetails = this._getSiteDetailsData(actor)
-    await this._verifyMethodOfProvidingSiteLocation(browseTheWeb)
-    await this._verifyCoordinateSystem(browseTheWeb, siteDetails)
-    await this._verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails)
-    await this._verifyWidthOfCircularSite(browseTheWeb, siteDetails)
+    const siteDetails = this.getSiteDetailsData(actor)
+    await this.verifyMethodOfProvidingSiteLocation(browseTheWeb)
+    await this.verifyCoordinateSystem(browseTheWeb, siteDetails)
+    await this.verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails)
+    await this.verifyWidthOfCircularSite(browseTheWeb, siteDetails)
   }
 
-  _getSiteDetailsData(actor) {
+  getSiteDetailsData(actor) {
     const exemption = actor.recalls('exemption')
 
     if (!exemption) {
@@ -29,7 +29,7 @@ export default class EnsureSiteDetails extends Task {
     return exemption.siteDetails
   }
 
-  async _verifyMethodOfProvidingSiteLocation(browseTheWeb) {
+  async verifyMethodOfProvidingSiteLocation(browseTheWeb) {
     const expectedMethod =
       'Manually enter one set of coordinates and a width to create a circular site'
 
@@ -47,7 +47,7 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  async _verifyCoordinateSystem(browseTheWeb, siteDetails) {
+  async verifyCoordinateSystem(browseTheWeb, siteDetails) {
     let expectedSystem
     if (siteDetails.coordinateSystem === 'WGS84') {
       expectedSystem = 'WGS84 (World Geodetic System 1984)'
@@ -71,7 +71,7 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  async _verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails) {
+  async verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails) {
     const { coordinateSystem, circleData } = siteDetails
 
     let expectedCoordinates
@@ -97,7 +97,7 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  async _verifyWidthOfCircularSite(browseTheWeb, siteDetails) {
+  async verifyWidthOfCircularSite(browseTheWeb, siteDetails) {
     const { circleData } = siteDetails
     const expectedWidth = `${circleData.width} metres`
 
