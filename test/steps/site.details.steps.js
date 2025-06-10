@@ -4,9 +4,11 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickSaveAndContinue,
   CompleteProjectName,
   CompleteSiteDetails,
   EnsurePageHeading,
+  EnsureSiteDetails,
   Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
@@ -63,6 +65,12 @@ Given('reaches the site details task', async function () {
 
 When('the site details task is completed', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
+})
+
+Then('the site details review page shows the site details', async function () {
+  await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
+  await this.actor.attemptsTo(ClickSaveAndContinue.now())
 })
 
 Then(
