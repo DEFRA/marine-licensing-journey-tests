@@ -5,7 +5,8 @@ import {
   EnterCoordinatesCentrePointPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
-  WhatCoordinateSystemPageInteractions
+  WhatCoordinateSystemPageInteractions,
+  WidthOfCircularSitePageInteractions
 } from '../page-interactions/index.js'
 
 export default class CompleteSiteDetails extends Task {
@@ -41,6 +42,7 @@ export default class CompleteSiteDetails extends Task {
       siteDetails.coordinateSystem
     )
     await this.enterCoordinateData(browseTheWeb, siteDetails)
+    await this.enterWidthOfCircle(browseTheWeb, siteDetails)
   }
 
   async enterCoordinateData(browseTheWeb, siteDetails) {
@@ -72,5 +74,12 @@ export default class CompleteSiteDetails extends Task {
       expect.fail(ERROR_MESSAGES.MISSING_DATA('Site details', 'site details'))
     }
     return exemption
+  }
+
+  async enterWidthOfCircle(browseTheWeb, siteDetails) {
+    await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
+      browseTheWeb,
+      siteDetails.circleData.width
+    )
   }
 }

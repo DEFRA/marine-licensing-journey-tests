@@ -66,21 +66,10 @@ When('the site details task is completed', async function () {
 })
 
 Then(
-  'the Which coordinate system do you want to use page is displayed',
+  'the Enter the width of the circular site page is displayed',
   async function () {
     await this.actor.attemptsTo(
-      EnsurePageHeading.is('Which coordinate system do you want to use?')
-    )
-  }
-)
-
-Then(
-  'the Enter the coordinates at the centre point of the site page is displayed',
-  async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is(
-        'Enter the coordinates at the centre point of the site'
-      )
+      EnsurePageHeading.is('Enter the width of the circular site in metres')
     )
   }
 )
