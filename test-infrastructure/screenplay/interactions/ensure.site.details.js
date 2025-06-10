@@ -1,10 +1,6 @@
 import Task from '../base/task.js'
 import expect from 'chai'
 
-/**
- * Ensures that the site details displayed on the review page match the expected data.
- * Supports both WGS84 (latitude/longitude) and OSGB36 (eastings/northings) coordinate systems.
- */
 export default class EnsureSiteDetails extends Task {
   static areCorrect() {
     return new EnsureSiteDetails()
@@ -12,18 +8,13 @@ export default class EnsureSiteDetails extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-
     const siteDetails = this._getSiteDetailsData(actor)
-
     await this._verifyMethodOfProvidingSiteLocation(browseTheWeb)
     await this._verifyCoordinateSystem(browseTheWeb, siteDetails)
     await this._verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails)
     await this._verifyWidthOfCircularSite(browseTheWeb, siteDetails)
   }
 
-  /**
-   * Retrieves site details data from the actor's memory
-   */
   _getSiteDetailsData(actor) {
     const exemption = actor.recalls('exemption')
 
@@ -38,14 +29,10 @@ export default class EnsureSiteDetails extends Task {
     return exemption.siteDetails
   }
 
-  /**
-   * Verifies that the method of providing site location is correctly displayed
-   */
   async _verifyMethodOfProvidingSiteLocation(browseTheWeb) {
     const expectedMethod =
       'Manually enter one set of coordinates and a width to create a circular site'
 
-    // Use XPath to find the dt element by text and then get its following dd sibling
     const valueElement = await browseTheWeb.getElement(
       '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd'
     )
@@ -60,11 +47,7 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  /**
-   * Verifies that the coordinate system is correctly displayed based on the site details
-   */
   async _verifyCoordinateSystem(browseTheWeb, siteDetails) {
-    // The display format includes technical name and descriptive text
     let expectedSystem
     if (siteDetails.coordinateSystem === 'WGS84') {
       expectedSystem = 'WGS84 (World Geodetic System 1984)'
@@ -74,7 +57,6 @@ export default class EnsureSiteDetails extends Task {
       expect.Fail(`Unknown coordinate system: ${siteDetails.coordinateSystem}`)
     }
 
-    // Use XPath to find the dt element by text and then get its following dd sibling
     const valueElement = await browseTheWeb.getElement(
       '//dt[contains(text(), "Coordinate system")]/following-sibling::dd'
     )
@@ -89,9 +71,6 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  /**
-   * Verifies the coordinates are displayed correctly based on the coordinate system
-   */
   async _verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails) {
     const { coordinateSystem, circleData } = siteDetails
 
@@ -104,7 +83,6 @@ export default class EnsureSiteDetails extends Task {
       expect.Fail(`Unknown coordinate system: ${coordinateSystem}`)
     }
 
-    // Use XPath to find the dt element by text and then get its following dd sibling
     const valueElement = await browseTheWeb.getElement(
       '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd'
     )
@@ -119,14 +97,10 @@ export default class EnsureSiteDetails extends Task {
     }
   }
 
-  /**
-   * Verifies the width of the circular site is displayed correctly
-   */
   async _verifyWidthOfCircularSite(browseTheWeb, siteDetails) {
     const { circleData } = siteDetails
     const expectedWidth = `${circleData.width} metres`
 
-    // Use XPath to find the dt element by text and then get its following dd sibling
     const valueElement = await browseTheWeb.getElement(
       '//dt[contains(text(), "Width of circular site")]/following-sibling::dd'
     )
