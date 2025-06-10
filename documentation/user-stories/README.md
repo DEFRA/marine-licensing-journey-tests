@@ -28,7 +28,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-18**: Choose coordinate system for site location
 - ✅ **ML-35**: Enter centre point of a circle (NEW: Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
 - ✅ **ML-36**: Enter width of circular site (NEW: Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
-- 📝 **ML-37**: Review circular site details (NEW: Summary and review functionality for circular sites) ⚠️ _Feature files and tests to be implemented_
+- ✅ **ML-37**: Review circular site details (NEW: Complete circular site review flow with validation and task completion)
 
 ## Feature file tags
 
@@ -50,8 +50,8 @@ The `@smoke` tag identifies core user journey scenarios that provide fast feedba
 - Activity description completion (ML-11)
 - Public register consent decision (ML-12)
 - Public register withhold decision (ML-12)
-- Site details with WGS84 coordinates (ML-16,17,18,35,36)
-- Site details with OSGB36 coordinates (ML-16,17,18,35,36)
+- Site details with WGS84 coordinates (ML-16,17,18,35,36,37)
+- Site details with OSGB36 coordinates (ML-16,17,18,35,36,37)
 
 **Execution time:** ~2-3 minutes vs full suite ~15+ minutes
 
