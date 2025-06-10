@@ -26,7 +26,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-17**: Choose how to enter site coordinates
 - ✅ **ML-18**: Choose coordinate system for site location
 - ✅ **ML-35**: Enter centre point of a circle (NEW: Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
-- 🔄 **ML-36**: Enter width of circular site (NEW: In progress - Ready for implementation)
+- ✅ **ML-36**: Enter width of circular site (NEW: Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
 
 ## Feature file tags
 
@@ -48,8 +48,8 @@ The `@smoke` tag identifies core user journey scenarios that provide fast feedba
 - Activity description completion (ML-11)
 - Public register consent decision (ML-12)
 - Public register withhold decision (ML-12)
-- Site details with WGS84 coordinates (ML-16,17,18,35)
-- Site details with OSGB36 coordinates (ML-16,17,18,35)
+- Site details with WGS84 coordinates (ML-16,17,18,35,36)
+- Site details with OSGB36 coordinates (ML-16,17,18,35,36)
 
 **Execution time:** ~2-3 minutes vs full suite ~15+ minutes
 
@@ -60,7 +60,12 @@ The `@smoke` tag identifies core user journey scenarios that provide fast feedba
 - Back navigation from coordinate entry pages preserving coordinate system selection (2 scenarios)
 - Cancel functionality from coordinate entry pages with data discard validation (2 scenarios)
 
-**Note:** These @wip scenarios represent edge cases in the navigation flow that require additional step definitions and are planned for future completion.
+**ML-36 Navigation scenarios (planned for future implementation):**
+
+- Back navigation from width entry page to centre point coordinates page
+- Cancel functionality from width entry page with data discard validation
+
+**Note:** These @wip scenarios represent edge cases in the navigation flow that require additional step definitions and are planned for future completion as part of an improved navigation test strategy.
 
 ## Usage
 
