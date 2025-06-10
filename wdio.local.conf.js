@@ -17,12 +17,24 @@ export const config = {
     require: ['test/steps/*.js'],
     tags: ['not @wip']
   },
-  maxInstances: 1,
+
+  // ============================================================================
+  // PARALLEL EXECUTION CONFIGURATION - LOCAL DEVELOPMENT
+  // ============================================================================
+  // For local development, use fewer instances to avoid overwhelming the machine
+  // Debug mode always uses 1 instance for easier debugging
+  // Use MAX_INSTANCES environment variable to override (e.g., MAX_INSTANCES=3)
+  maxInstances: debug
+    ? 1
+    : process.env.MAX_INSTANCES
+      ? parseInt(process.env.MAX_INSTANCES)
+      : 3,
+
   capabilities: debug
     ? [{ browserName: 'chrome' }]
     : [
         {
-          maxInstances: 1,
+          // Remove maxInstances from capability level to use global setting
           browserName: 'chrome',
           'goog:chromeOptions': {
             args: [

@@ -25,7 +25,16 @@ export const config = {
     require: ['test/steps/*.js'],
     tags: ['not @wip']
   },
-  maxInstances: 1,
+
+  // ============================================================================
+  // PARALLEL EXECUTION CONFIGURATION
+  // ============================================================================
+  // Number of instances to run in parallel
+  // Start with 3-5 for local development, can go higher for CI
+  // Each feature file will run in a separate worker process
+  maxInstances: process.env.MAX_INSTANCES
+    ? parseInt(process.env.MAX_INSTANCES)
+    : 3,
 
   capabilities: [
     {
