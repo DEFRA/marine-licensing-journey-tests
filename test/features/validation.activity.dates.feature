@@ -1,4 +1,4 @@
-@issue=ML-10 @wip
+@issue=ML-10
 Feature: Validation of activity dates: the user is prevented from proceeding with invalid date values
   As an applicant
   I want to be notified when I have provided invalid activity dates
@@ -6,23 +6,27 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
 
   Scenario: Error when no start date is entered
     Given a notification has been created with a valid project name
-    When the Activity dates task is selected and saved without entering a start date
+    And the activity has no start date
+    When completing the activity dates task
     Then the start date error "Enter the start date" is displayed
 
   Scenario: Error when no end date is entered
     Given a notification has been created with a valid project name
-    When the Activity dates task is selected and saved without entering an end date
+    And the activity has no end date
+    When completing the activity dates task
     Then the end date error "Enter the end date" is displayed
 
   Scenario: Error when no dates are entered
     Given a notification has been created with a valid project name
-    When the Activity dates task is selected and saved without entering any dates
+    And the activity dates are valid
+    When clicking save and continue without entering any dates
     Then the start date error "Enter the start date" is displayed
     And the end date error "Enter the end date" is displayed
 
   Scenario Outline: Error when invalid start date <startDate> is entered
     Given a notification has been created with a valid project name
-    When entering start date "<day>", "<month>", "<year>" and saving
+    And the activity start date has "<day>", "<month>", "<year>"
+    When completing the activity dates task
     Then the start date error "<expected_error>" is displayed
 
     Examples:
@@ -39,7 +43,8 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
 
   Scenario Outline: Error when invalid end date <endDate> is entered
     Given a notification has been created with a valid project name
-    When entering end date "<day>", "<month>", "<year>" and saving
+    And the activity end date has "<day>", "<month>", "<year>"
+    When completing the activity dates task
     Then the end date error "<expected_error>" is displayed
 
     Examples:
@@ -54,11 +59,12 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
       |  01 |    01 | 2024 | past       | End date must be today or in the future     |
       |  20 |    08 | 2023 | past       | End date must be today or in the future     |
 
+  @run-only
   Scenario Outline: Error when end date is before start date
     Given a notification has been created with a valid project name
-    When entering start date "<startDay>", "<startMonth>", "<startYear>"
-    And entering end date "<endDay>", "<endMonth>", "<endYear>"
-    And saving the activity dates
+    And the activity start date has "<startDay>", "<startMonth>", "<startYear>"
+    And the activity end date has "<endDay>", "<endMonth>", "<endYear>"
+    When completing the activity dates task
     Then the date order error "End date must be the same as or after the start date" is displayed
 
     Examples:

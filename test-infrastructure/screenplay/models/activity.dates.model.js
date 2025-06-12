@@ -87,4 +87,72 @@ export default class ActivityDatesModel {
       }
     }
   }
+
+  static generateEndDateOnly() {
+    const endDate = faker.date.future({ years: 1 })
+
+    return {
+      startDate: {
+        day: '',
+        month: '',
+        year: ''
+      },
+      endDate: {
+        day: endDate.getDate().toString().padStart(2, '0'),
+        month: (endDate.getMonth() + 1).toString().padStart(2, '0'),
+        year: endDate.getFullYear().toString()
+      }
+    }
+  }
+
+  static generateStartDateOnly() {
+    const startDate = faker.date.future({ years: 1 })
+
+    return {
+      startDate: {
+        day: startDate.getDate().toString().padStart(2, '0'),
+        month: (startDate.getMonth() + 1).toString().padStart(2, '0'),
+        year: startDate.getFullYear().toString()
+      },
+      endDate: {
+        day: '',
+        month: '',
+        year: ''
+      }
+    }
+  }
+
+  static generateEndDate(day, month, year) {
+    const startDate = faker.date.future({ years: 1 })
+
+    return {
+      startDate: {
+        day: startDate.getDate().toString().padStart(2, '0'),
+        month: (startDate.getMonth() + 1).toString().padStart(2, '0'),
+        year: startDate.getFullYear().toString()
+      },
+      endDate: {
+        day: day.toString().padStart(2, '0'),
+        month: month.toString().padStart(2, '0'),
+        year: year.toString()
+      }
+    }
+  }
+
+  static generateStartDate(day, month, year) {
+    const endDate = faker.date.future({ years: 1 })
+
+    return {
+      startDate: {
+        day: day.toString().padStart(2, '0'),
+        month: month.toString().padStart(2, '0'),
+        year: year.toString()
+      },
+      endDate: {
+        day: endDate.getDate().toString().padStart(2, '0'),
+        month: (endDate.getMonth() + 1).toString().padStart(2, '0'),
+        year: endDate.getFullYear().toString()
+      }
+    }
+  }
 }

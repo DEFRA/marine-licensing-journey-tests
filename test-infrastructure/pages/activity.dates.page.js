@@ -7,4 +7,6 @@ export default class ActivityDatesPage extends CommonPageElementsPage {
   static activityEndDateDay = '#activity-end-date-day'
   static activityEndDateMonth = '#activity-end-date-month'
   static activityEndDateYear = '#activity-end-date-year'
+  static activityStartDateError = '#activity-start-date-error'
+  static activityEndDateError = '#activity-end-date-error'
 }
