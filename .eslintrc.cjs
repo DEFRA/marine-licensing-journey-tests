@@ -30,6 +30,12 @@ module.exports = {
         'promise/catch-or-return': 'error',
         'require-await': 'error'
       }
+    },
+    {
+      files: ['bin/gherkin-standards-validation/**/*.js'],
+      rules: {
+        'no-console': 'off'
+      }
     }
   ],
   parserOptions: {
