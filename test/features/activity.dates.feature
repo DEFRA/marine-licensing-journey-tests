@@ -11,20 +11,21 @@ Feature: Activity dates: The user can provide activity dates for their marine pr
     When completing the activity dates task
     Then the "Activity dates" task status is "Completed"
 
-  @wip @run-only
+  @run-only
   Scenario: Save valid activity dates with today as start date
     Given a notification has been created with a valid project name
     And the start date of the activity is today
     When completing the activity dates task
     Then the "Activity dates" task status is "Completed"
 
-  @wip
+  @run-only
   Scenario: Update previously saved activity dates
-    Given the activity dates task has been completed with valid information
+    Given a notification has been created with a valid project name
+    And the activity dates task has been completed
     When completing the activity dates task with different dates
     Then the "Activity dates" task status is "Completed"
 
-  @wip
+  @run-only
   Scenario: Same start and end date is valid
     Given a notification has been created with a valid project name
     And the activity will take place in a single day
