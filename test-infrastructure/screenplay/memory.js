@@ -68,4 +68,11 @@ export default class Memory {
       }
     }
   }
+
+  static ofActivityDatesWith(activityDates) {
+    if (!activityDates || typeof activityDates !== 'object') {
+      expect.fail('Activity dates must be an object')
+    }
+    return (exemption) => (exemption.activityDates = activityDates)
+  }
 }

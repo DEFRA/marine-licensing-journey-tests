@@ -1,4 +1,6 @@
 export const ERROR_MESSAGES = {
+  MISSING_ACTIVITY_DATES:
+    'Activity dates must be set before completing the task',
   MISSING_EXEMPTION: (taskName) =>
     `Exemption data must be initialized before completing ${taskName}`,
   MISSING_BROWSER: 'Browser instance is required for BrowseTheWeb ability',

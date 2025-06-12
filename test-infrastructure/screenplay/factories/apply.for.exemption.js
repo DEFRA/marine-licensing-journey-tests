@@ -1,4 +1,5 @@
 import {
+  ActivityDatesModel,
   ActivityDescriptionModel,
   MarineProjectModel,
   PublicRegisterModel
@@ -14,9 +15,11 @@ export default class ApplyForExemption {
       projectName: MarineProjectModel.generateProjectName(),
       activityDescription:
         ActivityDescriptionModel.generateActivityDescription(),
+      activityDates: null,
       publicRegister: null,
       projectNameTaskCompleted: false,
       activityDescriptionTaskCompleted: false,
+      activityDatesTaskCompleted: false,
       publicRegisterTaskCompleted: false,
       ...overrides
     }
@@ -28,6 +31,31 @@ export default class ApplyForExemption {
 
   static withProjectName(projectName) {
     return new ApplyForExemption(this._createBaseExemption({ projectName }))
+  }
+
+  static withValidActivityDates() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        activityDates: ActivityDatesModel.generateValidActivityDates()
+      })
+    )
+  }
+
+  static withSameStartAndEndActivityDates() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        activityDates: ActivityDatesModel.generateSameStartAndEndDate()
+      })
+    )
+  }
+
+  static withCompletedActivityDates() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        activityDates: ActivityDatesModel.generateValidActivityDates(),
+        activityDatesTaskCompleted: true
+      })
+    )
   }
 
   static withConsentToPublicRegister() {
@@ -51,6 +79,16 @@ export default class ApplyForExemption {
 
   getData() {
     return this.data
+  }
+
+  activityDates(dates) {
+    this.data.activityDates = dates
+    return this
+  }
+
+  activityDatesTaskCompleted(completed = true) {
+    this.data.activityDatesTaskCompleted = completed
+    return this
   }
 
   latitude(value) {
@@ -141,6 +179,35 @@ export default class ApplyForExemption {
           siteType: 'boundary',
           coordinateSystem: 'OSGB36'
         }
+        return this
+      }
+    }
+  }
+
+  get andActivityDates() {
+    return {
+      withValidDates: () => {
+        this.data.activityDates =
+          ActivityDatesModel.generateValidActivityDates()
+        return this
+      },
+      withSameStartAndEndDate: () => {
+        this.data.activityDates =
+          ActivityDatesModel.generateSameStartAndEndDate()
+        return this
+      },
+      withShortDuration: () => {
+        this.data.activityDates =
+          ActivityDatesModel.generateShortDurationActivityDates()
+        return this
+      },
+      withLongDuration: () => {
+        this.data.activityDates =
+          ActivityDatesModel.generateLongDurationActivityDates()
+        return this
+      },
+      asCompleted: () => {
+        this.data.activityDatesTaskCompleted = true
         return this
       }
     }

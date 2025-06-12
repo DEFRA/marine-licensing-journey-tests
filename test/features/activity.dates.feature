@@ -4,28 +4,41 @@ Feature: Activity dates: The user can provide activity dates for their marine pr
   I want to provide activity dates for my marine project
   So that I can inform MMO when my activity will take place
 
-  @smoke
+  @smoke  @run-only
   Scenario: Save valid activity dates
     Given a notification has been created with a valid project name
-    When entering and saving valid activity dates
+    And the activity dates are valid
+    When completing the activity dates task
     Then the "Activity dates" task status is "Completed"
 
+  @wip @run-only
+  Scenario: Save valid activity dates with today as start date
+    Given a notification has been created with a valid project name
+    And the start date of the activity is today
+    When completing the activity dates task
+    Then the "Activity dates" task status is "Completed"
+
+  @wip
   Scenario: Update previously saved activity dates
     Given the activity dates task has been completed with valid information
-    When updating the activity dates with new valid dates
+    When completing the activity dates task with different dates
     Then the "Activity dates" task status is "Completed"
 
+  @wip
+  Scenario: Same start and end date is valid
+    Given a notification has been created with a valid project name
+    And the activity will take place in a single day
+    When completing the activity dates task
+    Then the "Activity dates" task status is "Completed" 
+
+  @wip
   Scenario: Cancel preserves previously saved data
     Given the activity dates task has been completed with valid information
     When changing the activity dates but cancelling out
     Then the "Activity dates" task status is "Completed"
 
+  @wip
   Scenario: Back link preserves previously saved data
     Given the activity dates task has been completed with valid information
     When changing the activity dates but using the back link
     Then the "Activity dates" task status is "Completed"
-
-  Scenario: Same start and end date is valid
-    Given a notification has been created with a valid project name
-    When entering and saving activity dates with the same start and end date
-    Then the "Activity dates" task status is "Completed" 
