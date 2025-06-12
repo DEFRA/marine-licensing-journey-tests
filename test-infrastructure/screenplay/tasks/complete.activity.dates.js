@@ -1,12 +1,25 @@
 import { expect } from 'chai'
+import { ActivityDatesPage } from '../../../test-infrastructure/pages/index.js'
 import Task from '../base/task.js'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Memory from '../memory.js'
-import { ActivityDatesPage } from '../../../test-infrastructure/pages/index.js'
 
 export default class CompleteActivityDates extends Task {
+  constructor(actionType = 'saveAndContinue') {
+    super()
+    this.actionType = actionType
+  }
+
   static now() {
     return new CompleteActivityDates()
+  }
+
+  andThenClickBack() {
+    return new CompleteActivityDates('back')
+  }
+
+  andThenClickCancel() {
+    return new CompleteActivityDates('cancel')
   }
 
   async performAs(actor) {
@@ -43,8 +56,20 @@ export default class CompleteActivityDates extends Task {
       ActivityDatesPage.activityEndDateYear,
       activityDates.endDate.year
     )
-    await browseTheWeb.click(ActivityDatesPage.saveAndContinueButton)
 
-    actor.updates(Memory.markTaskCompleted('activityDates'))
+    // Handle different action types
+    switch (this.actionType) {
+      case 'back':
+        await browseTheWeb.click(ActivityDatesPage.backLink)
+        break
+      case 'cancel':
+        await browseTheWeb.click(ActivityDatesPage.cancelLink)
+        break
+      case 'saveAndContinue':
+      default:
+        await browseTheWeb.click(ActivityDatesPage.saveAndContinueButton)
+        actor.updates(Memory.markTaskCompleted('activityDates'))
+        break
+    }
   }
 }

@@ -54,3 +54,13 @@ When(
     await this.actor.attemptsTo(CompleteActivityDates.now())
   }
 )
+
+When('changing the activity dates but using the back link', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
+  await this.actor.attemptsTo(CompleteActivityDates.now().andThenClickBack())
+})
+
+When('changing the activity dates but cancelling out', async function () {
+  await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
+  await this.actor.attemptsTo(CompleteActivityDates.now().andThenClickCancel())
+})
