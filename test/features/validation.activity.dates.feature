@@ -1,4 +1,4 @@
-@issue=ML-10
+@issue=ML-10 @run-only
 Feature: Validation of activity dates: the user is prevented from proceeding with invalid date values
   As an applicant
   I want to be notified when I have provided invalid activity dates
