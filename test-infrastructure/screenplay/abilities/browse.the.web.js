@@ -60,8 +60,8 @@ export default class BrowseTheWeb extends Ability {
   async sendKeys(locator, keys) {
     const element = await this.getElement(locator)
     await element.click()
-    if (keys?.length > 0) {
-      await this.browser.keys(keys)
+    if (keys != null && keys.length > 0) {
+      await element.setValue(keys)
     }
   }
 
