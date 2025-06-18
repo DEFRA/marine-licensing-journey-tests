@@ -16,5 +16,10 @@ export default class EnsureErrorDisplayed extends Task {
       this.locator,
       this.expectation
     )
+
+    await actor.ability.expectElementToContainText(
+      '.govuk-error-summary__list',
+      this.expectation
+    )
   }
 }
