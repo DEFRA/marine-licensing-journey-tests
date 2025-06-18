@@ -67,7 +67,7 @@ IMMEDIATE ACTIONS:
 
 ---
 
-This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios.
+This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios for **delivered functionality**.
 
 > **🔗 Powered by investigative testing**  
 > These charters implement the **[investigative testing](../test-strategy/investigative-testing.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
@@ -76,52 +76,52 @@ This section contains **investigative testing charters** for marine licensing us
 
 Test charters bridge the gap between:
 
-- **User story requirements** - What the feature should do
-- **Systematic investigation** - How we discover what it actually does through realistic scenarios
-- **Real user needs** - Whether it serves marine licensing personas effectively
+- **User story requirements** - What the delivered features should do
+- **Systematic investigation** - How we discover what they actually do through realistic scenarios
+- **Real user needs** - Whether delivered features serve marine licensing personas effectively
 - **Evidence collection** - Actionable insights for development teams
 
 ## 📋 Available investigation sessions
 
-| Theme                           | Charter name                                | Focus                                                     | Personas             | Priority | Status     |
-| ------------------------------- | ------------------------------------------- | --------------------------------------------------------- | -------------------- | -------- | ---------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete application flow for marine licensing newcomers  | Sarah                | High     | 🔄 Updated |
-| **Professional workflows**      | [Expert workflows](./expert-workflows.md)   | Professional user patterns within delivered functionality | Elena, Marcus, James | High     | 🔄 Updated |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling, conditional logic       | All                  | High     | 🔄 Ready   |
-| **Spatial data entry**          | [Site details](./site-details.md)           | Coordinate system selection and location method choices   | All                  | High     | 🔄 Updated |
+| Theme                           | Charter name                                | Focus                                                      | Personas                 | Priority | Status     |
+| ------------------------------- | ------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
+| **Professional workflows**      | [Expert workflows](./expert-workflows.md)   | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
+| **Coordinate entry workflows**  | [Site details](./site-details.md)           | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
 
 ### **Charter lifecycle**
 
-**Charters are refreshed on every release** to ensure they remain aligned with current system functionality:
+**Charters are updated based on delivered functionality** to ensure they remain aligned with current system capabilities:
 
-- **New features** → New charters created to investigate user experience and integration
-- **Changed features** → Existing charters updated to reflect new behaviour and workflows
-- **Removed features** → Obsolete charters archived to maintain focus on delivered functionality
-- **User feedback** → Charter priorities and focus areas adjusted based on real user insights
+- **New features delivered** → Charter activities updated to include new workflows
+- **Feature enhancements** → Existing charters updated to reflect improved behaviour
+- **Validation improvements** → Form interaction testing updated for new error handling
+- **User research insights** → Charter priorities adjusted based on persona research
 
-**Beta Research Integration**: Current charters incorporate relevant beta research insights that apply to delivered functionality, while insights about undelivered features are captured for future charter development.
+**Research-Based Personas**: All charters now use research-based personas derived from direct user interviews, MMO staff observations, and beta service feedback. These replace assumption-based personas with evidence from real marine licensing users.
 
-This approach ensures our investigation sessions always target the **actual delivered system** rather than outdated assumptions about functionality.
+This approach ensures our investigation sessions always target **delivered system functionality** and real user patterns rather than hypothetical scenarios.
 
 ## 🏗️ Charter structure
 
 All charters follow the **investigative testing framework**:
 
 ```
-EXPLORE: [Area of application or workflow]
-AS: [Type of user - MMO staff, applicant, etc.]
+EXPLORE: [Delivered feature area or workflow]
+AS: [Research-based persona - Marcus, Elena, Dr. James, Sarah, etc.]
 BECAUSE: [What you're concerned about or want to validate]
-LOOKING FOR: [Types of problems or insights you hope to find]
+LOOKING FOR: [Types of problems or insights based on delivered functionality]
 
 SCENARIO CONTEXT:
-THEME: [Rich user context - what authentic situation are we investigating?]
-SETUP: [Realistic pressures, friction, and environment]
-PERSONA: [Which marine licensing user type - Sarah, Elena, Marcus, Dr. James, Rachel, David]
+THEME: [Rich user context from persona research]
+SETUP: [Realistic pressures based on persona research]
+PERSONA: [Specific research-based persona with direct quotes]
 
 REALISTIC ACTIVITIES:
-- [Guided but flexible actions following authentic user patterns]
-- [Include friction, interruptions, and real-world behaviour]
-- [Test edge cases and stress conditions]
+- [Activities testing delivered features only]
+- [Include friction and patterns observed in research]
+- [Test edge cases within delivered functionality]
 
 EVIDENCE FRAMEWORK:
 + Things that worked well
@@ -130,7 +130,7 @@ EVIDENCE FRAMEWORK:
 ! Ideas for improvement
 
 Duration: 60-90 minutes
-Priority: [High/Medium/Low based on risk and user impact]
+Priority: [High/Medium/Low based on delivered feature risk and user impact]
 ```
 
 ## 🚀 Using test charters
@@ -139,58 +139,62 @@ Priority: [High/Medium/Low based on risk and user impact]
 
 ```
 📋 Setup (10 minutes)
-├── Pick area to explore
-├── Choose realistic user context
-└── Decide what questions to answer
+├── Pick delivered feature area to explore
+├── Choose realistic user context from research personas
+└── Decide what questions to answer about delivered functionality
 
 🔍 Exploration (45-70 minutes)
-├── Follow realistic user workflows
-├── Try variations and edge cases
-├── Note anything odd, slow, or confusing
+├── Follow realistic user workflows through delivered features
+├── Try variations and edge cases within current capabilities
+├── Note anything odd, slow, or confusing in delivered functionality
 └── Test scenarios automation might miss
 
 📝 Wrap-up (5-10 minutes)
-├── Document key findings
-├── Identify follow-up actions
+├── Document key findings about delivered features
+├── Identify follow-up actions for development team
 └── Share insights with team
 ```
 
 ### **After completion**
 
-1. **Summarise key discoveries** - Include both technical and user experience insights
+1. **Summarise key discoveries** - Focus on delivered feature performance and user experience
 2. **Create actionable reports** - Link findings to specific user impact and business risk
 3. **Identify automation opportunities** - What scenarios should automated tests validate?
-4. **Plan follow-up sessions** - Which areas need deeper investigation or different persona perspectives?
+4. **Plan follow-up sessions** - Which delivered features need deeper investigation?
 
-## 🔮 Future Charter Considerations (Beta Research Insights)
+## 🔮 Delivered Feature Coverage
 
-The following insights from beta user research will inform future charter development as new functionality is delivered:
+All current charters focus exclusively on **delivered functionality**:
 
-### **Multiple Sites Workflow (Not Yet Delivered)**
+### **Complete Exemption Notification Workflow**
 
-- _"Two users were uncertain if it was acceptable to provide a single location polygon where the activity occurs or if they needed to provide separate sites for each"_
-- **Future Charter Need**: Complex multi-site project management testing once this functionality is built
+- Project name entry and exemption creation (ML-1)
+- Task list navigation and progress tracking (ML-9)
+- Activity dates with enhanced validation (ML-10)
+- Activity description entry (ML-11)
+- Public register consent decisions (ML-12)
 
-### **Collaboration and Dependencies (Not Yet Delivered)**
+### **Site Details Coordinate Entry Workflow**
 
-- _"Even frequent organisational users struggle with providing location details and rely on colleagues to supply this"_
-- **Future Charter Need**: Team-based workflow testing when collaboration features are implemented
+- Location method selection - manual entry only (ML-16)
+- Circle vs coordinate list selection (ML-17)
+- Coordinate system selection (WGS84/OSGB36) (ML-18)
+- Centre point coordinate entry with validation (ML-35)
+- Circle width entry (ML-36)
+- Site details review and completion (ML-37)
 
-### **File Upload Functionality (Not Yet Delivered)**
+### **Form Validation and Interaction Patterns**
 
-- _"Shapefiles are the preferred format. KML is seen as less accurate and more for public use"_
-- **Future Charter Need**: File upload testing across different professional workflows once implemented
-
-### **Map Drawing (Not Yet Delivered)**
-
-- _"Some pro users would like to draw on a map and most users we spoke to ask a GIS specialist to prepare their shapefile"_
-- **Future Charter Need**: Map-based interface testing when drawing functionality is available
+- Enhanced validation with specific error messages
+- Cross-form consistency and state management
+- Accessibility and keyboard navigation
+- Error recovery and user guidance
 
 ## 🔗 Related resources
 
 - **[User stories](../user-stories/README.md)** - Requirements and acceptance criteria for delivered features
 - **[Investigative testing guide](../test-strategy/investigative-testing.md)** - Complete framework and methodology
-- **[Domain context](../test-strategy/domain-context.md)** - Marine licensing personas and user context
+- **[Research-based personas](../personas/README.md)** - Evidence-based user types from direct research
 - **[Testing heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
 - **[Feature files](../../test/features/)** - Automated test scenarios that validate delivered functionality
 
@@ -200,4 +204,4 @@ The following insights from beta user research will inform future charter develo
 
 ---
 
-_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how delivered features actually serve marine licensing users under authentic conditions._
+_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how delivered features actually serve marine licensing users under authentic conditions based on real research insights._

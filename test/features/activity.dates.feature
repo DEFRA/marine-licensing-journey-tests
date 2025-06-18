@@ -17,20 +17,6 @@ Feature: Activity dates: The user can provide activity dates for their marine pr
     When completing the activity dates task
     Then the "Activity dates" task status is "Completed"
 
-  @wip
-  Scenario: Valid leap year date is accepted
-    Given a notification has been created with a valid project name
-    And the activity start date is 29th February in a leap year
-    When completing the activity dates task
-    Then the "Activity dates" task status is "Completed"
-
-  @wip
-  Scenario: Valid month boundary dates are accepted
-    Given a notification has been created with a valid project name
-    And the activity dates use valid month boundary dates
-    When completing the activity dates task
-    Then the "Activity dates" task status is "Completed"
-
   Scenario: Update previously saved activity dates
     Given a notification has been created with a valid project name
     And the activity dates task has been completed
