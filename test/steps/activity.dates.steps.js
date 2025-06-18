@@ -56,7 +56,7 @@ Given(
   'the activity end date has {string}, {string}, {string}',
   function (day, month, year) {
     this.actor.updates(
-      Memory.ofActivityDatesWith(
+      Memory.ofActivityEndDateWith(
         ActivityDatesModel.generateEndDate(day, month, year)
       )
     )
@@ -67,7 +67,7 @@ Given(
   'the activity start date has {string}, {string}, {string}',
   function (day, month, year) {
     this.actor.updates(
-      Memory.ofActivityDatesWith(
+      Memory.ofActivityStartDateWith(
         ActivityDatesModel.generateStartDate(day, month, year)
       )
     )

@@ -3,6 +3,7 @@ import { browser } from '@wdio/globals'
 
 import { ProjectNamePage } from '~/test-infrastructure/pages'
 import {
+  ActivityDatesModel,
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
@@ -26,6 +27,11 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+    this.actor.updates(
+      Memory.ofActivityDatesWith(
+        ActivityDatesModel.generateValidActivityDates()
+      )
+    )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
