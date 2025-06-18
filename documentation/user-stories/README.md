@@ -22,7 +22,7 @@ This directory contains user stories for the marine licensing application under 
 
 - ✅ **ML-1**: Project name entry and exemption creation
 - ✅ **ML-9**: Task list display and navigation
-- ✅ **ML-10**: Provide activity dates (NEW: Date entry with comprehensive validation)
+- ✅ **ML-10**: Provide activity dates (UPDATED: Enhanced validation with specific error messages for individual date components)
 - ✅ **ML-11**: Provide activity description
 - ✅ **ML-12**: Public register consent and withholding
 - ✅ **ML-16**: Choose file upload or manual coordinate entry
@@ -45,10 +45,11 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 
 The `@smoke` tag identifies core user journey scenarios that provide fast feedback on essential functionality:
 
-**Tagged scenarios (7 core journeys):**
+**Tagged scenarios (8 core journeys):**
 
 - Project name creation (ML-1)
 - Task list display (ML-9)
+- Activity dates completion (ML-10)
 - Activity description completion (ML-11)
 - Public register consent decision (ML-12)
 - Public register withhold decision (ML-12)
@@ -84,7 +85,7 @@ documentation/user-stories/
 ├── README.md                                               # This file
 ├── ML-1.provide.project.name.and.create.exemption.md       # Project name entry
 ├── ML-9.view.the.task.list.md                              # Task list functionality
-├── ML-10.provide.activity.dates.md                         # Activity dates entry
+├── ML-10.provide.activity.dates.md                         # Activity dates entry with comprehensive validation
 ├── ML-11.provide.activity.description.md                   # Activity description entry
 ├── ML-12.provide.or.withhold.public.register.content.md    # Public register consent
 ├── ML-16.choose.file.upload.or.manual.coordinate.entry.md  # Site location options
