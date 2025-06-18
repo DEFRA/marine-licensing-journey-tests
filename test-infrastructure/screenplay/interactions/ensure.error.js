@@ -1,4 +1,5 @@
 import Task from '../base/task.js'
+import { expect } from 'chai'
 
 export default class EnsureErrorDisplayed extends Task {
   static is(locator, expectation) {
@@ -12,14 +13,26 @@ export default class EnsureErrorDisplayed extends Task {
   }
 
   async performAs(actor) {
-    await actor.ability.expectElementToContainText(
-      this.locator,
-      this.expectation
-    )
+    try {
+      await actor.ability.expectElementToContainText(
+        this.locator,
+        this.expectation
+      )
+    } catch (error) {
+      expect.fail(
+        `Expected error message "${this.expectation}" to be displayed in field error element (locator: ${JSON.stringify(this.locator)}), but it was not found. Original error: ${error.message}`
+      )
+    }
 
-    await actor.ability.expectElementToContainText(
-      '.govuk-error-summary__list',
-      this.expectation
-    )
+    try {
+      await actor.ability.expectElementToContainText(
+        '.govuk-error-summary__list',
+        this.expectation
+      )
+    } catch (error) {
+      expect.fail(
+        `Expected error message "${this.expectation}" to be displayed in error summary list (.govuk-error-summary__list), but it was not found. This suggests the error summary component may not be working correctly. Original error: ${error.message}`
+      )
+    }
   }
 }
