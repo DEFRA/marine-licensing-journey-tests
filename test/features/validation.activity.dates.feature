@@ -23,7 +23,7 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
     Then the start date error "Enter the start date" is displayed
     And the end date error "Enter the end date" is displayed
 
-  Scenario Outline: Error when <condition> using data: <startDay>, <startMonth>, <startYear> and <endDay>, <endMonth>, <endYear>
+  Scenario Outline: Error when <condition> using data: <startDay>/<startMonth>/<startYear> and <endDay>/<endMonth>/<endYear>
     Given a notification has been created with a valid project name
     And the activity start date has "<startDay>", "<startMonth>", "<startYear>"
     And the activity end date has "<endDay>", "<endMonth>", "<endYear>"
@@ -46,7 +46,7 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
       |       29 |         02 |      2027 |     01 |       01 |    2028 | 29th of February in a non leap year | The start date must be a real date            |
       |       18 |         01 |      2024 |     01 |       01 |    2028 | start date is in the past           | The start date must be today or in the future |
 
-  Scenario Outline: Error when <condition> end date with data: <startDay>, <startMonth>, <startYear> and <endDay>, <endMonth>, <endYear>
+  Scenario Outline: Error when <condition> end date with data: <startDay>/<startMonth>/<startYear> and <endDay>/<endMonth>/<endYear>
     Given a notification has been created with a valid project name
     And the activity start date has "<startDay>", "<startMonth>", "<startYear>"
     And the activity end date has "<endDay>", "<endMonth>", "<endYear>"
@@ -67,7 +67,7 @@ Feature: Validation of activity dates: the user is prevented from proceeding wit
       |       01 |         01 |      2027 |     29 |       02 |    2029 | 29th of February in a non leap year | The end date must be a real date            |
       |       01 |         12 |      2023 |     01 |       01 |    2024 | end date is in the past             | The end date must be today or in the future |
 
-  Scenario Outline: Error when end date is before start date <startDay>, <startMonth>, <startYear> and <endDay>, <endMonth>, <endYear>
+  Scenario Outline: Error when end date is before start date <startDay>/<startMonth>/<startYear> and <endDay>/<endMonth>/<endYear>
     Given a notification has been created with a valid project name
     And the activity start date has "<startDay>", "<startMonth>", "<startYear>"
     And the activity end date has "<endDay>", "<endMonth>", "<endYear>"
