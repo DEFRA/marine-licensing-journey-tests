@@ -17,6 +17,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-35    | Enter centre point of a circle                | [ML-35.enter.centre.point.of.a.circle.md](./ML-35.enter.centre.point.of.a.circle.md)                               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.centre.point.coordinates.feature](../../test/features/validation.centre.point.coordinates.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature)                                                                         |
 | ML-36    | Enter width of circular site                  | [ML-36.enter.width.of.circular.site.md](./ML-36.enter.width.of.circular.site.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.width.circular.site.feature](../../test/features/validation.width.circular.site.feature)                                                                                                                                                                                                                                                                       |
 | ML-37    | Review circular site details                  | [ML-37.review.circular.site.details.md](./ML-37.review.circular.site.details.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature)                                                                                                                                                                                                                                                                                                                                                                             |
+| ML-82    | Check answers before sending your information | [ML-82.check.answers.circular.site.md](./ML-82.check.answers.circular.site.md)                                     | TBC - Feature files to be created                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## Story status
 
@@ -31,6 +32,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-35**: Enter centre point of a circle (NEW: Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
 - ✅ **ML-36**: Enter width of circular site (NEW: Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
 - ✅ **ML-37**: Review circular site details (NEW: Complete circular site review flow with validation and task completion)
+- 🚧 **ML-82**: Check answers before sending your information (NEW: Summary page displaying all notification details before submission)
 
 ## Feature file tags
 
@@ -93,7 +95,8 @@ documentation/user-stories/
 ├── ML-18.choose.coordinate.system.md                       # Coordinate system selection
 ├── ML-35.enter.centre.point.of.a.circle.md                 # Enter centre point of a circle
 ├── ML-36.enter.width.of.circular.site.md                   # Enter width of circular site
-└── ML-37.review.circular.site.details.md                   # Review circular site details
+├── ML-37.review.circular.site.details.md                   # Review circular site details
+└── ML-82.check.answers.circular.site.md                    # Check answers before sending your information
 ```
 
 ## Adding new user stories
