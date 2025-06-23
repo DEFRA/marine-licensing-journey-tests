@@ -77,6 +77,15 @@ export default class ApplyForExemption {
     )
   }
 
+  static withAllTasksCompleted() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        activityDates: ActivityDatesModel.generateValidActivityDates(),
+        publicRegister: { consent: true }
+      })
+    )
+  }
+
   getData() {
     return this.data
   }

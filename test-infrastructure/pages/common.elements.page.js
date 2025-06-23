@@ -3,5 +3,5 @@ export default class CommonElementsPage {
   static cancelLink = '//a[text()="Cancel"]'
   static submitButton = 'button[type="submit"]'
   static saveAndContinueButton = 'button[type="submit"]'
-  static mainHeading = 'h1'
+  static mainHeading = 'h1, h2'
 }

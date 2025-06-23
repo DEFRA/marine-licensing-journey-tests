@@ -22,4 +22,11 @@ export default class TaskListPage {
   static getTaskListContainer() {
     return 'ul.govuk-task-list__items'
   }
+
+  static getReviewAndSendButton() {
+    return {
+      primary: `//a[normalize-space(text()) = "Review and send your information"]`,
+      fallback: `#review-and-send`
+    }
+  }
 }
