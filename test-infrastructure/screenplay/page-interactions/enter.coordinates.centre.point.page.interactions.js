@@ -59,7 +59,18 @@ export default class EnterCoordinatesCentrePointPageInteractions {
       }
     }
 
-    const mapping = coordinateSystemMappings[coordinateSystem]
+    // Handle both short and full descriptive text formats
+    let mappingKey
+    if (coordinateSystem === 'WGS84' || coordinateSystem.includes('WGS84')) {
+      mappingKey = 'WGS84'
+    } else if (
+      coordinateSystem === 'OSGB36' ||
+      coordinateSystem.includes('OSGB36')
+    ) {
+      mappingKey = 'OSGB36'
+    }
+
+    const mapping = coordinateSystemMappings[mappingKey]
     if (!mapping) {
       expect.fail(`Unsupported coordinate system: ${coordinateSystem}`)
     }

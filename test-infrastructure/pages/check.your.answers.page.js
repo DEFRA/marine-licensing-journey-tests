@@ -1,129 +1,90 @@
 export default class CheckYourAnswersPage {
   static url = '/exemption/check-your-answers'
 
-  // Main heading
-  static getMainHeading() {
-    return 'h2#check-your-answers-heading'
-  }
+  static locators = {
+    // Main heading
+    mainHeading: 'h2#check-your-answers-heading',
 
-  // Project details section
-  static getProjectDetailsSection() {
-    return {
-      heading: 'h2:has-text("Project details")',
-      projectName: {
-        term: 'dt:has-text("Project name")',
-        value: 'dt:has-text("Project name") + dd'
-      },
-      changeLink: 'a:has-text("Change (Project details)")'
+    // Project details section
+    projectDetails: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project details")]',
+      projectNameTerm: '//dt[contains(text(), "Project name")]',
+      projectNameValue:
+        '//dt[contains(text(), "Project name")]/following-sibling::dd[1]',
+      changeLink: '//a[contains(@href, "project-name")]'
+    },
+
+    // Activity dates section
+    activityDates: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity dates")]',
+      startDateTerm: '//dt[contains(text(), "Start date")]',
+      startDateValue:
+        '//dt[contains(text(), "Start date")]/following-sibling::dd[1]',
+      endDateTerm: '//dt[contains(text(), "End date")]',
+      endDateValue:
+        '//dt[contains(text(), "End date")]/following-sibling::dd[1]',
+      changeLink: '//a[contains(@href, "activity-dates")]'
+    },
+
+    // Activity details section
+    activityDetails: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]',
+      activityDescriptionTerm: '//dt[contains(text(), "Activity description")]',
+      activityDescriptionValue:
+        '//dt[contains(text(), "Activity description")]/following-sibling::dd[1]',
+      changeLink: '//a[contains(@href, "activity-description")]'
+    },
+
+    // Site details section
+    siteDetails: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Site details")]',
+      coordinatesTypeTerm: '//dt[contains(text(), "Coordinates type")]',
+      coordinatesTypeValue:
+        '//dt[contains(text(), "Coordinates type")]/following-sibling::dd[1]',
+      coordinatesEntryTerm: '//dt[contains(text(), "Coordinates Entry")]',
+      coordinatesEntryValue:
+        '//dt[contains(text(), "Coordinates Entry")]/following-sibling::dd[1]',
+      coordinateSystemTerm: '//dt[contains(text(), "Coordinates system")]',
+      coordinateSystemValue:
+        '//dt[contains(text(), "Coordinates system")]/following-sibling::dd[1]',
+      coordinatesTerm: '//dt[contains(text(), "Coordinates")]',
+      coordinatesValue:
+        '//dt[contains(text(), "Coordinates")]/following-sibling::dd[1]',
+      circleWidthTerm: '//dt[contains(text(), "Circle width")]',
+      circleWidthValue:
+        '//dt[contains(text(), "Circle width")]/following-sibling::dd[1]',
+      changeLink: '//a[contains(@href, "coordinates")]'
+    },
+
+    // Public register section
+    publicRegister: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Public register")]',
+      informationWithheldTerm:
+        '//dt[contains(text(), "Information withheld from public register")]',
+      informationWithheldValue:
+        '//dt[contains(text(), "Information withheld from public register")]/following-sibling::dd[1]',
+      changeLink: '//a[contains(@href, "public-register")]'
+    },
+
+    // Submission section
+    submission: {
+      heading:
+        '//h2[contains(@class, "govuk-heading-m") and contains(text(), "Now send your information")]',
+      submitButton: 'button[type="submit"]',
+      declarationCheckbox: '#confirm-declaration'
+    },
+
+    // Generic selectors
+    generic: {
+      allHeadings: 'h1, h2',
+      allChangeLinks: '//a[contains(text(), "Change")]',
+      allTerms: 'dt',
+      allValues: 'dd'
     }
-  }
-
-  // Activity dates section
-  static getActivityDatesSection() {
-    return {
-      heading: 'h2:has-text("Activity dates")',
-      startDate: {
-        term: 'dt:has-text("Start date")',
-        value: 'dt:has-text("Start date") + dd'
-      },
-      endDate: {
-        term: 'dt:has-text("End date")',
-        value: 'dt:has-text("End date") + dd'
-      },
-      changeLink: 'a:has-text("Change (Activity dates)")'
-    }
-  }
-
-  // Activity details section
-  static getActivityDetailsSection() {
-    return {
-      heading: 'h2:has-text("Activity details")',
-      activityDescription: {
-        term: 'dt:has-text("Activity description")',
-        value: 'dt:has-text("Activity description") + dd'
-      },
-      typeOfActivity: {
-        term: 'dt:has-text("Type of activity")',
-        value: 'dt:has-text("Type of activity") + dd'
-      },
-      purposeOfActivity: {
-        term: 'dt:has-text("The purpose of the activity")',
-        value: 'dt:has-text("The purpose of the activity") + dd'
-      },
-      whatActivityInvolves: {
-        term: 'dt:has-text("What the activity involves")',
-        value: 'dt:has-text("What the activity involves") + dd'
-      },
-      whyActivityExempt: {
-        term: 'dt:has-text("Why this activity is exempt")',
-        value: 'dt:has-text("Why this activity is exempt") + dd'
-      },
-      changeActivityDescriptionLink: 'a:has-text("Change activity description")'
-    }
-  }
-
-  // Site details section
-  static getSiteDetailsSection() {
-    return {
-      heading: 'h2:has-text("Site details")',
-      coordinatesType: {
-        term: 'dt:has-text("Coordinates type")',
-        value: 'dt:has-text("Coordinates type") + dd'
-      },
-      coordinatesEntry: {
-        term: 'dt:has-text("Coordinates Entry")',
-        value: 'dt:has-text("Coordinates Entry") + dd'
-      },
-      coordinatesSystem: {
-        term: 'dt:has-text("Coordinates system")',
-        value: 'dt:has-text("Coordinates system") + dd'
-      },
-      coordinates: {
-        term: 'dt:has-text("Coordinates")',
-        value: 'dt:has-text("Coordinates") + dd'
-      },
-      circleWidth: {
-        term: 'dt:has-text("Circle width")',
-        value: 'dt:has-text("Circle width") + dd'
-      },
-      changeLink: 'a:has-text("Change (Site details)")'
-    }
-  }
-
-  // Public register section
-  static getPublicRegisterSection() {
-    return {
-      heading: 'h2:has-text("Public register")',
-      informationWithheld: {
-        term: 'dt:has-text("Information withheld from public register")',
-        value: 'dt:has-text("Information withheld from public register") + dd'
-      },
-      changeLink: 'a:has-text("Change (Public register)")'
-    }
-  }
-
-  // Submission section
-  static getSubmissionSection() {
-    return {
-      heading: 'h2:has-text("Now send your information")',
-      confirmButton: 'button:has-text("Confirm and send")'
-    }
-  }
-
-  // Generic selectors for validation
-  static getAllSummaryCards() {
-    return '.govuk-summary-card'
-  }
-
-  static getAllDefinitionLists() {
-    return 'dl'
-  }
-
-  static getAllTerms() {
-    return 'dt'
-  }
-
-  static getAllDefinitions() {
-    return 'dd'
   }
 }

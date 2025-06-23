@@ -1,7 +1,6 @@
-import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import { expect } from 'chai'
+import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import Task from '../base/task.js'
-import Memory from '../memory.js'
 
 export default class EnsureCheckYourAnswersPage extends Task {
   static showsAllAnswers() {
@@ -10,7 +9,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    const exemptionData = Memory.getExemption()
+    const exemptionData = actor.recalls('exemption')
 
     // Validate Project Details section
     await this._validateProjectDetails(browseTheWeb, exemptionData)
@@ -29,15 +28,16 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateProjectDetails(browseTheWeb, exemptionData) {
-    const projectSection = CheckYourAnswersPage.getProjectDetailsSection()
-
     // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(projectSection.heading)
+    await browseTheWeb.expectElementToContainText(
+      CheckYourAnswersPage.locators.projectDetails.heading,
+      'Project details'
+    )
 
     // Validate project name
     if (exemptionData.projectName) {
       const actualProjectName = await browseTheWeb.getText(
-        projectSection.projectName.value
+        CheckYourAnswersPage.locators.projectDetails.projectNameValue
       )
       if (actualProjectName.trim() !== exemptionData.projectName.trim()) {
         expect.fail(
@@ -48,16 +48,16 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateActivityDates(browseTheWeb, exemptionData) {
-    const datesSection = CheckYourAnswersPage.getActivityDatesSection()
-
     // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(datesSection.heading)
+    await browseTheWeb.expectElementToBePresent(
+      CheckYourAnswersPage.locators.activityDates.heading
+    )
 
     // Validate activity dates if they exist
     if (exemptionData.activityDates) {
       if (exemptionData.activityDates.startDate) {
         const actualStartDate = await browseTheWeb.getText(
-          datesSection.startDate.value
+          CheckYourAnswersPage.locators.activityDates.startDateValue
         )
         const expectedStartDate = this._formatDateForDisplay(
           exemptionData.activityDates.startDate
@@ -71,7 +71,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
       if (exemptionData.activityDates.endDate) {
         const actualEndDate = await browseTheWeb.getText(
-          datesSection.endDate.value
+          CheckYourAnswersPage.locators.activityDates.endDateValue
         )
         const expectedEndDate = this._formatDateForDisplay(
           exemptionData.activityDates.endDate
@@ -86,15 +86,15 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateActivityDetails(browseTheWeb, exemptionData) {
-    const detailsSection = CheckYourAnswersPage.getActivityDetailsSection()
-
     // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(detailsSection.heading)
+    await browseTheWeb.expectElementToBePresent(
+      CheckYourAnswersPage.locators.activityDetails.heading
+    )
 
     // Validate activity description
     if (exemptionData.activityDescription) {
       const actualDescription = await browseTheWeb.getText(
-        detailsSection.activityDescription.value
+        CheckYourAnswersPage.locators.activityDetails.activityDescriptionValue
       )
       if (
         actualDescription.trim() !== exemptionData.activityDescription.trim()
@@ -107,17 +107,17 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateSiteDetails(browseTheWeb, exemptionData) {
-    const siteSection = CheckYourAnswersPage.getSiteDetailsSection()
-
     // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(siteSection.heading)
+    await browseTheWeb.expectElementToBePresent(
+      CheckYourAnswersPage.locators.siteDetails.heading
+    )
 
     // Validate site details if they exist
     if (exemptionData.siteDetails) {
       // Validate coordinates type
       if (exemptionData.siteDetails.coordinatesType) {
         const actualCoordinatesType = await browseTheWeb.getText(
-          siteSection.coordinatesType.value
+          CheckYourAnswersPage.locators.siteDetails.coordinatesTypeValue
         )
         if (
           actualCoordinatesType.trim() !==
@@ -132,7 +132,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
       // Validate coordinates entry method
       if (exemptionData.siteDetails.coordinatesEntry) {
         const actualCoordinatesEntry = await browseTheWeb.getText(
-          siteSection.coordinatesEntry.value
+          CheckYourAnswersPage.locators.siteDetails.coordinatesEntryValue
         )
         if (
           actualCoordinatesEntry.trim() !==
@@ -144,17 +144,27 @@ export default class EnsureCheckYourAnswersPage extends Task {
         }
       }
 
-      // Validate coordinate system
+      // Validate coordinate system - map short format to expected display text
       if (exemptionData.siteDetails.coordinateSystem) {
         const actualCoordinateSystem = await browseTheWeb.getText(
-          siteSection.coordinatesSystem.value
+          CheckYourAnswersPage.locators.siteDetails.coordinateSystemValue
         )
-        if (
-          actualCoordinateSystem.trim() !==
-          exemptionData.siteDetails.coordinateSystem
-        ) {
+
+        // Map the stored short format to what should be displayed per AC
+        let expectedCoordinateSystem
+        if (exemptionData.siteDetails.coordinateSystem === 'WGS84') {
+          expectedCoordinateSystem =
+            'WGS84 (World Geodetic System 1984) Latitude and longitude'
+        } else if (exemptionData.siteDetails.coordinateSystem === 'OSGB36') {
+          expectedCoordinateSystem =
+            'OSGB36 (National Grid) Eastings and Northings'
+        } else {
+          expectedCoordinateSystem = exemptionData.siteDetails.coordinateSystem
+        }
+
+        if (actualCoordinateSystem.trim() !== expectedCoordinateSystem) {
           expect.fail(
-            `Coordinate system mismatch. Expected: "${exemptionData.siteDetails.coordinateSystem}", but found: "${actualCoordinateSystem}"`
+            `Coordinate system mismatch. Expected: "${expectedCoordinateSystem}", but found: "${actualCoordinateSystem}"`
           )
         }
       }
@@ -162,7 +172,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
       // Validate coordinates
       if (exemptionData.siteDetails.coordinates) {
         const actualCoordinates = await browseTheWeb.getText(
-          siteSection.coordinates.value
+          CheckYourAnswersPage.locators.siteDetails.coordinatesValue
         )
         const expectedCoordinates = this._formatCoordinatesForDisplay(
           exemptionData.siteDetails.coordinates
@@ -177,7 +187,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
       // Validate circle width (for circular sites)
       if (exemptionData.siteDetails.width) {
         const actualWidth = await browseTheWeb.getText(
-          siteSection.circleWidth.value
+          CheckYourAnswersPage.locators.siteDetails.circleWidthValue
         )
         if (actualWidth.trim() !== exemptionData.siteDetails.width.toString()) {
           expect.fail(
@@ -189,19 +199,18 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
-    const registerSection = CheckYourAnswersPage.getPublicRegisterSection()
-
     // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(registerSection.heading)
+    await browseTheWeb.expectElementToBePresent(
+      CheckYourAnswersPage.locators.publicRegister.heading
+    )
 
     // Validate public register consent
     if (exemptionData.publicRegister) {
       const actualConsent = await browseTheWeb.getText(
-        registerSection.informationWithheld.value
+        CheckYourAnswersPage.locators.publicRegister.informationWithheldValue
       )
-      const expectedConsent = exemptionData.publicRegister.consent
-        ? 'No'
-        : 'Yes'
+      const expectedConsent =
+        exemptionData.publicRegister.consent === 'no' ? 'Yes' : 'No'
       if (actualConsent.trim() !== expectedConsent) {
         expect.fail(
           `Public register consent mismatch. Expected: "${expectedConsent}", but found: "${actualConsent}"`
