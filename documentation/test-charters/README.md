@@ -173,6 +173,8 @@ All current charters focus exclusively on **delivered functionality**:
 - Activity dates with enhanced validation (ML-10)
 - Activity description entry (ML-11)
 - Public register consent decisions (ML-12)
+- Check answers before submission (ML-82)
+- Submit notification and confirmation (ML-84)
 
 ### **Site Details Coordinate Entry Workflow**
 

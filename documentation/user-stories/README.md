@@ -19,6 +19,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-36    | Enter width of circular site                  | [ML-36.enter.width.of.circular.site.md](./ML-36.enter.width.of.circular.site.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.width.circular.site.feature](../../test/features/validation.width.circular.site.feature)                                                                                                                                                                                                                                                                       |
 | ML-37    | Review circular site details                  | [ML-37.review.circular.site.details.md](./ML-37.review.circular.site.details.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature)                                                                                                                                                                                                                                                                                                                                                                             |
 | ML-82    | Check answers before sending your information | [ML-82.check.answers.circular.site.md](./ML-82.check.answers.circular.site.md)                                     | TBC - Feature files to be created                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ML-84    | Submit notification                           | [ML-84.submit.notification.md](./ML-84.submit.notification.md)                                                     | TBC - Feature files to be created                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## Story status
 
@@ -35,6 +36,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-36**: Enter width of circular site (Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
 - ✅ **ML-37**: Review circular site details (Complete circular site review flow with validation and task completion)
 - 🚧 **ML-82**: Check answers before sending your information (Summary page displaying all notification details before submission)
+- 📝 **ML-84**: Submit notification (Submit exemption notification to MMO and display confirmation page with reference number)
 
 ## Feature file tags
 
@@ -101,7 +103,8 @@ documentation/user-stories/
 ├── ML-36.enter.width.of.circular.site.md                   # Enter width of circular site (manual path)
 ├── ML-37.review.circular.site.details.md                   # Review circular site details (manual path)
 ├── ML-69.choose.file.to.upload.md                          # Choose file type to upload (file upload path)
-└── ML-82.check.answers.circular.site.md                    # Check answers before sending your information
+├── ML-82.check.answers.circular.site.md                    # Check answers before sending your information
+└── ML-84.submit.notification.md                            # Submit notification and show confirmation
 ```
 
 ## Adding new user stories

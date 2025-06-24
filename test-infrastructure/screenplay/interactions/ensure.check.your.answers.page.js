@@ -182,9 +182,12 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
     if (exemptionData.publicRegister) {
+      // Field shows "Information withheld from public register"
+      // consent: true = give consent to share = NOT withheld = "No"
+      // consent: false = withhold consent = IS withheld = "Yes"
       const expectedConsent = exemptionData.publicRegister.consent
-        ? 'Yes'
-        : 'No'
+        ? 'No'
+        : 'Yes'
       await browseTheWeb.expectElementToContainText(
         CheckYourAnswersPage.locators.publicRegister.informationWithheldValue,
         expectedConsent
