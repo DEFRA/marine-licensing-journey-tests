@@ -28,221 +28,169 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateProjectDetails(browseTheWeb, exemptionData) {
-    // Check section heading exists
-    await browseTheWeb.expectElementToContainText(
-      CheckYourAnswersPage.locators.projectDetails.heading,
-      'Project details'
-    )
-
-    // Validate project name
     if (exemptionData.projectName) {
-      const actualProjectName = await browseTheWeb.getText(
-        CheckYourAnswersPage.locators.projectDetails.projectNameValue
+      await browseTheWeb.expectElementToHaveExactText(
+        CheckYourAnswersPage.locators.projectDetails.projectNameValue,
+        exemptionData.projectName
       )
-      if (actualProjectName.trim() !== exemptionData.projectName.trim()) {
-        expect.fail(
-          `Project name mismatch. Expected: "${exemptionData.projectName}", but found: "${actualProjectName}"`
-        )
-      }
     }
   }
 
   async _validateActivityDates(browseTheWeb, exemptionData) {
-    // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(
-      CheckYourAnswersPage.locators.activityDates.heading
-    )
-
-    // Validate activity dates if they exist
     if (exemptionData.activityDates) {
-      if (exemptionData.activityDates.startDate) {
-        const actualStartDate = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.activityDates.startDateValue
-        )
-        const expectedStartDate = this._formatDateForDisplay(
-          exemptionData.activityDates.startDate
-        )
-        if (actualStartDate.trim() !== expectedStartDate) {
-          expect.fail(
-            `Start date mismatch. Expected: "${expectedStartDate}", but found: "${actualStartDate}"`
-          )
-        }
-      }
-
-      if (exemptionData.activityDates.endDate) {
-        const actualEndDate = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.activityDates.endDateValue
-        )
-        const expectedEndDate = this._formatDateForDisplay(
-          exemptionData.activityDates.endDate
-        )
-        if (actualEndDate.trim() !== expectedEndDate) {
-          expect.fail(
-            `End date mismatch. Expected: "${expectedEndDate}", but found: "${actualEndDate}"`
-          )
-        }
-      }
+      await this._validateDateField(
+        browseTheWeb,
+        exemptionData.activityDates,
+        'startDate'
+      )
+      await this._validateDateField(
+        browseTheWeb,
+        exemptionData.activityDates,
+        'endDate'
+      )
     }
   }
 
-  async _validateActivityDetails(browseTheWeb, exemptionData) {
-    // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(
-      CheckYourAnswersPage.locators.activityDetails.heading
-    )
-
-    // Validate activity description
-    if (exemptionData.activityDescription) {
-      const actualDescription = await browseTheWeb.getText(
-        CheckYourAnswersPage.locators.activityDetails.activityDescriptionValue
+  async _validateDateField(browseTheWeb, activityDates, dateField) {
+    if (activityDates[dateField]) {
+      const locator =
+        CheckYourAnswersPage.locators.activityDates[`${dateField}Value`]
+      const expectedDate = this._formatDateObjectToDisplay(
+        activityDates[dateField]
       )
-      if (
-        actualDescription.trim() !== exemptionData.activityDescription.trim()
-      ) {
-        expect.fail(
-          `Activity description mismatch. Expected: "${exemptionData.activityDescription}", but found: "${actualDescription}"`
-        )
-      }
+      await browseTheWeb.expectElementToHaveExactText(locator, expectedDate)
+    }
+  }
+
+  _formatDateObjectToDisplay(dateObject) {
+    if (dateObject && dateObject.day && dateObject.month && dateObject.year) {
+      return `${dateObject.day}/${dateObject.month}/${dateObject.year}`
+    }
+    return String(dateObject)
+  }
+
+  async _validateActivityDetails(browseTheWeb, exemptionData) {
+    if (exemptionData.activityDetails?.description) {
+      await browseTheWeb.expectElementToContainText(
+        CheckYourAnswersPage.locators.activityDetails.activityDescriptionValue,
+        exemptionData.activityDetails.description
+      )
     }
   }
 
   async _validateSiteDetails(browseTheWeb, exemptionData) {
-    // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(
-      CheckYourAnswersPage.locators.siteDetails.heading
-    )
-
-    // Validate site details if they exist
     if (exemptionData.siteDetails) {
-      // Validate coordinates type
-      if (exemptionData.siteDetails.coordinatesType) {
-        const actualCoordinatesType = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.siteDetails.coordinatesTypeValue
-        )
-        if (
-          actualCoordinatesType.trim() !==
-          exemptionData.siteDetails.coordinatesType
-        ) {
-          expect.fail(
-            `Coordinates type mismatch. Expected: "${exemptionData.siteDetails.coordinatesType}", but found: "${actualCoordinatesType}"`
-          )
-        }
-      }
+      await this._validateMethodOfProvidingSiteLocation(
+        browseTheWeb,
+        exemptionData.siteDetails
+      )
+      await this._validateCoordinateSystem(
+        browseTheWeb,
+        exemptionData.siteDetails
+      )
+      await this._validateCoordinates(browseTheWeb, exemptionData.siteDetails)
+      await this._validateCircularSiteWidth(
+        browseTheWeb,
+        exemptionData.siteDetails
+      )
+    }
+  }
 
-      // Validate coordinates entry method
-      if (exemptionData.siteDetails.coordinatesEntry) {
-        const actualCoordinatesEntry = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.siteDetails.coordinatesEntryValue
-        )
-        if (
-          actualCoordinatesEntry.trim() !==
-          exemptionData.siteDetails.coordinatesEntry
-        ) {
-          expect.fail(
-            `Coordinates entry mismatch. Expected: "${exemptionData.siteDetails.coordinatesEntry}", but found: "${actualCoordinatesEntry}"`
-          )
-        }
-      }
+  async _validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails) {
+    // AC6: Method of providing site location - fixed text for circular sites
+    const expectedText =
+      'Manually enter one set of coordinates and a width to create a circular site'
 
-      // Validate coordinate system - map short format to expected display text
-      if (exemptionData.siteDetails.coordinateSystem) {
-        const actualCoordinateSystem = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.siteDetails.coordinateSystemValue
-        )
+    await browseTheWeb.expectElementToContainText(
+      CheckYourAnswersPage.locators.siteDetails
+        .methodOfProvidingSiteLocationValue,
+      expectedText
+    )
+  }
 
-        // Map the stored short format to what should be displayed per AC
-        let expectedCoordinateSystem
-        if (exemptionData.siteDetails.coordinateSystem === 'WGS84') {
-          expectedCoordinateSystem =
-            'WGS84 (World Geodetic System 1984) Latitude and longitude'
-        } else if (exemptionData.siteDetails.coordinateSystem === 'OSGB36') {
-          expectedCoordinateSystem =
-            'OSGB36 (National Grid) Eastings and Northings'
-        } else {
-          expectedCoordinateSystem = exemptionData.siteDetails.coordinateSystem
-        }
+  async _validateCoordinateSystem(browseTheWeb, siteDetails) {
+    if (siteDetails.coordinateSystem) {
+      const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
+        siteDetails.coordinateSystem
+      )
 
-        if (actualCoordinateSystem.trim() !== expectedCoordinateSystem) {
-          expect.fail(
-            `Coordinate system mismatch. Expected: "${expectedCoordinateSystem}", but found: "${actualCoordinateSystem}"`
-          )
-        }
-      }
+      // Use Chai fallback for complex error message with expected vs actual
+      const actualText = await browseTheWeb.getText(
+        CheckYourAnswersPage.locators.siteDetails.coordinateSystemValue
+      )
 
-      // Validate coordinates
-      if (exemptionData.siteDetails.coordinates) {
-        const actualCoordinates = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.siteDetails.coordinatesValue
+      if (actualText.trim() !== expectedDisplayText) {
+        expect.fail(
+          `Coordinate system mismatch. Expected: "${expectedDisplayText}", but found: "${actualText}"`
         )
-        const expectedCoordinates = this._formatCoordinatesForDisplay(
-          exemptionData.siteDetails.coordinates
-        )
-        if (actualCoordinates.trim() !== expectedCoordinates) {
-          expect.fail(
-            `Coordinates mismatch. Expected: "${expectedCoordinates}", but found: "${actualCoordinates}"`
-          )
-        }
-      }
-
-      // Validate circle width (for circular sites)
-      if (exemptionData.siteDetails.width) {
-        const actualWidth = await browseTheWeb.getText(
-          CheckYourAnswersPage.locators.siteDetails.circleWidthValue
-        )
-        if (actualWidth.trim() !== exemptionData.siteDetails.width.toString()) {
-          expect.fail(
-            `Circle width mismatch. Expected: "${exemptionData.siteDetails.width}", but found: "${actualWidth}"`
-          )
-        }
       }
     }
+  }
+
+  _mapCoordinateSystemToDisplayText(coordinateSystem) {
+    const mappings = {
+      WGS84: 'WGS84 (World Geodetic System 1984) Latitude and longitude',
+      OSGB36: 'OSGB36 (National Grid) Eastings and Northings'
+    }
+    return mappings[coordinateSystem] || coordinateSystem
+  }
+
+  async _validateCoordinates(browseTheWeb, siteDetails) {
+    if (siteDetails.circleData) {
+      const { circleData, coordinateSystem } = siteDetails
+
+      // AC6: Validate "Coordinates at centre of site" field
+      const expectedCoordinates = this._formatCoordinatesForDisplay(
+        circleData,
+        coordinateSystem
+      )
+      if (expectedCoordinates) {
+        await browseTheWeb.expectElementToContainText(
+          CheckYourAnswersPage.locators.siteDetails.coordinatesAtCentreValue,
+          expectedCoordinates
+        )
+      }
+    }
+  }
+
+  async _validateCircularSiteWidth(browseTheWeb, siteDetails) {
+    if (siteDetails.circleData?.width) {
+      // AC6: Width should be displayed as "<width> metres" in "Width of circular site" field
+      const expectedWidth = `${siteDetails.circleData.width} metres`
+      await browseTheWeb.expectElementToContainText(
+        CheckYourAnswersPage.locators.siteDetails.widthOfCircularSiteValue,
+        expectedWidth
+      )
+    }
+  }
+
+  _formatCoordinatesForDisplay(circleData, coordinateSystem) {
+    if (
+      coordinateSystem === 'WGS84' &&
+      circleData.latitude &&
+      circleData.longitude
+    ) {
+      return `${circleData.latitude}, ${circleData.longitude}`
+    }
+    if (
+      coordinateSystem === 'OSGB36' &&
+      circleData.eastings &&
+      circleData.northings
+    ) {
+      return `${circleData.eastings}, ${circleData.northings}`
+    }
+    return null
   }
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
-    // Check section heading exists
-    await browseTheWeb.expectElementToBePresent(
-      CheckYourAnswersPage.locators.publicRegister.heading
-    )
-
-    // Validate public register consent
     if (exemptionData.publicRegister) {
-      const actualConsent = await browseTheWeb.getText(
-        CheckYourAnswersPage.locators.publicRegister.informationWithheldValue
+      const expectedConsent = exemptionData.publicRegister.consent
+        ? 'Yes'
+        : 'No'
+      await browseTheWeb.expectElementToContainText(
+        CheckYourAnswersPage.locators.publicRegister.informationWithheldValue,
+        expectedConsent
       )
-      const expectedConsent =
-        exemptionData.publicRegister.consent === 'no' ? 'Yes' : 'No'
-      if (actualConsent.trim() !== expectedConsent) {
-        expect.fail(
-          `Public register consent mismatch. Expected: "${expectedConsent}", but found: "${actualConsent}"`
-        )
-      }
     }
-  }
-
-  /**
-   * Format date object for display comparison
-   * Expected format: DD/MM/YYYY
-   */
-  _formatDateForDisplay(dateObj) {
-    if (!dateObj) return ''
-
-    const day = dateObj.day?.toString().padStart(2, '0') || '01'
-    const month = dateObj.month?.toString().padStart(2, '0') || '01'
-    const year = dateObj.year?.toString() || '2025'
-
-    return `${day}/${month}/${year}`
-  }
-
-  /**
-   * Format coordinates for display comparison
-   * Expected format: "latitude, longitude"
-   */
-  _formatCoordinatesForDisplay(coordinates) {
-    if (!coordinates) return ''
-
-    const lat = coordinates.latitude || coordinates.lat || ''
-    const lon = coordinates.longitude || coordinates.lon || ''
-
-    return `${lat}, ${lon}`
   }
 }

@@ -57,6 +57,18 @@ export default class CheckYourAnswersPage {
       circleWidthTerm: '//dt[contains(text(), "Circle width")]',
       circleWidthValue:
         '//dt[contains(text(), "Circle width")]/following-sibling::dd[1]',
+      methodOfProvidingSiteLocationTerm:
+        '//dt[contains(text(), "Method of providing site location")]',
+      methodOfProvidingSiteLocationValue:
+        '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd[1]',
+      coordinatesAtCentreTerm:
+        '//dt[contains(text(), "Coordinates at centre of site")]',
+      coordinatesAtCentreValue:
+        '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd[1]',
+      widthOfCircularSiteTerm:
+        '//dt[contains(text(), "Width of circular site")]',
+      widthOfCircularSiteValue:
+        '//dt[contains(text(), "Width of circular site")]/following-sibling::dd[1]',
       changeLink: '//a[contains(@href, "coordinates")]'
     },
 
