@@ -176,7 +176,8 @@ All current charters focus exclusively on **delivered functionality**:
 
 ### **Site Details Coordinate Entry Workflow**
 
-- Location method selection - manual entry only (ML-16)
+- Location method selection - manual entry and file upload (ML-16)
+- File type selection for upload (KML/Shapefile) (ML-69)
 - Circle vs coordinate list selection (ML-17)
 - Coordinate system selection (WGS84/OSGB36) (ML-18)
 - Centre point coordinate entry with validation (ML-35)
