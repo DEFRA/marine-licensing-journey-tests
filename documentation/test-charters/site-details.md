@@ -2,10 +2,10 @@
 
 ## Investigation Plan
 
-**EXPLORE:** Complete site details coordinate entry workflow including system selection and validation  
+**EXPLORE:** Complete site details workflow including file upload and manual coordinate entry options  
 **AS:** Marine licensing applicants (see References)  
-**BECAUSE:** Coordinate entry is universally challenging and critical to application accuracy  
-**LOOKING FOR:** Usability issues in coordinate workflows, validation clarity, decision confidence, error recovery patterns  
+**BECAUSE:** Site location provision is universally challenging and critical to application accuracy  
+**LOOKING FOR:** Usability issues in location workflows, file type decisions, validation clarity, decision confidence, error recovery patterns  
 **NOTE:** Some advanced back/cancel navigation scenarios from coordinate entry pages are marked @wip (ML-35, ML-36)
 
 **Duration:** 100 minutes  
@@ -15,6 +15,7 @@
 
 - **Requirements:**
   - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
+  - [ML-69: Choose file type to upload](../user-stories/ML-69.choose.file.to.upload.md)
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
   - [ML-35: Enter centre point of a circle](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
@@ -42,7 +43,10 @@
 
 ## Realistic Activities
 
-- Test complete coordinate entry workflow: manual selection → circle choice → coordinate system selection → centre point entry → width entry → review
+- Test complete file upload workflow: location method selection → file type choice (KML vs Shapefile) → upload preparation
+- Test complete manual coordinate entry workflow: manual selection → circle choice → coordinate system selection → centre point entry → width entry → review
+- Investigate file type selection decisions based on user's existing data formats (Marcus's reliance on GIS specialists providing files)
+- Evaluate help text effectiveness for understanding file type differences
 - Investigate coordinate system selection confidence (WGS84 vs OSGB36) across different user technical backgrounds
 - Test centre point coordinate entry accuracy for both systems with realistic scenarios
 - Evaluate decimal place precision understanding (6 decimal places for WGS84)
@@ -53,7 +57,7 @@
 - Test navigation flow and state preservation through the complete workflow
 - Simulate scenarios where users have existing coordinate data but are uncertain about system choice
 - Test help text effectiveness for coordinate system guidance
-- Investigate professional workflows with prepared coordinate data
+- Investigate professional workflows with prepared coordinate data or files from GIS specialists
 
 ## Evidence Framework
 
@@ -75,6 +79,8 @@
 
 ### 🤔 Questions to investigate
 
+- How do users decide between file upload and manual entry based on their available data?
+- What factors influence file type selection (KML vs Shapefile) for users with existing coordinate files?
 - How do users with different geospatial knowledge approach coordinate system selection?
 - What strategies do users employ when coordinate entry validation fails?
 - How do users understand decimal place precision requirements for different coordinate systems?
@@ -83,6 +89,8 @@
 
 ### 💡 Ideas to explore
 
+- Could file type selection guidance better explain when to use KML vs Shapefile?
+- Are there opportunities to help users identify their file type before selection?
 - Could coordinate system selection guidance be more accessible to non-technical users?
 - Are there opportunities to better validate coordinate accuracy during entry?
 - How might width entry be made clearer for users unfamiliar with measurement concepts?
@@ -103,6 +111,7 @@ WORKFLOW OBSERVATIONS:
 
 DELIVERED FEATURE FINDINGS:
 Entry Method Selection: [Manual vs file upload choice, guidance clarity]
+File Type Selection: [KML vs Shapefile understanding, decision confidence, help text effectiveness]
 Shape Selection: [Circle vs polygon understanding, choice confidence]
 Coordinate System: [WGS84/OSGB36 selection confidence, guidance effectiveness]
 Centre Point Entry: [Coordinate accuracy, format understanding, validation response]
@@ -134,6 +143,6 @@ IMMEDIATE ACTIONS:
 
 ---
 
-**Delivered features tested:** Complete site details coordinate entry workflow including location method selection, circle/polygon choice, coordinate system selection (WGS84/OSGB36), centre point coordinate entry with validation, circle width entry, and site details review
+**Delivered features tested:** Complete site details workflow including location method selection (file upload/manual entry), file type selection (KML/Shapefile), circle/polygon choice, coordinate system selection (WGS84/OSGB36), centre point coordinate entry with validation, circle width entry, and site details review
 
 **@wip scenarios:** Advanced back navigation from coordinate entry pages preserving coordinate system selection, cancel functionality from coordinate entry pages with data discard validation (specific to ML-35, ML-36)

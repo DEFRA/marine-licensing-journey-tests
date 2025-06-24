@@ -42,6 +42,7 @@ This directory contains comprehensive documentation for the Marine Licensing jou
 - [ML-16: Site location input method](./user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
 - [ML-17: Circle or coordinate list entry](./user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
 - [ML-18: Coordinate system selection](./user-stories/ML-18.choose.coordinate.system.md)
+- [ML-69: Choose file type to upload](./user-stories/ML-69.choose.file.to.upload.md)
 
 ### User personas
 

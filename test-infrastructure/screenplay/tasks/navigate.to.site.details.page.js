@@ -43,26 +43,23 @@ export default class NavigateToSiteDetailsPage extends Task {
   constructor(targetPage) {
     super()
     this.targetPage = targetPage
+    this.navigationStrategies = this.createNavigationStrategies()
   }
 
-  async performAs(actor) {
-    const browseTheWeb = actor.ability
-    const exemption = actor.recalls('exemption')
-    const siteDetails = exemption?.siteDetails
-
-    switch (this.targetPage) {
-      case 'coordinates-entry-method':
+  createNavigationStrategies() {
+    return {
+      'coordinates-entry-method': async (browseTheWeb) => {
         await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
           browseTheWeb
         )
-        break
-      case 'coordinate-system':
+      },
+      'coordinate-system': async (browseTheWeb) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
-        break
-      case 'select-wgs84-only':
+      },
+      'select-wgs84-only': async (browseTheWeb) => {
         await WhatCoordinateSystemPageInteractions.selectWGS84(browseTheWeb)
-        break
-      case 'enter-wgs84-coordinates':
+      },
+      'enter-wgs84-coordinates': async (browseTheWeb, siteDetails) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
           browseTheWeb
@@ -73,30 +70,40 @@ export default class NavigateToSiteDetailsPage extends Task {
             siteDetails
           )
         }
-        break
-      case 'enter-osgb36-coordinates':
+      },
+      'enter-osgb36-coordinates': async (browseTheWeb) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
-        break
-      case 'enter-wgs84-coordinates-page-only':
+      },
+      'enter-wgs84-coordinates-page-only': async (browseTheWeb) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
           browseTheWeb
         )
-        // Stop here - don't enter any coordinates (for validation testing)
-        break
-      case 'enter-osgb36-coordinates-page-only':
+      },
+      'enter-osgb36-coordinates-page-only': async (browseTheWeb) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
-        // Stop here - don't enter any coordinates (for validation testing)
-        break
-      default:
-        expect.fail(`Unknown target page: ${this.targetPage}`)
+      }
     }
+  }
+
+  async performAs(actor) {
+    const browseTheWeb = actor.ability
+    const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
+
+    const navigationStrategy = this.navigationStrategies[this.targetPage]
+
+    if (!navigationStrategy) {
+      expect.fail(`Unknown target page: ${this.targetPage}`)
+    }
+
+    await navigationStrategy(browseTheWeb, siteDetails)
   }
 
   async navigateToCoordinateSystem(browseTheWeb) {

@@ -12,6 +12,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-11    | Provide activity description                  | [ML-11.provide.activity.description.md](./ML-11.provide.activity.description.md)                                   | [activity.description.feature](../../test/features/activity.description.feature)                                                                                                                                                                                                                                                                                                                                                                                         |
 | ML-12    | Provide or withhold public register content   | [ML-12.provide.or.withhold.public.register.content.md](./ML-12.provide.or.withhold.public.register.content.md)     | [public.register.feature](../../test/features/public.register.feature), [validation.public.register.feature](../../test/features/validation.public.register.feature), [back.and.cancel.public.register.feature](../../test/features/back.and.cancel.public.register.feature)                                                                                                                                                                                             |
 | ML-16    | Choose file upload or manual coordinate entry | [ML-16.choose.file.upload.or.manual.coordinate.entry.md](./ML-16.choose.file.upload.or.manual.coordinate.entry.md) | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature) |
+| ML-69    | Choose file type to upload                    | [ML-69.choose.file.to.upload.md](./ML-69.choose.file.to.upload.md)                                                 | [file.type.selection.feature](../../test/features/file.type.selection.feature)                                                                                                                                                                                                                                                                                                                                                                                           |
 | ML-17    | Choose circle or coordinate list entry        | [ML-17.choose.circle.or.coordinate.list.entry.md](./ML-17.choose.circle.or.coordinate.list.entry.md)               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature) |
 | ML-18    | Choose coordinate system                      | [ML-18.choose.coordinate.system.md](./ML-18.choose.coordinate.system.md)                                           | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [site.details.manual.polygon.feature](../../test/features/site.details.manual.polygon.feature), [validation.site.details.feature](../../test/features/validation.site.details.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature) |
 | ML-35    | Enter centre point of a circle                | [ML-35.enter.centre.point.of.a.circle.md](./ML-35.enter.centre.point.of.a.circle.md)                               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.centre.point.coordinates.feature](../../test/features/validation.centre.point.coordinates.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature)                                                                         |
@@ -23,16 +24,17 @@ This directory contains user stories for the marine licensing application under 
 
 - ✅ **ML-1**: Project name entry and exemption creation
 - ✅ **ML-9**: Task list display and navigation
-- ✅ **ML-10**: Provide activity dates (UPDATED: Enhanced validation with specific error messages for individual date components)
+- ✅ **ML-10**: Provide activity dates (Enhanced validation with specific error messages for individual date components)
 - ✅ **ML-11**: Provide activity description
 - ✅ **ML-12**: Public register consent and withholding
 - ✅ **ML-16**: Choose file upload or manual coordinate entry
+- ✅ **ML-69**: Choose file type to upload (File type selection for site location upload workflow)
 - ✅ **ML-17**: Choose how to enter site coordinates
 - ✅ **ML-18**: Choose coordinate system for site location
-- ✅ **ML-35**: Enter centre point of a circle (NEW: Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
-- ✅ **ML-36**: Enter width of circular site (NEW: Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
-- ✅ **ML-37**: Review circular site details (NEW: Complete circular site review flow with validation and task completion)
-- 🚧 **ML-82**: Check answers before sending your information (NEW: Summary page displaying all notification details before submission)
+- ✅ **ML-35**: Enter centre point of a circle (Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
+- ✅ **ML-36**: Enter width of circular site (Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
+- ✅ **ML-37**: Review circular site details (Complete circular site review flow with validation and task completion)
+- 🚧 **ML-82**: Check answers before sending your information (Summary page displaying all notification details before submission)
 
 ## Feature file tags
 
@@ -47,7 +49,7 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 
 The `@smoke` tag identifies core user journey scenarios that provide fast feedback on essential functionality:
 
-**Tagged scenarios (8 core journeys):**
+**Tagged scenarios (10 core journeys):**
 
 - Project name creation (ML-1)
 - Task list display (ML-9)
@@ -55,6 +57,8 @@ The `@smoke` tag identifies core user journey scenarios that provide fast feedba
 - Activity description completion (ML-11)
 - Public register consent decision (ML-12)
 - Public register withhold decision (ML-12)
+- File type selection for upload - Shapefile (ML-69)
+- File type selection for upload - KML (ML-69)
 - Site details with WGS84 coordinates (ML-16,17,18,35,36,37)
 - Site details with OSGB36 coordinates (ML-16,17,18,35,36,37)
 
@@ -91,11 +95,12 @@ documentation/user-stories/
 ├── ML-11.provide.activity.description.md                   # Activity description entry
 ├── ML-12.provide.or.withhold.public.register.content.md    # Public register consent
 ├── ML-16.choose.file.upload.or.manual.coordinate.entry.md  # Site location options
-├── ML-17.choose.circle.or.coordinate.list.entry.md         # Coordinate entry options
-├── ML-18.choose.coordinate.system.md                       # Coordinate system selection
-├── ML-35.enter.centre.point.of.a.circle.md                 # Enter centre point of a circle
-├── ML-36.enter.width.of.circular.site.md                   # Enter width of circular site
-├── ML-37.review.circular.site.details.md                   # Review circular site details
+├── ML-17.choose.circle.or.coordinate.list.entry.md         # Coordinate entry options (manual path)
+├── ML-18.choose.coordinate.system.md                       # Coordinate system selection (manual path)
+├── ML-35.enter.centre.point.of.a.circle.md                 # Enter centre point of a circle (manual path)
+├── ML-36.enter.width.of.circular.site.md                   # Enter width of circular site (manual path)
+├── ML-37.review.circular.site.details.md                   # Review circular site details (manual path)
+├── ML-69.choose.file.to.upload.md                          # Choose file type to upload (file upload path)
 └── ML-82.check.answers.circular.site.md                    # Check answers before sending your information
 ```
 
