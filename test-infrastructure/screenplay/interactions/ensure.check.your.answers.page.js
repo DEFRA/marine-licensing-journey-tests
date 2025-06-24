@@ -169,21 +169,29 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   _formatCoordinatesForDisplay(circleData, coordinateSystem) {
-    if (
-      coordinateSystem === 'WGS84' &&
-      circleData.latitude &&
-      circleData.longitude
-    ) {
+    if (this._isWGS84CoordinateSystem(circleData, coordinateSystem)) {
       return `${circleData.latitude}, ${circleData.longitude}`
     }
-    if (
-      coordinateSystem === 'OSGB36' &&
-      circleData.eastings &&
-      circleData.northings
-    ) {
+    if (this._isOSGB36CoordinateSystem(circleData, coordinateSystem)) {
       return `${circleData.eastings}, ${circleData.northings}`
     }
     return null
+  }
+
+  _isWGS84CoordinateSystem(circleData, coordinateSystem) {
+    return (
+      coordinateSystem === 'WGS84' &&
+      circleData.latitude &&
+      circleData.longitude
+    )
+  }
+
+  _isOSGB36CoordinateSystem(circleData, coordinateSystem) {
+    return (
+      coordinateSystem === 'OSGB36' &&
+      circleData.eastings &&
+      circleData.northings
+    )
   }
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
