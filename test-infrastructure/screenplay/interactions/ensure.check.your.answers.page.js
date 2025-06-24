@@ -63,10 +63,14 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   _formatDateObjectToDisplay(dateObject) {
-    if (dateObject && dateObject.day && dateObject.month && dateObject.year) {
+    if (this._isValidDateObject(dateObject)) {
       return `${dateObject.day}/${dateObject.month}/${dateObject.year}`
     }
     return String(dateObject)
+  }
+
+  _isValidDateObject(dateObject) {
+    return dateObject && dateObject.day && dateObject.month && dateObject.year
   }
 
   async _validateActivityDetails(browseTheWeb, exemptionData) {
