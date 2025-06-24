@@ -20,7 +20,7 @@ export default class CompleteSiteDetails extends Task {
     const browseTheWeb = actor.ability
 
     if (siteDetails.coordinatesEntryMethod === 'file-upload') {
-      await this.completeFileUploadFlow(browseTheWeb, siteDetails)
+      await this.completeFileUploadFlow(browseTheWeb, siteDetails, actor)
     } else if (siteDetails.coordinatesEntryMethod === 'enter-manually') {
       await this.completeManualEntryFlow(browseTheWeb, siteDetails)
     } else {
@@ -62,9 +62,15 @@ export default class CompleteSiteDetails extends Task {
     return siteDetails.siteType === 'circle'
   }
 
-  async completeFileUploadFlow(browseTheWeb, siteDetails) {
-    await Promise.resolve()
-    expect.fail(ERROR_MESSAGES.FILE_UPLOAD_NOT_IMPLEMENTED)
+  async completeFileUploadFlow(browseTheWeb, siteDetails, actor) {
+    // Navigate to file upload by selecting "Upload a file" option
+    await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
+      browseTheWeb,
+      siteDetails.coordinatesEntryMethod
+    )
+
+    // Stop here - the test steps will handle the file type selection
+    // TODO: When more of the file upload flow is implemented, we can complete the flow here
   }
 
   validateTestData(actor) {

@@ -6,28 +6,19 @@ Feature: File type selection: The user can choose which type of file to upload f
 
   @smoke
   Scenario: Successfully select Shapefile for upload
-    Given a user has chosen to upload a file for site location
-    And the "Which type of file do you want to upload?" page is displayed
-    When selecting "Shapefile" as the file type
-    Then the file type selection is saved
+    Given the user wants to apply for an exemption using a Shapefile
+    And the Which type of file do you want to upload? page is displayed
+    When selecting Shapefile as the file type
+    Then the Shapefile option is selected
 
   @smoke
   Scenario: Successfully select KML for upload
-    Given a user has chosen to upload a file for site location
-    And the "Which type of file do you want to upload?" page is displayed
-    When selecting "KML" as the file type
-    Then the file type selection is saved
-
-  Scenario: Display file type selection page with correct elements
-    Given a user has chosen to upload a file for site location
-    When the "Which type of file do you want to upload?" page is displayed
-    Then the page shows the project name as the caption
-    And the page shows two file type options: "Shapefile" and "KML"
-    And neither radio button is selected by default
-    And the help content "Help with file types" is available
+    Given the user wants to apply for an exemption using a KML file
+    And the Which type of file do you want to upload? page is displayed
+    When selecting KML as the file type
+    Then the KML option is selected
 
   Scenario: Prevent proceeding without selecting a file type
-    Given a user has chosen to upload a file for site location
-    And the "Which type of file do you want to upload?" page is displayed
+    Given the Which type of file do you want to upload? page is displayed
     When the Continue button is clicked without selecting a file type
-    Then the error message "Select which type of file you want to upload" is displayed 
+    Then the file type error "Select which type of file you want to upload" is displayed

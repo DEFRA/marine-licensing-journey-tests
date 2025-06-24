@@ -1,6 +1,7 @@
 import {
   ActivityDatesModel,
   ActivityDescriptionModel,
+  FileTypeModel,
   MarineProjectModel,
   PublicRegisterModel
 } from '../models/index.js'
@@ -17,6 +18,7 @@ export default class ApplyForExemption {
         ActivityDescriptionModel.generateActivityDescription(),
       activityDates: null,
       publicRegister: null,
+      fileType: null,
       projectNameTaskCompleted: false,
       activityDescriptionTaskCompleted: false,
       activityDatesTaskCompleted: false,
@@ -72,6 +74,38 @@ export default class ApplyForExemption {
         publicRegister: {
           consent: false,
           reason: PublicRegisterModel.generateWithholdingReason()
+        }
+      })
+    )
+  }
+
+  static withShapefileUpload() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        fileType: FileTypeModel.generateShapefile(),
+        siteDetails: {
+          coordinatesEntryMethod: 'file-upload'
+        }
+      })
+    )
+  }
+
+  static withKMLUpload() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        fileType: FileTypeModel.generateKML(),
+        siteDetails: {
+          coordinatesEntryMethod: 'file-upload'
+        }
+      })
+    )
+  }
+
+  static withFileUpload() {
+    return new ApplyForExemption(
+      this._createBaseExemption({
+        siteDetails: {
+          coordinatesEntryMethod: 'file-upload'
         }
       })
     )

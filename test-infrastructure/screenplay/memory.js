@@ -89,4 +89,11 @@ export default class Memory {
     }
     return (exemption) => (exemption.activityDates.endDate = endDate)
   }
+
+  static ofFileTypeWith(fileType) {
+    if (!fileType || typeof fileType !== 'string') {
+      expect.fail('File type must be a non-empty string')
+    }
+    return (exemption) => (exemption.fileType = fileType)
+  }
 }
