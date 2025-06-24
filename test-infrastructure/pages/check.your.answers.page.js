@@ -2,10 +2,8 @@ export default class CheckYourAnswersPage {
   static url = '/exemption/check-your-answers'
 
   static locators = {
-    // Main heading
     mainHeading: 'h2#check-your-answers-heading',
 
-    // Project details section
     projectDetails: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project details")]',
@@ -15,7 +13,6 @@ export default class CheckYourAnswersPage {
       changeLink: '//a[contains(@href, "project-name")]'
     },
 
-    // Activity dates section
     activityDates: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity dates")]',
@@ -28,7 +25,6 @@ export default class CheckYourAnswersPage {
       changeLink: '//a[contains(@href, "activity-dates")]'
     },
 
-    // Activity details section
     activityDetails: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]',
@@ -38,7 +34,6 @@ export default class CheckYourAnswersPage {
       changeLink: '//a[contains(@href, "activity-description")]'
     },
 
-    // Site details section
     siteDetails: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Site details")]',
@@ -72,7 +67,6 @@ export default class CheckYourAnswersPage {
       changeLink: '//a[contains(@href, "coordinates")]'
     },
 
-    // Public register section
     publicRegister: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Public register")]',
@@ -83,7 +77,6 @@ export default class CheckYourAnswersPage {
       changeLink: '//a[contains(@href, "public-register")]'
     },
 
-    // Submission section
     submission: {
       heading:
         '//h2[contains(@class, "govuk-heading-m") and contains(text(), "Now send your information")]',
@@ -91,7 +84,6 @@ export default class CheckYourAnswersPage {
       declarationCheckbox: '#confirm-declaration'
     },
 
-    // Generic selectors
     generic: {
       allHeadings: 'h1, h2',
       allChangeLinks: '//a[contains(text(), "Change")]',

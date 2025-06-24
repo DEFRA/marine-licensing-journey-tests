@@ -59,7 +59,6 @@ export default class EnterCoordinatesCentrePointPageInteractions {
       }
     }
 
-    // Handle both short and full descriptive text formats
     let mappingKey
     if (coordinateSystem === 'WGS84' || coordinateSystem.includes('WGS84')) {
       mappingKey = 'WGS84'

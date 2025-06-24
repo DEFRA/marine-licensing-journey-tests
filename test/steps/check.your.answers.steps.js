@@ -44,12 +44,9 @@ When('the user clicks Review and send', async function () {
 Then(
   'the user is able to see all their answers in a summary format',
   async function () {
-    // First ensure we're on the correct page
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Check your answers before sending your information')
     )
-
-    // Then validate all answers match the data in memory
     await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
   }
 )

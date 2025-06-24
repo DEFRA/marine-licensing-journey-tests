@@ -10,20 +10,10 @@ export default class EnsureCheckYourAnswersPage extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
     const exemptionData = actor.recalls('exemption')
-
-    // Validate Project Details section
     await this._validateProjectDetails(browseTheWeb, exemptionData)
-
-    // Validate Activity Dates section
     await this._validateActivityDates(browseTheWeb, exemptionData)
-
-    // Validate Activity Details section
     await this._validateActivityDetails(browseTheWeb, exemptionData)
-
-    // Validate Site Details section
     await this._validateSiteDetails(browseTheWeb, exemptionData)
-
-    // Validate Public Register section
     await this._validatePublicRegister(browseTheWeb, exemptionData)
   }
 
@@ -101,7 +91,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
   }
 
   async _validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails) {
-    // AC6: Method of providing site location - fixed text for circular sites
     const expectedText =
       'Manually enter one set of coordinates and a width to create a circular site'
 
@@ -118,7 +107,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
         siteDetails.coordinateSystem
       )
 
-      // Use Chai fallback for complex error message with expected vs actual
       const actualText = await browseTheWeb.getText(
         CheckYourAnswersPage.locators.siteDetails.coordinateSystemValue
       )
@@ -143,7 +131,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
     if (siteDetails.circleData) {
       const { circleData, coordinateSystem } = siteDetails
 
-      // AC6: Validate "Coordinates at centre of site" field
       const expectedCoordinates = this._formatCoordinatesForDisplay(
         circleData,
         coordinateSystem
@@ -159,7 +146,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   async _validateCircularSiteWidth(browseTheWeb, siteDetails) {
     if (siteDetails.circleData?.width) {
-      // AC6: Width should be displayed as "<width> metres" in "Width of circular site" field
       const expectedWidth = `${siteDetails.circleData.width} metres`
       await browseTheWeb.expectElementToContainText(
         CheckYourAnswersPage.locators.siteDetails.widthOfCircularSiteValue,

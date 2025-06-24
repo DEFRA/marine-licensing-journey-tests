@@ -34,7 +34,6 @@ Given('the user wants to apply for an exemption using a KML file', function () {
 Given(
   'the Which type of file do you want to upload? page is displayed',
   async function () {
-    // Create actor if it doesn't exist (for validation scenarios)
     if (!this.actor) {
       this.actor = new Actor('Alice')
       this.actor.can(BrowseTheWeb.using(browser))

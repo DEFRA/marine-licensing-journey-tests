@@ -4,7 +4,6 @@ export default class MarineProjectModel {
   static PROJECT_NAME_MAX_LENGTH = 250
 
   static generateProjectName() {
-    // Simple, realistic project name for testing
     const activities = [
       'Wind Farm',
       'Cable Installation',

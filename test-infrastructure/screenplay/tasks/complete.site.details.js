@@ -38,7 +38,6 @@ export default class CompleteSiteDetails extends Task {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
     }
 
-    // Save and continue if requested
     if (this.saveAndContinue) {
       await actor.attemptsTo(ClickSaveAndContinue.now())
       actor.updates(Memory.markTaskCompleted('siteDetails'))
@@ -80,13 +79,10 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeFileUploadFlow(browseTheWeb, siteDetails, actor) {
-    // Navigate to file upload by selecting "Upload a file" option
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       browseTheWeb,
       siteDetails.coordinatesEntryMethod
     )
-
-    // Stop here - the test steps will handle the file type selection
     // TODO: When more of the file upload flow is implemented, we can complete the flow here
   }
 
