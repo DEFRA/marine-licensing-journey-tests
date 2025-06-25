@@ -19,8 +19,8 @@ This directory contains user stories for the marine licensing application under 
 | ML-35    | Enter centre point of a circle                | [ML-35.enter.centre.point.of.a.circle.md](./ML-35.enter.centre.point.of.a.circle.md)                               | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.centre.point.coordinates.feature](../../test/features/validation.centre.point.coordinates.feature), [back.link.site.details.feature](../../test/features/back.link.site.details.feature), [cancel.button.site.details.feature](../../test/features/cancel.button.site.details.feature)                                                                         |
 | ML-36    | Enter width of circular site                  | [ML-36.enter.width.of.circular.site.md](./ML-36.enter.width.of.circular.site.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature), [validation.width.circular.site.feature](../../test/features/validation.width.circular.site.feature)                                                                                                                                                                                                                                                                       |
 | ML-37    | Review circular site details                  | [ML-37.review.circular.site.details.md](./ML-37.review.circular.site.details.md)                                   | [site.details.manual.circle.feature](../../test/features/site.details.manual.circle.feature)                                                                                                                                                                                                                                                                                                                                                                             |
-| ML-82    | Check answers before sending your information | [ML-82.check.answers.circular.site.md](./ML-82.check.answers.circular.site.md)                                     | TBC - Feature files to be created                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ML-84    | Submit notification                           | [ML-84.submit.notification.md](./ML-84.submit.notification.md)                                                     | TBC - Feature files to be created                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ML-82    | Check answers before sending your information | [ML-82.check.answers.circular.site.md](./ML-82.check.answers.circular.site.md)                                     | [check.your.answers.feature](../../test/features/check.your.answers.feature), [submit.notification.feature](../../test/features/submit.notification.feature)                                                                                                                                                                                                                                                                                                             |
+| ML-84    | Submit notification                           | [ML-84.submit.notification.md](./ML-84.submit.notification.md)                                                     | [submit.notification.feature](../../test/features/submit.notification.feature)                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## Story status
 
@@ -37,8 +37,8 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-35**: Enter centre point of a circle (Coordinate entry with comprehensive validation) ⚠️ _Some back/cancel navigation scenarios @wip_
 - ✅ **ML-36**: Enter width of circular site (Width validation and core functionality) ⚠️ _Back/cancel navigation tests planned for future implementation_
 - ✅ **ML-37**: Review circular site details (Complete circular site review flow with validation and task completion)
-- 🚧 **ML-82**: Check answers before sending your information (Summary page displaying all notification details before submission)
-- 📝 **ML-84**: Submit notification (Submit exemption notification to MMO and display confirmation page with reference number)
+- ✅ **ML-82**: Check answers before sending your information (Summary page displaying all notification details before submission)
+- ✅ **ML-84**: Submit notification (Submit exemption notification to MMO and display confirmation page with reference number)
 
 ## Feature file tags
 
@@ -53,7 +53,7 @@ Feature files are tagged with `@issue=ML-n` where `n` corresponds to the user st
 
 The `@smoke` tag identifies core user journey scenarios that provide fast feedback on essential functionality:
 
-**Tagged scenarios (10 core journeys):**
+**Tagged scenarios (8 core journeys):**
 
 - Project name creation (ML-1)
 - Task list display (ML-9)
@@ -63,8 +63,6 @@ The `@smoke` tag identifies core user journey scenarios that provide fast feedba
 - Public register withhold decision (ML-12)
 - File type selection for upload - Shapefile (ML-69)
 - File type selection for upload - KML (ML-69)
-- Site details with WGS84 coordinates (ML-16,17,18,35,36,37)
-- Site details with OSGB36 coordinates (ML-16,17,18,35,36,37)
 
 **Execution time:** ~2-3 minutes vs full suite ~15+ minutes
 
