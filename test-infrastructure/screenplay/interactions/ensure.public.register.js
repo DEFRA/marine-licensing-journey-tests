@@ -86,8 +86,8 @@ export default class EnsurePublicRegisterTask extends Task {
   }
 
   async verifyNoPrepopulatedDetails(browseTheWeb) {
-    await browseTheWeb.isNotSelected(PublicRegisterPage.consent)
-    await browseTheWeb.isNotSelected(PublicRegisterPage.withhold)
+    await browseTheWeb.isNotSelected(PublicRegisterPage.consentYes)
+    await browseTheWeb.isNotSelected(PublicRegisterPage.consentNo)
   }
 
   async verifyPrepopulatedDetails(browseTheWeb) {

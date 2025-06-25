@@ -25,7 +25,7 @@ export default class FillForm extends Task {
     return new FillForm(async (actor) => {
       const browseTheWeb = actor.ability
 
-      await browseTheWeb.click(PublicRegisterPage.withhold)
+      await browseTheWeb.click(PublicRegisterPage.consentYes)
 
       if (reason && reason.length > 0) {
         await browseTheWeb.sendKeys(PublicRegisterPage.withholdReason, reason)

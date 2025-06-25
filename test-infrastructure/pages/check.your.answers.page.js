@@ -80,7 +80,7 @@ export default class CheckYourAnswersPage {
     submission: {
       heading:
         '//h2[contains(@class, "govuk-heading-m") and contains(text(), "Now send your information")]',
-      submitButton: 'button[type="submit"]',
+      confirmAndSendButton: 'button[type="submit"]',
       declarationCheckbox: '#confirm-declaration'
     },
 

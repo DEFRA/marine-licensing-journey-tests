@@ -129,3 +129,5 @@ IMMEDIATE ACTIONS:
 ---
 
 **Delivered features tested:** Complete exemption notification workflow including project name, task list, activity dates (enhanced validation), activity description, public register consent, and complete site details coordinate entry workflow
+
+**Related charters:** See [Review and Submission](./review-and-submission.md) for focused investigation of final stage review confidence and submission patterns for first-time users

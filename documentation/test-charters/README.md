@@ -83,12 +83,13 @@ Test charters bridge the gap between:
 
 ## 📋 Available investigation sessions
 
-| Theme                           | Charter name                                | Focus                                                      | Personas                 | Priority | Status     |
-| ------------------------------- | ------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)       | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
-| **Professional workflows**      | [Expert workflows](./expert-workflows.md)   | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md) | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
-| **Coordinate entry workflows**  | [Site details](./site-details.md)           | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
+| Theme                           | Charter name                                        | Focus                                                      | Personas                 | Priority | Status     |
+| ------------------------------- | --------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)               | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
+| **Professional workflows**      | [Expert workflows](./expert-workflows.md)           | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md)         | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
+| **Coordinate entry workflows**  | [Site details](./site-details.md)                   | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
+| **Review and submission**       | [Review and submission](./review-and-submission.md) | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
 
 ### **Charter lifecycle**
 
@@ -175,6 +176,7 @@ All current charters focus exclusively on **delivered functionality**:
 - Public register consent decisions (ML-12)
 - Check answers before submission (ML-82)
 - Submit notification and confirmation (ML-84)
+- Application reference generation (ML-21)
 
 ### **Site Details Coordinate Entry Workflow**
 
@@ -185,6 +187,14 @@ All current charters focus exclusively on **delivered functionality**:
 - Centre point coordinate entry with validation (ML-35)
 - Circle width entry (ML-36)
 - Site details review and completion (ML-37)
+
+### **Review and Submission Workflow**
+
+- Information verification and accuracy checking (ML-82)
+- Declaration comprehension and submission confidence
+- "Confirm and send" interaction patterns (ML-84)
+- Application reference understanding and next steps (ML-21)
+- Error detection and correction at final stage
 
 ### **Form Validation and Interaction Patterns**
 

@@ -133,3 +133,5 @@ IMMEDIATE ACTIONS:
 ---
 
 **Delivered features tested:** Complete exemption notification workflow optimised for professional efficiency patterns, including project name entry, task list navigation, activity dates, activity description, public register consent, and complete site details coordinate entry workflow
+
+**Related charters:** See [Review and Submission](./review-and-submission.md) for investigation of professional verification patterns and submission confidence in organisational contexts

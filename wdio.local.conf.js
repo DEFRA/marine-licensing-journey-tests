@@ -15,7 +15,8 @@ export const config = {
   specs: ['test/features/*.feature'],
   cucumberOpts: {
     require: ['test/steps/*.js'],
-    tags: ['not @wip']
+    tags: ['not @wip'],
+    timeout: 60000 // 60 seconds for local development (generous timeout for debugging)
   },
 
   // ============================================================================

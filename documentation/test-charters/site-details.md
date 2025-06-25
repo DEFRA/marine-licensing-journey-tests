@@ -146,3 +146,5 @@ IMMEDIATE ACTIONS:
 **Delivered features tested:** Complete site details workflow including location method selection (file upload/manual entry), file type selection (KML/Shapefile), circle/polygon choice, coordinate system selection (WGS84/OSGB36), centre point coordinate entry with validation, circle width entry, and site details review
 
 **@wip scenarios:** Advanced back navigation from coordinate entry pages preserving coordinate system selection, cancel functionality from coordinate entry pages with data discard validation (specific to ML-35, ML-36)
+
+**Related charters:** See [Review and Submission](./review-and-submission.md) for investigation of how site details information appears in check your answers summary and affects user submission confidence

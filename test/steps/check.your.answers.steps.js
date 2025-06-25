@@ -2,38 +2,28 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import {
   Actor,
-  ApplyForExemption,
   BrowseTheWeb,
   ClickReviewAndSend,
-  CompleteActivityDates,
-  CompleteActivityDescription,
-  CompleteProjectName,
-  CompletePublicRegisterTask,
-  CompleteSiteDetails,
   EnsureCheckYourAnswersPage,
-  EnsurePageHeading,
-  Navigate,
-  SelectTheTask
+  EnsurePageHeading
 } from '~/test-infrastructure/screenplay'
+import { completeAllTasksWithCircularSite } from '../helpers/shared-tasks.js'
 
 Given(
   'the user has completed all the tasks on the task list for a circular site using WGS84 coordinates',
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withAllTasksCompleted().andSiteDetails.withCircleWGS84()
-    )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
-    await this.actor.attemptsTo(CompleteProjectName.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
-    await this.actor.attemptsTo(CompleteActivityDescription.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-    await this.actor.attemptsTo(CompleteSiteDetails.andSave())
-    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(CompletePublicRegisterTask.andSave())
+    await completeAllTasksWithCircularSite(this.actor, 'WGS84')
+  }
+)
+
+Given(
+  'the user has completed all the tasks on the task list for a circular site using OSGB36 coordinates',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    await completeAllTasksWithCircularSite(this.actor, 'OSGB36')
   }
 )
 

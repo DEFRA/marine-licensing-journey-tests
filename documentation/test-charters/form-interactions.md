@@ -138,3 +138,5 @@ IMMEDIATE ACTIONS:
 ---
 
 **Delivered features tested:** Complete form validation and interaction patterns across exemption notification workflow: project name entry, task list navigation, activity dates (enhanced validation), activity description, public register consent, and complete site details coordinate entry workflow
+
+**Related charters:** See [Review and Submission](./review-and-submission.md) for investigation of review page accessibility and submission form interactions
