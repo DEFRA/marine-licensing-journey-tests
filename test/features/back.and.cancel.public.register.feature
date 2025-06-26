@@ -1,4 +1,4 @@
-@issue=ML-12 @run-only
+@issue=ML-12
 Feature: Back and Cancel from Public register: State management when clicking back or cancel
 
   Scenario: Cancelling out of the public register task when no information has previously been saved
