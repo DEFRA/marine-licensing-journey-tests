@@ -1,5 +1,8 @@
 import allure from 'allure-commandline'
-import { attachRichFeatureContext } from './test-infrastructure/capture/index.js'
+import {
+  attachRichFeatureContext,
+  logUserCleanup
+} from './test-infrastructure/capture/index.js'
 
 const debug = process.env.DEBUG
 const oneMinute = 60 * 1000
@@ -51,6 +54,7 @@ export const config = {
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
   baseUrl: `http://localhost:3000/`,
+  defraIdUrl: 'http://localhost:3200',
   waitforTimeout: 5000,
   waitforInterval: 200,
   connectionRetryTimeout: 120000,
@@ -75,9 +79,29 @@ export const config = {
   afterStep: async function () {
     await browser.takeScreenshot()
   },
-  afterScenario: async function (scenario) {
+  afterScenario: async function (scenario, world) {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
+    }
+
+    // Clean up any test users created during this scenario
+    if (global.testUsersCreated && global.testUsersCreated.length > 0) {
+      const { DefraIdStubUserManager } = await import(
+        './test-infrastructure/helpers/defra-id-stub-user-manager.js'
+      )
+      const userManager = new DefraIdStubUserManager(config.defraIdUrl)
+
+      for (const userId of global.testUsersCreated) {
+        try {
+          await userManager.expireTestUser(userId)
+          logUserCleanup(userId, true)
+        } catch (error) {
+          logUserCleanup(userId, false, error)
+        }
+      }
+
+      // Clear the list for next scenario
+      global.testUsersCreated = []
     }
   },
   onComplete: function (exitCode, config, capabilities, results) {

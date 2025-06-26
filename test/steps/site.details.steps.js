@@ -58,7 +58,7 @@ Given(
 )
 
 Given('reaches the site details task', async function () {
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })

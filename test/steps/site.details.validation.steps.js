@@ -27,7 +27,7 @@ Given('a user is providing site details', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withValidProjectName().andSiteDetails.withCircleWGS84()
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })

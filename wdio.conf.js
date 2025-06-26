@@ -1,5 +1,8 @@
 import fs from 'node:fs'
-import { attachRichFeatureContext } from './test-infrastructure/capture/index.js'
+import {
+  attachRichFeatureContext,
+  logUserCleanup
+} from './test-infrastructure/capture/index.js'
 
 let chromeProxyConfig = {}
 if (process.env.HTTP_PROXY) {
@@ -16,6 +19,7 @@ if (process.env.HTTP_PROXY) {
 export const config = {
   runner: 'local',
   baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
+  defraIdUrl: `https://cdp-defra-id-stub.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
 
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
@@ -101,9 +105,29 @@ export const config = {
   afterStep: async function () {
     await browser.takeScreenshot()
   },
-  afterScenario: async function (scenario) {
+  afterScenario: async function (scenario, world) {
     if (scenario.result.status === 'FAILED') {
       await browser.takeScreenshot()
+    }
+
+    // Clean up any test users created during this scenario
+    if (global.testUsersCreated && global.testUsersCreated.length > 0) {
+      const { DefraIdStubUserManager } = await import(
+        './test-infrastructure/helpers/defra-id-stub-user-manager.js'
+      )
+      const userManager = new DefraIdStubUserManager(config.defraIdUrl)
+
+      for (const userId of global.testUsersCreated) {
+        try {
+          await userManager.expireTestUser(userId)
+          logUserCleanup(userId, true)
+        } catch (error) {
+          logUserCleanup(userId, false, error)
+        }
+      }
+
+      // Clear the list for next scenario
+      global.testUsersCreated = []
     }
   },
 

@@ -1,5 +1,6 @@
 import { expect as chaiExpect } from 'chai'
 import { expect } from '~/node_modules/@wdio/globals/build/index'
+import { DefraIdStubUserManager } from '~/test-infrastructure/helpers/defra-id-stub-user-manager.js'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import Ability from '../abilities/ability'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
@@ -11,6 +12,9 @@ export default class BrowseTheWeb extends Ability {
       chaiExpect.fail(ERROR_MESSAGES.MISSING_BROWSER)
     }
     this.browser = browser
+
+    // Use defraIdUrl from config
+    this.defraIdStub = new DefraIdStubUserManager(browser.options.defraIdUrl)
   }
 
   static using(browser) {
@@ -145,5 +149,13 @@ export default class BrowseTheWeb extends Ability {
   async countElements(locator) {
     const elements = await this.browser.$$(locator)
     return elements.length
+  }
+
+  async registerTestUser(scenarioName) {
+    return await this.defraIdStub.registerTestUser(scenarioName)
+  }
+
+  async expireTestUser(userId) {
+    return await this.defraIdStub.expireTestUser(userId)
   }
 }

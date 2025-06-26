@@ -28,7 +28,7 @@ Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   await this.actor.attemptsTo(EnsurePageHeading.is('Public register'))
@@ -39,7 +39,7 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     this.actor.intendsTo(ApplyForExemption.withConsentToPublicRegister())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
@@ -52,7 +52,7 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     this.actor.intendsTo(ApplyForExemption.withWithholdFromPublicRegister())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Public register'))

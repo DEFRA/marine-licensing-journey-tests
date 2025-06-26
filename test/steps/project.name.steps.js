@@ -18,7 +18,7 @@ import {
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
 })
 
 Given(
@@ -32,7 +32,7 @@ Given(
         ActivityDatesModel.generateValidActivityDates()
       )
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )

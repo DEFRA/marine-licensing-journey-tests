@@ -1,4 +1,4 @@
-import { Given, When, Then } from '@cucumber/cucumber'
+import { Given, Then, When } from '@cucumber/cucumber'
 import { faker } from '@faker-js/faker'
 import { ActivityDescriptionPage } from '~/test-infrastructure/pages'
 import {
@@ -8,8 +8,8 @@ import {
   BrowseTheWeb,
   ClickCancel,
   ClickSaveAndContinue,
-  CompleteProjectName,
   CompleteActivityDescription,
+  CompleteProjectName,
   EnsureErrorDisplayed,
   Memory,
   Navigate,
@@ -23,7 +23,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
     await this.actor.attemptsTo(CompleteActivityDescription.now())
