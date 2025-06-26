@@ -8,16 +8,24 @@ This project follows a user-centric approach to test automation, focusing on **w
 
 These journey tests cover:
 
-- [marine-licensing-frontend](https://github.com/DEFRA/marine-licensing-frontend)
-- [marine-licensing-backend](https://github.com/DEFRA/marine-licensing-backend)
+- [marine-licensing-frontend](https://github.com/DEFRA/marine-licensing-frontend) - Hapi.js frontend with GOV.UK Design System
+- [marine-licensing-backend](https://github.com/DEFRA/marine-licensing-backend) - Hapi.js REST API with MongoDB
+
+### **Authentication & Security**
+
+- **DEFRA ID Integration** - Complete OIDC authentication using CDP stub for development/testing
+- **Session Management** - Secure cookie-based sessions with automatic user lifecycle management
+- **Test User Management** - Automated user registration and cleanup via `DefraIdStubUserManager`
+- **Production Ready** - Seamless transition from CDP stub to production DEFRA ID
 
 ### **Supporting Infrastructure**
 
-**Dependencies (for GitHub/Docker execution):**
+**Dependencies:**
 
 - **MongoDB** - Data persistence
 - **Redis** - Session and caching
 - **LocalStack** - AWS services simulation (S3, SQS, SNS, DynamoDB)
+- **DEFRA ID Stub** - CDP authentication stub for testing
 
 **Test Environments:**
 
@@ -27,102 +35,24 @@ These journey tests cover:
 
 ## 🎯 Current Focus: Private Beta Exemption Notifications
 
-We are currently focused on delivering a **private beta** that enables **members of the public to submit exemption notifications to the Marine Management Organisation (MMO)**.
-
-### **Private Beta Scope**
-
-- 🌊 **Exemption notifications** - Allow users to notify the MMO of activities that qualify for marine licensing exemptions
-- 👥 **Public access** - External users (not just MMO staff) can create and submit notifications
-- 📋 **Essential workflow** - Core user journey from initial notification through to submission
-- 🔒 **Private beta constraints** - Limited user base for initial validation and feedback
+We are delivering a **private beta** that enables **members of the public to submit exemption notifications to the Marine Management Organisation (MMO)**.
 
 ### **Key User Journey**
 
-The private beta focuses on enabling this core workflow:
+1. **Authenticate** - User signs in via DEFRA ID
+2. **Start exemption notification** - User initiates a new exemption notification
+3. **Provide project details** - Essential information about the marine activity
+4. **Submit notification** - Complete submission to the MMO
+5. **Receive confirmation** - User gets acknowledgement of successful submission
 
-1. **Start exemption notification** - User initiates a new exemption notification
-2. **Provide project details** - Essential information about the marine activity
-3. **Submit notification** - Complete submission to the MMO
-4. **Receive confirmation** - User gets acknowledgement of successful submission
+**Current Test Coverage:** 378+ scenarios across 19 feature files validating complete end-to-end workflows.
 
-This testing suite validates the complete end-to-end journey for exemption notifications, ensuring the private beta delivers reliable functionality for real users.
+## 📋 User Stories & Documentation
 
-## 📋 User Stories & Current Coverage
-
-This project implements automated tests for marine licensing user journeys. See what functionality has been delivered:
-
-**[📖 View Current User Stories & Test Coverage →](documentation/user-stories/README.md)**
-
-Each user story includes acceptance criteria, descriptions of screenshots, and links to corresponding feature files tagged with `@issue=ML-{number}` for full traceability between requirements and tests.
-
-## 🧠 Modern Test Strategy
-
-This project implements a **contemporary quality engineering approach** that builds upon traditional testing principles whilst embracing modern practices for better outcomes.
-
-### **[📖 Complete Test Strategy Documentation →](documentation/test-strategy/README.md)**
-
-### **Key Principles**
-
-- 🎯 **Context-driven testing** - Strategy adapts to marine licensing domain specifics
-- 🔍 **Heuristic-based exploration** - Systematic thinking models guide test discovery
-- 🤖 **Automation-first approach** - Fast feedback through comprehensive automation
-- 👥 **Whole-team quality** - Testing is everyone's responsibility
-- 📊 **Evidence-based decisions** - Data and metrics drive testing investments
-
-### **Testing Approach Overview**
-
-#### **🔺 Test Automation Pyramid**
-
-```
-UI Tests (Few)          → Critical user journeys, accessibility
-API Tests (Many)        → Business logic, integrations, edge cases
-Unit Tests (Excellent)  → Component behaviour, domain logic, high coverage
-Static Analysis         → Code quality, security vulnerabilities
-```
-
-#### **🧠 Heuristic-Driven Testing**
-
-- **[HTSM (Heuristic Test Strategy Model)](documentation/test-strategy/heuristics.md)** - Systematic exploration framework
-- **[Domain-specific heuristics](documentation/test-strategy/heuristics.md#marine-licensing-heuristics)** - MARINE and EXEMPTION models for marine licensing
-- **[Investigative testing sessions](documentation/test-strategy/investigative-testing.md)** - Charter-driven investigation
-
-#### **👥 User-Centred Quality**
-
-- **[Investigative testing](documentation/test-strategy/investigative-testing.md)** - Rich, realistic user investigations using structured exploration
-- **[Real user personas](documentation/test-strategy/domain-context.md#user-reality--testing-implications)** - Testing with Fatima, Simon, Amy, and Zofia personas
-- **[Accessibility-first](documentation/test-strategy/accessibility.md)** - GOV.UK standards and inclusive design
-- **[Marine licensing domain expertise](documentation/test-strategy/domain-context.md)** - Testing grounded in regulatory reality
-
-### **Quick Access to Strategy**
-
-| **I want to...**                            | **Go to...**                                                                  |
-| ------------------------------------------- | ----------------------------------------------------------------------------- |
-| Understand our testing philosophy           | [Test Strategy Overview](documentation/test-strategy/README.md)               |
-| Investigate with realistic user scenarios   | [Investigative Testing](documentation/test-strategy/investigative-testing.md) |
-| Learn systematic exploration techniques     | [Testing Heuristics](documentation/test-strategy/heuristics.md)               |
-| Build robust test automation                | [Automation Approach](documentation/test-strategy/automation.md)              |
-| Understand marine licensing testing context | [Domain Context](documentation/test-strategy/domain-context.md)               |
-
-### **Evolution from Traditional Approaches**
-
-Our strategy **builds upon and modernises** established testing principles, preserving essential intentions whilst adopting contemporary practices:
-
-- ✅ **Same fundamental goals** - Quality software, risk management, regulatory compliance
-- ⚡ **Better delivery speed** - Faster feedback cycles and automated quality gates
-- 🔍 **Enhanced discovery** - Systematic exploration uncovers risks automation might miss
-- 📊 **Evidence-based confidence** - Data-driven decisions rather than process compliance
-- 🤝 **Collaborative quality** - Whole-team responsibility rather than testing handoffs
-
-### **Built on Proven Testing Foundations**
-
-Our approach respectfully builds upon methodologies developed by leading testing practitioners:
-
-- **Context-Driven Testing** - _James Bach, Michael Bolton_ - Adaptive strategies that respond to domain context
-- **Session-Based Test Management** - _John Bach_ - Structured time-boxed exploration with accountability
-- **Scenario Testing** - _Michael Bolton_ - Rich, realistic user investigations
-- **Heuristic Test Strategy Model** - _James Bach_ - Systematic thinking frameworks for test discovery
-
-These proven methodologies are adapted for marine licensing domain requirements whilst preserving their essential insights and principles.
+- **[📖 User Stories & Test Coverage →](documentation/user-stories/README.md)** - Requirements and acceptance criteria
+- **[🧠 Complete Test Strategy →](documentation/test-strategy/README.md)** - Modern quality engineering approach
+- **[🎯 Test Charters →](documentation/test-charters/README.md)** - Investigative testing plans
+- **[📚 Complete Documentation →](documentation/README.md)** - Comprehensive documentation hub
 
 ## 🏗️ Architecture Overview
 
@@ -132,100 +62,32 @@ These proven methodologies are adapted for marine licensing domain requirements 
 - **🎬 Step Definitions** (`test/steps/`) - Bridge between Gherkin and Screenplay
 - **🎭 Screenplay Pattern** (`test-infrastructure/screenplay/`) - User-centric test automation
   - **Actor** - Represents the user performing actions
-  - **Abilities** - What the actor can do (browse web, call APIs)
+  - **Abilities** - What the actor can do (browse web, authenticate with DEFRA ID)
   - **Tasks** - High-level user goals (complete project name, apply for exemption)
   - **Interactions** - Low-level actions (click, verify, ensure)
 - **📍 Page Objects** (`test-infrastructure/pages/`) - Locators and selectors only
+
+### **Authentication Integration**
+
+```javascript
+// User creation happens automatically on first navigation
+await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+// ↳ This creates test user + authenticates transparently
+
+// Test user is now available in actor memory
+const testUser = this.actor.recalls('testUser')
+// ↳ { userId, email, firstName, lastName, ... }
+```
 
 ### **Core Principles**
 
 ✅ **Self-documenting code** - No comments or JSDoc required  
 ✅ **Explicit naming** - Functions and variables express intent clearly  
 ✅ **Single responsibility** - Each component has one clear purpose  
-✅ **Framework flexibility** - WebDriverIO encapsulated for easy switching
-
-## 📁 Project Structure
-
-```
-test/
-├── features/                  # Gherkin feature files (*.feature)
-└── steps/                     # Cucumber step definitions (*.js)
-
-test-infrastructure/
-├── screenplay/
-│   ├── actor.js               # Main actor with memory and abilities
-│   ├── abilities/             # What actors can do
-│   │   └── browse.the.web.js  # WebDriverIO encapsulation
-│   ├── tasks/                 # High-level user workflows
-│   ├── interactions/          # Single-purpose actions
-│   └── models/                # Test data models (future)
-├── pages/                     # Page objects (locators only)
-└── capture/                   # Allure reporting utilities
-
-*.conf.js                      # WebDriverIO configurations per environment
-```
-
-## 🎯 Writing Tests
-
-### **BDD Guidelines**
-
-- **Golden Rule**: Write Gherkin for clarity - others should understand without knowing the feature
-- **Cardinal Rule**: One Scenario, One Behaviour
-- **Structure**: Always Given → When → Then (in that order, no repeats)
-- **Focus**: Customer needs and real user workflows
-
-### **Example Feature**
-
-```gherkin
-Feature: Starting a new exemption notification
-
-  Scenario: Provide a valid project name
-    Given the project name page is displayed
-    When entering and saving a project with a valid name
-    Then the task list page is displayed
-```
-
-### **Step Implementation**
-
-```javascript
-// Maps to high-level Tasks
-When('entering and saving a project with a valid name', async function () {
-  await this.actor.attemptsTo(CompleteProjectName.with(faker.lorem.words(5)))
-})
-
-// Maps to verification Interactions
-Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsurePageHeading.is('Task List'))
-})
-```
+✅ **Framework flexibility** - WebDriverIO encapsulated for easy switching  
+✅ **Secure testing** - Automated user lifecycle with proper cleanup
 
 ## 🚀 Getting Started
-
-### **Workspace Setup (Recommended)**
-
-For optimal development experience, set up a workspace with all related repositories:
-
-```bash
-# Create a workspace directory
-mkdir marine-licensing-workspace
-cd marine-licensing-workspace
-
-# Clone all repositories to the same level
-git clone https://github.com/DEFRA/marine-licensing-frontend.git
-git clone https://github.com/DEFRA/marine-licensing-backend.git
-git clone https://github.com/DEFRA/marine-licensing-journey-tests.git
-
-# Your structure should look like:
-# marine-licensing-workspace/
-# ├── marine-licensing-frontend/
-# ├── marine-licensing-backend/
-# └── marine-licensing-journey-tests/
-```
-
-**IDE Setup:**
-
-1. Open the `marine-licensing-workspace` folder in your IDE
-2. This provides access to the full application context
 
 ### **Requirements**
 
@@ -233,9 +95,6 @@ git clone https://github.com/DEFRA/marine-licensing-journey-tests.git
 - **npm** `>= v9`
 
 ```bash
-# Navigate to the journey tests
-cd marine-licensing-journey-tests
-
 # Use correct Node version
 nvm use
 
@@ -246,7 +105,7 @@ npm install
 ### **Development Commands**
 
 ```bash
-# Local development (requires locally running services for marine-licencing-frontend and marine-licensing-backend)
+# Local development (requires locally running services)
 npm run test:local
 npm run test:local:debug
 
@@ -257,13 +116,9 @@ npm run test:local -- --cucumberOpts.tags "@smoke"
 npm run lint
 npm run lint:fix
 npm run format
-npm run format:check
 
 # Generate test reports
 npm run report
-
-# Format all files using prettier
-npx prettier --write .
 ```
 
 ### **Environment Configurations**
@@ -277,75 +132,56 @@ npx prettier --write .
 
 ### **🚀 Smoke Testing - Fast Core Journey Validation**
 
-For rapid feedback during development, run only the core user journey scenarios tagged with `@smoke`:
+Run only the core user journey scenarios tagged with `@smoke` for rapid feedback:
 
 ```bash
 # Run smoke tests locally (≈2-3 minutes vs full suite ≈15+ minutes)
 npm run test:local -- --cucumberOpts.tags "@smoke"
-
-# Run smoke tests against any environment
-npm run test -- --cucumberOpts.tags "@smoke"
-
-# Combine with other tags
-npm run test:local -- --cucumberOpts.tags "@smoke and not @wip"
 ```
 
-**What's included in @smoke:**
+**Smoke test coverage:**
 
-- ✅ **Project name creation** - Core exemption start journey
-- ✅ **Task list navigation** - Main application flow
-- ✅ **Activity description** - Essential task completion
-- ✅ **Public register decisions** - Both consent and withhold paths
-- ✅ **Site details coordinate entry** - Both WGS84 and OSGB36 systems
+- ✅ Automatic test user creation and DEFRA ID authentication
+- ✅ Project name creation and task list navigation
+- ✅ Activity description and public register decisions
+- ✅ Site details coordinate entry (WGS84 and OSGB36)
 
-**What's excluded:**
+## 🎯 Writing Tests
 
-- ❌ **Validation scenarios** - Error handling and edge cases
-- ❌ **Back/cancel navigation** - Secondary user flows
-- ❌ **@wip scenarios** - Work in progress features
-- ❌ **Data persistence edge cases** - Advanced state management
+### **BDD Guidelines**
 
-**Use smoke tests for:**
+- **Golden Rule**: Write Gherkin for clarity - others should understand without knowing the feature
+- **Structure**: Always Given → When → Then (in that order)
+- **Focus**: Customer needs and real user workflows
 
-- 🔄 **Quick feedback loops** - Verify changes don't break core journeys
-- 🚀 **Pre-commit checks** - Validate main user paths before push
-- 🔧 **Environment validation** - Confirm deployment health
-- 👥 **Pull request validation** - Ensure core functionality intact
+### **Example with Authentication**
 
-## 🏭 Production & Deployment
+```gherkin
+Feature: Starting a new exemption notification
 
-### **CDP Portal**
-
-Tests run automatically via CDP Portal under **Test Suites**:
-
-1. **Build Trigger**: New Docker image built on `main` branch merge
-2. **Build Time**: ~1-2 minutes (check GitHub Actions)
-3. **Results**: Available in CDP Portal with Allure reports
-
-### **GitHub Workflows**
-
-Alternative execution using Docker Compose:
-
-```bash
-# Test locally with Docker
-docker compose up
-npm run test:github
+  Scenario: Provide a valid project name
+    Given the project name page is displayed
+    When entering and saving a project with a valid name
+    Then the task list page is displayed
 ```
 
-**Setup Requirements:**
+### **Step Implementation**
 
-1. Edit `compose.yml` to include your services
-2. Modify `docker/scripts/` for database setup
-3. Configure `.github/workflows/journey-tests`
+```javascript
+Given('the project name page is displayed', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  // Authentication happens automatically here ↓
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
+})
 
-### **BrowserStack Integration**
+When('entering and saving a project with a valid name', async function () {
+  await this.actor.attemptsTo(CompleteProjectName.with(faker.lorem.words(5)))
+})
 
-```bash
-# Via CDP Portal
-npm run test:browserstack
-
-# Via GitHub Runner
-npm run test:github:browserstack
+Then('the task list page is displayed', async function () {
+  await this.actor.attemptsTo(EnsurePageHeading.is('Task List'))
+})
 ```
 
 ## 📏 Coding Standards
@@ -356,39 +192,43 @@ npm run test:github:browserstack
 - ❌ **No JSDoc** - Self-documenting code
 - ❌ **No Comments** - Expressive naming preferred
 - ❌ **No `console.log()`** - Use Allure capture functions
-- ❌ **No `throw Error`** - Use Chai assertions for proper test failures
+- ❌ **No `throw Error`** - Use Chai assertions (`expect.fail()`) for proper test failures
 
 ### **Architecture Rules**
 
-- **Tasks** → High-level user goals (`CompleteProjectName`, `ApplyForExemption`)
+- **Tasks** → High-level user goals (`CompleteProjectName`, `AuthenticateWith`)
 - **Interactions** → Single actions (`ClickSaveAndContinue`, `EnsureHeading`)
 - **Page Objects** → Locators and dynamic selectors only
-- **Abilities** → Framework encapsulation (WebDriverIO → `browse.the.web.js`)
+- **Abilities** → Framework encapsulation (WebDriverIO, DEFRA ID authentication)
 
 ### **File Naming**
 
 - **JavaScript files**: `dot.case.js`
-- **Assets**: `kebab-case` (static files)
-- **Features**: `descriptive.name.feature` (e.g., `project.name.feature`, `validation.project.name.feature`, `task.list.feature`, `public.register.feature`)
+- **Features**: `descriptive.name.feature`
 
 ## 🎭 Screenplay Pattern Usage
 
-### **Actor Setup**
+### **Actor with Authentication**
 
 ```javascript
-// In step definitions
+// In step definitions - standard actor setup
 this.actor = new Actor('Alice')
 this.actor.can(new BrowseTheWeb(browser))
+// ↳ BrowseTheWeb automatically includes DEFRA ID capabilities
+
+// Navigate triggers automatic user creation + authentication
+await this.actor.attemptsTo(Navigate.toProjectNamePage())
 
 // Remember data for later use
 this.actor.remembers('projectName', 'My Project')
 const name = this.actor.recalls('projectName')
+const testUser = this.actor.recalls('testUser') // Available after navigation
 ```
 
 ### **Task Implementation**
 
 ```javascript
-// High-level user workflow
+// High-level user workflow (authentication handled by Navigate)
 export default class CompleteProjectName extends Task {
   static with(projectName) {
     return new CompleteProjectName(projectName)
@@ -405,77 +245,70 @@ export default class CompleteProjectName extends Task {
 }
 ```
 
-### **Interaction Implementation**
+## 🏭 Production & Deployment
 
-```javascript
-// Single verification action
-export default class EnsurePageHeading extends Task {
-  static is(expectation) {
-    return new EnsurePageHeading(expectation)
-  }
+### **CDP Portal Integration**
 
-  async performAs(actor) {
-    const browseTheWeb = actor.ability
-    await browseTheWeb.expectElementToContainText('h1', this.expectation)
-  }
-}
+Tests run automatically via CDP Portal with:
+
+- **Docker builds** on `main` branch merge
+- **Allure reports** with comprehensive test results
+- **BrowserStack integration** for cross-browser testing
+
+### **DEFRA ID Configuration**
+
+**Development/Testing:**
+
+```bash
+DEFRA_ID_OIDC_CONFIGURATION_URL=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
+DEFRA_ID_CLIENT_ID=cdp-defra-id-stub
 ```
 
-## 📊 Test Strategy
+**Production:**
 
-This project follows a **comprehensive modern test strategy** that combines systematic thinking with contemporary quality engineering practices.
+```bash
+DEFRA_ID_OIDC_CONFIGURATION_URL=https://login.defra.gov.uk/...
+DEFRA_ID_CLIENT_ID=<production-client-id>
+```
 
-### **Complete Strategy Documentation**
-
-**[📖 Full Test Strategy →](documentation/test-strategy/README.md)** - Modern quality engineering approach
-
-### **Core Framework**
-
-- **[Testing Heuristics](documentation/test-strategy/heuristics.md)** - HTSM and systematic exploration
-- **[Test Charters](documentation/test-charters/README.md)** - Systematic exploration of user stories and requirements
-- **[Automation Approach](documentation/test-strategy/automation.md)** - Test pyramid and quality engineering
-- **[Domain Context](documentation/test-strategy/domain-context.md)** - Marine licensing reality and user personas
-- **[Exploratory Testing](documentation/test-strategy/investigative-testing.md)** - Session-based investigation
-
-### **Key Approaches**
-
-- **Risk-based testing** using systematic heuristics
-- **Quality criteria** considerations across product factors
-- **User-centred testing** with real marine licensing personas
-- **Evidence-based decisions** driven by metrics and outcomes
-
-> 📖 See complete strategy, heuristics, and guidelines in **[documentation/test-strategy/](documentation/test-strategy/README.md)**
-
-## 🔧 Debugging
-
-### **Local Debugging**
+## 🔧 Quick Debugging
 
 ```bash
 # Run with debug output
 npm run test:local:debug
 
-# Check specific configuration
-cat wdio.local.conf.js
+# Check DEFRA ID stub is running
+curl http://localhost:3200/health
+
+# Verify Docker services
+docker ps
 ```
 
-### **Common Issues**
+**Common Issues:**
 
+- **Authentication failures**: Check DEFRA ID stub is running and accessible
 - **Service not running**: Ensure target application is accessible at configured `baseUrl`
 - **Element not found**: Check page objects for correct selectors
-- **Memory issues**: Actor memory is scenario-scoped, use `remembers()` / `recalls()`
 
-## 📚 Documentation
+## 📁 Project Structure
 
-- **[📖 Complete Documentation](documentation/README.md)** - Comprehensive documentation hub
-- **[📋 User Stories](documentation/user-stories/README.md)** - Requirements and acceptance criteria
-- **[🧠 Test Strategy](documentation/test-strategy/README.md)** - Quality engineering approach
-- **[🎯 Test Charters](documentation/test-charters/README.md)** - Investigative testing plans
-- **🎭 Screenplay Pattern**: Implemented using actor-task-interaction pattern
-- **🏗️ Project Structure**: Clear separation of concerns with test infrastructure
-- **💻 Coding Standards**: Self-documenting code with expressive naming
-- **🧹 Clean Code**: No comments, no JSDoc, clear intent through naming
-- **📝 Style Guide**: JavaScript-only, dot.case.js naming convention
-- **🔄 Refactoring Guidelines**: Follow single responsibility and clear abstractions
+```
+test/
+├── features/                  # Gherkin feature files
+└── steps/                     # Cucumber step definitions
+
+test-infrastructure/
+├── screenplay/
+│   ├── actor.js               # Main actor with memory and abilities
+│   ├── abilities/             # What actors can do
+│   ├── tasks/                 # High-level user workflows
+│   ├── interactions/          # Single-purpose actions
+│   └── models/                # Test data models
+├── pages/                     # Page objects (locators only)
+├── helpers/
+│   └── defra-id-stub-user-manager.js  # DEFRA ID test user management
+└── capture/                   # Allure reporting utilities
+```
 
 ## 📜 Licence
 
