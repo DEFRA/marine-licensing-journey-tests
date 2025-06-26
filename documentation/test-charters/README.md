@@ -83,13 +83,14 @@ Test charters bridge the gap between:
 
 ## 📋 Available investigation sessions
 
-| Theme                           | Charter name                                        | Focus                                                      | Personas                 | Priority | Status     |
-| ------------------------------- | --------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)               | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
-| **Professional workflows**      | [Expert workflows](./expert-workflows.md)           | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md)         | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
-| **Coordinate entry workflows**  | [Site details](./site-details.md)                   | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
-| **Review and submission**       | [Review and submission](./review-and-submission.md) | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
+| Theme                           | Charter name                                                  | Focus                                                      | Personas                 | Priority | Status     |
+| ------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)                         | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
+| **Professional workflows**      | [Expert workflows](./expert-workflows.md)                     | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md)                   | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
+| **Coordinate entry workflows**  | [Site details](./site-details.md)                             | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
+| **Review and submission**       | [Review and submission](./review-and-submission.md)           | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
+| **Navigation consistency**      | [Back and cancel navigation](./back-and-cancel-navigation.md) | Cross-workflow navigation behaviour and consistency        | All personas             | High     | 🆕 New     |
 
 ### **Charter lifecycle**
 
@@ -99,6 +100,7 @@ Test charters bridge the gap between:
 - **Feature enhancements** → Existing charters updated to reflect improved behaviour
 - **Validation improvements** → Form interaction testing updated for new error handling
 - **User research insights** → Charter priorities adjusted based on persona research
+- **Navigation consistency gaps** → New charter created to investigate cross-workflow behaviour patterns
 
 **Research-Based Personas**: All charters now use research-based personas derived from direct user interviews, MMO staff observations, and beta service feedback. These replace assumption-based personas with evidence from real marine licensing users.
 
