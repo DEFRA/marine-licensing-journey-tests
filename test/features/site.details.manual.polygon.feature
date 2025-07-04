@@ -3,12 +3,12 @@ Feature: Site details: The user marks the boundary of a site manually using WGS8
 
   Scenario: Marking out the boundary of a site using WGS84 (World Geodetic System 1984) coordinates
     Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the Enter multiple sets of coordinates to mark the boundary of the site page is displayed
 
   Scenario: Marking out the boundary of a site using OSGB36 (National Grid) coordinates
     Given the user wants to apply for an exemption for a polygonal site using OSGB36 coordinates
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the Enter multiple sets of coordinates to mark the boundary of the site page is displayed

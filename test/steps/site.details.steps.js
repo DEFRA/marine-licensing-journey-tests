@@ -36,6 +36,36 @@ Given(
 )
 
 Given(
+  'an exemption for a circular site using OSGB36 coordinates with eastings {string}, northings {string} and width {string} metres',
+  function (eastings, northings, circleWidth) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName()
+        .andSiteDetails.withCircleOSGB36()
+        .withEastings(eastings)
+        .withNorthings(northings)
+        .withWidth(circleWidth)
+    )
+  }
+)
+
+Given(
+  'an exemption for a circular site using WGS84 coordinates with latitude {string}, longitude {string} and width {string} metres',
+  function (latitude, longitude, circleWidth) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName()
+        .andSiteDetails.withCircleWGS84()
+        .withLatitude(latitude)
+        .withLongitude(longitude)
+        .withWidth(circleWidth)
+    )
+  }
+)
+
+Given(
   'the user wants to apply for an exemption for a polygonal site using WGS84 coordinates',
   function () {
     this.actor = new Actor('Alice')
@@ -57,7 +87,7 @@ Given(
   }
 )
 
-Given('reaches the site details task', async function () {
+Given('the site details task is reached', async function () {
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))

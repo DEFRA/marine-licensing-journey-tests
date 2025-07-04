@@ -12,7 +12,7 @@ Feature: Validation of circular site width: user prevented from proceeding with 
 
   Scenario Outline: Error when invalid width "<width>" is entered
     Given the user wants to apply for an exemption for a circular site using "<width>" width
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the width error "<expected_error>" is displayed
 

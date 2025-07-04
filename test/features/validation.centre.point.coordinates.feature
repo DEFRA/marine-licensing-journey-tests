@@ -20,7 +20,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
   Scenario Outline: Error when invalid WGS84 latitude <latitude> is entered
     Given the user wants to apply for an exemption for a circular site using "<latitude>" latitude
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the latitude error "<expected_error>" is displayed
 
@@ -34,7 +34,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
   Scenario Outline: Error when invalid WGS84 longitude <longitude> is entered
     Given the user wants to apply for an exemption for a circular site using "<longitude>" longitude
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the longitude error "<expected_error>" is displayed
 
@@ -48,7 +48,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
   Scenario Outline: Error when invalid OSGB36 eastings <eastings> is entered
     Given the user wants to apply for an exemption for a circular site using "<eastings>" eastings
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the eastings error "<expected_error>" is displayed
 
@@ -61,7 +61,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
   Scenario Outline: Error when invalid OSGB36 northings <northings> is entered
     Given the user wants to apply for an exemption for a circular site using "<northings>" northings
-    And reaches the site details task
+    And the site details task is reached
     When the site details task is completed
     Then the northings error "<expected_error>" is displayed
 

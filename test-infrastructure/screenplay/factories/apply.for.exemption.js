@@ -176,6 +176,41 @@ export default class ApplyForExemption {
     return this
   }
 
+  withLatitude(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.latitude = value
+    }
+    return this
+  }
+
+  withLongitude(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.longitude = value
+    }
+    return this
+  }
+
+  withEastings(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.eastings = value
+    }
+    return this
+  }
+
+  withNorthings(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.northings = value
+    }
+    return this
+  }
+
+  withWidth(value) {
+    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+      this.data.siteDetails.circleData.width = value
+    }
+    return this
+  }
+
   get andSiteDetails() {
     return {
       withCircleWGS84: () => {
