@@ -135,42 +135,42 @@ export default class ApplyForExemption {
   }
 
   latitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.latitude = value
     }
     return this
   }
 
   longitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.longitude = value
     }
     return this
   }
 
   radius(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.radiusMeters = value
     }
     return this
   }
 
   eastings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.eastings = value
     }
     return this
   }
 
   northings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.northings = value
     }
     return this
   }
 
   width(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.width = value
     }
     return this
