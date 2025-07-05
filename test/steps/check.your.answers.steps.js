@@ -2,19 +2,23 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import {
   Actor,
+  ApplyForExemption,
   BrowseTheWeb,
   ClickReviewAndSend,
+  CompleteAllTasks,
   EnsureCheckYourAnswersPage,
   EnsurePageHeading
 } from '~/test-infrastructure/screenplay'
-import { completeAllTasksWithCircularSite } from '../helpers/shared-tasks.js'
 
 Given(
   'the user has completed all the tasks on the task list for a circular site using WGS84 coordinates',
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-    await completeAllTasksWithCircularSite(this.actor, 'WGS84')
+    const exemptionFactory =
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+    this.actor.intendsTo(exemptionFactory)
+    await this.actor.attemptsTo(CompleteAllTasks.now())
   }
 )
 
@@ -23,7 +27,10 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-    await completeAllTasksWithCircularSite(this.actor, 'OSGB36')
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithOSGB36Coordinates()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
   }
 )
 

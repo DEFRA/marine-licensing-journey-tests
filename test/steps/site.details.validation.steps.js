@@ -25,7 +25,7 @@ Given('a user is providing site details', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withValidProjectName().andSiteDetails.withCircleWGS84()
+    ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithWGS84Coordinates()
   )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
@@ -39,7 +39,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleWGS84()
+        .andSiteDetails.forACircleWithWGS84Coordinates()
         .latitude(latitude)
     )
   }
@@ -52,7 +52,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleWGS84()
+        .andSiteDetails.forACircleWithWGS84Coordinates()
         .longitude(longitude)
     )
   }
@@ -65,7 +65,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleOSGB36()
+        .andSiteDetails.forACircleWithOSGB36Coordinates()
         .eastings(eastings)
     )
   }
@@ -78,7 +78,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleOSGB36()
+        .andSiteDetails.forACircleWithOSGB36Coordinates()
         .northings(northings)
     )
   }
@@ -91,7 +91,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleWGS84()
+        .andSiteDetails.forACircleWithWGS84Coordinates()
         .width(width)
     )
   }

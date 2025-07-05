@@ -79,7 +79,7 @@ export default class ApplyForExemption {
     )
   }
 
-  static withAllTasksCompleted() {
+  static withCompleteData() {
     return new ApplyForExemption(
       this._createBaseExemption({
         activityDates: ActivityDatesModel.generateValidActivityDates(),
@@ -178,7 +178,7 @@ export default class ApplyForExemption {
 
   get andSiteDetails() {
     return {
-      withCircleWGS84: () => {
+      forACircleWithWGS84Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'circle',
@@ -193,7 +193,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withCircleOSGB36: () => {
+      forACircleWithOSGB36Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'circle',
@@ -208,7 +208,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withBoundaryWGS84: () => {
+      forABoundaryWithWGS84Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'boundary',
@@ -216,7 +216,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withBoundaryOSGB36: () => {
+      forABoundaryWithOSGB36Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'boundary',
