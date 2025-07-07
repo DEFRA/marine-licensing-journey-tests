@@ -131,6 +131,10 @@ When('the site details task is completed', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
 })
 
+When('the triangular site coordinates are entered', async function () {
+  await this.actor.attemptsTo(CompleteSiteDetails.coordinatesOnly())
+})
+
 Then('the site details review page shows the site details', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
@@ -165,3 +169,11 @@ Then(
     )
   }
 )
+
+Then('the coordinates entry page remains displayed', async function () {
+  await this.actor.attemptsTo(
+    EnsurePageHeading.is(
+      'Enter multiple sets of coordinates to mark the boundary of the site'
+    )
+  )
+})

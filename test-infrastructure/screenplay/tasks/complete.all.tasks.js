@@ -21,7 +21,6 @@ export default class CompleteAllTasks extends Task {
     if (!exemption) {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('complete all tasks'))
     }
-
     await actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await actor.attemptsTo(CompleteProjectName.now())
     await actor.attemptsTo(SelectTheTask.withName('Activity description'))

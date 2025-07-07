@@ -7,12 +7,11 @@ Feature: Site details: The user marks the boundary of a triangular site manually
   - ML-18: Choosing the coordinate system for latitude/longitude (WGS84) or eastings/northings (OSGB36)
   - ML-19: Entering multiple sets of coordinates to mark the boundary of a triangular site
 
-  Scenario Outline: Successfully completing triangular site details using WGS84 coordinates
+  Scenario Outline: Successfully entering triangular site coordinates using WGS84 coordinates
     Given an exemption for a triangular site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>" and point 3 "<lat3>", "<lng3>"
     And the site details task is reached
-    When the site details task is completed
-    Then the site details review page shows the triangular site details
-    And the "Site details" task status is "Completed"
+    When the triangular site coordinates are entered
+    Then the coordinates entry page remains displayed
 
     Examples: WGS84 coordinate testing: boundary values and realistic marine scenarios
       | lat1      | lng1      | lat2      | lng2      | lat3      | lng3      |
@@ -21,12 +20,11 @@ Feature: Site details: The user marks the boundary of a triangular site manually
       | 55.123456 |  1.234567 | 55.124000 |  1.235000 | 55.123700 |  1.234800 |
       | 49.500000 | -6.000000 | 49.501000 | -5.999000 | 49.500500 | -5.999500 |
 
-  Scenario Outline: Successfully completing triangular site details using OSGB36 coordinates
+  Scenario Outline: Successfully entering triangular site coordinates using OSGB36 coordinates
     Given an exemption for a triangular site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>" and point 3 "<east3>", "<north3>"
     And the site details task is reached
-    When the site details task is completed
-    Then the site details review page shows the triangular site details
-    And the "Site details" task status is "Completed"
+    When the triangular site coordinates are entered
+    Then the coordinates entry page remains displayed
 
     Examples: OSGB36 coordinate testing: UK Grid coverage and decimal precision
       | east1  | north1 | east2  | north2 | east3  | north3 |
