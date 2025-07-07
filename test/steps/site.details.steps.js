@@ -42,7 +42,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleOSGB36()
+        .andSiteDetails.forACircleWithOSGB36Coordinates()
         .withEastings(eastings)
         .withNorthings(northings)
         .withWidth(circleWidth)
@@ -57,7 +57,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.withCircleWGS84()
+        .andSiteDetails.forACircleWithWGS84Coordinates()
         .withLatitude(latitude)
         .withLongitude(longitude)
         .withWidth(circleWidth)

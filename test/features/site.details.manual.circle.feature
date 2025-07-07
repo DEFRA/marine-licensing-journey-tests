@@ -1,4 +1,4 @@
-@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @run-only
+@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37
 Feature: Site details: The user enters the details of a circular site manually using WGS84 or OSGB36 coordinates
   These scenarios test the user journey for manually entering circular site coordinates, covering:
   
