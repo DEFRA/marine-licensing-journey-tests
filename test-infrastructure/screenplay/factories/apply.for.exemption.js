@@ -1,293 +1,127 @@
+import BaseBuilder from './base-builder.js'
 import {
-  ActivityDatesModel,
-  ActivityDescriptionModel,
-  FileTypeModel,
-  MarineProjectModel,
-  PublicRegisterModel
-} from '../models/index.js'
+  activityDatesExtension,
+  createExtensionGetter,
+  siteDetailsExtension
+} from './builder-extensions.js'
+import ExemptionFactory from './exemption.factory.js'
 
-export default class ApplyForExemption {
-  constructor(data) {
-    this.data = { ...data }
-  }
-
-  static _createBaseExemption(overrides = {}) {
-    return {
-      projectName: MarineProjectModel.generateProjectName(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      activityDates: null,
-      publicRegister: null,
-      fileType: null,
-      projectNameTaskCompleted: false,
-      activityDescriptionTaskCompleted: false,
-      activityDatesTaskCompleted: false,
-      publicRegisterTaskCompleted: false,
-      ...overrides
-    }
-  }
-
+export default class ApplyForExemption extends BaseBuilder {
   static withValidProjectName() {
-    return new ApplyForExemption(this._createBaseExemption())
+    return new ApplyForExemption(ExemptionFactory.createValidProjectName())
   }
 
   static withProjectName(projectName) {
-    return new ApplyForExemption(this._createBaseExemption({ projectName }))
+    return new ApplyForExemption(
+      ExemptionFactory.createWithProjectName(projectName)
+    )
   }
 
   static withValidActivityDates() {
-    return new ApplyForExemption(
-      this._createBaseExemption({
-        activityDates: ActivityDatesModel.generateValidActivityDates()
-      })
-    )
+    return new ApplyForExemption(ExemptionFactory.createValidActivityDates())
   }
 
   static withSameStartAndEndActivityDates() {
     return new ApplyForExemption(
-      this._createBaseExemption({
-        activityDates: ActivityDatesModel.generateSameStartAndEndDate()
-      })
+      ExemptionFactory.createSameStartAndEndActivityDates()
     )
   }
 
   static withCompletedActivityDates() {
     return new ApplyForExemption(
-      this._createBaseExemption({
-        activityDates: ActivityDatesModel.generateValidActivityDates(),
-        activityDatesTaskCompleted: true
-      })
+      ExemptionFactory.createCompletedActivityDates()
     )
   }
 
   static withConsentToPublicRegister() {
     return new ApplyForExemption(
-      this._createBaseExemption({
-        publicRegister: { consent: true }
-      })
+      ExemptionFactory.createConsentToPublicRegister()
     )
   }
 
   static withWithholdFromPublicRegister() {
     return new ApplyForExemption(
-      this._createBaseExemption({
-        publicRegister: {
-          consent: false,
-          reason: PublicRegisterModel.generateWithholdingReason()
-        }
-      })
+      ExemptionFactory.createWithholdFromPublicRegister()
     )
   }
 
   static withCompleteData() {
-    return new ApplyForExemption(
-      this._createBaseExemption({
-        activityDates: ActivityDatesModel.generateValidActivityDates(),
-        publicRegister: { consent: true }
-      })
-    )
+    return new ApplyForExemption(ExemptionFactory.createCompleteData())
   }
 
   static withShapefileUpload() {
-    return new ApplyForExemption(
-      this._createBaseExemption({
-        fileType: FileTypeModel.generateShapefile(),
-        siteDetails: {
-          coordinatesEntryMethod: 'file-upload'
-        }
-      })
-    )
+    return new ApplyForExemption(ExemptionFactory.createShapefileUpload())
   }
 
   static withKMLUpload() {
-    return new ApplyForExemption(
-      this._createBaseExemption({
-        fileType: FileTypeModel.generateKML(),
-        siteDetails: {
-          coordinatesEntryMethod: 'file-upload'
-        }
-      })
-    )
+    return new ApplyForExemption(ExemptionFactory.createKMLUpload())
   }
 
   static withFileUpload() {
-    return new ApplyForExemption(
-      this._createBaseExemption({
-        siteDetails: {
-          coordinatesEntryMethod: 'file-upload'
-        }
-      })
-    )
-  }
-
-  getData() {
-    return this.data
+    return new ApplyForExemption(ExemptionFactory.createFileUpload())
   }
 
   activityDates(dates) {
-    this.data.activityDates = dates
-    return this
+    return this.setProperty('activityDates', dates)
   }
 
   activityDatesTaskCompleted(completed = true) {
-    this.data.activityDatesTaskCompleted = completed
-    return this
+    return this.setTaskCompleted('activityDates', completed)
   }
 
   latitude(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.latitude = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.latitude', value)
   }
 
   longitude(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.longitude = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.longitude', value)
   }
 
   radius(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.radiusMeters = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.radiusMeters', value)
   }
 
   eastings(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.eastings = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.eastings', value)
   }
 
   northings(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.northings = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.northings', value)
   }
 
   width(value) {
-    if (this.data.siteDetails?.circleData) {
-      this.data.siteDetails.circleData.width = value
-    }
-    return this
+    return this.setSafeProperty('siteDetails.circleData.width', value)
   }
 
   withLatitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
-      this.data.siteDetails.circleData.latitude = value
-    }
-    return this
+    return this.latitude(value)
   }
 
   withLongitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
-      this.data.siteDetails.circleData.longitude = value
-    }
-    return this
+    return this.longitude(value)
   }
 
   withEastings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
-      this.data.siteDetails.circleData.eastings = value
-    }
-    return this
+    return this.eastings(value)
   }
 
   withNorthings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
-      this.data.siteDetails.circleData.northings = value
-    }
-    return this
+    return this.northings(value)
   }
 
   withWidth(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
-      this.data.siteDetails.circleData.width = value
-    }
-    return this
+    return this.width(value)
+  }
+
+  withCoordinatePoints(points) {
+    return this.setSafeProperty('siteDetails.polygonData.coordinates', points)
   }
 
   get andSiteDetails() {
-    return {
-      forACircleWithWGS84Coordinates: () => {
-        this.data.siteDetails = {
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'circle',
-          coordinateSystem: 'WGS84',
-          circleData: {
-            latitude: 51.507412,
-            longitude: -0.127812,
-            width: 20,
-            easting: null,
-            northing: null
-          }
-        }
-        return this
-      },
-      forACircleWithOSGB36Coordinates: () => {
-        this.data.siteDetails = {
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'circle',
-          coordinateSystem: 'OSGB36',
-          circleData: {
-            eastings: 432675,
-            northings: 181310,
-            width: 20,
-            latitude: null,
-            longitude: null
-          }
-        }
-        return this
-      },
-      forABoundaryWithWGS84Coordinates: () => {
-        this.data.siteDetails = {
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'boundary',
-          coordinateSystem: 'WGS84'
-        }
-        return this
-      },
-      forABoundaryWithOSGB36Coordinates: () => {
-        this.data.siteDetails = {
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'boundary',
-          coordinateSystem: 'OSGB36'
-        }
-        return this
-      }
-    }
+    return createExtensionGetter(this, siteDetailsExtension)
   }
 
   get andActivityDates() {
-    return {
-      withValidDates: () => {
-        this.data.activityDates =
-          ActivityDatesModel.generateValidActivityDates()
-        return this
-      },
-      withSameStartAndEndDate: () => {
-        this.data.activityDates =
-          ActivityDatesModel.generateSameStartAndEndDate()
-        return this
-      },
-      withShortDuration: () => {
-        this.data.activityDates =
-          ActivityDatesModel.generateShortDurationActivityDates()
-        return this
-      },
-      withLongDuration: () => {
-        this.data.activityDates =
-          ActivityDatesModel.generateLongDurationActivityDates()
-        return this
-      },
-      asCompleted: () => {
-        this.data.activityDatesTaskCompleted = true
-        return this
-      }
-    }
+    return createExtensionGetter(this, activityDatesExtension)
   }
 }

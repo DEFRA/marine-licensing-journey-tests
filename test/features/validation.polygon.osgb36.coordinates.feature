@@ -1,4 +1,3 @@
-@issue=ML-19
 Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites

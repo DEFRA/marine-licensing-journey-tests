@@ -5,6 +5,7 @@ import { ClickSaveAndContinue } from '../interactions/index.js'
 import Memory from '../memory.js'
 import {
   EnterCoordinatesCentrePointPageInteractions,
+  EnterMultipleCoordinatesPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
   WhatCoordinateSystemPageInteractions,
@@ -71,11 +72,20 @@ export default class CompleteSiteDetails extends Task {
         browseTheWeb,
         siteDetails
       )
+    } else if (this.isBoundarySite(siteDetails)) {
+      await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
+        browseTheWeb,
+        siteDetails
+      )
     }
   }
 
   isCircleSite(siteDetails) {
     return siteDetails.siteType === 'circle'
+  }
+
+  isBoundarySite(siteDetails) {
+    return siteDetails.siteType === 'boundary'
   }
 
   async completeFileUploadFlow(browseTheWeb, siteDetails, actor) {
@@ -106,12 +116,11 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async enterWidthOfCircleIfOnWidthPage(browseTheWeb, siteDetails) {
-    try {
-      const widthElement = await browseTheWeb.browser.$('#width')
-      await widthElement.waitForExist({ timeout: 1000 })
+    const widthElement = await browseTheWeb.browser.$('#width')
+    const isOnWidthPage = await widthElement.isExisting()
+
+    if (isOnWidthPage) {
       await this.enterWidthOfCircle(browseTheWeb, siteDetails)
-    } catch (error) {
-      // Do nothing
     }
   }
 }
