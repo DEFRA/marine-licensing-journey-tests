@@ -13,6 +13,7 @@ import {
   ClickSaveAndContinue,
   CompleteProjectName,
   EnsureErrorDisplayed,
+  EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
   EnsureThatCoordinateEntryMethodSelected,
   EnsureThatSiteTypeSelected,
@@ -300,3 +301,17 @@ Then('the width error {string} is displayed', async function (errorMessage) {
     EnsureErrorDisplayed.is(WidthOfCircularSitePage.widthError, errorMessage)
   )
 })
+
+Then(
+  'the following validation errors are displayed:',
+  async function (dataTable) {
+    const expectedErrors = dataTable.hashes() // Convert table to array of objects
+
+    // Use the new interaction that handles polygon OSGB36 coordinate errors specifically
+    await this.actor.attemptsTo(
+      EnsureMultipleErrorsAreDisplayed.forPolygonOSGB36Coordinates(
+        expectedErrors
+      )
+    )
+  }
+)

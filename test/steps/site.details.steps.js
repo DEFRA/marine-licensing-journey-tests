@@ -10,6 +10,7 @@ import {
   EnsurePageHeading,
   EnsureSiteDetails,
   Navigate,
+  NavigateToSiteDetailsPage,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
@@ -177,3 +178,27 @@ Then('the coordinates entry page remains displayed', async function () {
     )
   )
 })
+
+When(
+  'the Continue button is clicked without providing any coordinates',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+Given(
+  'the Enter multiple sets of coordinates to mark the boundary of the site for OSGB36 coordinates page is displayed',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterPolygonOSGB36CoordinatesPageOnly()
+    )
+  }
+)

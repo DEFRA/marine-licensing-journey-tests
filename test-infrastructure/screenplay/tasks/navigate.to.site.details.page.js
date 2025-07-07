@@ -40,6 +40,12 @@ export default class NavigateToSiteDetailsPage extends Task {
     return new NavigateToSiteDetailsPage('enter-osgb36-coordinates-page-only')
   }
 
+  static enterPolygonOSGB36CoordinatesPageOnly() {
+    return new NavigateToSiteDetailsPage(
+      'enter-polygon-osgb36-coordinates-page-only'
+    )
+  }
+
   constructor(targetPage) {
     super()
     this.targetPage = targetPage
@@ -88,6 +94,12 @@ export default class NavigateToSiteDetailsPage extends Task {
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
+      },
+      'enter-polygon-osgb36-coordinates-page-only': async (browseTheWeb) => {
+        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
+          browseTheWeb
+        )
       }
     }
   }
@@ -112,6 +124,16 @@ export default class NavigateToSiteDetailsPage extends Task {
     )
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectCircularSiteAndContinue(
       browseTheWeb
+    )
+  }
+
+  async navigateToBoundaryCoordinateSystem(browseTheWeb) {
+    await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
+      browseTheWeb
+    )
+    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
+      browseTheWeb,
+      'boundary'
     )
   }
 }

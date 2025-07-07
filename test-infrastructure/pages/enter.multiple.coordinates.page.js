@@ -16,19 +16,19 @@ export default class EnterMultipleCoordinatesPage {
   }
 
   static latitudeError(pointIndex) {
-    return `#coordinates${pointIndex}latitude-error`
+    return `#coordinates\\[${pointIndex}\\]\\[latitude\\]-error`
   }
 
   static longitudeError(pointIndex) {
-    return `#coordinates${pointIndex}longitude-error`
+    return `#coordinates\\[${pointIndex}\\]\\[longitude\\]-error`
   }
 
   static eastingsError(pointIndex) {
-    return `#coordinates${pointIndex}eastings-error`
+    return `#coordinates\\[${pointIndex}\\]\\[eastings\\]-error`
   }
 
   static northingsError(pointIndex) {
-    return `#coordinates${pointIndex}northings-error`
+    return `#coordinates\\[${pointIndex}\\]\\[northings\\]-error`
   }
 
   static continueButton = '#continue'

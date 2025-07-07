@@ -12,9 +12,9 @@ import {
 } from '~/test-infrastructure/screenplay'
 import {
   EnsureErrorDisplayed,
-  EnsureThatFileTypeSelected
+  EnsureThatFileTypeSelected,
+  SelectFileType
 } from '~/test-infrastructure/screenplay/interactions'
-import { WhichTypeOfFileDoYouWantToUploadPageInteractions } from '~/test-infrastructure/screenplay/page-interactions'
 
 Given(
   'the user wants to apply for an exemption using a Shapefile',
@@ -48,28 +48,17 @@ Given(
 )
 
 When('selecting Shapefile as the file type', async function () {
-  const browseTheWeb = this.actor.ability
-  await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
-    browseTheWeb,
-    'Shapefile'
-  )
+  await this.actor.attemptsTo(SelectFileType.shapefile())
 })
 
 When('selecting KML as the file type', async function () {
-  const browseTheWeb = this.actor.ability
-  await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
-    browseTheWeb,
-    'KML'
-  )
+  await this.actor.attemptsTo(SelectFileType.kml())
 })
 
 When(
   'the Continue button is clicked without selecting a file type',
   async function () {
-    const browseTheWeb = this.actor.ability
-    await WhichTypeOfFileDoYouWantToUploadPageInteractions.clickContinue(
-      browseTheWeb
-    )
+    await this.actor.attemptsTo(SelectFileType.clickContinueWithoutSelection())
   }
 )
 
