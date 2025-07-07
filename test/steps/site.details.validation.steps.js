@@ -12,6 +12,7 @@ import {
   BrowseTheWeb,
   ClickSaveAndContinue,
   CompleteProjectName,
+  EnsureCoordinateError,
   EnsureErrorDisplayed,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
@@ -19,7 +20,8 @@ import {
   EnsureThatSiteTypeSelected,
   Navigate,
   NavigateToSiteDetailsPage,
-  SelectTheTask
+  SelectTheTask,
+  SetCoordinateField
 } from '~/test-infrastructure/screenplay'
 
 Given('a user is providing site details', async function () {
@@ -302,16 +304,34 @@ Then('the width error {string} is displayed', async function (errorMessage) {
   )
 })
 
-Then(
-  'the following validation errors are displayed:',
-  async function (dataTable) {
-    const expectedErrors = dataTable.hashes() // Convert table to array of objects
-
-    // Use the new interaction that handles polygon OSGB36 coordinate errors specifically
+When(
+  'the {string} input for {string} is set to {string}',
+  async function (fieldType, point, invalidValue) {
     await this.actor.attemptsTo(
-      EnsureMultipleErrorsAreDisplayed.forPolygonOSGB36Coordinates(
-        expectedErrors
-      )
+      SetCoordinateField.withValue(fieldType, point, invalidValue)
     )
   }
 )
+
+Then(
+  'the {string} error for {string} is {string}',
+  async function (fieldType, point, expectedError) {
+    await this.actor.attemptsTo(
+      EnsureCoordinateError.forField(fieldType, point, expectedError)
+    )
+  }
+)
+
+Then(
+  'the following validation errors are displayed:',
+  async function (dataTable) {
+    const errors = dataTable.hashes()
+    await this.actor.attemptsTo(
+      EnsureMultipleErrorsAreDisplayed.forPolygonOSGB36Coordinates(errors)
+    )
+  }
+)
+
+When('the Continue button is clicked', async function () {
+  await this.actor.attemptsTo(ClickSaveAndContinue.now())
+})

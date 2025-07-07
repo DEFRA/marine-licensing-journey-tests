@@ -9,6 +9,8 @@ export { default as EnsureThatCoordinateEntryMethodSelected } from './ensure.coo
 export { default as EnsureErrorDisplayed } from './ensure.error'
 export { default as EnsureThatFileTypeSelected } from './ensure.file.type'
 export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.errors.are.displayed'
+export { default as EnsureCoordinateError } from './ensure.coordinate.error'
+export { default as SetCoordinateField } from './set.coordinate.field'
 export { default as EnsurePageHeading } from './ensure.page.heading'
 export { default as EnsureThatProjectName } from './ensure.project.name'
 export { default as EnsureProjectNameDisplayedAsCaption } from './ensure.project.name.displayed.as.caption'
