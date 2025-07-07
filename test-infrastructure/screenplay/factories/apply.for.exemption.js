@@ -79,7 +79,7 @@ export default class ApplyForExemption {
     )
   }
 
-  static withAllTasksCompleted() {
+  static withCompleteData() {
     return new ApplyForExemption(
       this._createBaseExemption({
         activityDates: ActivityDatesModel.generateValidActivityDates(),
@@ -135,42 +135,42 @@ export default class ApplyForExemption {
   }
 
   latitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.latitude = value
     }
     return this
   }
 
   longitude(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.longitude = value
     }
     return this
   }
 
   radius(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.radiusMeters = value
     }
     return this
   }
 
   eastings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.eastings = value
     }
     return this
   }
 
   northings(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.northings = value
     }
     return this
   }
 
   width(value) {
-    if (this.data.siteDetails && this.data.siteDetails.circleData) {
+    if (this.data.siteDetails?.circleData) {
       this.data.siteDetails.circleData.width = value
     }
     return this
@@ -213,7 +213,7 @@ export default class ApplyForExemption {
 
   get andSiteDetails() {
     return {
-      withCircleWGS84: () => {
+      forACircleWithWGS84Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'circle',
@@ -228,7 +228,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withCircleOSGB36: () => {
+      forACircleWithOSGB36Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'circle',
@@ -243,7 +243,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withBoundaryWGS84: () => {
+      forABoundaryWithWGS84Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'boundary',
@@ -251,7 +251,7 @@ export default class ApplyForExemption {
         }
         return this
       },
-      withBoundaryOSGB36: () => {
+      forABoundaryWithOSGB36Coordinates: () => {
         this.data.siteDetails = {
           coordinatesEntryMethod: 'enter-manually',
           siteType: 'boundary',

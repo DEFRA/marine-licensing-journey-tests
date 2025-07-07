@@ -19,7 +19,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withCircleWGS84()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithWGS84Coordinates()
     )
   }
 )
@@ -30,7 +30,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withCircleOSGB36()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithOSGB36Coordinates()
     )
   }
 )
@@ -71,7 +71,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withBoundaryWGS84()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithWGS84Coordinates()
     )
   }
 )
@@ -82,7 +82,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.withBoundaryOSGB36()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
     )
   }
 )

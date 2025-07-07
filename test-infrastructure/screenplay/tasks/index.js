@@ -1,5 +1,6 @@
 export { default as CompleteActivityDates } from './complete.activity.dates'
 export { default as CompleteActivityDescription } from './complete.activity.description'
+export { default as CompleteAllTasks } from './complete.all.tasks'
 export { default as CompleteProjectName } from './complete.project.name'
 export { default as CompletePublicRegisterTask } from './complete.public.register'
 export { default as CompleteSiteDetails } from './complete.site.details'

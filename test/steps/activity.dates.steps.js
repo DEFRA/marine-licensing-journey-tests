@@ -21,11 +21,6 @@ Given('the start date of the activity is today', function () {
   )
 })
 
-Given('the actiity dates task has been completed', async function () {
-  await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-  await this.actor.attemptsTo(CompleteActivityDates.now())
-})
-
 Given('the activity dates task has been completed', async function () {
   this.actor.updates(
     Memory.ofActivityDatesWith(ActivityDatesModel.generateTodayAsStartDate())
