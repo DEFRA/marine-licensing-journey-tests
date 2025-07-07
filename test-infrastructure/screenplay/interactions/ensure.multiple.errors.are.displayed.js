@@ -27,18 +27,15 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
       let message
 
       if (this.type === 'polygon-osgb36') {
-        // Map field names to polygon OSGB36 coordinate error selectors
         selector = this.getPolygonOSGB36ErrorSelector(
           errorItem.Field || errorItem.field
         )
         message = errorItem['Error Message'] || errorItem.message
       } else {
-        // Custom mode - expect selector and message to be provided
         selector = errorItem.selector
         message = errorItem.message
       }
 
-      // Use the existing EnsureErrorDisplayed interaction for each error
       await actor.attemptsTo(EnsureErrorDisplayed.is(selector, message))
     }
   }
