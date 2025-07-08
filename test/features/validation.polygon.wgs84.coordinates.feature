@@ -1,4 +1,4 @@
-@issue=ML-19
+@issue=ML-19 @wip
 Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites using WGS84 coordinates
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites

@@ -1,14 +1,16 @@
 import { expect } from 'chai'
 import Task from '../base/task.js'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
-import { ClickSaveAndContinue } from '../interactions/index.js'
+import {
+  ClickSaveAndContinue,
+  UploadFileAndContinue
+} from '../interactions/index.js'
 import Memory from '../memory.js'
 import {
   EnterCoordinatesCentrePointPageInteractions,
   EnterMultipleCoordinatesPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
-  UploadFilePageInteractions,
   WhatCoordinateSystemPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
@@ -50,9 +52,8 @@ export default class CompleteSiteDetails extends Task {
       )
 
       if (siteDetails.filePath) {
-        await UploadFilePageInteractions.uploadFileAndContinue(
-          browseTheWeb,
-          siteDetails.filePath
+        await actor.attemptsTo(
+          UploadFileAndContinue.withPath(siteDetails.filePath)
         )
       } else {
         expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
