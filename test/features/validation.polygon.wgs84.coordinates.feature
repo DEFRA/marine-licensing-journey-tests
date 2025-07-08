@@ -1,5 +1,5 @@
-@issue=ML-19 @run-only
-Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites
+@issue=ML-19
+Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites using WGS84 coordinates
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites
   So that I can correct errors before submitting my marine licence application
@@ -23,22 +23,22 @@ Feature: Validation of polygon coordinates: preventing entry of invalid coordina
     Then the "<fieldType>" error for "<point>" is "<expectedError>"
 
     Examples:
-      | fieldType | point               | invalidValue | expectedError                                                                  |
-      | Latitude  | Start and end point | abc          | Latitude of start and end point must be a number                               |
-      | Latitude  | Point 2             | xyz          | Latitude of point 2 must be a number                                           |
-      | Latitude  | Point 3             |       123abc | Latitude of point 3 must be a number                                           |
-      | Longitude | Start and end point | def          | Longitude of start and end point must be a number                              |
-      | Longitude | Point 2             | uvw          | Longitude of point 2 must be a number                                          |
-      | Longitude | Point 3             |       456def | Longitude of point 3 must be a number                                          |
-      | Latitude  | Start and end point |   -91.000000 | Latitude of start and end point must be between -90 and 90                     |
-      | Latitude  | Point 2             |    91.000000 | Latitude of point 2 must be between -90 and 90                                 |
-      | Latitude  | Point 3             |   -95.123456 | Latitude of point 3 must be between -90 and 90                                 |
-      | Longitude | Start and end point |  -181.000000 | Longitude of start and end point must be between -180 and 180                  |
-      | Longitude | Point 2             |   181.000000 | Longitude of point 2 must be between -180 and 180                              |
-      | Longitude | Point 3             |  -185.123456 | Longitude of point 3 must be between -180 and 180                              |
-      | Latitude  | Start and end point |     55.01988 | Latitude of start and end point must include 6 decimal places, like 55.019889  |
-      | Latitude  | Point 2             |   55.0198899 | Latitude of point 2 must include 6 decimal places, like 55.019889              |
-      | Latitude  | Point 3             |     55.12345 | Latitude of point 3 must include 6 decimal places, like 55.019889              |
-      | Longitude | Start and end point |     -1.39950 | Longitude of start and end point must include 6 decimal places, like -1.399500 |
-      | Longitude | Point 2             |   -1.3995000 | Longitude of point 2 must include 6 decimal places, like -1.399500             |
-      | Longitude | Point 3             |     -1.12345 | Longitude of point 3 must include 6 decimal places, like -1.399500             |
+      | fieldType | point               | invalidValue | expectedError                                                                      |
+      | Latitude  | Start and end point | abc          | Latitude of the start and end point must be a number                               |
+      | Latitude  | Point 2             | xyz          | Latitude of point 2 must be a number                                               |
+      | Latitude  | Point 3             |       123abc | Latitude of point 3 must be a number                                               |
+      | Longitude | Start and end point | def          | Longitude of the start and end point must be a number                              |
+      | Longitude | Point 2             | uvw          | Longitude of point 2 must be a number                                              |
+      | Longitude | Point 3             |       456def | Longitude of point 3 must be a number                                              |
+      | Latitude  | Start and end point |   -91.000000 | Latitude of the start and end point must be between -90 and 90                     |
+      | Latitude  | Point 2             |    91.000000 | Latitude of point 2 must be between -90 and 90                                     |
+      | Latitude  | Point 3             |   -95.123456 | Latitude of point 3 must be between -90 and 90                                     |
+      | Longitude | Start and end point |  -181.000000 | Longitude of the start and end point must be between -180 and 180                  |
+      | Longitude | Point 2             |   181.000000 | Longitude of point 2 must be between -180 and 180                                  |
+      | Longitude | Point 3             |  -185.123456 | Longitude of point 3 must be between -180 and 180                                  |
+      | Latitude  | Start and end point |     55.01988 | Latitude of the start and end point must include 6 decimal places, like 55.019889  |
+      | Latitude  | Point 2             |   55.0198899 | Latitude of point 2 must include 6 decimal places, like 55.019889                  |
+      | Latitude  | Point 3             |     55.12345 | Latitude of point 3 must include 6 decimal places, like 55.019889                  |
+      | Longitude | Start and end point |     -1.39950 | Longitude of the start and end point must include 6 decimal places, like -1.399500 |
+      | Longitude | Point 2             |   -1.3995000 | Longitude of point 2 must include 6 decimal places, like -1.399500                 |
+      | Longitude | Point 3             |     -1.12345 | Longitude of point 3 must include 6 decimal places, like -1.399500                 |
