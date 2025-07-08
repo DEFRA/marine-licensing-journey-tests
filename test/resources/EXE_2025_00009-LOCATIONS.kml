@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd">
+<Folder>
+<name>EXE/2025/00009</name>
+<Document id="SL893028">
+<name>mmo_advice_sites</name>
+<description>MMO Advice Sites</description>
+<Style id="s_advice_main_line_point">
+<LineStyle><color>FF000000</color></LineStyle>
+<PolyStyle><color>FFFFFFFF</color></PolyStyle>
+</Style>
+<Placemark id="SID12271033">
+<name>Bridge Pontoon</name>
+<description>Bridge Pontoon</description>
+<styleUrl>#s_advice_main_line_point</styleUrl>
+<LineString><coordinates>-1.29516666666666666666666666666666666666,50.7602,0 -1.29495,50.76038333333333333333333333333333333333,0 </coordinates></LineString>
+</Placemark>
+</Document>
+</Folder>
+</kml>
