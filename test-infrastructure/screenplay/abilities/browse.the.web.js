@@ -1,6 +1,6 @@
+import { expect } from '@wdio/globals'
 import { expect as chaiExpect } from 'chai'
 import path from 'path'
-import { expect } from '~/node_modules/@wdio/globals/build/index'
 import { DefraIdStubUserManager } from '~/test-infrastructure/helpers/defra-id-stub-user-manager.js'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import Ability from '../abilities/ability'
