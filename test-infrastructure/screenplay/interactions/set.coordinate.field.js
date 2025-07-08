@@ -27,13 +27,18 @@ export default class SetCoordinateField extends Task {
     }
 
     const browseTheWeb = actor.ability
-    const lowerFieldType = this.fieldType.toLowerCase()
 
-    if (lowerFieldType === 'eastings') {
+    if (this.fieldType === 'Eastings') {
       const selector = EnterMultipleCoordinatesPage.eastingsInput(pointIndex)
       await browseTheWeb.sendKeys(selector, this.value)
-    } else if (lowerFieldType === 'northings') {
+    } else if (this.fieldType === 'Northings') {
       const selector = EnterMultipleCoordinatesPage.northingsInput(pointIndex)
+      await browseTheWeb.sendKeys(selector, this.value)
+    } else if (this.fieldType === 'Latitude') {
+      const selector = EnterMultipleCoordinatesPage.latitudeInput(pointIndex)
+      await browseTheWeb.sendKeys(selector, this.value)
+    } else if (this.fieldType === 'Longitude') {
+      const selector = EnterMultipleCoordinatesPage.longitudeInput(pointIndex)
       await browseTheWeb.sendKeys(selector, this.value)
     } else {
       expect.fail(`Unknown field type: ${this.fieldType}`)

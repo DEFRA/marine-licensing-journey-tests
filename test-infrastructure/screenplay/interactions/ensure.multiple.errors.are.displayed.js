@@ -11,6 +11,10 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
     )
   }
 
+  static forPolygonWGS84Coordinates(fieldErrorList) {
+    return new EnsureMultipleErrorsAreDisplayed(fieldErrorList, 'polygon-wgs84')
+  }
+
   static withCustomSelectors(errorDefinitions) {
     return new EnsureMultipleErrorsAreDisplayed(errorDefinitions, 'custom')
   }
@@ -28,6 +32,11 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
 
       if (this.type === 'polygon-osgb36') {
         selector = this.getPolygonOSGB36ErrorSelector(
+          errorItem.Field || errorItem.field
+        )
+        message = errorItem['Error Message'] || errorItem.message
+      } else if (this.type === 'polygon-wgs84') {
+        selector = this.getPolygonWGS84ErrorSelector(
           errorItem.Field || errorItem.field
         )
         message = errorItem['Error Message'] || errorItem.message
@@ -56,6 +65,25 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
         return EnterMultipleCoordinatesPage.northingsError(2)
       default:
         expect.fail(`Unknown polygon OSGB36 field: ${field}`)
+    }
+  }
+
+  getPolygonWGS84ErrorSelector(field) {
+    switch (field) {
+      case 'Start and end point latitude':
+        return EnterMultipleCoordinatesPage.latitudeError(0)
+      case 'Start and end point longitude':
+        return EnterMultipleCoordinatesPage.longitudeError(0)
+      case 'Point 2 latitude':
+        return EnterMultipleCoordinatesPage.latitudeError(1)
+      case 'Point 2 longitude':
+        return EnterMultipleCoordinatesPage.longitudeError(1)
+      case 'Point 3 latitude':
+        return EnterMultipleCoordinatesPage.latitudeError(2)
+      case 'Point 3 longitude':
+        return EnterMultipleCoordinatesPage.longitudeError(2)
+      default:
+        expect.fail(`Unknown polygon WGS84 field: ${field}`)
     }
   }
 }

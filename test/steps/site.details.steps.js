@@ -202,3 +202,20 @@ Given(
     )
   }
 )
+
+Given(
+  'the Enter multiple sets of coordinates to mark the boundary of the site for WGS84 coordinates page is displayed',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterPolygonWGS84CoordinatesPageOnly()
+    )
+  }
+)

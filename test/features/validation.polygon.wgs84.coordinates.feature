@@ -1,125 +1,44 @@
-@issue=ML-19
+@issue=ML-19 @run-only
 Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites
   So that I can correct errors before submitting my marine licence application
 
-  @wip
   Scenario: Error when no WGS84 coordinates are entered for polygon
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
+    Given the Enter multiple sets of coordinates to mark the boundary of the site for WGS84 coordinates page is displayed
     When the Continue button is clicked without providing any coordinates
-    Then the latitude error "Enter the latitude of the start and end point" is displayed
-    And the longitude error "Enter the longitude of the start and end point" is displayed
+    Then the following validation errors are displayed:
+      | Field                         | Error Message                              |
+      | Start and end point latitude  | Enter the latitude of start and end point  |
+      | Start and end point longitude | Enter the longitude of start and end point |
+      | Point 2 latitude              | Enter the latitude of point 2              |
+      | Point 2 longitude             | Enter the longitude of point 2             |
+      | Point 3 latitude              | Enter the latitude of point 3              |
+      | Point 3 longitude             | Enter the longitude of point 3             |
 
-  @wip
-  Scenario Outline: Error when WGS84 latitude fields are missing for different points
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And only the latitude for "<point>" is left blank
-    When the Continue button is clicked
-    Then the latitude error "Enter the latitude of <point_reference>" is displayed
-
-    Examples:
-      | point       | point_reference         |
-      | start_point | the start and end point |
-      | point_2     | point 2                 |
-      | point_3     | point 3                 |
-
-  @wip
-  Scenario Outline: Error when WGS84 longitude fields are missing for different points
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And only the longitude for "<point>" is left blank
-    When the Continue button is clicked
-    Then the longitude error "Enter the longitude of <point_reference>" is displayed
+  Scenario Outline: Error when WGS84 coordinate field contains invalid data for field type <fieldType> for point <point> with value <invalidValue>
+    Given the Enter multiple sets of coordinates to mark the boundary of the site for WGS84 coordinates page is displayed
+    When the "<fieldType>" input for "<point>" is set to "<invalidValue>"
+    And the Continue button is clicked
+    Then the "<fieldType>" error for "<point>" is "<expectedError>"
 
     Examples:
-      | point       | point_reference         |
-      | start_point | the start and end point |
-      | point_2     | point 2                 |
-      | point_3     | point 3                 |
-
-  @wip
-  Scenario Outline: Error when WGS84 latitude contains non-numeric characters
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the latitude for "<point>" is set to "<invalid_latitude>"
-    When the Continue button is clicked
-    Then the latitude error "Latitude of <point_reference> must be a number" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_latitude |
-      | start_point | the start and end point | abc              |
-      | point_2     | point 2                 | xyz              |
-      | point_3     | point 3                 |           123abc |
-
-  @wip
-  Scenario Outline: Error when WGS84 longitude contains non-numeric characters
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the longitude for "<point>" is set to "<invalid_longitude>"
-    When the Continue button is clicked
-    Then the longitude error "Longitude of <point_reference> must be a number" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_longitude |
-      | start_point | the start and end point | def               |
-      | point_2     | point 2                 | uvw               |
-      | point_3     | point 3                 |            456def |
-
-  @wip
-  Scenario Outline: Error when WGS84 latitude is outside valid range
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the latitude for "<point>" is set to "<invalid_latitude>"
-    When the Continue button is clicked
-    Then the latitude error "Latitude of <point_reference> must be between -90 and 90" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_latitude |
-      | start_point | the start and end point |       -91.000000 |
-      | point_2     | point 2                 |        91.000000 |
-      | point_3     | point 3                 |       -95.123456 |
-
-  @wip
-  Scenario Outline: Error when WGS84 longitude is outside valid range
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the longitude for "<point>" is set to "<invalid_longitude>"
-    When the Continue button is clicked
-    Then the longitude error "Longitude of <point_reference> must be between -180 and 180" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_longitude |
-      | start_point | the start and end point |       -181.000000 |
-      | point_2     | point 2                 |        181.000000 |
-      | point_3     | point 3                 |       -185.123456 |
-
-  @wip
-  Scenario Outline: Error when WGS84 latitude doesn't have exactly 6 decimal places
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the latitude for "<point>" is set to "<invalid_latitude>"
-    When the Continue button is clicked
-    Then the latitude error "Latitude of <point_reference> must include 6 decimal places, like 55.019889" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_latitude |
-      | start_point | the start and end point |         55.01988 |
-      | point_2     | point 2                 |       55.0198899 |
-      | point_3     | point 3                 |         55.12345 |
-
-  @wip
-  Scenario Outline: Error when WGS84 longitude doesn't have exactly 6 decimal places
-    Given the user wants to apply for an exemption for a polygonal site using WGS84 coordinates
-    And the "Enter multiple sets of coordinates to mark the boundary of the site" page is displayed
-    And the longitude for "<point>" is set to "<invalid_longitude>"
-    When the Continue button is clicked
-    Then the longitude error "Longitude of <point_reference> must include 6 decimal places, like -1.399500" is displayed
-
-    Examples:
-      | point       | point_reference         | invalid_longitude |
-      | start_point | the start and end point |          -1.39950 |
-      | point_2     | point 2                 |        -1.3995000 |
-      | point_3     | point 3                 |          -1.12345 |
+      | fieldType | point               | invalidValue | expectedError                                                                  |
+      | Latitude  | Start and end point | abc          | Latitude of start and end point must be a number                               |
+      | Latitude  | Point 2             | xyz          | Latitude of point 2 must be a number                                           |
+      | Latitude  | Point 3             |       123abc | Latitude of point 3 must be a number                                           |
+      | Longitude | Start and end point | def          | Longitude of start and end point must be a number                              |
+      | Longitude | Point 2             | uvw          | Longitude of point 2 must be a number                                          |
+      | Longitude | Point 3             |       456def | Longitude of point 3 must be a number                                          |
+      | Latitude  | Start and end point |   -91.000000 | Latitude of start and end point must be between -90 and 90                     |
+      | Latitude  | Point 2             |    91.000000 | Latitude of point 2 must be between -90 and 90                                 |
+      | Latitude  | Point 3             |   -95.123456 | Latitude of point 3 must be between -90 and 90                                 |
+      | Longitude | Start and end point |  -181.000000 | Longitude of start and end point must be between -180 and 180                  |
+      | Longitude | Point 2             |   181.000000 | Longitude of point 2 must be between -180 and 180                              |
+      | Longitude | Point 3             |  -185.123456 | Longitude of point 3 must be between -180 and 180                              |
+      | Latitude  | Start and end point |     55.01988 | Latitude of start and end point must include 6 decimal places, like 55.019889  |
+      | Latitude  | Point 2             |   55.0198899 | Latitude of point 2 must include 6 decimal places, like 55.019889              |
+      | Latitude  | Point 3             |     55.12345 | Latitude of point 3 must include 6 decimal places, like 55.019889              |
+      | Longitude | Start and end point |     -1.39950 | Longitude of start and end point must include 6 decimal places, like -1.399500 |
+      | Longitude | Point 2             |   -1.3995000 | Longitude of point 2 must include 6 decimal places, like -1.399500             |
+      | Longitude | Point 3             |     -1.12345 | Longitude of point 3 must include 6 decimal places, like -1.399500             |

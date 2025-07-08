@@ -46,6 +46,12 @@ export default class NavigateToSiteDetailsPage extends Task {
     )
   }
 
+  static enterPolygonWGS84CoordinatesPageOnly() {
+    return new NavigateToSiteDetailsPage(
+      'enter-polygon-wgs84-coordinates-page-only'
+    )
+  }
+
   constructor(targetPage) {
     super()
     this.targetPage = targetPage
@@ -98,6 +104,12 @@ export default class NavigateToSiteDetailsPage extends Task {
       'enter-polygon-osgb36-coordinates-page-only': async (browseTheWeb) => {
         await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
+          browseTheWeb
+        )
+      },
+      'enter-polygon-wgs84-coordinates-page-only': async (browseTheWeb) => {
+        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
+        await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
           browseTheWeb
         )
       }

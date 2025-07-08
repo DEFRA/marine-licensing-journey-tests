@@ -27,13 +27,16 @@ export default class EnsureCoordinateError extends Task {
     }
 
     const browseTheWeb = actor.ability
-    const lowerFieldType = this.fieldType.toLowerCase()
 
     let selector
-    if (lowerFieldType === 'eastings') {
+    if (this.fieldType === 'Eastings') {
       selector = EnterMultipleCoordinatesPage.eastingsError(pointIndex)
-    } else if (lowerFieldType === 'northings') {
+    } else if (this.fieldType === 'Northings') {
       selector = EnterMultipleCoordinatesPage.northingsError(pointIndex)
+    } else if (this.fieldType === 'Latitude') {
+      selector = EnterMultipleCoordinatesPage.latitudeError(pointIndex)
+    } else if (this.fieldType === 'Longitude') {
+      selector = EnterMultipleCoordinatesPage.longitudeError(pointIndex)
     } else {
       expect.fail(`Unknown field type: ${this.fieldType}`)
     }

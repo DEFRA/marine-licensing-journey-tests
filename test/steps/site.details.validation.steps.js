@@ -326,9 +326,23 @@ Then(
   'the following validation errors are displayed:',
   async function (dataTable) {
     const errors = dataTable.hashes()
-    await this.actor.attemptsTo(
-      EnsureMultipleErrorsAreDisplayed.forPolygonOSGB36Coordinates(errors)
+
+    // Detect coordinate system based on field names
+    const hasLatLongFields = errors.some(
+      (error) =>
+        (error.Field || error.field)?.includes('latitude') ||
+        (error.Field || error.field)?.includes('longitude')
     )
+
+    if (hasLatLongFields) {
+      await this.actor.attemptsTo(
+        EnsureMultipleErrorsAreDisplayed.forPolygonWGS84Coordinates(errors)
+      )
+    } else {
+      await this.actor.attemptsTo(
+        EnsureMultipleErrorsAreDisplayed.forPolygonOSGB36Coordinates(errors)
+      )
+    }
   }
 )
 
