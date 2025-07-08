@@ -40,14 +40,10 @@ export default class BrowseTheWeb extends Ability {
     }
 
     if (typeof locator === 'object' && locator.primary) {
-      try {
-        const element = await this.browser.$(locator.primary)
-        const isExisting = await element.isExisting()
-        if (isExisting) {
-          return element
-        }
-      } catch (error) {
-        // Primary locator failed, will try fallback if available
+      const element = await this.browser.$(locator.primary)
+      const isExisting = await element.isExisting()
+      if (isExisting) {
+        return element
       }
 
       if (locator.fallback) {
