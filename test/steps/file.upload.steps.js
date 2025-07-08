@@ -1,5 +1,16 @@
-import { Given, Then, When } from '@cucumber/cucumber'
+import { Given, Then, When } from '@wdio/cucumber-framework'
 import { browser } from '@wdio/globals'
+
+import {
+  ClickSaveAndContinue,
+  EnsureErrorDisplayed,
+  EnsureNoErrorsDisplayed,
+  EnsurePageHeading,
+  EnsureProjectNameDisplayedAsCaption,
+  SelectTheTask
+} from '~/test-infrastructure/screenplay/interactions/index.js'
+
+import { WhichTypeOfFileDoYouWantToUploadPageInteractions } from '~/test-infrastructure/screenplay/page-interactions/index.js'
 
 import {
   Actor,
@@ -7,72 +18,64 @@ import {
   BrowseTheWeb,
   CompleteProjectName,
   CompleteSiteDetails,
-  Navigate,
-  SelectTheTask
-} from '~/test-infrastructure/screenplay'
-import {
-  EnsureErrorDisplayed,
-  EnsureThatFileTypeSelected,
-  SelectFileType
-} from '~/test-infrastructure/screenplay/interactions'
+  Navigate
+} from '~/test-infrastructure/screenplay/index.js'
 
-Given(
-  'the user wants to apply for an exemption using a Shapefile',
-  function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(ApplyForExemption.withShapefileUpload())
-  }
-)
-
-Given('the user wants to apply for an exemption using a KML file', function () {
+Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withKMLUpload())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
 
-Given(
-  'the Which type of file do you want to upload? page is displayed',
-  async function () {
-    if (!this.actor) {
-      this.actor = new Actor('Alice')
-      this.actor.can(BrowseTheWeb.using(browser))
-      this.actor.intendsTo(ApplyForExemption.withFileUpload())
-    }
-
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await this.actor.attemptsTo(CompleteProjectName.now())
-    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-    await this.actor.attemptsTo(CompleteSiteDetails.now())
-  }
-)
-
-When('selecting Shapefile as the file type', async function () {
-  await this.actor.attemptsTo(SelectFileType.shapefile())
+Given('the Upload a KML file page is displayed', async function () {
+  await this.actor.attemptsTo(
+    EnsurePageHeading.is('Upload a KML file'),
+    EnsureProjectNameDisplayedAsCaption.is(this.actor.remember.projectName)
+  )
 })
 
-When('selecting KML as the file type', async function () {
-  await this.actor.attemptsTo(SelectFileType.kml())
+When('completing the site details task', async function () {
+  await this.actor.attemptsTo(CompleteSiteDetails.now())
+})
+
+When('uploading a valid KML file', async function () {
+  await this.actor.attemptsTo(CompleteSiteDetails.now())
+})
+
+Then('the file is successfully processed', async function () {
+  await this.actor.attemptsTo(EnsureNoErrorsDisplayed.onPage())
 })
 
 When(
-  'the Continue button is clicked without selecting a file type',
-  async function () {
-    await this.actor.attemptsTo(SelectFileType.clickContinueWithoutSelection())
+  'an invalid file type {string} is selected for upload',
+  async function (fileUploadType) {
+    await this.actor.attemptsTo(
+      WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
+        fileUploadType
+      ),
+      ClickSaveAndContinue.now()
+    )
   }
 )
 
-Then('the Shapefile option is selected', async function () {
-  await this.actor.attemptsTo(EnsureThatFileTypeSelected.is('Shapefile'))
-})
-
-Then('the KML option is selected', async function () {
-  await this.actor.attemptsTo(EnsureThatFileTypeSelected.is('KML'))
-})
+Given(
+  'the {string} file type has been selected',
+  async function (fileUploadType) {
+    await this.actor.attemptsTo(
+      WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
+        fileUploadType
+      ),
+      ClickSaveAndContinue.now()
+    )
+  }
+)
 
 Then(
-  'the file type error {string} is displayed',
-  async function (expectedErrorMessage) {
+  'the {string} file upload type error {string} is displayed',
+  async function (fileUploadType, expectedErrorMessage) {
     await this.actor.attemptsTo(
       EnsureErrorDisplayed.is('#fileUploadType-error', expectedErrorMessage)
     )

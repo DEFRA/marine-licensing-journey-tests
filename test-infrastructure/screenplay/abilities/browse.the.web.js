@@ -1,4 +1,5 @@
 import { expect as chaiExpect } from 'chai'
+import path from 'path'
 import { expect } from '~/node_modules/@wdio/globals/build/index'
 import { DefraIdStubUserManager } from '~/test-infrastructure/helpers/defra-id-stub-user-manager.js'
 import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
@@ -157,5 +158,65 @@ export default class BrowseTheWeb extends Ability {
 
   async expireTestUser(userId) {
     return await this.defraIdStub.expireTestUser(userId)
+  }
+
+  async uploadFile(locator, filePath) {
+    const absoluteFilePath = path.resolve(filePath)
+    const remoteFilePath = await this.browser.uploadFile(absoluteFilePath)
+    const element = await this.getElement(locator)
+    const isHidden = await element.getAttribute('hidden')
+    const isAriaHidden = await element.getAttribute('aria-hidden')
+
+    if (isHidden === 'true' || isAriaHidden === 'true') {
+      await this.browser.execute((el) => {
+        const originalHidden = el.hidden
+        const originalAriaHidden = el.getAttribute('aria-hidden')
+        const originalTabIndex = el.tabIndex
+        const originalDisplay = el.style.display
+        const originalVisibility = el.style.visibility
+
+        el.hidden = false
+        el.removeAttribute('aria-hidden')
+        el.style.display = 'block'
+        el.style.visibility = 'visible'
+        el.style.position = 'absolute'
+        el.style.top = '0px'
+        el.style.left = '0px'
+        el.style.width = '1px'
+        el.style.height = '1px'
+        el.style.opacity = '0'
+        el.style.zIndex = '9999'
+        el.tabIndex = 0
+
+        window.restoreFileInput = () => {
+          el.hidden = originalHidden
+          if (originalAriaHidden)
+            el.setAttribute('aria-hidden', originalAriaHidden)
+          el.tabIndex = originalTabIndex
+          el.style.display = originalDisplay
+          el.style.visibility = originalVisibility
+          el.style.position = ''
+          el.style.top = ''
+          el.style.left = ''
+          el.style.width = ''
+          el.style.height = ''
+          el.style.opacity = ''
+          el.style.zIndex = ''
+        }
+      }, element)
+
+      try {
+        await element.setValue(remoteFilePath)
+      } finally {
+        await this.browser.execute(() => {
+          if (window.restoreFileInput) {
+            window.restoreFileInput()
+            delete window.restoreFileInput
+          }
+        })
+      }
+    } else {
+      await element.setValue(remoteFilePath)
+    }
   }
 }

@@ -83,8 +83,11 @@ export default class ExemptionFactory {
 
   static createKMLUpload() {
     return this.createBaseExemption({
-      fileType: FileTypeModel.generateKML(),
-      siteDetails: SiteDetailsFactory.createFileUpload()
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateKML(),
+        filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
+      }
     })
   }
 

@@ -8,7 +8,9 @@ import {
   EnterMultipleCoordinatesPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
+  UploadFilePageInteractions,
   WhatCoordinateSystemPageInteractions,
+  WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
 } from '../page-interactions/index.js'
 
@@ -41,6 +43,20 @@ export default class CompleteSiteDetails extends Task {
         browseTheWeb,
         siteDetails.coordinatesEntryMethod
       )
+
+      await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
+        browseTheWeb,
+        siteDetails.fileType
+      )
+
+      if (siteDetails.filePath) {
+        await UploadFilePageInteractions.uploadFileAndContinue(
+          browseTheWeb,
+          siteDetails.filePath
+        )
+      } else {
+        expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
+      }
     } else if (this.coordinatesOnly) {
       await this.completePolygonFlow(browseTheWeb, siteDetails)
     } else if (siteDetails.siteType === 'circle') {

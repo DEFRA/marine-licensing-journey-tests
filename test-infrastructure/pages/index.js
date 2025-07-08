@@ -8,6 +8,7 @@ export { default as HowDoYouWantToProvideCoordinatesPage } from './how.do.you.wa
 export { default as ProjectNamePage } from './project.name.page'
 export { default as PublicRegisterPage } from './public.register.page'
 export { default as TaskListPage } from './task.list.page'
+export { default as UploadFilePage } from './upload.file.page'
 export { default as WhatCoordinateSystemPage } from './what.coordinate.system.page'
 export { default as WhichTypeOfFileDoYouWantToUploadPage } from './which.type.of.file.do.you.want.to.upload.page'
 export { default as WidthOfCircularSitePage } from './width.of.circular.site.page'
