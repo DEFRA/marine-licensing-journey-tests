@@ -21,3 +21,8 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Given an exemption notification with a file with a virus
     When completing the site details task
     Then the file upload error "The selected file contains a virus" is displayed
+
+  Scenario: Uploading without selecting a file fails
+    Given an exemption notification for file upload
+    When navigating to the file upload page and continuing without selecting a file
+    Then the file upload error "Select a file to upload" is displayed

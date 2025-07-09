@@ -10,7 +10,10 @@ import {
   SelectTheTask
 } from '~/test-infrastructure/screenplay/interactions/index.js'
 
-import { WhichTypeOfFileDoYouWantToUploadPageInteractions } from '~/test-infrastructure/screenplay/page-interactions/index.js'
+import {
+  HowDoYouWantToProvideCoordinatesPageInteractions,
+  WhichTypeOfFileDoYouWantToUploadPageInteractions
+} from '~/test-infrastructure/screenplay/page-interactions/index.js'
 
 import {
   Actor,
@@ -69,6 +72,26 @@ When('uploading a valid KML file', async function () {
 })
 
 When(
+  'navigating to the file upload page and continuing without selecting a file',
+  async function () {
+    // Navigate to "How do you want to provide the coordinates?" page and select file upload
+    await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
+      this.actor.ability,
+      'file-upload'
+    )
+
+    // Navigate to "Which type of file do you want to upload?" page and select Shapefile
+    await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
+      this.actor.ability,
+      'Shapefile'
+    )
+
+    // Click continue without selecting a file to trigger validation
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When(
   'an invalid file type {string} is selected for upload',
   async function (fileUploadType) {
     await this.actor.attemptsTo(
@@ -104,6 +127,15 @@ Given('an exemption notification with a file with a virus', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withVirusUpload())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
+Given('an exemption notification for file upload', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withFileUpload())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
