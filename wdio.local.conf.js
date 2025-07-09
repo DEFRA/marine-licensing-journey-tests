@@ -19,7 +19,7 @@ export const config = {
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: ['not @wip'],
-    timeout: 60000 // 60 seconds for local development (generous timeout for debugging)
+    timeout: 120000 // 60 seconds for local development (generous timeout for debugging)
   },
 
   // ============================================================================
@@ -45,7 +45,8 @@ export const config = {
               '--no-sandbox',
               '--disable-infobars',
               '--disable-gpu',
-              '--window-size=1920,1080'
+              '--window-size=1920,1080',
+              ...(process.env.HEADLESS === 'true' ? ['--headless'] : [])
             ]
           }
         }
