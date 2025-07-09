@@ -1,4 +1,4 @@
-@issue=ML-70 @covers=ML-69
+@issue=ML-70 @issue=ML-69
 Feature: Upload coordinate file: The user can upload a KML or Shapefile containing coordinates for their site
   As an applicant
   I want to upload a file of coordinates for my site
