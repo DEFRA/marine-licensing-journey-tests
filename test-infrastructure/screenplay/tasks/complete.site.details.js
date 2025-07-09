@@ -36,92 +36,93 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async performAs(actor) {
-    const exemption = this.validateTestData(actor)
-    const siteDetails = exemption.siteDetails
-    const browseTheWeb = actor.ability
+    this.actor = actor
+    this.exemption = this.validateTestData(actor)
+    this.siteDetails = this.exemption.siteDetails
+    this.browseTheWeb = actor.ability
 
-    if (siteDetails.coordinatesEntryMethod === 'file-upload') {
-      await this.completeFileUploadFlow(browseTheWeb, siteDetails, actor)
+    if (this.siteDetails.coordinatesEntryMethod === 'file-upload') {
+      await this.completeFileUploadFlow()
     } else if (this.coordinatesOnly) {
-      await this.completePolygonFlow(browseTheWeb, siteDetails)
+      await this.completePolygonFlow()
     } else {
-      await this.completeManualCoordinatesFlow(browseTheWeb, siteDetails, actor)
+      await this.completeManualCoordinatesFlow()
     }
   }
 
-  async completeFileUploadFlow(browseTheWeb, siteDetails, actor) {
+  async completeFileUploadFlow() {
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
-      browseTheWeb,
-      siteDetails.coordinatesEntryMethod
+      this.browseTheWeb,
+      this.siteDetails.coordinatesEntryMethod
     )
 
     await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
-      browseTheWeb,
-      siteDetails.fileType
+      this.browseTheWeb,
+      this.siteDetails.fileType
     )
 
-    if (siteDetails.filePath) {
-      await actor.attemptsTo(
-        UploadFileAndContinue.withPath(siteDetails.filePath)
+    if (this.siteDetails.filePath) {
+      await this.actor.attemptsTo(
+        UploadFileAndContinue.withPath(this.siteDetails.filePath)
       )
     } else {
       expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
     }
   }
 
-  async completeManualCoordinatesFlow(browseTheWeb, siteDetails, actor) {
-    if (siteDetails.siteType === 'circle') {
-      await this.completeCircleFlow(browseTheWeb, siteDetails, actor)
+  async completeManualCoordinatesFlow() {
+    if (this.siteDetails.siteType === 'circle') {
+      await this.completeCircleFlow()
       if (this.saveAndContinue) {
-        await actor.attemptsTo(ClickSaveAndContinue.now())
-        actor.updates(Memory.markTaskCompleted('siteDetails'))
+        await this.actor.attemptsTo(ClickSaveAndContinue.now())
+        this.actor.updates(Memory.markTaskCompleted('siteDetails'))
       }
-    } else if (siteDetails.siteType === 'boundary') {
-      await this.completePolygonFlow(browseTheWeb, siteDetails)
+    } else if (this.siteDetails.siteType === 'boundary') {
+      await this.completePolygonFlow()
     } else {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
     }
   }
 
-  async completeCircleFlow(browseTheWeb, siteDetails, actor) {
-    await this.completeFlowUpToCoordinates(browseTheWeb, siteDetails)
+  async completeCircleFlow() {
+    await this.completeFlowUpToCoordinates()
     await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
-      browseTheWeb,
-      siteDetails
+      this.browseTheWeb,
+      this.siteDetails
     )
-    await this.enterWidthOfCircleIfOnWidthPage(browseTheWeb, siteDetails)
+    await this.enterWidthOfCircleIfOnWidthPage()
   }
 
-  async completePolygonFlow(browseTheWeb, siteDetails) {
-    await this.completeFlowUpToCoordinates(browseTheWeb, siteDetails)
+  async completePolygonFlow() {
+    await this.completeFlowUpToCoordinates()
     await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinates(
-      browseTheWeb,
-      siteDetails
+      this.browseTheWeb,
+      this.siteDetails
     )
   }
 
-  async completeFlowUpToCoordinates(browseTheWeb, siteDetails) {
+  async completeFlowUpToCoordinates() {
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
-      browseTheWeb,
-      siteDetails.coordinatesEntryMethod
+      this.browseTheWeb,
+      this.siteDetails.coordinatesEntryMethod
     )
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
-      browseTheWeb,
-      siteDetails.siteType
+      this.browseTheWeb,
+      this.siteDetails.siteType
     )
     await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
-      browseTheWeb,
-      siteDetails.coordinateSystem
+      this.browseTheWeb,
+      this.siteDetails.coordinateSystem
     )
   }
 
-  async enterWidthOfCircleIfOnWidthPage(browseTheWeb, siteDetails) {
+  async enterWidthOfCircleIfOnWidthPage() {
     try {
-      const widthElement = await browseTheWeb.browser.$('#width')
+      const widthElement = await this.browseTheWeb.browser.$('#width')
       await widthElement.waitForExist({ timeout: 1000 })
       await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
-        browseTheWeb,
-        siteDetails.circleData.width
+        this.browseTheWeb,
+        this.siteDetails.circleData.width
       )
     } catch {}
   }
