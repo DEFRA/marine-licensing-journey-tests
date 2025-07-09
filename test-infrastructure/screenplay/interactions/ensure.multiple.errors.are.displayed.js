@@ -50,40 +50,37 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
   }
 
   getPolygonOSGB36ErrorSelector(field) {
-    switch (field) {
-      case 'Start and end point eastings':
-        return EnterMultipleCoordinatesPage.eastingsError(0)
-      case 'Start and end point northings':
-        return EnterMultipleCoordinatesPage.northingsError(0)
-      case 'Point 2 eastings':
-        return EnterMultipleCoordinatesPage.eastingsError(1)
-      case 'Point 2 northings':
-        return EnterMultipleCoordinatesPage.northingsError(1)
-      case 'Point 3 eastings':
-        return EnterMultipleCoordinatesPage.eastingsError(2)
-      case 'Point 3 northings':
-        return EnterMultipleCoordinatesPage.northingsError(2)
-      default:
-        expect.fail(`Unknown polygon OSGB36 field: ${field}`)
-    }
+    return this.getPolygonErrorSelector(field, 'osgb36')
   }
 
   getPolygonWGS84ErrorSelector(field) {
-    switch (field) {
-      case 'Start and end point latitude':
-        return EnterMultipleCoordinatesPage.latitudeError(0)
-      case 'Start and end point longitude':
-        return EnterMultipleCoordinatesPage.longitudeError(0)
-      case 'Point 2 latitude':
-        return EnterMultipleCoordinatesPage.latitudeError(1)
-      case 'Point 2 longitude':
-        return EnterMultipleCoordinatesPage.longitudeError(1)
-      case 'Point 3 latitude':
-        return EnterMultipleCoordinatesPage.latitudeError(2)
-      case 'Point 3 longitude':
-        return EnterMultipleCoordinatesPage.longitudeError(2)
-      default:
-        expect.fail(`Unknown polygon WGS84 field: ${field}`)
+    return this.getPolygonErrorSelector(field, 'wgs84')
+  }
+
+  getPolygonErrorSelector(field, coordinateSystem) {
+    const fieldMappings = {
+      'Start and end point': 0,
+      'Point 2': 1,
+      'Point 3': 2
     }
+
+    const methodMappings = {
+      osgb36: { eastings: 'eastingsError', northings: 'northingsError' },
+      wgs84: { latitude: 'latitudeError', longitude: 'longitudeError' }
+    }
+
+    for (const [prefix, index] of Object.entries(fieldMappings)) {
+      if (field.startsWith(prefix)) {
+        const suffix = field.replace(`${prefix} `, '')
+        const method = methodMappings[coordinateSystem][suffix]
+        if (method) {
+          return EnterMultipleCoordinatesPage[method](index)
+        }
+      }
+    }
+
+    expect.fail(
+      `Unknown polygon ${coordinateSystem.toUpperCase()} field: ${field}`
+    )
   }
 }

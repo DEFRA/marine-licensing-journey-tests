@@ -41,28 +41,37 @@ export default class CompleteSiteDetails extends Task {
     const browseTheWeb = actor.ability
 
     if (siteDetails.coordinatesEntryMethod === 'file-upload') {
-      await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
-        browseTheWeb,
-        siteDetails.coordinatesEntryMethod
-      )
-
-      await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
-        browseTheWeb,
-        siteDetails.fileType
-      )
-
-      if (siteDetails.filePath) {
-        await actor.attemptsTo(
-          UploadFileAndContinue.withPath(siteDetails.filePath)
-        )
-      } else {
-        expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
-      }
+      await this.completeFileUploadFlow(browseTheWeb, siteDetails, actor)
     } else if (this.coordinatesOnly) {
       await this.completePolygonFlow(browseTheWeb, siteDetails)
-    } else if (siteDetails.siteType === 'circle') {
-      await this.completeCircleFlow(browseTheWeb, siteDetails, actor)
+    } else {
+      await this.completeManualCoordinatesFlow(browseTheWeb, siteDetails, actor)
+    }
+  }
 
+  async completeFileUploadFlow(browseTheWeb, siteDetails, actor) {
+    await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
+      browseTheWeb,
+      siteDetails.coordinatesEntryMethod
+    )
+
+    await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
+      browseTheWeb,
+      siteDetails.fileType
+    )
+
+    if (siteDetails.filePath) {
+      await actor.attemptsTo(
+        UploadFileAndContinue.withPath(siteDetails.filePath)
+      )
+    } else {
+      expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
+    }
+  }
+
+  async completeManualCoordinatesFlow(browseTheWeb, siteDetails, actor) {
+    if (siteDetails.siteType === 'circle') {
+      await this.completeCircleFlow(browseTheWeb, siteDetails, actor)
       if (this.saveAndContinue) {
         await actor.attemptsTo(ClickSaveAndContinue.now())
         actor.updates(Memory.markTaskCompleted('siteDetails'))
