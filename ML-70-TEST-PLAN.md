@@ -79,6 +79,6 @@
 
 **Progress tracking:**
 
-- Completed: 4 ✅
+- Completed: 5 ✅
 - Remaining: 16 ⏳
 - Total scenarios: 20
