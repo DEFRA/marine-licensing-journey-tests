@@ -152,3 +152,8 @@ Then(
     )
   }
 )
+
+Then('the spinner page displays during upload process', async function () {
+  // Check that spinner/loading page is displayed during upload
+  await this.actor.ability.isDisplayed(FileUploadPage.spinner)
+})

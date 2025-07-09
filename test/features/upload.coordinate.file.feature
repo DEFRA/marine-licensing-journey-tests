@@ -17,6 +17,11 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Then the file is successfully processed
     And the Upload a Shapefile file page is displayed
 
+  Scenario: Spinner page displays during upload process
+    Given an exemption notification with a valid KML file
+    When completing the site details task
+    Then the spinner page displays during upload process
+
   Scenario: Uploading a file with a virus fails
     Given an exemption notification with a file with a virus
     When completing the site details task
