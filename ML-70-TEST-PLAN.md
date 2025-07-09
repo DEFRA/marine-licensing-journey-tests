@@ -27,7 +27,7 @@
 
 ### **AC5 - Upload Flow Details** (2 scenarios)
 
-- [ ] Spinner page displays during upload process
+- [x] Spinner page displays during upload process
 
 ### **AC6 - Cancel Navigation** (2 scenarios)
 
