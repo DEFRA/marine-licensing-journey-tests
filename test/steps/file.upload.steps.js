@@ -21,6 +21,8 @@ import {
   Navigate
 } from '~/test-infrastructure/screenplay/index.js'
 
+import { FileUploadPage } from '~/test-infrastructure/pages/index.js'
+
 Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
@@ -37,20 +39,8 @@ Given('the Upload a KML file page is displayed', async function () {
   )
 })
 
-When('completing the site details task', async function () {
-  await this.actor.attemptsTo(CompleteSiteDetails.now())
-})
-
-When('uploading a valid KML file', async function () {
-  await this.actor.attemptsTo(CompleteSiteDetails.now())
-})
-
-Then('the file is successfully processed', async function () {
-  await this.actor.attemptsTo(EnsureNoErrorsDisplayed.onPage())
-})
-
-When(
-  'an invalid file type {string} is selected for upload',
+Given(
+  'the {string} file type has been selected',
   async function (fileUploadType) {
     await this.actor.attemptsTo(
       WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
@@ -61,8 +51,25 @@ When(
   }
 )
 
-Given(
-  'the {string} file type has been selected',
+Given('an exemption notification with a valid Shapefile', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withShapefileUpload())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
+When('completing the site details task', async function () {
+  await this.actor.attemptsTo(CompleteSiteDetails.now())
+})
+
+When('uploading a valid KML file', async function () {
+  await this.actor.attemptsTo(CompleteSiteDetails.now())
+})
+
+When(
+  'an invalid file type {string} is selected for upload',
   async function (fileUploadType) {
     await this.actor.attemptsTo(
       WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
@@ -78,6 +85,38 @@ Then(
   async function (fileUploadType, expectedErrorMessage) {
     await this.actor.attemptsTo(
       EnsureErrorDisplayed.is('#fileUploadType-error', expectedErrorMessage)
+    )
+  }
+)
+
+Then('the Upload a Shapefile file page is displayed', async function () {
+  await this.actor.attemptsTo(
+    EnsurePageHeading.is('Upload a Shapefile'),
+    EnsureProjectNameDisplayedAsCaption.fromMemory()
+  )
+})
+
+Then('the file is successfully processed', async function () {
+  await this.actor.attemptsTo(EnsureNoErrorsDisplayed.onPage())
+})
+
+Given('an exemption notification with a file with a virus', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withVirusUpload())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
+Then(
+  'the file upload error {string} is displayed',
+  async function (expectedErrorMessage) {
+    await this.actor.attemptsTo(
+      EnsureErrorDisplayed.is(
+        FileUploadPage.fileUploadError,
+        expectedErrorMessage
+      )
     )
   }
 )

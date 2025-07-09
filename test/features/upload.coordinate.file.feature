@@ -10,3 +10,14 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     When completing the site details task
     Then the file is successfully processed
     And the Upload a KML file page is displayed
+
+  Scenario: Successfully upload a valid Shapefile file
+    Given an exemption notification with a valid Shapefile
+    When completing the site details task
+    Then the file is successfully processed
+    And the Upload a Shapefile file page is displayed
+
+  Scenario: Uploading a file with a virus fails
+    Given an exemption notification with a file with a virus
+    When completing the site details task
+    Then the file upload error "The selected file contains a virus" is displayed

@@ -57,6 +57,10 @@ export default class ApplyForExemption extends BaseBuilder {
     return new ApplyForExemption(ExemptionFactory.createKMLUpload())
   }
 
+  static withVirusUpload() {
+    return new ApplyForExemption(ExemptionFactory.createVirusUpload())
+  }
+
   static withFileUpload() {
     return new ApplyForExemption(ExemptionFactory.createFileUpload())
   }

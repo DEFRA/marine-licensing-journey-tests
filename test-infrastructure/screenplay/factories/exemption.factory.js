@@ -76,8 +76,11 @@ export default class ExemptionFactory {
 
   static createShapefileUpload() {
     return this.createBaseExemption({
-      fileType: FileTypeModel.generateShapefile(),
-      siteDetails: SiteDetailsFactory.createFileUpload()
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath: 'test/resources/mygeodata.zip'
+      }
     })
   }
 
@@ -87,6 +90,16 @@ export default class ExemptionFactory {
         ...SiteDetailsFactory.createFileUpload(),
         fileType: FileTypeModel.generateKML(),
         filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
+      }
+    })
+  }
+
+  static createVirusUpload() {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath: 'test/resources/nasty-virus-here.kml'
       }
     })
   }

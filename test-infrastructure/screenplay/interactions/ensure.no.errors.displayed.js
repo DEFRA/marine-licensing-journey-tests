@@ -1,4 +1,5 @@
 import Task from '../base/task.js'
+import { FileUploadPage } from '../../pages/index.js'
 
 export default class EnsureNoErrorsDisplayed extends Task {
   static onPage() {
@@ -10,6 +11,6 @@ export default class EnsureNoErrorsDisplayed extends Task {
     await actor.ability.isNotDisplayed('.govuk-error-summary')
 
     // Check that no file upload specific error is displayed
-    await actor.ability.isNotDisplayed('#file-error')
+    await actor.ability.isNotDisplayed(FileUploadPage.fileUploadError)
   }
 }
