@@ -6,7 +6,7 @@ export default class WhichTypeOfFileDoYouWantToUploadPageInteractions {
       WhichTypeOfFileDoYouWantToUploadPage.getFileTypeSelector(fileType)
     await browseTheWeb.click(selector)
     await browseTheWeb.click(
-      WhichTypeOfFileDoYouWantToUploadPage.saveAndContinueButton
+      WhichTypeOfFileDoYouWantToUploadPage.saveAndContinue
     )
   }
 
@@ -18,7 +18,7 @@ export default class WhichTypeOfFileDoYouWantToUploadPageInteractions {
 
   static async clickContinue(browseTheWeb) {
     await browseTheWeb.click(
-      WhichTypeOfFileDoYouWantToUploadPage.saveAndContinueButton
+      WhichTypeOfFileDoYouWantToUploadPage.saveAndContinue
     )
   }
 

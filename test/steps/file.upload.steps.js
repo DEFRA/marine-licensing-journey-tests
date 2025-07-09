@@ -33,7 +33,7 @@ Given('an exemption notification with a valid KML file', async function () {
 Given('the Upload a KML file page is displayed', async function () {
   await this.actor.attemptsTo(
     EnsurePageHeading.is('Upload a KML file'),
-    EnsureProjectNameDisplayedAsCaption.is(this.actor.remember.projectName)
+    EnsureProjectNameDisplayedAsCaption.fromMemory()
   )
 })
 
