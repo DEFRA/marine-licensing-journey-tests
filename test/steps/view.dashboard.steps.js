@@ -59,15 +59,12 @@ Given(
 
     await submitAnExemptionNotification.call(this)
 
-    // Sign out and submit second exemption
     await this.actor.attemptsTo(SignOut.now())
     await submitAnExemptionNotificationAfterSignIn.call(this)
 
-    // Sign out and submit third exemption
     await this.actor.attemptsTo(SignOut.now())
     await submitAnExemptionNotificationAfterSignIn.call(this)
 
-    // Sign out and partially complete fourth exemption
     await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(SignIn.now())
