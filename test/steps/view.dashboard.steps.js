@@ -7,7 +7,7 @@ import {
   ClickConfirmAndSend,
   ClickProjectsHome,
   ClickReviewAndSend,
-  CompleteAllTasksWithoutNavigation,
+  CompleteAllTasks,
   EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
@@ -32,11 +32,10 @@ Given('a user has submitted an exemption notification', async function () {
 })
 
 async function submitAnExemptionNotification() {
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
-  await this.actor.attemptsTo(CompleteAllTasksWithoutNavigation.now())
+  await this.actor.attemptsTo(CompleteAllTasks.now())
   await this.actor.attemptsTo(ClickReviewAndSend.now())
   await this.actor.attemptsTo(ClickConfirmAndSend.now())
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
@@ -46,7 +45,7 @@ async function submitAnExemptionNotificationAfterSignIn() {
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
-  await this.actor.attemptsTo(CompleteAllTasksWithoutNavigation.now())
+  await this.actor.attemptsTo(CompleteAllTasks.now())
   await this.actor.attemptsTo(ClickReviewAndSend.now())
   await this.actor.attemptsTo(ClickConfirmAndSend.now())
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
@@ -62,14 +61,10 @@ Given(
 
     // Sign out and submit second exemption
     await this.actor.attemptsTo(SignOut.now())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await this.actor.attemptsTo(SignIn.now())
     await submitAnExemptionNotificationAfterSignIn.call(this)
 
     // Sign out and submit third exemption
     await this.actor.attemptsTo(SignOut.now())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await this.actor.attemptsTo(SignIn.now())
     await submitAnExemptionNotificationAfterSignIn.call(this)
 
     // Sign out and partially complete fourth exemption

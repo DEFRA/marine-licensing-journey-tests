@@ -32,7 +32,7 @@ export const config = {
     ? 1
     : process.env.MAX_INSTANCES
       ? parseInt(process.env.MAX_INSTANCES)
-      : 4,
+      : 6,
 
   capabilities: debug
     ? [{ browserName: 'chrome' }]
