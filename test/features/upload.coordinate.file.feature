@@ -31,3 +31,18 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Given an exemption notification for file upload
     When navigating to the file upload page and continuing without selecting a file
     Then the file upload error "Select a file to upload" is displayed
+
+  Scenario: Uploading wrong file type fails
+    Given an exemption notification with wrong file type
+    When completing the site details task
+    Then the file upload error "The selected file must be a KML file" is displayed
+
+  Scenario: Uploading file too large fails
+    Given an exemption notification with file too large
+    When completing the site details task
+    Then the file upload error "The selected file must be smaller than 50 MB" is displayed
+
+  Scenario: Uploading empty file fails
+    Given an exemption notification with empty file
+    When completing the site details task
+    Then the file upload error "The selected file is empty" is displayed

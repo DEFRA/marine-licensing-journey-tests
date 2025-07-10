@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@wdio/cucumber-framework'
+import { Given, Then, When, After } from '@wdio/cucumber-framework'
 import { browser } from '@wdio/globals'
 
 import {
@@ -25,6 +25,7 @@ import {
 } from '~/test-infrastructure/screenplay/index.js'
 
 import { FileUploadPage } from '~/test-infrastructure/pages/index.js'
+import FileGenerator from '~/test-infrastructure/helpers/file-generator.js'
 
 Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
@@ -74,19 +75,16 @@ When('uploading a valid KML file', async function () {
 When(
   'navigating to the file upload page and continuing without selecting a file',
   async function () {
-    // Navigate to "How do you want to provide the coordinates?" page and select file upload
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       this.actor.ability,
       'file-upload'
     )
 
-    // Navigate to "Which type of file do you want to upload?" page and select Shapefile
     await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
       this.actor.ability,
       'Shapefile'
     )
 
-    // Click continue without selecting a file to trigger validation
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
@@ -141,6 +139,41 @@ Given('an exemption notification for file upload', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
 
+Given('an exemption notification with wrong file type', async function () {
+  this.actor = new Actor('Charlie')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withWrongFileType())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
+Given('an exemption notification with file too large', async function () {
+  this.generatedFilePath = await FileGenerator.generateTemporaryLargeFile(
+    'file-too-large',
+    51
+  )
+
+  this.actor = new Actor('David')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withLargeFile(this.generatedFilePath))
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
+Given('an exemption notification with empty file', async function () {
+  this.generatedFilePath =
+    FileGenerator.generateTemporaryEmptyFile('empty-file')
+
+  this.actor = new Actor('Emily')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withEmptyFile(this.generatedFilePath))
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+})
+
 Then(
   'the file upload error {string} is displayed',
   async function (expectedErrorMessage) {
@@ -154,6 +187,12 @@ Then(
 )
 
 Then('the spinner page displays during upload process', async function () {
-  // Check that spinner/loading page is displayed during upload
   await this.actor.ability.isDisplayed(FileUploadPage.spinner)
+})
+
+After(function () {
+  if (this.generatedFilePath) {
+    FileGenerator.cleanupFile(this.generatedFilePath)
+    this.generatedFilePath = null
+  }
 })

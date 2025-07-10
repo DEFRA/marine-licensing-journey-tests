@@ -109,4 +109,35 @@ export default class ExemptionFactory {
       siteDetails: SiteDetailsFactory.createFileUpload()
     })
   }
+
+  static createWrongFileType() {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateKML(),
+        filePath:
+          'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html'
+      }
+    })
+  }
+
+  static createLargeFile(filePath) {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateKML(),
+        filePath
+      }
+    })
+  }
+
+  static createEmptyFile(filePath) {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateKML(),
+        filePath
+      }
+    })
+  }
 }

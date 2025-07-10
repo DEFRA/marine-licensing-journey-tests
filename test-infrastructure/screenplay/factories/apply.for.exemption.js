@@ -65,6 +65,18 @@ export default class ApplyForExemption extends BaseBuilder {
     return new ApplyForExemption(ExemptionFactory.createFileUpload())
   }
 
+  static withWrongFileType() {
+    return new ApplyForExemption(ExemptionFactory.createWrongFileType())
+  }
+
+  static withLargeFile(filePath) {
+    return new ApplyForExemption(ExemptionFactory.createLargeFile(filePath))
+  }
+
+  static withEmptyFile(filePath) {
+    return new ApplyForExemption(ExemptionFactory.createEmptyFile(filePath))
+  }
+
   activityDates(dates) {
     return this.setProperty('activityDates', dates)
   }
