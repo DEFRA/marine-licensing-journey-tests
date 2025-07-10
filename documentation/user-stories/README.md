@@ -23,6 +23,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-70    | Upload a coordinate file                      | [ML-70.upload.a.coordinate.file.md](./ML-70.upload.a.coordinate.file.md)                                           | [upload.coordinate.file.feature](../../test/features/upload.coordinate.file.feature)                                                                                                                                                                                                                                                                                                                                                                                     |
 | ML-82    | Check answers before sending your information | [ML-82.check.answers.circular.site.md](./ML-82.check.answers.circular.site.md)                                     | [check.your.answers.feature](../../test/features/check.your.answers.feature), [submit.notification.feature](../../test/features/submit.notification.feature)                                                                                                                                                                                                                                                                                                             |
 | ML-84    | Submit notification                           | [ML-84.submit.notification.md](./ML-84.submit.notification.md)                                                     | [submit.notification.feature](../../test/features/submit.notification.feature)                                                                                                                                                                                                                                                                                                                                                                                           |
+| ML-96    | View dashboard                                | [ML-96.view.dashboard.md](./ML-96.view.dashboard.md)                                                               | [view.dashboard.feature](../../test/features/view.dashboard.feature)                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ## Story status
 
@@ -43,6 +44,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-70**: Upload a coordinate file (Complete KML and Shapefile upload functionality with comprehensive validation including virus scanning, file size limits, and file type validation)
 - ✅ **ML-82**: Check answers before sending your information (Summary page displaying all notification details before submission)
 - ✅ **ML-84**: Submit notification (Submit exemption notification to MMO and display confirmation page with reference number)
+- ✅ **ML-96**: View dashboard (Complete dashboard functionality displaying all user exemptions with proper sorting and empty state handling)
 
 ## Feature file tags
 
@@ -111,7 +113,8 @@ documentation/user-stories/
 ├── ML-69.choose.file.to.upload.md                          # Choose file type to upload (file upload path)
 ├── ML-70.upload.a.coordinate.file.md                       # Upload a coordinate file (file upload path)
 ├── ML-82.check.answers.circular.site.md                    # Check answers before sending your information
-└── ML-84.submit.notification.md                            # Submit notification and show confirmation
+├── ML-84.submit.notification.md                            # Submit notification and show confirmation
+└── ML-96.view.dashboard.md                                  # View dashboard with all user exemptions
 ```
 
 ## Adding new user stories
