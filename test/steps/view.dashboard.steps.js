@@ -14,8 +14,10 @@ import {
   Navigate,
   NavigateToDashboard,
   RememberTheExemptionReferenceNumber,
+  SignIn,
   SignOut
 } from '~/test-infrastructure/screenplay'
+import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name'
 
 Given('the user has not submitted any notifications', async function () {
   this.actor = new Actor('Alice')
@@ -26,6 +28,7 @@ Given('the user has not submitted any notifications', async function () {
 Given('a user has submitted an exemption notification', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await submitAnExemptionNotification.call(this)
 })
 
@@ -44,17 +47,20 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-
-    // Submit first exemption
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await submitAnExemptionNotification.call(this)
-
-    // Sign out and submit second exemption
     await this.actor.attemptsTo(SignOut.now())
+    await this.actor.attemptsTo(SignIn.now())
     await submitAnExemptionNotification.call(this)
-
-    // Sign out and submit third exemption
     await this.actor.attemptsTo(SignOut.now())
+    await this.actor.attemptsTo(SignIn.now())
     await submitAnExemptionNotification.call(this)
+    await this.actor.attemptsTo(SignOut.now())
+    await this.actor.attemptsTo(SignIn.now())
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
 

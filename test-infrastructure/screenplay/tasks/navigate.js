@@ -17,16 +17,13 @@ export default class Navigate extends Task {
   }
 
   async performAs(actor) {
-    // Register a test user for this actor if not already done
     if (!actor.hasMemoryOf('testUser')) {
       const testUser = await actor.ability.registerTestUser(actor.name)
       actor.remembers('testUser', testUser)
     }
 
-    // Navigate to the application URL
     await actor.ability.navigateTo(this.url)
 
-    // Authenticate with DEFRA ID if redirected
     await actor.attemptsTo(AuthenticateWith.theTestUser())
   }
 }

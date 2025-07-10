@@ -26,6 +26,7 @@ export { default as RememberTheExemptionReferenceNumber } from './remember.the.e
 export { default as SelectFileType } from './select.file.type'
 export { default as SelectTheTask } from './select.task'
 export { default as SetCoordinateField } from './set.coordinate.field'
+export { default as SignIn } from './sign.in'
 export { default as SignOut } from './sign.out'
 export { default as UploadFile } from './upload.file'
 export { default as UploadFileAndContinue } from './upload.file.and.continue'
