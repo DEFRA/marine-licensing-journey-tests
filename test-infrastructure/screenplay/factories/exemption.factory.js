@@ -1,3 +1,4 @@
+import FileGenerator from '../../helpers/file-generator.js'
 import {
   ActivityDescriptionModel,
   FileTypeModel,
@@ -74,16 +75,6 @@ export default class ExemptionFactory {
     })
   }
 
-  static createShapefileUpload() {
-    return this.createBaseExemption({
-      siteDetails: {
-        ...SiteDetailsFactory.createFileUpload(),
-        fileType: FileTypeModel.generateShapefile(),
-        filePath: 'test/resources/mygeodata.zip'
-      }
-    })
-  }
-
   static createKMLUpload() {
     return this.createBaseExemption({
       siteDetails: {
@@ -94,23 +85,26 @@ export default class ExemptionFactory {
     })
   }
 
-  static createVirusUpload() {
+  static createKMLVirusUpload() {
     return this.createBaseExemption({
       siteDetails: {
         ...SiteDetailsFactory.createFileUpload(),
-        fileType: FileTypeModel.generateShapefile(),
+        fileType: FileTypeModel.generateKML(),
         filePath: 'test/resources/nasty-virus-here.kml'
       }
     })
   }
 
-  static createFileUpload() {
+  static createKMLFileUpload() {
     return this.createBaseExemption({
-      siteDetails: SiteDetailsFactory.createFileUpload()
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateKML()
+      }
     })
   }
 
-  static createWrongFileType() {
+  static createKMLWrongFileType() {
     return this.createBaseExemption({
       siteDetails: {
         ...SiteDetailsFactory.createFileUpload(),
@@ -121,7 +115,7 @@ export default class ExemptionFactory {
     })
   }
 
-  static createLargeFile(filePath) {
+  static createKMLLargeFile(filePath) {
     return this.createBaseExemption({
       siteDetails: {
         ...SiteDetailsFactory.createFileUpload(),
@@ -131,7 +125,7 @@ export default class ExemptionFactory {
     })
   }
 
-  static createEmptyFile(filePath) {
+  static createKMLEmptyFile(filePath) {
     return this.createBaseExemption({
       siteDetails: {
         ...SiteDetailsFactory.createFileUpload(),
@@ -139,5 +133,87 @@ export default class ExemptionFactory {
         filePath
       }
     })
+  }
+
+  static createShapefileUpload() {
+    const filePath = FileGenerator.generateTemporaryValidShapefile()
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath
+      }
+    })
+  }
+
+  static createShapefileVirusUpload() {
+    const filePath = FileGenerator.generateTemporaryVirusShapefile()
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath
+      }
+    })
+  }
+
+  static createShapefileFileUpload() {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile()
+      }
+    })
+  }
+
+  static createShapefileWrongFileType() {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath:
+          'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html'
+      }
+    })
+  }
+
+  static createShapefileLargeFile(filePath) {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath
+      }
+    })
+  }
+
+  static createShapefileEmptyFile(filePath) {
+    return this.createBaseExemption({
+      siteDetails: {
+        ...SiteDetailsFactory.createFileUpload(),
+        fileType: FileTypeModel.generateShapefile(),
+        filePath
+      }
+    })
+  }
+
+  static createVirusUpload() {
+    return this.createKMLVirusUpload()
+  }
+
+  static createFileUpload() {
+    return this.createKMLFileUpload()
+  }
+
+  static createWrongFileType() {
+    return this.createKMLWrongFileType()
+  }
+
+  static createLargeFile(filePath) {
+    return this.createKMLLargeFile(filePath)
+  }
+
+  static createEmptyFile(filePath) {
+    return this.createKMLEmptyFile(filePath)
   }
 }

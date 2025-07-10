@@ -49,12 +49,58 @@ export default class ApplyForExemption extends BaseBuilder {
     return new ApplyForExemption(ExemptionFactory.createCompleteData())
   }
 
+  static withKMLUpload() {
+    return new ApplyForExemption(ExemptionFactory.createKMLUpload())
+  }
+
+  static withKMLVirusUpload() {
+    return new ApplyForExemption(ExemptionFactory.createKMLVirusUpload())
+  }
+
+  static withKMLFileUpload() {
+    return new ApplyForExemption(ExemptionFactory.createKMLFileUpload())
+  }
+
+  static withKMLWrongFileType() {
+    return new ApplyForExemption(ExemptionFactory.createKMLWrongFileType())
+  }
+
+  static withKMLLargeFile(filePath) {
+    return new ApplyForExemption(ExemptionFactory.createKMLLargeFile(filePath))
+  }
+
+  static withKMLEmptyFile(filePath) {
+    return new ApplyForExemption(ExemptionFactory.createKMLEmptyFile(filePath))
+  }
+
   static withShapefileUpload() {
     return new ApplyForExemption(ExemptionFactory.createShapefileUpload())
   }
 
-  static withKMLUpload() {
-    return new ApplyForExemption(ExemptionFactory.createKMLUpload())
+  static withShapefileVirusUpload() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileVirusUpload())
+  }
+
+  static withShapefileFileUpload() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileFileUpload())
+  }
+
+  static withShapefileWrongFileType() {
+    return new ApplyForExemption(
+      ExemptionFactory.createShapefileWrongFileType()
+    )
+  }
+
+  static withShapefileLargeFile(filePath) {
+    return new ApplyForExemption(
+      ExemptionFactory.createShapefileLargeFile(filePath)
+    )
+  }
+
+  static withShapefileEmptyFile(filePath) {
+    return new ApplyForExemption(
+      ExemptionFactory.createShapefileEmptyFile(filePath)
+    )
   }
 
   static withVirusUpload() {
