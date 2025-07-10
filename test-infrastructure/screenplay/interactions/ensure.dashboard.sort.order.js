@@ -9,7 +9,6 @@ export default class EnsureDashboardSortOrder extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-
     const rowCount = await browseTheWeb.countElements(
       DashboardPage.locators.tableRows
     )
