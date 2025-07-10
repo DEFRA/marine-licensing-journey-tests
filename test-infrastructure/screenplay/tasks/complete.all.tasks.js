@@ -5,6 +5,7 @@ import {
   CompleteProjectName,
   CompletePublicRegisterTask,
   CompleteSiteDetails,
+  Navigate,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 import Task from '../base/task.js'
@@ -21,6 +22,7 @@ export default class CompleteAllTasks extends Task {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('complete all tasks'))
     }
 
+    await actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await actor.attemptsTo(CompleteProjectName.now())
     await actor.attemptsTo(SelectTheTask.withName('Activity description'))
     await actor.attemptsTo(CompleteActivityDescription.now())

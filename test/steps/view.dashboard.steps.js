@@ -7,7 +7,7 @@ import {
   ClickConfirmAndSend,
   ClickProjectsHome,
   ClickReviewAndSend,
-  CompleteAllTasks,
+  CompleteAllTasksWithoutNavigation,
   EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
@@ -28,15 +28,25 @@ Given('the user has not submitted any notifications', async function () {
 Given('a user has submitted an exemption notification', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await submitAnExemptionNotification.call(this)
 })
 
 async function submitAnExemptionNotification() {
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
-  await this.actor.attemptsTo(CompleteAllTasks.now())
+  await this.actor.attemptsTo(CompleteAllTasksWithoutNavigation.now())
+  await this.actor.attemptsTo(ClickReviewAndSend.now())
+  await this.actor.attemptsTo(ClickConfirmAndSend.now())
+  await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
+}
+
+async function submitAnExemptionNotificationAfterSignIn() {
+  this.actor.intendsTo(
+    ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+  )
+  await this.actor.attemptsTo(CompleteAllTasksWithoutNavigation.now())
   await this.actor.attemptsTo(ClickReviewAndSend.now())
   await this.actor.attemptsTo(ClickConfirmAndSend.now())
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
@@ -47,15 +57,24 @@ Given(
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
+
+    await submitAnExemptionNotification.call(this)
+
+    // Sign out and submit second exemption
+    await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await submitAnExemptionNotification.call(this)
-    await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(SignIn.now())
-    await submitAnExemptionNotification.call(this)
+    await submitAnExemptionNotificationAfterSignIn.call(this)
+
+    // Sign out and submit third exemption
     await this.actor.attemptsTo(SignOut.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(SignIn.now())
-    await submitAnExemptionNotification.call(this)
+    await submitAnExemptionNotificationAfterSignIn.call(this)
+
+    // Sign out and partially complete fourth exemption
     await this.actor.attemptsTo(SignOut.now())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(SignIn.now())
     this.actor.intendsTo(
       ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
@@ -75,17 +94,17 @@ When('the user navigates to the dashboard', async function () {
 Then(
   'the dashboard displays the submitted notification correctly',
   async function () {
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
+    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.correctly())
   }
 )
 
 Then('the message {string} is shown', async function (expectedMessage) {
-  await this.actor.attemptsTo(EnsureEmptyStateMessage.shows(expectedMessage))
+  await this.actor.attemptsTo(EnsureEmptyStateMessage.displays(expectedMessage))
 })
 
 Then(
   'the notifications are sorted by status with drafts first then by project name',
   async function () {
-    await this.actor.attemptsTo(EnsureDashboardSortOrder.now())
+    await this.actor.attemptsTo(EnsureDashboardSortOrder.isCorrect())
   }
 )
