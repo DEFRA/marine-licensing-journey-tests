@@ -21,9 +21,12 @@
   - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
-  - [ML-35: Centre point coordinates](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
+  - [ML-19: Enter coordinate for polygon site](../user-stories/ML-19.enter.coordinate.for.polygon.site.md)
+  - [ML-35: Enter centre point of a circle](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
   - [ML-36: Circle width entry](../user-stories/ML-36.enter.width.of.circular.site.md)
   - [ML-37: Site details review](../user-stories/ML-37.review.circular.site.details.md)
+  - [ML-69: Choose file type to upload](../user-stories/ML-69.choose.file.to.upload.md)
+  - [ML-70: Upload a coordinate file](../user-stories/ML-70.upload.a.coordinate.file.md)
   - [ML-82: Check answers before submission](../user-stories/ML-82.check.answers.circular.site.md)
   - [ML-84: Submit notification](../user-stories/ML-84.submit.notification.md)
 - **Personas:**
@@ -46,15 +49,18 @@
 ## Realistic Activities
 
 - Test rapid completion of complete workflow with prepared information (project name → dates → description → register → site details)
-- Simulate professional context: client deadlines, interruptions, working with prepared coordinate data
+- Simulate professional context: client deadlines, interruptions, working with prepared coordinate data or files
+- Test file upload efficiency with professional GIS files: KML vs Shapefile selection based on existing data
+- Evaluate file upload integration with professional workflows: GIS specialist-generated files, CAD exports
+- Test polygon coordinate entry efficiency for complex site boundaries with professional precision requirements
 - Test coordinate system decision-making with realistic professional scenarios (existing survey data, GIS outputs)
 - Investigate activity description completion with professional documentation standards vs character limits
 - Test public register consent decision patterns for different organisational contexts
-- Evaluate site details workflow efficiency for professionals with existing coordinate data
+- Evaluate site details workflow efficiency for professionals with existing coordinate data across entry methods
 - Test validation responses with professional expectations for data quality and accuracy
 - Simulate scenarios where professionals need to consult colleagues or documentation mid-application
-- Test professional expectations around data validation and error messaging quality
-- Investigate efficiency patterns when professionals have incomplete information
+- Test professional expectations around data validation and error messaging quality across coordinate entry and file upload
+- Investigate efficiency patterns when professionals have incomplete information or need to switch between entry methods
 
 ## Evidence Framework
 

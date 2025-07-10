@@ -21,9 +21,12 @@
   - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
-  - [ML-35: Centre point coordinates](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
+  - [ML-19: Enter coordinate for polygon site](../user-stories/ML-19.enter.coordinate.for.polygon.site.md)
+  - [ML-35: Enter centre point of a circle](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
   - [ML-36: Circle width entry](../user-stories/ML-36.enter.width.of.circular.site.md)
   - [ML-37: Site details review](../user-stories/ML-37.review.circular.site.details.md)
+  - [ML-69: Choose file type to upload](../user-stories/ML-69.choose.file.to.upload.md)
+  - [ML-70: Upload a coordinate file](../user-stories/ML-70.upload.a.coordinate.file.md)
   - [ML-82: Check answers before submission](../user-stories/ML-82.check.answers.circular.site.md)
   - [ML-84: Submit notification](../user-stories/ML-84.submit.notification.md)
 - **Personas:**
@@ -47,14 +50,18 @@
 
 - Test input validation and error handling across all major forms in sequence
 - Investigate enhanced activity dates validation (specific day/month/year error messages)
-- Test coordinate entry validation for both WGS84 and OSGB36 systems with edge cases
+- Test coordinate entry validation for both WGS84 and OSGB36 systems with edge cases across circular and polygon sites
+- Test polygon coordinate entry validation: three-point boundary definition with field-specific error messages
 - Assess character limits and guidance clarity for activity description
 - Test radio button behaviour and conditional logic in public register and site details forms
-- Evaluate cross-form navigation, interruptions, and state preservation
-- Test error recovery patterns and validation message clarity
+- Test file upload form interactions: file selection, drag and drop, validation messaging
+- Evaluate file upload validation patterns: file type errors, size limits, virus detection, empty file handling
+- Test file upload progress indication and form state during upload process
+- Evaluate cross-form navigation, interruptions, and state preservation including file upload workflows
+- Test error recovery patterns and validation message clarity across coordinate entry and file upload
 - Simulate edge cases: special characters, copy/paste, very long text, boundary values
 - Test with different browsers, devices, and assistive technologies
-- Investigate form completion patterns under time pressure
+- Investigate form completion patterns under time pressure across manual entry and file upload workflows
 
 ## Evidence Framework
 

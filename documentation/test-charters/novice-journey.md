@@ -21,9 +21,12 @@
   - [ML-16: Site location input method](../user-stories/ML-16.choose.file.upload.or.manual.coordinate.entry.md)
   - [ML-17: Circle or coordinate list entry](../user-stories/ML-17.choose.circle.or.coordinate.list.entry.md)
   - [ML-18: Coordinate system selection](../user-stories/ML-18.choose.coordinate.system.md)
-  - [ML-35: Centre point coordinates](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
-  - [ML-36: Circle width entry](../user-stories/ML-36.enter.width.of.circular.site.md)
-  - [ML-37: Site details review](../user-stories/ML-37.review.circular.site.details.md)
+  - [ML-19: Enter coordinate for polygon site](../user-stories/ML-19.enter.coordinate.for.polygon.site.md)
+  - [ML-35: Enter centre point of a circle](../user-stories/ML-35.enter.centre.point.of.a.circle.md)
+  - [ML-36: Enter width of circular site](../user-stories/ML-36.enter.width.of.circular.site.md)
+  - [ML-37: Review circular site details](../user-stories/ML-37.review.circular.site.details.md)
+  - [ML-69: Choose file type to upload](../user-stories/ML-69.choose.file.to.upload.md)
+  - [ML-70: Upload a coordinate file](../user-stories/ML-70.upload.a.coordinate.file.md)
   - [ML-82: Check answers before submission](../user-stories/ML-82.check.answers.circular.site.md)
   - [ML-84: Submit notification](../user-stories/ML-84.submit.notification.md)
 - **Personas:**
@@ -49,11 +52,16 @@
 - Test activity date entry with validation scenarios (enhanced error messages for missing day/month/year)
 - Evaluate activity description completion with character limits and guidance
 - Test public register consent decision comprehension and confidence
-- Investigate site details workflow: manual entry selection → circle selection → coordinate system choice → coordinate entry → width entry → review
+- Investigate site details workflow decision points: file upload vs manual entry vs drawing
+- Test file upload workflow: file type selection (KML vs Shapefile) → upload process → validation scenarios
+- Evaluate file upload decision making for users without existing coordinate files
+- Test manual coordinate entry: circle vs polygon selection → coordinate system choice → coordinate entry → review
+- Test circular site workflow: centre point coordinate entry → width entry → review
+- Test polygon site workflow: triangular boundary definition with three coordinate points
 - Test coordinate entry accuracy for both WGS84 and OSGB36 systems with realistic user scenarios
-- Simulate interruptions, incomplete information, and session resumption
-- Test error recovery and validation message comprehension
-- Evaluate accessibility with screen reader and keyboard navigation
+- Simulate interruptions, incomplete information, and session resumption across all site entry methods
+- Test error recovery and validation message comprehension across coordinate entry and file upload workflows
+- Evaluate accessibility with screen reader and keyboard navigation for complete site details workflows
 
 ## Evidence Framework
 
