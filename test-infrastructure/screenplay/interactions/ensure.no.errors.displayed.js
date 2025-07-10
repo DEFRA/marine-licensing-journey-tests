@@ -1,16 +1,22 @@
 import Task from '../base/task.js'
-import { FileUploadPage } from '../../pages/index.js'
 
 export default class EnsureNoErrorsDisplayed extends Task {
-  static onPage() {
-    return new EnsureNoErrorsDisplayed()
+  static onPage(locators = ['.govuk-error-summary']) {
+    return new EnsureNoErrorsDisplayed(locators)
+  }
+
+  static withLocators(locators) {
+    return new EnsureNoErrorsDisplayed(locators)
+  }
+
+  constructor(locators = ['.govuk-error-summary']) {
+    super()
+    this.locators = Array.isArray(locators) ? locators : [locators]
   }
 
   async performAs(actor) {
-    // Check that no error summary is displayed
-    await actor.ability.isNotDisplayed('.govuk-error-summary')
-
-    // Check that no file upload specific error is displayed
-    await actor.ability.isNotDisplayed(FileUploadPage.fileUploadError)
+    for (const locator of this.locators) {
+      await actor.ability.isNotDisplayed(locator)
+    }
   }
 }
