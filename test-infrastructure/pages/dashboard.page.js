@@ -17,12 +17,12 @@ export default class DashboardPage {
     },
     tableRows: 'tbody tr',
     firstRowCells: {
-      name: 'tbody tr:first-child td:nth-child(1)',
-      type: 'tbody tr:first-child td:nth-child(2)',
-      reference: 'tbody tr:first-child td:nth-child(3)',
-      status: 'tbody tr:first-child td:nth-child(4)',
-      dateSubmitted: 'tbody tr:first-child td:nth-child(5)',
-      actions: 'tbody tr:first-child td:nth-child(6)'
+      name: 'tbody tr:nth-child(1) td:nth-child(1)',
+      type: 'tbody tr:nth-child(1) td:nth-child(2)',
+      reference: 'tbody tr:nth-child(1) td:nth-child(3)',
+      status: 'tbody tr:nth-child(1) td:nth-child(4)',
+      dateSubmitted: 'tbody tr:nth-child(1) td:nth-child(5)',
+      actions: 'tbody tr:nth-child(1) td:nth-child(6)'
     }
   }
 }

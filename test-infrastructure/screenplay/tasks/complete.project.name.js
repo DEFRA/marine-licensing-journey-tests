@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
-import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Task from '../base/task.js'
+import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Memory from '../memory.js'
 
 export default class CompleteProjectName extends Task {

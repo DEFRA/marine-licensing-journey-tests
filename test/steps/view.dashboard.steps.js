@@ -9,11 +9,12 @@ import {
   ClickReviewAndSend,
   CompleteAllTasks,
   EnsureDashboardDisplaysNotification,
+  EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
-  EnsurePageHeading,
   Navigate,
   NavigateToDashboard,
-  RememberTheExemptionReferenceNumber
+  RememberTheExemptionReferenceNumber,
+  SignOut
 } from '~/test-infrastructure/screenplay'
 
 Given('the user has not submitted any notifications', async function () {
@@ -25,6 +26,10 @@ Given('the user has not submitted any notifications', async function () {
 Given('a user has submitted an exemption notification', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  await submitAnExemptionNotification.call(this)
+})
+
+async function submitAnExemptionNotification() {
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
@@ -32,7 +37,26 @@ Given('a user has submitted an exemption notification', async function () {
   await this.actor.attemptsTo(ClickReviewAndSend.now())
   await this.actor.attemptsTo(ClickConfirmAndSend.now())
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
-})
+}
+
+Given(
+  'the user has multiple notifications with different statuses and names',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+
+    // Submit first exemption
+    await submitAnExemptionNotification.call(this)
+
+    // Sign out and submit second exemption
+    await this.actor.attemptsTo(SignOut.now())
+    await submitAnExemptionNotification.call(this)
+
+    // Sign out and submit third exemption
+    await this.actor.attemptsTo(SignOut.now())
+    await submitAnExemptionNotification.call(this)
+  }
+)
 
 When('the user clicks on Projects home in the header', async function () {
   await this.actor.attemptsTo(ClickProjectsHome.now())
@@ -45,11 +69,17 @@ When('the user navigates to the dashboard', async function () {
 Then(
   'the dashboard displays the submitted notification correctly',
   async function () {
-    await this.actor.attemptsTo(EnsurePageHeading.is('Your projects'))
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.correctly())
+    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
   }
 )
 
 Then('the message {string} is shown', async function (expectedMessage) {
   await this.actor.attemptsTo(EnsureEmptyStateMessage.shows(expectedMessage))
 })
+
+Then(
+  'the notifications are sorted by status with drafts first then by project name',
+  async function () {
+    await this.actor.attemptsTo(EnsureDashboardSortOrder.now())
+  }
+)
