@@ -4,54 +4,79 @@ import path from 'path'
 import { logOperation } from '../capture/index.js'
 
 export default class FileGenerator {
-  static async generateLargeKMLFile(filePath, targetSizeMB = 51) {
+  static createFileWithContent(filePath, content, fileType, description) {
     try {
       this.ensureDirectoryExists(filePath)
-
-      const kmlContent = this.createKMLContent(targetSizeMB)
-      await this.writeFileAsync(filePath, kmlContent)
-
-      this.logFileCreation(filePath, targetSizeMB)
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate large KML file: ${error.message}`)
-    }
-  }
-
-  static generateEmptyKMLFile(filePath) {
-    try {
-      this.ensureDirectoryExists(filePath)
-      fs.writeFileSync(filePath, '')
+      fs.writeFileSync(filePath, content)
 
       const stats = fs.statSync(filePath)
       logOperation(
         'File Generation',
-        `Generated empty KML file: ${filePath} (${stats.size} bytes)`
+        `Generated ${description} ${fileType}: ${filePath} (${stats.size} bytes)`
       )
       return filePath
     } catch (error) {
-      expect.fail(`Failed to generate empty KML file: ${error.message}`)
+      expect.fail(
+        `Failed to generate ${description} ${fileType}: ${error.message}`
+      )
     }
   }
 
-  static async generateTemporaryLargeFile(
-    baseName = 'large-test-file',
-    sizeMB = 51
+  static async createLargeFileWithContent(
+    filePath,
+    contentCreator,
+    targetSizeMB,
+    fileType
   ) {
-    const filePath = this.createTimestampedPath(baseName)
-    return await this.generateLargeKMLFile(filePath, sizeMB)
-  }
-
-  static generateTemporaryEmptyFile(baseName = 'empty-test-file') {
-    const filePath = this.createTimestampedPath(baseName)
-    return this.generateEmptyKMLFile(filePath)
-  }
-
-  static generateGenericErrorFile(filePath) {
     try {
       this.ensureDirectoryExists(filePath)
 
-      const validKMLContent = `<?xml version="1.0" encoding="UTF-8"?>
+      const content = contentCreator(targetSizeMB)
+      await this.writeFileAsync(filePath, content)
+
+      this.logFileCreation(filePath, targetSizeMB)
+      return filePath
+    } catch (error) {
+      expect.fail(`Failed to generate large ${fileType}: ${error.message}`)
+    }
+  }
+
+  static createEmptyFile(filePath, fileType) {
+    return this.createFileWithContent(filePath, '', fileType, 'empty')
+  }
+
+  static createTemporaryFile(baseName, extension, generator) {
+    const filePath = this.createTimestampedPath(baseName, extension)
+    return generator(filePath)
+  }
+
+  static generateLargeKMLFile(filePath, targetSizeMB = 51) {
+    return this.createLargeFileWithContent(
+      filePath,
+      (size) => this.createKMLContent(size),
+      targetSizeMB,
+      'KML file'
+    )
+  }
+
+  static generateEmptyKMLFile(filePath) {
+    return this.createEmptyFile(filePath, 'KML file')
+  }
+
+  static generateTemporaryLargeFile(baseName = 'large-test-file', sizeMB = 51) {
+    return this.createTemporaryFile(baseName, '.kml', (filePath) =>
+      this.generateLargeKMLFile(filePath, sizeMB)
+    )
+  }
+
+  static generateTemporaryEmptyFile(baseName = 'empty-test-file') {
+    return this.createTemporaryFile(baseName, '.kml', (filePath) =>
+      this.generateEmptyKMLFile(filePath)
+    )
+  }
+
+  static generateGenericErrorFile(filePath) {
+    const validKMLContent = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <name>Test Document</name>
@@ -63,144 +88,97 @@ export default class FileGenerator {
     </Placemark>
   </Document>
 </kml>`
-
-      fs.writeFileSync(filePath, validKMLContent)
-
-      const stats = fs.statSync(filePath)
-      logOperation(
-        'File Generation',
-        `Generated generic error trigger file: ${filePath} (${stats.size} bytes)`
-      )
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate generic error file: ${error.message}`)
-    }
+    return this.createFileWithContent(
+      filePath,
+      validKMLContent,
+      'KML file',
+      'generic error trigger'
+    )
   }
 
   static generateTemporaryGenericErrorFile(baseName = 'upload-error-trigger') {
-    const filePath = this.createTimestampedPath(baseName)
-    return this.generateGenericErrorFile(filePath)
+    return this.createTemporaryFile(baseName, '.kml', (filePath) =>
+      this.generateGenericErrorFile(filePath)
+    )
   }
 
   static generateValidShapefile(filePath) {
-    try {
-      this.ensureDirectoryExists(filePath)
-
-      const zipContent = this.createShapefileZipContent()
-      fs.writeFileSync(filePath, zipContent)
-
-      const stats = fs.statSync(filePath)
-      logOperation(
-        'File Generation',
-        `Generated valid Shapefile: ${filePath} (${stats.size} bytes)`
-      )
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate valid Shapefile: ${error.message}`)
-    }
+    const zipContent = this.createShapefileZipContent()
+    return this.createFileWithContent(
+      filePath,
+      zipContent,
+      'Shapefile',
+      'valid'
+    )
   }
 
   static generateVirusShapefile(filePath) {
-    try {
-      this.ensureDirectoryExists(filePath)
-
-      const zipContent = this.createShapefileZipContent('virus-shapefile')
-      fs.writeFileSync(filePath, zipContent)
-
-      const stats = fs.statSync(filePath)
-      logOperation(
-        'File Generation',
-        `Generated virus Shapefile: ${filePath} (${stats.size} bytes)`
-      )
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate virus Shapefile: ${error.message}`)
-    }
+    const zipContent = this.createShapefileZipContent('virus-shapefile')
+    return this.createFileWithContent(
+      filePath,
+      zipContent,
+      'Shapefile',
+      'virus'
+    )
   }
 
-  static async generateLargeShapefile(filePath, targetSizeMB = 51) {
-    try {
-      this.ensureDirectoryExists(filePath)
-
-      const zipContent = this.createLargeShapefileZipContent(targetSizeMB)
-      await this.writeFileAsync(filePath, zipContent)
-
-      this.logFileCreation(filePath, targetSizeMB)
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate large Shapefile: ${error.message}`)
-    }
+  static generateLargeShapefile(filePath, targetSizeMB = 51) {
+    return this.createLargeFileWithContent(
+      filePath,
+      (size) => this.createLargeShapefileZipContent(size),
+      targetSizeMB,
+      'Shapefile'
+    )
   }
 
   static generateEmptyShapefile(filePath) {
-    try {
-      this.ensureDirectoryExists(filePath)
-      fs.writeFileSync(filePath, '')
-
-      const stats = fs.statSync(filePath)
-      logOperation(
-        'File Generation',
-        `Generated empty Shapefile: ${filePath} (${stats.size} bytes)`
-      )
-      return filePath
-    } catch (error) {
-      expect.fail(`Failed to generate empty Shapefile: ${error.message}`)
-    }
+    return this.createEmptyFile(filePath, 'Shapefile')
   }
 
   static generateGenericErrorShapefile(filePath) {
-    try {
-      this.ensureDirectoryExists(filePath)
-
-      const zipContent = this.createShapefileZipContent('upload-error-trigger')
-      fs.writeFileSync(filePath, zipContent)
-
-      const stats = fs.statSync(filePath)
-      logOperation(
-        'File Generation',
-        `Generated generic error trigger Shapefile: ${filePath} (${stats.size} bytes)`
-      )
-      return filePath
-    } catch (error) {
-      expect.fail(
-        `Failed to generate generic error Shapefile: ${error.message}`
-      )
-    }
+    const zipContent = this.createShapefileZipContent('upload-error-trigger')
+    return this.createFileWithContent(
+      filePath,
+      zipContent,
+      'Shapefile',
+      'generic error trigger'
+    )
   }
 
-  // === TEMPORARY SHAPEFILE GENERATORS ===
-
   static generateTemporaryValidShapefile(baseName = 'valid-shapefile') {
-    const filePath = this.createTimestampedPath(baseName, '.zip')
-    return this.generateValidShapefile(filePath)
+    return this.createTemporaryFile(baseName, '.zip', (filePath) =>
+      this.generateValidShapefile(filePath)
+    )
   }
 
   static generateTemporaryVirusShapefile(baseName = 'virus-shapefile') {
-    const filePath = this.createTimestampedPath(baseName, '.zip')
-    return this.generateVirusShapefile(filePath)
+    return this.createTemporaryFile(baseName, '.zip', (filePath) =>
+      this.generateVirusShapefile(filePath)
+    )
   }
 
-  static async generateTemporaryLargeShapefile(
+  static generateTemporaryLargeShapefile(
     baseName = 'large-shapefile',
     sizeMB = 51
   ) {
-    const filePath = this.createTimestampedPath(baseName, '.zip')
-    return await this.generateLargeShapefile(filePath, sizeMB)
+    return this.createTemporaryFile(baseName, '.zip', (filePath) =>
+      this.generateLargeShapefile(filePath, sizeMB)
+    )
   }
 
   static generateTemporaryEmptyShapefile(baseName = 'empty-shapefile') {
-    const filePath = this.createTimestampedPath(baseName, '.zip')
-    return this.generateEmptyShapefile(filePath)
+    return this.createTemporaryFile(baseName, '.zip', (filePath) =>
+      this.generateEmptyShapefile(filePath)
+    )
   }
 
   static generateTemporaryGenericErrorShapefile(
     baseName = 'upload-error-trigger-shapefile'
   ) {
-    const filePath = this.createTimestampedPath(baseName, '.zip')
-    return this.generateGenericErrorShapefile(filePath)
+    return this.createTemporaryFile(baseName, '.zip', (filePath) =>
+      this.generateGenericErrorShapefile(filePath)
+    )
   }
-
-  // === HELPER METHODS ===
 
   static cleanupFile(filePath) {
     try {

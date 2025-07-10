@@ -1,4 +1,4 @@
-@wip @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-19
+@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-19
 Feature: Site details: The user marks the boundary of a triangular site manually using WGS84 or OSGB36 coordinates
   These scenarios test the user journey for manually entering triangular site coordinates, covering:
   
