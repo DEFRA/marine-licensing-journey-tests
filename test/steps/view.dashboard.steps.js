@@ -94,17 +94,17 @@ When('the user navigates to the dashboard', async function () {
 Then(
   'the dashboard displays the submitted notification correctly',
   async function () {
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.correctly())
+    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
   }
 )
 
 Then('the message {string} is shown', async function (expectedMessage) {
-  await this.actor.attemptsTo(EnsureEmptyStateMessage.displays(expectedMessage))
+  await this.actor.attemptsTo(EnsureEmptyStateMessage.shows(expectedMessage))
 })
 
 Then(
   'the notifications are sorted by status with drafts first then by project name',
   async function () {
-    await this.actor.attemptsTo(EnsureDashboardSortOrder.isCorrect())
+    await this.actor.attemptsTo(EnsureDashboardSortOrder.now())
   }
 )

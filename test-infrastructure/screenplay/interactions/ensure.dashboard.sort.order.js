@@ -10,7 +10,6 @@ export default class EnsureDashboardSortOrder extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
 
-    // First check if there are any rows in the table
     const rowCount = await browseTheWeb.countElements(
       DashboardPage.locators.tableRows
     )
@@ -32,7 +31,6 @@ export default class EnsureDashboardSortOrder extends Task {
       notifications.push({ name: name.trim(), status: status.trim() })
     }
 
-    // Verify sort order: Drafts first, then Closed, and within each status A-Z by name
     this.verifySortOrder(notifications)
   }
 
@@ -40,7 +38,6 @@ export default class EnsureDashboardSortOrder extends Task {
     const drafts = notifications.filter((n) => n.status === 'Draft')
     const closed = notifications.filter((n) => n.status === 'Closed')
 
-    // Check that all drafts come before all closed
     const draftIndices = notifications
       .map((n, i) => (n.status === 'Draft' ? i : -1))
       .filter((i) => i !== -1)
@@ -59,7 +56,6 @@ export default class EnsureDashboardSortOrder extends Task {
       }
     }
 
-    // Check that within each status group, names are sorted A-Z
     this.verifyAlphabeticalOrder(drafts, 'Draft')
     this.verifyAlphabeticalOrder(closed, 'Closed')
   }

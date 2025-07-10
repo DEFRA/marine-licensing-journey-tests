@@ -7,6 +7,14 @@ export default class SignIn extends Task {
   }
 
   async performAs(actor) {
-    await actor.attemptsTo(AuthenticateWith.theTestUser())
+    const browseTheWeb = actor.ability
+
+    // Check if we're on the authentication page (URL contains 'cdp-defra-id-stub')
+    const currentUrl = await browseTheWeb.browser.getUrl()
+    if (currentUrl.includes('cdp-defra-id-stub')) {
+      // We're on the auth page, so we need to authenticate
+      await actor.attemptsTo(AuthenticateWith.theTestUser())
+    }
+    // If we're not on the auth page, we're already authenticated - do nothing
   }
 }
