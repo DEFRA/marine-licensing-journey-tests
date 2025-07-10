@@ -19,7 +19,7 @@ Feature: Submit exemption notification: A unique reference number is generated f
   Scenario: After successfully completing all the tasks on the task list, the user is able to submit their notification
     Given the user has completed all the tasks on the task list and is on the Check your answers page
     When the user clicks Confirm and send
-    Then the confirmation page is displayed with an application reference
+    Then the confirmation page is displayed with an application reference  
 
   @bug-reproduction @wip
   Scenario: Site details completion fails after switching from file upload to manual entry

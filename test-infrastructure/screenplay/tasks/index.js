@@ -1,3 +1,4 @@
+export { default as ClickProjectsHome } from './click.projects.home'
 export { default as CompleteActivityDates } from './complete.activity.dates'
 export { default as CompleteActivityDescription } from './complete.activity.description'
 export { default as CompleteAllTasks } from './complete.all.tasks'
@@ -6,4 +7,5 @@ export { default as CompletePublicRegisterTask } from './complete.public.registe
 export { default as CompleteSiteDetails } from './complete.site.details'
 export { default as FillForm } from './fill.form'
 export { default as Navigate } from './navigate'
+export { default as NavigateToDashboard } from './navigate.to.dashboard'
 export { default as NavigateToSiteDetailsPage } from './navigate.to.site.details.page'
