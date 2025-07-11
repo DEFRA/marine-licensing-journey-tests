@@ -12,8 +12,6 @@ export default class BrowseTheWeb extends Ability {
       chaiExpect.fail(ERROR_MESSAGES.MISSING_BROWSER)
     }
     this.browser = browser
-
-    // Use defraIdUrl from config
     this.defraIdStub = new DefraIdStubUserManager(browser.options.defraIdUrl)
   }
 
@@ -71,18 +69,13 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async clickSaveAndContinue() {
-    // Try specific Save and continue button first (for review pages)
-    try {
-      const saveAndContinueButton = await this.browser.$(
-        'button*=Save and continue'
-      )
-      const isExisting = await saveAndContinueButton.isExisting()
-      if (isExisting) {
-        await saveAndContinueButton.click()
-        return
-      }
-    } catch (error) {
-      // Fall back to generic submit button
+    const saveAndContinueButton = await this.browser.$(
+      'button*=Save and continue'
+    )
+    const isExisting = await saveAndContinueButton.isExisting()
+    if (isExisting) {
+      await saveAndContinueButton.click()
+      return
     }
 
     await this.clickSubmit()

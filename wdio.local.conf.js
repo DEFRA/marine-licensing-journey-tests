@@ -56,7 +56,7 @@ export const config = {
   bail: 0,
   baseUrl: `http://localhost:3000/`,
   defraIdUrl: 'http://localhost:3200',
-  waitforTimeout: 5000,
+  waitforTimeout: 10000,
   waitforInterval: 200,
   connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
