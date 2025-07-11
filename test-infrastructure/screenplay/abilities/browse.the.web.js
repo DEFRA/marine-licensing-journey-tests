@@ -71,6 +71,20 @@ export default class BrowseTheWeb extends Ability {
   }
 
   async clickSaveAndContinue() {
+    // Try specific Save and continue button first (for review pages)
+    try {
+      const saveAndContinueButton = await this.browser.$(
+        'button*=Save and continue'
+      )
+      const isExisting = await saveAndContinueButton.isExisting()
+      if (isExisting) {
+        await saveAndContinueButton.click()
+        return
+      }
+    } catch (error) {
+      // Fall back to generic submit button
+    }
+
     await this.clickSubmit()
   }
 
