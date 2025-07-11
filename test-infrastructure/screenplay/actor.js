@@ -27,14 +27,9 @@ export default class Actor {
 
   remembers(key, value) {
     if (this.hasMemoryOf(key) && key === 'exemption') {
-      // Convert to array if not already, then add new exemption
-      if (!Array.isArray(this.memory[key])) {
-        this.memory[key] = [this.memory[key]]
-      }
-      this.memory[key].push(value)
-    } else {
-      this.memory[key] = value
+      expect.fail(ERROR_MESSAGES.CANNOT_REPLACE_EXEMPTION(key))
     }
+    this.memory[key] = value
     attachJson(this.toJson(), `actor-memory-changed-${key}.json`)
   }
 

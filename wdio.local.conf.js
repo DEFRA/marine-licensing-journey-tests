@@ -85,7 +85,6 @@ export const config = {
       await browser.takeScreenshot()
     }
 
-    // Clean up any test users created during this scenario
     if (global.testUsersCreated && global.testUsersCreated.length > 0) {
       const { DefraIdStubUserManager } = await import(
         './test-infrastructure/helpers/defra-id-stub-user-manager.js'
@@ -101,7 +100,6 @@ export const config = {
         }
       }
 
-      // Clear the list for next scenario
       global.testUsersCreated = []
     }
   },
