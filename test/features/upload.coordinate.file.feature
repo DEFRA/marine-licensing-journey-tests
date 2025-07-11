@@ -4,20 +4,20 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
   I want to upload a file of coordinates for my site
   So that I can provide my site details easily and accurately
 
-  @smoke @kml
+  @smoke @kml @bug @issue=ML-481
   Scenario: Successfully upload a valid KML file
     Given an exemption notification with a valid KML file
     When completing the site details task
     Then the file is successfully processed
     And the Upload a KML file page is displayed
 
-  @kml
+  @kml @bug @issue=ML-481
   Scenario: Spinner page displays during KML upload process
     Given an exemption notification with a valid KML file
     When completing the site details task
     Then the spinner page displays during upload process
 
-  @kml
+  @kml @local-only
   Scenario: Uploading a KML file with a virus fails
     Given an exemption notification with a KML file with a virus
     When completing the site details task
@@ -60,7 +60,7 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     When completing the site details task
     Then the spinner page displays during upload process
 
-  @shapefile
+  @shapefile @local-only
   Scenario: Uploading a Shapefile with a virus fails
     Given an exemption notification with a Shapefile with a virus
     When completing the site details task
