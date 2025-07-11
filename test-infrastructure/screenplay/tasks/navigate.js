@@ -24,6 +24,9 @@ export default class Navigate extends Task {
 
     await actor.ability.navigateTo(this.url)
 
-    await actor.attemptsTo(AuthenticateWith.theTestUser())
+    if (!actor.hasMemoryOf('isAuthenticated')) {
+      await actor.attemptsTo(AuthenticateWith.theTestUser())
+      actor.remembers('isAuthenticated', true)
+    }
   }
 }

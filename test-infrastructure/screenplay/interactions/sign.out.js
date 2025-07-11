@@ -7,8 +7,16 @@ export default class SignOut extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-
-    // Click the "Sign out" link in the navigation
     await browseTheWeb.click('a[href="/sign-out"]')
+
+    await browseTheWeb.browser.waitUntil(
+      async () => {
+        const url = await browseTheWeb.browser.getUrl()
+        return url.includes('/login') || url.includes('cdp-defra-id-stub')
+      },
+      { timeout: 10000 }
+    )
+
+    delete actor.memory.isAuthenticated
   }
 }

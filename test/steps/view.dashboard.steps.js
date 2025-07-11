@@ -23,6 +23,7 @@ Given('the user has not submitted any notifications', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(SignIn.now())
 })
 
 Given('a user has submitted an exemption notification', async function () {
@@ -32,6 +33,8 @@ Given('a user has submitted an exemption notification', async function () {
 })
 
 async function submitAnExemptionNotification() {
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(SignIn.now())
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
@@ -41,7 +44,9 @@ async function submitAnExemptionNotification() {
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
 }
 
-async function submitAnExemptionNotificationAfterSignIn() {
+async function submitCompleteExemptionNotification() {
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(SignIn.now())
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
@@ -60,10 +65,10 @@ Given(
     await submitAnExemptionNotification.call(this)
 
     await this.actor.attemptsTo(SignOut.now())
-    await submitAnExemptionNotificationAfterSignIn.call(this)
+    await submitCompleteExemptionNotification.call(this)
 
     await this.actor.attemptsTo(SignOut.now())
-    await submitAnExemptionNotificationAfterSignIn.call(this)
+    await submitCompleteExemptionNotification.call(this)
 
     await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
