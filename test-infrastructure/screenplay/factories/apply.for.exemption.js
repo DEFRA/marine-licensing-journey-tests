@@ -5,6 +5,7 @@ import {
   siteDetailsExtension
 } from './builder-extensions.js'
 import ExemptionFactory from './exemption.factory.js'
+import SiteDetailsFactory from './site-details.factory.js'
 
 export default class ApplyForExemption extends BaseBuilder {
   static withValidProjectName() {
@@ -177,6 +178,15 @@ export default class ApplyForExemption extends BaseBuilder {
 
   withCoordinatePoints(points) {
     return this.setSafeProperty('siteDetails.polygonData.coordinates', points)
+  }
+
+  withRandomCoordinateCount(coordinateCount) {
+    const coordinateSystem = this.data?.siteDetails?.coordinateSystem || 'WGS84'
+    const randomSiteDetails = SiteDetailsFactory.createRandomPolygon(
+      coordinateCount,
+      coordinateSystem
+    )
+    return this.setProperty('siteDetails', randomSiteDetails)
   }
 
   get andSiteDetails() {

@@ -71,6 +71,13 @@ export const siteDetailsExtension = {
       SiteDetailsFactory.create('pentagon', 'OSGB36')
     )
     return builder
+  },
+  forARandomPolygonWithWGS84Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.createRandomPolygon(5, 'WGS84')
+    )
+    return builder
   }
 }
 

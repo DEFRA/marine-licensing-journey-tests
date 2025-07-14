@@ -1,3 +1,5 @@
+import { expect } from 'chai'
+
 export default class SiteDetailsFactory {
   static defaultData = {
     circle: {
@@ -58,6 +60,52 @@ export default class SiteDetailsFactory {
         ['432675', '181500']
       ]
     }
+  }
+
+  static generateRandomWGS84Coordinate() {
+    const minLatitude = 49.5
+    const maxLatitude = 61.0
+    const minLongitude = -11.0
+    const maxLongitude = 2.0
+
+    const latitude = (
+      Math.random() * (maxLatitude - minLatitude) +
+      minLatitude
+    ).toFixed(6)
+    const longitude = (
+      Math.random() * (maxLongitude - minLongitude) +
+      minLongitude
+    ).toFixed(6)
+
+    return [latitude, longitude]
+  }
+
+  static generateRandomPolygonCoordinates(
+    coordinateCount,
+    coordinateSystem = 'WGS84'
+  ) {
+    if (coordinateSystem !== 'WGS84') {
+      expect.fail('Random coordinate generation only supports WGS84 currently')
+    }
+
+    const coordinates = []
+    for (let i = 0; i < coordinateCount; i++) {
+      coordinates.push(this.generateRandomWGS84Coordinate())
+    }
+    return coordinates
+  }
+
+  static createRandomPolygon(coordinateCount, coordinateSystem = 'WGS84') {
+    const randomCoordinates = this.generateRandomPolygonCoordinates(
+      coordinateCount,
+      coordinateSystem
+    )
+    return this._createSiteDetails('boundary', coordinateSystem, {
+      polygonData: this._createCoordinateSet(
+        randomCoordinates,
+        coordinateSystem
+      )
+    })
   }
 
   static create(shape, coordinateSystem) {

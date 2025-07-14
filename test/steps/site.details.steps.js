@@ -239,6 +239,28 @@ When(
   }
 )
 
+Given(
+  'an exemption for a {int} point random polygon site using WGS84 coordinates',
+  function (coordinateCount) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName()
+        .andSiteDetails.forARandomPolygonWithWGS84Coordinates()
+        .withRandomCoordinateCount(coordinateCount)
+    )
+  }
+)
+
+When(
+  'the {int} point random polygon coordinates are entered using add another point',
+  async function (coordinateCount) {
+    await this.actor.attemptsTo(
+      CompleteSiteDetails.coordinatesWithAddAnotherPoint()
+    )
+  }
+)
+
 Then('the site details review page shows the site details', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
