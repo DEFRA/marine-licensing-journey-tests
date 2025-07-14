@@ -1,16 +1,30 @@
 import EnterMultipleCoordinatesPage from '~/test-infrastructure/pages/enter.multiple.coordinates.page.js'
 
 export default class EnterMultipleCoordinatesPageInteractions {
-  static async enterPolygonCoordinates(browseTheWeb, siteDetails) {
+  static async enterPolygonCoordinates(
+    browseTheWeb,
+    siteDetails,
+    useAddAnotherPoint = false
+  ) {
     const { coordinateSystem, polygonData } = siteDetails
 
     if (!polygonData?.coordinates) {
       return
     }
 
-    const coordinates = polygonData.coordinates.slice(0, 3) // Take only first 3 points for triangle
+    let coordinates
+    if (useAddAnotherPoint) {
+      coordinates = polygonData.coordinates
+    } else {
+      coordinates = polygonData.coordinates.slice(0, 3)
+    }
 
-    await this.enterCoordinates(browseTheWeb, coordinateSystem, coordinates)
+    await this.enterCoordinatesWithAddAnotherPoint(
+      browseTheWeb,
+      coordinateSystem,
+      coordinates,
+      useAddAnotherPoint
+    )
   }
 
   static async enterCoordinates(browseTheWeb, coordinateSystem, coordinates) {
@@ -21,35 +35,105 @@ export default class EnterMultipleCoordinatesPageInteractions {
     }
   }
 
+  static async enterCoordinatesWithAddAnotherPoint(
+    browseTheWeb,
+    coordinateSystem,
+    coordinates,
+    useAddAnotherPoint
+  ) {
+    await this.enterCoordinates(
+      browseTheWeb,
+      coordinateSystem,
+      coordinates.slice(0, 3)
+    )
+
+    if (useAddAnotherPoint && coordinates.length > 3) {
+      await this.addAdditionalCoordinates(
+        browseTheWeb,
+        coordinateSystem,
+        coordinates.slice(3)
+      )
+    }
+  }
+
+  static async addAdditionalCoordinates(
+    browseTheWeb,
+    coordinateSystem,
+    additionalCoordinates
+  ) {
+    for (let i = 0; i < additionalCoordinates.length; i++) {
+      await browseTheWeb.click(
+        EnterMultipleCoordinatesPage.addAnotherPointButton
+      )
+      await this.enterSingleCoordinate(
+        browseTheWeb,
+        coordinateSystem,
+        additionalCoordinates[i],
+        3 + i
+      )
+    }
+  }
+
+  static async enterSingleCoordinate(
+    browseTheWeb,
+    coordinateSystem,
+    coordinate,
+    coordinateIndex
+  ) {
+    if (coordinateSystem === 'WGS84') {
+      await this.enterWGS84Coordinate(browseTheWeb, coordinate, coordinateIndex)
+    } else if (coordinateSystem === 'OSGB36') {
+      await this.enterOSGB36Coordinate(
+        browseTheWeb,
+        coordinate,
+        coordinateIndex
+      )
+    }
+  }
+
+  static async enterWGS84Coordinate(browseTheWeb, coordinate, coordinateIndex) {
+    await this.enterCoordinateField(
+      browseTheWeb,
+      coordinate.latitude,
+      EnterMultipleCoordinatesPage.latitudeInput(coordinateIndex)
+    )
+    await this.enterCoordinateField(
+      browseTheWeb,
+      coordinate.longitude,
+      EnterMultipleCoordinatesPage.longitudeInput(coordinateIndex)
+    )
+  }
+
+  static async enterOSGB36Coordinate(
+    browseTheWeb,
+    coordinate,
+    coordinateIndex
+  ) {
+    await this.enterCoordinateField(
+      browseTheWeb,
+      coordinate.eastings,
+      EnterMultipleCoordinatesPage.eastingsInput(coordinateIndex)
+    )
+    await this.enterCoordinateField(
+      browseTheWeb,
+      coordinate.northings,
+      EnterMultipleCoordinatesPage.northingsInput(coordinateIndex)
+    )
+  }
+
+  static async enterCoordinateField(browseTheWeb, value, selector) {
+    value && (await browseTheWeb.sendKeys(selector, value))
+  }
+
   static async enterWGS84Coordinates(browseTheWeb, coordinates) {
     for (let i = 0; i < coordinates.length; i++) {
-      const coordinate = coordinates[i]
-      coordinate.latitude &&
-        (await browseTheWeb.sendKeys(
-          EnterMultipleCoordinatesPage.latitudeInput(i),
-          coordinate.latitude
-        ))
-      coordinate.longitude &&
-        (await browseTheWeb.sendKeys(
-          EnterMultipleCoordinatesPage.longitudeInput(i),
-          coordinate.longitude
-        ))
+      await this.enterWGS84Coordinate(browseTheWeb, coordinates[i], i)
     }
   }
 
   static async enterOSGB36Coordinates(browseTheWeb, coordinates) {
     for (let i = 0; i < coordinates.length; i++) {
-      const coordinate = coordinates[i]
-      coordinate.eastings &&
-        (await browseTheWeb.sendKeys(
-          EnterMultipleCoordinatesPage.eastingsInput(i),
-          coordinate.eastings
-        ))
-      coordinate.northings &&
-        (await browseTheWeb.sendKeys(
-          EnterMultipleCoordinatesPage.northingsInput(i),
-          coordinate.northings
-        ))
+      await this.enterOSGB36Coordinate(browseTheWeb, coordinates[i], i)
     }
   }
 

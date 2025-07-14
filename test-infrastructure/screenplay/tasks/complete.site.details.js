@@ -25,14 +25,23 @@ export default class CompleteSiteDetails extends Task {
     return new CompleteSiteDetails(false, true)
   }
 
+  static coordinatesWithAddAnotherPoint() {
+    return new CompleteSiteDetails(false, true, true)
+  }
+
   static andSave() {
     return new CompleteSiteDetails(true, false)
   }
 
-  constructor(saveAndContinue = false, coordinatesOnly = false) {
+  constructor(
+    saveAndContinue = false,
+    coordinatesOnly = false,
+    useAddAnotherPoint = false
+  ) {
     super()
     this.saveAndContinue = saveAndContinue
     this.coordinatesOnly = coordinatesOnly
+    this.useAddAnotherPoint = useAddAnotherPoint
   }
 
   async performAs(actor) {
@@ -97,7 +106,8 @@ export default class CompleteSiteDetails extends Task {
     await this.completeFlowUpToCoordinates()
     await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinates(
       this.browseTheWeb,
-      this.siteDetails
+      this.siteDetails,
+      this.useAddAnotherPoint
     )
   }
 

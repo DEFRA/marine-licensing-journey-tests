@@ -83,14 +83,15 @@ Test charters bridge the gap between:
 
 ## 📋 Available investigation sessions
 
-| Theme                           | Charter name                                                  | Focus                                                      | Personas                 | Priority | Status     |
-| ------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)                         | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
-| **Professional workflows**      | [Expert workflows](./expert-workflows.md)                     | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md)                   | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
-| **Coordinate entry workflows**  | [Site details](./site-details.md)                             | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
-| **Review and submission**       | [Review and submission](./review-and-submission.md)           | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
-| **Navigation consistency**      | [Back and cancel navigation](./back-and-cancel-navigation.md) | Cross-workflow navigation behaviour and consistency        | All personas             | High     | 🆕 New     |
+| Theme                           | Charter name                                                    | Focus                                                      | Personas                 | Priority | Status     |
+| ------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
+| **First-time user experience**  | [Novice journey](./novice-journey.md)                           | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
+| **Professional workflows**      | [Expert workflows](./expert-workflows.md)                       | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
+| **Form behaviour & validation** | [Form interactions](./form-interactions.md)                     | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
+| **Coordinate entry workflows**  | [Site details](./site-details.md)                               | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
+| **Manual polygon entry**        | [Manual polygon site details](./manual-polygon-site-details.md) | Multi-point coordinate entry with add/remove functionality | All personas             | High     | 🆕 New     |
+| **Review and submission**       | [Review and submission](./review-and-submission.md)             | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
+| **Navigation consistency**      | [Back and cancel navigation](./back-and-cancel-navigation.md)   | Cross-workflow navigation behaviour and consistency        | All personas             | High     | 🆕 New     |
 
 ### **Charter lifecycle**
 
@@ -189,6 +190,14 @@ All current charters focus exclusively on **delivered functionality**:
 - Centre point coordinate entry with validation (ML-35)
 - Circle width entry (ML-36)
 - Site details review and completion (ML-37)
+
+### **Manual Polygon Coordinate Entry**
+
+- Multi-point polygon boundary definition (ML-19)
+- "Add another point" interaction with MOJ pattern (ML-38)
+- Dynamic point addition and removal functionality
+- Sequential coordinate numbering and re-numbering
+- Multi-point validation for both WGS84 and OSGB36 systems
 
 ### **Review and Submission Workflow**
 

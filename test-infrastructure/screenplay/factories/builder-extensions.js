@@ -3,32 +3,58 @@ import SiteDetailsFactory from './site-details.factory.js'
 
 export const siteDetailsExtension = {
   forACircleWithWGS84Coordinates: (builder) => {
-    builder.setProperty('siteDetails', SiteDetailsFactory.createCircleWGS84())
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('circle', 'WGS84')
+    )
     return builder
   },
   forACircleWithOSGB36Coordinates: (builder) => {
-    builder.setProperty('siteDetails', SiteDetailsFactory.createCircleOSGB36())
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('circle', 'OSGB36')
+    )
     return builder
   },
   forABoundaryWithWGS84Coordinates: (builder) => {
-    builder.setProperty('siteDetails', SiteDetailsFactory.createBoundaryWGS84())
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('boundary', 'WGS84')
+    )
     return builder
   },
   forABoundaryWithOSGB36Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.createBoundaryOSGB36()
+      SiteDetailsFactory.create('boundary', 'OSGB36')
     )
     return builder
   },
   forATriangleWithWGS84Coordinates: (builder) => {
-    builder.setProperty('siteDetails', SiteDetailsFactory.createTriangleWGS84())
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('triangle', 'WGS84')
+    )
     return builder
   },
   forATriangleWithOSGB36Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.createTriangleOSGB36()
+      SiteDetailsFactory.create('triangle', 'OSGB36')
+    )
+    return builder
+  },
+  forAQuadrilateralWithWGS84Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('quadrilateral', 'WGS84')
+    )
+    return builder
+  },
+  forAQuadrilateralWithOSGB36Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('quadrilateral', 'OSGB36')
     )
     return builder
   }
