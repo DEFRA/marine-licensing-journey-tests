@@ -57,6 +57,20 @@ export const siteDetailsExtension = {
       SiteDetailsFactory.create('quadrilateral', 'OSGB36')
     )
     return builder
+  },
+  forAPentagonWithWGS84Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('pentagon', 'WGS84')
+    )
+    return builder
+  },
+  forAPentagonWithOSGB36Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('pentagon', 'OSGB36')
+    )
+    return builder
   }
 }
 

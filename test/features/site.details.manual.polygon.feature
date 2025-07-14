@@ -58,7 +58,6 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
       | 529090 | 181680 | 529300 | 181680 | 529300 | 181900 | 529090 | 181900 |
       | 326398 | 673781 | 326600 | 673781 | 326600 | 674000 | 326398 | 674000 |
 
-  @wip
   Scenario Outline: Successfully adding multiple additional points to create a complex polygon site using WGS84 coordinates
     Given an exemption for a pentagon site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>", point 3 "<lat3>", "<lng3>", point 4 "<lat4>", "<lng4>" and point 5 "<lat5>", "<lng5>"
     And the site details task is reached
@@ -70,7 +69,6 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
       | 50.000000 | -1.000000 | 50.001000 | -1.000000 | 50.001500 | -0.999500 | 50.001000 | -0.999000 | 50.000000 | -0.999000 |
       | 51.507000 | -0.128000 | 51.508000 | -0.128000 | 51.508500 | -0.127500 | 51.508000 | -0.127000 | 51.507000 | -0.127000 |
 
-  @wip
   Scenario Outline: Successfully adding multiple additional points to create a complex polygon site using OSGB36 coordinates
     Given an exemption for a pentagon site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>", point 3 "<east3>", "<north3>", point 4 "<east4>", "<north4>" and point 5 "<east5>", "<north5>"
     And the site details task is reached
