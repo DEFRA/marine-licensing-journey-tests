@@ -4,18 +4,15 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
-  ClickConfirmAndSend,
   ClickProjectsHome,
-  ClickReviewAndSend,
-  CompleteAllTasks,
   EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
   Navigate,
   NavigateToDashboard,
-  RememberTheExemptionReferenceNumber,
   SignIn,
-  SignOut
+  SignOut,
+  SubmitAnExemptionNotification
 } from '~/test-infrastructure/screenplay'
 import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name'
 
@@ -29,47 +26,19 @@ Given('the user has not submitted any notifications', async function () {
 Given('a user has submitted an exemption notification', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
-  await submitAnExemptionNotification.call(this)
+  await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
 })
-
-async function submitAnExemptionNotification() {
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(SignIn.now())
-  this.actor.intendsTo(
-    ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-  )
-  await this.actor.attemptsTo(CompleteAllTasks.now())
-  await this.actor.attemptsTo(ClickReviewAndSend.now())
-  await this.actor.attemptsTo(ClickConfirmAndSend.now())
-  await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
-}
-
-async function submitCompleteExemptionNotification() {
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(SignIn.now())
-  this.actor.intendsTo(
-    ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-  )
-  await this.actor.attemptsTo(CompleteAllTasks.now())
-  await this.actor.attemptsTo(ClickReviewAndSend.now())
-  await this.actor.attemptsTo(ClickConfirmAndSend.now())
-  await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
-}
 
 Given(
   'the user has multiple notifications with different statuses and names',
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
-
-    await submitAnExemptionNotification.call(this)
-
+    await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
     await this.actor.attemptsTo(SignOut.now())
-    await submitCompleteExemptionNotification.call(this)
-
+    await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
     await this.actor.attemptsTo(SignOut.now())
-    await submitCompleteExemptionNotification.call(this)
-
+    await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
     await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(SignIn.now())
