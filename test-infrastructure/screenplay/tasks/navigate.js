@@ -18,23 +18,22 @@ export default class Navigate extends Task {
   }
 
   async performAs(actor) {
-    await actor.ability.navigateTo(this.url)
-
-    if (actor.hasMemoryOf('isAuthenticated')) {
-      return
-    }
-
     if (process.env.ENVIRONMENT === 'test') {
-      await actor.attemptsTo(AuthenticateWithAPermanentUser.aPermanentUser())
-      actor.remembers('isAuthenticated', true)
-      return
+      await actor.ability.navigateTo(this.url)
+      if (!actor.hasMemoryOf('isAuthenticated')) {
+        await actor.attemptsTo(AuthenticateWithAPermanentUser.aPermanentUser())
+        actor.remembers('isAuthenticated', true)
+      }
+    } else {
+      if (!actor.hasMemoryOf('testUser')) {
+        const testUser = await actor.ability.registerTestUser(actor.name)
+        actor.remembers('testUser', testUser)
+      }
+      await actor.ability.navigateTo(this.url)
+      if (!actor.hasMemoryOf('isAuthenticated')) {
+        await actor.attemptsTo(AuthenticateWith.theTestUser())
+        actor.remembers('isAuthenticated', true)
+      }
     }
-
-    if (!actor.hasMemoryOf('testUser')) {
-      const testUser = await actor.ability.registerTestUser(actor.name)
-      actor.remembers('testUser', testUser)
-    }
-    await actor.attemptsTo(AuthenticateWith.theTestUser())
-    actor.remembers('isAuthenticated', true)
   }
 }
