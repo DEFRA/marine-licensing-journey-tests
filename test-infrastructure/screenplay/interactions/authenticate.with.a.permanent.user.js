@@ -1,0 +1,31 @@
+import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
+import { expect } from 'chai'
+import Task from '../base/task.js'
+
+export default class AuthenticateWithAPermanentUser extends Task {
+  static aPermanentUser() {
+    return new AuthenticateWithAPermanentUser()
+  }
+
+  async performAs(actor) {
+    const browseTheWeb = actor.ability
+    const testUser = {
+      id: '38 51 93 67 55 42',
+      password: process.env.DEFRA_ID_USER_PASSWORD
+    }
+
+    if (!testUser.password) {
+      expect.fail('Missing DEFRA_ID_USER_PASSWORD environment variable')
+    }
+
+    await browseTheWeb.setValue(DefraIdLoginPage.usernameField, testUser.id)
+    await browseTheWeb.setValue(
+      DefraIdLoginPage.passwordField,
+      testUser.password
+    )
+
+    await browseTheWeb.waitForEnabled(DefraIdLoginPage.signInButton)
+
+    await browseTheWeb.click(DefraIdLoginPage.signInButton)
+  }
+}

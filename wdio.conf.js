@@ -5,8 +5,8 @@ import {
 } from './test-infrastructure/capture/index.js'
 
 let chromeProxyConfig = {}
-if (process.env.HTTP_PROXY) {
-  const url = new URL(process.env.HTTP_PROXY)
+if (process.env.CDP_HTTPS_PROXY) {
+  const url = new URL(process.env.CDP_HTTPS_PROXY)
   chromeProxyConfig = {
     proxy: {
       proxyType: 'manual',
@@ -14,6 +14,13 @@ if (process.env.HTTP_PROXY) {
       sslProxy: `${url.host}:${url.port}`
     }
   }
+}
+
+const getTags = () => {
+  if (process.env.ENVIRONMENT === 'test') {
+    return ['@real-defra-id']
+  }
+  return ['not @wip', 'not @bug', 'not @local-only']
 }
 
 export const config = {
@@ -27,8 +34,8 @@ export const config = {
   specs: ['test/features/*.feature'],
   cucumberOpts: {
     require: ['test/steps/*.js'],
-    tags: ['not @wip', 'not @bug', 'not @local-only'],
-    timeout: 30000 // 30 seconds for CI environment
+    tags: getTags(),
+    timeout: 120000
   },
 
   // ============================================================================
@@ -110,24 +117,26 @@ export const config = {
       await browser.takeScreenshot()
     }
 
-    // Clean up any test users created during this scenario
-    if (global.testUsersCreated && global.testUsersCreated.length > 0) {
-      const { DefraIdStubUserManager } = await import(
-        './test-infrastructure/helpers/defra-id-stub-user-manager.js'
-      )
-      const userManager = new DefraIdStubUserManager(config.defraIdUrl)
+    if (process.env.ENVIRONMENT !== 'test') {
+      // Clean up any test users created during this scenario
+      if (global.testUsersCreated && global.testUsersCreated.length > 0) {
+        const { DefraIdStubUserManager } = await import(
+          './test-infrastructure/helpers/defra-id-stub-user-manager.js'
+        )
+        const userManager = new DefraIdStubUserManager(config.defraIdUrl)
 
-      for (const userId of global.testUsersCreated) {
-        try {
-          await userManager.expireTestUser(userId)
-          logUserCleanup(userId, true)
-        } catch (error) {
-          logUserCleanup(userId, false, error)
+        for (const userId of global.testUsersCreated) {
+          try {
+            await userManager.expireTestUser(userId)
+            logUserCleanup(userId, true)
+          } catch (error) {
+            logUserCleanup(userId, false, error)
+          }
         }
-      }
 
-      // Clear the list for next scenario
-      global.testUsersCreated = []
+        // Clear the list for next scenario
+        global.testUsersCreated = []
+      }
     }
   },
 
