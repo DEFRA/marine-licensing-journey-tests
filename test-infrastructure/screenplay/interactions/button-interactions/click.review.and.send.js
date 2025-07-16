@@ -1,5 +1,5 @@
 import TaskListPage from '~/test-infrastructure/pages/task.list.page'
-import Task from '../base/task.js'
+import Task from '../../base/task.js'
 
 export default class ClickReviewAndSend extends Task {
   static now() {
@@ -13,7 +13,6 @@ export default class ClickReviewAndSend extends Task {
     try {
       await browseTheWeb.click(selectors.primary)
     } catch (error) {
-      // Fallback to ID selector if XPath fails
       await browseTheWeb.click(selectors.fallback)
     }
   }

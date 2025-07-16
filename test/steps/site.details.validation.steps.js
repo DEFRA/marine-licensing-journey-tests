@@ -1,6 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import EnterCoordinatesCentrePointPage from '~/test-infrastructure/pages/enter.coordinates.centre.point'
+import EnterMultipleCoordinatesPage from '~/test-infrastructure/pages/enter.multiple.coordinates.page'
 import HowDoYouWantToEnterTheCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.enter.the.coordinates.page'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page'
 import WhatCoordinateSystemPage from '~/test-infrastructure/pages/what.coordinate.system.page'
@@ -10,10 +11,13 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickAddAnotherPoint,
+  ClickRemovePointButton,
   ClickSaveAndContinue,
   CompleteProjectName,
   EnsureCoordinateError,
   EnsureErrorDisplayed,
+  EnsureErrorNotDisplayed,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
   EnsureThatCoordinateEntryMethodSelected,
@@ -175,6 +179,31 @@ Given(
   }
 )
 
+Given(
+  'errors have been generated for the first {int} coordinate points',
+  async function (numberOfPoints) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(
+      NavigateToSiteDetailsPage.enterPolygonOSGB36CoordinatesPageOnly()
+    )
+
+    const defaultPoints = 3
+    const additionalPointsNeeded = numberOfPoints - defaultPoints
+    for (let i = 0; i < additionalPointsNeeded; i++) {
+      await this.actor.attemptsTo(ClickAddAnotherPoint.now())
+    }
+
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {
@@ -200,6 +229,37 @@ When(
   'the Continue button is clicked with providing any coordinates',
   async function () {
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When('the Continue button is clicked', async function () {
+  await this.actor.attemptsTo(ClickSaveAndContinue.now())
+})
+
+When('the Add another point button is clicked', async function () {
+  await this.actor.attemptsTo(ClickAddAnotherPoint.now())
+})
+
+When(
+  'the Remove button for Point {int} is clicked',
+  async function (pointNumber) {
+    await this.actor.attemptsTo(ClickRemovePointButton.forPoint(pointNumber))
+  }
+)
+
+When(
+  'the Continue button is clicked without providing any width',
+  async function () {
+    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  }
+)
+
+When(
+  'the {string} input for {string} is set to {string}',
+  async function (fieldType, point, invalidValue) {
+    await this.actor.attemptsTo(
+      SetCoordinateField.withValue(fieldType, point, invalidValue)
+    )
   }
 )
 
@@ -291,27 +351,11 @@ Then(
   }
 )
 
-When(
-  'the Continue button is clicked without providing any width',
-  async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
-  }
-)
-
 Then('the width error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
     EnsureErrorDisplayed.is(WidthOfCircularSitePage.widthError, errorMessage)
   )
 })
-
-When(
-  'the {string} input for {string} is set to {string}',
-  async function (fieldType, point, invalidValue) {
-    await this.actor.attemptsTo(
-      SetCoordinateField.withValue(fieldType, point, invalidValue)
-    )
-  }
-)
 
 Then(
   'the {string} error for {string} is {string}',
@@ -327,7 +371,6 @@ Then(
   async function (dataTable) {
     const errors = dataTable.hashes()
 
-    // Detect coordinate system based on field names
     const hasLatLongFields = errors.some(
       (error) =>
         (error.Field || error.field)?.includes('latitude') ||
@@ -346,6 +389,26 @@ Then(
   }
 )
 
-When('the Continue button is clicked', async function () {
-  await this.actor.attemptsTo(ClickSaveAndContinue.now())
-})
+Then(
+  'the point {int} eastings error should not exist',
+  async function (pointNumber) {
+    const errorLocator = EnterMultipleCoordinatesPage.eastingsError(
+      pointNumber - 1
+    )
+    await this.actor.attemptsTo(
+      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+    )
+  }
+)
+
+Then(
+  'the point {int} northings error should not exist',
+  async function (pointNumber) {
+    const errorLocator = EnterMultipleCoordinatesPage.northingsError(
+      pointNumber - 1
+    )
+    await this.actor.attemptsTo(
+      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+    )
+  }
+)

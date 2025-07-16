@@ -1,5 +1,5 @@
-import Task from '../base/task.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
+import Task from '../../base/task.js'
 
 export default class ClickConfirmAndSend extends Task {
   static now() {

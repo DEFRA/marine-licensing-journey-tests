@@ -6,7 +6,7 @@ import {
   Memory,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
-import ClickSaveAndContinue from '~/test-infrastructure/screenplay/interactions/click.save.and.continue'
+import ClickSaveAndContinue from '~/test-infrastructure/screenplay/interactions/button-interactions/click.save.and.continue'
 import EnsureErrorDisplayed from '~/test-infrastructure/screenplay/interactions/ensure.error'
 
 Given('the activity dates are valid', function () {

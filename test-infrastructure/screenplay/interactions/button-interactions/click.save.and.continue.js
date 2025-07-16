@@ -1,4 +1,4 @@
-import Task from '../base/task.js'
+import Task from '../../base/task.js'
 
 export default class ClickSaveAndContinue extends Task {
   async performAs(actor) {

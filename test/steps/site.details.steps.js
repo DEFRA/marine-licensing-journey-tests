@@ -4,6 +4,7 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickButton,
   ClickSaveAndContinue,
   CompleteProjectName,
   CompleteSiteDetails,
@@ -307,7 +308,7 @@ Then('the coordinates entry page remains displayed', async function () {
 When(
   'the Continue button is clicked without providing any coordinates',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 

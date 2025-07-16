@@ -1,4 +1,4 @@
-@issue=ML-19
+@issue=ML-19 @issue=ML-38
 Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites using OSGB36 coordinates
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites
@@ -48,3 +48,15 @@ Feature: Validation of polygon coordinates: preventing entry of invalid coordina
       | Northings | Start and end point |     12345678 | Northings of start and end point must be 6 or 7 digits                               |
       | Northings | Point 2             |    123456789 | Northings of point 2 must be 6 or 7 digits                                           |
       | Northings | Point 3             |   1234567890 | Northings of point 3 must be 6 or 7 digits                                           |
+
+  Scenario: Adding coordinate point after validation failure shows correct validation state
+    Given errors have been generated for the first 3 coordinate points
+    When the Add another point button is clicked
+    Then the point 4 eastings error should not exist
+    And the point 4 northings error should not exist
+
+  Scenario: Removing coordinate point with validation errors clears errors correctly
+    Given errors have been generated for the first 4 coordinate points
+    When the Remove button for Point 4 is clicked
+    Then the point 4 eastings error should not exist
+    And the point 4 northings error should not exist
