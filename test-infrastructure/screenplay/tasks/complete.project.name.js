@@ -15,6 +15,7 @@ export default class CompleteProjectName extends Task {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('project name'))
     }
     const browseTheWeb = actor.ability
+
     await browseTheWeb.sendKeys(
       ProjectNamePage.projectNameInput,
       exemption.projectName

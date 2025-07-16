@@ -10,18 +10,22 @@ export default class AuthenticateWithAPermanentUser extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
     const testUser = {
-      email: process.env.TEST_USER_EMAIL,
-      password: process.env.TEST_USER_PASSWORD
+      id: '38 51 93 67 55 42',
+      password: process.env.DEFRA_ID_USER_PASSWORD
     }
 
-    if (!testUser.email || !testUser.password) {
-      expect.fail(
-        'Missing TEST_USER_EMAIL or TEST_USER_PASSWORD environment variables'
-      )
+    if (!testUser.password) {
+      expect.fail('Missing DEFRA_ID_USER_PASSWORD environment variable')
     }
 
-    // This interaction is simplified as we don't have the real Defra ID login page locally.
-    // In a real-world scenario, this would involve filling in the username and password fields.
-    await browseTheWeb.click(DefraIdLoginPage.loginLinkForUser(testUser.email))
+    await browseTheWeb.setValue(DefraIdLoginPage.usernameField, testUser.id)
+    await browseTheWeb.setValue(
+      DefraIdLoginPage.passwordField,
+      testUser.password
+    )
+
+    await browseTheWeb.waitForEnabled(DefraIdLoginPage.signInButton)
+
+    await browseTheWeb.click(DefraIdLoginPage.signInButton)
   }
 }

@@ -166,4 +166,9 @@ export default class BrowseTheWeb extends Ability {
     const element = await this.getElement(locator)
     await element.setValue(value)
   }
+
+  async waitForEnabled(locator) {
+    const element = await this.getElement(locator)
+    await element.waitForEnabled()
+  }
 }
