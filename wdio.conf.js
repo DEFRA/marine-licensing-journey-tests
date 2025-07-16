@@ -16,6 +16,13 @@ if (process.env.HTTP_PROXY) {
   }
 }
 
+const getTags = () => {
+  if (process.env.ENVIRONMENT === 'test') {
+    return ['@real-defra-id']
+  }
+  return ['not @wip', 'not @bug', 'not @local-only']
+}
+
 export const config = {
   runner: 'local',
   baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
@@ -27,7 +34,7 @@ export const config = {
   specs: ['test/features/*.feature'],
   cucumberOpts: {
     require: ['test/steps/*.js'],
-    tags: ['not @wip', 'not @bug', 'not @local-only'],
+    tags: getTags(),
     timeout: 30000 // 30 seconds for CI environment
   },
 
@@ -110,24 +117,26 @@ export const config = {
       await browser.takeScreenshot()
     }
 
-    // Clean up any test users created during this scenario
-    if (global.testUsersCreated && global.testUsersCreated.length > 0) {
-      const { DefraIdStubUserManager } = await import(
-        './test-infrastructure/helpers/defra-id-stub-user-manager.js'
-      )
-      const userManager = new DefraIdStubUserManager(config.defraIdUrl)
+    if (process.env.ENVIRONMENT !== 'test') {
+      // Clean up any test users created during this scenario
+      if (global.testUsersCreated && global.testUsersCreated.length > 0) {
+        const { DefraIdStubUserManager } = await import(
+          './test-infrastructure/helpers/defra-id-stub-user-manager.js'
+        )
+        const userManager = new DefraIdStubUserManager(config.defraIdUrl)
 
-      for (const userId of global.testUsersCreated) {
-        try {
-          await userManager.expireTestUser(userId)
-          logUserCleanup(userId, true)
-        } catch (error) {
-          logUserCleanup(userId, false, error)
+        for (const userId of global.testUsersCreated) {
+          try {
+            await userManager.expireTestUser(userId)
+            logUserCleanup(userId, true)
+          } catch (error) {
+            logUserCleanup(userId, false, error)
+          }
         }
-      }
 
-      // Clear the list for next scenario
-      global.testUsersCreated = []
+        // Clear the list for next scenario
+        global.testUsersCreated = []
+      }
     }
   },
 
