@@ -4,7 +4,6 @@
  */
 
 import fs from 'fs'
-import path from 'path'
 import { extractScenariosFromContent } from '../../src/parsers/gherkin-parser.js'
 import {
   findFeatureFiles,
@@ -12,75 +11,108 @@ import {
 } from '../../src/processors/file-processor.js'
 import { validateScenario } from '../../src/validators/step-validators.js'
 
+const TEST_DATA = {
+  VALID_SIMPLE_FEATURE: `
+    Feature: User Login
+    
+    Scenario: Successful login
+      Given I am on the login page
+      When I enter valid credentials
+      Then I should be logged in
+  `,
+
+  INVALID_TOO_MANY_STEPS: `
+    Feature: Complex Process
+    
+    Scenario: Process with too many steps
+      Given I am logged in
+      And I navigate to the form
+      And I fill in field 1
+      When I submit the form
+      And I wait for processing
+      And I confirm the submission
+      And I check the status
+      Then I should see success
+      And I should get an email
+  `,
+
+  SHOPPING_CART_FEATURE: `
+    Feature: Shopping Cart
+    
+    Scenario: Add item to cart
+      Given I have an empty cart
+      When I add an item
+      Then the cart should contain 1 item
+      
+    Scenario: Remove item from cart
+      Given I have 1 item in my cart
+      When I remove the item
+      Then the cart should be empty
+  `,
+
+  EMPTY_CONTENT: '',
+
+  NO_SCENARIOS_FEATURE: `
+    Feature: Empty Feature
+    As a user
+    I want something
+    So that I can do something
+  `,
+
+  KNOWN_VALID_FEATURE: `
+    Feature: Simple Valid Feature
+    
+    Scenario: Short scenario
+      Given a simple setup
+      When an action occurs
+      Then verify result
+  `,
+
+  KNOWN_INVALID_FEATURE: `
+    Feature: Invalid Feature
+    
+    Scenario: Too many steps scenario
+      Given step 1
+      And step 2
+      And step 3
+      When step 4
+      And step 5
+      And step 6
+      And step 7
+      Then step 8
+      And step 9
+  `
+}
+
+const testWithTempFile = (content, maxSteps = 6) => {
+  const tempFile = `temp-${Date.now()}.feature`
+  fs.writeFileSync(tempFile, content)
+
+  try {
+    return lintFeatureFile(tempFile, maxSteps)
+  } finally {
+    fs.unlinkSync(tempFile)
+  }
+}
+
 describe('Simple Integration Tests', () => {
   describe('End-to-End Feature File Validation', () => {
     it('should validate a simple valid feature file', () => {
-      const validContent = `
-        Feature: User Login
-        
-        Scenario: Successful login
-          Given I am on the login page
-          When I enter valid credentials
-          Then I should be logged in
-      `
-
-      // Create a temporary file
-      const tempFile = 'temp-valid.feature'
-      fs.writeFileSync(tempFile, validContent)
-
-      try {
-        const violations = lintFeatureFile(tempFile, 6)
-        expect(violations).toBe(0)
-      } finally {
-        fs.unlinkSync(tempFile)
-      }
+      const violations = testWithTempFile(TEST_DATA.VALID_SIMPLE_FEATURE)
+      expect(violations).toBe(0)
     })
 
     it('should detect violations in a feature file with too many steps', () => {
-      const invalidContent = `
-        Feature: Complex Process
-        
-        Scenario: Process with too many steps
-          Given I am logged in
-          And I navigate to the form
-          And I fill in field 1
-          When I submit the form
-          And I wait for processing
-          And I confirm the submission
-          And I check the status
-          Then I should see success
-          And I should get an email
-      `
-
-      const tempFile = 'temp-invalid.feature'
-      fs.writeFileSync(tempFile, invalidContent)
-
-      try {
-        const violations = lintFeatureFile(tempFile, 6)
-        expect(violations).toBeGreaterThan(0)
-      } finally {
-        fs.unlinkSync(tempFile)
-      }
+      const violations = testWithTempFile(TEST_DATA.INVALID_TOO_MANY_STEPS)
+      expect(violations).toBeGreaterThan(0)
     })
   })
 
   describe('Parser Integration', () => {
     it('should parse and extract scenarios correctly', () => {
-      const content = `
-        Feature: Shopping Cart
-        
-        Scenario: Add item to cart
-          Given I have an empty cart
-          When I add an item
-          Then the cart should contain 1 item
-          
-        Scenario: Remove item from cart
-          Given I have 1 item in my cart
-          When I remove the item
-          Then the cart should be empty
-      `
-
-      const scenarios = extractScenariosFromContent(content)
+      const scenarios = extractScenariosFromContent(
+        TEST_DATA.SHOPPING_CART_FEATURE
+      )
 
       expect(scenarios).toHaveLength(2)
       expect(scenarios[0].name).toBe('Add item to cart')
@@ -159,33 +191,15 @@ describe('Simple Integration Tests', () => {
     })
   })
 
-  describe('Real Test Data Files', () => {
-    it('should validate the existing valid feature file', () => {
-      const validFeaturePath = path.join(
-        'tests',
-        'test-data',
-        'valid-features',
-        'simple-valid.feature'
-      )
-
-      if (fs.existsSync(validFeaturePath)) {
-        const violations = lintFeatureFile(validFeaturePath, 6)
-        expect(violations).toBe(0)
-      }
+  describe('Additional Validation Cases', () => {
+    it('should validate minimal valid feature', () => {
+      const violations = testWithTempFile(TEST_DATA.KNOWN_VALID_FEATURE)
+      expect(violations).toBe(0)
     })
 
-    it('should detect violations in the existing invalid feature file', () => {
-      const invalidFeaturePath = path.join(
-        'tests',
-        'test-data',
-        'invalid-features',
-        'too-many-steps.feature'
-      )
-
-      if (fs.existsSync(invalidFeaturePath)) {
-        const violations = lintFeatureFile(invalidFeaturePath, 6)
-        expect(violations).toBeGreaterThan(0)
-      }
+    it('should detect clear step count violations', () => {
+      const violations = testWithTempFile(TEST_DATA.KNOWN_INVALID_FEATURE)
+      expect(violations).toBeGreaterThan(0)
     })
   })
 
@@ -220,34 +234,13 @@ describe('Simple Integration Tests', () => {
 
   describe('Edge Cases', () => {
     it('should handle empty feature files', () => {
-      const emptyContent = ''
-      const tempFile = 'temp-empty.feature'
-      fs.writeFileSync(tempFile, emptyContent)
-
-      try {
-        const violations = lintFeatureFile(tempFile, 6)
-        expect(violations).toBe(0)
-      } finally {
-        fs.unlinkSync(tempFile)
-      }
+      const violations = testWithTempFile(TEST_DATA.EMPTY_CONTENT)
+      expect(violations).toBe(0)
     })
 
     it('should handle feature files with no scenarios', () => {
-      const noScenariosContent = `
-        Feature: Empty Feature
-        As a user
-        I want something
-        So that I can do something
-      `
-      const tempFile = 'temp-no-scenarios.feature'
-      fs.writeFileSync(tempFile, noScenariosContent)
-
-      try {
-        const violations = lintFeatureFile(tempFile, 6)
-        expect(violations).toBe(0)
-      } finally {
-        fs.unlinkSync(tempFile)
-      }
+      const violations = testWithTempFile(TEST_DATA.NO_SCENARIOS_FEATURE)
+      expect(violations).toBe(0)
     })
 
     it('should handle scenarios with no steps', () => {
