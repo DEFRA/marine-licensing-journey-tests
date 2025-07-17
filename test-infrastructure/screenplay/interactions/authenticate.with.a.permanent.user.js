@@ -1,6 +1,6 @@
 import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
-import { logOperation } from '~/test-infrastructure/capture/index.js'
 import { expect } from 'chai'
+import { logOperation } from '~/test-infrastructure/capture/index.js'
 import Task from '../base/task.js'
 
 export default class AuthenticateWithAPermanentUser extends Task {
