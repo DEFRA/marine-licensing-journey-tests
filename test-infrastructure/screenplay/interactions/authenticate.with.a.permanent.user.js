@@ -1,9 +1,10 @@
 import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
+import { logOperation } from '~/test-infrastructure/capture/index.js'
 import { expect } from 'chai'
 import Task from '../base/task.js'
 
 export default class AuthenticateWithAPermanentUser extends Task {
-  static aPermanentUser() {
+  static now() {
     return new AuthenticateWithAPermanentUser()
   }
 
@@ -27,5 +28,9 @@ export default class AuthenticateWithAPermanentUser extends Task {
     await browseTheWeb.waitForEnabled(DefraIdLoginPage.signInButton)
 
     await browseTheWeb.click(DefraIdLoginPage.signInButton)
+    logOperation(
+      'Authentication',
+      `Successfully authenticated as: ${testUser.id}`
+    )
   }
 }

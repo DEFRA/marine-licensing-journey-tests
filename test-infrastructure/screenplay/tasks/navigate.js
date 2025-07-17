@@ -19,21 +19,29 @@ export default class Navigate extends Task {
 
   async performAs(actor) {
     if (process.env.ENVIRONMENT === 'test') {
-      await actor.ability.navigateTo(this.url)
-      if (!actor.hasMemoryOf('isAuthenticated')) {
-        await actor.attemptsTo(AuthenticateWithAPermanentUser.aPermanentUser())
-        actor.remembers('isAuthenticated', true)
-      }
+      await this.authenticateWithRealDefraId(actor)
     } else {
-      if (!actor.hasMemoryOf('testUser')) {
-        const testUser = await actor.ability.registerTestUser(actor.name)
-        actor.remembers('testUser', testUser)
-      }
-      await actor.ability.navigateTo(this.url)
-      if (!actor.hasMemoryOf('isAuthenticated')) {
-        await actor.attemptsTo(AuthenticateWith.theTestUser())
-        actor.remembers('isAuthenticated', true)
-      }
+      await this.authenticateWithDefraIdStub(actor)
+    }
+  }
+
+  async authenticateWithRealDefraId(actor) {
+    await actor.ability.navigateTo(this.url)
+    if (!actor.hasMemoryOf('isAuthenticated')) {
+      await actor.attemptsTo(AuthenticateWithAPermanentUser.now())
+      actor.remembers('isAuthenticated', true)
+    }
+  }
+
+  async authenticateWithDefraIdStub(actor) {
+    if (!actor.hasMemoryOf('testUser')) {
+      const testUser = await actor.ability.registerTestUser(actor.name)
+      actor.remembers('testUser', testUser)
+    }
+    await actor.ability.navigateTo(this.url)
+    if (!actor.hasMemoryOf('isAuthenticated')) {
+      await actor.attemptsTo(AuthenticateWith.theTestUser())
+      actor.remembers('isAuthenticated', true)
     }
   }
 }
