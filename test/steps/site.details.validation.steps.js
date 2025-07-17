@@ -412,3 +412,27 @@ Then(
     )
   }
 )
+
+Then(
+  'the point {int} latitude error should not exist',
+  async function (pointNumber) {
+    const errorLocator = EnterMultipleCoordinatesPage.latitudeError(
+      pointNumber - 1
+    )
+    await this.actor.attemptsTo(
+      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+    )
+  }
+)
+
+Then(
+  'the point {int} longitude error should not exist',
+  async function (pointNumber) {
+    const errorLocator = EnterMultipleCoordinatesPage.longitudeError(
+      pointNumber - 1
+    )
+    await this.actor.attemptsTo(
+      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+    )
+  }
+)

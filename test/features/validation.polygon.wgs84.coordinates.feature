@@ -1,4 +1,4 @@
-@issue=ML-19
+@issue=ML-19 @issue=ML-38
 Feature: Validation of polygon coordinates: preventing entry of invalid coordinate values for polygon sites using WGS84 coordinates
   As an applicant
   I want to be notified when I have provided invalid coordinate values for polygon sites
@@ -42,3 +42,15 @@ Feature: Validation of polygon coordinates: preventing entry of invalid coordina
       | Longitude | Start and end point |     -1.39950 | Longitude of start and end point must include 6 decimal places, like -1.399500 |
       | Longitude | Point 2             |   -1.3995000 | Longitude of point 2 must include 6 decimal places, like -1.399500             |
       | Longitude | Point 3             |     -1.12345 | Longitude of point 3 must include 6 decimal places, like -1.399500             |
+
+  Scenario: Adding coordinate point after validation failure shows correct validation state
+    Given errors have been generated for the first 3 coordinate points
+    When the Add another point button is clicked
+    Then the point 4 latitude error should not exist
+    And the point 4 longitude error should not exist
+
+  Scenario: Removing coordinate point with validation errors clears errors correctly
+    Given errors have been generated for the first 4 coordinate points
+    When the Remove button for Point 4 is clicked
+    Then the point 4 latitude error should not exist
+    And the point 4 longitude error should not exist
