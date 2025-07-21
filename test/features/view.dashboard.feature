@@ -14,6 +14,7 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
     When the user navigates to the dashboard
     Then the message "You currently have no projects." is shown
 
+  @smoke
   Scenario: View dashboard with notifications in correct sort order
     Given the user has multiple notifications with different statuses and names
     When the user navigates to the dashboard
