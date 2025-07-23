@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "wdio.*.conf.js",
+    "test/steps/*.js",
+    "test-infrastructure/screenplay/index.js"
+  ],
+  "project": [
+    "test/**/*.js",
+    "test-infrastructure/**/*.js",
+    "wdio.*.conf.js",
+    "bin/**/*.js"
+  ],
+  "ignore": [
+    "test-infrastructure/screenplay/**/*",
+    "test-infrastructure/pages/**/*",
+    "test/steps/**/*",
+    "test-infrastructure/capture/**/*",
+    "wdio.*.conf.js",
+    "bin/gherkin-standards-validation/**/*"
+  ],
+  "ignoreDependencies": [
+    "@wdio/browserstack-service",
+    "@wdio/junit-reporter",
+    "@wdio/local-runner",
+    "@wdio/mocha-framework",
+    "esm-module-alias",
+    "husky",
+    "wdio-wait-for"
+  ]
+}
