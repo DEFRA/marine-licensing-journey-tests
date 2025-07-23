@@ -6,8 +6,9 @@ export default class HowDoYouWantToProvideCoordinatesPage {
 
   static getCoordinatesInputMethodSelector(coordinatesInputMethod) {
     if (coordinatesInputMethod === 'file-upload') return this.uploadCoordinates
-    if (coordinatesInputMethod === 'enter-manually')
+    if (coordinatesInputMethod === 'enter-manually') {
       return this.enterCoordinates
+    }
     return coordinatesInputMethod
   }
 }
