@@ -25,6 +25,14 @@ services:
     image: selenium/standalone-chrome:123.0
     ports:
       - 4444:4444
+      - 9222:9222
+    command: >
+      sh -c "
+        /opt/bin/entry_point.sh standalone 
+        --driver-configuration 'display-name=chrome' 
+        'max-sessions=5' 
+        'stereotype={\"browserName\": \"chrome\", \"goog:chromeOptions\": {\"args\": [\"--remote-debugging-address=0.0.0.0\", \"--remote-debugging-port=9222\"]}}'
+      "
 
   ################################################################################
   mongodb:
