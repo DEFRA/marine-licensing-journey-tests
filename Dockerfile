@@ -5,13 +5,11 @@ ENV TZ="Europe/London"
 USER root
 
 RUN apk add --no-cache \
-    openjdk17-jre-headless \
-    curl \
     aws-cli \
-    unzip
-
-# Install Playwright Chromium binary for CDP
-RUN mkdir -p /root/.cache/ms-playwright/chromium-1181/chrome-linux && \
+    curl \
+    openjdk17-jre-headless \
+    unzip && \
+    mkdir -p /root/.cache/ms-playwright/chromium-1181/chrome-linux && \
     curl -L -o /tmp/chromium-linux.zip https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1181/chromium-linux.zip && \
     unzip /tmp/chromium-linux.zip -d /tmp/ && \
     cp /tmp/chrome-linux/chrome /root/.cache/ms-playwright/chromium-1181/chrome-linux/chrome && \
