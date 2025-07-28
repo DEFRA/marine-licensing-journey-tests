@@ -62,9 +62,9 @@ We are delivering a **private beta** that enables **members of the public to sub
 - **🎬 Step Definitions** (`test/steps/`) - Bridge between Gherkin and Screenplay
 - **🎭 Screenplay Pattern** (`test-infrastructure/screenplay/`) - User-centric test automation
   - **Actor** - Represents the user performing actions
-  - **Abilities** - What the actor can do (browse web, authenticate with DEFRA ID)
-  - **Tasks** - High-level user goals (complete project name, apply for exemption)
-  - **Interactions** - Low-level actions (click, verify, ensure)
+  - **Abilities** - What the actor can do (browse web, authenticate with DEFRA ID, browse D365)
+  - **Tasks** - High-level user goals (complete project name, apply for exemption, login to D365)
+  - **Interactions** - Low-level actions (click, verify, ensure, launch D365)
 - **📍 Page Objects** (`test-infrastructure/pages/`) - Locators and selectors only
 
 ### **Browser Automation Architecture**
@@ -77,7 +77,8 @@ We are delivering a **private beta** that enables **members of the public to sub
 
 **Playwright** - External system integration
 
-- **D365 testing** - Microsoft Dynamics 365 case verification
+- **D365 testing** - Microsoft Dynamics 365 case verification with automatic authentication
+- **Smart authentication handling** - Automatic dialog detection and popup management
 - **Modern browser handling** - Superior OAuth and SPA support
 - **Independent contexts** - Isolated from main application tests
 
@@ -295,7 +296,35 @@ D365_USER_ID=<user-email-for-d365-login>
 D365_USER_PASSWORD=<user-password-for-d365-login>
 ```
 
-These variables are used by the `BrowseD365` ability to authenticate with Microsoft Dynamics 365 and verify that exemption notifications have been successfully submitted and are visible in the case management system.
+#### **Authentication Approaches**
+
+**Browser Automation (Default):** Uses the `LaunchD365` interaction with automatic authentication dialog handling:
+
+- **Automatic dialog handling** - Detects and clicks "Please sign in again" dialogs
+- **Popup window management** - Automatically closes authentication popup windows
+- **Session persistence** - Maintains D365 session throughout test execution
+- **Resilient authentication** - Works with D365's dynamic authentication challenges
+
+```javascript
+// D365 tests automatically handle authentication dialogs
+await this.actor.attemptsTo(LoginToD365.now())
+// ↳ Uses LaunchD365 interaction with dialog/popup handling
+```
+
+**OAuth2 Programmatic:** Alternative approach using access tokens (see `test-infrastructure/auth/README.md`):
+
+- **Token-based authentication** - No browser login automation required
+- **Environment variables** - Direct credential configuration
+- **Resource Owner Password Credentials** - Standard OAuth2 flow
+
+#### **Automatic Authentication Features**
+
+The `BrowseD365` ability and `LaunchD365` interaction automatically handle:
+
+- ✅ **"Please sign in again" dialogs** - Detected and clicked automatically
+- ✅ **Authentication popup windows** - Closed automatically without user intervention
+- ✅ **Session refresh prompts** - Handled transparently during test execution
+- ✅ **Secondary authentication dialogs** - Multiple dialog handling supported
 
 **Note:** D365 integration tests only run in integrated environments. They do not run locally or in development environments where D365 connectivity is not available.
 
@@ -315,6 +344,7 @@ docker ps
 **Common Issues:**
 
 - **Authentication failures**: Check DEFRA ID stub is running and accessible
+- **D365 authentication dialogs**: Tests automatically handle "Please sign in again" and popup windows
 - **Service not running**: Ensure target application is accessible at configured `baseUrl`
 - **Element not found**: Check page objects for correct selectors
 
