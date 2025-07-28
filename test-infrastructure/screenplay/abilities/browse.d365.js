@@ -16,7 +16,8 @@ export default class BrowseD365 {
     if (!this.browser) {
       this.browser = await chromium.launch({
         headless: process.env.HEADLESS === 'true',
-        devtools: false
+        devtools: false,
+        executablePath: '/usr/lib/chromium/chromium'
       })
       this.context = await this.browser.newContext()
       this.context.setDefaultTimeout(60000)
