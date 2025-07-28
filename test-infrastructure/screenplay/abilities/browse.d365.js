@@ -29,14 +29,14 @@ export default class BrowseD365 {
         ignoreHTTPSErrors: true
       })
 
-      this.context.setDefaultTimeout(180000)
-      this.context.setDefaultNavigationTimeout(180000)
+      this.context.setDefaultTimeout(60000)
+      this.context.setDefaultNavigationTimeout(60000)
       this.page = await this.context.newPage()
 
       // Set authentication header if token is available
       if (this.accessToken) {
         await this.page.setExtraHTTPHeaders({
-          'Authorization': `Bearer ${this.accessToken}`
+          Authorization: `Bearer ${this.accessToken}`
         })
       }
     }
@@ -49,7 +49,7 @@ export default class BrowseD365 {
     // If page already exists, update headers
     if (this.page) {
       await this.page.setExtraHTTPHeaders({
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       })
     }
   }
@@ -57,7 +57,6 @@ export default class BrowseD365 {
   async navigateToUrl(url) {
     const page = await this.launch()
     await page.goto(url)
-    await page.waitForLoadState('domcontentloaded')
   }
 
   async fillField(selector, value) {
