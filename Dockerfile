@@ -3,6 +3,7 @@ FROM node:22.13.1-alpine
 ENV TZ="Europe/London"
 ENV PLAYWRIGHT_BROWSERS_PATH=/usr
 ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/lib/chromium/chromium
+ENV HEADLESS=true
 
 USER root
 
