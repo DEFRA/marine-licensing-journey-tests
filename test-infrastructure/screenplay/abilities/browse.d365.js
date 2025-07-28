@@ -10,27 +10,54 @@ export default class BrowseD365 {
     this.browser = null
     this.context = null
     this.page = null
+    this.accessToken = null
   }
 
   async launch() {
     if (!this.browser) {
-      this.browser = await chromium.launch({
+      const launchOptions = {
         headless: process.env.HEADLESS === 'true',
-        devtools: false,
-        executablePath: '/usr/lib/chromium/chromium'
+        devtools: false
+      }
+
+      if (process.env.ENVIRONMENT === 'test') {
+        launchOptions.executablePath = '/usr/lib/chromium/chromium'
+      }
+
+      this.browser = await chromium.launch(launchOptions)
+      this.context = await this.browser.newContext({
+        ignoreHTTPSErrors: true
       })
-      this.context = await this.browser.newContext()
-      this.context.setDefaultTimeout(60000)
-      this.context.setDefaultNavigationTimeout(60000)
+
+      this.context.setDefaultTimeout(180000)
+      this.context.setDefaultNavigationTimeout(180000)
       this.page = await this.context.newPage()
+
+      // Set authentication header if token is available
+      if (this.accessToken) {
+        await this.page.setExtraHTTPHeaders({
+          'Authorization': `Bearer ${this.accessToken}`
+        })
+      }
     }
     return this.page
+  }
+
+  async setAuthenticationToken(accessToken) {
+    this.accessToken = accessToken
+
+    // If page already exists, update headers
+    if (this.page) {
+      await this.page.setExtraHTTPHeaders({
+        'Authorization': `Bearer ${accessToken}`
+      })
+    }
   }
 
   async navigateToUrl(url) {
     const page = await this.launch()
     await page.goto(url)
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
   }
 
   async fillField(selector, value) {
@@ -64,6 +91,7 @@ export default class BrowseD365 {
       this.browser = null
       this.context = null
       this.page = null
+      this.accessToken = null
     }
   }
 }

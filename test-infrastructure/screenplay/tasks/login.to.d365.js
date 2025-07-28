@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import D365Page from '../../pages/d365.page.js'
 import Task from '../base/task.js'
 
 export default class LoginToD365 extends Task {
@@ -14,36 +13,50 @@ export default class LoginToD365 extends Task {
       throw new Error('Actor must have BrowseD365 ability to login to D365')
     }
 
-    const credentials = this.getD365Credentials()
+    const accessToken = await this.getD365AccessToken()
+    await browseD365.setAuthenticationToken(accessToken)
     await browseD365.navigateToUrl(process.env.D365_URL)
-    await this.handleMicrosoftLogin(browseD365, credentials)
   }
 
-  getD365Credentials() {
+  async getD365AccessToken() {
     const userId = process.env.D365_USER_ID
     const password = process.env.D365_USER_PASSWORD
+    const tenantId = process.env.D365_TENANT_ID || 'defradev.onmicrosoft.com'
+    const clientId = process.env.D365_CLIENT_ID || '04b07795-8ddb-461a-bbee-02f9e1bf7b46' // Microsoft Office client ID
 
     if (!userId || !password) {
-      expect.fail(
-        'Missing D365_USER_ID or D365_USER_PASSWORD environment variables'
-      )
+      expect.fail('Missing D365_USER_ID or D365_USER_PASSWORD environment variables')
     }
 
-    return { userId, password }
-  }
+    try {
+      // Use Resource Owner Password Credentials (ROPC) flow
+      const tokenEndpoint = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`
 
-  async handleMicrosoftLogin(browseD365, credentials) {
-    if (await browseD365.isElementVisible(D365Page.usernameField)) {
-      await browseD365.fillField(D365Page.usernameField, credentials.userId)
-      await browseD365.clickElement(D365Page.nextButton)
-      await browseD365.fillField(D365Page.passwordField, credentials.password)
-      await browseD365.clickElement(D365Page.signInButton)
+      const formData = new URLSearchParams()
+      formData.append('grant_type', 'password')
+      formData.append('client_id', clientId)
+      formData.append('scope', 'https://marinelicensingdev.crm11.dynamics.com/.default')
+      formData.append('username', userId)
+      formData.append('password', password)
 
-      try {
-        await browseD365.clickElement(D365Page.staySignedInButton)
-      } catch (error) {
-        console.log('Stay signed in dialog not found, continuing...')
+      const response = await fetch(tokenEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        const error = await response.text()
+        expect.fail(`Failed to get access token: ${response.status} ${error}`)
       }
+
+      const tokenData = await response.json()
+      return tokenData.access_token
+
+    } catch (error) {
+      expect.fail(`OAuth2 token acquisition failed: ${error.message}`)
     }
   }
 }
