@@ -69,6 +69,11 @@ export default class BrowseD365 {
     await page.locator(selector).click()
   }
 
+  async clickByRole(role, name) {
+    const page = await this.launch()
+    await page.getByRole(role, { name }).click()
+  }
+
   async isElementVisible(selector) {
     const page = await this.launch()
     return await page.locator(selector).isVisible()

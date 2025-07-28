@@ -11,8 +11,7 @@ export default class LaunchD365 extends Task {
     if (!browseD365) {
       throw new Error('Actor must have BrowseD365 ability to launch D365')
     }
-
     await browseD365.navigateToUrl(process.env.D365_URL)
-    await browseD365.page.getByRole('button', { name: 'Sign In' }).click()
+    await browseD365.clickByRole('button', 'Sign In')
   }
 }
