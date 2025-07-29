@@ -1,5 +1,6 @@
-import Task from '../base/task.js'
 import { expect } from 'chai'
+import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
+import Task from '../base/task.js'
 
 export default class EnsureSiteDetails extends Task {
   static areCorrect() {
@@ -8,109 +9,95 @@ export default class EnsureSiteDetails extends Task {
 
   async performAs(actor) {
     const browseTheWeb = actor.ability
-    const siteDetails = this.getSiteDetailsData(actor)
-    await this.verifyMethodOfProvidingSiteLocation(browseTheWeb)
-    await this.verifyCoordinateSystem(browseTheWeb, siteDetails)
-    await this.verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails)
-    await this.verifyWidthOfCircularSite(browseTheWeb, siteDetails)
+    await this.verifyMethodOfProvidingSiteLocationDisplayed(browseTheWeb, actor)
+    await this.verifySiteDetailsAreDisplayed(browseTheWeb, actor)
   }
 
-  getSiteDetailsData(actor) {
+  async verifyMethodOfProvidingSiteLocationDisplayed(browseTheWeb, actor) {
     const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
 
-    if (!exemption) {
-      expect.Fail('No exemption data available for verification')
-    }
+    let expectedMethod
 
-    if (!exemption.siteDetails) {
-      expect.Fail('No site details data available for verification')
-    }
-
-    return exemption.siteDetails
-  }
-
-  async verifyMethodOfProvidingSiteLocation(browseTheWeb) {
-    const expectedMethod =
-      'Manually enter one set of coordinates and a width to create a circular site'
-
-    const valueElement = await browseTheWeb.getElement(
-      '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd'
-    )
-    await valueElement.waitForExist()
-
-    const actualValue = await valueElement.getText()
-
-    if (!actualValue.includes(expectedMethod)) {
-      expect.Fail(
-        `Expected method "${expectedMethod}" but found "${actualValue}"`
-      )
-    }
-  }
-
-  async verifyCoordinateSystem(browseTheWeb, siteDetails) {
-    let expectedSystem
-    if (siteDetails.coordinateSystem === 'WGS84') {
-      expectedSystem = 'WGS84 (World Geodetic System 1984)'
-    } else if (siteDetails.coordinateSystem === 'OSGB36') {
-      expectedSystem = 'OSGB36 (National Grid)'
+    if (siteDetails?.coordinatesEntryMethod === 'file-upload') {
+      expectedMethod = 'Upload a file with the coordinates of the site'
+    } else if (siteDetails?.siteType === 'circle') {
+      expectedMethod =
+        'Manually enter one set of coordinates and a width to create a circular site'
+    } else if (siteDetails?.siteType === 'boundary') {
+      expectedMethod =
+        'Enter multiple sets of coordinates to mark the boundary of the site'
     } else {
-      expect.Fail(`Unknown coordinate system: ${siteDetails.coordinateSystem}`)
-    }
-
-    const valueElement = await browseTheWeb.getElement(
-      '//dt[contains(text(), "Coordinate system")]/following-sibling::dd'
-    )
-    await valueElement.waitForExist()
-
-    const actualValue = await valueElement.getText()
-
-    if (!actualValue.includes(expectedSystem)) {
-      expect.Fail(
-        `Expected coordinate system "${expectedSystem}" but found "${actualValue}"`
+      expect.fail(
+        `Unable to determine expected method from actor's memory. Site details: ${JSON.stringify(siteDetails)}`
       )
     }
+
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.methodOfProvidingSiteLocationValue,
+      expectedMethod
+    )
   }
 
-  async verifyCoordinatesAtCentreOfSite(browseTheWeb, siteDetails) {
-    const { coordinateSystem, circleData } = siteDetails
+  async verifySiteDetailsAreDisplayed(browseTheWeb, actor) {
+    const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
 
-    let expectedCoordinates
-    if (coordinateSystem === 'WGS84') {
-      expectedCoordinates = `${circleData.latitude}, ${circleData.longitude}`
-    } else if (coordinateSystem === 'OSGB36') {
-      expectedCoordinates = `${circleData.eastings}, ${circleData.northings}`
+    if (siteDetails?.coordinatesEntryMethod === 'file-upload') {
+      await this.verifyFileUploadSiteDetails(browseTheWeb, actor)
     } else {
-      expect.Fail(`Unknown coordinate system: ${coordinateSystem}`)
-    }
-
-    const valueElement = await browseTheWeb.getElement(
-      '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd'
-    )
-    await valueElement.waitForExist()
-
-    const actualValue = await valueElement.getText()
-
-    if (!actualValue.includes(expectedCoordinates)) {
-      expect.Fail(
-        `Expected coordinates "${expectedCoordinates}" but found "${actualValue}"`
-      )
+      await this.verifyManualEntrySiteDetails(browseTheWeb, actor)
     }
   }
 
-  async verifyWidthOfCircularSite(browseTheWeb, siteDetails) {
-    const { circleData } = siteDetails
-    const expectedWidth = `${circleData.width} metres`
+  async verifyFileUploadSiteDetails(browseTheWeb, actor) {
+    const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
+    const expectedFileType = siteDetails?.fileType
 
-    const valueElement = await browseTheWeb.getElement(
-      '//dt[contains(text(), "Width of circular site")]/following-sibling::dd'
+    if (!expectedFileType) {
+      expect.fail(
+        `Unable to determine expected file type from actor's memory. Site details: ${JSON.stringify(siteDetails)}`
+      )
+    }
+
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.fileTypeValue,
+      expectedFileType
     )
-    await valueElement.waitForExist()
 
-    const actualValue = await valueElement.getText()
+    const fileUploadedElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.fileUploadedValue
+    )
+    const fileName = await fileUploadedElement.getText()
 
-    if (!actualValue.includes(expectedWidth)) {
-      expect.Fail(
-        `Expected width "${expectedWidth}" but found "${actualValue}"`
+    if (!fileName || fileName.trim() === '') {
+      expect.fail('Uploaded file name should be displayed but was empty')
+    }
+  }
+
+  async verifyManualEntrySiteDetails(browseTheWeb, actor) {
+    const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
+
+    if (!siteDetails) {
+      expect.fail(
+        "Unable to determine expected coordinate entry details from actor's memory"
+      )
+    }
+
+    await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinateSystemValue)
+
+    if (siteDetails.coordinatesEntryMethod === 'manual-circle') {
+      await browseTheWeb.isDisplayed(
+        ReviewSiteDetailsPage.coordinatesAtCentreOfSiteValue
+      )
+      await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.widthValue)
+    } else if (siteDetails.coordinatesEntryMethod === 'manual-boundary') {
+      await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinatesValue)
+    } else {
+      expect.fail(
+        `Unexpected coordinates entry method: ${siteDetails.coordinatesEntryMethod}`
       )
     }
   }

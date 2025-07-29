@@ -1,15 +1,15 @@
-@issue=ML-70 @issue=ML-69
+@issue=ML-70 @issue=ML-69 @issue=ML-74
 Feature: Upload coordinate file: The user can upload a KML or Shapefile containing coordinates for their site
   As an applicant
   I want to upload a file of coordinates for my site
   So that I can provide my site details easily and accurately
 
-  @smoke @kml
-  Scenario: Successfully upload a valid KML file
+  @smoke @kml @run-only
+  Scenario: Successfully upload a valid KML file and review site details
     Given an exemption notification with a valid KML file
     When completing the site details task
     Then the file is successfully processed
-    And the Upload a KML file page is displayed
+    And the site details review page shows the site details
 
   @kml
   Scenario: Spinner page displays during KML upload process
@@ -47,12 +47,12 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     When completing the site details task
     Then the file upload error "The selected file is empty" is displayed
 
-  @smoke @shapefile
-  Scenario: Successfully upload a valid Shapefile
+  @smoke @shapefile @run-only
+  Scenario: Successfully upload a valid Shapefile and review site details
     Given an exemption notification with a valid Shapefile
     When completing the site details task
     Then the file is successfully processed
-    And the Upload a Shapefile file page is displayed
+    And the site details review page shows the site details
 
   @shapefile
   Scenario: Spinner page displays during Shapefile upload process

@@ -265,7 +265,6 @@ When(
 Then('the site details review page shows the site details', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
-  await this.actor.attemptsTo(ClickSaveAndContinue.now())
 })
 
 Then(
