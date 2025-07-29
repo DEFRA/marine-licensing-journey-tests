@@ -284,34 +284,56 @@ export default class FileGenerator {
 
   static createSHPContent() {
     const header = Buffer.alloc(100)
+    // File code (9994)
     header.writeInt32BE(9994, 0)
-    header.writeInt32BE(50, 24)
+    // File length in 16-bit words (header: 50 words + record: 14 words = 64 words total)
+    header.writeInt32BE(64, 24)
+    // Version
     header.writeInt32LE(1000, 28)
+    // Shape type (1 = Point)
     header.writeInt32LE(1, 32)
 
-    header.writeDoubleLE(-1.0, 36)
-    header.writeDoubleLE(-1.0, 44)
-    header.writeDoubleLE(1.0, 52)
-    header.writeDoubleLE(1.0, 60)
+    // Bounding box (using actual test coordinates)
+    header.writeDoubleLE(-1.234567, 36)  // Xmin
+    header.writeDoubleLE(51.123456, 44)  // Ymin  
+    header.writeDoubleLE(-1.234567, 52)  // Xmax
+    header.writeDoubleLE(51.123456, 60)  // Ymax
 
-    const record = Buffer.alloc(12)
-    record.writeInt32BE(1, 0)
-    record.writeInt32BE(10, 4)
-    record.writeInt32LE(1, 8)
+    // Record header (8 bytes)
+    const recordHeader = Buffer.alloc(8)
+    recordHeader.writeInt32BE(1, 0)      // Record number
+    recordHeader.writeInt32BE(10, 4)     // Content length in 16-bit words (20 bytes = 10 words)
 
-    return Buffer.concat([header, record])
+    // Point record content (20 bytes)
+    const pointRecord = Buffer.alloc(20)
+    pointRecord.writeInt32LE(1, 0)           // Shape type (Point)
+    pointRecord.writeDoubleLE(-1.234567, 4) // X coordinate  
+    pointRecord.writeDoubleLE(51.123456, 12) // Y coordinate
+
+    return Buffer.concat([header, recordHeader, pointRecord])
   }
 
   static createSHXContent() {
     const header = Buffer.alloc(100)
+    // File code (9994)
     header.writeInt32BE(9994, 0)
+    // File length in 16-bit words (header: 50 words + index record: 4 words = 54 words total)
     header.writeInt32BE(54, 24)
+    // Version
     header.writeInt32LE(1000, 28)
+    // Shape type (1 = Point)
     header.writeInt32LE(1, 32)
 
+    // Bounding box (same as SHP file)
+    header.writeDoubleLE(-1.234567, 36)  // Xmin
+    header.writeDoubleLE(51.123456, 44)  // Ymin  
+    header.writeDoubleLE(-1.234567, 52)  // Xmax
+    header.writeDoubleLE(51.123456, 60)  // Ymax
+
+    // Index record (8 bytes)
     const record = Buffer.alloc(8)
-    record.writeInt32BE(50, 0)
-    record.writeInt32BE(10, 4)
+    record.writeInt32BE(50, 0)    // Offset to record in 16-bit words (after 100-byte header = 50 words)
+    record.writeInt32BE(10, 4)    // Content length in 16-bit words (20 bytes = 10 words)
 
     return Buffer.concat([header, record])
   }
@@ -347,41 +369,44 @@ export default class FileGenerator {
         ? file.content
         : Buffer.from(file.content)
 
+      // Calculate CRC32 for the file content
+      const crc32 = this.calculateCRC32(fileContent)
+
       const localHeader = Buffer.alloc(30 + fileName.length)
-      localHeader.writeUInt32LE(0x04034b50, 0)
-      localHeader.writeUInt16LE(20, 4)
-      localHeader.writeUInt16LE(0, 6)
-      localHeader.writeUInt16LE(0, 8)
-      localHeader.writeUInt16LE(0, 10)
-      localHeader.writeUInt16LE(0, 12)
-      localHeader.writeUInt32LE(0, 14)
-      localHeader.writeUInt32LE(fileContent.length, 18)
-      localHeader.writeUInt32LE(fileContent.length, 22)
-      localHeader.writeUInt16LE(fileName.length, 26)
-      localHeader.writeUInt16LE(0, 28)
+      localHeader.writeUInt32LE(0x04034b50, 0)  // Local file header signature
+      localHeader.writeUInt16LE(20, 4)          // Version needed to extract
+      localHeader.writeUInt16LE(0, 6)           // General purpose bit flag
+      localHeader.writeUInt16LE(0, 8)           // Compression method (none)
+      localHeader.writeUInt16LE(0, 10)          // Last mod file time
+      localHeader.writeUInt16LE(0, 12)          // Last mod file date
+      localHeader.writeUInt32LE(crc32, 14)      // CRC-32
+      localHeader.writeUInt32LE(fileContent.length, 18) // Compressed size
+      localHeader.writeUInt32LE(fileContent.length, 22) // Uncompressed size
+      localHeader.writeUInt16LE(fileName.length, 26)    // File name length
+      localHeader.writeUInt16LE(0, 28)          // Extra field length
       fileName.copy(localHeader, 30)
 
       zipData.push(localHeader)
       zipData.push(fileContent)
 
       const centralEntry = Buffer.alloc(46 + fileName.length)
-      centralEntry.writeUInt32LE(0x02014b50, 0)
-      centralEntry.writeUInt16LE(20, 4)
-      centralEntry.writeUInt16LE(20, 6)
-      centralEntry.writeUInt16LE(0, 8)
-      centralEntry.writeUInt16LE(0, 10)
-      centralEntry.writeUInt16LE(0, 12)
-      centralEntry.writeUInt16LE(0, 14)
-      centralEntry.writeUInt32LE(0, 16)
-      centralEntry.writeUInt32LE(fileContent.length, 20)
-      centralEntry.writeUInt32LE(fileContent.length, 24)
-      centralEntry.writeUInt16LE(fileName.length, 28)
-      centralEntry.writeUInt16LE(0, 30)
-      centralEntry.writeUInt16LE(0, 32)
-      centralEntry.writeUInt16LE(0, 34)
-      centralEntry.writeUInt16LE(0, 36)
-      centralEntry.writeUInt32LE(0, 38)
-      centralEntry.writeUInt32LE(offset, 42)
+      centralEntry.writeUInt32LE(0x02014b50, 0)      // Central directory header signature
+      centralEntry.writeUInt16LE(20, 4)              // Version made by
+      centralEntry.writeUInt16LE(20, 6)              // Version needed to extract
+      centralEntry.writeUInt16LE(0, 8)               // General purpose bit flag
+      centralEntry.writeUInt16LE(0, 10)              // Compression method
+      centralEntry.writeUInt16LE(0, 12)              // Last mod file time
+      centralEntry.writeUInt16LE(0, 14)              // Last mod file date
+      centralEntry.writeUInt32LE(crc32, 16)          // CRC-32
+      centralEntry.writeUInt32LE(fileContent.length, 20) // Compressed size
+      centralEntry.writeUInt32LE(fileContent.length, 24) // Uncompressed size
+      centralEntry.writeUInt16LE(fileName.length, 28)    // File name length
+      centralEntry.writeUInt16LE(0, 30)              // Extra field length
+      centralEntry.writeUInt16LE(0, 32)              // File comment length
+      centralEntry.writeUInt16LE(0, 34)              // Disk number start
+      centralEntry.writeUInt16LE(0, 36)              // Internal file attributes
+      centralEntry.writeUInt32LE(0, 38)              // External file attributes
+      centralEntry.writeUInt32LE(offset, 42)         // Relative offset of local header
       fileName.copy(centralEntry, 46)
 
       centralDir.push(centralEntry)
@@ -391,16 +416,35 @@ export default class FileGenerator {
     const centralDirData = Buffer.concat(centralDir)
 
     const endOfCentralDir = Buffer.alloc(22)
-    endOfCentralDir.writeUInt32LE(0x06054b50, 0)
-    endOfCentralDir.writeUInt16LE(0, 4)
-    endOfCentralDir.writeUInt16LE(0, 6)
-    endOfCentralDir.writeUInt16LE(files.length, 8)
-    endOfCentralDir.writeUInt16LE(files.length, 10)
-    endOfCentralDir.writeUInt32LE(centralDirData.length, 12)
-    endOfCentralDir.writeUInt32LE(offset, 16)
-    endOfCentralDir.writeUInt16LE(0, 20)
+    endOfCentralDir.writeUInt32LE(0x06054b50, 0)  // End of central dir signature
+    endOfCentralDir.writeUInt16LE(0, 4)           // Number of this disk
+    endOfCentralDir.writeUInt16LE(0, 6)           // Disk where central directory starts
+    endOfCentralDir.writeUInt16LE(files.length, 8)     // Number of central directory records on this disk
+    endOfCentralDir.writeUInt16LE(files.length, 10)    // Total number of central directory records
+    endOfCentralDir.writeUInt32LE(centralDirData.length, 12) // Size of central directory
+    endOfCentralDir.writeUInt32LE(offset, 16)     // Offset of start of central directory
+    endOfCentralDir.writeUInt16LE(0, 20)          // ZIP file comment length
 
     return Buffer.concat([...zipData, centralDirData, endOfCentralDir])
+  }
+
+  static calculateCRC32(buffer) {
+    // CRC32 polynomial: 0xEDB88320 (reversed IEEE 802.3)
+    const crcTable = []
+    for (let i = 0; i < 256; i++) {
+      let crc = i
+      for (let j = 0; j < 8; j++) {
+        crc = (crc & 1) ? (0xEDB88320 ^ (crc >>> 1)) : (crc >>> 1)
+      }
+      crcTable[i] = crc
+    }
+
+    let crc = 0xFFFFFFFF
+    for (let i = 0; i < buffer.length; i++) {
+      const byte = buffer[i]
+      crc = crcTable[(crc ^ byte) & 0xFF] ^ (crc >>> 8)
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0  // Convert to unsigned 32-bit
   }
 
   static writeFileAsync(filePath, content) {

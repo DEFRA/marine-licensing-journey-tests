@@ -23,7 +23,7 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     When completing the site details task
     Then the file upload error "The selected file contains a virus" is displayed
 
-  @kml
+  @kml@issue=ML-74
   Scenario: Uploading without selecting a KML file fails
     Given an exemption notification for KML file upload
     When navigating to the KML upload page and continuing without selecting a file
