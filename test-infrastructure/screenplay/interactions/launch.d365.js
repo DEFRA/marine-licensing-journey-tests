@@ -16,7 +16,7 @@ export default class LaunchD365 extends Task {
     await browseD365.takeScreenshot('D365 after launch')
 
     try {
-      await browseD365.clickByRole('button', 'Sign In')
+      await browseD365.clickByRole('button', 'Sign In', 15000)
       page.on('popup', async (popup) => {
         await popup.close()
       })
