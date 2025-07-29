@@ -38,17 +38,29 @@ export default class LoginToD365 extends Task {
     })
   }
 
+  validateD365Config(userId, password, clientId, tenantId) {
+    if (!userId) {
+      expect.fail('Missing D365_USER_ID environment variable')
+    }
+    if (!password) {
+      expect.fail('Missing D365_USER_PASSWORD environment variable')
+    }
+    if (!clientId) {
+      expect.fail('Missing D365_CLIENT_ID environment variable')
+    }
+    if (!tenantId) {
+      expect.fail('Missing D365_TENANT_ID environment variable')
+    }
+  }
+
   async getD365AccessToken() {
     const userId = process.env.D365_USER_ID
     const password = process.env.D365_USER_PASSWORD
-    const tenantId = 'defradev.onmicrosoft.com'
-    const clientId = '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
+    const tenantId = process.env.D365_TENANT_ID
+    const clientId = process.env.D365_CLIENT_ID
+    const scope = 'https://marinelicensingdev.crm11.dynamics.com/.default'
 
-    if (!userId || !password) {
-      expect.fail(
-        'Missing D365_USER_ID or D365_USER_PASSWORD environment variables'
-      )
-    }
+    this.validateD365Config(userId, password, clientId, tenantId)
 
     try {
       const tokenEndpoint = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`
@@ -56,10 +68,7 @@ export default class LoginToD365 extends Task {
       const formData = new URLSearchParams()
       formData.append('grant_type', 'password')
       formData.append('client_id', clientId)
-      formData.append(
-        'scope',
-        'https://marinelicensingdev.crm11.dynamics.com/.default'
-      )
+      formData.append('scope', scope)
       formData.append('username', userId)
       formData.append('password', password)
 
