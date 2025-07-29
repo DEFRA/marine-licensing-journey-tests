@@ -22,9 +22,8 @@ export default class LoginToD365 extends Task {
   async getD365AccessToken() {
     const userId = process.env.D365_USER_ID
     const password = process.env.D365_USER_PASSWORD
-    const tenantId = process.env.D365_TENANT_ID || 'defradev.onmicrosoft.com'
-    const clientId =
-      process.env.D365_CLIENT_ID || '04b07795-8ddb-461a-bbee-02f9e1bf7b46' // Microsoft Office client ID
+    const tenantId = 'defradev.onmicrosoft.com'
+    const clientId = '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
 
     if (!userId || !password) {
       expect.fail(
@@ -33,7 +32,6 @@ export default class LoginToD365 extends Task {
     }
 
     try {
-      // Use Resource Owner Password Credentials (ROPC) flow
       const tokenEndpoint = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`
 
       const formData = new URLSearchParams()
