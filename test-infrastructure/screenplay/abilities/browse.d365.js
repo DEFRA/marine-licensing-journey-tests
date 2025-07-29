@@ -1,5 +1,8 @@
 import { chromium } from 'playwright'
-import { takePlaywrightScreenshot } from '~/test-infrastructure/capture/index.js'
+import {
+  attachJson,
+  takePlaywrightScreenshot
+} from '~/test-infrastructure/capture/index.js'
 
 export default class BrowseD365 {
   static withPlaywright() {
@@ -11,6 +14,8 @@ export default class BrowseD365 {
     this.context = null
     this.page = null
     this.accessToken = null
+    this.networkRequests = []
+    this.networkResponses = []
   }
 
   async launch() {
@@ -43,7 +48,11 @@ export default class BrowseD365 {
 
       this.context.setDefaultTimeout(60000)
       this.context.setDefaultNavigationTimeout(60000)
+
       this.page = await this.context.newPage()
+
+      // Set up network monitoring for debugging
+      this.setupNetworkMonitoring()
 
       // Set authentication header if token is available
       if (this.accessToken) {
@@ -53,6 +62,68 @@ export default class BrowseD365 {
       }
     }
     return this.page
+  }
+
+  setupNetworkMonitoring() {
+    this.page.on('request', (request) => {
+      this.networkRequests.push({
+        timestamp: new Date().toISOString(),
+        method: request.method(),
+        url: request.url(),
+        headers: request.headers(),
+        postData: request.postData()
+      })
+    })
+
+    this.page.on('response', (response) => {
+      this.networkResponses.push({
+        timestamp: new Date().toISOString(),
+        status: response.status(),
+        statusText: response.statusText(),
+        url: response.url(),
+        headers: response.headers()
+      })
+    })
+
+    this.page.on('requestfailed', (request) => {
+      this.networkRequests.push({
+        timestamp: new Date().toISOString(),
+        method: request.method(),
+        url: request.url(),
+        failure: request.failure(),
+        headers: request.headers()
+      })
+    })
+  }
+
+  async captureNetworkDebuggingInfo() {
+    // Attach network requests and responses to allure report
+    attachJson(this.networkRequests, 'D365-Network-Requests')
+    attachJson(this.networkResponses, 'D365-Network-Responses')
+
+    // Capture page info
+    const pageInfo = {
+      url: this.page.url(),
+      title: await this.page.title().catch(() => 'Unknown'),
+      userAgent: await this.page
+        .evaluate(() => navigator.userAgent)
+        .catch(() => 'Unknown'),
+      timestamp: new Date().toISOString()
+    }
+    attachJson(pageInfo, 'D365-Page-Info')
+
+    // Capture any console errors
+    const consoleLogs = []
+    this.page.on('console', (msg) => {
+      consoleLogs.push({
+        type: msg.type(),
+        text: msg.text(),
+        timestamp: new Date().toISOString()
+      })
+    })
+    if (consoleLogs.length > 0) {
+      attachJson(consoleLogs, 'D365-Console-Logs')
+    }
   }
 
   async setAuthenticationToken(accessToken) {
@@ -69,6 +140,9 @@ export default class BrowseD365 {
   async navigateToUrl(url) {
     const page = await this.launch()
     await page.goto(url)
+
+    // Capture debugging info after navigation
+    await this.captureNetworkDebuggingInfo()
   }
 
   async fillField(selector, value) {
@@ -102,12 +176,19 @@ export default class BrowseD365 {
   }
 
   async close() {
+    // Capture final debugging info before closing
+    if (this.page) {
+      await this.captureNetworkDebuggingInfo()
+    }
+
     if (this.browser) {
       await this.browser.close()
       this.browser = null
       this.context = null
       this.page = null
       this.accessToken = null
+      this.networkRequests = []
+      this.networkResponses = []
     }
   }
 }

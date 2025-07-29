@@ -21,7 +21,7 @@ export default class ViewSubmittedExemptionNotification extends Task {
     const referenceSelector = D365Page.getCaseRecordLink(
       this.applicationReference
     )
-    await browseD365.takeScreenshot('D365 After Clicking Case Record')
+    await browseD365.takeScreenshot('D365 Before Clicking Case Record')
     await browseD365.clickElement(referenceSelector)
   }
 }

@@ -1,3 +1,4 @@
+import { attachJson } from '~/test-infrastructure/capture/index.js'
 import Task from '../base/task.js'
 
 export default class LaunchD365 extends Task {
@@ -14,6 +15,39 @@ export default class LaunchD365 extends Task {
     await browseD365.navigateToUrl(process.env.D365_URL)
     const page = await browseD365.launch()
     await browseD365.takeScreenshot('D365 after launch')
+
+    // Check for D365 error dialog with short timeout
+    const errorExists = await page
+      .locator('text=An error has occurred')
+      .isVisible({ timeout: 5000 })
+      .catch(() => false)
+    if (errorExists) {
+      await browseD365.takeScreenshot('D365-error-dialog')
+
+      // Try to capture technical details if available
+      const showDetailsButton = page.locator('text=Show Technical Details')
+      if (await showDetailsButton.isVisible().catch(() => false)) {
+        await showDetailsButton.click()
+        await browseD365.takeScreenshot('D365-technical-details')
+
+        // Capture any visible error details as JSON
+        const errorDetails = await page
+          .textContent('body')
+          .catch(() => 'Could not capture error details')
+        attachJson(
+          {
+            errorDetails,
+            url: page.url(),
+            timestamp: new Date().toISOString()
+          },
+          'D365-Error-Details'
+        )
+      }
+
+      throw new Error(
+        'D365 is showing an error dialog. Check screenshots and network logs for details.'
+      )
+    }
 
     try {
       await browseD365.clickByRole('button', 'Sign In', 15000)
