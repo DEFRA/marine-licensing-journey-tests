@@ -1,4 +1,4 @@
-import { After, Given, Then, When } from '@wdio/cucumber-framework'
+import { Given, Then, When } from '@wdio/cucumber-framework'
 import { browser } from '@wdio/globals'
 
 import {
@@ -24,7 +24,7 @@ import {
   Navigate
 } from '~/test-infrastructure/screenplay/index.js'
 
-import FileGenerator from '~/test-infrastructure/helpers/file-generator.js'
+import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
 import { FileUploadPage } from '~/test-infrastructure/pages/index.js'
 
 // ========================================
@@ -74,15 +74,10 @@ Given(
 )
 
 Given('an exemption notification with KML file too large', async function () {
-  this.generatedFilePath = await FileGenerator.generateTemporaryLargeFile(
-    'kml-file-too-large',
-    51
-  )
-
   this.actor = new Actor('David')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withKMLLargeFile(this.generatedFilePath)
+    ApplyForExemption.withKMLLargeFile(CoordinateFiles.LARGE_KML)
   )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
@@ -90,13 +85,10 @@ Given('an exemption notification with KML file too large', async function () {
 })
 
 Given('an exemption notification with empty KML file', async function () {
-  this.generatedFilePath =
-    FileGenerator.generateTemporaryEmptyFile('empty-kml-file')
-
   this.actor = new Actor('Emily')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withKMLEmptyFile(this.generatedFilePath)
+    ApplyForExemption.withKMLEmptyFile(CoordinateFiles.EMPTY_KML)
   )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
@@ -167,15 +159,10 @@ Given(
 )
 
 Given('an exemption notification with Shapefile too large', async function () {
-  this.generatedFilePath = await FileGenerator.generateTemporaryLargeShapefile(
-    'shapefile-too-large',
-    51
-  )
-
   this.actor = new Actor('David')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withShapefileLargeFile(this.generatedFilePath)
+    ApplyForExemption.withShapefileLargeFile(CoordinateFiles.LARGE_SHAPEFILE)
   )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
@@ -183,13 +170,10 @@ Given('an exemption notification with Shapefile too large', async function () {
 })
 
 Given('an exemption notification with empty Shapefile', async function () {
-  this.generatedFilePath =
-    FileGenerator.generateTemporaryEmptyShapefile('empty-shapefile')
-
   this.actor = new Actor('Emily')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withShapefileEmptyFile(this.generatedFilePath)
+    ApplyForExemption.withShapefileEmptyFile(CoordinateFiles.EMPTY_SHAPEFILE)
   )
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
@@ -290,85 +274,4 @@ Then(
 
 Then('the spinner page displays during upload process', async function () {
   await this.actor.ability.isDisplayed(FileUploadPage.spinner)
-})
-
-// ========================================
-// LEGACY STEP DEFINITIONS (for backward compatibility)
-// ========================================
-
-Given('an exemption notification with a file with a virus', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withVirusUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
-
-Given('an exemption notification for file upload', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withFileUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
-
-Given('an exemption notification with wrong file type', async function () {
-  this.actor = new Actor('Charlie')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withWrongFileType())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
-
-Given('an exemption notification with file too large', async function () {
-  this.generatedFilePath = await FileGenerator.generateTemporaryLargeFile(
-    'file-too-large',
-    51
-  )
-
-  this.actor = new Actor('David')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withLargeFile(this.generatedFilePath))
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
-
-Given('an exemption notification with empty file', async function () {
-  this.generatedFilePath =
-    FileGenerator.generateTemporaryEmptyFile('empty-file')
-
-  this.actor = new Actor('Emily')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withEmptyFile(this.generatedFilePath))
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
-
-When(
-  'navigating to the file upload page and continuing without selecting a file',
-  async function () {
-    await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
-      this.actor.ability,
-      'file-upload'
-    )
-
-    await WhichTypeOfFileDoYouWantToUploadPageInteractions.selectFileTypeAndContinue(
-      this.actor.ability,
-      'Shapefile'
-    )
-
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
-  }
-)
-
-After(function () {
-  if (this.generatedFilePath) {
-    FileGenerator.cleanupFile(this.generatedFilePath)
-    this.generatedFilePath = null
-  }
 })

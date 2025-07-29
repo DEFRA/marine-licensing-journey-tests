@@ -1,4 +1,3 @@
-import FileGenerator from '../../helpers/file-generator.js'
 import {
   ActivityDescriptionModel,
   FileTypeModel,
@@ -124,13 +123,19 @@ export default class ExemptionFactory {
 
   static createShapefileUpload() {
     return this.createFileUploadBase('shapefile', {
-      generateFile: () => FileGenerator.generateTemporaryValidShapefile()
+      filePath: 'test/resources/mygeodata.zip'
     })
   }
 
   static createShapefileVirusUpload() {
     return this.createFileUploadBase('shapefile', {
-      generateFile: () => FileGenerator.generateTemporaryVirusShapefile()
+      filePath: 'test/resources/mygeodata-virus.zip'
+    })
+  }
+
+  static createShapefileLargeUpload() {
+    return this.createFileUploadBase('shapefile', {
+      filePath: 'test/resources/mygeodata-large.zip'
     })
   }
 

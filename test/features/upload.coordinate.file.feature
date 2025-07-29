@@ -4,7 +4,7 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
   I want to upload a file of coordinates for my site
   So that I can provide my site details easily and accurately
 
-  @smoke @kml @run-only
+  @smoke @kml
   Scenario: Successfully upload a valid KML file and review site details
     Given an exemption notification with a valid KML file
     When completing the site details task
