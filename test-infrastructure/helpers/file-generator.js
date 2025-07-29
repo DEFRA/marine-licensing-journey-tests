@@ -103,31 +103,42 @@ export default class FileGenerator {
   }
 
   static generateValidShapefile(filePath) {
-    const zipContent = this.createShapefileZipContent()
-    return this.createFileWithContent(
+    const staticShapefilePath = 'test/resources/mygeodata.zip'
+    return this.copyStaticFile(
+      staticShapefilePath,
       filePath,
-      zipContent,
       'Shapefile',
       'valid'
     )
   }
 
   static generateVirusShapefile(filePath) {
-    const zipContent = this.createShapefileZipContent('virus-shapefile')
-    return this.createFileWithContent(
+    // For virus testing, just use the static shapefile with a virus filename
+    // The virus detection stub works based on filename containing "virus"
+    const staticShapefilePath = 'test/resources/mygeodata.zip'
+    return this.copyStaticFile(
+      staticShapefilePath,
       filePath,
-      zipContent,
       'Shapefile',
       'virus'
     )
   }
 
   static generateLargeShapefile(filePath, targetSizeMB = 51) {
-    return this.createLargeFileWithContent(
+    const staticShapefilePath = 'test/resources/mygeodata.zip'
+    const targetSizeBytes = targetSizeMB * 1024 * 1024
+
+    // Read the base file and pad it to reach target size
+    const baseContent = fs.readFileSync(staticShapefilePath)
+    const paddingNeeded = Math.max(0, targetSizeBytes - baseContent.length)
+    const padding = Buffer.alloc(paddingNeeded, 0)
+    const largeContent = Buffer.concat([baseContent, padding])
+
+    return this.createFileWithContent(
       filePath,
-      (size) => this.createLargeShapefileZipContent(size),
-      targetSizeMB,
-      'Shapefile'
+      largeContent,
+      'Shapefile',
+      'large'
     )
   }
 
@@ -136,10 +147,11 @@ export default class FileGenerator {
   }
 
   static generateGenericErrorShapefile(filePath) {
-    const zipContent = this.createShapefileZipContent('upload-error-trigger')
-    return this.createFileWithContent(
+    // Use the valid shapefile but with a trigger name for backend error simulation
+    const staticShapefilePath = 'test/resources/mygeodata.zip'
+    return this.copyStaticFile(
+      staticShapefilePath,
       filePath,
-      zipContent,
       'Shapefile',
       'generic error trigger'
     )
@@ -239,212 +251,18 @@ export default class FileGenerator {
     }
   }
 
-  static createShapefileZipContent(baseName = 'test-shapefile') {
-    const shpContent = this.createSHPContent()
-    const shxContent = this.createSHXContent()
-    const dbfContent = this.createDBFContent()
-    const prjContent = this.createPRJContent()
-
-    return this.createZipBuffer([
-      { name: `${baseName}.shp`, content: shpContent },
-      { name: `${baseName}.shx`, content: shxContent },
-      { name: `${baseName}.dbf`, content: dbfContent },
-      { name: `${baseName}.prj`, content: prjContent }
-    ])
-  }
-
-  static createLargeShapefileZipContent(targetSizeMB) {
-    const targetSizeBytes = targetSizeMB * 1024 * 1024
-
-    const shpContent = this.createSHPContent()
-    const shxContent = this.createSHXContent()
-    const dbfContent = this.createDBFContent()
-    const prjContent = this.createPRJContent()
-
-    const basicSize =
-      shpContent.length +
-      shxContent.length +
-      dbfContent.length +
-      prjContent.length +
-      1000
-    const paddingNeeded = Math.max(0, targetSizeBytes - basicSize)
-
-    const largeSHPContent = Buffer.concat([
-      shpContent,
-      Buffer.alloc(paddingNeeded, 0)
-    ])
-
-    return this.createZipBuffer([
-      { name: 'large-shapefile.shp', content: largeSHPContent },
-      { name: 'large-shapefile.shx', content: shxContent },
-      { name: 'large-shapefile.dbf', content: dbfContent },
-      { name: 'large-shapefile.prj', content: prjContent }
-    ])
-  }
-
-  static createSHPContent() {
-    const header = Buffer.alloc(100)
-    // File code (9994)
-    header.writeInt32BE(9994, 0)
-    // File length in 16-bit words (header: 50 words + record: 14 words = 64 words total)
-    header.writeInt32BE(64, 24)
-    // Version
-    header.writeInt32LE(1000, 28)
-    // Shape type (1 = Point)
-    header.writeInt32LE(1, 32)
-
-    // Bounding box (using actual test coordinates)
-    header.writeDoubleLE(-1.234567, 36) // Xmin
-    header.writeDoubleLE(51.123456, 44) // Ymin
-    header.writeDoubleLE(-1.234567, 52) // Xmax
-    header.writeDoubleLE(51.123456, 60) // Ymax
-
-    // Record header (8 bytes)
-    const recordHeader = Buffer.alloc(8)
-    recordHeader.writeInt32BE(1, 0) // Record number
-    recordHeader.writeInt32BE(10, 4) // Content length in 16-bit words (20 bytes = 10 words)
-
-    // Point record content (20 bytes)
-    const pointRecord = Buffer.alloc(20)
-    pointRecord.writeInt32LE(1, 0) // Shape type (Point)
-    pointRecord.writeDoubleLE(-1.234567, 4) // X coordinate
-    pointRecord.writeDoubleLE(51.123456, 12) // Y coordinate
-
-    return Buffer.concat([header, recordHeader, pointRecord])
-  }
-
-  static createSHXContent() {
-    const header = Buffer.alloc(100)
-    // File code (9994)
-    header.writeInt32BE(9994, 0)
-    // File length in 16-bit words (header: 50 words + index record: 4 words = 54 words total)
-    header.writeInt32BE(54, 24)
-    // Version
-    header.writeInt32LE(1000, 28)
-    // Shape type (1 = Point)
-    header.writeInt32LE(1, 32)
-
-    // Bounding box (same as SHP file)
-    header.writeDoubleLE(-1.234567, 36) // Xmin
-    header.writeDoubleLE(51.123456, 44) // Ymin
-    header.writeDoubleLE(-1.234567, 52) // Xmax
-    header.writeDoubleLE(51.123456, 60) // Ymax
-
-    // Index record (8 bytes)
-    const record = Buffer.alloc(8)
-    record.writeInt32BE(50, 0) // Offset to record in 16-bit words (after 100-byte header = 50 words)
-    record.writeInt32BE(10, 4) // Content length in 16-bit words (20 bytes = 10 words)
-
-    return Buffer.concat([header, record])
-  }
-
-  static createDBFContent() {
-    const header = Buffer.alloc(32)
-    header.writeUInt8(3, 0)
-    header.writeUInt8(125, 1)
-    header.writeUInt8(1, 2)
-    header.writeUInt8(1, 3)
-    header.writeUInt32LE(1, 4)
-    header.writeUInt16LE(33, 8)
-    header.writeUInt16LE(1, 10)
-
-    const terminator = Buffer.from([0x0d])
-    return Buffer.concat([header, terminator])
-  }
-
-  static createPRJContent() {
-    return Buffer.from(
-      `GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]`
+  static logFileCreation(filePath, targetSizeMB) {
+    const stats = fs.statSync(filePath)
+    const actualSizeMB = stats.size / (1024 * 1024)
+    logOperation(
+      'File Generation',
+      `Generated large file: ${filePath} (${actualSizeMB.toFixed(2)} MB)`
     )
   }
 
-  static createZipBuffer(files) {
-    const zipData = []
-    const centralDir = []
-    let offset = 0
-
-    for (const file of files) {
-      const fileName = Buffer.from(file.name)
-      const fileContent = Buffer.isBuffer(file.content)
-        ? file.content
-        : Buffer.from(file.content)
-
-      // Calculate CRC32 for the file content
-      const crc32 = this.calculateCRC32(fileContent)
-
-      const localHeader = Buffer.alloc(30 + fileName.length)
-      localHeader.writeUInt32LE(0x04034b50, 0) // Local file header signature
-      localHeader.writeUInt16LE(20, 4) // Version needed to extract
-      localHeader.writeUInt16LE(0, 6) // General purpose bit flag
-      localHeader.writeUInt16LE(0, 8) // Compression method (none)
-      localHeader.writeUInt16LE(0, 10) // Last mod file time
-      localHeader.writeUInt16LE(0, 12) // Last mod file date
-      localHeader.writeUInt32LE(crc32, 14) // CRC-32
-      localHeader.writeUInt32LE(fileContent.length, 18) // Compressed size
-      localHeader.writeUInt32LE(fileContent.length, 22) // Uncompressed size
-      localHeader.writeUInt16LE(fileName.length, 26) // File name length
-      localHeader.writeUInt16LE(0, 28) // Extra field length
-      fileName.copy(localHeader, 30)
-
-      zipData.push(localHeader)
-      zipData.push(fileContent)
-
-      const centralEntry = Buffer.alloc(46 + fileName.length)
-      centralEntry.writeUInt32LE(0x02014b50, 0) // Central directory header signature
-      centralEntry.writeUInt16LE(20, 4) // Version made by
-      centralEntry.writeUInt16LE(20, 6) // Version needed to extract
-      centralEntry.writeUInt16LE(0, 8) // General purpose bit flag
-      centralEntry.writeUInt16LE(0, 10) // Compression method
-      centralEntry.writeUInt16LE(0, 12) // Last mod file time
-      centralEntry.writeUInt16LE(0, 14) // Last mod file date
-      centralEntry.writeUInt32LE(crc32, 16) // CRC-32
-      centralEntry.writeUInt32LE(fileContent.length, 20) // Compressed size
-      centralEntry.writeUInt32LE(fileContent.length, 24) // Uncompressed size
-      centralEntry.writeUInt16LE(fileName.length, 28) // File name length
-      centralEntry.writeUInt16LE(0, 30) // Extra field length
-      centralEntry.writeUInt16LE(0, 32) // File comment length
-      centralEntry.writeUInt16LE(0, 34) // Disk number start
-      centralEntry.writeUInt16LE(0, 36) // Internal file attributes
-      centralEntry.writeUInt32LE(0, 38) // External file attributes
-      centralEntry.writeUInt32LE(offset, 42) // Relative offset of local header
-      fileName.copy(centralEntry, 46)
-
-      centralDir.push(centralEntry)
-      offset += localHeader.length + fileContent.length
-    }
-
-    const centralDirData = Buffer.concat(centralDir)
-
-    const endOfCentralDir = Buffer.alloc(22)
-    endOfCentralDir.writeUInt32LE(0x06054b50, 0) // End of central dir signature
-    endOfCentralDir.writeUInt16LE(0, 4) // Number of this disk
-    endOfCentralDir.writeUInt16LE(0, 6) // Disk where central directory starts
-    endOfCentralDir.writeUInt16LE(files.length, 8) // Number of central directory records on this disk
-    endOfCentralDir.writeUInt16LE(files.length, 10) // Total number of central directory records
-    endOfCentralDir.writeUInt32LE(centralDirData.length, 12) // Size of central directory
-    endOfCentralDir.writeUInt32LE(offset, 16) // Offset of start of central directory
-    endOfCentralDir.writeUInt16LE(0, 20) // ZIP file comment length
-
-    return Buffer.concat([...zipData, centralDirData, endOfCentralDir])
-  }
-
-  static calculateCRC32(buffer) {
-    // CRC32 polynomial: 0xEDB88320 (reversed IEEE 802.3)
-    const crcTable = []
-    for (let i = 0; i < 256; i++) {
-      let crc = i
-      for (let j = 0; j < 8; j++) {
-        crc = crc & 1 ? 0xedb88320 ^ (crc >>> 1) : crc >>> 1
-      }
-      crcTable[i] = crc
-    }
-
-    let crc = 0xffffffff
-    for (let i = 0; i < buffer.length; i++) {
-      const byte = buffer[i]
-      crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8)
-    }
-    return (crc ^ 0xffffffff) >>> 0 // Convert to unsigned 32-bit
+  static createTimestampedPath(baseName, extension = '.kml') {
+    const timestamp = Date.now()
+    return `test/resources/generated-${baseName}-${timestamp}${extension}`
   }
 
   static writeFileAsync(filePath, content) {
@@ -459,17 +277,25 @@ export default class FileGenerator {
     })
   }
 
-  static createTimestampedPath(baseName, extension = '.kml') {
-    const timestamp = Date.now()
-    return `test/resources/generated-${baseName}-${timestamp}${extension}`
-  }
+  // New helper method for copying static files
+  static copyStaticFile(sourcePath, targetPath, fileType, description) {
+    try {
+      this.ensureDirectoryExists(targetPath)
 
-  static logFileCreation(filePath, targetSizeMB) {
-    const stats = fs.statSync(filePath)
-    const actualSizeMB = stats.size / (1024 * 1024)
-    logOperation(
-      'File Generation',
-      `Generated large file: ${filePath} (${actualSizeMB.toFixed(2)} MB)`
-    )
+      if (!fs.existsSync(sourcePath)) {
+        expect.fail(`Static test file not found: ${sourcePath}`)
+      }
+
+      fs.copyFileSync(sourcePath, targetPath)
+
+      const stats = fs.statSync(targetPath)
+      logOperation(
+        'File Generation',
+        `Copied ${description} ${fileType}: ${sourcePath} -> ${targetPath} (${stats.size} bytes)`
+      )
+      return targetPath
+    } catch (error) {
+      expect.fail(`Failed to copy ${description} ${fileType}: ${error.message}`)
+    }
   }
 }

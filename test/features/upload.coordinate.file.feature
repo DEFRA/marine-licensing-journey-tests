@@ -11,6 +11,13 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Then the file is successfully processed
     And the site details review page shows the site details
 
+  @smoke @shapefile
+  Scenario: Successfully upload a valid Shapefile and review site details
+    Given an exemption notification with a valid Shapefile
+    When completing the site details task
+    Then the file is successfully processed
+    And the site details review page shows the site details
+
   @kml
   Scenario: Spinner page displays during KML upload process
     Given an exemption notification with a valid KML file
@@ -23,7 +30,7 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     When completing the site details task
     Then the file upload error "The selected file contains a virus" is displayed
 
-  @kml@issue=ML-74
+  @kml
   Scenario: Uploading without selecting a KML file fails
     Given an exemption notification for KML file upload
     When navigating to the KML upload page and continuing without selecting a file
@@ -46,13 +53,6 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Given an exemption notification with empty KML file
     When completing the site details task
     Then the file upload error "The selected file is empty" is displayed
-
-  @smoke @shapefile @run-only
-  Scenario: Successfully upload a valid Shapefile and review site details
-    Given an exemption notification with a valid Shapefile
-    When completing the site details task
-    Then the file is successfully processed
-    And the site details review page shows the site details
 
   @shapefile
   Scenario: Spinner page displays during Shapefile upload process
