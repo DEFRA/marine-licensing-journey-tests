@@ -60,6 +60,8 @@ jobs:
           timeout 60 bash -c 'until curl -f http://localhost:4444/wd/hub/status; do sleep 5; done'
           echo "Waiting for backend to be ready..."
           timeout 120 bash -c 'until curl -f http://localhost:3001/health; do sleep 5; done'
+          echo "Waiting for Defra ID stub to be ready..."
+          timeout 120 bash -c 'until curl -f http://localhost:3200/health; do sleep 5; done'
           echo "Waiting for frontend to be ready..."
           timeout 120 bash -c 'until curl -f http://localhost:3000/health; do sleep 5; done'
           echo "All services are ready!"
@@ -70,6 +72,7 @@ jobs:
           echo "✅ Selenium Chrome: $(curl -s http://localhost:4444/wd/hub/status | jq -r .ready)"
           echo "✅ Frontend Health: $(curl -s http://localhost:3000/health || echo 'FAILED')"
           echo "✅ Backend Health: $(curl -s http://localhost:3001/health || echo 'FAILED')"
+          echo "✅ Defra ID Stub: $(curl -s http://localhost:3200/health || echo 'FAILED')"
           echo "✅ LocalStack: $(curl -s http://localhost:4566/health | jq -r .status || echo 'FAILED')"
           echo "✅ MongoDB: $(curl -s http://localhost:27017 >/dev/null && echo 'RUNNING' || echo 'FAILED')"
           echo "✅ Redis: $(redis-cli -h localhost -p 6379 ping 2>/dev/null || echo 'FAILED')"
@@ -116,6 +119,9 @@ jobs:
           echo ""
           echo "=== Backend Logs ==="
           docker compose logs marine-licensing-backend || echo "Backend container not found"
+          echo ""
+          echo "=== Defra ID Stub Logs ==="
+          docker compose logs defra-id-stub || echo "Defra ID stub container not found"
           echo ""
           echo "=== Selenium Chrome Logs ==="
           docker compose logs selenium-chrome || echo "Selenium container not found"

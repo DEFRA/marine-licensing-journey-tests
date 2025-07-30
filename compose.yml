@@ -64,6 +64,24 @@ services:
       retries: 5
   ################################################################################
   #
+  # Authentication Services
+  #
+  ################################################################################
+  defra-id-stub:
+    image: defradigital/cdp-defra-id-stub:latest
+    ports:
+      - 3200:3200
+    environment:
+      - PORT=3200
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  ################################################################################
+  #
   # Marine Licensing Application Services
   #
   ################################################################################
@@ -78,6 +96,8 @@ services:
       marine-licensing-backend:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      defra-id-stub:
         condition: service_healthy
     ports:
       - 3000:3000
