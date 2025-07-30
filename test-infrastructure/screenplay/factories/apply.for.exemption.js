@@ -79,7 +79,9 @@ export default class ApplyForExemption extends BaseBuilder {
   }
 
   static withSolentTestShapefileUpload() {
-    return new ApplyForExemption(ExemptionFactory.createSolentTestShapefileUpload())
+    return new ApplyForExemption(
+      ExemptionFactory.createSolentTestShapefileUpload()
+    )
   }
 
   static withShapefileVirusUpload() {
