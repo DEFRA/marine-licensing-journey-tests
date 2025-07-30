@@ -98,9 +98,7 @@ export default class EnsureSiteDetails extends Task {
     } else if (siteDetails.siteType === 'boundary') {
       await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinatesValue)
     } else {
-      expect.fail(
-        `Unexpected site type: ${siteDetails.siteType}`
-      )
+      expect.fail(`Unexpected site type: ${siteDetails.siteType}`)
     }
   }
 
