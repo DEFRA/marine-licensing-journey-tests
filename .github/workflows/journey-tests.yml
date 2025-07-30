@@ -76,6 +76,8 @@ jobs:
           echo "✅ LocalStack: $(curl -s http://localhost:4566/health | jq -r .status || echo 'FAILED')"
           echo ""
           echo "=== Defra ID Stub User Registration Test ==="
+          echo "Checking if user registration init container completed..."
+          docker compose ps defra-id-user-init
           echo "Testing dynamic user registration endpoint..."
           curl -s -X POST -H "Content-Type: application/json" \
             -d '{"userId":"test-connection","email":"test@example.com","firstName":"Test","lastName":"Connection","loa":"1","aal":"1","enrolmentCount":1,"enrolmentRequestCount":1,"relationships":[{"organisationName":"Test Org","relationshipRole":"Employee","roleName":"Test Role","roleStatus":"1"}]}' \
@@ -128,6 +130,9 @@ jobs:
           echo ""
           echo "=== Defra ID Stub Logs ==="
           docker compose logs defra-id-stub || echo "Defra ID stub container not found"
+          echo ""
+          echo "=== Defra ID User Init Logs ==="
+          docker compose logs defra-id-user-init || echo "Defra ID user init container not found"
           echo ""
           echo "=== Selenium Chrome Logs ==="
           docker compose logs selenium-chrome || echo "Selenium container not found"

@@ -1,0 +1,19 @@
+{
+  "userId": "test-user-journey-tests-001",
+  "email": "test-user-journey-tests-001@example.com",
+  "contactId": "contact-journey-tests-001",
+  "firstName": "Test",
+  "lastName": "User",
+  "loa": "1",
+  "aal": "1",
+  "enrolmentCount": 1,
+  "enrolmentRequestCount": 1,
+  "relationships": [
+    {
+      "organisationName": "Journey Tests Organisation",
+      "relationshipRole": "Employee",
+      "roleName": "Test Role",
+      "roleStatus": "1"
+    }
+  ]
+}
