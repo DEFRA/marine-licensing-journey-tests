@@ -1,29 +1,28 @@
 import allure from 'allure-commandline'
+import {
+  attachRichFeatureContext,
+  logUserCleanup
+} from './test-infrastructure/capture/index.js'
 
 const oneMinute = 60 * 1000
 
 export const config = {
-  //
-  // ====================
-  // Runner Configuration
-  // ====================
-  // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
-  baseUrl: `http://localhost:3000`,
+  baseUrl: 'http://localhost:3000',
+  defraIdUrl: 'http://localhost:3200',
 
-  // Connection to remote chromedriver
-  hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
+  // Use selenium chrome service for GitHub Actions
+  hostname: process.env.CHROMEDRIVER_URL || 'localhost',
   port: process.env.CHROMEDRIVER_PORT || 4444,
+  path: '/wd/hub',
 
-  // Tests to run
-  specs: ['./test/specs/**/*.js'],
-  // Tests to exclude
-  exclude: [],
+  specs: ['test/features/*.feature'],
+  cucumberOpts: {
+    require: ['test/steps/*.js'],
+    tags: 'not @wip and not @bug and not @d365',
+    timeout: 120000
+  },
+
   maxInstances: 1,
 
   capabilities: [
@@ -52,15 +51,13 @@ export const config = {
   execArgv: ['--loader', 'esm-module-alias/loader'],
 
   logLevel: 'info',
-
-  // Number of failures before the test suite bails.
   bail: 0,
   waitforTimeout: 10000,
   waitforInterval: 200,
   connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
 
-  framework: 'mocha',
+  framework: 'cucumber',
 
   reporters: [
     [
@@ -221,28 +218,50 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: function (exitCode, config, capabilities, results) {
-    if (results?.failed && results.failed > 0) {
-      const reportError = new Error('Could not generate Allure report')
-      const generation = allure(['generate', 'allure-results', '--clean'])
-
-      return new Promise((resolve, reject) => {
-        const generationTimeout = setTimeout(
-          () => reject(reportError),
-          oneMinute
-        )
-
-        generation.on('exit', function (exitCode) {
-          clearTimeout(generationTimeout)
-
-          if (exitCode !== 0) {
-            return reject(reportError)
-          }
-
-          resolve()
-        })
-      })
+  beforeFeature: attachRichFeatureContext,
+  afterStep: async function () {
+    await browser.takeScreenshot()
+  },
+  afterScenario: async function (scenario, world) {
+    if (scenario.result.status === 'FAILED') {
+      await browser.takeScreenshot()
     }
+
+    if (global.testUsersCreated && global.testUsersCreated.length > 0) {
+      const { DefraIdStubUserManager } = await import(
+        './test-infrastructure/helpers/defra-id-stub-user-manager.js'
+      )
+      const userManager = new DefraIdStubUserManager(config.defraIdUrl)
+
+      for (const userId of global.testUsersCreated) {
+        try {
+          await userManager.expireTestUser(userId)
+          logUserCleanup(userId, true)
+        } catch (error) {
+          logUserCleanup(userId, false, error)
+        }
+      }
+
+      global.testUsersCreated = []
+    }
+  },
+  onComplete: function (exitCode, config, capabilities, results) {
+    const reportError = new Error('Could not generate Allure report')
+    const generation = allure(['generate', 'allure-results', '--clean'])
+
+    return new Promise((resolve, reject) => {
+      const generationTimeout = setTimeout(() => reject(reportError), oneMinute)
+
+      generation.on('exit', function (exitCode) {
+        clearTimeout(generationTimeout)
+
+        if (exitCode !== 0) {
+          return reject(reportError)
+        }
+
+        resolve()
+      })
+    })
   }
   /**
    * Gets executed when a refresh happens.

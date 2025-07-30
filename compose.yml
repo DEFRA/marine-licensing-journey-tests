@@ -62,9 +62,54 @@ services:
       interval: 5s
       start_period: 2s
       retries: 5
+  ################################################################################
+  #
+  # Marine Licensing Application Services
+  #
+  ################################################################################
+  marine-licensing-frontend:
+    image: defradigital/marine-licensing-frontend:${MARINE_LICENSING_FRONTEND_VERSION:-latest}
+    env_file:
+      - ./docker/config/defaults.env
+    environment:
+      - PORT=3000
+      - MARINE_LICENSING_BACKEND_API_URL=http://marine-licensing-backend:3001
+    depends_on:
+      marine-licensing-backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
+  marine-licensing-backend:
+    image: defradigital/marine-licensing-backend:${MARINE_LICENSING_BACKEND_VERSION:-latest}
+    env_file:
+      - ./docker/config/defaults.env
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - 3001:3001
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3001/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
 ################################################################################
 #
-# Add the services you want to test below.
+# Example services (keeping for reference)
 #
 ################################################################################
 #  cdp-example-node-frontend:

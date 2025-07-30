@@ -7,9 +7,78 @@ permissions:
 on:
   workflow_dispatch:
   workflow_call:
+
 jobs:
-  build:
-    name: Run Journey Tests
+  journey-tests:
+    name: Run WebDriverIO Journey Tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: DEFRA/cdp-node-journey-test-suite-template/run-journey-tests@main
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start application services
+        env:
+          MARINE_LICENSING_FRONTEND_VERSION: latest
+          MARINE_LICENSING_BACKEND_VERSION: latest
+        run: |
+          docker compose up --wait-timeout 300 -d --quiet-pull
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for selenium-chrome to be ready..."
+          timeout 60 bash -c 'until curl -f http://localhost:4444/wd/hub/status; do sleep 5; done'
+          echo "Waiting for backend to be ready..."
+          timeout 120 bash -c 'until curl -f http://localhost:3001/health; do sleep 5; done'
+          echo "Waiting for frontend to be ready..."
+          timeout 120 bash -c 'until curl -f http://localhost:3000/health; do sleep 5; done'
+          echo "All services are ready!"
+
+      - name: Run WebDriverIO tests
+        env:
+          CHROMEDRIVER_URL: localhost
+          CHROMEDRIVER_PORT: 4444
+        run: npm run test:github
+
+      - name: Generate Allure report
+        if: always()
+        run: npm run report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: ./allure-report
+
+      - name: Upload test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: ./allure-results/screenshots
+          if-no-files-found: ignore
+
+      - name: Show container logs on failure
+        if: failure()
+        run: |
+          echo "=== Container Status ==="
+          docker ps -a
+          echo ""
+          echo "=== Frontend Logs ==="
+          docker compose logs marine-licensing-frontend || echo "Frontend container not found"
+          echo ""
+          echo "=== Backend Logs ==="
+          docker compose logs marine-licensing-backend || echo "Backend container not found"
+          echo ""
+          echo "=== Selenium Chrome Logs ==="
+          docker compose logs selenium-chrome || echo "Selenium container not found"
