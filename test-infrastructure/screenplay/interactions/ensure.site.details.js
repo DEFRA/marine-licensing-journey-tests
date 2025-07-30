@@ -114,23 +114,17 @@ export default class EnsureSiteDetails extends Task {
       )
     }
 
-    // Get the first extracted coordinates element (simplest approach for now)
-    const extractedCoordinatesElement = await browseTheWeb.getElement(
+    const actualCoordinatesElement = await browseTheWeb.getElement(
       ReviewSiteDetailsPage.extractedCoordinatesValue
     )
-    const extractedCoordinatesText = await extractedCoordinatesElement.getText()
+    const actualCoordinatesText = await actualCoordinatesElement.getText()
 
-    if (!extractedCoordinatesText) {
+    if (!actualCoordinatesText) {
       expect.fail('No extracted coordinates displayed on review page')
     }
 
-    const extractedCoordinates = JSON.parse(extractedCoordinatesText.trim())
+    const actualCoordinates = JSON.parse(actualCoordinatesText.trim())
 
-    // Check against the first expected coordinate (since shapefiles have multiple)
-    const firstExpectedCoordinate = Array.isArray(expectedCoordinates)
-      ? expectedCoordinates[0]
-      : expectedCoordinates
-
-    expect(extractedCoordinates).to.deep.equal(firstExpectedCoordinate)
+    expect(actualCoordinates).to.deep.equal(expectedCoordinates)
   }
 }

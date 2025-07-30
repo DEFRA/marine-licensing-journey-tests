@@ -1,8 +1,0 @@
-{
-  "extractedCoordinates": [
-    [-3.04360449336214, 51.2937355865616],
-    [-3.09050277777778, 51.3089527777778]
-  ],
-  "geometryTypes": ["Point", "Point", "Polygon"],
-  "description": "All extracted geometries from mygeodata.zip - 2 points and 1 polygon (checking points only for simplicity)"
-}
