@@ -1,15 +1,22 @@
-
-FROM mcr.microsoft.com/playwright:v1.54.0-noble
+FROM node:22.13.1-alpine
 
 ENV TZ="Europe/London"
+ENV PLAYWRIGHT_BROWSERS_PATH=/usr
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/lib/chromium/chromium
 ENV HEADLESS=true
 
 USER root
 
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jre-headless \
+RUN apk add --no-cache \
+    openjdk17-jre-headless \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    aws-cli \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
 
 WORKDIR /app
 
