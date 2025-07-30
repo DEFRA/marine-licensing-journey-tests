@@ -127,8 +127,8 @@ export default class EnsureSiteDetails extends Task {
     const extractedCoordinates = JSON.parse(extractedCoordinatesText.trim())
 
     // Check against the first expected coordinate (since shapefiles have multiple)
-    const firstExpectedCoordinate = Array.isArray(expectedCoordinates) 
-      ? expectedCoordinates[0] 
+    const firstExpectedCoordinate = Array.isArray(expectedCoordinates)
+      ? expectedCoordinates[0]
       : expectedCoordinates
 
     expect(extractedCoordinates).to.deep.equal(firstExpectedCoordinate)
