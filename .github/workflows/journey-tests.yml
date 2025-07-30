@@ -74,6 +74,12 @@ jobs:
           echo "✅ Backend Health: $(curl -s http://localhost:3001/health || echo 'FAILED')"
           echo "✅ Defra ID Stub: $(curl -s http://localhost:3200/health || echo 'FAILED')"
           echo "✅ LocalStack: $(curl -s http://localhost:4566/health | jq -r .status || echo 'FAILED')"
+          echo ""
+          echo "=== Defra ID Stub User Registration Test ==="
+          echo "Testing dynamic user registration endpoint..."
+          curl -s -X POST -H "Content-Type: application/json" \
+            -d '{"userId":"test-connection","email":"test@example.com","firstName":"Test","lastName":"Connection","loa":"1","aal":"1","enrolmentCount":1,"enrolmentRequestCount":1,"relationships":[{"organisationName":"Test Org","relationshipRole":"Employee","roleName":"Test Role","roleStatus":"1"}]}' \
+            http://localhost:3200/cdp-defra-id-stub/API/register || echo "FAILED"
           echo "✅ MongoDB: $(curl -s http://localhost:27017 >/dev/null && echo 'RUNNING' || echo 'FAILED')"
           echo "✅ Redis: $(redis-cli -h localhost -p 6379 ping 2>/dev/null || echo 'FAILED')"
           echo ""

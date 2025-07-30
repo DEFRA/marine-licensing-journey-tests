@@ -73,6 +73,9 @@ services:
       - 3200:3200
     environment:
       - PORT=3200
+    volumes:
+      - ./user-stub.json:/user-stub.json
+    command: 'sh -c "sleep 5 && curl -X POST -H \"Content-Type: application/json\" -d @/user-stub.json \"http://localhost:3200/cdp-defra-id-stub/API/register\" & node server.js"'
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
       interval: 10s
