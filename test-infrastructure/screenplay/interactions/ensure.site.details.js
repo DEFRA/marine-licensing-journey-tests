@@ -90,16 +90,16 @@ export default class EnsureSiteDetails extends Task {
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinateSystemValue)
 
-    if (siteDetails.coordinatesEntryMethod === 'manual-circle') {
+    if (siteDetails.siteType === 'circle') {
       await browseTheWeb.isDisplayed(
         ReviewSiteDetailsPage.coordinatesAtCentreOfSiteValue
       )
       await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.widthValue)
-    } else if (siteDetails.coordinatesEntryMethod === 'manual-boundary') {
+    } else if (siteDetails.siteType === 'boundary') {
       await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinatesValue)
     } else {
       expect.fail(
-        `Unexpected coordinates entry method: ${siteDetails.coordinatesEntryMethod}`
+        `Unexpected site type: ${siteDetails.siteType}`
       )
     }
   }
