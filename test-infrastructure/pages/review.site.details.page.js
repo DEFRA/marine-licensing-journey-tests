@@ -28,6 +28,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static fileUploadedKey = 'dt.govuk-summary-list__key*=File uploaded'
   static fileUploadedValue =
     '//dt[contains(text(), "File uploaded")]/following-sibling::dd'
+  static extractedCoordinatesValue =
+    '//dt[contains(text(), "Extracted")]/following-sibling::dd'
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
   static backLink = 'a.govuk-back-link'

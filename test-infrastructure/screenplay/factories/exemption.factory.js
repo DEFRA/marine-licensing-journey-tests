@@ -1,3 +1,4 @@
+import CoordinateFiles from '../helpers/coordinate-files.js'
 import {
   ActivityDescriptionModel,
   FileTypeModel,
@@ -78,15 +79,24 @@ export default class ExemptionFactory {
     const { filePath, generateFile } = options
     const actualFilePath = generateFile ? generateFile() : filePath
 
-    return this.createBaseExemption({
-      siteDetails: {
-        ...SiteDetailsFactory.createFileUpload(),
-        fileType:
-          fileType === 'kml'
-            ? FileTypeModel.generateKML()
-            : FileTypeModel.generateShapefile(),
-        ...(actualFilePath && { filePath: actualFilePath })
+    const siteDetails = {
+      ...SiteDetailsFactory.createFileUpload(),
+      fileType:
+        fileType === 'kml'
+          ? FileTypeModel.generateKML()
+          : FileTypeModel.generateShapefile(),
+      ...(actualFilePath && { filePath: actualFilePath })
+    }
+
+    if (actualFilePath) {
+      const expectedData = CoordinateFiles.loadExpectedCoordinates(actualFilePath)
+      if (expectedData?.extractedCoordinates) {
+        siteDetails.expectedCoordinates = expectedData.extractedCoordinates
       }
+    }
+
+    return this.createBaseExemption({
+      siteDetails
     })
   }
 

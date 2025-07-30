@@ -1,0 +1,8 @@
+{
+  "extractedCoordinates": [
+    [-1.2951666666666666, 50.7602, 0],
+    [-1.29495, 50.76038333333333, 0]
+  ],
+  "geometryType": "LineString",
+  "description": "Expected coordinates extracted from EXE_2025_00009-LOCATIONS.kml - Bridge Pontoon line"
+}

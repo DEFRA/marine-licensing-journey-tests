@@ -74,6 +74,8 @@ export default class EnsureSiteDetails extends Task {
     if (!fileName || fileName.trim() === '') {
       expect.fail('Uploaded file name should be displayed but was empty')
     }
+
+    await this.verifyExtractedCoordinates(browseTheWeb, actor)
   }
 
   async verifyManualEntrySiteDetails(browseTheWeb, actor) {
@@ -99,6 +101,30 @@ export default class EnsureSiteDetails extends Task {
       expect.fail(
         `Unexpected coordinates entry method: ${siteDetails.coordinatesEntryMethod}`
       )
+    }
+  }
+
+  async verifyExtractedCoordinates(browseTheWeb, actor) {
+    const exemption = actor.recalls('exemption')
+    const expectedCoordinates = exemption?.siteDetails?.expectedCoordinates
+
+    if (!expectedCoordinates) {
+      expect.fail('No expected coordinates found in actor memory for verification')
+    }
+
+    const extractedCoordinatesElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.extractedCoordinatesValue
+    )
+    const extractedCoordinatesText = await extractedCoordinatesElement.getText()
+
+    if (!extractedCoordinatesText) {
+      expect.fail('No extracted coordinates displayed on review page')
+    }
+
+    const extractedCoordinates = JSON.parse(extractedCoordinatesText.trim())
+
+    if (JSON.stringify(extractedCoordinates) !== JSON.stringify(expectedCoordinates)) {
+      expect.fail(`Expected coordinates ${JSON.stringify(expectedCoordinates)} but found ${JSON.stringify(extractedCoordinates)}`)
     }
   }
 }
