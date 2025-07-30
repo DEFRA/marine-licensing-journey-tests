@@ -13,7 +13,6 @@ export default class CoordinateFiles {
   static EMPTY_SHAPEFILE = 'test/resources/empty-shapefile.zip'
   static VALID_SHAPEFILE = 'test/resources/mygeodata.zip'
   static VIRUS_SHAPEFILE = 'test/resources/mygeodata-virus.zip'
-  static SOLENT_TEST_SHAPEFILE = 'test/resources/solent-test-area.zip'
 
   static loadExpectedCoordinates(filePath) {
     const baseName = path.basename(filePath, path.extname(filePath))

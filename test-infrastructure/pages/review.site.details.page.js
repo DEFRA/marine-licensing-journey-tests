@@ -30,6 +30,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     '//dt[contains(text(), "File uploaded")]/following-sibling::dd'
   static extractedCoordinatesValue =
     '//dt[contains(text(), "Extracted")]/following-sibling::dd'
+  static allExtractedCoordinatesValues =
+    '//dt[contains(text(), "Extracted")]/following-sibling::dd'
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
   static backLink = 'a.govuk-back-link'

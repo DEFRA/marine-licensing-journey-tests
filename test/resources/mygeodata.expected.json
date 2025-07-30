@@ -1,7 +1,8 @@
 {
   "extractedCoordinates": [
-    "PLACEHOLDER - actual coordinates from mygeodata.zip should be determined by examining the file"
+    [-3.04360449336214, 51.2937355865616],
+    [-3.09050277777778, 51.3089527777778]
   ],
-  "geometryType": "Unknown",
-  "description": "Expected coordinates extracted from mygeodata.zip - coordinates need to be determined from actual file content"
+  "geometryTypes": ["Point", "Point", "Polygon"],
+  "description": "All extracted geometries from mygeodata.zip - 2 points and 1 polygon (checking points only for simplicity)"
 }

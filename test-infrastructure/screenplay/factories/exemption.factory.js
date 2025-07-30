@@ -138,12 +138,6 @@ export default class ExemptionFactory {
     })
   }
 
-  static createSolentTestShapefileUpload() {
-    return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/solent-test-area.zip'
-    })
-  }
-
   static createShapefileVirusUpload() {
     return this.createFileUploadBase('shapefile', {
       filePath: 'test/resources/mygeodata-virus.zip'
