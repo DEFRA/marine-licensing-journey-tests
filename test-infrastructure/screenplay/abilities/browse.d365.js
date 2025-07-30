@@ -50,6 +50,10 @@ export default class BrowseD365 {
         ]
       }
 
+      if (process.env.ENVIRONMENT === 'test') {
+        launchOptions.executablePath = '/usr/lib/chromium/chromium'
+      }
+
       this.browser = await chromium.launch(launchOptions)
 
       const contextOptions = {

@@ -21,7 +21,6 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 COPY . .
-RUN npm install \
-    && npx playwright install
+RUN npm install
 
 ENTRYPOINT [ "./entrypoint.sh" ]
