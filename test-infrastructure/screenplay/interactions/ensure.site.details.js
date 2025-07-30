@@ -125,13 +125,6 @@ export default class EnsureSiteDetails extends Task {
 
     const extractedCoordinates = JSON.parse(extractedCoordinatesText.trim())
 
-    if (
-      JSON.stringify(extractedCoordinates) !==
-      JSON.stringify(expectedCoordinates)
-    ) {
-      expect.fail(
-        `Expected coordinates ${JSON.stringify(expectedCoordinates)} but found ${JSON.stringify(extractedCoordinates)}`
-      )
-    }
+    expect(extractedCoordinates).to.deep.equal(expectedCoordinates)
   }
 }

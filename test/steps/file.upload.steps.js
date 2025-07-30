@@ -119,7 +119,7 @@ When(
 Given('an exemption notification with a valid Shapefile', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withShapefileUpload())
+  this.actor.intendsTo(ApplyForExemption.withSolentTestShapefileUpload())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))

@@ -11,7 +11,7 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Then the file is successfully processed
     And the site details review page shows the site details
 
-  @smoke @shapefile
+  @smoke @shapefile @run-only
   Scenario: Successfully upload a valid Shapefile and review site details
     Given an exemption notification with a valid Shapefile
     When completing the site details task

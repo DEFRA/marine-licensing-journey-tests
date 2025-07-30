@@ -1,4 +1,4 @@
-import CoordinateFiles from '../helpers/coordinate-files.js'
+import CoordinateFiles from '../../helpers/coordinate-files.js'
 import {
   ActivityDescriptionModel,
   FileTypeModel,
@@ -135,6 +135,12 @@ export default class ExemptionFactory {
   static createShapefileUpload() {
     return this.createFileUploadBase('shapefile', {
       filePath: 'test/resources/mygeodata.zip'
+    })
+  }
+
+  static createSolentTestShapefileUpload() {
+    return this.createFileUploadBase('shapefile', {
+      filePath: 'test/resources/solent-test-area.zip'
     })
   }
 

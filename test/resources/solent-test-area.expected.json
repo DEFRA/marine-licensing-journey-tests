@@ -1,0 +1,11 @@
+{
+  "extractedCoordinates": [
+    [-1.1, 50.8, 0],
+    [-1.0, 50.8, 0],
+    [-1.0, 50.75, 0],
+    [-1.1, 50.75, 0],
+    [-1.1, 50.8, 0]
+  ],
+  "geometryType": "Polygon",
+  "description": "Test polygon in the Solent area near Portsmouth - 4 corner rectangle in UK coastal waters"
+}
