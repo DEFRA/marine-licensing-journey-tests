@@ -16,7 +16,10 @@ export default class CoordinateFiles {
 
   static loadExpectedCoordinates(filePath) {
     const baseName = path.basename(filePath, path.extname(filePath))
-    const sidecarPath = path.join(path.dirname(filePath), `${baseName}.expected.json`)
+    const sidecarPath = path.join(
+      path.dirname(filePath),
+      `${baseName}.expected.json`
+    )
 
     try {
       const sidecarContent = readFileSync(sidecarPath, 'utf8')

@@ -109,7 +109,9 @@ export default class EnsureSiteDetails extends Task {
     const expectedCoordinates = exemption?.siteDetails?.expectedCoordinates
 
     if (!expectedCoordinates) {
-      expect.fail('No expected coordinates found in actor memory for verification')
+      expect.fail(
+        'No expected coordinates found in actor memory for verification'
+      )
     }
 
     const extractedCoordinatesElement = await browseTheWeb.getElement(
@@ -123,8 +125,13 @@ export default class EnsureSiteDetails extends Task {
 
     const extractedCoordinates = JSON.parse(extractedCoordinatesText.trim())
 
-    if (JSON.stringify(extractedCoordinates) !== JSON.stringify(expectedCoordinates)) {
-      expect.fail(`Expected coordinates ${JSON.stringify(expectedCoordinates)} but found ${JSON.stringify(extractedCoordinates)}`)
+    if (
+      JSON.stringify(extractedCoordinates) !==
+      JSON.stringify(expectedCoordinates)
+    ) {
+      expect.fail(
+        `Expected coordinates ${JSON.stringify(expectedCoordinates)} but found ${JSON.stringify(extractedCoordinates)}`
+      )
     }
   }
 }

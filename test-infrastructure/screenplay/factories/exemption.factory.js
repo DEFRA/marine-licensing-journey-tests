@@ -89,7 +89,8 @@ export default class ExemptionFactory {
     }
 
     if (actualFilePath) {
-      const expectedData = CoordinateFiles.loadExpectedCoordinates(actualFilePath)
+      const expectedData =
+        CoordinateFiles.loadExpectedCoordinates(actualFilePath)
       if (expectedData?.extractedCoordinates) {
         siteDetails.expectedCoordinates = expectedData.extractedCoordinates
       }
