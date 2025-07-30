@@ -29,6 +29,7 @@ export default class EnsureThatTheExemptionDetailsAreCorrect extends Task {
   }
 
   async verifyExemptionDetails(browseD365) {
+    await browseD365.takeScreenshot('D365 Before Verifying Exemption Details')
     const referenceValue = await browseD365.getInputValue(
       D365Page.exemptionReferenceField
     )
