@@ -16,39 +16,54 @@ export default class LaunchD365 extends Task {
     const page = await browseD365.launch()
     await browseD365.takeScreenshot('D365 after launch')
 
-    // Check for D365 error dialog with short timeout
+    await this.checkForErrorDialog(page, browseD365)
+    await this.handleSignIn(browseD365, page)
+    await browseD365.takeScreenshot('D365 after checking for sign in button')
+  }
+
+  async checkForErrorDialog(page, browseD365) {
     const errorExists = await page
       .locator('text=An error has occurred')
       .isVisible({ timeout: 5000 })
       .catch(() => false)
-    if (errorExists) {
-      await browseD365.takeScreenshot('D365-error-dialog')
 
-      // Try to capture technical details if available
-      const showDetailsButton = page.locator('text=Show Technical Details')
-      if (await showDetailsButton.isVisible().catch(() => false)) {
-        await showDetailsButton.click()
-        await browseD365.takeScreenshot('D365-technical-details')
-
-        // Capture any visible error details as JSON
-        const errorDetails = await page
-          .textContent('body')
-          .catch(() => 'Could not capture error details')
-        attachJson(
-          {
-            errorDetails,
-            url: page.url(),
-            timestamp: new Date().toISOString()
-          },
-          'D365-Error-Details'
-        )
-      }
-
-      throw new Error(
-        'D365 is showing an error dialog. Check screenshots and network logs for details.'
-      )
+    if (!errorExists) {
+      return
     }
 
+    await browseD365.takeScreenshot('D365-error-dialog')
+    await this.captureErrorDetails(page, browseD365)
+    throw new Error(
+      'D365 is showing an error dialog. Check screenshots and network logs for details.'
+    )
+  }
+
+  async captureErrorDetails(page, browseD365) {
+    const showDetailsButton = page.locator('text=Show Technical Details')
+    const detailsVisible = await showDetailsButton.isVisible().catch(() => false)
+
+    if (!detailsVisible) {
+      return
+    }
+
+    await showDetailsButton.click()
+    await browseD365.takeScreenshot('D365-technical-details')
+
+    const errorDetails = await page
+      .textContent('body')
+      .catch(() => 'Could not capture error details')
+
+    attachJson(
+      {
+        errorDetails,
+        url: page.url(),
+        timestamp: new Date().toISOString()
+      },
+      'D365-Error-Details'
+    )
+  }
+
+  async handleSignIn(browseD365, page) {
     try {
       await browseD365.clickByRole('button', 'Sign In', 15000)
       page.on('popup', async (popup) => {
@@ -57,7 +72,5 @@ export default class LaunchD365 extends Task {
     } catch (error) {
       // Sign In button not found - likely already authenticated
     }
-
-    await browseD365.takeScreenshot('D365 after checking for sign in button')
   }
 }

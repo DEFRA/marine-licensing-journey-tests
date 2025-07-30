@@ -20,87 +20,107 @@ export default class BrowseD365 {
 
   async launch() {
     if (!this.browser) {
-      const launchOptions = {
-        headless: process.env.HEADLESS === 'true',
-        devtools: false,
-        args: [
-          '--no-sandbox',
-          '--disable-infobars',
-          '--disable-gpu',
-          '--window-size=1920,1080',
-          '--enable-features=NetworkService,NetworkServiceInProcess',
-          '--password-store=basic',
-          '--use-mock-keychain',
-          '--dns-prefetch-disable',
-          '--disable-background-networking',
-          '--disable-remote-fonts',
-          '--ignore-certificate-errors',
-          '--disable-dev-shm-usage',
-          '--disable-web-security',
-          '--disable-features=VizDisplayCompositor',
-          '--ignore-ssl-errors=true',
-          '--ignore-ssl-errors-list',
-          '--ignore-certificate-errors-spki-list',
-          '--disable-blink-features=AutomationControlled',
-          '--no-first-run',
-          '--no-default-browser-check',
-          '--disable-extensions',
-          '--disable-plugins',
-          '--disable-default-apps'
-        ]
-      }
-
-      if (process.env.ENVIRONMENT === 'test') {
-        launchOptions.executablePath = '/usr/lib/chromium/chromium'
-      }
-
-      this.browser = await chromium.launch(launchOptions)
-
-      const contextOptions = {
-        ignoreHTTPSErrors: true,
-        viewport: { width: 1920, height: 1080 },
-        userAgent:
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        extraHTTPHeaders: {
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-GB,en;q=0.9',
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache'
-        }
-      }
-
-      const httpProxyConfig = process.env.HTTP_PROXY
-      const httpsProxyConfig = process.env.HTTPS_PROXY
-
-      if (httpProxyConfig || httpsProxyConfig) {
-        contextOptions.proxy = {
-          server: httpsProxyConfig || httpProxyConfig
-        }
-      }
-
-      this.context = await this.browser.newContext(contextOptions)
-
-      this.context.setDefaultTimeout(60000)
-      this.context.setDefaultNavigationTimeout(60000)
-
-      this.page = await this.context.newPage()
-
-      await this.page.addInitScript(() => {
-        Object.defineProperty(navigator, 'webdriver', {
-          get: () => undefined
-        })
-      })
-
+      await this.createBrowser()
+      await this.createContext()
+      await this.createPage()
       this.setupNetworkMonitoring()
-
-      if (this.accessToken) {
-        await this.page.setExtraHTTPHeaders({
-          Authorization: `Bearer ${this.accessToken}`
-        })
-      }
+      await this.configureAuthentication()
     }
     return this.page
+  }
+
+  async createBrowser() {
+    const launchOptions = this.getBrowserLaunchOptions()
+    this.browser = await chromium.launch(launchOptions)
+  }
+
+  getBrowserLaunchOptions() {
+    const options = {
+      headless: process.env.HEADLESS === 'true',
+      devtools: false,
+      args: [
+        '--no-sandbox',
+        '--disable-infobars',
+        '--disable-gpu',
+        '--window-size=1920,1080',
+        '--enable-features=NetworkService,NetworkServiceInProcess',
+        '--password-store=basic',
+        '--use-mock-keychain',
+        '--dns-prefetch-disable',
+        '--disable-background-networking',
+        '--disable-remote-fonts',
+        '--ignore-certificate-errors',
+        '--disable-dev-shm-usage',
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor',
+        '--ignore-ssl-errors=true',
+        '--ignore-ssl-errors-list',
+        '--ignore-certificate-errors-spki-list',
+        '--disable-blink-features=AutomationControlled',
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-extensions',
+        '--disable-plugins',
+        '--disable-default-apps'
+      ]
+    }
+
+    if (process.env.ENVIRONMENT === 'test') {
+      options.executablePath = '/usr/lib/chromium/chromium'
+    }
+
+    return options
+  }
+
+  async createContext() {
+    const contextOptions = this.getContextOptions()
+    this.context = await this.browser.newContext(contextOptions)
+    this.context.setDefaultTimeout(60000)
+    this.context.setDefaultNavigationTimeout(60000)
+  }
+
+  getContextOptions() {
+    const options = {
+      ignoreHTTPSErrors: true,
+      viewport: { width: 1920, height: 1080 },
+      userAgent:
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      extraHTTPHeaders: {
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-GB,en;q=0.9',
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache'
+      }
+    }
+
+    const httpProxyConfig = process.env.HTTP_PROXY
+    const httpsProxyConfig = process.env.HTTPS_PROXY
+
+    if (httpProxyConfig || httpsProxyConfig) {
+      options.proxy = {
+        server: httpsProxyConfig || httpProxyConfig
+      }
+    }
+
+    return options
+  }
+
+  async createPage() {
+    this.page = await this.context.newPage()
+    await this.page.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', {
+        get: () => undefined
+      })
+    })
+  }
+
+  async configureAuthentication() {
+    if (this.accessToken) {
+      await this.page.setExtraHTTPHeaders({
+        Authorization: `Bearer ${this.accessToken}`
+      })
+    }
   }
 
   setupNetworkMonitoring() {
