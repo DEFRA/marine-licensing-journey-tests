@@ -13,7 +13,7 @@ export const config = {
 
   // Use selenium chrome service for GitHub Actions
   hostname: process.env.CHROMEDRIVER_URL || 'localhost',
-  port: process.env.CHROMEDRIVER_PORT || 4444,
+  port: Number(process.env.CHROMEDRIVER_PORT) || 4444,
   path: '/wd/hub',
 
   specs: ['test/features/*.feature'],

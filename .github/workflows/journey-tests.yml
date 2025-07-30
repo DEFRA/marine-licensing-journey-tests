@@ -1,4 +1,4 @@
-name: Run Journey Tests on GitHub
+name: Code Quality & Journey Tests
 
 permissions:
   checks: write
@@ -20,8 +20,8 @@ on:
     branches: [main]
 
 jobs:
-  journey-tests:
-    name: Run WebDriverIO Journey Tests
+  test-and-validate:
+    name: Code Quality & Journey Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +36,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Code quality checks
+        run: |
+          npm run format:check
+          npm run lint
 
       - name: Install Redis CLI for health checks
         run: |
