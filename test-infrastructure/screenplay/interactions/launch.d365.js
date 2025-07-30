@@ -40,7 +40,9 @@ export default class LaunchD365 extends Task {
 
   async captureErrorDetails(page, browseD365) {
     const showDetailsButton = page.locator('text=Show Technical Details')
-    const detailsVisible = await showDetailsButton.isVisible().catch(() => false)
+    const detailsVisible = await showDetailsButton
+      .isVisible()
+      .catch(() => false)
 
     if (!detailsVisible) {
       return
