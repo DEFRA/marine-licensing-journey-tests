@@ -16,11 +16,19 @@ RUN apk add --no-cache \
     freetype \
     harfbuzz \
     ca-certificates \
+    ca-certificates-bundle \
+    openssl \
+    openssl-dev \
+    libssl3 \
     ttf-freefont
+
+# Update certificate store
+RUN update-ca-certificates
 
 WORKDIR /app
 
 COPY . .
-RUN npm install
+RUN npm install \
+    && npx playwright install
 
 ENTRYPOINT [ "./entrypoint.sh" ]
