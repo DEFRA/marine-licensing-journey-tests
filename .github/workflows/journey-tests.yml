@@ -5,8 +5,19 @@ permissions:
   pull-requests: write
 
 on:
+  # Manual trigger
   workflow_dispatch:
+
+  # Called by other workflows
   workflow_call:
+
+  # Trigger on pushes to any branch
+  push:
+
+  # Trigger on pull requests
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 jobs:
   journey-tests:
@@ -26,6 +37,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Redis CLI for health checks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-tools
+
       - name: Start application services
         env:
           MARINE_LICENSING_FRONTEND_VERSION: latest
@@ -43,10 +59,26 @@ jobs:
           timeout 120 bash -c 'until curl -f http://localhost:3000/health; do sleep 5; done'
           echo "All services are ready!"
 
-      - name: Run WebDriverIO tests
+      - name: Verify local infrastructure
+        run: |
+          echo "=== Verifying Local Infrastructure ==="
+          echo "✅ Selenium Chrome: $(curl -s http://localhost:4444/wd/hub/status | jq -r .ready)"
+          echo "✅ Frontend Health: $(curl -s http://localhost:3000/health || echo 'FAILED')"
+          echo "✅ Backend Health: $(curl -s http://localhost:3001/health || echo 'FAILED')"
+          echo "✅ LocalStack: $(curl -s http://localhost:4566/health | jq -r .status || echo 'FAILED')"
+          echo "✅ MongoDB: $(curl -s http://localhost:27017 >/dev/null && echo 'RUNNING' || echo 'FAILED')"
+          echo "✅ Redis: $(redis-cli -h localhost -p 6379 ping 2>/dev/null || echo 'FAILED')"
+          echo ""
+          echo "=== Container Status ==="
+          docker compose ps
+
+      - name: Run WebDriverIO tests with local infrastructure
         env:
           CHROMEDRIVER_URL: localhost
           CHROMEDRIVER_PORT: 4444
+          # Use local infrastructure endpoints
+          LOCALSTACK_URL: http://localhost:4566
+          DEFRA_ID_URL: http://localhost:3200
         run: npm run test:github
 
       - name: Generate Allure report
