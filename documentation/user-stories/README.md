@@ -28,6 +28,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-96    | View dashboard                                   | [ML-96.view.dashboard.md](./ML-96.view.dashboard.md)                                                                     | [view.dashboard.feature](../../test/features/view.dashboard.feature)                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ML-99    | Continue draft notification from dashboard       | [ML-99.continue.draft.notification.from.dashboard.md](./ML-99.continue.draft.notification.from.dashboard.md)             | [view.dashboard.feature](../../test/features/view.dashboard.feature)                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ML-379   | View submitted exemption notifications           | [ML-379.submission.of.case.to.d365.md](./ML-379.submission.of.case.to.d365.md)                                           | [submit.notification.to.d365.feature](../../test/features/submit.notification.to.d365.feature)                                                                                                                                                                                                                                                                                                                                                                           |
+| ML-543   | Service name verification                        | [ML-543.service.name.verification.md](./ML-543.service.name.verification.md)                                             | [service.name.verification.feature](../../test/features/service.name.verification.feature)                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## Story status
 
@@ -53,6 +54,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-96**: View dashboard (Complete dashboard functionality displaying all user exemptions with proper sorting and empty state handling)
 - ✅ **ML-99**: Continue draft notification from dashboard (Resume draft applications from dashboard by selecting Continue option to return to task list)
 - ✅ **ML-379**: View submitted exemption notifications (D365 integration test that verifies exemption cases are created in Dynamics 365 for MMO internal users to review)
+- ✅ **ML-543**: Service name verification (Comprehensive testing to ensure "Get permission for marine work" service name is displayed consistently across all pages including dashboard, task list, and form pages)
 
 ## Feature file tags
 
@@ -98,7 +100,8 @@ documentation/user-stories/
 ├── ML-84.submit.notification.md                              # Submit notification and show confirmation
 ├── ML-96.view.dashboard.md                                   # View dashboard with all user exemptions
 ├── ML-99.continue.draft.notification.from.dashboard.md       # Continue draft notification from dashboard
-└── ML-379.submission.of.case.to.d365.md                      # View submitted exemption notifications (MMO internal users)
+├── ML-379.submission.of.case.to.d365.md                      # View submitted exemption notifications (MMO internal users)
+└── ML-543.service.name.verification.md                       # Service name verification across all pages
 ```
 
 ## Adding new user stories
