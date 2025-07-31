@@ -175,8 +175,8 @@ SCENARIO EFFECTIVENESS:
 
 | **User Story**    | **Automation Level** | **Investigation Focus** | **Scenario Type** | **Priority** |
 | ----------------- | -------------------- | ----------------------- | ----------------- | ------------ |
-| ML-1 Project Name | High                 | Error recovery patterns | Zofia novice      | Medium       |
-| ML-9 Task List    | Medium               | Navigation efficiency   | Amy expert        | High         |
+| ML-1 Project Name | High                 | Error recovery patterns | Sarah novice      | Medium       |
+| ML-9 Task List    | Medium               | Navigation efficiency   | Marcus expert     | High         |
 | ML-12 Consent     | Low                  | Legal compliance        | Legal review      | High         |
 
 ### **Session Scheduling Integration**

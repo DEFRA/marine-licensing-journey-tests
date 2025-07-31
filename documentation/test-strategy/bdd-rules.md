@@ -9,7 +9,7 @@
 - **Step integrity**: Given = setup, When = action, Then = verification
 - **Business value**: Titles clearly describe the business value being delivered
 - **Domain context**: Use realistic marine licensing terminology and workflows
-- **User-centred**: Cover important journeys from personas (Zofia, Amy, Fatima)
+- **User-centred**: Cover important journeys from personas (Sarah, Marcus, Elena, Dr. James)
 - **Test smart, not everything**: Prioritise scenarios based on risk and value, not completeness
 
 ## Test prioritisation

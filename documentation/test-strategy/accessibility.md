@@ -70,10 +70,12 @@ The service must demonstrate compatibility with Defra group's corporate assistiv
 
 Our marine licensing personas include accessibility considerations:
 
-- **Zofia (Novice applicant)** - May use screen readers or magnification
-- **Fatima (Case officer)** - Keyboard navigation efficiency for professional use
-- **Simon (Marine officer)** - Mobile accessibility for field work
-- **Amy (Veteran applicant)** - Voice recognition for efficiency
+- **Sarah (Discovery-First User)** - May use screen readers or magnification, digital accessibility needs
+- **David (Compliance Specialist)** - Keyboard navigation efficiency for professional use
+- **Rachel (Enforcement Coordinator)** - Mobile accessibility for field work
+- **Marcus (Infrastructure Professional)** - Voice recognition for efficiency, professional tools integration
+- **Elena (Multi-Project Coordinator)** - Multi-device accessibility for client coordination
+- **Dr. James (Research Practitioner)** - Precision accessibility tools for academic work
 
 ### **Realistic accessibility scenarios**
 

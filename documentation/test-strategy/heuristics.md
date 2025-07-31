@@ -98,10 +98,12 @@ Specific considerations for exemption testing:
 
 #### **Testing with Personas** (From our marine licensing personas)
 
-- **Fatima** (Case Officer) - Manual processes, system integration needs
-- **Simon** (Marine Officer) - Field access, evidence gathering, enforcement
-- **Amy** (Veteran Applicant) - Efficiency, familiar workflows, speed
-- **Zofia** (Novice Applicant) - Guidance, clarity, location assistance
+- **David** (Compliance Specialist) - Central processing, system integration needs
+- **Rachel** (Enforcement Coordinator) - Field access, evidence gathering, enforcement
+- **Marcus** (Infrastructure Professional) - Efficiency, familiar workflows, speed
+- **Elena** (Multi-Project Coordinator) - Project management, client efficiency
+- **Dr. James** (Research Practitioner) - Scientific precision, academic standards
+- **Sarah** (Discovery-First User) - Guidance, clarity, location assistance
 
 For each persona, ask:
 

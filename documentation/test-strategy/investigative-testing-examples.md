@@ -15,7 +15,7 @@ Identify usability barriers and guidance gaps for first-time applicants with no 
 
 ### **Persona connection**
 
-This investigation connects directly with [Zofia's persona](../personas/zofia-novice-applicant.md) - someone completely new to marine licensing regulations.
+This investigation connects directly with [Sarah's persona](../personas/sarah-discovery-first-user.md) - someone completely new to marine licensing regulations.
 
 ### **Investigation script**
 
@@ -62,7 +62,7 @@ Identify workflow friction and efficiency barriers for experienced applicants ma
 
 ### **Persona connection**
 
-This investigation connects directly with [Amy's persona](../personas/amy-veteran-applicant.md) - an experienced applicant who needs optimal efficiency.
+This investigation connects directly with [Marcus's persona](../personas/marcus-infrastructure-professional.md) - an experienced professional who needs optimal efficiency.
 
 ### **Investigation script**
 
@@ -109,7 +109,7 @@ Evaluate service resilience under realistic usage conditions with interruptions,
 
 ### **Persona connection**
 
-This investigation spans multiple personas, especially [Simon](../personas/simon-marine-officer.md) who may need to access the service in field conditions.
+This investigation spans multiple personas, especially [Rachel](../personas/rachel-enforcement-coordinator.md) who may need to access the service in field conditions.
 
 ### **Investigation script**
 
@@ -156,7 +156,7 @@ Explore the service from MMO staff viewpoint to identify administrative and case
 
 ### **Persona connection**
 
-This investigation connects with [Fatima's persona](../personas/fatima-case-officer.md) as a case officer supporting applicants.
+This investigation connects with [David's persona](../personas/david-compliance-specialist.md) as a case officer supporting applicants.
 
 ### **Investigation script**
 

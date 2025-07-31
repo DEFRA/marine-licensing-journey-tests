@@ -46,10 +46,12 @@ This directory contains comprehensive documentation for the Marine Licensing jou
 
 ### User personas
 
-- [Zofia - Novice applicant](./personas/zofia-novice-applicant.md) - First-time property owner
-- [Amy - Veteran applicant](./personas/amy-veteran-applicant.md) - Experienced researcher
-- [Fatima - Case officer](./personas/fatima-case-officer.md) - MMO staff member
-- [Simon - Marine officer](./personas/simon-marine-officer.md) - Enforcement officer
+- [Sarah - Discovery-First User](./personas/sarah-discovery-first-user.md) - Individual applicant with infrequent licensing needs
+- [Marcus - Infrastructure Professional](./personas/marcus-infrastructure-professional.md) - Port authority environment specialist
+- [Elena - Multi-Project Coordinator](./personas/elena-multi-project-coordinator.md) - Consultant applying on behalf of multiple clients
+- [Dr. James - Research Practitioner](./personas/dr-james-research-practitioner.md) - University researcher conducting marine studies
+- [David - Compliance Specialist](./personas/david-compliance-specialist.md) - MMO central processing case officer
+- [Rachel - Enforcement Coordinator](./personas/rachel-enforcement-coordinator.md) - MMO enforcement officer and regional coordinator
 
 ### Testing approaches
 

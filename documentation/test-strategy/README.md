@@ -54,7 +54,7 @@
 
 ```
 🌊 Marine Licensing Domain Context
-├── User Personas (Zofia, Amy, Fatima)
+├── User Personas (Sarah, Marcus, Elena, Dr. James, David, Rachel)
 ├── Regulatory Requirements
 └── Real-world Constraints
                  ↓

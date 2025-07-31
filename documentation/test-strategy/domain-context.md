@@ -29,7 +29,7 @@ Testing failures in marine licensing can lead to:
 
 Our [detailed personas](../personas/README.md) inform our testing approach:
 
-#### **[Fatima (Case officer)](../personas/fatima-case-officer.md) - Integration testing focus**
+#### **[David (Compliance Specialist)](../personas/david-compliance-specialist.md) - Central processing integration focus**
 
 **Reality**: Manual processes, system switching, interruption-heavy environment
 
@@ -42,7 +42,7 @@ Our [detailed personas](../personas/README.md) inform our testing approach:
 🎯 Risk focus: Information gaps leading to poor user support
 ```
 
-#### **[Simon (Marine officer)](../personas/simon-marine-officer.md) - Field & mobile testing**
+#### **[Rachel (Enforcement Coordinator)](../personas/rachel-enforcement-coordinator.md) - Field & mobile testing**
 
 **Reality**: Outdoor enforcement, limited connectivity, evidence gathering
 
@@ -55,7 +55,7 @@ Our [detailed personas](../personas/README.md) inform our testing approach:
 🎯 Risk focus: Evidence loss, enforcement delays
 ```
 
-#### **[Amy (Veteran applicant)](../personas/amy-veteran-applicant.md) - Efficiency testing**
+#### **[Marcus (Infrastructure Professional)](../personas/marcus-infrastructure-professional.md) - Professional efficiency testing**
 
 **Reality**: Repeated applications, time pressure, domain expertise
 
@@ -68,7 +68,7 @@ Our [detailed personas](../personas/README.md) inform our testing approach:
 🎯 Risk focus: Regression in familiar workflows
 ```
 
-#### **[Zofia (Novice applicant)](../personas/zofia-novice-applicant.md) - Accessibility & guidance testing**
+#### **[Sarah (Discovery-First User)](../personas/sarah-discovery-first-user.md) - Accessibility & guidance testing**
 
 **Reality**: Unfamiliar terminology, location data confusion, digital skills gaps
 
