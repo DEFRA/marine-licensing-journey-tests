@@ -64,6 +64,12 @@ export default class CheckYourAnswersPage {
         '//dt[contains(text(), "Width of circular site")]',
       widthOfCircularSiteValue:
         '//dt[contains(text(), "Width of circular site")]/following-sibling::dd[1]',
+      fileTypeTerm: '//dt[contains(text(), "File type")]',
+      fileTypeValue:
+        '//dt[contains(text(), "File type")]/following-sibling::dd[1]',
+      fileUploadedTerm: '//dt[contains(text(), "File uploaded")]',
+      fileUploadedValue:
+        '//dt[contains(text(), "File uploaded")]/following-sibling::dd[1]',
       changeLink: '//a[contains(@href, "coordinates")]'
     },
 

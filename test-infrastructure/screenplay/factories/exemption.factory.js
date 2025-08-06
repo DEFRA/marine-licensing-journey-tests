@@ -97,6 +97,8 @@ export default class ExemptionFactory {
     }
 
     return this.createBaseExemption({
+      activityDates: ActivityDatesFactory.createValidDates(),
+      publicRegister: { consent: true },
       siteDetails
     })
   }

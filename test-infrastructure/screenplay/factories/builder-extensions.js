@@ -78,6 +78,17 @@ export const siteDetailsExtension = {
       SiteDetailsFactory.createRandomPolygon(5, 'WGS84')
     )
     return builder
+  },
+  withKMLUpload: (builder) => {
+    builder.setProperty('siteDetails', SiteDetailsFactory.createKMLUpload())
+    return builder
+  },
+  withShapefileUpload: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.createShapefileUpload()
+    )
+    return builder
   }
 }
 

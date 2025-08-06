@@ -77,6 +77,11 @@ export default class CompleteSiteDetails extends Task {
     } else {
       expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
     }
+
+    if (this.saveAndContinue) {
+      await this.actor.attemptsTo(ClickSaveAndContinue.now())
+      this.actor.updates(Memory.markTaskCompleted('siteDetails'))
+    }
   }
 
   async completeManualCoordinatesFlow() {

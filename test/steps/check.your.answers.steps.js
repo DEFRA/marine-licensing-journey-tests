@@ -34,6 +34,30 @@ Given(
   }
 )
 
+Given(
+  'the user has completed all the tasks on the task list using a KML file upload',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.withKMLUpload()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
+Given(
+  'the user has completed all the tasks on the task list using a Shapefile upload',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.withShapefileUpload()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
 When('the user clicks Review and send', async function () {
   await this.actor.attemptsTo(ClickReviewAndSend.now())
 })

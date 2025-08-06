@@ -54,7 +54,26 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   _formatDateObjectToDisplay(dateObject) {
     if (this._isValidDateObject(dateObject)) {
-      return `${dateObject.day}/${dateObject.month}/${dateObject.year}`
+      const day = parseInt(dateObject.day, 10)
+      const month = parseInt(dateObject.month, 10)
+      const year = parseInt(dateObject.year, 10)
+
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+
+      return `${day} ${monthNames[month - 1]} ${year}`
     }
     return String(dateObject)
   }
@@ -78,21 +97,35 @@ export default class EnsureCheckYourAnswersPage extends Task {
         browseTheWeb,
         exemptionData.siteDetails
       )
-      await this._validateCoordinateSystem(
-        browseTheWeb,
-        exemptionData.siteDetails
-      )
-      await this._validateCoordinates(browseTheWeb, exemptionData.siteDetails)
-      await this._validateCircularSiteWidth(
-        browseTheWeb,
-        exemptionData.siteDetails
-      )
+
+      if (this._isFileUpload(exemptionData.siteDetails)) {
+        await this._validateFileUploadDetails(
+          browseTheWeb,
+          exemptionData.siteDetails
+        )
+      } else {
+        await this._validateCoordinateSystem(
+          browseTheWeb,
+          exemptionData.siteDetails
+        )
+        await this._validateCoordinates(browseTheWeb, exemptionData.siteDetails)
+        await this._validateCircularSiteWidth(
+          browseTheWeb,
+          exemptionData.siteDetails
+        )
+      }
     }
   }
 
   async _validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails) {
-    const expectedText =
-      'Manually enter one set of coordinates and a width to create a circular site'
+    let expectedText
+
+    if (this._isFileUpload(siteDetails)) {
+      expectedText = 'Upload a file with the coordinates of the site'
+    } else {
+      expectedText =
+        'Manually enter one set of coordinates and a width to create a circular site'
+    }
 
     await browseTheWeb.expectElementToContainText(
       CheckYourAnswersPage.locators.siteDetails
@@ -193,5 +226,43 @@ export default class EnsureCheckYourAnswersPage extends Task {
         expectedConsent
       )
     }
+  }
+
+  _isFileUpload(siteDetails) {
+    return siteDetails.fileType || siteDetails.filePath
+  }
+
+  async _validateFileUploadDetails(browseTheWeb, siteDetails) {
+    if (siteDetails.fileType) {
+      const expectedFileType = this._mapFileTypeToDisplayText(
+        siteDetails.fileType
+      )
+      await browseTheWeb.expectElementToContainText(
+        CheckYourAnswersPage.locators.siteDetails.fileTypeValue,
+        expectedFileType
+      )
+    }
+
+    if (siteDetails.filePath) {
+      const filename = this._extractFilenameFromPath(siteDetails.filePath)
+      await browseTheWeb.expectElementToContainText(
+        CheckYourAnswersPage.locators.siteDetails.fileUploadedValue,
+        filename
+      )
+    }
+  }
+
+  _mapFileTypeToDisplayText(fileType) {
+    const mappings = {
+      kml: 'KML',
+      KML: 'KML',
+      shapefile: 'Shapefile',
+      Shapefile: 'Shapefile'
+    }
+    return mappings[fileType] || fileType
+  }
+
+  _extractFilenameFromPath(filePath) {
+    return filePath.split('/').pop()
   }
 }

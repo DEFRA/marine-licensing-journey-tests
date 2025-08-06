@@ -27,6 +27,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-84    | Submit notification                              | [ML-84.submit.notification.md](./ML-84.submit.notification.md)                                                           | [submit.notification.feature](../../test/features/submit.notification.feature)                                                                                                                                                                                                                                                                                                                                                                                           |
 | ML-96    | View dashboard                                   | [ML-96.view.dashboard.md](./ML-96.view.dashboard.md)                                                                     | [view.dashboard.feature](../../test/features/view.dashboard.feature)                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ML-99    | Continue draft notification from dashboard       | [ML-99.continue.draft.notification.from.dashboard.md](./ML-99.continue.draft.notification.from.dashboard.md)             | [view.dashboard.feature](../../test/features/view.dashboard.feature)                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ML-140   | File upload check your answers                   | [ML-140.file.upload.check.your.answers.md](./ML-140.file.upload.check.your.answers.md)                                   | [check.your.answers.feature](../../test/features/check.your.answers.feature) + [Frontend Integration Tests](https://github.com/DEFRA/marine-licensing-frontend/tree/main/tests)                                                                                                                                                                                                                                                                                          |
 | ML-379   | View submitted exemption notifications           | [ML-379.submission.of.case.to.d365.md](./ML-379.submission.of.case.to.d365.md)                                           | [submit.notification.to.d365.feature](../../test/features/submit.notification.to.d365.feature)                                                                                                                                                                                                                                                                                                                                                                           |
 | ML-543   | Service name verification                        | [ML-543.service.name.verification.md](./ML-543.service.name.verification.md)                                             | [service.name.verification.feature](../../test/features/service.name.verification.feature)                                                                                                                                                                                                                                                                                                                                                                               |
 
@@ -53,6 +54,7 @@ This directory contains user stories for the marine licensing application under 
 - ✅ **ML-84**: Submit notification (Submit exemption notification to MMO and display confirmation page with reference number)
 - ✅ **ML-96**: View dashboard (Complete dashboard functionality displaying all user exemptions with proper sorting and empty state handling)
 - ✅ **ML-99**: Continue draft notification from dashboard (Resume draft applications from dashboard by selecting Continue option to return to task list)
+- ✅ **ML-140**: File upload check your answers (Check your answers page displays uploaded file details with comprehensive multi-layered test coverage combining detailed integration tests and high-level journey validation)
 - ✅ **ML-379**: View submitted exemption notifications (D365 integration test that verifies exemption cases are created in Dynamics 365 for MMO internal users to review)
 - ✅ **ML-543**: Service name verification (Comprehensive testing to ensure "Get permission for marine work" service name is displayed consistently across all pages including dashboard, task list, and form pages)
 
@@ -100,9 +102,38 @@ documentation/user-stories/
 ├── ML-84.submit.notification.md                              # Submit notification and show confirmation
 ├── ML-96.view.dashboard.md                                   # View dashboard with all user exemptions
 ├── ML-99.continue.draft.notification.from.dashboard.md       # Continue draft notification from dashboard
+├── ML-140.file.upload.check.your.answers.md                  # File upload check your answers (with integration tests)
 ├── ML-379.submission.of.case.to.d365.md                      # View submitted exemption notifications (MMO internal users)
 └── ML-543.service.name.verification.md                       # Service name verification across all pages
 ```
+
+## Test Coverage Strategy
+
+Starting with **ML-140**, we've established a **complementary test architecture** that optimises test coverage while improving development velocity:
+
+### **Integration Tests + Journey Tests**
+
+**Frontend Integration Tests** ([marine-licensing-frontend/tests](https://github.com/DEFRA/marine-licensing-frontend/tree/main/tests)):
+
+- ✅ **Detailed DOM validation** - Every element, text content, and structural requirement tested
+- ✅ **Fast execution** - Isolated component testing without full application stack
+- ✅ **Developer feedback** - Immediate feedback on template changes and data flow
+- ✅ **Comprehensive coverage** - All acceptance criteria validated with precision
+
+**Journey Tests** (`test/features/`):
+
+- ✅ **User workflow validation** - Complete end-to-end journey validation
+- ✅ **Cross-component integration** - Validates data flow between frontend/backend/cache
+- ✅ **Business scenario coverage** - Real user scenarios with actual file uploads
+
+### **Benefits of This Approach**
+
+- **Enhanced development velocity** - Developers get immediate feedback from fast integration tests
+- **Reduced journey test complexity** - High-level scenarios focus on user workflow, not detailed validation
+- **Maintainable test architecture** - Clear separation of concerns with Uncle Bob's Clean Code principles
+- **Comprehensive validation** - Combined approach ensures both detailed validation and end-to-end functionality
+
+**Implementation Example:** ML-140 uses data-driven integration tests with comprehensive fixtures alongside concise Gherkin scenarios for optimal coverage.
 
 ## Adding new user stories
 
@@ -112,6 +143,7 @@ When adding new user stories:
 2. Update this README.md file with the new entry in the table above
 3. Add descriptions of the screenshots provided as images
 4. Update the story status section
+5. **Consider the complementary test strategy**: Evaluate whether detailed validation is better suited to integration tests with high-level journey validation
 
 ## Related documentation
 

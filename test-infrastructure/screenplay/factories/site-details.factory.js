@@ -129,6 +129,22 @@ export default class SiteDetailsFactory {
     return { coordinatesEntryMethod: 'file-upload' }
   }
 
+  static createKMLUpload() {
+    return {
+      coordinatesEntryMethod: 'file-upload',
+      fileType: 'KML',
+      filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
+    }
+  }
+
+  static createShapefileUpload() {
+    return {
+      coordinatesEntryMethod: 'file-upload',
+      fileType: 'Shapefile',
+      filePath: 'test/resources/valid-shapefile.zip'
+    }
+  }
+
   static _createSiteDetails(siteType, coordinateSystem, additionalData = {}) {
     return {
       coordinatesEntryMethod: 'enter-manually',
