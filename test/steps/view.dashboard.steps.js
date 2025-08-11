@@ -6,9 +6,11 @@ import {
   BrowseTheWeb,
   ClickContinueLink,
   ClickProjectsHome,
+  DeleteDraftNotification,
   EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
+  EnsureNotificationRemoved,
   Navigate,
   NavigateToDashboard,
   SignIn,
@@ -99,3 +101,27 @@ Then(
     await this.actor.attemptsTo(EnsureDashboardSortOrder.now())
   }
 )
+
+When(
+  'the user deletes the draft notification from the dashboard',
+  async function () {
+    await this.actor.attemptsTo(SignIn.now())
+    await this.actor.attemptsTo(NavigateToDashboard.now())
+    await this.actor.attemptsTo(
+      DeleteDraftNotification.withProjectName(
+        this.actor.recalls('exemption').projectName
+      )
+    )
+  }
+)
+
+Then('the notification is removed from the dashboard', async function () {
+  await this.actor.attemptsTo(
+    EnsureNotificationRemoved.withProjectName(
+      this.actor.recalls('exemption').projectName
+    )
+  )
+  await this.actor.attemptsTo(
+    EnsureEmptyStateMessage.shows('You currently have no projects.')
+  )
+})

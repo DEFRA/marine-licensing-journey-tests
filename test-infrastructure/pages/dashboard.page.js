@@ -29,4 +29,12 @@ export default class DashboardPage {
   static continueLink(projectName) {
     return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[@aria-label="Continue to task list"]`
   }
+
+  static deleteLink(projectName) {
+    return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="Delete"]`
+  }
+
+  static projectRow(projectName) {
+    return `//tr[td[1][normalize-space(text())="${projectName}"]]`
+  }
 }
