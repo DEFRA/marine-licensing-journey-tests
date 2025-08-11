@@ -54,7 +54,7 @@ export const config = {
   execArgv,
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
-  baseUrl: `https://marine-licensing-frontend.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/`,
+  baseUrl: `http://localhost:3000/`,
   defraIdUrl: 'http://localhost:3200',
   waitforTimeout: 10000,
   waitforInterval: 200,
