@@ -98,9 +98,7 @@ export default class EnsureSiteDetails extends Task {
   }
 
   async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
-    // Fix: coordinates are in polygonData.coordinates, not siteDetails.coordinates
-    const coordinates =
-      siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
+    const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
     await this.verifyStartAndEndPointsContent(browseTheWeb, coordinates)
@@ -127,8 +125,6 @@ export default class EnsureSiteDetails extends Task {
     const startPoint = coordinates[0]
     const expectedStartText = this.formatCoordinateForDisplay(startPoint)
 
-    // For closed polygons, start and end points are the same coordinate
-    // The app automatically closes the polygon back to the start point
     await browseTheWeb.expectElementToContainText(
       ReviewSiteDetailsPage.startAndEndPointsValue,
       expectedStartText
@@ -159,9 +155,8 @@ export default class EnsureSiteDetails extends Task {
 
     this.validateExpectedCoordinates(expectedCoordinates)
 
-    const actualCoordinatesText =
-      await this.getActualCoordinatesText(browseTheWeb)
-    const actualCoordinates = JSON.parse(actualCoordinatesText.trim())
+    const actualGeoJSON = await this.getActualCoordinatesFromDOM(browseTheWeb)
+    const actualCoordinates = this.extractCoordinatesFromGeoJSON(actualGeoJSON)
 
     expect(actualCoordinates).to.deep.equal(expectedCoordinates)
   }
@@ -200,16 +195,68 @@ export default class EnsureSiteDetails extends Task {
     )
   }
 
-  async getActualCoordinatesText(browseTheWeb) {
-    const actualCoordinatesElement = await browseTheWeb.getElement(
-      ReviewSiteDetailsPage.extractedCoordinatesValue
-    )
-    const actualCoordinatesText = await actualCoordinatesElement.getText()
+  async getActualCoordinatesFromDOM(browseTheWeb) {
+    try {
+      const siteDetailsElement = await browseTheWeb.getElement(
+        ReviewSiteDetailsPage.siteDetailsDataScript
+      )
+      const siteDetailsHTML = await siteDetailsElement.getHTML(false)
 
-    if (!actualCoordinatesText) {
-      expect.fail('No extracted coordinates displayed on review page')
+      if (siteDetailsHTML && siteDetailsHTML.trim()) {
+        const siteDetailsData = JSON.parse(siteDetailsHTML.trim())
+        if (siteDetailsData?.geoJSON) {
+          return siteDetailsData.geoJSON
+        }
+      }
+    } catch (error) {
+      expect.fail('No coordinates were extracted from the file')
     }
 
-    return actualCoordinatesText
+    expect.fail('No coordinate data found in #site-details-data script element')
+  }
+
+  extractCoordinatesFromGeoJSON(geoJSON) {
+    this.validateGeoJSONStructure(geoJSON)
+
+    if (geoJSON.features.length === 0) {
+      expect.fail('Invalid GeoJSON structure: no features found')
+    }
+
+    const feature = geoJSON.features[0]
+    if (!feature.geometry || !feature.geometry.coordinates) {
+      expect.fail('Invalid GeoJSON structure: missing geometry coordinates')
+    }
+
+    const coordinates = feature.geometry.coordinates
+    const geometryType = feature.geometry.type
+
+    switch (geometryType) {
+      case 'LineString':
+        return coordinates
+      case 'Polygon':
+        return coordinates
+      case 'Point':
+        return [coordinates]
+      default:
+        expect.fail(`Unsupported geometry type: ${geometryType}`)
+    }
+  }
+
+  getCoordinatesFromSiteDetails(siteDetails) {
+    return (
+      siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
+    )
+  }
+
+  validateGeoJSONStructure(geoJSON) {
+    if (!geoJSON) {
+      expect.fail('Invalid GeoJSON structure: missing geoJSON')
+    }
+    if (!geoJSON.features) {
+      expect.fail('Invalid GeoJSON structure: missing features')
+    }
+    if (!Array.isArray(geoJSON.features)) {
+      expect.fail('Invalid GeoJSON structure: features is not an array')
+    }
   }
 }

@@ -30,6 +30,7 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     '//dt[contains(text(), "File uploaded")]/following-sibling::dd'
   static extractedCoordinatesValue =
     '//dt[contains(text(), "Extracted")]/following-sibling::dd'
+  static siteDetailsDataScript = '#site-details-data'
   static startAndEndPointsValue =
     '//dt[contains(text(), "Start and end points")]/following-sibling::dd'
   static point2Value = '//dt[contains(text(), "Point 2")]/following-sibling::dd'
