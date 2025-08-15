@@ -86,13 +86,14 @@ export default class CompleteSiteDetails extends Task {
       await this.actor.attemptsTo(
         UploadFileAndContinue.withPath(this.siteDetails.filePath)
       )
+
+      // After file upload, we land on "Review site details" page and need to continue
+      if (this.saveAndContinue) {
+        await this.actor.attemptsTo(ClickSaveAndContinue.now())
+        this.actor.updates(Memory.markTaskCompleted('siteDetails'))
+      }
     } else {
       expect.fail(ERROR_MESSAGES.MISSING_DATA('File path', 'site details'))
-    }
-
-    if (this.saveAndContinue) {
-      await this.actor.attemptsTo(ClickSaveAndContinue.now())
-      this.actor.updates(Memory.markTaskCompleted('siteDetails'))
     }
   }
 
@@ -163,7 +164,7 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         this.siteDetails.circleData.width
       )
-    } catch {}
+    } catch { }
   }
 
   validateTestData(actor) {
