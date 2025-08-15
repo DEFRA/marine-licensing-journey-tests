@@ -7,6 +7,7 @@ import {
 } from '../interactions/index.js'
 import Memory from '../memory.js'
 import {
+  BeforeYouStartSiteDetailsPageInteractions,
   EnterCoordinatesCentrePointPageInteractions,
   EnterMultipleCoordinatesPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
@@ -68,6 +69,9 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeFileUploadFlow() {
+    await BeforeYouStartSiteDetailsPageInteractions.clickContinue(
+      this.browseTheWeb
+    )
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       this.browseTheWeb,
       this.siteDetails.coordinatesEntryMethod
@@ -134,6 +138,9 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeFlowUpToCoordinates() {
+    await BeforeYouStartSiteDetailsPageInteractions.clickContinue(
+      this.browseTheWeb
+    )
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       this.browseTheWeb,
       this.siteDetails.coordinatesEntryMethod

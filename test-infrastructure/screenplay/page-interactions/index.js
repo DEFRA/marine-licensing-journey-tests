@@ -1,3 +1,4 @@
+export { default as BeforeYouStartSiteDetailsPageInteractions } from './before.you.start.site.details.page.interactions.js'
 export { default as EnterCoordinatesCentrePointPageInteractions } from './enter.coordinates.centre.point.page.interactions.js'
 export { default as EnterMultipleCoordinatesPageInteractions } from './enter.multiple.coordinates.page.interactions.js'
 export { default as HowDoYouWantToEnterTheCoordinatesPageInteractions } from './how.do.you.want.to.enter.the.coordinates.page.interactions.js'
