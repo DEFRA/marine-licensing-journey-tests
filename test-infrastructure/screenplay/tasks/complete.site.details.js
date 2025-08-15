@@ -164,7 +164,9 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         this.siteDetails.circleData.width
       )
-    } catch { }
+    } catch {
+      // If the width page is not present, we can just continue
+    }
   }
 
   validateTestData(actor) {
