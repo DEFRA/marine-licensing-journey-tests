@@ -15,6 +15,7 @@ import {
   ClickRemovePointButton,
   ClickSaveAndContinue,
   CompleteProjectName,
+  ContinueFromBeforeYouStartSiteDetailsPage,
   EnsureCoordinateError,
   EnsureErrorDisplayed,
   EnsureErrorNotDisplayed,
@@ -107,6 +108,7 @@ Given(
 Given(
   'the "How do you want to provide the site location?" page has been reached',
   async function () {
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       EnsurePageHeading.is('How do you want to provide the site location?')
     )
@@ -116,6 +118,7 @@ Given(
 Given(
   'the "How do you want to enter the coordinates?" page has been reached',
   async function () {
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       NavigateToSiteDetailsPage.coordinatesEntryMethod()
     )
@@ -128,6 +131,7 @@ Given(
 Given(
   'the "Which coordinate system do you want to use?" page has been reached',
   async function () {
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(NavigateToSiteDetailsPage.coordinateSystem())
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Which coordinate system do you want to use?')
