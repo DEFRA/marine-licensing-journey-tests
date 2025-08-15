@@ -3,6 +3,7 @@ import { browser } from '@wdio/globals'
 
 import {
   ClickSaveAndContinue,
+  ContinueFromBeforeYouStartSiteDetailsPage,
   EnsureErrorDisplayed,
   EnsureNoErrorsDisplayed,
   EnsurePageHeading,
@@ -98,6 +99,7 @@ Given('an exemption notification with empty KML file', async function () {
 When(
   'navigating to the KML upload page and continuing without selecting a file',
   async function () {
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       this.actor.ability,
       'file-upload'
@@ -183,6 +185,7 @@ Given('an exemption notification with empty Shapefile', async function () {
 When(
   'navigating to the Shapefile upload page and continuing without selecting a file',
   async function () {
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await HowDoYouWantToProvideCoordinatesPageInteractions.selectCoordinatesInputMethodAndContinue(
       this.actor.ability,
       'file-upload'

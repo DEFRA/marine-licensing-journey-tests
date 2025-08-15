@@ -38,6 +38,7 @@ Given('a user is providing site details', async function () {
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+  await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
 })
 
 Given(
@@ -108,7 +109,6 @@ Given(
 Given(
   'the "How do you want to provide the site location?" page has been reached',
   async function () {
-    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       EnsurePageHeading.is('How do you want to provide the site location?')
     )
@@ -118,7 +118,6 @@ Given(
 Given(
   'the "How do you want to enter the coordinates?" page has been reached',
   async function () {
-    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       NavigateToSiteDetailsPage.coordinatesEntryMethod()
     )
@@ -131,7 +130,6 @@ Given(
 Given(
   'the "Which coordinate system do you want to use?" page has been reached',
   async function () {
-    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(NavigateToSiteDetailsPage.coordinateSystem())
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Which coordinate system do you want to use?')
@@ -194,6 +192,7 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       NavigateToSiteDetailsPage.enterPolygonOSGB36CoordinatesPageOnly()
     )

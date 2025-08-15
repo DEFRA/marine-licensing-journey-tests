@@ -8,6 +8,7 @@ import {
   ClickSaveAndContinue,
   CompleteProjectName,
   CompleteSiteDetails,
+  ContinueFromBeforeYouStartSiteDetailsPage,
   EnsurePageHeading,
   EnsureSiteDetails,
   Navigate,
@@ -357,6 +358,7 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       NavigateToSiteDetailsPage.enterPolygonOSGB36CoordinatesPageOnly()
     )
@@ -374,6 +376,7 @@ Given(
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
     await this.actor.attemptsTo(
       NavigateToSiteDetailsPage.enterPolygonWGS84CoordinatesPageOnly()
     )

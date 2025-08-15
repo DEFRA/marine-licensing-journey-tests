@@ -5,7 +5,8 @@ Feature: Back link navigation in Site details: State preservation during back na
     Given a user is providing site details
     And the "How do you want to provide the site location?" page has been reached
     When the Back link is clicked
-    And the "Site details" task status is "Incomplete"
+    And the Back link is clicked
+    Then the "Site details" task status is "Incomplete"
 
   Scenario: Using the back link from the coordinate entry method page preserves selections
     Given a user is providing site details
