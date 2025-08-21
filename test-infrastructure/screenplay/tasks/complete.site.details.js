@@ -101,14 +101,19 @@ export default class CompleteSiteDetails extends Task {
   async completeManualCoordinatesFlow() {
     if (this.siteDetails.siteType === 'circle') {
       await this.completeCircleFlow()
-      if (this.saveAndContinue) {
-        await this.actor.attemptsTo(ClickSaveAndContinue.now())
-        this.actor.updates(Memory.markTaskCompleted('siteDetails'))
-      }
     } else if (this.siteDetails.siteType === 'boundary') {
       await this.completePolygonFlow()
     } else {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
+    }
+
+    await this._saveIfRequired()
+  }
+
+  async _saveIfRequired() {
+    if (this.saveAndContinue) {
+      await this.actor.attemptsTo(ClickSaveAndContinue.now())
+      this.actor.updates(Memory.markTaskCompleted('siteDetails'))
     }
   }
 
@@ -123,7 +128,7 @@ export default class CompleteSiteDetails extends Task {
 
   async completePolygonFlow() {
     await this.completeFlowUpToCoordinates()
-    await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinates(
+    await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
       this.browseTheWeb,
       this.siteDetails,
       this.useAddAnotherPoint

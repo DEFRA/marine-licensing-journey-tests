@@ -25,7 +25,7 @@ which will play back all their answers and allow them to verify that the answers
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @smoke @new
+  @smoke
   Scenario: After successfully completing all the tasks on the task list, with a boundary using WGS84 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a boundary using WGS84 coordinates
     When the user clicks Review and send

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
-import Task from '../base/task.js'
 import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
+import Task from '../base/task.js'
 
 export default class EnsureCheckYourAnswersPage extends Task {
   static showsAllAnswers() {
@@ -109,11 +109,13 @@ export default class EnsureCheckYourAnswersPage extends Task {
           browseTheWeb,
           exemptionData.siteDetails
         )
-        await this.verifyCoordinateDisplayBySiteType(browseTheWeb, exemptionData.siteDetails)
+        await this.verifyCoordinateDisplayBySiteType(
+          browseTheWeb,
+          exemptionData.siteDetails
+        )
       }
     }
   }
-
 
   async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
     if (siteDetails.siteType === 'circle') {
@@ -131,10 +133,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   async verifyCircleSiteDisplay(browseTheWeb, siteDetails) {
     await this._validateCoordinates(browseTheWeb, siteDetails)
-    await this._validateCircularSiteWidth(
-      browseTheWeb,
-      siteDetails
-    )
+    await this._validateCircularSiteWidth(browseTheWeb, siteDetails)
   }
 
   async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
@@ -143,6 +142,8 @@ export default class EnsureCheckYourAnswersPage extends Task {
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
     await this.verifyStartAndEndPointsContent(browseTheWeb, coordinates)
 
+    // Verify points 2 through N (where N is the total number of coordinates)
+    // Point 1 is already covered by "Start and end points"
     for (let i = 1; i < coordinates.length; i++) {
       const pointNumber = i + 1
       const coordinate = coordinates[i]
@@ -164,6 +165,9 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
     if (this._isFileUpload(siteDetails)) {
       expectedText = 'Upload a file with the coordinates of the site'
+    } else if (siteDetails.siteType === 'boundary') {
+      expectedText =
+        'Manually enter multiple sets of coordinates to mark the boundary of the site'
     } else {
       expectedText =
         'Manually enter one set of coordinates and a width to create a circular site'
@@ -306,5 +310,48 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   _extractFilenameFromPath(filePath) {
     return filePath.split('/').pop()
+  }
+
+  getCoordinatesFromSiteDetails(siteDetails) {
+    const allCoordinates =
+      siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
+    return this._limitBoundaryCoordinates(siteDetails, allCoordinates)
+  }
+
+  _limitBoundaryCoordinates(siteDetails, coordinates) {
+    if (siteDetails?.siteType === 'boundary' && coordinates.length > 3) {
+      return coordinates.slice(0, 3)
+    }
+    return coordinates
+  }
+
+  async verifyStartAndEndPointsContent(browseTheWeb, coordinates) {
+    if (coordinates.length === 0) return
+
+    const startPoint = coordinates[0]
+    const expectedStartText = this.formatCoordinateForDisplay(startPoint)
+
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.startAndEndPointsValue,
+      expectedStartText
+    )
+  }
+
+  async verifyCoordinatePointContent(browseTheWeb, pointNumber, coordinate) {
+    const expectedText = this.formatCoordinateForDisplay(coordinate)
+
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.getPolygonPointValue(pointNumber),
+      expectedText
+    )
+  }
+
+  formatCoordinateForDisplay(coordinate) {
+    if (coordinate.latitude && coordinate.longitude) {
+      return `${coordinate.latitude}, ${coordinate.longitude}`
+    } else if (coordinate.eastings && coordinate.northings) {
+      return `${coordinate.eastings}, ${coordinate.northings}`
+    }
+    throw new Error(`Invalid coordinate format: ${JSON.stringify(coordinate)}`)
   }
 }

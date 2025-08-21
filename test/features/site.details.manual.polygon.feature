@@ -41,7 +41,8 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
     Given an exemption for a quadrilateral site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>", point 3 "<lat3>", "<lng3>" and point 4 "<lat4>", "<lng4>"
     And the site details task is reached
     When the quadrilateral site coordinates are entered using add another point
-    Then the polygon coordinate entry page is displayed
+    Then the polygon site details review page shows the correct site details
+    And the "Site details" task status is "Completed"
 
     Examples: WGS84 quadrilateral testing: rectangular and complex boundary shapes
       | lat1      | lng1      | lat2      | lng2      | lat3      | lng3      | lat4      | lng4      |
@@ -53,7 +54,8 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
     Given an exemption for a quadrilateral site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>", point 3 "<east3>", "<north3>" and point 4 "<east4>", "<north4>"
     And the site details task is reached
     When the quadrilateral site coordinates are entered using add another point
-    Then the polygon coordinate entry page is displayed
+    Then the polygon site details review page shows the correct site details
+    And the "Site details" task status is "Completed"
 
     Examples: OSGB36 quadrilateral testing: rectangular and complex boundary shapes
       | east1  | north1 | east2  | north2 | east3  | north3 | east4  | north4 |
@@ -65,7 +67,8 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
     Given an exemption for a pentagon site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>", point 3 "<lat3>", "<lng3>", point 4 "<lat4>", "<lng4>" and point 5 "<lat5>", "<lng5>"
     And the site details task is reached
     When the pentagon site coordinates are entered using add another point
-    Then the polygon coordinate entry page is displayed
+    Then the polygon site details review page shows the correct site details
+    And the "Site details" task status is "Completed"
 
     Examples: WGS84 pentagon testing: complex boundary shapes with multiple additional points
       | lat1      | lng1      | lat2      | lng2      | lat3      | lng3      | lat4      | lng4      | lat5      | lng5      |
@@ -76,7 +79,8 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
     Given an exemption for a pentagon site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>", point 3 "<east3>", "<north3>", point 4 "<east4>", "<north4>" and point 5 "<east5>", "<north5>"
     And the site details task is reached
     When the pentagon site coordinates are entered using add another point
-    Then the polygon coordinate entry page is displayed
+    Then the polygon site details review page shows the correct site details
+    And the "Site details" task status is "Completed"
 
     Examples: OSGB36 pentagon testing: complex boundary shapes with multiple additional points
       | east1  | north1 | east2  | north2 | east3  | north3 | east4  | north4 | east5  | north5 |

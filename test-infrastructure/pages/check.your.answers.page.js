@@ -43,9 +43,9 @@ export default class CheckYourAnswersPage {
       coordinatesEntryTerm: '//dt[contains(text(), "Coordinates Entry")]',
       coordinatesEntryValue:
         '//dt[contains(text(), "Coordinates Entry")]/following-sibling::dd[1]',
-      coordinateSystemTerm: '//dt[contains(text(), "Coordinates system")]',
+      coordinateSystemTerm: '//dt[contains(text(), "Coordinate system")]',
       coordinateSystemValue:
-        '//dt[contains(text(), "Coordinates system")]/following-sibling::dd[1]',
+        '//dt[contains(text(), "Coordinate system")]/following-sibling::dd[1]',
       coordinatesTerm: '//dt[contains(text(), "Coordinates")]',
       coordinatesValue:
         '//dt[contains(text(), "Coordinates")]/following-sibling::dd[1]',
