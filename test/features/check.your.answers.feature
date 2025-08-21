@@ -1,4 +1,4 @@
-@issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-82 @issue=ML-140
+@issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-82 @issue=ML-139 @issue=ML-140
 Feature: Check your answers: Once the user has completed all the tasks on the task list, they will be able to access the "Check your answers" page,
 which will play back all their answers and allow them to verify that the answers are OK, ready for submission of their notification.
 
@@ -17,6 +17,7 @@ which will play back all their answers and allow them to verify that the answers
   - ML-70: Upload coordinate file (KML or Shapefile)
   - ML-74: Review uploaded site details
   - ML-82: The user is able to access the "Check your answers" page after completing all the tasks on the task list
+  - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
 
   @smoke
