@@ -142,8 +142,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
     await this.verifyStartAndEndPointsContent(browseTheWeb, coordinates)
 
-    // Verify points 2 through N (where N is the total number of coordinates)
-    // Point 1 is already covered by "Start and end points"
     for (let i = 1; i < coordinates.length; i++) {
       const pointNumber = i + 1
       const coordinate = coordinates[i]
@@ -261,9 +259,6 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
     if (exemptionData.publicRegister) {
-      // Field shows "Information withheld from public register"
-      // consent: true = give consent to share = NOT withheld = "No"
-      // consent: false = withhold consent = IS withheld = "Yes"
       const expectedConsent = exemptionData.publicRegister.consent
         ? 'No'
         : 'Yes'
