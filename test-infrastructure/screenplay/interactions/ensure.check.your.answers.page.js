@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import Task from '../base/task.js'
+import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
 
 export default class EnsureCheckYourAnswersPage extends Task {
   static showsAllAnswers() {
@@ -108,12 +109,53 @@ export default class EnsureCheckYourAnswersPage extends Task {
           browseTheWeb,
           exemptionData.siteDetails
         )
-        await this._validateCoordinates(browseTheWeb, exemptionData.siteDetails)
-        await this._validateCircularSiteWidth(
-          browseTheWeb,
-          exemptionData.siteDetails
-        )
+        await this.verifyCoordinateDisplayBySiteType(browseTheWeb, exemptionData.siteDetails)
       }
+    }
+  }
+
+
+  async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
+    if (siteDetails.siteType === 'circle') {
+      await this.verifyCircleSiteDisplay(browseTheWeb, siteDetails)
+      return
+    }
+
+    if (siteDetails.siteType === 'boundary') {
+      await this.verifyBoundarySiteDisplay(browseTheWeb, siteDetails)
+      return
+    }
+
+    expect.fail(`Unexpected site type: ${siteDetails.siteType}`)
+  }
+
+  async verifyCircleSiteDisplay(browseTheWeb, siteDetails) {
+    await this._validateCoordinates(browseTheWeb, siteDetails)
+    await this._validateCircularSiteWidth(
+      browseTheWeb,
+      siteDetails
+    )
+  }
+
+  async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
+    const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
+
+    await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
+    await this.verifyStartAndEndPointsContent(browseTheWeb, coordinates)
+
+    for (let i = 1; i < coordinates.length; i++) {
+      const pointNumber = i + 1
+      const coordinate = coordinates[i]
+
+      await browseTheWeb.isDisplayed(
+        ReviewSiteDetailsPage.getPolygonPointValue(pointNumber)
+      )
+
+      await this.verifyCoordinatePointContent(
+        browseTheWeb,
+        pointNumber,
+        coordinate
+      )
     }
   }
 

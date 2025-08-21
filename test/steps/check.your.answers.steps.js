@@ -23,12 +23,36 @@ Given(
 )
 
 Given(
+  'the user has completed all the tasks on the task list for a boundary using WGS84 coordinates',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    const exemptionFactory =
+      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithWGS84Coordinates()
+    this.actor.intendsTo(exemptionFactory)
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
+Given(
   'the user has completed all the tasks on the task list for a circular site using OSGB36 coordinates',
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithOSGB36Coordinates()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
+Given(
+  'the user has completed all the tasks on the task list for a boundary using OSGB36 coordinates',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithOSGB36Coordinates()
     )
     await this.actor.attemptsTo(CompleteAllTasks.now())
   }
