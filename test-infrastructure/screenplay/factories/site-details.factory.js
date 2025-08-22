@@ -106,16 +106,7 @@ export default class SiteDetailsFactory {
         coordinateSystem
       )
     })
-    return {
-      ...siteDetails,
-      sites: [
-        {
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          ...siteDetails
-        }
-      ]
-    }
+    return this._wrapInSitesArray(siteDetails)
   }
 
   static create(shape, coordinateSystem) {
@@ -125,32 +116,16 @@ export default class SiteDetailsFactory {
     if (!data) return this._createSiteDetails(siteType, coordinateSystem)
 
     if (shape === 'circle') {
-      return this._createSiteDetails(siteType, coordinateSystem, {
-        circleData: data,
-        sites: [
-          {
-            siteName: 'Main Research Site',
-            siteNumber: 1,
-            ...this._createSiteDetails(siteType, coordinateSystem, {
-              circleData: data
-            })
-          }
-        ]
+      const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
+        circleData: data
       })
+      return this._wrapInSitesArray(siteDetails)
     }
 
-    return this._createSiteDetails(siteType, coordinateSystem, {
-      polygonData: this._createCoordinateSet(data, coordinateSystem),
-      sites: [
-        {
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          ...this._createSiteDetails(siteType, coordinateSystem, {
-            polygonData: this._createCoordinateSet(data, coordinateSystem)
-          })
-        }
-      ]
+    const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
+      polygonData: this._createCoordinateSet(data, coordinateSystem)
     })
+    return this._wrapInSitesArray(siteDetails)
   }
 
   static createFileUpload() {
@@ -195,16 +170,7 @@ export default class SiteDetailsFactory {
       fileType: 'KML',
       filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
     }
-    return {
-      ...siteDetails,
-      sites: [
-        {
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          ...siteDetails
-        }
-      ]
-    }
+    return this._wrapInSitesArray(siteDetails)
   }
 
   static createShapefileUpload() {
@@ -213,11 +179,15 @@ export default class SiteDetailsFactory {
       fileType: 'Shapefile',
       filePath: 'test/resources/valid-shapefile.zip'
     }
+    return this._wrapInSitesArray(siteDetails)
+  }
+
+  static _wrapInSitesArray(siteDetails, siteName = 'Main Research Site') {
     return {
       ...siteDetails,
       sites: [
         {
-          siteName: 'Main Research Site',
+          siteName,
           siteNumber: 1,
           ...siteDetails
         }
