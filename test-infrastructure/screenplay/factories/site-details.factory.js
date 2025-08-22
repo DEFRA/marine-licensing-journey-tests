@@ -100,7 +100,7 @@ export default class SiteDetailsFactory {
       coordinateCount,
       coordinateSystem
     )
-    return this._createSiteDetails('boundary', coordinateSystem, {
+    return this._createSiteDetails('triangle', coordinateSystem, {
       polygonData: this._createCoordinateSet(
         randomCoordinates,
         coordinateSystem
@@ -109,7 +109,7 @@ export default class SiteDetailsFactory {
   }
 
   static create(shape, coordinateSystem) {
-    const siteType = shape === 'circle' ? 'circle' : 'boundary'
+    const siteType = shape === 'circle' ? 'circle' : 'triangle'
     const data = this.defaultData[shape]?.[coordinateSystem]
 
     if (!data) return this._createSiteDetails(siteType, coordinateSystem)

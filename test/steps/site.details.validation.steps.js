@@ -188,7 +188,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forATriangleWithOSGB36Coordinates()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())

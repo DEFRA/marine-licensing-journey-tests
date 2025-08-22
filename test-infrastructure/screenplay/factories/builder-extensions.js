@@ -16,20 +16,6 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forABoundaryWithWGS84Coordinates: (builder) => {
-    builder.setProperty(
-      'siteDetails',
-      SiteDetailsFactory.create('triangle', 'WGS84')
-    )
-    return builder
-  },
-  forABoundaryWithOSGB36Coordinates: (builder) => {
-    builder.setProperty(
-      'siteDetails',
-      SiteDetailsFactory.create('triangle', 'OSGB36')
-    )
-    return builder
-  },
   forATriangleWithWGS84Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',

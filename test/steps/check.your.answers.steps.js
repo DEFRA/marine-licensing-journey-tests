@@ -28,7 +28,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     const exemptionFactory =
-      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithWGS84Coordinates()
+      ApplyForExemption.withCompleteData().andSiteDetails.forATriangleWithWGS84Coordinates()
     this.actor.intendsTo(exemptionFactory)
     await this.actor.attemptsTo(CompleteAllTasks.now())
   }
@@ -52,7 +52,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithOSGB36Coordinates()
+      ApplyForExemption.withCompleteData().andSiteDetails.forATriangleWithOSGB36Coordinates()
     )
     await this.actor.attemptsTo(CompleteAllTasks.now())
   }

@@ -28,8 +28,8 @@ export default class SiteDetailsModel {
   }
 
   setSiteType(type) {
-    if (!['circle', 'boundary'].includes(type)) {
-      expect.fail('Site type must be either "circle" or "boundary"')
+    if (!['circle', 'triangle'].includes(type)) {
+      expect.fail('Site type must be either "circle" or "triangle"')
     }
     this._data.siteType = type
     return this

@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import Task from '../base/task.js'
 import {
+  DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions,
   EnterCoordinatesCentrePointPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
-  DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions,
   WhatCoordinateSystemPageInteractions
 } from '../page-interactions/index.js'
 
@@ -106,13 +106,13 @@ export default class NavigateToSiteDetailsPage extends Task {
         )
       },
       'enter-polygon-osgb36-coordinates-page-only': async (browseTheWeb) => {
-        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
+        await this.navigateToTriangleCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
       },
       'enter-polygon-wgs84-coordinates-page-only': async (browseTheWeb) => {
-        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
+        await this.navigateToTriangleCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
           browseTheWeb
         )
@@ -135,27 +135,26 @@ export default class NavigateToSiteDetailsPage extends Task {
   }
 
   async navigateToCoordinateSystem(browseTheWeb) {
-    await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
-      browseTheWeb
-    )
-    await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
-      browseTheWeb
-    )
+    await this.navigateToSiteTypeSelection(browseTheWeb)
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectCircularSiteAndContinue(
       browseTheWeb
     )
   }
 
-  async navigateToBoundaryCoordinateSystem(browseTheWeb) {
+  async navigateToTriangleCoordinateSystem(browseTheWeb) {
+    await this.navigateToSiteTypeSelection(browseTheWeb)
+    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
+      browseTheWeb,
+      'triangle'
+    )
+  }
+
+  async navigateToSiteTypeSelection(browseTheWeb) {
     await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
       browseTheWeb
     )
     await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
       browseTheWeb
-    )
-    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
-      browseTheWeb,
-      'boundary'
     )
   }
 }

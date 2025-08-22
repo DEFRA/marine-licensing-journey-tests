@@ -123,8 +123,8 @@ export default class EnsureCheckYourAnswersPage extends Task {
       return
     }
 
-    if (siteDetails.siteType === 'boundary') {
-      await this.verifyBoundarySiteDisplay(browseTheWeb, siteDetails)
+    if (siteDetails.siteType === 'triangle') {
+      await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
@@ -136,7 +136,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
     await this._validateCircularSiteWidth(browseTheWeb, siteDetails)
   }
 
-  async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
+  async verifyTriangleSiteDisplay(browseTheWeb, siteDetails) {
     const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
@@ -163,7 +163,7 @@ export default class EnsureCheckYourAnswersPage extends Task {
 
     if (this._isFileUpload(siteDetails)) {
       expectedText = 'Upload a file with the coordinates of the site'
-    } else if (siteDetails.siteType === 'boundary') {
+    } else if (siteDetails.siteType === 'triangle') {
       expectedText =
         'Manually enter multiple sets of coordinates to mark the boundary of the site'
     } else {
@@ -310,11 +310,11 @@ export default class EnsureCheckYourAnswersPage extends Task {
   getCoordinatesFromSiteDetails(siteDetails) {
     const allCoordinates =
       siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
-    return this._limitBoundaryCoordinates(siteDetails, allCoordinates)
+    return this._limitTriangleCoordinates(siteDetails, allCoordinates)
   }
 
-  _limitBoundaryCoordinates(siteDetails, coordinates) {
-    if (siteDetails?.siteType === 'boundary' && coordinates.length > 3) {
+  _limitTriangleCoordinates(siteDetails, coordinates) {
+    if (siteDetails?.siteType === 'triangle' && coordinates.length > 3) {
       return coordinates.slice(0, 3)
     }
     return coordinates

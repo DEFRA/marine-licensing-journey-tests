@@ -82,8 +82,8 @@ export default class EnsureSiteDetails extends Task {
       return
     }
 
-    if (siteDetails.siteType === 'boundary') {
-      await this.verifyBoundarySiteDisplay(browseTheWeb, siteDetails)
+    if (siteDetails.siteType === 'triangle') {
+      await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
@@ -97,7 +97,7 @@ export default class EnsureSiteDetails extends Task {
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.widthValue)
   }
 
-  async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
+  async verifyTriangleSiteDisplay(browseTheWeb, siteDetails) {
     const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
@@ -186,7 +186,7 @@ export default class EnsureSiteDetails extends Task {
       return 'Manually enter one set of coordinates and a width to create a circular site'
     }
 
-    if (siteDetails?.siteType === 'boundary') {
+    if (siteDetails?.siteType === 'triangle') {
       return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
     }
 

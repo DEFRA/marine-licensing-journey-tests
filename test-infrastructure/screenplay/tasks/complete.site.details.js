@@ -101,7 +101,7 @@ export default class CompleteSiteDetails extends Task {
   async completeManualCoordinatesFlow() {
     if (this.siteDetails.siteType === 'circle') {
       await this.completeCircleFlow()
-    } else if (this.siteDetails.siteType === 'boundary') {
+    } else if (this.siteDetails.siteType === 'triangle') {
       await this.completePolygonFlow()
     } else {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
