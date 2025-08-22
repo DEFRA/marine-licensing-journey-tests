@@ -99,6 +99,11 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeManualCoordinatesFlow() {
+    // Handle multi-site case - just stop at site name page
+    if (this.siteDetails.multipleSitesEnabled === 'yes') {
+      return // Stop here - we'll be on the site name page
+    }
+
     if (this.siteDetails.siteType === 'circle') {
       await this.completeCircleFlow()
     } else if (this.siteDetails.siteType === 'triangle') {
@@ -152,9 +157,19 @@ export default class CompleteSiteDetails extends Task {
       this.browseTheWeb,
       this.siteDetails.coordinatesEntryMethod
     )
-    await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
-      this.browseTheWeb
-    )
+
+    if (this.siteDetails.multipleSitesEnabled === 'yes') {
+      await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectMoreThanOneSiteAndContinue(
+        this.browseTheWeb,
+        'yes'
+      )
+      await this.handleSiteNameFlow()
+    } else {
+      await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
+        this.browseTheWeb
+      )
+    }
+
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
       this.browseTheWeb,
       this.siteDetails.siteType
@@ -163,6 +178,12 @@ export default class CompleteSiteDetails extends Task {
       this.browseTheWeb,
       this.siteDetails.coordinateSystem
     )
+  }
+
+  async handleSiteNameFlow() {
+    // For now, just continue without entering a site name
+    // This will get us to the site name page as required by the test
+    await this.browseTheWeb.click('button[type="submit"]')
   }
 
   async enterWidthOfCircleIfOnWidthPage() {

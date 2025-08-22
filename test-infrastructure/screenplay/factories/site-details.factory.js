@@ -100,12 +100,20 @@ export default class SiteDetailsFactory {
       coordinateCount,
       coordinateSystem
     )
-    return this._createSiteDetails('triangle', coordinateSystem, {
+    const siteDetails = this._createSiteDetails('triangle', coordinateSystem, {
       polygonData: this._createCoordinateSet(
         randomCoordinates,
         coordinateSystem
       )
     })
+    return {
+      ...siteDetails,
+      sites: [{
+        siteName: '',
+        siteNumber: 1,
+        ...siteDetails
+      }]
+    }
   }
 
   static create(shape, coordinateSystem) {
@@ -116,12 +124,24 @@ export default class SiteDetailsFactory {
 
     if (shape === 'circle') {
       return this._createSiteDetails(siteType, coordinateSystem, {
-        circleData: data
+        circleData: data,
+        sites: [{
+          siteName: '',
+          siteNumber: 1,
+          ...this._createSiteDetails(siteType, coordinateSystem, { circleData: data })
+        }]
       })
     }
 
     return this._createSiteDetails(siteType, coordinateSystem, {
-      polygonData: this._createCoordinateSet(data, coordinateSystem)
+      polygonData: this._createCoordinateSet(data, coordinateSystem),
+      sites: [{
+        siteName: '',
+        siteNumber: 1,
+        ...this._createSiteDetails(siteType, coordinateSystem, {
+          polygonData: this._createCoordinateSet(data, coordinateSystem)
+        })
+      }]
     })
   }
 
@@ -129,19 +149,67 @@ export default class SiteDetailsFactory {
     return { coordinatesEntryMethod: 'file-upload' }
   }
 
-  static createKMLUpload() {
+  static createMultipleSites() {
     return {
+      multipleSitesEnabled: 'yes',
+      coordinatesEntryMethod: 'enter-manually',
+      siteType: 'circle',
+      coordinateSystem: 'WGS84',
+      circleData: this.defaultData.circle.WGS84,
+      sites: [
+        {
+          siteName: '',
+          siteNumber: 1,
+          ...this._createSiteDetails('circle', 'WGS84', {
+            circleData: this.defaultData.circle.WGS84
+          })
+        },
+        {
+          siteName: '',
+          siteNumber: 2,
+          ...this._createSiteDetails('circle', 'WGS84', {
+            circleData: {
+              latitude: 51.510000,
+              longitude: -0.130000,
+              width: 25,
+              easting: null,
+              northing: null
+            }
+          })
+        }
+      ]
+    }
+  }
+
+  static createKMLUpload() {
+    const siteDetails = {
       coordinatesEntryMethod: 'file-upload',
       fileType: 'KML',
       filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
     }
+    return {
+      ...siteDetails,
+      sites: [{
+        siteName: '',
+        siteNumber: 1,
+        ...siteDetails
+      }]
+    }
   }
 
   static createShapefileUpload() {
-    return {
+    const siteDetails = {
       coordinatesEntryMethod: 'file-upload',
       fileType: 'Shapefile',
       filePath: 'test/resources/valid-shapefile.zip'
+    }
+    return {
+      ...siteDetails,
+      sites: [{
+        siteName: '',
+        siteNumber: 1,
+        ...siteDetails
+      }]
     }
   }
 

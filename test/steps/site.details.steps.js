@@ -10,6 +10,7 @@ import {
   CompleteSiteDetails,
   ContinueFromBeforeYouStartSiteDetailsPage,
   EnsurePageHeading,
+  EnsureProjectNameDisplayedAsCaption,
   EnsureSiteDetails,
   Navigate,
   NavigateToSiteDetailsPage,
@@ -52,6 +53,14 @@ Given(
     )
   }
 )
+
+Given('a user is providing site details for multiple sites', function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(
+    ApplyForExemption.withValidProjectName().andSiteDetails.forMultipleSites()
+  )
+})
 
 Given(
   'an exemption for a circular site using WGS84 coordinates with latitude {string}, longitude {string} and width {string} metres',
@@ -382,3 +391,26 @@ Given(
     )
   }
 )
+
+When('"Yes" is selected on the "Do you need to tell us about more than one site?" page', async function () {
+  const browseTheWeb = this.actor.ability
+  await browseTheWeb.click('#multipleSitesEnabled')
+})
+
+When('the "Continue" button is clicked', async function () {
+  const browseTheWeb = this.actor.ability
+  await browseTheWeb.click('button[type="submit"]')
+})
+
+Then('the "Site name" page is displayed', async function () {
+  await this.actor.attemptsTo(EnsurePageHeading.is('Site name'))
+})
+
+Then('the project name is displayed in the page caption', async function () {
+  await this.actor.attemptsTo(EnsureProjectNameDisplayedAsCaption.isCorrect())
+})
+
+Then('"Site 1" is displayed beneath the page caption', async function () {
+  const browseTheWeb = this.actor.ability
+  await browseTheWeb.expectElementToContainText('.govuk-body', 'Site 1')
+})
