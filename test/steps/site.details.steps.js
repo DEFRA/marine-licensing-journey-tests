@@ -392,10 +392,13 @@ Given(
   }
 )
 
-When('"Yes" is selected on the "Do you need to tell us about more than one site?" page', async function () {
-  const browseTheWeb = this.actor.ability
-  await browseTheWeb.click('#multipleSitesEnabled')
-})
+When(
+  '"Yes" is selected on the "Do you need to tell us about more than one site?" page',
+  async function () {
+    const browseTheWeb = this.actor.ability
+    await browseTheWeb.click('#multipleSitesEnabled')
+  }
+)
 
 When('the "Continue" button is clicked', async function () {
   const browseTheWeb = this.actor.ability

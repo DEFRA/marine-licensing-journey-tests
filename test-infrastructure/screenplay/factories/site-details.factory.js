@@ -108,11 +108,13 @@ export default class SiteDetailsFactory {
     })
     return {
       ...siteDetails,
-      sites: [{
-        siteName: '',
-        siteNumber: 1,
-        ...siteDetails
-      }]
+      sites: [
+        {
+          siteName: '',
+          siteNumber: 1,
+          ...siteDetails
+        }
+      ]
     }
   }
 
@@ -125,23 +127,29 @@ export default class SiteDetailsFactory {
     if (shape === 'circle') {
       return this._createSiteDetails(siteType, coordinateSystem, {
         circleData: data,
-        sites: [{
-          siteName: '',
-          siteNumber: 1,
-          ...this._createSiteDetails(siteType, coordinateSystem, { circleData: data })
-        }]
+        sites: [
+          {
+            siteName: '',
+            siteNumber: 1,
+            ...this._createSiteDetails(siteType, coordinateSystem, {
+              circleData: data
+            })
+          }
+        ]
       })
     }
 
     return this._createSiteDetails(siteType, coordinateSystem, {
       polygonData: this._createCoordinateSet(data, coordinateSystem),
-      sites: [{
-        siteName: '',
-        siteNumber: 1,
-        ...this._createSiteDetails(siteType, coordinateSystem, {
-          polygonData: this._createCoordinateSet(data, coordinateSystem)
-        })
-      }]
+      sites: [
+        {
+          siteName: '',
+          siteNumber: 1,
+          ...this._createSiteDetails(siteType, coordinateSystem, {
+            polygonData: this._createCoordinateSet(data, coordinateSystem)
+          })
+        }
+      ]
     })
   }
 
@@ -169,8 +177,8 @@ export default class SiteDetailsFactory {
           siteNumber: 2,
           ...this._createSiteDetails('circle', 'WGS84', {
             circleData: {
-              latitude: 51.510000,
-              longitude: -0.130000,
+              latitude: 51.51,
+              longitude: -0.13,
               width: 25,
               easting: null,
               northing: null
@@ -189,11 +197,13 @@ export default class SiteDetailsFactory {
     }
     return {
       ...siteDetails,
-      sites: [{
-        siteName: '',
-        siteNumber: 1,
-        ...siteDetails
-      }]
+      sites: [
+        {
+          siteName: '',
+          siteNumber: 1,
+          ...siteDetails
+        }
+      ]
     }
   }
 
@@ -205,11 +215,13 @@ export default class SiteDetailsFactory {
     }
     return {
       ...siteDetails,
-      sites: [{
-        siteName: '',
-        siteNumber: 1,
-        ...siteDetails
-      }]
+      sites: [
+        {
+          siteName: '',
+          siteNumber: 1,
+          ...siteDetails
+        }
+      ]
     }
   }
 
