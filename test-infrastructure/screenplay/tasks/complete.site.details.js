@@ -88,7 +88,6 @@ export default class CompleteSiteDetails extends Task {
         UploadFileAndContinue.withPath(this.siteDetails.filePath)
       )
 
-      // After file upload, we land on "Review site details" page and need to continue
       if (this.saveAndContinue) {
         await this.actor.attemptsTo(ClickSaveAndContinue.now())
         this.actor.updates(Memory.markTaskCompleted('siteDetails'))
@@ -176,7 +175,6 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async handleSiteNameFlow() {
-    // Enter the site name from the factory data
     const siteName = this.siteDetails.sites[0].siteName
     await this.browseTheWeb.setValue('#siteName', siteName)
     await this.browseTheWeb.click('button[type="submit"]')
