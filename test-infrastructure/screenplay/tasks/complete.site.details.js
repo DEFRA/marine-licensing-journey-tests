@@ -99,11 +99,6 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeManualCoordinatesFlow() {
-    // Handle multi-site case - just stop at site name page
-    if (this.siteDetails.multipleSitesEnabled === 'yes') {
-      return // Stop here - we'll be on the site name page
-    }
-
     if (this.siteDetails.siteType === 'circle') {
       await this.completeCircleFlow()
     } else if (this.siteDetails.siteType === 'triangle') {
@@ -181,8 +176,9 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async handleSiteNameFlow() {
-    // For now, just continue without entering a site name
-    // This will get us to the site name page as required by the test
+    // Enter the site name from the factory data
+    const siteName = this.siteDetails.sites[0].siteName
+    await this.browseTheWeb.setValue('#siteName', siteName)
     await this.browseTheWeb.click('button[type="submit"]')
   }
 

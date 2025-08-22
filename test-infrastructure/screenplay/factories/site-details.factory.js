@@ -110,7 +110,7 @@ export default class SiteDetailsFactory {
       ...siteDetails,
       sites: [
         {
-          siteName: '',
+          siteName: 'Main Research Site',
           siteNumber: 1,
           ...siteDetails
         }
@@ -129,7 +129,7 @@ export default class SiteDetailsFactory {
         circleData: data,
         sites: [
           {
-            siteName: '',
+            siteName: 'Main Research Site',
             siteNumber: 1,
             ...this._createSiteDetails(siteType, coordinateSystem, {
               circleData: data
@@ -143,7 +143,7 @@ export default class SiteDetailsFactory {
       polygonData: this._createCoordinateSet(data, coordinateSystem),
       sites: [
         {
-          siteName: '',
+          siteName: 'Main Research Site',
           siteNumber: 1,
           ...this._createSiteDetails(siteType, coordinateSystem, {
             polygonData: this._createCoordinateSet(data, coordinateSystem)
@@ -166,14 +166,14 @@ export default class SiteDetailsFactory {
       circleData: this.defaultData.circle.WGS84,
       sites: [
         {
-          siteName: '',
+          siteName: 'Main Research Site',
           siteNumber: 1,
           ...this._createSiteDetails('circle', 'WGS84', {
             circleData: this.defaultData.circle.WGS84
           })
         },
         {
-          siteName: '',
+          siteName: 'Marine Research Site Beta',
           siteNumber: 2,
           ...this._createSiteDetails('circle', 'WGS84', {
             circleData: {
@@ -199,7 +199,7 @@ export default class SiteDetailsFactory {
       ...siteDetails,
       sites: [
         {
-          siteName: '',
+          siteName: 'Main Research Site',
           siteNumber: 1,
           ...siteDetails
         }
@@ -217,7 +217,7 @@ export default class SiteDetailsFactory {
       ...siteDetails,
       sites: [
         {
-          siteName: '',
+          siteName: 'Main Research Site',
           siteNumber: 1,
           ...siteDetails
         }
