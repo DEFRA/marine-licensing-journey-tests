@@ -1,7 +1,7 @@
 @issue=ML-228
 Feature: Multi-site: Provide multiple sites for an exemption notification
 
-  @smoke @run-only
+  @smoke
   Scenario: Complete site details for multiple sites
     Given a user is providing site details for multiple sites
     And the site details task is reached
