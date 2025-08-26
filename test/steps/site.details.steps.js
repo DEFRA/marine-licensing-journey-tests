@@ -57,7 +57,9 @@ Given('a user is providing site details for multiple sites', function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(
-    ApplyForExemption.withValidProjectName().andSiteDetails.forMultipleSites()
+    ApplyForExemption.withValidProjectName()
+      .andActivityDates.withValidDates()
+      .andSiteDetails.forMultipleSites()
   )
 })
 
