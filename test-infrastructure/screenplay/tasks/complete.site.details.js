@@ -13,6 +13,7 @@ import {
   EnterMultipleCoordinatesPageInteractions,
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
+  SameActivityDatesPageInteractions,
   WhatCoordinateSystemPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
@@ -178,6 +179,10 @@ export default class CompleteSiteDetails extends Task {
     const siteName = this.siteDetails.sites[0].siteName
     await this.browseTheWeb.setValue('#siteName', siteName)
     await this.browseTheWeb.click('button[type="submit"]')
+    await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sameActivityDates
+    )
   }
 
   async enterWidthOfCircleIfOnWidthPage() {

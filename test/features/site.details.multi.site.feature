@@ -1,4 +1,4 @@
-@issue=ML-228
+@issue=ML-228 @issue=ML-419
 Feature: Multi-site: Provide multiple sites for an exemption notification
 
   @smoke
@@ -8,3 +8,4 @@ Feature: Multi-site: Provide multiple sites for an exemption notification
     When the site details task is completed
     Then the site details review page shows the site details
     And the "Site details" task status is "Completed"
+    

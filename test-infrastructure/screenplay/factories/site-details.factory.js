@@ -135,6 +135,7 @@ export default class SiteDetailsFactory {
   static createMultipleSites() {
     return {
       multipleSitesEnabled: 'yes',
+      sameActivityDates: 'yes',
       coordinatesEntryMethod: 'enter-manually',
       siteType: 'circle',
       coordinateSystem: 'WGS84',
