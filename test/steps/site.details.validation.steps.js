@@ -21,7 +21,6 @@ import {
   EnsureErrorNotDisplayed,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
-  EnsureThatCoordinateEntryMethodSelected,
   EnsureThatMultipleSiteOptionSelected,
   EnsureThatSiteTypeSelected,
   Navigate,
@@ -305,12 +304,6 @@ Then(
 
 Then('the multiple sites option is selected', async function () {
   await this.actor.attemptsTo(EnsureThatMultipleSiteOptionSelected.is('no'))
-})
-
-Then('the manual coordinate entry method is selected', async function () {
-  await this.actor.attemptsTo(
-    EnsureThatCoordinateEntryMethodSelected.is('enter-manually')
-  )
 })
 
 Then('the circular site option is selected', async function () {

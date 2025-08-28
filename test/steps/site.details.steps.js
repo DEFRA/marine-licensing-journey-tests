@@ -17,28 +17,6 @@ import {
 } from '~/test-infrastructure/screenplay'
 
 Given(
-  'the user wants to apply for an exemption for a circular site using WGS84 coordinates',
-  function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithWGS84Coordinates()
-    )
-  }
-)
-
-Given(
-  'the user wants to apply for an exemption for a circular site using OSGB36 coordinates',
-  function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithOSGB36Coordinates()
-    )
-  }
-)
-
-Given(
   'an exemption for a circular site using OSGB36 coordinates with eastings {string}, northings {string} and width {string} metres',
   function (eastings, northings, circleWidth) {
     this.actor = new Actor('Alice')
@@ -74,28 +52,6 @@ Given(
         .withLatitude(latitude)
         .withLongitude(longitude)
         .withWidth(circleWidth)
-    )
-  }
-)
-
-Given(
-  'the user wants to apply for an exemption for a polygonal site using WGS84 coordinates',
-  function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forATriangleWithWGS84Coordinates()
-    )
-  }
-)
-
-Given(
-  'the user wants to apply for an exemption for a polygonal site using OSGB36 coordinates',
-  function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forATriangleWithOSGB36Coordinates()
     )
   }
 )
@@ -240,24 +196,6 @@ When(
   }
 )
 
-When(
-  'the quadrilateral site coordinates are entered and continued to review',
-  async function () {
-    await this.actor.attemptsTo(
-      new CompleteSiteDetails(false, false, true, true)
-    )
-  }
-)
-
-When(
-  'the pentagon site coordinates are entered and continued to review',
-  async function () {
-    await this.actor.attemptsTo(
-      new CompleteSiteDetails(false, false, true, true)
-    )
-  }
-)
-
 Then('the polygon coordinate entry page is displayed', async function () {
   await this.actor.attemptsTo(
     EnsurePageHeading.is(
@@ -284,19 +222,6 @@ When(
   }
 )
 
-Given(
-  'an exemption for a {int} point random polygon site using WGS84 coordinates',
-  function (coordinateCount) {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName()
-        .andSiteDetails.forARandomPolygonWithWGS84Coordinates()
-        .withRandomCoordinateCount(coordinateCount)
-    )
-  }
-)
-
 When(
   'the {int} point random polygon coordinates are entered using add another point',
   async function (coordinateCount) {
@@ -313,40 +238,11 @@ Then('the site details review page shows the site details', async function () {
 })
 
 Then(
-  'the site details review page shows the triangular site details',
-  async function () {
-    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
-    await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
-  }
-)
-
-Then(
   'the polygon site details review page shows the correct site details',
   async function () {
     await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
     await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
-  }
-)
-
-Then(
-  'the Enter the width of the circular site page is displayed',
-  async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Enter the width of the circular site in metres')
-    )
-  }
-)
-
-Then(
-  'the Enter multiple sets of coordinates to mark the boundary of the site page is displayed',
-  async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is(
-        'Enter multiple sets of coordinates to mark the boundary of the site'
-      )
-    )
   }
 )
 

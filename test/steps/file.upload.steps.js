@@ -6,8 +6,6 @@ import {
   ContinueFromBeforeYouStartSiteDetailsPage,
   EnsureErrorDisplayed,
   EnsureNoErrorsDisplayed,
-  EnsurePageHeading,
-  EnsureProjectNameDisplayedAsCaption,
   SelectTheTask
 } from '~/test-infrastructure/screenplay/interactions/index.js'
 
@@ -204,59 +202,8 @@ When(
 // SHARED STEP DEFINITIONS
 // ========================================
 
-Given('the Upload a KML file page is displayed', async function () {
-  await this.actor.attemptsTo(
-    EnsurePageHeading.is('Upload a KML file'),
-    EnsureProjectNameDisplayedAsCaption.fromMemory()
-  )
-})
-
-Given(
-  'the {string} file type has been selected',
-  async function (fileUploadType) {
-    await this.actor.attemptsTo(
-      WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
-        fileUploadType
-      ),
-      ClickSaveAndContinue.now()
-    )
-  }
-)
-
 When('completing the site details task', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
-})
-
-When('uploading a valid KML file', async function () {
-  await this.actor.attemptsTo(CompleteSiteDetails.now())
-})
-
-When(
-  'an invalid file type {string} is selected for upload',
-  async function (fileUploadType) {
-    await this.actor.attemptsTo(
-      WhichTypeOfFileDoYouWantToUploadPageInteractions.selectOption(
-        fileUploadType
-      ),
-      ClickSaveAndContinue.now()
-    )
-  }
-)
-
-Then(
-  'the {string} file upload type error {string} is displayed',
-  async function (fileUploadType, expectedErrorMessage) {
-    await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is('#fileUploadType-error', expectedErrorMessage)
-    )
-  }
-)
-
-Then('the Upload a Shapefile file page is displayed', async function () {
-  await this.actor.attemptsTo(
-    EnsurePageHeading.is('Upload a Shapefile'),
-    EnsureProjectNameDisplayedAsCaption.fromMemory()
-  )
 })
 
 Then('the file is successfully processed', async function () {
