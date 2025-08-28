@@ -5,10 +5,6 @@ export default class EnsureNoErrorsDisplayed extends Task {
     return new EnsureNoErrorsDisplayed(locators)
   }
 
-  static withLocators(locators) {
-    return new EnsureNoErrorsDisplayed(locators)
-  }
-
   constructor(locators = ['.govuk-error-summary']) {
     super()
     this.locators = Array.isArray(locators) ? locators : [locators]

@@ -23,18 +23,4 @@ export default class ActivityDatesFactory {
       completed: true
     }
   }
-
-  static createWithCompletion(dateType = 'valid', completed = true) {
-    const dateGenerators = {
-      valid: () => this.createValidDates(),
-      same: () => this.createSameStartAndEndDate(),
-      short: () => this.createShortDuration(),
-      long: () => this.createLongDuration()
-    }
-
-    return {
-      dates: dateGenerators[dateType](),
-      completed
-    }
-  }
 }

@@ -39,16 +39,4 @@ export default class BaseBuilder {
   setTaskCompleted(taskName, completed = true) {
     return this.setProperty(`${taskName}TaskCompleted`, completed)
   }
-
-  extend(extensionName, extensionObject) {
-    if (!this._extensions) {
-      this._extensions = {}
-    }
-    this._extensions[extensionName] = extensionObject
-    return this
-  }
-
-  getExtension(extensionName) {
-    return this._extensions?.[extensionName]
-  }
 }

@@ -14,14 +14,6 @@ export default class CompleteActivityDates extends Task {
     return new CompleteActivityDates()
   }
 
-  andThenClickBack() {
-    return new CompleteActivityDates('back')
-  }
-
-  andThenClickCancel() {
-    return new CompleteActivityDates('cancel')
-  }
-
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     if (!exemption) {

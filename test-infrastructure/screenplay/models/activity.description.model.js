@@ -34,8 +34,4 @@ export default class ActivityDescriptionModel {
     const longText = faker.lorem.paragraphs(50, ' ')
     return longText.substring(0, this.NOTIFICATION_DESCRIPTION_MAX_LENGTH + 1) // 4001 characters
   }
-
-  static generateMinimalActivityDescription() {
-    return 'Marine construction activity.'
-  }
 }

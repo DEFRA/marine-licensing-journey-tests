@@ -19,10 +19,6 @@ export default class TaskListPage {
     return 'ul.govuk-task-list__items > li'
   }
 
-  static getTaskListContainer() {
-    return 'ul.govuk-task-list__items'
-  }
-
   static getReviewAndSendButton() {
     return {
       primary: `//a[normalize-space(text()) = "Review and send your information"]`,

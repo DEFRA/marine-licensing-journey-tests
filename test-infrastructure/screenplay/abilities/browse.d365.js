@@ -204,11 +204,6 @@ export default class BrowseD365 {
     await this.captureNetworkDebuggingInfo()
   }
 
-  async fillField(selector, value) {
-    const page = await this.launch()
-    await page.locator(selector).fill(value)
-  }
-
   async clickElement(selector) {
     const page = await this.launch()
     await page.locator(selector).click()
@@ -217,11 +212,6 @@ export default class BrowseD365 {
   async clickByRole(role, name, timeout = 60000) {
     const page = await this.launch()
     await page.getByRole(role, { name }).click({ timeout })
-  }
-
-  async isElementVisible(selector) {
-    const page = await this.launch()
-    return await page.locator(selector).isVisible()
   }
 
   async getInputValue(selector) {

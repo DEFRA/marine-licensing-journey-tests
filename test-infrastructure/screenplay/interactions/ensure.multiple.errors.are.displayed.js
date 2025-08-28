@@ -15,10 +15,6 @@ export default class EnsureMultipleErrorsAreDisplayed extends Task {
     return new EnsureMultipleErrorsAreDisplayed(fieldErrorList, 'polygon-wgs84')
   }
 
-  static withCustomSelectors(errorDefinitions) {
-    return new EnsureMultipleErrorsAreDisplayed(errorDefinitions, 'custom')
-  }
-
   constructor(fieldErrorList, type = 'custom') {
     super()
     this.fieldErrorList = fieldErrorList

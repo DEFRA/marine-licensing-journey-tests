@@ -23,14 +23,6 @@ export default class BrowseTheWeb extends Ability {
     await this.browser.url(url)
   }
 
-  async getTitle() {
-    return await this.browser.getTitle()
-  }
-
-  async getHeading() {
-    return await this.browser.$(CommonElementsPage.mainHeading).getText()
-  }
-
   async getElement(locator) {
     if (!locator) {
       chaiExpect.fail(ERROR_MESSAGES.LOCATOR_UNDEFINED)
@@ -83,11 +75,6 @@ export default class BrowseTheWeb extends Ability {
 
   async clickSubmit() {
     await this.click(CommonElementsPage.submitButton)
-  }
-
-  async selectOption(locator, option) {
-    const element = await this.getElement(locator)
-    await element.selectByVisibleText(option)
   }
 
   async expectElementToContainText(locator, expectedSubstring) {
@@ -164,10 +151,6 @@ export default class BrowseTheWeb extends Ability {
 
   async registerTestUser(scenarioName) {
     return await this.defraIdStub.registerTestUser(scenarioName)
-  }
-
-  async expireTestUser(userId) {
-    return await this.defraIdStub.expireTestUser(userId)
   }
 
   async setValue(locator, value) {

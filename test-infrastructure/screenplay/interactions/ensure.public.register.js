@@ -26,31 +26,6 @@ export default class EnsurePublicRegisterTask extends Task {
     )
   }
 
-  static isCompleted() {
-    return new EnsurePublicRegisterTask(
-      EnsurePublicRegisterTask.MODES.COMPLETED
-    )
-  }
-
-  static isNotStarted() {
-    return new EnsurePublicRegisterTask(
-      EnsurePublicRegisterTask.MODES.NOT_STARTED
-    )
-  }
-
-  static isPrePopulated(consent) {
-    return new EnsurePublicRegisterTask(
-      EnsurePublicRegisterTask.MODES.PRE_POPULATED,
-      consent
-    )
-  }
-
-  static isNotPrePopulated() {
-    return new EnsurePublicRegisterTask(
-      EnsurePublicRegisterTask.MODES.NOT_PRE_POPULATED
-    )
-  }
-
   constructor(mode, option = null, withholdReason = '') {
     super()
     this.mode = mode

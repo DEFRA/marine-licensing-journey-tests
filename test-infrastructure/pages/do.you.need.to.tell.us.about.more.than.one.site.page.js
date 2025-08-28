@@ -2,7 +2,6 @@ export default class DoYouNeedToTellUsAboutMoreThanOneSitePage {
   static no = '#multipleSitesEnabled-2'
   static yes = '#multipleSitesEnabled'
   static saveAndContinue = 'button[type="submit"]'
-  static moreThanOneSiteError = '#multipleSitesEnabled-error'
 
   static getMoreThanOneSiteSelector(moreThanOneSite) {
     if (moreThanOneSite === 'yes') return this.yes

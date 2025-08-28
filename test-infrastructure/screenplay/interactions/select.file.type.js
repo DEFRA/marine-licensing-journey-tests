@@ -11,10 +11,6 @@ export default class SelectFileType extends Task {
     return new SelectFileType('kml')
   }
 
-  static clickContinueWithoutSelection() {
-    return new SelectFileType('continue-without-selection')
-  }
-
   constructor(action) {
     super()
     this.action = action

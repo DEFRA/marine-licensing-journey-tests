@@ -25,14 +25,6 @@ export default class NavigateToSiteDetailsPage extends Task {
     return new NavigateToSiteDetailsPage('enter-wgs84-coordinates')
   }
 
-  static enterOSGB36Coordinates() {
-    return new NavigateToSiteDetailsPage('enter-osgb36-coordinates')
-  }
-
-  static enterWidthOfCircle() {
-    return new NavigateToSiteDetailsPage('enter-width-of-circle')
-  }
-
   static enterWGS84CoordinatesPageOnly() {
     return new NavigateToSiteDetailsPage('enter-wgs84-coordinates-page-only')
   }

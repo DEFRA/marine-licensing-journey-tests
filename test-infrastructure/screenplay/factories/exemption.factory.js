@@ -33,26 +33,6 @@ export default class ExemptionFactory {
     return this.createBaseExemption({ projectName })
   }
 
-  static createValidActivityDates() {
-    return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createValidDates()
-    })
-  }
-
-  static createSameStartAndEndActivityDates() {
-    return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createSameStartAndEndDate()
-    })
-  }
-
-  static createCompletedActivityDates() {
-    const completedDates = ActivityDatesFactory.createCompletedDates()
-    return this.createBaseExemption({
-      activityDates: completedDates.dates,
-      activityDatesTaskCompleted: completedDates.completed
-    })
-  }
-
   static createConsentToPublicRegister() {
     return this.createBaseExemption({
       publicRegister: { consent: true }
@@ -146,12 +126,6 @@ export default class ExemptionFactory {
     })
   }
 
-  static createShapefileLargeUpload() {
-    return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/mygeodata-large.zip'
-    })
-  }
-
   static createShapefileFileUpload() {
     return this.createFileUploadBase('shapefile')
   }
@@ -169,25 +143,5 @@ export default class ExemptionFactory {
 
   static createShapefileEmptyFile(filePath) {
     return this.createFileUploadBase('shapefile', { filePath })
-  }
-
-  static createVirusUpload() {
-    return this.createKMLVirusUpload()
-  }
-
-  static createFileUpload() {
-    return this.createKMLFileUpload()
-  }
-
-  static createWrongFileType() {
-    return this.createKMLWrongFileType()
-  }
-
-  static createLargeFile(filePath) {
-    return this.createKMLLargeFile(filePath)
-  }
-
-  static createEmptyFile(filePath) {
-    return this.createKMLEmptyFile(filePath)
   }
 }

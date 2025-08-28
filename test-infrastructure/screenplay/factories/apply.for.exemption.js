@@ -5,7 +5,6 @@ import {
   siteDetailsExtension
 } from './builder-extensions.js'
 import ExemptionFactory from './exemption.factory.js'
-import SiteDetailsFactory from './site-details.factory.js'
 
 export default class ApplyForExemption extends BaseBuilder {
   static withValidProjectName() {
@@ -15,22 +14,6 @@ export default class ApplyForExemption extends BaseBuilder {
   static withProjectName(projectName) {
     return new ApplyForExemption(
       ExemptionFactory.createWithProjectName(projectName)
-    )
-  }
-
-  static withValidActivityDates() {
-    return new ApplyForExemption(ExemptionFactory.createValidActivityDates())
-  }
-
-  static withSameStartAndEndActivityDates() {
-    return new ApplyForExemption(
-      ExemptionFactory.createSameStartAndEndActivityDates()
-    )
-  }
-
-  static withCompletedActivityDates() {
-    return new ApplyForExemption(
-      ExemptionFactory.createCompletedActivityDates()
     )
   }
 
@@ -104,26 +87,6 @@ export default class ApplyForExemption extends BaseBuilder {
     )
   }
 
-  static withVirusUpload() {
-    return new ApplyForExemption(ExemptionFactory.createVirusUpload())
-  }
-
-  static withFileUpload() {
-    return new ApplyForExemption(ExemptionFactory.createFileUpload())
-  }
-
-  static withWrongFileType() {
-    return new ApplyForExemption(ExemptionFactory.createWrongFileType())
-  }
-
-  static withLargeFile(filePath) {
-    return new ApplyForExemption(ExemptionFactory.createLargeFile(filePath))
-  }
-
-  static withEmptyFile(filePath) {
-    return new ApplyForExemption(ExemptionFactory.createEmptyFile(filePath))
-  }
-
   activityDates(dates) {
     return this.setProperty('activityDates', dates)
   }
@@ -138,10 +101,6 @@ export default class ApplyForExemption extends BaseBuilder {
 
   longitude(value) {
     return this.setSafeProperty('siteDetails.circleData.longitude', value)
-  }
-
-  radius(value) {
-    return this.setSafeProperty('siteDetails.circleData.radiusMeters', value)
   }
 
   eastings(value) {
@@ -178,15 +137,6 @@ export default class ApplyForExemption extends BaseBuilder {
 
   withCoordinatePoints(points) {
     return this.setSafeProperty('siteDetails.polygonData.coordinates', points)
-  }
-
-  withRandomCoordinateCount(coordinateCount) {
-    const coordinateSystem = this.data?.siteDetails?.coordinateSystem || 'WGS84'
-    const randomSiteDetails = SiteDetailsFactory.createRandomPolygon(
-      coordinateCount,
-      coordinateSystem
-    )
-    return this.setProperty('siteDetails', randomSiteDetails)
   }
 
   get andSiteDetails() {

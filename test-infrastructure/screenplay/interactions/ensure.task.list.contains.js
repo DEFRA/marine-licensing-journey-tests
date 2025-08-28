@@ -16,20 +16,6 @@ export default class EnsureTaskListContains extends Task {
     )
   }
 
-  static atLeast(count) {
-    return new EnsureTaskListContains(
-      count,
-      EnsureTaskListContains.MODES.AT_LEAST
-    )
-  }
-
-  static atMost(count) {
-    return new EnsureTaskListContains(
-      count,
-      EnsureTaskListContains.MODES.AT_MOST
-    )
-  }
-
   constructor(count, mode = EnsureTaskListContains.MODES.EXACTLY) {
     super()
     this.count = count

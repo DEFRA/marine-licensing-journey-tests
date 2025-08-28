@@ -10,10 +10,6 @@ export default class EnsureProjectNameDisplayedAsCaption extends Task {
     return new EnsureProjectNameDisplayedAsCaption(expectedProjectName)
   }
 
-  static fromMemory() {
-    return new EnsureProjectNameDisplayedAsCaption()
-  }
-
   async performAs(actor) {
     const projectName =
       this.expectedProjectName || actor.recalls('exemption').projectName

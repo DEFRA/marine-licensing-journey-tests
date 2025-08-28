@@ -113,13 +113,4 @@ export class DefraIdStubUserManager {
       )
     }
   }
-
-  async isStubAvailable() {
-    try {
-      const response = await fetch(`${this.stubUrl}/health`)
-      return response.ok
-    } catch {
-      return false
-    }
-  }
 }
