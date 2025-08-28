@@ -19,6 +19,12 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
     When the user continues the notification from the dashboard
     Then the task list page is displayed
 
+  @run-only
+  Scenario: When a user has previously submitted a notification and starts a new one, no previously input data is shown
+    Given a user has submitted an exemption notification
+    When the user starts a new notification
+    Then the project name is not pre-populated
+
   @smoke
   Scenario: View dashboard with notifications in correct sort order
     Given the user has multiple notifications with different statuses and names

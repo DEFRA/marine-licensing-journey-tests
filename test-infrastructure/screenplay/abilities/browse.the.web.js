@@ -139,6 +139,17 @@ export default class BrowseTheWeb extends Ability {
     await expect(isSelected).toBe(false)
   }
 
+  async inputIsEmpty(locator) {
+    const element = await this.getElement(locator)
+    const value = await element.getValue()
+    return value === null || value === '' || value === undefined
+  }
+
+  async expectInputToBeEmpty(locator) {
+    const isEmpty = await this.inputIsEmpty(locator)
+    await expect(isEmpty).toBe(true)
+  }
+
   async isDisplayed(locator) {
     const element = await this.getElement(locator)
     await expect(element).toBeDisplayed()
