@@ -95,20 +95,6 @@ export default class SiteDetailsFactory {
     return coordinates
   }
 
-  static createRandomPolygon(coordinateCount, coordinateSystem = 'WGS84') {
-    const randomCoordinates = this.generateRandomPolygonCoordinates(
-      coordinateCount,
-      coordinateSystem
-    )
-    const siteDetails = this._createSiteDetails('triangle', coordinateSystem, {
-      polygonData: this._createCoordinateSet(
-        randomCoordinates,
-        coordinateSystem
-      )
-    })
-    return this._wrapInSitesArray(siteDetails)
-  }
-
   static create(shape, coordinateSystem) {
     const siteType = shape === 'circle' ? 'circle' : 'triangle'
     const data = this.defaultData[shape]?.[coordinateSystem]

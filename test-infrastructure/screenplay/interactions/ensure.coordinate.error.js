@@ -3,10 +3,6 @@ import EnterMultipleCoordinatesPage from '../../pages/enter.multiple.coordinates
 import Task from '../base/task.js'
 
 export default class EnsureCoordinateError extends Task {
-  static forField(fieldType, point, expectedError) {
-    return new EnsureCoordinateError(fieldType, point, expectedError)
-  }
-
   constructor(fieldType, point, expectedError) {
     super()
     this.fieldType = fieldType

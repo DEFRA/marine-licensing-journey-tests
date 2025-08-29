@@ -107,18 +107,6 @@ export default class ActivityDatesModel {
     return this.generateDate()
   }
 
-  static generateSameStartAndEndDate() {
-    return this.generateDate({ sameDate: true })
-  }
-
-  static generateShortDurationActivityDates() {
-    return this.generateDate({ duration: 'short' })
-  }
-
-  static generateLongDurationActivityDates() {
-    return this.generateDate({ duration: 'long' })
-  }
-
   static generateTodayAsStartDate() {
     return this.generateDate({ useToday: true })
   }

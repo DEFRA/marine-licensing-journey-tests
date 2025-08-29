@@ -3,10 +3,6 @@ import EnterMultipleCoordinatesPage from '../../pages/enter.multiple.coordinates
 import Task from '../base/task.js'
 
 export default class SetCoordinateField extends Task {
-  static withValue(fieldType, point, value) {
-    return new SetCoordinateField(fieldType, point, value)
-  }
-
   constructor(fieldType, point, value) {
     super()
     this.fieldType = fieldType
