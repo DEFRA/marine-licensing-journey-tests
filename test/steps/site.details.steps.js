@@ -16,21 +16,6 @@ import {
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
-Given(
-  'an exemption for a circular site using OSGB36 coordinates with eastings {string}, northings {string} and width {string} metres',
-  function (eastings, northings, circleWidth) {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName()
-        .andSiteDetails.forACircleWithOSGB36Coordinates()
-        .withEastings(eastings)
-        .withNorthings(northings)
-        .withWidth(circleWidth)
-    )
-  }
-)
-
 Given('a user is providing site details for multiple sites', function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
@@ -40,21 +25,6 @@ Given('a user is providing site details for multiple sites', function () {
       .andSiteDetails.forMultipleSites()
   )
 })
-
-Given(
-  'an exemption for a circular site using WGS84 coordinates with latitude {string}, longitude {string} and width {string} metres',
-  function (latitude, longitude, circleWidth) {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName()
-        .andSiteDetails.forACircleWithWGS84Coordinates()
-        .withLatitude(latitude)
-        .withLongitude(longitude)
-        .withWidth(circleWidth)
-    )
-  }
-)
 
 Given(
   'an exemption for a triangular site using WGS84 coordinates with point 1 {string}, {string}, point 2 {string}, {string} and point 3 {string}, {string}',

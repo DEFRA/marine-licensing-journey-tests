@@ -115,26 +115,6 @@ export default class ApplyForExemption extends BaseBuilder {
     return this.setSafeProperty('siteDetails.circleData.width', value)
   }
 
-  withLatitude(value) {
-    return this.latitude(value)
-  }
-
-  withLongitude(value) {
-    return this.longitude(value)
-  }
-
-  withEastings(value) {
-    return this.eastings(value)
-  }
-
-  withNorthings(value) {
-    return this.northings(value)
-  }
-
-  withWidth(value) {
-    return this.width(value)
-  }
-
   withCoordinatePoints(points) {
     return this.setSafeProperty('siteDetails.polygonData.coordinates', points)
   }

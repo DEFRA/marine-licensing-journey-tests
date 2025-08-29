@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-
 export default class SiteDetailsFactory {
   static defaultData = {
     circle: {
@@ -78,21 +76,6 @@ export default class SiteDetailsFactory {
     ).toFixed(6)
 
     return [latitude, longitude]
-  }
-
-  static generateRandomPolygonCoordinates(
-    coordinateCount,
-    coordinateSystem = 'WGS84'
-  ) {
-    if (coordinateSystem !== 'WGS84') {
-      expect.fail('Random coordinate generation only supports WGS84 currently')
-    }
-
-    const coordinates = []
-    for (let i = 0; i < coordinateCount; i++) {
-      coordinates.push(this.generateRandomWGS84Coordinate())
-    }
-    return coordinates
   }
 
   static create(shape, coordinateSystem) {

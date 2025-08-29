@@ -9,9 +9,7 @@ import {
   CompleteProjectName,
   EnsureErrorDisplayed,
   EnsureThatProjectName,
-  Memory,
-  Navigate,
-  SelectTheTask
+  Navigate
 } from '~/test-infrastructure/screenplay'
 
 Given('the project name page is displayed', async function () {
@@ -46,14 +44,6 @@ When(
   }
 )
 
-When('the project name is updated', async function () {
-  const newProjectName =
-    ApplyForExemption.withValidProjectName().getData().projectName
-  this.actor.updates(Memory.ofProjectNameWith(newProjectName))
-  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
-  await this.actor.attemptsTo(CompleteProjectName.now())
-})
-
 Then(
   'the project name error {string} is displayed',
   async function (errorMessage) {
@@ -64,10 +54,5 @@ Then(
 )
 
 Then('the project name is pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
-})
-
-Then('the new project name is saved', async function () {
-  await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
 })

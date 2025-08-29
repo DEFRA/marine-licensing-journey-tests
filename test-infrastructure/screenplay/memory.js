@@ -1,13 +1,6 @@
 import { expect } from 'chai'
 
 export default class Memory {
-  static ofProjectNameWith(newProjectName) {
-    if (!newProjectName || typeof newProjectName !== 'string') {
-      expect.fail('Project name must be a non-empty string')
-    }
-    return (exemption) => (exemption.projectName = newProjectName)
-  }
-
   static ofPublicRegisterWithConsent(consent) {
     if (typeof consent !== 'boolean') {
       expect.fail('Consent must be a boolean value')
