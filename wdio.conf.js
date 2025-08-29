@@ -14,7 +14,7 @@ const chromeProxyConfig = {
 
 const getTags = () => {
   if (process.env.ENVIRONMENT === 'test') {
-    return '@real-defra-id or @d365'
+    return '@real-defra-id or @d365 or @fivium'
   }
   return 'not @wip and not @bug and not @local-only and not @d365 and not @real-defra-id'
 }

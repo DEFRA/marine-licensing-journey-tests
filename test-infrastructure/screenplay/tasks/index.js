@@ -7,6 +7,7 @@ export { default as CompletePublicRegisterTask } from './complete.public.registe
 export { default as CompleteSiteDetails } from './complete.site.details'
 export { default as DeleteDraftNotification } from './delete.draft.notification'
 export { default as FillForm } from './fill.form'
+export { default as LaunchIat } from './launch.iat'
 export { default as LoginToD365 } from './login.to.d365'
 export { default as Navigate } from './navigate'
 export { default as NavigateToDashboard } from './navigate.to.dashboard'
