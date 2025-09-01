@@ -9,24 +9,24 @@
  * @returns {string} The constructed URL with query parameters
  */
 export function constructIatUrl(baseUrl, iatContext) {
-    if (!iatContext) {
-        return baseUrl
+  if (!iatContext) {
+    return baseUrl
+  }
+
+  const params = new URLSearchParams({
+    ACTIVITY_TYPE: iatContext.activityType.code,
+    ARTICLE: iatContext.articleCode.code,
+    pdfDownloadUrl: iatContext.pdfUrl
+  })
+
+  if (iatContext.activityType.supportsPurpose && iatContext.activityPurpose) {
+    const subtypeKey = getActivitySubtypeKey(iatContext.activityType.code)
+    if (subtypeKey) {
+      params.set(subtypeKey, iatContext.activityPurpose)
     }
+  }
 
-    const params = new URLSearchParams({
-        ACTIVITY_TYPE: iatContext.activityType.code,
-        ARTICLE: iatContext.articleCode.code,
-        pdfDownloadUrl: iatContext.pdfUrl
-    })
-
-    if (iatContext.activityType.supportsPurpose && iatContext.activityPurpose) {
-        const subtypeKey = getActivitySubtypeKey(iatContext.activityType.code)
-        if (subtypeKey) {
-            params.set(subtypeKey, iatContext.activityPurpose)
-        }
-    }
-
-    return `${baseUrl}?${params.toString()}`
+  return `${baseUrl}?${params.toString()}`
 }
 
 /**
@@ -35,11 +35,11 @@ export function constructIatUrl(baseUrl, iatContext) {
  * @returns {string|undefined} The corresponding subtype parameter key
  */
 function getActivitySubtypeKey(activityTypeCode) {
-    const subtypeMap = {
-        CON: 'EXE_ACTIVITY_SUBTYPE_CONSTRUCTION',
-        DEPOSIT: 'EXE_ACTIVITY_SUBTYPE_DEPOSIT',
-        REMOVAL: 'EXE_ACTIVITY_SUBTYPE_REMOVAL',
-        DREDGE: 'EXE_ACTIVITY_SUBTYPE_DREDGING'
-    }
-    return subtypeMap[activityTypeCode]
+  const subtypeMap = {
+    CON: 'EXE_ACTIVITY_SUBTYPE_CONSTRUCTION',
+    DEPOSIT: 'EXE_ACTIVITY_SUBTYPE_DEPOSIT',
+    REMOVAL: 'EXE_ACTIVITY_SUBTYPE_REMOVAL',
+    DREDGE: 'EXE_ACTIVITY_SUBTYPE_DREDGING'
+  }
+  return subtypeMap[activityTypeCode]
 }
