@@ -27,12 +27,18 @@ export default class ExemptionFactory {
       activityDescriptionTaskCompleted: false,
       activityDatesTaskCompleted: false,
       publicRegisterTaskCompleted: false,
-      iatContext: {
-        activityType: faker.helpers.arrayElement(ACTIVITY_TYPES),
-        articleCode: faker.helpers.arrayElement(ARTICLE_CODES),
-        activityPurpose: faker.helpers.arrayElement(ACTIVITY_PURPOSES),
-        pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
-      },
+      iatContext: (() => {
+        const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
+
+        return {
+          activityType,
+          articleCode: faker.helpers.arrayElement(ARTICLE_CODES),
+          activityPurpose: activityType.supportsPurpose
+            ? faker.helpers.arrayElement(ACTIVITY_PURPOSES)
+            : null,
+          pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
+        }
+      })(),
       ...overrides
     }
   }

@@ -1,11 +1,31 @@
 export const ACTIVITY_TYPES = [
-  { code: 'CON', display: 'Construction' },
-  { code: 'DEPOSIT', display: 'Deposit of a substance or object' },
-  { code: 'REMOVAL', display: 'Removal of a substance or object' },
-  { code: 'DREDGE', display: 'Dredging' },
-  { code: 'INCINERATION', display: 'Incineration of a substance or object' },
-  { code: 'EXPLOSIVES', display: 'Use of an explosive substance' },
-  { code: 'SCUTTLING', display: 'Sinking of a vessel or floating container' }
+  { code: 'CON', display: 'Construction', supportsPurpose: true },
+  {
+    code: 'DEPOSIT',
+    display: 'Deposit of a substance or object',
+    supportsPurpose: true
+  },
+  {
+    code: 'REMOVAL',
+    display: 'Removal of a substance or object',
+    supportsPurpose: true
+  },
+  { code: 'DREDGE', display: 'Dredging', supportsPurpose: true },
+  {
+    code: 'INCINERATION',
+    display: 'Incineration of a substance or object',
+    supportsPurpose: false
+  },
+  {
+    code: 'EXPLOSIVES',
+    display: 'Use of an explosive substance',
+    supportsPurpose: false
+  },
+  {
+    code: 'SCUTTLING',
+    display: 'Sinking of a vessel or floating container',
+    supportsPurpose: false
+  }
 ]
 
 export const ARTICLE_CODES = [
@@ -84,12 +104,23 @@ export const ARTICLE_CODES = [
 ]
 
 export const ACTIVITY_PURPOSES = [
-  'Samples for testing and analysis',
-  'Environmental monitoring and research',
-  'Infrastructure maintenance and repair',
-  'Scientific research and data collection',
-  'Habitat restoration activities',
-  'Navigation channel maintenance',
-  'Coastal protection measures',
-  'Marine conservation work'
+  'coastalProtectionDrainageOrFloodDefence',
+  'crossrailAct',
+  'deepseaMining',
+  'defenceMiningCrossrail',
+  'dredgedMaterial',
+  'emergency',
+  'fishing',
+  'hullCleaning',
+  'maintenance',
+  'markersMooringsAidsToNavigation',
+  'markersMooringsAndAidToNavigation',
+  'miscellaneous',
+  'navigationalDredging',
+  'ObstructionsDanger',
+  'pollutionResponse',
+  'pontoons',
+  'scientificResearch',
+  'shellfish',
+  'waste'
 ]
