@@ -20,7 +20,7 @@ which will play back all their answers and allow them to verify that the answers
   - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
 
-  @smoke @circle @wgs84 @run-only
+  @smoke @circle @wgs84
   Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates with latitude "51.507222", longitude "-0.127500" and width "100" metres, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a circular site using WGS84 coordinates
     When the user clicks Review and send
