@@ -60,24 +60,6 @@ export default class SiteDetailsFactory {
     }
   }
 
-  static generateRandomWGS84Coordinate() {
-    const minLatitude = 49.5
-    const maxLatitude = 61.0
-    const minLongitude = -11.0
-    const maxLongitude = 2.0
-
-    const latitude = (
-      Math.random() * (maxLatitude - minLatitude) +
-      minLatitude
-    ).toFixed(6)
-    const longitude = (
-      Math.random() * (maxLongitude - minLongitude) +
-      minLongitude
-    ).toFixed(6)
-
-    return [latitude, longitude]
-  }
-
   static create(shape, coordinateSystem) {
     const siteType = shape === 'circle' ? 'circle' : 'triangle'
     const data = this.defaultData[shape]?.[coordinateSystem]
