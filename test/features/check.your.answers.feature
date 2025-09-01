@@ -19,6 +19,7 @@ which will play back all their answers and allow them to verify that the answers
   - ML-82: The user is able to access the "Check your answers" page after completing all the tasks on the task list
   - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
+  - ML-142: Check your answers page displays project summary with IAT context
 
   @smoke @circle @wgs84
   Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates with latitude "51.507222", longitude "-0.127500" and width "100" metres, the user is able to access the "Check your answers" page
