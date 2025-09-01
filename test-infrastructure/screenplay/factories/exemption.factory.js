@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import CoordinateFiles from '../../helpers/coordinate-files.js'
 import {
   ActivityDescriptionModel,
@@ -6,6 +7,11 @@ import {
   PublicRegisterModel
 } from '../models/index.js'
 import ActivityDatesFactory from './activity-dates.factory.js'
+import {
+  ACTIVITY_PURPOSES,
+  ACTIVITY_TYPES,
+  ARTICLE_CODES
+} from './iat-constants.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
 export default class ExemptionFactory {
@@ -21,6 +27,12 @@ export default class ExemptionFactory {
       activityDescriptionTaskCompleted: false,
       activityDatesTaskCompleted: false,
       publicRegisterTaskCompleted: false,
+      iatContext: {
+        activityType: faker.helpers.arrayElement(ACTIVITY_TYPES),
+        articleCode: faker.helpers.arrayElement(ARTICLE_CODES),
+        activityPurpose: faker.helpers.arrayElement(ACTIVITY_PURPOSES),
+        pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
+      },
       ...overrides
     }
   }
