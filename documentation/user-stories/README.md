@@ -86,14 +86,11 @@ Starting with **ML-140**, we've established a **complementary test architecture*
 
 **Implementation Example:** ML-140 uses data-driven integration tests with comprehensive fixtures alongside concise Gherkin scenarios for optimal coverage.
 
-### **Recent Enhancements: ML-142**
-
 **IAT Context Integration:** All journey tests have been enhanced with comprehensive path parameter support:
 
 - ✅ **Universal IAT Context** - Every test scenario now includes path parameters for IAT (Intelligent Assessment and Testing) context
-- ✅ **Check Your Answers Validation** - Enhanced CYA feature verification to ensure IAT data is correctly surfaced and displayed
 - ✅ **End-to-End Context Preservation** - IAT parameters flow through complete user journeys from start to submission
-- ✅ **Comprehensive Test Coverage** - All existing feature files updated to support IAT path parameters
+
 
 ## Adding new user stories
 
