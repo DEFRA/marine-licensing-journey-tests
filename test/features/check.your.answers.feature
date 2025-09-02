@@ -21,7 +21,7 @@ which will play back all their answers and allow them to verify that the answers
   - ML-140: Check your answers page displays uploaded file details
 
   @smoke @circle @wgs84
-  Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates with latitude "51.507222", longitude "-0.127500" and width "100" metres, the user is able to access the "Check your answers" page
+  Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a circular site using WGS84 coordinates
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
@@ -33,7 +33,7 @@ which will play back all their answers and allow them to verify that the answers
     Then the user is able to see all their answers in a summary format
 
   @smoke @circle @osgb36
-  Scenario: After successfully completing all the tasks on the task list, with a circle using OSGB36 coordinates with eastings "529090", northings "181680" and width "100" metres, the user is able to access the "Check your answers" page
+  Scenario: After successfully completing all the tasks on the task list, with a circle using OSGB36 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a circular site using OSGB36 coordinates
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
