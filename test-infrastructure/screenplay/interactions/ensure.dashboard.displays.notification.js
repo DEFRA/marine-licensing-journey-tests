@@ -1,6 +1,7 @@
+import { expect } from 'chai'
+import { format } from 'date-fns'
 import DashboardPage from '~/test-infrastructure/pages/dashboard.page.js'
 import Task from '../base/task.js'
-import { expect } from 'chai'
 
 export default class EnsureDashboardDisplaysNotification extends Task {
   static now() {
@@ -34,11 +35,7 @@ export default class EnsureDashboardDisplaysNotification extends Task {
       latestExemption.applicationReference
     )
 
-    const today = new Date().toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    })
+    const today = format(new Date(), 'd MMM yyyy')
 
     await browseTheWeb.expectElementToContainText(
       DashboardPage.locators.firstRowCells.dateSubmitted,
