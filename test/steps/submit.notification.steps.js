@@ -44,6 +44,7 @@ Then(
 Given('the user is on any page within the service', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
 })
 
@@ -61,6 +62,7 @@ Then(
 Given('the user is on the Defra account management page', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(ClickDefraAccount.now())
   await this.actor.attemptsTo(EnsureDefraAccountPage.isDisplayed())

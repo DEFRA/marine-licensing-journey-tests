@@ -11,10 +11,12 @@ import {
   EnsureThatProjectName,
   Navigate
 } from '~/test-infrastructure/screenplay'
+import { MarineProjectModel } from '~/test-infrastructure/screenplay/models'
 
 Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
 })
 
@@ -32,14 +34,18 @@ Given(
 )
 
 When('entering and saving a project with a valid name', async function () {
-  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  this.actor.updates((exemption) => {
+    exemption.projectName = MarineProjectModel.generateProjectName()
+  })
   await this.actor.attemptsTo(CompleteProjectName.now())
 })
 
 When(
   'entering and saving the project with name {string}',
   async function (projectName) {
-    this.actor.intendsTo(ApplyForExemption.withProjectName(projectName))
+    this.actor.updates((exemption) => {
+      exemption.projectName = projectName
+    })
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )

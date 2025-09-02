@@ -22,6 +22,7 @@ import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete
 Given('the user has not submitted any notifications', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(SignIn.now())
 })
@@ -43,11 +44,11 @@ Given(
     await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
     await this.actor.attemptsTo(SignOut.now())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await this.actor.attemptsTo(SignIn.now())
     this.actor.intendsTo(
       ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
     )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(SignIn.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
