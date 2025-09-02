@@ -4,7 +4,6 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
   I want to see a list of all my applications
   So that I can keep track of my applications and manage them
 
-  @run-only
   Scenario: After submitting a notification, view it on the dashboard
     Given a user has submitted an exemption notification
     When the user clicks on Projects home in the header
