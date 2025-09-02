@@ -38,6 +38,7 @@ This directory contains user stories for the marine licensing application under 
 | ML-420   | MANUAL Provide activity dates                    | [ML-420.MANUAL.provide.activity.dates.md](./ML-420.MANUAL.provide.activity.dates.md)                                     | [site.details.multi.site.feature](../../test/features/site.details.multi.site.feature)                                                                                                                                                                                                                                                                                                                                                                                   |
 | ML-277   | Manage Defra account                             | [ML-277.manage.defra.account.md](./ML-277.manage.defra.account.md)                                                       | [real.defra.id.integration.feature](../../test/features/real.defra.id.integration.feature)                                                                                                                                                                                                                                                                                                                                                                               |
 | ML-543   | Service name verification                        | [ML-543.service.name.verification.md](./ML-543.service.name.verification.md)                                             | [service.name.verification.feature](../../test/features/service.name.verification.feature)                                                                                                                                                                                                                                                                                                                                                                               |
+| ML-142   | CYA Project Summary card - IAT integration       | [ML-142.CYA.project.summary.card.iat.md](./ML-142.CYA.project.summary.card.iat.md)                                       | [check.your.answers.feature](../../test/features/check.your.answers.feature) - IAT context integration across all test scenarios                                                                                                                                                                                                                                                                                                                                         |
 
 ## Feature file tags
 
@@ -84,6 +85,15 @@ Starting with **ML-140**, we've established a **complementary test architecture*
 - **Comprehensive validation** - Combined approach ensures both detailed validation and end-to-end functionality
 
 **Implementation Example:** ML-140 uses data-driven integration tests with comprehensive fixtures alongside concise Gherkin scenarios for optimal coverage.
+
+### **Recent Enhancements: ML-142**
+
+**IAT Context Integration:** All journey tests have been enhanced with comprehensive path parameter support:
+
+- ✅ **Universal IAT Context** - Every test scenario now includes path parameters for IAT (Intelligent Assessment and Testing) context
+- ✅ **Check Your Answers Validation** - Enhanced CYA feature verification to ensure IAT data is correctly surfaced and displayed
+- ✅ **End-to-End Context Preservation** - IAT parameters flow through complete user journeys from start to submission
+- ✅ **Comprehensive Test Coverage** - All existing feature files updated to support IAT path parameters
 
 ## Adding new user stories
 
