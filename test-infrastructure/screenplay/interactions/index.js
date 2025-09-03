@@ -27,7 +27,6 @@ export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.e
 export { default as EnsureThatMultipleSiteOptionSelected } from './ensure.multiple.site.option'
 export { default as EnsureNoErrorsDisplayed } from './ensure.no.errors.displayed'
 export { default as EnsureNotificationRemoved } from './ensure.notification.removed'
-export { default as EnsurePageAccessibility } from './ensure.page.accessibility'
 export { default as EnsurePageHeading } from './ensure.page.heading'
 export { default as EnsureThatProjectName } from './ensure.project.name'
 export { default as EnsureProjectNameDisplayedAsCaption } from './ensure.project.name.displayed.as.caption'
