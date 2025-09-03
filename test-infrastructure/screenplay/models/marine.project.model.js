@@ -10,12 +10,6 @@ export default class MarineProjectModel {
     return `${location} ${activity} - ${descriptor} ${randomNumber}`
   }
 
-  static generateOversizedProjectName() {
-    return 'Construction of an Eco-Conscious Offshore Wind Farm Featuring Advanced Turbine Technology, Renewable Energy Integration Systems, and Marine Environmental Safeguards to Protect Biodiversity Across Coastal and Open Water Ecosystems While Promoting Sustainable Energy Solutions'
-  }
-
-  static PROJECT_NAME_MAX_LENGTH = 250
-
   static ACTIVITIES = [
     'Wind Farm',
     'Cable Installation',

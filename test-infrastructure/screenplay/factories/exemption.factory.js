@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import CoordinateFiles from '../../helpers/coordinate-files.js'
 import {
   ActivityDescriptionModel,
@@ -6,6 +7,11 @@ import {
   PublicRegisterModel
 } from '../models/index.js'
 import ActivityDatesFactory from './activity-dates.factory.js'
+import {
+  ACTIVITY_PURPOSES,
+  ACTIVITY_TYPES,
+  ARTICLE_CODES
+} from './iat-constants.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
 export default class ExemptionFactory {
@@ -21,6 +27,18 @@ export default class ExemptionFactory {
       activityDescriptionTaskCompleted: false,
       activityDatesTaskCompleted: false,
       publicRegisterTaskCompleted: false,
+      iatContext: (() => {
+        const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
+
+        return {
+          activityType,
+          articleCode: faker.helpers.arrayElement(ARTICLE_CODES),
+          activityPurpose: activityType.supportsPurpose
+            ? faker.helpers.arrayElement(ACTIVITY_PURPOSES)
+            : null,
+          pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
+        }
+      })(),
       ...overrides
     }
   }
@@ -31,26 +49,6 @@ export default class ExemptionFactory {
 
   static createWithProjectName(projectName) {
     return this.createBaseExemption({ projectName })
-  }
-
-  static createValidActivityDates() {
-    return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createValidDates()
-    })
-  }
-
-  static createSameStartAndEndActivityDates() {
-    return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createSameStartAndEndDate()
-    })
-  }
-
-  static createCompletedActivityDates() {
-    const completedDates = ActivityDatesFactory.createCompletedDates()
-    return this.createBaseExemption({
-      activityDates: completedDates.dates,
-      activityDatesTaskCompleted: completedDates.completed
-    })
   }
 
   static createConsentToPublicRegister() {
@@ -146,12 +144,6 @@ export default class ExemptionFactory {
     })
   }
 
-  static createShapefileLargeUpload() {
-    return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/mygeodata-large.zip'
-    })
-  }
-
   static createShapefileFileUpload() {
     return this.createFileUploadBase('shapefile')
   }
@@ -169,25 +161,5 @@ export default class ExemptionFactory {
 
   static createShapefileEmptyFile(filePath) {
     return this.createFileUploadBase('shapefile', { filePath })
-  }
-
-  static createVirusUpload() {
-    return this.createKMLVirusUpload()
-  }
-
-  static createFileUpload() {
-    return this.createKMLFileUpload()
-  }
-
-  static createWrongFileType() {
-    return this.createKMLWrongFileType()
-  }
-
-  static createLargeFile(filePath) {
-    return this.createKMLLargeFile(filePath)
-  }
-
-  static createEmptyFile(filePath) {
-    return this.createKMLEmptyFile(filePath)
   }
 }

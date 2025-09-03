@@ -6,12 +6,15 @@ import {
   BrowseTheWeb,
   ClickContinueLink,
   ClickProjectsHome,
+  ClickViewDetailsLink,
   DeleteDraftNotification,
   EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
+  EnsurePageHeading,
   EnsureThatProjectNameIsEmpty,
+  EnsureViewDetailsPage,
   Navigate,
   NavigateToDashboard,
   SignIn,
@@ -24,6 +27,7 @@ import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete
 Given('the user has not submitted any notifications', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(SignIn.now())
 })
@@ -45,11 +49,11 @@ Given(
     await this.actor.attemptsTo(SignOut.now())
     await this.actor.attemptsTo(SubmitAnExemptionNotification.now())
     await this.actor.attemptsTo(SignOut.now())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-    await this.actor.attemptsTo(SignIn.now())
     this.actor.intendsTo(
       ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
     )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(SignIn.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
@@ -65,9 +69,16 @@ Given('the user has a draft exemption notification', async function () {
   await this.actor.attemptsTo(SignOut.now())
 })
 
-When('the user clicks on Projects home in the header', async function () {
-  await this.actor.attemptsTo(ClickProjectsHome.now())
-})
+When(
+  'the user clicks view details for the submitted notification on the dashboard',
+  async function () {
+    await this.actor.attemptsTo(ClickProjectsHome.now())
+    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
+    await this.actor.attemptsTo(
+      ClickViewDetailsLink.forLastCompletedExemption()
+    )
+  }
+)
 
 When('the user navigates to the dashboard', async function () {
   await this.actor.attemptsTo(NavigateToDashboard.now())
@@ -83,13 +94,6 @@ When(
         this.actor.recalls('exemption').projectName
       )
     )
-  }
-)
-
-Then(
-  'the dashboard displays the submitted notification correctly',
-  async function () {
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
   }
 )
 
@@ -135,3 +139,13 @@ Then('the notification is removed from the dashboard', async function () {
     EnsureEmptyStateMessage.shows('You currently have no projects.')
   )
 })
+
+Then(
+  'the user is able to view the notification in a summary format',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('View notification details')
+    )
+    await this.actor.attemptsTo(EnsureViewDetailsPage.showsAllAnswers())
+  }
+)

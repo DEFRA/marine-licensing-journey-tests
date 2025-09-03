@@ -13,5 +13,3 @@ export {
   PublicRegisterModel,
   SiteDetailsModel
 }
-
-export { default as MemoryFormatter } from './memory.formatter.js'

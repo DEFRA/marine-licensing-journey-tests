@@ -1,4 +1,4 @@
-@issue=ML-228 @issue=ML-419
+@issue=ML-228 @issue=ML-419 @issue=ML-420
 Feature: Multi-site: Provide multiple sites for an exemption notification
 
   @smoke

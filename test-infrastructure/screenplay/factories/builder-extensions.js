@@ -62,13 +62,6 @@ export const siteDetailsExtension = {
     builder.setProperty('siteDetails', SiteDetailsFactory.createMultipleSites())
     return builder
   },
-  forARandomPolygonWithWGS84Coordinates: (builder) => {
-    builder.setProperty(
-      'siteDetails',
-      SiteDetailsFactory.createRandomPolygon(5, 'WGS84')
-    )
-    return builder
-  },
   withKMLUpload: (builder) => {
     builder.setProperty('siteDetails', SiteDetailsFactory.createKMLUpload())
     return builder
@@ -88,31 +81,6 @@ export const activityDatesExtension = {
       'activityDates',
       ActivityDatesFactory.createValidDates()
     )
-    return builder
-  },
-  withSameStartAndEndDate: (builder) => {
-    builder.setProperty(
-      'activityDates',
-      ActivityDatesFactory.createSameStartAndEndDate()
-    )
-    return builder
-  },
-  withShortDuration: (builder) => {
-    builder.setProperty(
-      'activityDates',
-      ActivityDatesFactory.createShortDuration()
-    )
-    return builder
-  },
-  withLongDuration: (builder) => {
-    builder.setProperty(
-      'activityDates',
-      ActivityDatesFactory.createLongDuration()
-    )
-    return builder
-  },
-  asCompleted: (builder) => {
-    builder.setTaskCompleted('activityDates')
     return builder
   }
 }

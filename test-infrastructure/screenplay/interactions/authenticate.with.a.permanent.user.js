@@ -1,7 +1,8 @@
-import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
 import { expect } from 'chai'
 import { logOperation } from '~/test-infrastructure/capture/index.js'
+import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
 import Task from '../base/task.js'
+import SelectGovernmentGatewayAuthentication from './select.government.gateway.authentication.js'
 
 export default class AuthenticateWithAPermanentUser extends Task {
   static now() {
@@ -18,6 +19,8 @@ export default class AuthenticateWithAPermanentUser extends Task {
     if (!testUser.password) {
       expect.fail('Missing DEFRA_ID_USER_PASSWORD environment variable')
     }
+
+    await actor.attemptsTo(SelectGovernmentGatewayAuthentication.now())
 
     await browseTheWeb.setValue(DefraIdLoginPage.usernameField, testUser.id)
     await browseTheWeb.setValue(

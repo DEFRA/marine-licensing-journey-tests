@@ -34,6 +34,10 @@ export default class DashboardPage {
     return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="Delete"]`
   }
 
+  static viewDetailsLink(projectName) {
+    return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="View details"]`
+  }
+
   static projectRow(projectName) {
     return `//tr[td[1][normalize-space(text())="${projectName}"]]`
   }

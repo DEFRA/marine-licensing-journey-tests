@@ -7,7 +7,8 @@ import {
   ClickReviewAndSend,
   CompleteAllTasks,
   EnsureCheckYourAnswersPage,
-  EnsurePageHeading
+  EnsurePageHeading,
+  EnsureProjectSummaryCard
 } from '~/test-infrastructure/screenplay'
 
 Given(
@@ -93,5 +94,8 @@ Then(
       EnsurePageHeading.is('Check your answers before sending your information')
     )
     await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
+    await this.actor.attemptsTo(
+      EnsureProjectSummaryCard.isDisplayedWithIatInformation()
+    )
   }
 )

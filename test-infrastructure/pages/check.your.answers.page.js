@@ -4,6 +4,28 @@ export default class CheckYourAnswersPage {
   static locators = {
     mainHeading: 'h2#check-your-answers-heading',
 
+    projectSummary: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project summary")]',
+      projectNameTerm: '//dt[contains(text(), "Project name")]',
+      projectNameValue:
+        '//dt[contains(text(), "Project name")]/following-sibling::dd[1]',
+      activityTypeTerm: '//dt[contains(text(), "Type of activity")]',
+      activityTypeValue:
+        '//dt[contains(text(), "Type of activity")]/following-sibling::dd[1]',
+      exemptionReasonTerm:
+        '//dt[contains(text(), "Why this activity is exempt")]',
+      exemptionReasonValue:
+        '//dt[contains(text(), "Why this activity is exempt")]/following-sibling::dd[1]',
+      exemptionReasonLink:
+        '//dt[contains(text(), "Why this activity is exempt")]/following-sibling::dd[1]//a',
+      pdfDownloadTerm: '//dt[contains(text(), "Your answers from")]',
+      pdfDownloadValue:
+        '//dt[contains(text(), "Your answers from")]/following-sibling::dd[1]',
+      pdfDownloadLink:
+        '//dt[contains(text(), "Your answers from")]/following-sibling::dd[1]//a'
+    },
+
     projectDetails: {
       heading:
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project details")]',

@@ -14,3 +14,4 @@ FAILED
 *.code-workspace
 .cursor/mcp.json
 .cursor/rules/*.mdc
+.claude/settings.local.json

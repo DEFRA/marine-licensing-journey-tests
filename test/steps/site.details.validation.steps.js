@@ -16,18 +16,15 @@ import {
   ClickSaveAndContinue,
   CompleteProjectName,
   ContinueFromBeforeYouStartSiteDetailsPage,
-  EnsureCoordinateError,
   EnsureErrorDisplayed,
   EnsureErrorNotDisplayed,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
-  EnsureThatCoordinateEntryMethodSelected,
   EnsureThatMultipleSiteOptionSelected,
   EnsureThatSiteTypeSelected,
   Navigate,
   NavigateToSiteDetailsPage,
-  SelectTheTask,
-  SetCoordinateField
+  SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
 Given('a user is providing site details', async function () {
@@ -258,15 +255,6 @@ When(
   }
 )
 
-When(
-  'the {string} input for {string} is set to {string}',
-  async function (fieldType, point, invalidValue) {
-    await this.actor.attemptsTo(
-      SetCoordinateField.withValue(fieldType, point, invalidValue)
-    )
-  }
-)
-
 Then(
   'the coordinates type error: {string} is displayed',
   async function (errorMessage) {
@@ -305,12 +293,6 @@ Then(
 
 Then('the multiple sites option is selected', async function () {
   await this.actor.attemptsTo(EnsureThatMultipleSiteOptionSelected.is('no'))
-})
-
-Then('the manual coordinate entry method is selected', async function () {
-  await this.actor.attemptsTo(
-    EnsureThatCoordinateEntryMethodSelected.is('enter-manually')
-  )
 })
 
 Then('the circular site option is selected', async function () {
@@ -364,15 +346,6 @@ Then('the width error {string} is displayed', async function (errorMessage) {
     EnsureErrorDisplayed.is(WidthOfCircularSitePage.widthError, errorMessage)
   )
 })
-
-Then(
-  'the {string} error for {string} is {string}',
-  async function (fieldType, point, expectedError) {
-    await this.actor.attemptsTo(
-      EnsureCoordinateError.forField(fieldType, point, expectedError)
-    )
-  }
-)
 
 Then(
   'the following validation errors are displayed:',

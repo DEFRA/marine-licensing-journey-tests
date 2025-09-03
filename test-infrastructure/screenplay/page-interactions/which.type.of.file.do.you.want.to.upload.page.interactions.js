@@ -10,12 +10,6 @@ export default class WhichTypeOfFileDoYouWantToUploadPageInteractions {
     )
   }
 
-  static async selectFileType(browseTheWeb, fileType) {
-    const selector =
-      WhichTypeOfFileDoYouWantToUploadPage.getFileTypeSelector(fileType)
-    await browseTheWeb.click(selector)
-  }
-
   static async clickContinue(browseTheWeb) {
     await browseTheWeb.click(
       WhichTypeOfFileDoYouWantToUploadPage.saveAndContinue

@@ -18,6 +18,7 @@ import {
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
 } from '../page-interactions/index.js'
+import CompleteActivityDates from './complete.activity.dates.js'
 
 export default class CompleteSiteDetails extends Task {
   static now() {
@@ -158,7 +159,7 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         'yes'
       )
-      await this.handleSiteNameFlow()
+      await this.handleMultiSiteFlow()
     } else {
       await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
         this.browseTheWeb
@@ -175,7 +176,7 @@ export default class CompleteSiteDetails extends Task {
     )
   }
 
-  async handleSiteNameFlow() {
+  async handleMultiSiteFlow() {
     const siteName = this.siteDetails.sites[0].siteName
     await this.browseTheWeb.setValue('#siteName', siteName)
     await this.browseTheWeb.click('button[type="submit"]')
@@ -183,6 +184,7 @@ export default class CompleteSiteDetails extends Task {
       this.browseTheWeb,
       this.siteDetails.sameActivityDates
     )
+    await this.actor.attemptsTo(CompleteActivityDates.now())
   }
 
   async enterWidthOfCircleIfOnWidthPage() {

@@ -4,10 +4,6 @@ import ActivityDescriptionPage from '~/test-infrastructure/pages/activity.descri
 import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
 
 export default class FillForm extends Task {
-  static withInteractions(formFiller) {
-    return new FillForm(formFiller)
-  }
-
   static activityDescription(description) {
     return new FillForm(async (actor) => {
       const browseTheWeb = actor.ability

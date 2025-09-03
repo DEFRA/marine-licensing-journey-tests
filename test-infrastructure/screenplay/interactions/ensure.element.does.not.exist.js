@@ -1,10 +1,6 @@
 import Task from '../base/task.js'
 
 export default class EnsureElementDoesNotExist extends Task {
-  static withLocator(locator, description = 'element') {
-    return new EnsureElementDoesNotExist(locator, description)
-  }
-
   constructor(locator, description) {
     super()
     this.locator = locator
