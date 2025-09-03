@@ -200,7 +200,7 @@ export default class EnsureSiteDetails extends Task {
       const siteDetailsElement = await browseTheWeb.getElement(
         ReviewSiteDetailsPage.siteDetailsDataScript
       )
-      const siteDetailsHTML = await siteDetailsElement.getHTML(false)
+      const siteDetailsHTML = siteDetailsElement.getHTML(false)
 
       if (siteDetailsHTML && siteDetailsHTML.trim()) {
         const siteDetailsData = JSON.parse(siteDetailsHTML.trim())

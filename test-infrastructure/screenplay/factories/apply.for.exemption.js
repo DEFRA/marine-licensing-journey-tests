@@ -11,12 +11,6 @@ export default class ApplyForExemption extends BaseBuilder {
     return new ApplyForExemption(ExemptionFactory.createValidProjectName())
   }
 
-  static withProjectName(projectName) {
-    return new ApplyForExemption(
-      ExemptionFactory.createWithProjectName(projectName)
-    )
-  }
-
   static withConsentToPublicRegister() {
     return new ApplyForExemption(
       ExemptionFactory.createConsentToPublicRegister()
@@ -89,10 +83,6 @@ export default class ApplyForExemption extends BaseBuilder {
 
   activityDates(dates) {
     return this.setProperty('activityDates', dates)
-  }
-
-  activityDatesTaskCompleted(completed = true) {
-    return this.setTaskCompleted('activityDates', completed)
   }
 
   latitude(value) {
