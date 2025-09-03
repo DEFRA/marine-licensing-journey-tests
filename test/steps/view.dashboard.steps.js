@@ -19,7 +19,6 @@ import {
   NavigateToDashboard,
   SignIn,
   SignOut,
-  StartNewExemption,
   SubmitAnExemptionNotification
 } from '~/test-infrastructure/screenplay'
 import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name'
@@ -122,7 +121,9 @@ When(
 )
 
 When('the user starts a new notification', async function () {
-  await this.actor.attemptsTo(StartNewExemption.now())
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(SignIn.now())
 })
 
 Then('the project name is not pre-populated', async function () {
