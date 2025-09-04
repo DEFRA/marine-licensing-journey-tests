@@ -43,13 +43,19 @@ runs:
       if: inputs.github-token != ''
       working-directory: ./marine-licensing-journey-tests
       run: |
+        echo "=== Frontend Build Debug ==="
+        echo "Current directory: $(pwd)"
+        echo "Parent directory contents: $(ls -la ..)"
+
         if [ -d "../marine-licensing-frontend" ]; then
-          echo "Building frontend image from PR branch..."
+          echo "✅ Found frontend directory"
           cd ../marine-licensing-frontend
           echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
+          echo "Building Docker image..."
           docker build -t defradigital/marine-licensing-frontend:pr-build .
+          echo "✅ Frontend image built successfully"
         else
-          echo "No frontend directory found, skipping build"
+          echo "❌ No frontend directory found at ../marine-licensing-frontend"
         fi
       shell: bash
 
@@ -57,13 +63,18 @@ runs:
       if: inputs.github-token != ''
       working-directory: ./marine-licensing-journey-tests
       run: |
+        echo "=== Backend Build Debug ==="
+        echo "Current directory: $(pwd)"
+
         if [ -d "../marine-licensing-backend" ]; then
-          echo "Building backend image from PR branch..."
+          echo "✅ Found backend directory"
           cd ../marine-licensing-backend
           echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
+          echo "Building Docker image..."
           docker build -t defradigital/marine-licensing-backend:pr-build .
+          echo "✅ Backend image built successfully"
         else
-          echo "No backend directory found, skipping build"
+          echo "❌ No backend directory found at ../marine-licensing-backend"
         fi
       shell: bash
 
