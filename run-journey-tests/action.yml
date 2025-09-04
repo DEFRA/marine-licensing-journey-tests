@@ -36,6 +36,7 @@ runs:
     - name: Extract dependent Pull Requests
       if: inputs.github-token != ''
       uses: depends-on/depends-on-action@0.15.0
+      continue-on-error: true
       with:
         token: ${{ inputs.github-token }}
         path: ./marine-licensing-journey-tests
