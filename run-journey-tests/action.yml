@@ -81,15 +81,13 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        # Simple logic: Use PR images if they exist, otherwise use specified versions or latest
-        FRONTEND_VERSION="${{ inputs.marine-licensing-frontend }}"
-        BACKEND_VERSION="${{ inputs.marine-licensing-backend }}"
-
+        # Priority: PR images > specified inputs > latest
         # Check if we built PR images and use them if available
         if docker image inspect defradigital/marine-licensing-frontend:pr-build >/dev/null 2>&1; then
           echo "✅ Using PR-built frontend image (from depends-on)"
           FRONTEND_VERSION="pr-build"
         else
+          FRONTEND_VERSION="${{ inputs.marine-licensing-frontend }}"
           echo "ℹ️  Using frontend version: ${FRONTEND_VERSION:-latest} (no PR dependency)"
         fi
 
@@ -97,6 +95,7 @@ runs:
           echo "✅ Using PR-built backend image (from depends-on)"
           BACKEND_VERSION="pr-build"
         else
+          BACKEND_VERSION="${{ inputs.marine-licensing-backend }}"
           echo "ℹ️  Using backend version: ${BACKEND_VERSION:-latest} (no PR dependency)"
         fi
 
