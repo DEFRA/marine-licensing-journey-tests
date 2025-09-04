@@ -18,7 +18,9 @@ export const config = {
 
   specs: [
     'test/features/project.name.parallel.user1.feature',
-    'test/features/project.name.parallel.user2.feature'
+    'test/features/project.name.parallel.user2.feature',
+    'test/features/project.name.parallel.user3.feature',
+    'test/features/project.name.parallel.user4.feature'
   ],
   cucumberOpts: {
     require: ['test/steps/*.js'],
@@ -35,7 +37,7 @@ export const config = {
   // Each feature file will run in a separate worker process
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
-    : 2,
+    : 4,
 
   capabilities: [
     {
