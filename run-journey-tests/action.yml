@@ -33,20 +33,11 @@ runs:
         git checkout ${{ inputs.branch }} || echo "Using default branch"
       shell: bash
 
-    - name: Clean workspace for depends-on
-      if: inputs.github-token != ''
-      run: |
-        # Remove any existing directories that might cause conflicts
-        rm -rf marine-licensing-frontend marine-licensing-backend
-        echo "Cleaned workspace for depends-on-action"
-      shell: bash
-
     - name: Extract dependent Pull Requests
       if: inputs.github-token != ''
       uses: depends-on/depends-on-action@0.15.0
       with:
         token: ${{ inputs.github-token }}
-        extra-dirs: marine-licensing-frontend marine-licensing-backend
 
     - name: Build marine-licensing-frontend image
       if: inputs.github-token != ''
