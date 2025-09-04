@@ -56,8 +56,8 @@ runs:
         echo "=== Building Frontend Image ==="
         echo "Current directory: $(pwd)"
 
-        if [ ! -d "../marine-licensing-frontend" ]; then
-          echo "❌ ERROR: Frontend directory not found at ../marine-licensing-frontend"
+        if [ ! -d "../../marine-licensing-frontend" ]; then
+          echo "❌ ERROR: Frontend directory not found at ../../marine-licensing-frontend"
           echo "depends-on-action should have created this directory"
           echo ""
           echo "=== DEBUGGING: Full directory structure ==="
@@ -71,7 +71,7 @@ runs:
         fi
 
         echo "✅ Found frontend directory"
-        cd ../marine-licensing-frontend
+        cd ../../marine-licensing-frontend
         echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
         docker build -t defradigital/marine-licensing-frontend:pr-build .
         echo "✅ Frontend image built successfully"
@@ -84,8 +84,8 @@ runs:
         echo "=== Building Backend Image ==="
         echo "Current directory: $(pwd)"
 
-        if [ ! -d "../marine-licensing-backend" ]; then
-          echo "❌ ERROR: Backend directory not found at ../marine-licensing-backend"
+        if [ ! -d "../../marine-licensing-backend" ]; then
+          echo "❌ ERROR: Backend directory not found at ../../marine-licensing-backend"
           echo "depends-on-action should have created this directory"
           echo ""
           echo "=== DEBUGGING: Full directory structure ==="
@@ -99,7 +99,7 @@ runs:
         fi
 
         echo "✅ Found backend directory"
-        cd ../marine-licensing-backend
+        cd ../../marine-licensing-backend
         echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
         docker build -t defradigital/marine-licensing-backend:pr-build .
         echo "✅ Backend image built successfully"
