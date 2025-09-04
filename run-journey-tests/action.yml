@@ -41,10 +41,11 @@ runs:
 
     - name: Build marine-licensing-frontend image
       if: inputs.github-token != ''
+      working-directory: ./marine-licensing-journey-tests
       run: |
-        if [ -d "./marine-licensing-frontend" ]; then
+        if [ -d "../marine-licensing-frontend" ]; then
           echo "Building frontend image from PR branch..."
-          cd ./marine-licensing-frontend
+          cd ../marine-licensing-frontend
           echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-frontend:pr-build .
         else
@@ -54,10 +55,11 @@ runs:
 
     - name: Build marine-licensing-backend image
       if: inputs.github-token != ''
+      working-directory: ./marine-licensing-journey-tests
       run: |
-        if [ -d "./marine-licensing-backend" ]; then
+        if [ -d "../marine-licensing-backend" ]; then
           echo "Building backend image from PR branch..."
-          cd ./marine-licensing-backend
+          cd ../marine-licensing-backend
           echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-backend:pr-build .
         else
