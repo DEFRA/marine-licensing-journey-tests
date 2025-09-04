@@ -47,8 +47,7 @@ runs:
         if [ -d "./marine-licensing-frontend" ]; then
           echo "Building frontend image from PR branch..."
           cd ./marine-licensing-frontend
-          echo "Current branch: $(git branch --show-current)"
-          echo "Latest commit: $(git log -1 --oneline)"
+          echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-frontend:pr-build .
         else
           echo "No frontend directory found, skipping build"
@@ -61,8 +60,7 @@ runs:
         if [ -d "./marine-licensing-backend" ]; then
           echo "Building backend image from PR branch..."
           cd ./marine-licensing-backend
-          echo "Current branch: $(git branch --show-current)"
-          echo "Latest commit: $(git log -1 --oneline)"
+          echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-backend:pr-build .
         else
           echo "No backend directory found, skipping build"
@@ -84,22 +82,29 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        # Determine which versions to use
+        # Simple logic: Use PR images if they exist, otherwise use specified versions or latest
         FRONTEND_VERSION="${{ inputs.marine-licensing-frontend }}"
         BACKEND_VERSION="${{ inputs.marine-licensing-backend }}"
 
         # Check if we built PR images and use them if available
         if docker image inspect defradigital/marine-licensing-frontend:pr-build >/dev/null 2>&1; then
-          echo "Using PR-built frontend image"
+          echo "✅ Using PR-built frontend image (from depends-on)"
           FRONTEND_VERSION="pr-build"
+        else
+          echo "ℹ️  Using frontend version: ${FRONTEND_VERSION:-latest} (no PR dependency)"
         fi
 
         if docker image inspect defradigital/marine-licensing-backend:pr-build >/dev/null 2>&1; then
-          echo "Using PR-built backend image"
+          echo "✅ Using PR-built backend image (from depends-on)"
           BACKEND_VERSION="pr-build"
+        else
+          echo "ℹ️  Using backend version: ${BACKEND_VERSION:-latest} (no PR dependency)"
         fi
 
-        # Use determined versions or default to latest
+        echo "🐳 Starting containers with:"
+        echo "  Frontend: ${FRONTEND_VERSION:-latest}"
+        echo "  Backend: ${BACKEND_VERSION:-latest}"
+
         MARINE_LICENSING_FRONTEND_VERSION=${FRONTEND_VERSION:-latest} \
         MARINE_LICENSING_BACKEND_VERSION=${BACKEND_VERSION:-latest} \
         docker compose -f $(pwd)/compose.common.yml up --wait-timeout 300 -d --quiet-pull
