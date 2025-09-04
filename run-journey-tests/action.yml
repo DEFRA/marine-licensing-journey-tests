@@ -39,22 +39,7 @@ runs:
       continue-on-error: true
       with:
         token: ${{ inputs.github-token }}
-        path: ./marine-licensing-journey-tests
         extra-dirs: marine-licensing-frontend marine-licensing-backend
-
-    - name: Checkout marine-licensing-frontend
-      if: inputs.github-token != ''
-      uses: actions/checkout@v4
-      with:
-        repository: DEFRA/marine-licensing-frontend
-        path: ./marine-licensing-frontend
-
-    - name: Checkout marine-licensing-backend
-      if: inputs.github-token != ''
-      uses: actions/checkout@v4
-      with:
-        repository: DEFRA/marine-licensing-backend
-        path: ./marine-licensing-backend
 
     - name: Build marine-licensing-frontend image
       if: inputs.github-token != ''
@@ -62,6 +47,8 @@ runs:
         if [ -d "./marine-licensing-frontend" ]; then
           echo "Building frontend image from PR branch..."
           cd ./marine-licensing-frontend
+          echo "Current branch: $(git branch --show-current)"
+          echo "Latest commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-frontend:pr-build .
         else
           echo "No frontend directory found, skipping build"
@@ -74,6 +61,8 @@ runs:
         if [ -d "./marine-licensing-backend" ]; then
           echo "Building backend image from PR branch..."
           cd ./marine-licensing-backend
+          echo "Current branch: $(git branch --show-current)"
+          echo "Latest commit: $(git log -1 --oneline)"
           docker build -t defradigital/marine-licensing-backend:pr-build .
         else
           echo "No backend directory found, skipping build"
