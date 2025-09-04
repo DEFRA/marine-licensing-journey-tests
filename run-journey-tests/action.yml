@@ -53,39 +53,58 @@ runs:
     - name: Build marine-licensing-frontend image
       if: inputs.github-token != ''
       run: |
-        echo "=== Frontend Build Debug ==="
+        echo "=== Building Frontend Image ==="
         echo "Current directory: $(pwd)"
-        echo "Workspace contents: $(ls -la)"
 
-        if [ -d "marine-licensing-frontend" ]; then
-          echo "✅ Found frontend directory"
-          cd marine-licensing-frontend
-          echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
-          echo "Building Docker image..."
-          docker build -t defradigital/marine-licensing-frontend:pr-build .
-          echo "✅ Frontend image built successfully"
-        else
-          echo "❌ No frontend directory found at ./marine-licensing-frontend"
+        if [ ! -d "../marine-licensing-frontend" ]; then
+          echo "❌ ERROR: Frontend directory not found at ../marine-licensing-frontend"
+          echo "depends-on-action should have created this directory"
+          echo ""
+          echo "=== DEBUGGING: Full directory structure ==="
+          echo "Current working directory: $(pwd)"
+          echo "Parent directory (..): $(ls -la ..)"
+          echo "Workspace root contents:"
+          find /home/runner/work/marine-licensing-journey-tests -maxdepth 2 -type d -name "*marine*" 2>/dev/null || echo "No marine directories found"
+          echo "Full workspace structure:"
+          ls -la /home/runner/work/marine-licensing-journey-tests/
+          exit 1
         fi
+
+        echo "✅ Found frontend directory"
+        cd ../marine-licensing-frontend
+        echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
+        docker build -t defradigital/marine-licensing-frontend:pr-build .
+        echo "✅ Frontend image built successfully"
       shell: bash
+      working-directory: ./marine-licensing-journey-tests
 
     - name: Build marine-licensing-backend image
       if: inputs.github-token != ''
       run: |
-        echo "=== Backend Build Debug ==="
+        echo "=== Building Backend Image ==="
         echo "Current directory: $(pwd)"
 
-        if [ -d "marine-licensing-backend" ]; then
-          echo "✅ Found backend directory"
-          cd marine-licensing-backend
-          echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
-          echo "Building Docker image..."
-          docker build -t defradigital/marine-licensing-backend:pr-build .
-          echo "✅ Backend image built successfully"
-        else
-          echo "❌ No backend directory found at ./marine-licensing-backend"
+        if [ ! -d "../marine-licensing-backend" ]; then
+          echo "❌ ERROR: Backend directory not found at ../marine-licensing-backend"
+          echo "depends-on-action should have created this directory"
+          echo ""
+          echo "=== DEBUGGING: Full directory structure ==="
+          echo "Current working directory: $(pwd)"
+          echo "Parent directory (..): $(ls -la ..)"
+          echo "Workspace root contents:"
+          find /home/runner/work/marine-licensing-journey-tests -maxdepth 2 -type d -name "*marine*" 2>/dev/null || echo "No marine directories found"
+          echo "Full workspace structure:"
+          ls -la /home/runner/work/marine-licensing-journey-tests/
+          exit 1
         fi
+
+        echo "✅ Found backend directory"
+        cd ../marine-licensing-backend
+        echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
+        docker build -t defradigital/marine-licensing-backend:pr-build .
+        echo "✅ Backend image built successfully"
       shell: bash
+      working-directory: ./marine-licensing-journey-tests
 
     - uses: actions/setup-node@v4
       with:
