@@ -20,7 +20,13 @@ export const config = {
     'test/features/project.name.parallel.user1.feature',
     'test/features/project.name.parallel.user2.feature',
     'test/features/project.name.parallel.user3.feature',
-    'test/features/project.name.parallel.user4.feature'
+    'test/features/project.name.parallel.user4.feature',
+    'test/features/project.name.parallel.user5.feature',
+    'test/features/project.name.parallel.user6.feature',
+    'test/features/project.name.parallel.user7.feature',
+    'test/features/project.name.parallel.user8.feature',
+    'test/features/project.name.parallel.user9.feature',
+    'test/features/project.name.parallel.user10.feature'
   ],
   cucumberOpts: {
     require: ['test/steps/*.js'],
@@ -37,7 +43,7 @@ export const config = {
   // Each feature file will run in a separate worker process
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
-    : 4,
+    : 10,
 
   capabilities: [
     {
@@ -98,6 +104,10 @@ export const config = {
     console.log(`[WDIO] Starting scenario: "${world.pickle.name}"`)
     await browser.reloadSession()
     attachRichFeatureContext(world)
+  },
+
+  afterStep: async function () {
+    await browser.takeScreenshot()
   },
 
   afterScenario: async function (scenario, world) {
