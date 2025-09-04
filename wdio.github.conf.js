@@ -16,7 +16,10 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  specs: ['test/features/*.feature'],
+  specs: [
+    'test/features/project.name.parallel.user1.feature',
+    'test/features/project.name.parallel.user2.feature'
+  ],
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: getTags(),
@@ -32,7 +35,7 @@ export const config = {
   // Each feature file will run in a separate worker process
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
-    : 1,
+    : 2,
 
   capabilities: [
     {
