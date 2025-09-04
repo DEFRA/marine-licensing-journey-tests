@@ -1,3 +1,5 @@
+import { ActivityDatesModel } from '../models/index.js'
+
 export default class SiteDetailsFactory {
   static defaultData = {
     circle: {
@@ -80,7 +82,10 @@ export default class SiteDetailsFactory {
   }
 
   static createFileUpload() {
-    return { coordinatesEntryMethod: 'file-upload' }
+    return {
+      coordinatesEntryMethod: 'file-upload',
+      activityDates: ActivityDatesModel.generateValidActivityDates()
+    }
   }
 
   static createMultipleSites() {
@@ -91,6 +96,7 @@ export default class SiteDetailsFactory {
       siteType: 'circle',
       coordinateSystem: 'WGS84',
       circleData: this.defaultData.circle.WGS84,
+      activityDates: ActivityDatesModel.generateValidActivityDates(),
       sites: [
         {
           siteName: 'Main Research Site',
@@ -120,7 +126,8 @@ export default class SiteDetailsFactory {
     const siteDetails = {
       coordinatesEntryMethod: 'file-upload',
       fileType: 'KML',
-      filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml'
+      filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
+      activityDates: ActivityDatesModel.generateValidActivityDates()
     }
     return this._wrapInSitesArray(siteDetails)
   }
@@ -129,7 +136,8 @@ export default class SiteDetailsFactory {
     const siteDetails = {
       coordinatesEntryMethod: 'file-upload',
       fileType: 'Shapefile',
-      filePath: 'test/resources/valid-shapefile.zip'
+      filePath: 'test/resources/valid-shapefile.zip',
+      activityDates: ActivityDatesModel.generateValidActivityDates()
     }
     return this._wrapInSitesArray(siteDetails)
   }
@@ -152,6 +160,7 @@ export default class SiteDetailsFactory {
       coordinatesEntryMethod: 'enter-manually',
       siteType,
       coordinateSystem,
+      activityDates: ActivityDatesModel.generateValidActivityDates(),
       ...additionalData
     }
   }

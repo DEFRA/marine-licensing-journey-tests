@@ -1,3 +1,4 @@
+export { default as ActivityDatesPageInteractions } from './activity.dates.page.interactions.js'
 export { default as BeforeYouStartSiteDetailsPageInteractions } from './before.you.start.site.details.page.interactions.js'
 export { default as DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions } from './do.you.need.to.tell.us.about.more.than.one.site.page.interactions.js'
 export { default as EnterCoordinatesCentrePointPageInteractions } from './enter.coordinates.centre.point.page.interactions.js'

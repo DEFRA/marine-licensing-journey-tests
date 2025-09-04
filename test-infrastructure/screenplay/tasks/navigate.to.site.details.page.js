@@ -54,12 +54,7 @@ export default class NavigateToSiteDetailsPage extends Task {
   createNavigationStrategies() {
     return {
       'coordinates-entry-method': async (browseTheWeb) => {
-        await HowDoYouWantToProvideCoordinatesPageInteractions.navigateToCoordinatesEntryMethod(
-          browseTheWeb
-        )
-        await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
-          browseTheWeb
-        )
+        await this.navigateToSiteTypeSelection(browseTheWeb)
       },
       'coordinate-system': async (browseTheWeb) => {
         await this.navigateToCoordinateSystem(browseTheWeb)
@@ -147,6 +142,16 @@ export default class NavigateToSiteDetailsPage extends Task {
     )
     await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
       browseTheWeb
+    )
+    // Complete activity dates step to reach the coordinates entry method page
+    const { ActivityDatesModel } = await import('../models/index.js')
+    const { ActivityDatesPageInteractions } = await import(
+      '../page-interactions/index.js'
+    )
+    const validActivityDates = ActivityDatesModel.generateValidActivityDates()
+    await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
+      browseTheWeb,
+      validActivityDates
     )
   }
 }

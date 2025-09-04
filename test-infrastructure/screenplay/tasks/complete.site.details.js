@@ -7,6 +7,7 @@ import {
 } from '../interactions/index.js'
 import Memory from '../memory.js'
 import {
+  ActivityDatesPageInteractions,
   BeforeYouStartSiteDetailsPageInteractions,
   DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions,
   EnterCoordinatesCentrePointPageInteractions,
@@ -164,6 +165,7 @@ export default class CompleteSiteDetails extends Task {
       await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
         this.browseTheWeb
       )
+      await this.handleSingleSiteActivityDates()
     }
 
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
@@ -185,6 +187,17 @@ export default class CompleteSiteDetails extends Task {
       this.siteDetails.sameActivityDates
     )
     await this.actor.attemptsTo(CompleteActivityDates.now())
+  }
+
+  async handleSingleSiteActivityDates() {
+    if (this.siteDetails.activityDates) {
+      await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.activityDates
+      )
+    } else {
+      await ActivityDatesPageInteractions.clickContinue(this.browseTheWeb)
+    }
   }
 
   async enterWidthOfCircleIfOnWidthPage() {
