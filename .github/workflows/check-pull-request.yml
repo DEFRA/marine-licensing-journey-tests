@@ -37,5 +37,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./run-journey-tests
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -11,10 +11,6 @@ inputs:
     required: false
     type: string
     default: main
-  github-token:
-    required: false
-    type: string
-    description: 'GitHub token for depends-on action'
 
 runs:
   using: 'composite'
@@ -34,24 +30,11 @@ runs:
       shell: bash
 
     - name: Extract dependent Pull Requests
-      if: inputs.github-token != ''
       uses: depends-on/depends-on-action@0.15.0
       with:
-        token: ${{ inputs.github-token }}
-
-    - name: Debug workspace after depends-on
-      if: inputs.github-token != ''
-      run: |
-        echo "=== Workspace Debug After depends-on ==="
-        echo "Current directory: $(pwd)"
-        echo "Workspace contents:"
-        ls -la
-        echo "Looking for marine-licensing-* directories:"
-        find . -maxdepth 2 -name "marine-licensing-*" -type d
-      shell: bash
+        token: ${{ github.token }}
 
     - name: Build marine-licensing-frontend image
-      if: inputs.github-token != ''
       run: |
         echo "=== Building Frontend Image ==="
         echo "Current directory: $(pwd)"
@@ -70,7 +53,6 @@ runs:
       working-directory: ./marine-licensing-journey-tests
 
     - name: Build marine-licensing-backend image
-      if: inputs.github-token != ''
       run: |
         echo "=== Building Backend Image ==="
         echo "Current directory: $(pwd)"
