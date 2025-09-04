@@ -7,7 +7,6 @@ export default class NavigateToDashboard extends Task {
   }
 
   async performAs(actor) {
-    const browseTheWeb = actor.ability
-    await browseTheWeb.click(DashboardPage.locators.projectsHomeLink)
+    await actor.ability.navigateTo(DashboardPage.url)
   }
 }
