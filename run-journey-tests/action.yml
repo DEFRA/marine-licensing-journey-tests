@@ -39,6 +39,17 @@ runs:
       with:
         token: ${{ inputs.github-token }}
 
+    - name: Debug workspace after depends-on
+      if: inputs.github-token != ''
+      run: |
+        echo "=== Workspace Debug After depends-on ==="
+        echo "Current directory: $(pwd)"
+        echo "Workspace contents:"
+        ls -la
+        echo "Looking for marine-licensing-* directories:"
+        find . -maxdepth 2 -name "marine-licensing-*" -type d
+      shell: bash
+
     - name: Build marine-licensing-frontend image
       if: inputs.github-token != ''
       run: |
