@@ -3,6 +3,11 @@
 - Clearly explain the purpose and motivation behind this pull request.
 - Detail the changes introduced.
 
+## Dependencies
+
+Depends-On: <frontend-pr-link>
+Depends-On: <backend-pr-link>
+
 ## Checklist
 
 Before submitting the PR, ensure the following:
