@@ -163,7 +163,7 @@ services:
     environment:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
-      - DEFRA_ID_ENABLED=false
+      - DEFRA_ID_ENABLED=true
     depends_on:
       mongodb:
         condition: service_healthy
