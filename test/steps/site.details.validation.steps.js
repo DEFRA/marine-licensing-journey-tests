@@ -20,8 +20,6 @@ import {
   EnsureErrorNotDisplayed,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
-  EnsureThatMultipleSiteOptionSelected,
-  EnsureThatSiteTypeSelected,
   Navigate,
   NavigateToSiteDetailsPage,
   SelectTheTask
@@ -134,10 +132,6 @@ Given(
     )
   }
 )
-
-Given('the WGS84 coordinate system has been selected', async function () {
-  await this.actor.attemptsTo(NavigateToSiteDetailsPage.andSelectWGS84())
-})
 
 Given(
   'the enter WGS84 coordinates at the centre point of the site page is displayed',
@@ -290,14 +284,6 @@ Then(
     )
   }
 )
-
-Then('the multiple sites option is selected', async function () {
-  await this.actor.attemptsTo(EnsureThatMultipleSiteOptionSelected.is('no'))
-})
-
-Then('the circular site option is selected', async function () {
-  await this.actor.attemptsTo(EnsureThatSiteTypeSelected.is('circle'))
-})
 
 Then('the latitude error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(

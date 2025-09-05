@@ -17,10 +17,6 @@ export default class NavigateToSiteDetailsPage extends Task {
     return new NavigateToSiteDetailsPage('coordinate-system')
   }
 
-  static andSelectWGS84() {
-    return new NavigateToSiteDetailsPage('select-wgs84-only')
-  }
-
   static enterWGS84Coordinates() {
     return new NavigateToSiteDetailsPage('enter-wgs84-coordinates')
   }
@@ -143,15 +139,26 @@ export default class NavigateToSiteDetailsPage extends Task {
     await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
       browseTheWeb
     )
-    // Complete activity dates step to reach the coordinates entry method page
-    const { ActivityDatesModel } = await import('../models/index.js')
-    const { ActivityDatesPageInteractions } = await import(
-      '../page-interactions/index.js'
+    // Complete activity dates step to reach the activity description page
+    const { ActivityDatesModel, ActivityDescriptionModel } = await import(
+      '../models/index.js'
     )
+    const {
+      ActivityDatesPageInteractions,
+      ActivityDescriptionPageInteractions
+    } = await import('../page-interactions/index.js')
     const validActivityDates = ActivityDatesModel.generateValidActivityDates()
     await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
       browseTheWeb,
       validActivityDates
+    )
+
+    // Complete activity description step to reach the coordinates entry method page
+    const validActivityDescription =
+      ActivityDescriptionModel.generateActivityDescription()
+    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+      browseTheWeb,
+      validActivityDescription
     )
   }
 }

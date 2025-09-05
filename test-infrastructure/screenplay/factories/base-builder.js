@@ -35,8 +35,4 @@ export default class BaseBuilder {
     current[finalKey] = value
     return this
   }
-
-  setTaskCompleted(taskName, completed = true) {
-    return this.setProperty(`${taskName}TaskCompleted`, completed)
-  }
 }

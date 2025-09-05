@@ -19,8 +19,4 @@ export default class WhichTypeOfFileDoYouWantToUploadPageInteractions {
   static async clickCancel(browseTheWeb) {
     await browseTheWeb.click(WhichTypeOfFileDoYouWantToUploadPage.cancelLink)
   }
-
-  static async clickBack(browseTheWeb) {
-    await browseTheWeb.click(WhichTypeOfFileDoYouWantToUploadPage.backLink)
-  }
 }

@@ -147,10 +147,6 @@ export default class BrowseTheWeb extends Ability {
     await expect(element).not.toBeDisplayed()
   }
 
-  async clickBack() {
-    await this.click(CommonElementsPage.backLink)
-  }
-
   async clickCancel() {
     await this.click(CommonElementsPage.cancelLink)
   }

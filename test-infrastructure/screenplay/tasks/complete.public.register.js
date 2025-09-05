@@ -9,10 +9,6 @@ export default class CompletePublicRegisterTask extends Task {
     return new CompletePublicRegisterTask(true)
   }
 
-  static withoutSaving() {
-    return new CompletePublicRegisterTask(false)
-  }
-
   constructor(saveAndContinue) {
     super()
     this.saveAndContinue = saveAndContinue
