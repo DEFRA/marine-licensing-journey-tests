@@ -8,6 +8,7 @@ import {
 import Memory from '../memory.js'
 import {
   ActivityDatesPageInteractions,
+  ActivityDescriptionPageInteractions,
   BeforeYouStartSiteDetailsPageInteractions,
   DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions,
   EnterCoordinatesCentrePointPageInteractions,
@@ -197,6 +198,20 @@ export default class CompleteSiteDetails extends Task {
       )
     } else {
       await ActivityDatesPageInteractions.clickContinue(this.browseTheWeb)
+    }
+
+    // After activity dates, handle activity description for single site
+    await this.handleSingleSiteActivityDescription()
+  }
+
+  async handleSingleSiteActivityDescription() {
+    if (this.siteDetails.activityDescription) {
+      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.activityDescription
+      )
+    } else {
+      await ActivityDescriptionPageInteractions.clickContinue(this.browseTheWeb)
     }
   }
 

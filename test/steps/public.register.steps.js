@@ -7,8 +7,6 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
-  ClickBack,
-  ClickCancel,
   ClickSaveAndContinue,
   CompleteProjectName,
   CompletePublicRegisterTask,
@@ -17,7 +15,6 @@ import {
   EnsureProjectNameDisplayedAsCaption,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
-  FillForm,
   Memory,
   Navigate,
   SelectTheTask
@@ -114,46 +111,6 @@ When(
   }
 )
 
-When(
-  'completing the public register task but cancelling out',
-  async function () {
-    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
-    await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
-    await this.actor.attemptsTo(ClickCancel.now())
-  }
-)
-
-When(
-  'completing the public register task but selecting to go back',
-  async function () {
-    this.actor.updates(Memory.ofPublicRegisterWithConsent(true))
-    await this.actor.attemptsTo(CompletePublicRegisterTask.withoutSaving())
-    await this.actor.attemptsTo(ClickBack.now())
-  }
-)
-
-When(
-  'changing the public register information to withhold but cancelling out',
-  async function () {
-    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      FillForm.publicRegisterWithhold(faker.lorem.words(5))
-    )
-    await this.actor.attemptsTo(ClickCancel.now())
-  }
-)
-
-When(
-  'changing the public register information to withhold but selecting to go back',
-  async function () {
-    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      FillForm.publicRegisterWithhold(faker.lorem.words(5))
-    )
-    await this.actor.attemptsTo(ClickBack.now())
-  }
-)
-
 When('changing the public register information to withhold', async function () {
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
   this.actor.updates(
@@ -224,26 +181,6 @@ Then(
 )
 
 Then(
-  'any changes made on the public register page before going back are not saved',
-  async function () {
-    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      EnsurePublicRegisterTask.hasNoInformationCompleted()
-    )
-  }
-)
-
-Then(
-  'any changes made on the public register page before cancelling are not saved',
-  async function () {
-    await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-    await this.actor.attemptsTo(
-      EnsurePublicRegisterTask.hasNoInformationCompleted()
-    )
-  }
-)
-
-Then(
   'the reason error message {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
@@ -251,13 +188,3 @@ Then(
     )
   }
 )
-
-Then('the previously saved changes are pre-populated', async function () {
-  await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  await this.actor.attemptsTo(
-    EnsurePublicRegisterTask.hasBeenCompletedWith(
-      this.actor.recalls('exemption').publicRegister.consent,
-      this.actor.recalls('exemption').publicRegister.reason || ''
-    )
-  )
-})
