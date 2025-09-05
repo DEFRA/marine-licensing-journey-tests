@@ -23,10 +23,32 @@ runs:
     - name: Alternative checkout attempt (only if called from different repo)
       if: github.repository != 'DEFRA/marine-licensing-journey-tests'
       run: |
+        set -e
         rm -rf ./marine-licensing-journey-tests
-        git clone https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests
-        cd ./marine-licensing-journey-tests
-        git checkout ${{ inputs.branch }} || echo "Using default branch"
+
+        DEFAULT_BRANCH="${{ inputs.branch }}"
+        BRANCH_TO_USE="$DEFAULT_BRANCH"
+
+        if [ -f "$GITHUB_EVENT_PATH" ]; then
+          PR_BODY=$(jq -r '.pull_request.body // empty' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
+          if [ -n "$PR_BODY" ]; then
+            # Look for lines mentioning depends-on and this repo, extract branch after @, : or space
+            CANDIDATE=$(printf '%s\n' "$PR_BODY" \
+              | grep -iE 'depends[- ]on' \
+              | grep -iE 'marine-licensing-journey-tests' \
+              | head -1 \
+              | sed -E 's/^.*marine-licensing-journey-tests[@:# ]+([A-Za-z0-9._\/-]+).*$/\1/i')
+            if [ -n "$CANDIDATE" ]; then
+              BRANCH_TO_USE="$CANDIDATE"
+            fi
+          fi
+        fi
+
+        echo "Cloning marine-licensing-journey-tests branch: $BRANCH_TO_USE"
+        git clone --branch "$BRANCH_TO_USE" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests || {
+          echo "Falling back to default branch: $DEFAULT_BRANCH"
+          git clone --branch "$DEFAULT_BRANCH" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests
+        }
       shell: bash
 
     - name: Extract dependent Pull Requests
