@@ -11,7 +11,7 @@ const getTags = () => {
 export const config = {
   runner: 'local',
   baseUrl: `http://marine-licensing-frontend:3000/`,
-  defraIdUrl: `http://defra-id-stub:3200`,
+  defraIdUrl: `http://localhost:3200`,
 
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
