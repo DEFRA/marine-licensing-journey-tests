@@ -35,28 +35,28 @@ export default class EnsureDashboardSortOrder extends Task {
 
   verifySortOrder(notifications) {
     const drafts = notifications.filter((n) => n.status === 'Draft')
-    const closed = notifications.filter((n) => n.status === 'Closed')
+    const active = notifications.filter((n) => n.status === 'Active')
 
     const draftIndices = notifications
       .map((n, i) => (n.status === 'Draft' ? i : -1))
       .filter((i) => i !== -1)
-    const closedIndices = notifications
-      .map((n, i) => (n.status === 'Closed' ? i : -1))
+    const activeIndices = notifications
+      .map((n, i) => (n.status === 'Active' ? i : -1))
       .filter((i) => i !== -1)
 
-    if (draftIndices.length > 0 && closedIndices.length > 0) {
+    if (draftIndices.length > 0 && activeIndices.length > 0) {
       const lastDraftIndex = Math.max(...draftIndices)
-      const firstClosedIndex = Math.min(...closedIndices)
+      const firstActiveIndex = Math.min(...activeIndices)
 
-      if (lastDraftIndex > firstClosedIndex) {
+      if (lastDraftIndex > firstActiveIndex) {
         expect.fail(
-          'Sort order incorrect: Draft notifications should appear before Closed notifications'
+          'Sort order incorrect: Draft notifications should appear before Active notifications'
         )
       }
     }
 
     this.verifyAlphabeticalOrder(drafts, 'Draft')
-    this.verifyAlphabeticalOrder(closed, 'Closed')
+    this.verifyAlphabeticalOrder(active, 'Active')
   }
 
   verifyAlphabeticalOrder(notifications, status) {
