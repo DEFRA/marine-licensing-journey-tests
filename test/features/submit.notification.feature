@@ -16,7 +16,7 @@ Feature: Submit exemption notification: A unique reference number is generated f
   - ML-82: The user is able to access the "Check your answers" page after completing all the tasks on the task list
   - ML-84: The user is able to submit their notification
 
-  @smoke
+  @smoke @run-only
   Scenario: After successfully completing all the tasks on the task list, the user is able to submit their notification
     Given the user has completed all the tasks on the task list and is on the Check your answers page
     When the user clicks Confirm and send
