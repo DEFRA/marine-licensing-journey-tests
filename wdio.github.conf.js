@@ -32,7 +32,7 @@ export const config = {
   // Each feature file will run in a separate worker process
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
-    : 4,
+    : 8,
 
   capabilities: [
     {
