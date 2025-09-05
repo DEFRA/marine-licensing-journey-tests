@@ -161,8 +161,6 @@ runs:
         rm -rf allure-results allure-report
         echo "=== Running tests ==="
         npm run test:github
-        echo "=== Checking test results ==="
-        ls -la allure-results/ || echo "No allure-results directory found"
 
     - name: debug
       if: always()
