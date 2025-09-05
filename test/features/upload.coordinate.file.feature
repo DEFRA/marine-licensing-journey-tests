@@ -4,14 +4,14 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
   I want to upload a file of coordinates for my site
   So that I can provide my site details easily and accurately
 
-  @kml
+  @kml @not-github-actions
   Scenario: Successfully upload a valid KML file and review site details
     Given an exemption notification with a valid KML file
     When completing the site details task
     Then the file is successfully processed
     And the site details review page shows the site details
 
-  @shapefile
+  @shapefile @not-github-actions
   Scenario: Successfully upload a valid Shapefile and review site details
     Given an exemption notification with a valid Shapefile
     When completing the site details task

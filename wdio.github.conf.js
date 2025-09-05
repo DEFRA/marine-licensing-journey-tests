@@ -134,7 +134,9 @@ export const config = {
   },
 
   afterCommand: async function (commandName, args, result, error) {
-    if (error && (commandName === 'navigateTo' || commandName === 'url')) {
+    const isNavigationCommand =
+      commandName === 'navigateTo' || commandName === 'url'
+    if (error && isNavigationCommand) {
       console.log(`[NAVIGATION-ERROR] ❌ Navigation failed to: ${args[0]}`)
       console.log(`[NAVIGATION-ERROR] 📝 Error: ${error.message}`)
     }
