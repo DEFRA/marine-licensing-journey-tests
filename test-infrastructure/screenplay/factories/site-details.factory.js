@@ -134,11 +134,17 @@ export default class SiteDetailsFactory {
   }
 
   static createKMLUpload() {
-    return this._createFileUpload('KML', 'test/resources/EXE_2025_00009-LOCATIONS.kml')
+    return this._createFileUpload(
+      'KML',
+      'test/resources/EXE_2025_00009-LOCATIONS.kml'
+    )
   }
 
   static createShapefileUpload() {
-    return this._createFileUpload('Shapefile', 'test/resources/valid-shapefile.zip')
+    return this._createFileUpload(
+      'Shapefile',
+      'test/resources/valid-shapefile.zip'
+    )
   }
 
   static _createFileUpload(fileType, filePath) {
