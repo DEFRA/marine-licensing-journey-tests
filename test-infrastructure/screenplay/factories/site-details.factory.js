@@ -134,22 +134,18 @@ export default class SiteDetailsFactory {
   }
 
   static createKMLUpload() {
-    const siteDetails = {
-      coordinatesEntryMethod: 'file-upload',
-      fileType: 'KML',
-      filePath: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription()
-    }
-    return this._wrapInSitesArray(siteDetails)
+    return this._createFileUpload('KML', 'test/resources/EXE_2025_00009-LOCATIONS.kml')
   }
 
   static createShapefileUpload() {
+    return this._createFileUpload('Shapefile', 'test/resources/valid-shapefile.zip')
+  }
+
+  static _createFileUpload(fileType, filePath) {
     const siteDetails = {
       coordinatesEntryMethod: 'file-upload',
-      fileType: 'Shapefile',
-      filePath: 'test/resources/valid-shapefile.zip',
+      fileType,
+      filePath,
       activityDates: ActivityDatesModel.generateValidActivityDates(),
       activityDescription:
         ActivityDescriptionModel.generateActivityDescription()
@@ -158,15 +154,15 @@ export default class SiteDetailsFactory {
   }
 
   static _wrapInSitesArray(siteDetails, siteName = 'Main Research Site') {
+    const { activityDescription, ...siteData } = siteDetails
     return {
       ...siteDetails,
       sites: [
         {
           siteName,
           siteNumber: 1,
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          ...siteDetails
+          activityDescription,
+          ...siteData
         }
       ]
     }
