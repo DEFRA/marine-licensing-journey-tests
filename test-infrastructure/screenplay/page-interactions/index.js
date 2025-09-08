@@ -7,6 +7,7 @@ export { default as EnterMultipleCoordinatesPageInteractions } from './enter.mul
 export { default as HowDoYouWantToEnterTheCoordinatesPageInteractions } from './how.do.you.want.to.enter.the.coordinates.page.interactions.js'
 export { default as HowDoYouWantToProvideCoordinatesPageInteractions } from './how.do.you.want.to.provide.coordinates.page.interactions.js'
 export { default as SameActivityDatesPageInteractions } from './same.activity.dates.page.interactions.js'
+export { default as SameActivityDescriptionPageInteractions } from './same.activity.description.page.interactions.js'
 export { default as WhatCoordinateSystemPageInteractions } from './what.coordinate.system.page.interactions.js'
 export { default as WhichTypeOfFileDoYouWantToUploadPageInteractions } from './which.type.of.file.do.you.want.to.upload.page.interactions.js'
 export { default as WidthOfCircularSitePageInteractions } from './width.of.circular.site.page.interactions.js'

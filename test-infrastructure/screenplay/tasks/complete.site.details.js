@@ -16,6 +16,7 @@ import {
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
   SameActivityDatesPageInteractions,
+  SameActivityDescriptionPageInteractions,
   WhatCoordinateSystemPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
@@ -188,6 +189,10 @@ export default class CompleteSiteDetails extends Task {
       this.siteDetails.sameActivityDates
     )
     await this.actor.attemptsTo(CompleteActivityDates.now())
+    await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+      this.browseTheWeb,
+      'yes'
+    )
   }
 
   async handleSingleSiteActivityDates() {
