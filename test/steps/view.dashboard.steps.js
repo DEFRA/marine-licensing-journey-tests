@@ -8,10 +8,10 @@ import {
   ClickProjectsHome,
   ClickViewDetailsLink,
   DeleteDraftNotification,
-  EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
+  EnsureNotificationsAreDisplayedOnTheDashboard,
   EnsurePageHeading,
   EnsureThatProjectNameIsEmpty,
   EnsureViewDetailsPage,
@@ -72,7 +72,9 @@ When(
   'the user clicks view details for the submitted notification on the dashboard',
   async function () {
     await this.actor.attemptsTo(ClickProjectsHome.now())
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
+    await this.actor.attemptsTo(
+      EnsureNotificationsAreDisplayedOnTheDashboard.correctly()
+    )
     await this.actor.attemptsTo(
       ClickViewDetailsLink.forLastCompletedExemption()
     )
@@ -148,5 +150,14 @@ Then(
       EnsurePageHeading.is('View notification details')
     )
     await this.actor.attemptsTo(EnsureViewDetailsPage.showsAllAnswers())
+  }
+)
+
+Then(
+  'the notifications are displayed with the correct information',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsureNotificationsAreDisplayedOnTheDashboard.correctly()
+    )
   }
 )
