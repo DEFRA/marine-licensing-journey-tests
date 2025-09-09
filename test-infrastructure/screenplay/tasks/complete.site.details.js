@@ -193,8 +193,6 @@ export default class CompleteSiteDetails extends Task {
       this.browseTheWeb,
       'yes'
     )
-
-    // ML-421: Handle activity description page for multi-site flow
     await this.handleMultiSiteActivityDescription()
   }
 
@@ -218,8 +216,6 @@ export default class CompleteSiteDetails extends Task {
     } else {
       await ActivityDatesPageInteractions.clickContinue(this.browseTheWeb)
     }
-
-    // After activity dates, handle activity description for single site
     await this.handleSingleSiteActivityDescription()
   }
 
