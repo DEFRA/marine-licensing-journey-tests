@@ -102,8 +102,8 @@ export default class NotificationSummaryBasePage {
 
     // Common submission details locators
     applicationReference:
-      '.govuk-panel__body strong, .govuk-body strong, //dt[contains(text(), "Reference")]/following-sibling::dd[1]',
+      '//dt[contains(text(), "Reference")]/following-sibling::dd[1] | //*[contains(@class, "govuk-panel__body")]//strong | //*[contains(@class, "govuk-body")]//strong',
     submissionDate:
-      '//dt[contains(text(), "Date submitted")]/following-sibling::dd[1], //p[contains(text(), "submitted on")], .govuk-body'
+      '//dt[contains(text(), "Date submitted")]/following-sibling::dd[1] | //p[contains(text(), "submitted on")]'
   }
 }
