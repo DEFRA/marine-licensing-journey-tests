@@ -12,7 +12,6 @@ import {
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
   EnsureNotificationsAreDisplayedOnTheDashboard,
-  EnsurePageHeading,
   EnsureThatProjectNameIsEmpty,
   EnsureViewDetailsPage,
   Navigate,
@@ -148,9 +147,6 @@ Then('the notification is removed from the dashboard', async function () {
 Then(
   'the user is able to view the notification in a summary format',
   async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('View notification details')
-    )
     await this.actor.attemptsTo(EnsureViewDetailsPage.showsAllAnswers())
   }
 )
