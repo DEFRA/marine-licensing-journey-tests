@@ -15,6 +15,7 @@ export { default as EnsureDashboardSortOrder } from './ensure.dashboard.sort.ord
 export { default as EnsureEmptyStateMessage } from './ensure.empty.state.message'
 export { default as EnsureErrorDisplayed } from './ensure.error'
 export { default as EnsureErrorNotDisplayed } from './ensure.error.not.displayed'
+export { default as EnsureFooterNavigationLinks } from './ensure.footer.navigation.links'
 export { default as EnsureHeaderNavigationLinks } from './ensure.header.navigation.links'
 export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.errors.are.displayed'
 export { default as EnsureNoErrorsDisplayed } from './ensure.no.errors.displayed'
@@ -39,3 +40,4 @@ export { default as SignIn } from './sign.in'
 export { default as SignOut } from './sign.out'
 export { default as UploadFileAndContinue } from './upload.file.and.continue'
 export { default as VerifyThatTheUserIsLoggedInToD365 } from './verify.that.the.user.is.logged.in.to.d365'
+
