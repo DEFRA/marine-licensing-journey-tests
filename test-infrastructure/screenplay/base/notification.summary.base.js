@@ -1,5 +1,8 @@
 import { expect } from 'chai'
-import { format } from 'date-fns'
+import {
+  formatDateObjectToDisplay,
+  formatSubmissionDateForDisplay
+} from '~/test-infrastructure/helpers/date-formatter.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
 import Task from './task.js'
@@ -57,8 +60,7 @@ export default class NotificationSummaryBase extends Task {
       if (exemptionData.submissionDate || exemptionData.dateSubmitted) {
         const submissionDate =
           exemptionData.submissionDate || exemptionData.dateSubmitted
-        const expectedDate =
-          this._formatSubmissionDateForDisplay(submissionDate)
+        const expectedDate = formatSubmissionDateForDisplay(submissionDate)
 
         await browseTheWeb.expectElementToContainText(
           pageLocators.submissionDate,
@@ -98,20 +100,9 @@ export default class NotificationSummaryBase extends Task {
     if (activityDates[dateField]) {
       const pageLocators = this._getPageLocators()
       const locator = pageLocators.activityDates[`${dateField}Value`]
-      const expectedDate = this._formatDateObjectToDisplay(
-        activityDates[dateField]
-      )
+      const expectedDate = formatDateObjectToDisplay(activityDates[dateField])
       await browseTheWeb.expectElementToHaveExactText(locator, expectedDate)
     }
-  }
-
-  _formatDateObjectToDisplay(dateObject) {
-    const date = new Date(dateObject.year, dateObject.month - 1, dateObject.day)
-    return format(date, 'd MMMM yyyy')
-  }
-
-  _formatSubmissionDateForDisplay(submissionDate) {
-    return format(new Date(submissionDate), 'd MMM yyyy')
   }
 
   async _validateActivityDetails(browseTheWeb, exemptionData) {
