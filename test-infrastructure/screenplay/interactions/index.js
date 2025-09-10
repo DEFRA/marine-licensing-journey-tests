@@ -15,6 +15,7 @@ export { default as EnsureDashboardSortOrder } from './ensure.dashboard.sort.ord
 export { default as EnsureEmptyStateMessage } from './ensure.empty.state.message'
 export { default as EnsureErrorDisplayed } from './ensure.error'
 export { default as EnsureErrorNotDisplayed } from './ensure.error.not.displayed'
+export { default as EnsureHeaderNavigationLinks } from './ensure.header.navigation.links'
 export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.errors.are.displayed'
 export { default as EnsureNoErrorsDisplayed } from './ensure.no.errors.displayed'
 export { default as EnsureNotificationRemoved } from './ensure.notification.removed'
