@@ -17,6 +17,7 @@ import {
   EnsureViewDetailsPage,
   Navigate,
   NavigateToDashboard,
+  SelectTheTask,
   SignIn,
   SignOut,
   SubmitAnExemptionNotification
@@ -86,7 +87,7 @@ When('the user navigates to the dashboard', async function () {
 })
 
 When(
-  'the user continues the notification from the dashboard',
+  'the user continues the notification from the dashboard and reenters the project name task',
   async function () {
     await this.actor.attemptsTo(SignIn.now())
     await this.actor.attemptsTo(NavigateToDashboard.now())
@@ -95,6 +96,7 @@ When(
         this.actor.recalls('exemption').projectName
       )
     )
+    await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   }
 )
 

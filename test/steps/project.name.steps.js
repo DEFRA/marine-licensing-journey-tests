@@ -8,6 +8,7 @@ import {
   BrowseTheWeb,
   CompleteProjectName,
   EnsureErrorDisplayed,
+  EnsureProjectNameDisplayedAsCaption,
   EnsureThatProjectName,
   Navigate
 } from '~/test-infrastructure/screenplay'
@@ -62,3 +63,10 @@ Then(
 Then('the project name is pre-populated', async function () {
   await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
 })
+
+Then(
+  'the page caption shows the previously saved project name',
+  async function () {
+    await this.actor.attemptsTo(EnsureProjectNameDisplayedAsCaption.isCorrect())
+  }
+)

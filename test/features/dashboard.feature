@@ -1,4 +1,4 @@
-@issue=ML-96 @issue=ML-99 @issue=ML-100 @issue=ML-591
+@issue=ML-96 @issue=ML-99 @issue=ML-100 @issue=ML-124 @issue=ML-591
 Feature: View dashboard: View a list of all applications to keep track of and manage them
   As an applicant
   I want to see a list of all my applications
@@ -16,8 +16,9 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
 
   Scenario: Continue a draft notification from the dashboard
     Given the user has a draft exemption notification
-    When the user continues the notification from the dashboard
-    Then the task list page is displayed
+    When the user continues the notification from the dashboard and reenters the project name task
+    Then the project name is pre-populated
+    And the page caption shows the previously saved project name
 
   Scenario: When a user has previously submitted a notification and starts a new one, no previously input data is shown
     Given a user has submitted an exemption notification
