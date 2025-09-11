@@ -7,12 +7,14 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickPublicRegisterLink,
   ClickSaveAndContinue,
   CompleteProjectName,
   CompletePublicRegisterTask,
   EnsureErrorDisplayed,
   EnsurePageHeading,
   EnsureProjectNameDisplayedAsCaption,
+  EnsurePublicRegisterNewTab,
   EnsurePublicRegisterTask,
   EnsureReasonTextBox,
   Memory,
@@ -186,5 +188,16 @@ Then(
     await this.actor.attemptsTo(
       EnsureErrorDisplayed.is(PublicRegisterPage.reasonError, errorMessage)
     )
+  }
+)
+
+When('the user clicks the link to the public register', async function () {
+  await this.actor.attemptsTo(ClickPublicRegisterLink.now())
+})
+
+Then(
+  'the user is taken to the public register page in a new tab',
+  async function () {
+    await this.actor.attemptsTo(EnsurePublicRegisterNewTab.isOpened())
   }
 )

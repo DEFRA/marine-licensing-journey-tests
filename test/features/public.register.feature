@@ -1,4 +1,4 @@
-@issue=ML-12
+@issue=ML-12 @issue=ML-145
 Feature: Public register: The user can consent or withhold from sharing information on the public register
   As an applicant
   I want to state whether I consent for my marine project to be shared on the public register
@@ -17,6 +17,11 @@ Feature: Public register: The user can consent or withhold from sharing informat
     When choosing to withhold information from the public register
     Then the "Public register" task status is "Completed"
     And the public register information is saved
+
+  Scenario: The user can follow the link to the public register
+    Given the Public register page is displayed
+    When the user clicks the link to the public register
+    Then the user is taken to the public register page in a new tab
 
   Scenario: Changing previously saved information from consent to withhold
     Given the Public register task has been completed with consent
