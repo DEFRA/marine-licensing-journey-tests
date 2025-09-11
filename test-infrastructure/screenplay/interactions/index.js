@@ -15,6 +15,7 @@ export { default as ContinueFromBeforeYouStartSiteDetailsPage } from './continue
 export { default as EnsureCheckYourAnswersPage } from './ensure.check.your.answers.page'
 export { default as EnsureConfirmationPage } from './ensure.confirmation.page'
 export { default as EnsureCookiesPolicyPage } from './ensure.cookies.policy.page'
+export { default as EnsureCookiesRadioButtonSelected } from './ensure.cookies.radio.button.selected'
 export { default as EnsureDashboardSortOrder } from './ensure.dashboard.sort.order'
 export { default as EnsureEmptyStateMessage } from './ensure.empty.state.message'
 export { default as EnsureErrorDisplayed } from './ensure.error'

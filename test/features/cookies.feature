@@ -14,7 +14,7 @@ Feature: Cookies policy page allows users to manage cookie preferences
   @smoke
   Scenario: Analytics cookies are not accepted by default
     Given a user has not made a decision about cookies
-    When the cookies policy page is displayed
+    When the cookies link is clicked in the footer
     Then the "No" radio button is selected for analytics cookies
 
   Scenario: Accepting analytics cookies
