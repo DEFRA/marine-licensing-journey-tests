@@ -39,6 +39,7 @@ runs:
               | head -1 \
               | sed -E 's/^.*marine-licensing-journey-tests[@:# ]+([A-Za-z0-9._\/-]+).*$/\1/i')
             if [ -n "$CANDIDATE" ]; then
+              echo "✅ Found branch: $CANDIDATE"
               BRANCH_TO_USE="$CANDIDATE"
             fi
           fi
