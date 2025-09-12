@@ -18,13 +18,13 @@ export default class EnsureCookieConfirmationBanner extends Task {
     await browseTheWeb.isDisplayed('.govuk-notification-banner--success')
 
     // Verify the banner contains the expected cookie preferences confirmation text
-    await browseTheWeb.containsText(
+    await browseTheWeb.expectElementToContainText(
       CookiesPolicyPage.locators.confirmationBanner,
       'Your cookie preferences were saved'
     )
 
     // Verify the "Go back to the previous page" link is present
-    await browseTheWeb.containsText(
+    await browseTheWeb.expectElementToContainText(
       CookiesPolicyPage.locators.confirmationBanner,
       'Go back to the previous page'
     )
