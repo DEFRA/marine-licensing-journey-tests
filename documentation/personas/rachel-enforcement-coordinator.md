@@ -31,19 +31,16 @@ Rachel works as an enforcement officer but also manages regional workbasket dist
 ## Core Needs
 
 1. **Workload Separation**:
-
    - Clear distinction between personal enforcement cases and administrative assignments
    - Separate views for regional coordination vs. individual work
    - Efficient case distribution workflows
 
 2. **Geographic Intelligence**:
-
    - Location-based assignment tools
    - Understanding of team member expertise and proximity
    - Regional boundary management
 
 3. **Priority Management**:
-
    - Risk-based prioritisation tools instead of opportunistic scheduling
    - Clear indicators of case urgency and complexity
    - Workload balancing across team members

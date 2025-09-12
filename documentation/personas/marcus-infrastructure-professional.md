@@ -31,17 +31,14 @@ Marcus has worked in the marine sector for 27+ years and handles "anything remot
 ## Core Needs
 
 1. **Data Continuity**:
-
    - Access to historical applications across system changes
    - Ability to search through previous submissions for reference
 
 2. **Technical Coordination**:
-
    - Seamless handoff between GIS specialists and application submission
    - Support for shapefile uploads from technical experts
 
 3. **Project Allocation Efficiency**:
-
    - Clear project ownership within team
    - "Everyone does everything, a person will be allocated to a project and they do that project"
 

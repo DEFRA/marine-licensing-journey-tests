@@ -32,7 +32,6 @@
 ## Implicit vs. explicit testing
 
 - **Implicit testing**: When features are indirectly verified through other test flows
-
   - Example: If a page display is verified as part of a validation scenario, a separate "page display" scenario is unnecessary
   - Page transitions are implicitly tested in user journey scenarios
 

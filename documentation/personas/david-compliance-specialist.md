@@ -31,19 +31,16 @@ David works in the central marine licensing team, reviewing applications and exe
 ## Core Needs
 
 1. **Streamlined Processing**:
-
    - Automated data transfer between systems
    - Reduced duplicate entry requirements
    - Clear processing workflows
 
 2. **Decision Support**:
-
    - Clear escalation criteria
    - Guidance for unusual cases
    - Quick access to Principal Officer consultation
 
 3. **System Integration**:
-
    - Connected systems that share data
    - Single view of case information
    - Reduced system switching
