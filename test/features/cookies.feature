@@ -39,6 +39,18 @@ Feature: Cookies policy page allows users to manage cookie preferences
     When returning to the cookies policy page
     Then the "No" radio button is selected for analytics cookies
 
+  Scenario: Changing cookie preferences from rejected to accepted
+    Given analytics cookies have been previously rejected
+    When returning to the cookies policy page
+    And selecting Yes for analytics cookies and saving preferences
+    Then the analytics cookies are enabled
+
+  Scenario: Changing cookie preferences from accepted to rejected
+    Given analytics cookies have been previously accepted
+    When returning to the cookies policy page
+    And selecting No for analytics cookies and saving preferences
+    Then the analytics cookies are disabled
+
   @wip
   Scenario: Returning to previous page from cookies page
     Given the cookies policy page is displayed from the task list
