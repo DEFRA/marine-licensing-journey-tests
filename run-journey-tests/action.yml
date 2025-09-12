@@ -32,15 +32,20 @@ runs:
         if [ -f "$GITHUB_EVENT_PATH" ]; then
           PR_BODY=$(jq -r '.pull_request.body // empty' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
           if [ -n "$PR_BODY" ]; then
-            # Look for lines mentioning depends-on and this repo, extract branch after @, : or space
+            # Look for lines mentioning depends-on and this repo, extract branch after @ or : (no spaces)
             CANDIDATE=$(printf '%s\n' "$PR_BODY" \
               | grep -iE 'depends[- ]on' \
               | grep -iE 'marine-licensing-journey-tests' \
               | head -1 \
-              | sed -E 's/^.*marine-licensing-journey-tests[@:# ]+([A-Za-z0-9._\/-]+).*$/\1/i')
+              | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
             if [ -n "$CANDIDATE" ]; then
-              echo "✅ Found branch: $CANDIDATE"
-              BRANCH_TO_USE="$CANDIDATE"
+              # Verify the branch exists on the remote before using it
+              if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$CANDIDATE" >/dev/null 2>&1; then
+                echo "✅ Found branch on remote: $CANDIDATE"
+                BRANCH_TO_USE="$CANDIDATE"
+              else
+                echo "⚠️  Candidate branch '$CANDIDATE' not found on DEFRA/marine-licensing-journey-tests; keeping default: $DEFAULT_BRANCH"
+              fi
             fi
           fi
         fi
