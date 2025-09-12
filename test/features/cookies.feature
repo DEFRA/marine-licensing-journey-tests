@@ -50,15 +50,4 @@ Feature: Cookies policy page allows users to manage cookie preferences
     When returning to the cookies policy page
     And selecting No for analytics cookies and saving preferences
     Then the analytics cookies are disabled
-
-  @wip
-  Scenario: Returning to previous page from cookies page
-    Given the cookies policy page is displayed from the task list
-    When the back link is clicked
-    Then the task list page is displayed
-
-  @wip
-  Scenario: Returning to previous page from confirmation banner
-    Given the cookie preferences confirmation banner is displayed
-    When the "Go back to the previous page" link is clicked
-    Then the previous page is displayed
+    
