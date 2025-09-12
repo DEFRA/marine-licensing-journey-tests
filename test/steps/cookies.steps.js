@@ -74,3 +74,28 @@ Then('the analytics cookies are enabled', async function () {
 Then('the analytics cookies are disabled', async function () {
   await this.actor.attemptsTo(EnsureAnalyticsCookiesSet.areDisabled())
 })
+
+Given('analytics cookies have been previously accepted', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(ClickCookiesLink.now())
+  await this.actor.attemptsTo(SaveCookiePreferences.accepting())
+  await this.actor.attemptsTo(EnsureCookieConfirmationBanner.isDisplayed())
+})
+
+Given('analytics cookies have been previously rejected', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(ClickCookiesLink.now())
+  await this.actor.attemptsTo(SaveCookiePreferences.rejecting())
+  await this.actor.attemptsTo(EnsureCookieConfirmationBanner.isDisplayed())
+})
+
+When('returning to the cookies policy page', async function () {
+  await this.actor.attemptsTo(ClickCookiesLink.now())
+  await this.actor.attemptsTo(EnsureCookiesPolicyPage.isDisplayed())
+})

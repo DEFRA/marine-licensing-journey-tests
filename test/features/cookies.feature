@@ -29,16 +29,14 @@ Feature: Cookies policy page allows users to manage cookie preferences
     Then the cookie preferences confirmation banner is displayed
     And the analytics cookies are disabled
 
-  @wip
   Scenario: Previously accepted analytics cookies are pre-selected
     Given analytics cookies have been previously accepted
-    When the cookies policy page is displayed
+    When returning to the cookies policy page
     Then the "Yes" radio button is selected for analytics cookies
 
-  @wip
   Scenario: Previously rejected analytics cookies are pre-selected
     Given analytics cookies have been previously rejected
-    When the cookies policy page is displayed
+    When returning to the cookies policy page
     Then the "No" radio button is selected for analytics cookies
 
   @wip
