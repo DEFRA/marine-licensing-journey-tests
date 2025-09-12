@@ -31,19 +31,16 @@ Dr. James conducts marine research that requires various forms of licensing and 
 ## Core Needs
 
 1. **Research Context Communication**:
-
    - Clear word/character limits for descriptions
    - Ability to provide research justification and methodology
    - Context about research objectives and intended findings
 
 2. **Technical Accuracy**:
-
    - Precise activity categorisation that matches research activities
    - Clear definitions that distinguish between similar activities
    - Understanding of regulatory boundaries for research
 
 3. **Professional Validation**:
-
    - Confirmation tools to verify regulatory compliance
    - Access to guidance that validates research approach
    - Professional due diligence capabilities
