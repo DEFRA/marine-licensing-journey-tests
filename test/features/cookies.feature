@@ -5,24 +5,24 @@ Feature: Cookies policy page allows users to manage cookie preferences
   SO THAT I can reassure myself of the data that is being stored about me
   AND I can be sure that DEFRA are meeting their statutory cookie management requirements
 
-  @smoke
   Scenario: Accessing the cookies page from the footer
     Given the project name page is displayed
     When the cookies link is clicked in the footer
     Then the cookies policy page is displayed
 
-  @smoke
   Scenario: Analytics cookies are not accepted by default
     Given a user has not made a decision about cookies
     When the cookies link is clicked in the footer
     Then the "No" radio button is selected for analytics cookies
 
+  @smoke
   Scenario: Accepting analytics cookies
     Given a user is on the cookies policy page
     When selecting Yes for analytics cookies and saving preferences
     Then the cookie preferences confirmation banner is displayed
     And the analytics cookies are enabled
 
+  @smoke
   Scenario: Rejecting analytics cookies
     Given a user is on the cookies policy page
     When selecting No for analytics cookies and saving preferences
