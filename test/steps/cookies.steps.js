@@ -5,9 +5,12 @@ import {
   ApplyForExemption,
   BrowseTheWeb,
   ClickCookiesLink,
+  EnsureAnalyticsCookiesSet,
+  EnsureCookieConfirmationBanner,
   EnsureCookiesPolicyPage,
   EnsureCookiesRadioButtonSelected,
-  Navigate
+  Navigate,
+  SaveCookiePreferences
 } from '~/test-infrastructure/screenplay'
 
 Given('a user has not made a decision about cookies', async function () {
@@ -33,3 +36,41 @@ Then(
     )
   }
 )
+
+Given('a user is on the cookies policy page', async function () {
+  this.actor = new Actor('Alice')
+  this.actor.can(new BrowseTheWeb(browser))
+  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(ClickCookiesLink.now())
+  await this.actor.attemptsTo(EnsureCookiesPolicyPage.isDisplayed())
+})
+
+When(
+  'selecting Yes for analytics cookies and saving preferences',
+  async function () {
+    await this.actor.attemptsTo(SaveCookiePreferences.accepting())
+  }
+)
+
+When(
+  'selecting No for analytics cookies and saving preferences',
+  async function () {
+    await this.actor.attemptsTo(SaveCookiePreferences.rejecting())
+  }
+)
+
+Then(
+  'the cookie preferences confirmation banner is displayed',
+  async function () {
+    await this.actor.attemptsTo(EnsureCookieConfirmationBanner.isDisplayed())
+  }
+)
+
+Then('the analytics cookies are enabled', async function () {
+  await this.actor.attemptsTo(EnsureAnalyticsCookiesSet.areEnabled())
+})
+
+Then('the analytics cookies are disabled', async function () {
+  await this.actor.attemptsTo(EnsureAnalyticsCookiesSet.areDisabled())
+})
