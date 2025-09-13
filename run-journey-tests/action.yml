@@ -235,8 +235,10 @@ runs:
           fi
           
           # Parse results by feature file
-          FEATURE_TABLE="| Feature | Passed | Failed |<br>|:--------|:------:|:------:|<br>"
-          declare -A feature_passed feature_failed
+          FEATURE_TABLE="| Feature | Passed | Failed |\n|:--------|:------:|:------:|"
+          
+          # Use temporary file to handle feature names with spaces
+          FEATURE_DATA=$(mktemp)
           
           for file in allure-results/*-result.json; do
             if [ -f "$file" ]; then
@@ -245,33 +247,43 @@ runs:
               if [ -z "$FEATURE" ] || [ "$FEATURE" = "null" ]; then
                 FEATURE=$(jq -r '.labels[] | select(.name=="suite") | .value // "Unknown"' "$file" 2>/dev/null | head -1)
               fi
-              # Clean up feature name - remove path and keep just feature file name
-              FEATURE=$(echo "$FEATURE" | sed 's/.*\///' | sed 's/\.feature$//')
+              
+              # Clean up feature name - extract meaningful part from full description
+              # e.g. "Check your answers: Once the user has..." -> "Check your answers"
+              FEATURE=$(echo "$FEATURE" | sed 's/:.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+              
+              # Skip if feature name is empty or unknown
+              if [ -z "$FEATURE" ] || [ "$FEATURE" = "Unknown" ]; then
+                continue
+              fi
               
               STATUS=$(jq -r '.status' "$file" 2>/dev/null)
               
-              if [ "$STATUS" = "passed" ]; then
-                feature_passed["$FEATURE"]=$((${feature_passed["$FEATURE"]:-0} + 1))
-              elif [ "$STATUS" = "failed" ] || [ "$STATUS" = "broken" ]; then
-                feature_failed["$FEATURE"]=$((${feature_failed["$FEATURE"]:-0} + 1))
-              fi
+              # Write feature and status to temp file
+              echo "${FEATURE}|${STATUS}" >> "$FEATURE_DATA"
             fi
           done
           
-          # Build feature table
-          for feature in $(echo "${!feature_passed[@]} ${!feature_failed[@]}" | tr ' ' '\n' | sort -u); do
-            PASS_COUNT=${feature_passed["$feature"]:-0}
-            FAIL_COUNT=${feature_failed["$feature"]:-0}
+          # Aggregate results by feature
+          sort "$FEATURE_DATA" | while IFS='|' read -r feature status; do
+            echo "$feature"
+          done | sort -u | while IFS= read -r feature; do
+            PASS_COUNT=$(grep "^${feature}|passed$" "$FEATURE_DATA" | wc -l | tr -d ' ')
+            FAIL_COUNT=$(grep "^${feature}|failed$\|^${feature}|broken$" "$FEATURE_DATA" | wc -l | tr -d ' ')
             
             # Add status emoji
-            if [ $FAIL_COUNT -eq 0 ]; then
+            if [ $FAIL_COUNT -eq 0 ] && [ $PASS_COUNT -gt 0 ]; then
               STATUS_ICON="✅"
-            else
+            elif [ $FAIL_COUNT -gt 0 ]; then
               STATUS_ICON="❌"
+            else
+              STATUS_ICON="⏭️"
             fi
             
-            FEATURE_TABLE="${FEATURE_TABLE}| ${STATUS_ICON} ${feature} | ${PASS_COUNT} | ${FAIL_COUNT} |<br>"
+            FEATURE_TABLE="${FEATURE_TABLE}\n| ${STATUS_ICON} ${feature} | ${PASS_COUNT} | ${FAIL_COUNT} |"
           done
+          
+          rm -f "$FEATURE_DATA"
           
           # Set outputs for the comment
           echo "total=$TOTAL" >> $GITHUB_OUTPUT
@@ -285,7 +297,11 @@ runs:
           echo "status_text=$STATUS_TEXT" >> $GITHUB_OUTPUT
           echo "status_color=$STATUS_COLOR" >> $GITHUB_OUTPUT
           echo "status_badge=$STATUS_BADGE" >> $GITHUB_OUTPUT
-          echo "feature_table=$FEATURE_TABLE" >> $GITHUB_OUTPUT
+          
+          # Handle multiline feature table output
+          echo "feature_table<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$FEATURE_TABLE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         else
           echo "No allure-results directory found"
           echo "total=0" >> $GITHUB_OUTPUT
@@ -299,7 +315,9 @@ runs:
           echo "status_text=No test results found" >> $GITHUB_OUTPUT
           echo "status_color=FFA500" >> $GITHUB_OUTPUT
           echo "status_badge=unknown" >> $GITHUB_OUTPUT
-          echo "feature_table=" >> $GITHUB_OUTPUT
+          echo "feature_table<<EOF" >> $GITHUB_OUTPUT
+          echo "No test results to display" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         fi
 
     - name: Find existing comment
@@ -323,11 +341,7 @@ runs:
 
           ### ${{ steps.test-results.outputs.status_emoji }} ${{ steps.test-results.outputs.status_text }}
 
-          ![Tests Status](https://img.shields.io/badge/tests-${{ steps.test-results.outputs.status_badge }}-${{ steps.test-results.outputs.status_color }}?style=flat-square)
-          ![Pass Rate](https://img.shields.io/badge/pass%20rate-${{ steps.test-results.outputs.pass_rate }}%25-${{ steps.test-results.outputs.status_color }}?style=flat-square)
-          ![Total Tests](https://img.shields.io/badge/total-${{ steps.test-results.outputs.total }}%20tests-informational?style=flat-square)
-
-          **Pass Rate:** ${{ steps.test-results.outputs.pass_rate }}% ${{ steps.test-results.outputs.progress_bar }}
+          **Total Tests:** ${{ steps.test-results.outputs.total }} | **Pass Rate:** ${{ steps.test-results.outputs.pass_rate }}% ${{ steps.test-results.outputs.progress_bar }}
 
           ### Test Results by Feature
 
