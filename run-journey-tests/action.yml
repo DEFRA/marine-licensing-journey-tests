@@ -190,16 +190,25 @@ runs:
       run: |
         # Count test results by status
         if [ -d "allure-results" ]; then
-          PASSED=$(find allure-results -name "*-result.json" -exec grep -l '"status":"passed"' {} + 2>/dev/null | wc -l || echo 0)
-          FAILED=$(find allure-results -name "*-result.json" -exec grep -l '"status":"failed"' {} + 2>/dev/null | wc -l || echo 0)
-          BROKEN=$(find allure-results -name "*-result.json" -exec grep -l '"status":"broken"' {} + 2>/dev/null | wc -l || echo 0)
-          SKIPPED=$(find allure-results -name "*-result.json" -exec grep -l '"status":"skipped"' {} + 2>/dev/null | wc -l || echo 0)
+          # Count each status type (safer approach)
+          PASSED=0
+          FAILED=0
+          BROKEN=0
+          SKIPPED=0
           
-          # Ensure numbers are properly formatted (remove spaces and leading zeros)
-          PASSED=$((PASSED + 0))
-          FAILED=$((FAILED + 0))
-          BROKEN=$((BROKEN + 0))
-          SKIPPED=$((SKIPPED + 0))
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              if grep -q '"status":"passed"' "$file" 2>/dev/null; then
+                PASSED=$((PASSED + 1))
+              elif grep -q '"status":"failed"' "$file" 2>/dev/null; then
+                FAILED=$((FAILED + 1))
+              elif grep -q '"status":"broken"' "$file" 2>/dev/null; then
+                BROKEN=$((BROKEN + 1))
+              elif grep -q '"status":"skipped"' "$file" 2>/dev/null; then
+                SKIPPED=$((SKIPPED + 1))
+              fi
+            fi
+          done
           
           TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
           
@@ -232,6 +241,10 @@ runs:
           STATUS_TEXT="No test results found"
         fi
 
+        # Debug output
+        echo "Debug: TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
+        echo "Debug: PASS_RATE=$PASS_RATE, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+
         # Set outputs
         echo "total=$TOTAL" >> $GITHUB_OUTPUT
         echo "passed=$PASSED" >> $GITHUB_OUTPUT
@@ -261,16 +274,16 @@ runs:
         body: |
           ## Marine Licensing Journey Tests
 
-          ### ${{ steps.test-results.outputs.status_emoji }} ${{ steps.test-results.outputs.status_text }}
+          ### ${{ steps.test-results.outputs.status_emoji || '⚠️' }} ${{ steps.test-results.outputs.status_text || 'Test Results' }}
 
           | Metric | Count |
           |:-------|------:|
-          | **Total Tests** | ${{ steps.test-results.outputs.total }} |
-          | **Passed** | ${{ steps.test-results.outputs.passed }} |
-          | **Failed** | ${{ steps.test-results.outputs.failed }} |
-          | **Broken** | ${{ steps.test-results.outputs.broken }} |
-          | **Skipped** | ${{ steps.test-results.outputs.skipped }} |
-          | **Pass Rate** | ${{ steps.test-results.outputs.pass_rate }}% |
+          | **Total Tests** | ${{ steps.test-results.outputs.total || '0' }} |
+          | **Passed** | ${{ steps.test-results.outputs.passed || '0' }} |
+          | **Failed** | ${{ steps.test-results.outputs.failed || '0' }} |
+          | **Broken** | ${{ steps.test-results.outputs.broken || '0' }} |
+          | **Skipped** | ${{ steps.test-results.outputs.skipped || '0' }} |
+          | **Pass Rate** | ${{ steps.test-results.outputs.pass_rate || '0' }}% |
 
           ---
 
