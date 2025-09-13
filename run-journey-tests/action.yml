@@ -155,7 +155,6 @@ runs:
       working-directory: ./marine-licensing-journey-tests
       env:
         CHROMEDRIVER_URL: localhost
-        # Use local infrastructure endpoints
       run: |
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
@@ -175,7 +174,6 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        # Install allure-commandline if not already available
         npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
 
     - name: Parse test results
@@ -290,7 +288,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: ./marine-licensing-journey-tests/allure-report/index.html # Single HTML file (not folder structure)
+        path: ./marine-licensing-journey-tests/allure-report/index.html
 
     - name: Upload docker compose logs
       if: always()
