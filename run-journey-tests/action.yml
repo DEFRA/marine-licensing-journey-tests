@@ -48,9 +48,13 @@ runs:
                 fi
               else
                 # Case 2: PR number syntax: owner/repo#123 or .../pull/123
-                PR_NUM=$(printf '%s\n' "$DEP_LINE" | sed -nE 's#.*marine-licensing-journey-tests[^0-9]*#([0-9]+).*#\1#p')
+                PR_NUM=$(printf '%s\n' "$DEP_LINE" \
+                  | grep -oE 'marine-licensing-journey-tests#[0-9]+' \
+                  | sed -E 's/.*#([0-9]+)/\1/')
                 if [ -z "$PR_NUM" ]; then
-                  PR_NUM=$(printf '%s\n' "$DEP_LINE" | sed -nE 's#.*marine-licensing-journey-tests.*/pull/([0-9]+).*#\1#p')
+                  PR_NUM=$(printf '%s\n' "$DEP_LINE" \
+                    | grep -oE 'marine-licensing-journey-tests.*/pull/[0-9]+' \
+                    | sed -E 's#.*/pull/([0-9]+).*#\1#')
                 fi
                 if [ -n "$PR_NUM" ]; then
                   echo "ℹ️  Resolving PR #$PR_NUM head branch for marine-licensing-journey-tests"
