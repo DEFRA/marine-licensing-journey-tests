@@ -195,10 +195,11 @@ runs:
           BROKEN=$(find allure-results -name "*-result.json" -exec grep -l '"status":"broken"' {} + 2>/dev/null | wc -l || echo 0)
           SKIPPED=$(find allure-results -name "*-result.json" -exec grep -l '"status":"skipped"' {} + 2>/dev/null | wc -l || echo 0)
           
-          PASSED=$(echo $PASSED | tr -d ' ')
-          FAILED=$(echo $FAILED | tr -d ' ')
-          BROKEN=$(echo $BROKEN | tr -d ' ')
-          SKIPPED=$(echo $SKIPPED | tr -d ' ')
+          # Ensure numbers are properly formatted (remove spaces and leading zeros)
+          PASSED=$((PASSED + 0))
+          FAILED=$((FAILED + 0))
+          BROKEN=$((BROKEN + 0))
+          SKIPPED=$((SKIPPED + 0))
           
           TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
           
