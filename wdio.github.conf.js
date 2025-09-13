@@ -5,7 +5,7 @@ import {
 } from './test-infrastructure/capture/index.js'
 
 const getTags = () => {
-  return '@smoke'
+  return '@sm'
 }
 
 export const config = {
