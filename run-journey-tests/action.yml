@@ -1,8 +1,4 @@
 name: Run Journey Tests on GitHub
-# Note: The calling workflow must have permissions to comment on PRs:
-# permissions:
-#   pull-requests: write
-#   issues: write
 
 inputs:
   marine-licensing-backend:
