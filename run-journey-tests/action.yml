@@ -205,29 +205,73 @@ runs:
             PASS_RATE=0
           fi
           
-          # Determine overall status emoji
+          # Generate visual progress bar
+          if [ $TOTAL -gt 0 ]; then
+            FILLED=$((PASS_RATE / 10))
+            EMPTY=$((10 - FILLED))
+            PROGRESS_BAR=""
+            for i in $(seq 1 $FILLED); do PROGRESS_BAR="${PROGRESS_BAR}█"; done
+            for i in $(seq 1 $EMPTY); do PROGRESS_BAR="${PROGRESS_BAR}░"; done
+          else
+            PROGRESS_BAR="░░░░░░░░░░"
+          fi
+          
+          # Determine overall status emoji and message
           if [ $FAILED -eq 0 ] && [ $BROKEN -eq 0 ] && [ $TOTAL -gt 0 ]; then
             STATUS_EMOJI="✅"
-            STATUS_TEXT="All tests passed!"
+            STATUS_TEXT="All tests passed"
+            STATUS_COLOR="00FF00"
+            STATUS_BADGE="passing"
           elif [ $TOTAL -eq 0 ]; then
             STATUS_EMOJI="⚠️"
             STATUS_TEXT="No tests were executed"
+            STATUS_COLOR="FFA500"
+            STATUS_BADGE="unknown"
           else
             STATUS_EMOJI="❌"
-            STATUS_TEXT="Some tests failed"
+            STATUS_TEXT="Test failures detected"
+            STATUS_COLOR="FF0000"
+            STATUS_BADGE="failing"
           fi
           
-          # Extract failed test names if any
-          FAILED_TESTS=""
-          if [ $FAILED -gt 0 ] || [ $BROKEN -gt 0 ]; then
-            FAILED_TESTS="### Failed Tests:\n"
-            for file in allure-results/*-result.json; do
-              if grep -q '"status":"failed"\|"status":"broken"' "$file" 2>/dev/null; then
-                TEST_NAME=$(jq -r '.name // "Unknown test"' "$file" 2>/dev/null || echo "Unknown test")
-                FAILED_TESTS="${FAILED_TESTS}- ${TEST_NAME}\n"
+          # Parse results by feature file
+          FEATURE_TABLE="| Feature | Passed | Failed |<br>|:--------|:------:|:------:|<br>"
+          declare -A feature_passed feature_failed
+          
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              # Extract feature name from labels
+              FEATURE=$(jq -r '.labels[] | select(.name=="feature") | .value // "Unknown"' "$file" 2>/dev/null | head -1)
+              if [ -z "$FEATURE" ] || [ "$FEATURE" = "null" ]; then
+                FEATURE=$(jq -r '.labels[] | select(.name=="suite") | .value // "Unknown"' "$file" 2>/dev/null | head -1)
               fi
-            done
-          fi
+              # Clean up feature name - remove path and keep just feature file name
+              FEATURE=$(echo "$FEATURE" | sed 's/.*\///' | sed 's/\.feature$//')
+              
+              STATUS=$(jq -r '.status' "$file" 2>/dev/null)
+              
+              if [ "$STATUS" = "passed" ]; then
+                feature_passed["$FEATURE"]=$((${feature_passed["$FEATURE"]:-0} + 1))
+              elif [ "$STATUS" = "failed" ] || [ "$STATUS" = "broken" ]; then
+                feature_failed["$FEATURE"]=$((${feature_failed["$FEATURE"]:-0} + 1))
+              fi
+            fi
+          done
+          
+          # Build feature table
+          for feature in $(echo "${!feature_passed[@]} ${!feature_failed[@]}" | tr ' ' '\n' | sort -u); do
+            PASS_COUNT=${feature_passed["$feature"]:-0}
+            FAIL_COUNT=${feature_failed["$feature"]:-0}
+            
+            # Add status emoji
+            if [ $FAIL_COUNT -eq 0 ]; then
+              STATUS_ICON="✅"
+            else
+              STATUS_ICON="❌"
+            fi
+            
+            FEATURE_TABLE="${FEATURE_TABLE}| ${STATUS_ICON} ${feature} | ${PASS_COUNT} | ${FAIL_COUNT} |<br>"
+          done
           
           # Set outputs for the comment
           echo "total=$TOTAL" >> $GITHUB_OUTPUT
@@ -236,11 +280,12 @@ runs:
           echo "broken=$BROKEN" >> $GITHUB_OUTPUT
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
           echo "pass_rate=$PASS_RATE" >> $GITHUB_OUTPUT
+          echo "progress_bar=$PROGRESS_BAR" >> $GITHUB_OUTPUT
           echo "status_emoji=$STATUS_EMOJI" >> $GITHUB_OUTPUT
           echo "status_text=$STATUS_TEXT" >> $GITHUB_OUTPUT
-          
-          # Store failed tests in a file to handle multiline content
-          echo -e "$FAILED_TESTS" > failed_tests.txt
+          echo "status_color=$STATUS_COLOR" >> $GITHUB_OUTPUT
+          echo "status_badge=$STATUS_BADGE" >> $GITHUB_OUTPUT
+          echo "feature_table=$FEATURE_TABLE" >> $GITHUB_OUTPUT
         else
           echo "No allure-results directory found"
           echo "total=0" >> $GITHUB_OUTPUT
@@ -249,9 +294,12 @@ runs:
           echo "broken=0" >> $GITHUB_OUTPUT
           echo "skipped=0" >> $GITHUB_OUTPUT
           echo "pass_rate=0" >> $GITHUB_OUTPUT
+          echo "progress_bar=░░░░░░░░░░" >> $GITHUB_OUTPUT
           echo "status_emoji=⚠️" >> $GITHUB_OUTPUT
           echo "status_text=No test results found" >> $GITHUB_OUTPUT
-          echo "" > failed_tests.txt
+          echo "status_color=FFA500" >> $GITHUB_OUTPUT
+          echo "status_badge=unknown" >> $GITHUB_OUTPUT
+          echo "feature_table=" >> $GITHUB_OUTPUT
         fi
 
     - name: Find existing comment
@@ -261,7 +309,7 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: 'github-actions[bot]'
-        body-includes: Journey Test Results
+        body-includes: Marine Licensing Journey Tests
 
     - name: Create or update PR comment with test results
       if: always() && github.event_name == 'pull_request'
@@ -271,25 +319,37 @@ runs:
         issue-number: ${{ github.event.pull_request.number }}
         edit-mode: replace
         body: |
-          ## 🧪 Journey Test Results ${{ steps.test-results.outputs.status_emoji }}
+          ## Marine Licensing Journey Tests
 
-          **${{ steps.test-results.outputs.status_text }}**
+          ### ${{ steps.test-results.outputs.status_emoji }} ${{ steps.test-results.outputs.status_text }}
+
+          ![Tests Status](https://img.shields.io/badge/tests-${{ steps.test-results.outputs.status_badge }}-${{ steps.test-results.outputs.status_color }}?style=flat-square)
+          ![Pass Rate](https://img.shields.io/badge/pass%20rate-${{ steps.test-results.outputs.pass_rate }}%25-${{ steps.test-results.outputs.status_color }}?style=flat-square)
+          ![Total Tests](https://img.shields.io/badge/total-${{ steps.test-results.outputs.total }}%20tests-informational?style=flat-square)
+
+          **Pass Rate:** ${{ steps.test-results.outputs.pass_rate }}% ${{ steps.test-results.outputs.progress_bar }}
+
+          ### Test Results by Feature
+
+          ${{ steps.test-results.outputs.feature_table }}
 
           ### Summary
-          | Metric | Value |
-          |--------|-------|
-          | **Total Tests** | ${{ steps.test-results.outputs.total }} |
-          | **Passed** | ✅ ${{ steps.test-results.outputs.passed }} |
-          | **Failed** | ❌ ${{ steps.test-results.outputs.failed }} |
-          | **Broken** | 💔 ${{ steps.test-results.outputs.broken }} |
-          | **Skipped** | ⏭️ ${{ steps.test-results.outputs.skipped }} |
-          | **Pass Rate** | ${{ steps.test-results.outputs.pass_rate }}% |
 
-          ${{ steps.test-results.outputs.failed > 0 && '### Failed Tests' || '' }}
-          ${{ steps.test-results.outputs.failed > 0 && 'See workflow logs for details.' || '' }}
+          | Metric | Count |
+          |:-------|------:|
+          | **Total Tests** | ${{ steps.test-results.outputs.total }} |
+          | **Passed** | ${{ steps.test-results.outputs.passed }} |
+          | **Failed** | ${{ steps.test-results.outputs.failed }} |
+          | **Broken** | ${{ steps.test-results.outputs.broken }} |
+          | **Skipped** | ${{ steps.test-results.outputs.skipped }} |
 
           ---
-          📊 [View Full Allure Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})** | **[Download Test Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
+
+          ---
+
+          <sub>Generated by Marine Licensing Test Suite • Run #${{ github.run_number }}</sub>
 
     - name: Upload Allure report
       if: always()
