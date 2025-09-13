@@ -15,39 +15,39 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
+    - if: github.repository == 'DEFRA/marine-licensing-journey-tests'
+      uses: actions/checkout@v4
       with:
         repository: DEFRA/marine-licensing-journey-tests
         path: ./marine-licensing-journey-tests
 
-    - name: Alternative checkout attempt (only if called from different repo)
+    - name: Determine journey-tests branch (only if called from different repo)
       if: github.repository != 'DEFRA/marine-licensing-journey-tests'
+      id: detect_tests_branch
+      shell: bash
       run: |
         set -e
-        rm -rf ./marine-licensing-journey-tests
 
         DEFAULT_BRANCH="${{ inputs.branch }}"
         BRANCH_TO_USE="$DEFAULT_BRANCH"
 
+        # Public repo URL for branch existence checks
+        REPO_URL="https://github.com/DEFRA/marine-licensing-journey-tests.git"
+
         if [ -f "$GITHUB_EVENT_PATH" ]; then
           PR_BODY=$(jq -r '.pull_request.body // empty' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
           if [ -n "$PR_BODY" ]; then
-            # Look for lines mentioning depends-on and this repo
             DEP_LINE=$(printf '%s\n' "$PR_BODY" | grep -iE 'depends[- ]on.*marine-licensing-journey-tests' | head -1 || true)
-
-            # Case 1: explicit branch using @ or :
             if [ -n "$DEP_LINE" ]; then
-              CANDIDATE=$(printf '%s\n' "$DEP_LINE" \
-                | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
+              CANDIDATE=$(printf '%s\n' "$DEP_LINE" | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
               if [ -n "$CANDIDATE" ] && [ "$CANDIDATE" != "$DEP_LINE" ]; then
-                if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$CANDIDATE" >/dev/null 2>&1; then
+                if git ls-remote --exit-code --heads "$REPO_URL" "$CANDIDATE" >/dev/null 2>&1; then
                   echo "✅ Using depends-on branch: $CANDIDATE"
                   BRANCH_TO_USE="$CANDIDATE"
                 else
-                  echo "⚠️  Branch '$CANDIDATE' not found on DEFRA/marine-licensing-journey-tests; will try PR number or keep default"
+                  echo "⚠️  Branch '$CANDIDATE' not found; will try PR number or keep default"
                 fi
               else
-                # Case 2: PR number syntax: owner/repo#123 or .../pull/123
                 PR_NUM=$(printf '%s\n' "$DEP_LINE" \
                   | grep -oE 'marine-licensing-journey-tests#[0-9]+' \
                   | sed -E 's/.*#([0-9]+)/\1/')
@@ -58,15 +58,14 @@ runs:
                 fi
                 if [ -n "$PR_NUM" ]; then
                   echo "ℹ️  Resolving PR #$PR_NUM head branch for marine-licensing-journey-tests"
-                  GITHUB_API_TOKEN='${{ github.token }}'
                   API_URL="https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$PR_NUM"
-                  HEAD_REF=$(curl -sS -H "Authorization: Bearer $GITHUB_API_TOKEN" -H "Accept: application/vnd.github+json" "$API_URL" | jq -r '.head.ref // empty')
+                  HEAD_REF=$(curl -sS -H "Accept: application/vnd.github+json" "$API_URL" | jq -r '.head.ref // empty')
                   if [ -n "$HEAD_REF" ]; then
-                    if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$HEAD_REF" >/dev/null 2>&1; then
+                    if git ls-remote --exit-code --heads "$REPO_URL" "$HEAD_REF" >/dev/null 2>&1; then
                       echo "✅ Using PR head branch: $HEAD_REF"
                       BRANCH_TO_USE="$HEAD_REF"
                     else
-                      echo "⚠️  PR head branch '$HEAD_REF' not found on DEFRA/marine-licensing-journey-tests; keeping default: $DEFAULT_BRANCH"
+                      echo "⚠️  PR head branch '$HEAD_REF' not found; keeping default: $DEFAULT_BRANCH"
                     fi
                   else
                     echo "⚠️  Could not resolve head.ref for PR #$PR_NUM; keeping default: $DEFAULT_BRANCH"
@@ -77,12 +76,16 @@ runs:
           fi
         fi
 
-        echo "Cloning marine-licensing-journey-tests branch: $BRANCH_TO_USE"
-        git clone --branch "$BRANCH_TO_USE" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests || {
-          echo "Falling back to default branch: $DEFAULT_BRANCH"
-          git clone --branch "$DEFAULT_BRANCH" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests
-        }
-      shell: bash
+        echo "branch=$BRANCH_TO_USE" >> "$GITHUB_OUTPUT"
+        echo "📦 Selected journey-tests branch: $BRANCH_TO_USE"
+
+    - name: Checkout journey-tests (only if called from different repo)
+      if: github.repository != 'DEFRA/marine-licensing-journey-tests'
+      uses: actions/checkout@v4
+      with:
+        repository: DEFRA/marine-licensing-journey-tests
+        ref: ${{ steps.detect_tests_branch.outputs.branch }}
+        path: ./marine-licensing-journey-tests
 
     - name: Extract dependent Pull Requests
       uses: depends-on/depends-on-action@0.15.0
