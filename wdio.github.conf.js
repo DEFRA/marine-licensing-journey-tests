@@ -5,7 +5,7 @@ import {
 } from './test-infrastructure/capture/index.js'
 
 const getTags = () => {
-  return 'not @wip and not @bug and not @local-only and not @d365 and not @real-defra-id and not @fivium and not @not-github-actions'
+  return '@sm'
 }
 
 export const config = {
