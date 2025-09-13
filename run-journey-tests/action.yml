@@ -32,19 +32,42 @@ runs:
         if [ -f "$GITHUB_EVENT_PATH" ]; then
           PR_BODY=$(jq -r '.pull_request.body // empty' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
           if [ -n "$PR_BODY" ]; then
-            # Look for lines mentioning depends-on and this repo, extract branch after @ or : (no spaces)
-            CANDIDATE=$(printf '%s\n' "$PR_BODY" \
-              | grep -iE 'depends[- ]on' \
-              | grep -iE 'marine-licensing-journey-tests' \
-              | head -1 \
-              | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
-            if [ -n "$CANDIDATE" ]; then
-              # Verify the branch exists on the remote before using it
-              if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$CANDIDATE" >/dev/null 2>&1; then
-                echo "✅ Found branch on remote: $CANDIDATE"
-                BRANCH_TO_USE="$CANDIDATE"
+            # Look for lines mentioning depends-on and this repo
+            DEP_LINE=$(printf '%s\n' "$PR_BODY" | grep -iE 'depends[- ]on.*marine-licensing-journey-tests' | head -1 || true)
+
+            # Case 1: explicit branch using @ or :
+            if [ -n "$DEP_LINE" ]; then
+              CANDIDATE=$(printf '%s\n' "$DEP_LINE" \
+                | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
+              if [ -n "$CANDIDATE" ] && [ "$CANDIDATE" != "$DEP_LINE" ]; then
+                if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$CANDIDATE" >/dev/null 2>&1; then
+                  echo "✅ Using depends-on branch: $CANDIDATE"
+                  BRANCH_TO_USE="$CANDIDATE"
+                else
+                  echo "⚠️  Branch '$CANDIDATE' not found on DEFRA/marine-licensing-journey-tests; will try PR number or keep default"
+                fi
               else
-                echo "⚠️  Candidate branch '$CANDIDATE' not found on DEFRA/marine-licensing-journey-tests; keeping default: $DEFAULT_BRANCH"
+                # Case 2: PR number syntax: owner/repo#123 or .../pull/123
+                PR_NUM=$(printf '%s\n' "$DEP_LINE" | sed -nE 's#.*marine-licensing-journey-tests[^0-9]*#([0-9]+).*#\1#p')
+                if [ -z "$PR_NUM" ]; then
+                  PR_NUM=$(printf '%s\n' "$DEP_LINE" | sed -nE 's#.*marine-licensing-journey-tests.*/pull/([0-9]+).*#\1#p')
+                fi
+                if [ -n "$PR_NUM" ]; then
+                  echo "ℹ️  Resolving PR #$PR_NUM head branch for marine-licensing-journey-tests"
+                  GITHUB_API_TOKEN='${{ github.token }}'
+                  API_URL="https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$PR_NUM"
+                  HEAD_REF=$(curl -sS -H "Authorization: Bearer $GITHUB_API_TOKEN" -H "Accept: application/vnd.github+json" "$API_URL" | jq -r '.head.ref // empty')
+                  if [ -n "$HEAD_REF" ]; then
+                    if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$HEAD_REF" >/dev/null 2>&1; then
+                      echo "✅ Using PR head branch: $HEAD_REF"
+                      BRANCH_TO_USE="$HEAD_REF"
+                    else
+                      echo "⚠️  PR head branch '$HEAD_REF' not found on DEFRA/marine-licensing-journey-tests; keeping default: $DEFAULT_BRANCH"
+                    fi
+                  else
+                    echo "⚠️  Could not resolve head.ref for PR #$PR_NUM; keeping default: $DEFAULT_BRANCH"
+                  fi
+                fi
               fi
             fi
           fi
