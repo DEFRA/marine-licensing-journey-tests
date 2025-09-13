@@ -1,4 +1,8 @@
 name: Run Journey Tests on GitHub
+# Note: The calling workflow must have permissions to comment on PRs:
+# permissions:
+#   pull-requests: write
+#   issues: write
 
 inputs:
   marine-licensing-backend:
@@ -175,7 +179,8 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        npm run report:github
+        # Install allure-commandline if not already available
+        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
