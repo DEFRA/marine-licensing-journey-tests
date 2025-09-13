@@ -47,10 +47,6 @@ export default class ExemptionFactory {
     return this.createBaseExemption()
   }
 
-  static createWithProjectName(projectName) {
-    return this.createBaseExemption({ projectName })
-  }
-
   static createConsentToPublicRegister() {
     return this.createBaseExemption({
       publicRegister: { consent: true }

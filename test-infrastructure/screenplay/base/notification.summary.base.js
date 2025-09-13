@@ -1,13 +1,81 @@
 import { expect } from 'chai'
+import {
+  formatDateObjectToDisplay,
+  formatSubmissionDateForDisplay
+} from '~/test-infrastructure/helpers/date-formatter.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
 import Task from './task.js'
 
 export default class NotificationSummaryBase extends Task {
-  async _validateProjectDetails(browseTheWeb, exemptionData) {
+  _getPageLocators() {
+    return CheckYourAnswersPage.locators
+  }
+
+  async _validateProjectSummary(browseTheWeb, exemptionData) {
+    const pageLocators = this._getPageLocators()
+
     if (exemptionData.projectName) {
       await browseTheWeb.expectElementToHaveExactText(
-        CheckYourAnswersPage.locators.projectDetails.projectNameValue,
+        pageLocators.projectSummary.projectNameValue,
+        exemptionData.projectName
+      )
+    }
+
+    if (exemptionData.activityType) {
+      await browseTheWeb.expectElementToContainText(
+        pageLocators.projectSummary.activityTypeValue,
+        exemptionData.activityType
+      )
+    }
+
+    if (exemptionData.exemptionReason) {
+      await browseTheWeb.expectElementToContainText(
+        pageLocators.projectSummary.exemptionReasonValue,
+        exemptionData.exemptionReason
+      )
+    }
+
+    await browseTheWeb.isDisplayed(pageLocators.projectSummary.pdfDownloadLink)
+  }
+
+  async _validateSubmissionDetails(browseTheWeb, exemptionData) {
+    const pageLocators = this._getPageLocators()
+
+    // Check if we're on the Check Your Answers page (which has submission details)
+    // vs View Details page (which doesn't show application reference or submission date)
+    const currentUrl = await browseTheWeb.browser.getUrl()
+    const isCheckYourAnswersPage = currentUrl.includes('/check-your-answers')
+
+    // Only validate submission details on Check Your Answers page
+    if (isCheckYourAnswersPage) {
+      if (exemptionData.applicationReference) {
+        await browseTheWeb.expectElementToContainText(
+          pageLocators.applicationReference,
+          exemptionData.applicationReference
+        )
+      }
+
+      // Validate submission date - format it to match display format
+      if (exemptionData.submissionDate || exemptionData.dateSubmitted) {
+        const submissionDate =
+          exemptionData.submissionDate || exemptionData.dateSubmitted
+        const expectedDate = formatSubmissionDateForDisplay(submissionDate)
+
+        await browseTheWeb.expectElementToContainText(
+          pageLocators.submissionDate,
+          expectedDate
+        )
+      }
+    }
+  }
+
+  async _validateProjectDetails(browseTheWeb, exemptionData) {
+    const pageLocators = this._getPageLocators()
+
+    if (exemptionData.projectName) {
+      await browseTheWeb.expectElementToHaveExactText(
+        pageLocators.projectDetails.projectNameValue,
         exemptionData.projectName
       )
     }
@@ -30,49 +98,19 @@ export default class NotificationSummaryBase extends Task {
 
   async _validateDateField(browseTheWeb, activityDates, dateField) {
     if (activityDates[dateField]) {
-      const locator =
-        CheckYourAnswersPage.locators.activityDates[`${dateField}Value`]
-      const expectedDate = this._formatDateObjectToDisplay(
-        activityDates[dateField]
-      )
+      const pageLocators = this._getPageLocators()
+      const locator = pageLocators.activityDates[`${dateField}Value`]
+      const expectedDate = formatDateObjectToDisplay(activityDates[dateField])
       await browseTheWeb.expectElementToHaveExactText(locator, expectedDate)
     }
   }
 
-  _formatDateObjectToDisplay(dateObject) {
-    if (this._isValidDateObject(dateObject)) {
-      const day = parseInt(dateObject.day, 10)
-      const month = parseInt(dateObject.month, 10)
-      const year = parseInt(dateObject.year, 10)
-
-      const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ]
-
-      return `${day} ${monthNames[month - 1]} ${year}`
-    }
-    return String(dateObject)
-  }
-
-  _isValidDateObject(dateObject) {
-    return dateObject && dateObject.day && dateObject.month && dateObject.year
-  }
-
   async _validateActivityDetails(browseTheWeb, exemptionData) {
+    const pageLocators = this._getPageLocators()
+
     if (exemptionData.activityDetails?.description) {
       await browseTheWeb.expectElementToContainText(
-        CheckYourAnswersPage.locators.activityDetails.activityDescriptionValue,
+        pageLocators.activityDetails.activityDescriptionValue,
         exemptionData.activityDetails.description
       )
     }
@@ -145,6 +183,7 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
     let expectedText
 
     if (this._isFileUpload(siteDetails)) {
@@ -158,20 +197,20 @@ export default class NotificationSummaryBase extends Task {
     }
 
     await browseTheWeb.expectElementToContainText(
-      CheckYourAnswersPage.locators.siteDetails
-        .methodOfProvidingSiteLocationValue,
+      pageLocators.siteDetails.methodOfProvidingSiteLocationValue,
       expectedText
     )
   }
 
   async _validateCoordinateSystem(browseTheWeb, siteDetails) {
     if (siteDetails.coordinateSystem) {
+      const pageLocators = this._getPageLocators()
       const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
         siteDetails.coordinateSystem
       )
 
       const actualText = await browseTheWeb.getText(
-        CheckYourAnswersPage.locators.siteDetails.coordinateSystemValue
+        pageLocators.siteDetails.coordinateSystemValue
       )
 
       if (actualText.trim().replaceAll('\n', ' ') !== expectedDisplayText) {
@@ -192,6 +231,7 @@ export default class NotificationSummaryBase extends Task {
 
   async _validateCoordinates(browseTheWeb, siteDetails) {
     if (siteDetails.circleData) {
+      const pageLocators = this._getPageLocators()
       const { circleData, coordinateSystem } = siteDetails
 
       const expectedCoordinates = this._formatCoordinatesForDisplay(
@@ -200,7 +240,7 @@ export default class NotificationSummaryBase extends Task {
       )
       if (expectedCoordinates) {
         await browseTheWeb.expectElementToContainText(
-          CheckYourAnswersPage.locators.siteDetails.coordinatesAtCentreValue,
+          pageLocators.siteDetails.coordinatesAtCentreValue,
           expectedCoordinates
         )
       }
@@ -209,9 +249,10 @@ export default class NotificationSummaryBase extends Task {
 
   async _validateCircularSiteWidth(browseTheWeb, siteDetails) {
     if (siteDetails.circleData?.width) {
+      const pageLocators = this._getPageLocators()
       const expectedWidth = `${siteDetails.circleData.width} metres`
       await browseTheWeb.expectElementToContainText(
-        CheckYourAnswersPage.locators.siteDetails.widthOfCircularSiteValue,
+        pageLocators.siteDetails.widthOfCircularSiteValue,
         expectedWidth
       )
     }
@@ -245,11 +286,12 @@ export default class NotificationSummaryBase extends Task {
 
   async _validatePublicRegister(browseTheWeb, exemptionData) {
     if (exemptionData.publicRegister) {
+      const pageLocators = this._getPageLocators()
       const expectedConsent = exemptionData.publicRegister.consent
         ? 'No'
         : 'Yes'
       await browseTheWeb.expectElementToContainText(
-        CheckYourAnswersPage.locators.publicRegister.informationWithheldValue,
+        pageLocators.publicRegister.informationWithheldValue,
         expectedConsent
       )
     }
@@ -260,12 +302,14 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateFileUploadDetails(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
+
     if (siteDetails.fileType) {
       const expectedFileType = this._mapFileTypeToDisplayText(
         siteDetails.fileType
       )
       await browseTheWeb.expectElementToContainText(
-        CheckYourAnswersPage.locators.siteDetails.fileTypeValue,
+        pageLocators.siteDetails.fileTypeValue,
         expectedFileType
       )
     }
@@ -273,7 +317,7 @@ export default class NotificationSummaryBase extends Task {
     if (siteDetails.filePath) {
       const filename = this._extractFilenameFromPath(siteDetails.filePath)
       await browseTheWeb.expectElementToContainText(
-        CheckYourAnswersPage.locators.siteDetails.fileUploadedValue,
+        pageLocators.siteDetails.fileUploadedValue,
         filename
       )
     }

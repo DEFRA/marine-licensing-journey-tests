@@ -6,6 +6,8 @@ export default class PublicRegisterPage {
   static consentError = '#consent-error'
   static reasonError = '#reason-error'
   static projectName = 'span.govuk-caption-l'
+  static publicRegisterLink =
+    'a[href*="marinelicensing.marinemanagement.org.uk"]'
 
   static getConsentSelector(consent) {
     // consent: true = give consent to share = answer "No" to "should it be withheld?"

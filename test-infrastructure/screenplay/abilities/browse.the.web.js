@@ -147,10 +147,6 @@ export default class BrowseTheWeb extends Ability {
     await expect(element).not.toBeDisplayed()
   }
 
-  async clickBack() {
-    await this.click(CommonElementsPage.backLink)
-  }
-
   async clickCancel() {
     await this.click(CommonElementsPage.cancelLink)
   }
@@ -172,5 +168,20 @@ export default class BrowseTheWeb extends Ability {
   async waitForEnabled(locator) {
     const element = await this.getElement(locator)
     await element.waitForEnabled()
+  }
+
+  async getCookies(filter) {
+    return await this.browser.getCookies(filter)
+  }
+
+  async expectCookieToExist(cookieName) {
+    const cookies = await this.getCookies([cookieName])
+    await expect(cookies.length).toBeGreaterThan(0)
+    return cookies[0]
+  }
+
+  async expectCookieToHaveValue(cookieName, expectedValue) {
+    const cookie = await this.expectCookieToExist(cookieName)
+    await expect(cookie.value).toBe(expectedValue)
   }
 }

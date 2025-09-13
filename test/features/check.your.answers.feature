@@ -45,13 +45,13 @@ which will play back all their answers and allow them to verify that the answers
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @kml
+  @kml @not-github-actions
   Scenario: After successfully completing all the tasks on the task list, with KML file upload, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a KML file upload
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @shapefile
+  @shapefile @not-github-actions
   Scenario: After successfully completing all the tasks on the task list, with Shapefile upload, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a Shapefile upload
     When the user clicks Review and send

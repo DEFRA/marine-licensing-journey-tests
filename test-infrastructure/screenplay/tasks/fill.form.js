@@ -1,7 +1,6 @@
 import Task from '../base/task.js'
 
 import ActivityDescriptionPage from '~/test-infrastructure/pages/activity.description.page'
-import PublicRegisterPage from '~/test-infrastructure/pages/public.register.page'
 
 export default class FillForm extends Task {
   static activityDescription(description) {
@@ -13,18 +12,6 @@ export default class FillForm extends Task {
           ActivityDescriptionPage.activityDescriptionInput,
           description
         )
-      }
-    })
-  }
-
-  static publicRegisterWithhold(reason) {
-    return new FillForm(async (actor) => {
-      const browseTheWeb = actor.ability
-
-      await browseTheWeb.click(PublicRegisterPage.consentYes)
-
-      if (reason && reason.length > 0) {
-        await browseTheWeb.sendKeys(PublicRegisterPage.withholdReason, reason)
       }
     })
   }

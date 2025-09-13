@@ -8,6 +8,7 @@ import {
 import Memory from '../memory.js'
 import {
   ActivityDatesPageInteractions,
+  ActivityDescriptionPageInteractions,
   BeforeYouStartSiteDetailsPageInteractions,
   DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions,
   EnterCoordinatesCentrePointPageInteractions,
@@ -15,6 +16,7 @@ import {
   HowDoYouWantToEnterTheCoordinatesPageInteractions,
   HowDoYouWantToProvideCoordinatesPageInteractions,
   SameActivityDatesPageInteractions,
+  SameActivityDescriptionPageInteractions,
   WhatCoordinateSystemPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
@@ -187,6 +189,22 @@ export default class CompleteSiteDetails extends Task {
       this.siteDetails.sameActivityDates
     )
     await this.actor.attemptsTo(CompleteActivityDates.now())
+    await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+      this.browseTheWeb,
+      'yes'
+    )
+    await this.handleMultiSiteActivityDescription()
+  }
+
+  async handleMultiSiteActivityDescription() {
+    if (this.siteDetails.activityDescription) {
+      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.activityDescription
+      )
+    } else {
+      await ActivityDescriptionPageInteractions.clickContinue(this.browseTheWeb)
+    }
   }
 
   async handleSingleSiteActivityDates() {
@@ -197,6 +215,18 @@ export default class CompleteSiteDetails extends Task {
       )
     } else {
       await ActivityDatesPageInteractions.clickContinue(this.browseTheWeb)
+    }
+    await this.handleSingleSiteActivityDescription()
+  }
+
+  async handleSingleSiteActivityDescription() {
+    if (this.siteDetails.activityDescription) {
+      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.activityDescription
+      )
+    } else {
+      await ActivityDescriptionPageInteractions.clickContinue(this.browseTheWeb)
     }
   }
 

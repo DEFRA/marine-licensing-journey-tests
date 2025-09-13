@@ -1,9 +1,9 @@
-@issue=ML-96 @issue=ML-99 @issue=ML-100
+@issue=ML-96 @issue=ML-99 @issue=ML-100 @issue=ML-124 @issue=ML-591
 Feature: View dashboard: View a list of all applications to keep track of and manage them
   As an applicant
   I want to see a list of all my applications
   So that I can keep track of my applications and manage them
-  
+
   Scenario: After submitting a notification, view it via the dashboard
     Given a user has submitted an exemption notification
     When the user clicks view details for the submitted notification on the dashboard
@@ -16,8 +16,9 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
 
   Scenario: Continue a draft notification from the dashboard
     Given the user has a draft exemption notification
-    When the user continues the notification from the dashboard
-    Then the task list page is displayed
+    When the user continues the notification from the dashboard and reenters the project name task
+    Then the project name is pre-populated
+    And the page caption shows the previously saved project name
 
   Scenario: When a user has previously submitted a notification and starts a new one, no previously input data is shown
     Given a user has submitted an exemption notification
@@ -28,7 +29,8 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
   Scenario: View dashboard with notifications in correct sort order
     Given the user has multiple notifications with different statuses and names
     When the user navigates to the dashboard
-    Then the notifications are sorted by status with drafts first then by project name
+    Then the notifications are displayed with the correct information
+    And the notifications are sorted by status with drafts first then by project name
 
   Scenario: Delete a draft notification from the dashboard
     Given the user has a draft exemption notification

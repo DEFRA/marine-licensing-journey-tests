@@ -8,15 +8,15 @@ import {
   ClickProjectsHome,
   ClickViewDetailsLink,
   DeleteDraftNotification,
-  EnsureDashboardDisplaysNotification,
   EnsureDashboardSortOrder,
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
-  EnsurePageHeading,
+  EnsureNotificationsAreDisplayedOnTheDashboard,
   EnsureThatProjectNameIsEmpty,
   EnsureViewDetailsPage,
   Navigate,
   NavigateToDashboard,
+  SelectTheTask,
   SignIn,
   SignOut,
   SubmitAnExemptionNotification
@@ -72,7 +72,9 @@ When(
   'the user clicks view details for the submitted notification on the dashboard',
   async function () {
     await this.actor.attemptsTo(ClickProjectsHome.now())
-    await this.actor.attemptsTo(EnsureDashboardDisplaysNotification.now())
+    await this.actor.attemptsTo(
+      EnsureNotificationsAreDisplayedOnTheDashboard.correctly()
+    )
     await this.actor.attemptsTo(
       ClickViewDetailsLink.forLastCompletedExemption()
     )
@@ -84,7 +86,7 @@ When('the user navigates to the dashboard', async function () {
 })
 
 When(
-  'the user continues the notification from the dashboard',
+  'the user continues the notification from the dashboard and reenters the project name task',
   async function () {
     await this.actor.attemptsTo(SignIn.now())
     await this.actor.attemptsTo(NavigateToDashboard.now())
@@ -93,6 +95,7 @@ When(
         this.actor.recalls('exemption').projectName
       )
     )
+    await this.actor.attemptsTo(SelectTheTask.withName('Project name'))
   }
 )
 
@@ -144,9 +147,15 @@ Then('the notification is removed from the dashboard', async function () {
 Then(
   'the user is able to view the notification in a summary format',
   async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('View notification details')
-    )
     await this.actor.attemptsTo(EnsureViewDetailsPage.showsAllAnswers())
+  }
+)
+
+Then(
+  'the notifications are displayed with the correct information',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsureNotificationsAreDisplayedOnTheDashboard.correctly()
+    )
   }
 )

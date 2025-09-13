@@ -6,6 +6,10 @@ export default class EnsureProjectNameDisplayedAsCaption extends Task {
     this.expectedProjectName = expectedProjectName
   }
 
+  static isCorrect() {
+    return new EnsureProjectNameDisplayedAsCaption()
+  }
+
   static is(expectedProjectName) {
     return new EnsureProjectNameDisplayedAsCaption(expectedProjectName)
   }

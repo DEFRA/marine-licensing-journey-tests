@@ -5,7 +5,7 @@ import {
 } from './test-infrastructure/capture/index.js'
 
 const getTags = () => {
-  return '@sm'
+  return 'not @wip and not @bug and not @local-only and not @d365 and not @real-defra-id and not @fivium and not @not-github-actions'
 }
 
 export const config = {
@@ -32,7 +32,7 @@ export const config = {
   // Each feature file will run in a separate worker process
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
-    : 1,
+    : 4,
 
   capabilities: [
     {
@@ -134,7 +134,9 @@ export const config = {
   },
 
   afterCommand: async function (commandName, args, result, error) {
-    if (error && (commandName === 'navigateTo' || commandName === 'url')) {
+    const isNavigationCommand =
+      commandName === 'navigateTo' || commandName === 'url'
+    if (error && isNavigationCommand) {
       console.log(`[NAVIGATION-ERROR] ❌ Navigation failed to: ${args[0]}`)
       console.log(`[NAVIGATION-ERROR] 📝 Error: ${error.message}`)
     }
