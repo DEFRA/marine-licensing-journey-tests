@@ -184,23 +184,35 @@ runs:
       run: |
         # Count test results by status
         if [ -d "allure-results" ]; then
-          # Count each status type (safer approach)
+          # Count each status type using more reliable JSON parsing
           PASSED=0
           FAILED=0
           BROKEN=0
           SKIPPED=0
           
+          echo "=== Processing Allure result files ==="
           for file in allure-results/*-result.json; do
             if [ -f "$file" ]; then
-              if grep -q '"status":"passed"' "$file" 2>/dev/null; then
-                PASSED=$((PASSED + 1))
-              elif grep -q '"status":"failed"' "$file" 2>/dev/null; then
-                FAILED=$((FAILED + 1))
-              elif grep -q '"status":"broken"' "$file" 2>/dev/null; then
-                BROKEN=$((BROKEN + 1))
-              elif grep -q '"status":"skipped"' "$file" 2>/dev/null; then
-                SKIPPED=$((SKIPPED + 1))
-              fi
+              # Extract the status field more reliably using sed and grep
+              STATUS=$(sed -n 's/.*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$file" | head -1)
+              echo "File $(basename "$file"): status='$STATUS'"
+              case "$STATUS" in
+                "passed")
+                  PASSED=$((PASSED + 1))
+                  ;;
+                "failed")
+                  FAILED=$((FAILED + 1))
+                  ;;
+                "broken")
+                  BROKEN=$((BROKEN + 1))
+                  ;;
+                "skipped")
+                  SKIPPED=$((SKIPPED + 1))
+                  ;;
+                *)
+                  echo "Warning: Unknown or missing status in file $file: '$STATUS'"
+                  ;;
+              esac
             fi
           done
           
@@ -235,9 +247,15 @@ runs:
           STATUS_TEXT="No test results found"
         fi
 
-        # Debug output
-        echo "Debug: TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
-        echo "Debug: PASS_RATE=$PASS_RATE, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+        # Debug output - show files processed and final counts
+        echo "=== Test Results Parsing Debug ==="
+        echo "Files processed: $(ls -1 allure-results/*-result.json 2>/dev/null | wc -l)"
+        echo "TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
+        echo "PASS_RATE=$PASS_RATE%, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+
+        # Show a few sample files for debugging
+        echo "=== Sample result files ==="
+        ls -la allure-results/*-result.json 2>/dev/null | head -3 || echo "No result files found"
 
         # Set outputs
         echo "total=$TOTAL" >> $GITHUB_OUTPUT
