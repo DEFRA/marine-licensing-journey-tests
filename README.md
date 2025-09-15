@@ -42,10 +42,20 @@ We are delivering a **private beta** that enables **members of the public to sub
 1. **Authenticate** - User signs in via DEFRA ID
 2. **Start exemption notification** - User initiates a new exemption notification
 3. **Provide project details** - Essential information about the marine activity
-4. **Submit notification** - Complete submission to the MMO
-5. **Receive confirmation** - User gets acknowledgement of successful submission
+4. **Define site details** - Single or multiple sites with coordinates, activity dates, and descriptions
+5. **Submit notification** - Complete submission to the MMO
+6. **Receive confirmation** - User gets acknowledgement of successful submission
 
-**Current Test Coverage:** 378+ scenarios across 19 feature files validating complete end-to-end workflows.
+#### **Multi-Site Support**
+
+The service supports **efficient multi-site workflows** with intelligent conditional routing:
+
+- **Streamlined data entry** - Reuse activity dates and descriptions across sites when appropriate
+- **Mixed site types** - Combine circular and polygon sites within the same notification
+- **Flexible coordination systems** - Support for both WGS84 and OSGB36 coordinate systems
+- **Add another site** - Efficient workflow to add multiple sites from the review page
+
+**Current Test Coverage:** 380+ scenarios across 20+ feature files validating complete end-to-end workflows including comprehensive multi-site functionality.
 
 ## 📋 User Stories & Documentation
 
@@ -161,6 +171,8 @@ npm run test:local -- --cucumberOpts.tags "@smoke"
 - ✅ Project name creation and task list navigation
 - ✅ Activity description and public register decisions
 - ✅ Site details coordinate entry (WGS84 and OSGB36)
+- ✅ Multi-site workflows with mixed site types
+- ✅ Complete exemption notification submission
 
 ## 🎯 Writing Tests
 

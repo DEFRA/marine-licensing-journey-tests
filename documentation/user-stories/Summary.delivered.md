@@ -60,6 +60,13 @@ Multiple pathways available:
 - **ML-420**: Activity dates for multiple sites ✅
 - **ML-417**: Activity description for single manual entry site ✅
 - **ML-421**: Activity description for multiple manual entry sites ✅
+- **ML-362**: Add another site from review site details ✅
+
+#### Advanced Multi-Site Capabilities
+
+- **Mixed Site Types**: Support for combining circular and polygon sites within single notifications
+- **Intelligent Conditional Routing**: Skip previously answered questions when adding additional sites
+- **Efficient Workflow**: "Add another site" button enables streamlined multi-site entry
 
 ### 🔐 Authentication & Navigation
 
@@ -109,8 +116,10 @@ When testing activity dates and descriptions:
 5. Decision: Same description for all sites? (ML-114)
 6. Enter descriptions (ML-421)
 7. Enter site details for each site
-8. Check answers (ML-140)
-9. Submit (ML-84)
+8. Review site details with "Add another site" option (ML-362)
+9. Optionally add more sites with intelligent routing
+10. Check answers (ML-140)
+11. Submit (ML-84)
 
 ### 3. File Upload Journey
 
@@ -122,6 +131,17 @@ When testing activity dates and descriptions:
 6. Check answers (ML-140)
 7. Submit (ML-84)
 
+### 4. Mixed Site Types Journey (Advanced Testing)
+
+1. Create project (ML-1)
+2. Enter first site as circular site
+3. Use "Add another site" to add polygon site (ML-362)
+4. System intelligently skips previously answered questions
+5. Add third site with different coordinate system
+6. Verify mixed site types display correctly
+7. Check answers showing all site variations (ML-140)
+8. Submit with comprehensive multi-site data (ML-84)
+
 ## Known Considerations
 
 ### Session Management
@@ -129,6 +149,8 @@ When testing activity dates and descriptions:
 - Session data persists between navigation steps
 - Switching between file upload and manual entry requires careful state management
 - Previous answers are retained when using back navigation
+- Multi-site data is maintained across "Add another site" workflows
+- Intelligent routing preserves user decisions about shared dates and descriptions
 
 ### Validation Rules
 
@@ -147,10 +169,13 @@ When testing activity dates and descriptions:
 
 1. **Start with single-site scenarios** to understand core functionality
 2. **Progress to multi-site scenarios** to test enhanced features
-3. **Test navigation flows** including back button and cancel behaviours
-4. **Verify data persistence** across the user journey
-5. **Check validation messages** for clarity and helpfulness
-6. **Confirm submission process** works as expected in your test environment
+3. **Test "Add another site" workflow** (ML-362) with intelligent conditional routing
+4. **Try mixed site types** - combine circular and polygon sites in one notification
+5. **Test navigation flows** including back button and cancel behaviours
+6. **Verify data persistence** across the user journey
+7. **Check validation messages** for clarity and helpfulness
+8. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
+9. **Confirm submission process** works as expected in your test environment
 
 ## Support & Documentation
 
@@ -159,4 +184,4 @@ When testing activity dates and descriptions:
 
 ---
 
-_Last Updated: 12 September 2025_
+_Last Updated: 15 September 2025_
