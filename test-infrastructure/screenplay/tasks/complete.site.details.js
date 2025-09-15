@@ -22,6 +22,7 @@ import {
   WidthOfCircularSitePageInteractions
 } from '../page-interactions/index.js'
 import CompleteActivityDates from './complete.activity.dates.js'
+import CompleteActivityDescription from './complete.activity.description.js'
 
 export default class CompleteSiteDetails extends Task {
   static now() {
@@ -188,12 +189,48 @@ export default class CompleteSiteDetails extends Task {
       this.browseTheWeb,
       this.siteDetails.sameActivityDates
     )
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-    await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      'yes'
-    )
-    await this.handleMultiSiteActivityDescription()
+
+    if (this.siteDetails.sameActivityDates === 'yes') {
+      await this.actor.attemptsTo(CompleteActivityDates.now())
+    } else {
+      const originalActivityDates =
+        this.actor.recalls('exemption').activityDates
+      this.actor.updates((exemption) => {
+        exemption.activityDates = this.siteDetails.sites[0].activityDates
+      })
+
+      await this.actor.attemptsTo(CompleteActivityDates.now())
+
+      this.actor.updates((exemption) => {
+        exemption.activityDates = originalActivityDates
+      })
+    }
+
+    if (this.siteDetails.sameActivityDescription === 'yes') {
+      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.sameActivityDescription
+      )
+      await this.handleMultiSiteActivityDescription()
+    } else {
+      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.sameActivityDescription
+      )
+
+      const originalActivityDescription =
+        this.actor.recalls('exemption').activityDescription
+      this.actor.updates((exemption) => {
+        exemption.activityDescription =
+          this.siteDetails.sites[0].activityDescription
+      })
+
+      await this.actor.attemptsTo(CompleteActivityDescription.now())
+
+      this.actor.updates((exemption) => {
+        exemption.activityDescription = originalActivityDescription
+      })
+    }
   }
 
   async handleMultiSiteActivityDescription() {

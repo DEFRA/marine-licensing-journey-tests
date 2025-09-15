@@ -134,59 +134,70 @@ export default class SiteDetailsFactory {
   }
 
   static createMixedMultipleSites() {
+    const firstSiteActivityDates =
+      ActivityDatesModel.generateValidActivityDates()
+    const firstSiteActivityDescription =
+      ActivityDescriptionModel.generateActivityDescription()
+
     return {
       multipleSitesEnabled: 'yes',
       sameActivityDates: 'no',
+      sameActivityDescription: 'no',
       coordinatesEntryMethod: 'enter-manually',
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
+      siteType: 'circle',
+      coordinateSystem: 'WGS84',
+      activityDates: firstSiteActivityDates,
+      activityDescription: firstSiteActivityDescription,
+      circleData: this.defaultData.circle.WGS84,
       sites: [
         {
           siteName: 'Circular Research Area Alpha',
           siteNumber: 1,
-          activityDates: ActivityDatesModel.generateValidActivityDates(),
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('circle', 'WGS84', {
-            circleData: this.defaultData.circle.WGS84
-          })
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'WGS84',
+          activityDates: firstSiteActivityDates,
+          activityDescription: firstSiteActivityDescription,
+          circleData: this.defaultData.circle.WGS84
         },
         {
           siteName: 'Triangular Survey Zone Beta',
           siteNumber: 2,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'triangle',
+          coordinateSystem: 'WGS84',
           activityDates: ActivityDatesModel.generateValidActivityDates(),
           activityDescription:
             ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('triangle', 'WGS84', {
-            polygonData: this._createCoordinateSet(
-              this.defaultData.triangle.WGS84,
-              'WGS84'
-            )
-          })
+          polygonData: this._createCoordinateSet(
+            this.defaultData.triangle.WGS84,
+            'WGS84'
+          )
         },
         {
           siteName: 'Circular Monitoring Point Gamma',
           siteNumber: 3,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'OSGB36',
           activityDates: ActivityDatesModel.generateValidActivityDates(),
           activityDescription:
             ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('circle', 'OSGB36', {
-            circleData: this.defaultData.circle.OSGB36
-          })
+          circleData: this.defaultData.circle.OSGB36
         },
         {
           siteName: 'Quadrilateral Study Area Delta',
           siteNumber: 4,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'triangle',
+          coordinateSystem: 'OSGB36',
           activityDates: ActivityDatesModel.generateValidActivityDates(),
           activityDescription:
             ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('triangle', 'OSGB36', {
-            polygonData: this._createCoordinateSet(
-              this.defaultData.quadrilateral.OSGB36,
-              'OSGB36'
-            )
-          })
+          polygonData: this._createCoordinateSet(
+            this.defaultData.quadrilateral.OSGB36,
+            'OSGB36'
+          )
         }
       ]
     }
