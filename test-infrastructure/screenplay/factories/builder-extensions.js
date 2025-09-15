@@ -62,6 +62,13 @@ export const siteDetailsExtension = {
     builder.setProperty('siteDetails', SiteDetailsFactory.createMultipleSites())
     return builder
   },
+  forMixedMultipleSites: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.createMixedMultipleSites()
+    )
+    return builder
+  },
   withKMLUpload: (builder) => {
     builder.setProperty('siteDetails', SiteDetailsFactory.createKMLUpload())
     return builder

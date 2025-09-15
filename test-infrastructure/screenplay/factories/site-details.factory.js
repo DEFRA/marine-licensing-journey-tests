@@ -133,6 +133,65 @@ export default class SiteDetailsFactory {
     }
   }
 
+  static createMixedMultipleSites() {
+    return {
+      multipleSitesEnabled: 'yes',
+      sameActivityDates: 'no',
+      coordinatesEntryMethod: 'enter-manually',
+      activityDates: ActivityDatesModel.generateValidActivityDates(),
+      activityDescription:
+        ActivityDescriptionModel.generateActivityDescription(),
+      sites: [
+        {
+          siteName: 'Circular Research Area Alpha',
+          siteNumber: 1,
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...this._createSiteDetails('circle', 'WGS84', {
+            circleData: this.defaultData.circle.WGS84
+          })
+        },
+        {
+          siteName: 'Triangular Survey Zone Beta',
+          siteNumber: 2,
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...this._createSiteDetails('triangle', 'WGS84', {
+            polygonData: this._createCoordinateSet(
+              this.defaultData.triangle.WGS84,
+              'WGS84'
+            )
+          })
+        },
+        {
+          siteName: 'Circular Monitoring Point Gamma',
+          siteNumber: 3,
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...this._createSiteDetails('circle', 'OSGB36', {
+            circleData: this.defaultData.circle.OSGB36
+          })
+        },
+        {
+          siteName: 'Quadrilateral Study Area Delta',
+          siteNumber: 4,
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...this._createSiteDetails('triangle', 'OSGB36', {
+            polygonData: this._createCoordinateSet(
+              this.defaultData.quadrilateral.OSGB36,
+              'OSGB36'
+            )
+          })
+        }
+      ]
+    }
+  }
+
   static createKMLUpload() {
     return this._createFileUpload(
       'KML',
