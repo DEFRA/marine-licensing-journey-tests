@@ -124,29 +124,17 @@ export default class CompleteSiteDetails extends Task {
 
   async completeCircleFlow() {
     await this.completeFlowUpToCoordinates()
-    await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
-      this.browseTheWeb,
-      this.siteDetails
-    )
-    await this.enterWidthOfCircleIfOnWidthPage()
+    await this.completeCoordinateEntry(this.siteDetails)
   }
 
   async completePolygonFlow() {
     await this.completeFlowUpToCoordinates()
-    await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
-      this.browseTheWeb,
-      this.siteDetails,
-      this.useAddAnotherPoint
-    )
+    await this.completeCoordinateEntry(this.siteDetails)
   }
 
   async completePolygonToReviewFlow() {
     await this.completeFlowUpToCoordinates()
-    await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
-      this.browseTheWeb,
-      this.siteDetails,
-      this.useAddAnotherPoint
-    )
+    await this.completeCoordinateEntry(this.siteDetails)
   }
 
   async completeFlowUpToCoordinates() {
@@ -200,64 +188,18 @@ export default class CompleteSiteDetails extends Task {
       await this.browseTheWeb.click('button[type="submit"]')
 
       if (isFirstSite) {
-        await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
-          this.browseTheWeb,
-          this.siteDetails.sameActivityDates
+        await this.handleFirstSiteSelections(
+          isSharedActivityDates,
+          isSharedActivityDescription
         )
       }
 
-      if (isSharedActivityDates && isFirstSite) {
-        await this.actor.attemptsTo(CompleteActivityDates.now())
-      } else if (!isSharedActivityDates) {
-        const originalActivityDates =
-          this.actor.recalls('exemption').activityDates
-        this.actor.updates((exemption) => {
-          exemption.activityDates = currentSite.activityDates
-        })
-        await this.actor.attemptsTo(CompleteActivityDates.now())
-        this.actor.updates((exemption) => {
-          exemption.activityDates = originalActivityDates
-        })
-      }
-
-      if (isFirstSite) {
-        await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
-          this.browseTheWeb,
-          this.siteDetails.sameActivityDescription
-        )
-      }
-
-      if (isSharedActivityDescription && isFirstSite) {
-        await this.handleMultiSiteActivityDescription()
-      } else if (!isSharedActivityDescription) {
-        await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-          this.browseTheWeb,
-          currentSite.activityDescription
-        )
-      }
-
-      await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
-        this.browseTheWeb,
-        currentSite.siteType
+      await this.handleSiteActivityDates(currentSite, isSharedActivityDates)
+      await this.handleSiteActivityDescription(
+        currentSite,
+        isSharedActivityDescription
       )
-      await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
-        this.browseTheWeb,
-        currentSite.coordinateSystem
-      )
-
-      if (currentSite.siteType === 'circle') {
-        await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
-          this.browseTheWeb,
-          currentSite
-        )
-        await this.enterWidthOfCircleIfOnWidthPage(currentSite)
-      } else {
-        await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
-          this.browseTheWeb,
-          currentSite,
-          false
-        )
-      }
+      await this.completeCoordinateEntry(currentSite)
 
       if (!isLastSite) {
         await SiteDetailsReviewPageInteractions.addAnotherSite(
@@ -267,38 +209,100 @@ export default class CompleteSiteDetails extends Task {
     }
   }
 
-  async handleMultiSiteActivityDescription() {
-    if (this.siteDetails.activityDescription) {
-      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-        this.browseTheWeb,
-        this.siteDetails.activityDescription
-      )
-    } else {
-      await ActivityDescriptionPageInteractions.clickContinue(this.browseTheWeb)
+  async handleFirstSiteSelections(
+    isSharedActivityDates,
+    isSharedActivityDescription
+  ) {
+    await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sameActivityDates
+    )
+
+    if (isSharedActivityDates) {
+      await this.actor.attemptsTo(CompleteActivityDates.now())
+    }
+
+    await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sameActivityDescription
+    )
+
+    if (isSharedActivityDescription) {
+      await this.handleMultiSiteActivityDescription()
     }
   }
 
-  async handleSingleSiteActivityDates() {
-    if (this.siteDetails.activityDates) {
-      await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
-        this.browseTheWeb,
-        this.siteDetails.activityDates
-      )
-    } else {
-      await ActivityDatesPageInteractions.clickContinue(this.browseTheWeb)
+  async handleSiteActivityDates(currentSite, isSharedActivityDates) {
+    if (!isSharedActivityDates) {
+      const originalActivityDates =
+        this.actor.recalls('exemption').activityDates
+      this.actor.updates((exemption) => {
+        exemption.activityDates = currentSite.activityDates
+      })
+      await this.actor.attemptsTo(CompleteActivityDates.now())
+      this.actor.updates((exemption) => {
+        exemption.activityDates = originalActivityDates
+      })
     }
+  }
+
+  async handleSiteActivityDescription(
+    currentSite,
+    isSharedActivityDescription
+  ) {
+    if (!isSharedActivityDescription) {
+      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        currentSite.activityDescription
+      )
+    }
+  }
+
+  async completeCoordinateEntry(siteDetails) {
+    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
+      this.browseTheWeb,
+      siteDetails.siteType
+    )
+    await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
+      this.browseTheWeb,
+      siteDetails.coordinateSystem
+    )
+
+    if (siteDetails.siteType === 'circle') {
+      await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
+        this.browseTheWeb,
+        siteDetails
+      )
+      await this.enterWidthOfCircleIfOnWidthPage(siteDetails)
+    } else {
+      await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
+        this.browseTheWeb,
+        siteDetails,
+        this.useAddAnotherPoint
+      )
+    }
+  }
+
+  async handleMultiSiteActivityDescription() {
+    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sites[0].activityDescription
+    )
+  }
+
+  async handleSingleSiteActivityDates() {
+    await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sites[0].activityDates
+    )
     await this.handleSingleSiteActivityDescription()
   }
 
   async handleSingleSiteActivityDescription() {
-    if (this.siteDetails.activityDescription) {
-      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-        this.browseTheWeb,
-        this.siteDetails.activityDescription
-      )
-    } else {
-      await ActivityDescriptionPageInteractions.clickContinue(this.browseTheWeb)
-    }
+    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+      this.browseTheWeb,
+      this.siteDetails.sites[0].activityDescription
+    )
   }
 
   async enterWidthOfCircleIfOnWidthPage(site = null) {

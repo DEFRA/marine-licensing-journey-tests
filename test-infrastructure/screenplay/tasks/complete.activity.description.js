@@ -18,7 +18,7 @@ export default class CompleteActivityDescription extends Task {
     const browseTheWeb = actor.ability
     await browseTheWeb.sendKeys(
       ActivityDescriptionPage.activityDescriptionInput,
-      exemption.activityDescription
+      exemption.siteDetails.sites[0].activityDescription
     )
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
 

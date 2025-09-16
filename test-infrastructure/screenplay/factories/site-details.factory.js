@@ -69,28 +69,49 @@ export default class SiteDetailsFactory {
     const siteType = shape === 'circle' ? 'circle' : 'triangle'
     const data = this.defaultData[shape]?.[coordinateSystem]
 
-    if (!data) return this._createSiteDetails(siteType, coordinateSystem)
-
-    if (shape === 'circle') {
-      const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
-        circleData: data
-      })
-      return this._wrapInSitesArray(siteDetails)
+    if (!data) {
+      const baseData = this._createSiteDetails(siteType, coordinateSystem)
+      const { activityDates, activityDescription, ...rootData } = baseData
+      return {
+        ...rootData,
+        sites: [
+          {
+            siteName: 'Main Research Site',
+            siteNumber: 1,
+            activityDescription:
+              ActivityDescriptionModel.generateActivityDescription(),
+            ...baseData
+          }
+        ]
+      }
     }
 
-    const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
-      polygonData: this._createCoordinateSet(data, coordinateSystem)
-    })
-    return this._wrapInSitesArray(siteDetails)
+    const baseData = this._createSiteDetails(
+      siteType,
+      coordinateSystem,
+      shape === 'circle'
+        ? { circleData: data }
+        : { polygonData: this._createCoordinateSet(data, coordinateSystem) }
+    )
+
+    const { activityDates, activityDescription, ...rootData } = baseData
+
+    return {
+      ...rootData,
+      sites: [
+        {
+          siteName: 'Main Research Site',
+          siteNumber: 1,
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...baseData
+        }
+      ]
+    }
   }
 
   static createFileUpload() {
-    return {
-      coordinatesEntryMethod: 'file-upload',
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription()
-    }
+    return this._createFileUpload()
   }
 
   static createMultipleSites() {
@@ -101,9 +122,6 @@ export default class SiteDetailsFactory {
       siteType: 'circle',
       coordinateSystem: 'WGS84',
       circleData: this.defaultData.circle.WGS84,
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
       sites: [
         {
           siteName: 'Main Research Site',
@@ -146,8 +164,6 @@ export default class SiteDetailsFactory {
       coordinatesEntryMethod: 'enter-manually',
       siteType: 'circle',
       coordinateSystem: 'WGS84',
-      activityDates: firstSiteActivityDates,
-      activityDescription: firstSiteActivityDescription,
       circleData: this.defaultData.circle.WGS84,
       sites: [
         {
@@ -217,30 +233,29 @@ export default class SiteDetailsFactory {
     )
   }
 
-  static _createFileUpload(fileType, filePath) {
-    const siteDetails = {
+  static _createFileUpload(fileType = null, filePath = null) {
+    const baseData = {
+      coordinatesEntryMethod: 'file-upload'
+    }
+
+    if (fileType) baseData.fileType = fileType
+    if (filePath) baseData.filePath = filePath
+
+    const siteData = {
+      siteName: 'Main Research Site',
+      siteNumber: 1,
       coordinatesEntryMethod: 'file-upload',
-      fileType,
-      filePath,
       activityDates: ActivityDatesModel.generateValidActivityDates(),
       activityDescription:
         ActivityDescriptionModel.generateActivityDescription()
     }
-    return this._wrapInSitesArray(siteDetails)
-  }
 
-  static _wrapInSitesArray(siteDetails, siteName = 'Main Research Site') {
-    const { activityDescription, ...siteData } = siteDetails
+    if (fileType) siteData.fileType = fileType
+    if (filePath) siteData.filePath = filePath
+
     return {
-      ...siteDetails,
-      sites: [
-        {
-          siteName,
-          siteNumber: 1,
-          activityDescription,
-          ...siteData
-        }
-      ]
+      ...baseData,
+      sites: [siteData]
     }
   }
 
