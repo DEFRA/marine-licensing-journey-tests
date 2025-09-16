@@ -16,16 +16,6 @@ import {
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 
-Given('a user is providing site details for multiple sites', function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(
-    ApplyForExemption.withValidProjectName()
-      .andActivityDates.withValidDates()
-      .andSiteDetails.forMultipleSites()
-  )
-})
-
 Given(
   'a user is providing mixed site details for multiple sites with separate activity dates and descriptions',
   function () {

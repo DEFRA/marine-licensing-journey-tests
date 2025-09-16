@@ -132,13 +132,7 @@ export default class SiteDetailsFactory {
           activityDescription:
             ActivityDescriptionModel.generateActivityDescription(),
           ...this._createSiteDetails('circle', 'WGS84', {
-            circleData: {
-              latitude: 51.51,
-              longitude: -0.13,
-              width: 25,
-              easting: null,
-              northing: null
-            }
+            circleData: this.defaultData.circle.WGS84
           })
         }
       ]
