@@ -124,17 +124,17 @@ export default class CompleteSiteDetails extends Task {
 
   async completeCircleFlow() {
     await this.completeFlowUpToCoordinates()
-    await this.completeCoordinateEntry(this.siteDetails)
+    await this.completeCoordinateEntry(this.siteDetails.sites[0])
   }
 
   async completePolygonFlow() {
     await this.completeFlowUpToCoordinates()
-    await this.completeCoordinateEntry(this.siteDetails)
+    await this.completeCoordinateEntry(this.siteDetails.sites[0])
   }
 
   async completePolygonToReviewFlow() {
     await this.completeFlowUpToCoordinates()
-    await this.completeCoordinateEntry(this.siteDetails)
+    await this.completeCoordinateEntry(this.siteDetails.sites[0])
   }
 
   async completeFlowUpToCoordinates() {
