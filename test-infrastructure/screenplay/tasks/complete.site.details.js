@@ -17,12 +17,12 @@ import {
   HowDoYouWantToProvideCoordinatesPageInteractions,
   SameActivityDatesPageInteractions,
   SameActivityDescriptionPageInteractions,
+  SiteDetailsReviewPageInteractions,
   WhatCoordinateSystemPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions,
   WidthOfCircularSitePageInteractions
 } from '../page-interactions/index.js'
 import CompleteActivityDates from './complete.activity.dates.js'
-import CompleteActivityDescription from './complete.activity.description.js'
 
 export default class CompleteSiteDetails extends Task {
   static now() {
@@ -164,6 +164,7 @@ export default class CompleteSiteDetails extends Task {
         'yes'
       )
       await this.handleMultiSiteFlow()
+      return
     } else {
       await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
         this.browseTheWeb
@@ -182,54 +183,87 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async handleMultiSiteFlow() {
-    const siteName = this.siteDetails.sites[0].siteName
-    await this.browseTheWeb.setValue('#siteName', siteName)
-    await this.browseTheWeb.click('button[type="submit"]')
-    await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
-      this.browseTheWeb,
-      this.siteDetails.sameActivityDates
-    )
+    const isSharedActivityDates = this.siteDetails.sameActivityDates === 'yes'
+    const isSharedActivityDescription =
+      this.siteDetails.sameActivityDescription === 'yes'
 
-    if (this.siteDetails.sameActivityDates === 'yes') {
-      await this.actor.attemptsTo(CompleteActivityDates.now())
-    } else {
-      const originalActivityDates =
-        this.actor.recalls('exemption').activityDates
-      this.actor.updates((exemption) => {
-        exemption.activityDates = this.siteDetails.sites[0].activityDates
-      })
+    for (
+      let siteIndex = 0;
+      siteIndex < this.siteDetails.sites.length;
+      siteIndex++
+    ) {
+      const currentSite = this.siteDetails.sites[siteIndex]
+      const isFirstSite = siteIndex === 0
+      const isLastSite = siteIndex === this.siteDetails.sites.length - 1
 
-      await this.actor.attemptsTo(CompleteActivityDates.now())
+      await this.browseTheWeb.setValue('#siteName', currentSite.siteName)
+      await this.browseTheWeb.click('button[type="submit"]')
 
-      this.actor.updates((exemption) => {
-        exemption.activityDates = originalActivityDates
-      })
-    }
+      if (isFirstSite) {
+        await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
+          this.browseTheWeb,
+          this.siteDetails.sameActivityDates
+        )
+      }
 
-    if (this.siteDetails.sameActivityDescription === 'yes') {
-      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+      if (isSharedActivityDates && isFirstSite) {
+        await this.actor.attemptsTo(CompleteActivityDates.now())
+      } else if (!isSharedActivityDates) {
+        const originalActivityDates =
+          this.actor.recalls('exemption').activityDates
+        this.actor.updates((exemption) => {
+          exemption.activityDates = currentSite.activityDates
+        })
+        await this.actor.attemptsTo(CompleteActivityDates.now())
+        this.actor.updates((exemption) => {
+          exemption.activityDates = originalActivityDates
+        })
+      }
+
+      if (isFirstSite) {
+        await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+          this.browseTheWeb,
+          this.siteDetails.sameActivityDescription
+        )
+      }
+
+      if (isSharedActivityDescription && isFirstSite) {
+        await this.handleMultiSiteActivityDescription()
+      } else if (!isSharedActivityDescription) {
+        await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
+          this.browseTheWeb,
+          currentSite.activityDescription
+        )
+      }
+
+      await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
         this.browseTheWeb,
-        this.siteDetails.sameActivityDescription
+        currentSite.siteType
       )
-      await this.handleMultiSiteActivityDescription()
-    } else {
-      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+      await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
         this.browseTheWeb,
-        this.siteDetails.sameActivityDescription
+        currentSite.coordinateSystem
       )
 
-      const originalActivityDescription =
-        this.actor.recalls('exemption').activityDescription
-      this.actor.updates((exemption) => {
-        exemption.activityDescription =
-          this.siteDetails.sites[0].activityDescription
-      })
+      if (currentSite.siteType === 'circle') {
+        await EnterCoordinatesCentrePointPageInteractions.enterCircleCoordinates(
+          this.browseTheWeb,
+          currentSite
+        )
+        await this.enterWidthOfCircleIfOnWidthPage(currentSite)
+      } else {
+        await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
+          this.browseTheWeb,
+          currentSite,
+          false
+        )
+      }
 
-      await this.actor.attemptsTo(CompleteActivityDescription.now())
-
-      this.actor.updates((exemption) => {
-        exemption.activityDescription = originalActivityDescription
-      })
+      if (!isLastSite) {
+        await SiteDetailsReviewPageInteractions.addAnotherSite(
+          this.browseTheWeb
+        )
+      }
     }
   }
 
@@ -267,17 +301,18 @@ export default class CompleteSiteDetails extends Task {
     }
   }
 
-  async enterWidthOfCircleIfOnWidthPage() {
+  async enterWidthOfCircleIfOnWidthPage(site = null) {
     try {
       const widthElement = await this.browseTheWeb.browser.$('#width')
       await widthElement.waitForExist({ timeout: 1000 })
+      const width = site
+        ? site.circleData.width
+        : this.siteDetails.circleData.width
       await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
         this.browseTheWeb,
-        this.siteDetails.circleData.width
+        width
       )
-    } catch {
-      // If the width page is not present, we can just continue
-    }
+    } catch { }
   }
 
   validateTestData(actor) {
