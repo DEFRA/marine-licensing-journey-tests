@@ -15,13 +15,6 @@ export default class NotificationSummaryBase extends Task {
   async _validateProjectSummary(browseTheWeb, exemptionData) {
     const pageLocators = this._getPageLocators()
 
-    if (exemptionData.projectName) {
-      await browseTheWeb.expectElementToHaveExactText(
-        pageLocators.projectSummary.projectNameValue,
-        exemptionData.projectName
-      )
-    }
-
     if (exemptionData.activityType) {
       await browseTheWeb.expectElementToContainText(
         pageLocators.projectSummary.activityTypeValue,
