@@ -104,9 +104,10 @@ export default class CompleteSiteDetails extends Task {
   }
 
   async completeManualCoordinatesFlow() {
-    if (this.siteDetails.siteType === 'circle') {
+    const firstSiteType = this.siteDetails.sites[0].siteType
+    if (firstSiteType === 'circle') {
       await this.completeCircleFlow()
-    } else if (this.siteDetails.siteType === 'triangle') {
+    } else if (firstSiteType === 'triangle') {
       await this.completePolygonFlow()
     } else {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
@@ -306,7 +307,7 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         width
       )
-    } catch {}
+    } catch { }
   }
 
   validateTestData(actor) {
