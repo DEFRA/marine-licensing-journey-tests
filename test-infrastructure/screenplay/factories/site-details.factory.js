@@ -71,9 +71,8 @@ export default class SiteDetailsFactory {
 
     if (!data) {
       const baseData = this._createSiteDetails(siteType, coordinateSystem)
-      const { activityDates, activityDescription, ...rootData } = baseData
       return {
-        ...rootData,
+        coordinatesEntryMethod: 'enter-manually',
         sites: [
           {
             siteName: 'Main Research Site',
@@ -94,10 +93,8 @@ export default class SiteDetailsFactory {
         : { polygonData: this._createCoordinateSet(data, coordinateSystem) }
     )
 
-    const { activityDates, activityDescription, ...rootData } = baseData
-
     return {
-      ...rootData,
+      coordinatesEntryMethod: 'enter-manually',
       sites: [
         {
           siteName: 'Main Research Site',
@@ -119,9 +116,6 @@ export default class SiteDetailsFactory {
       multipleSitesEnabled: 'yes',
       sameActivityDates: 'yes',
       coordinatesEntryMethod: 'enter-manually',
-      siteType: 'circle',
-      coordinateSystem: 'WGS84',
-      circleData: this.defaultData.circle.WGS84,
       sites: [
         {
           siteName: 'Main Research Site',
@@ -162,9 +156,6 @@ export default class SiteDetailsFactory {
       sameActivityDates: 'no',
       sameActivityDescription: 'no',
       coordinatesEntryMethod: 'enter-manually',
-      siteType: 'circle',
-      coordinateSystem: 'WGS84',
-      circleData: this.defaultData.circle.WGS84,
       sites: [
         {
           siteName: 'Circular Research Area Alpha',

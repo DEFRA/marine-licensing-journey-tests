@@ -152,22 +152,12 @@ export default class CompleteSiteDetails extends Task {
         'yes'
       )
       await this.handleMultiSiteFlow()
-      return
     } else {
       await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectNoAndContinue(
         this.browseTheWeb
       )
       await this.handleSingleSiteActivityDates()
     }
-
-    await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
-      this.browseTheWeb,
-      this.siteDetails.siteType
-    )
-    await WhatCoordinateSystemPageInteractions.selectCoordinateSystemAndContinue(
-      this.browseTheWeb,
-      this.siteDetails.coordinateSystem
-    )
   }
 
   async handleMultiSiteFlow() {
@@ -316,7 +306,7 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         width
       )
-    } catch {}
+    } catch { }
   }
 
   validateTestData(actor) {
