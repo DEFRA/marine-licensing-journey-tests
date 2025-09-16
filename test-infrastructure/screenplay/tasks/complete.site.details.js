@@ -355,7 +355,9 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         width
       )
-    } catch { }
+    } catch {
+      // don't do anything if the width element is not found
+    }
   }
 
   validateTestData(actor) {
