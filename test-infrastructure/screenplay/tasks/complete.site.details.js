@@ -307,7 +307,7 @@ export default class CompleteSiteDetails extends Task {
         this.browseTheWeb,
         width
       )
-    } catch { }
+    } catch {}
   }
 
   validateTestData(actor) {
