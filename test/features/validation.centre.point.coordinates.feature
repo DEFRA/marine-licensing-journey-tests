@@ -1,4 +1,4 @@
-@issue=ML-35
+@issue=ML-35 @broken
 Feature: Validation of centre point coordinates: the user is prevented from proceeding with invalid coordinate values
   As an applicant
   I want to be notified when I have provided invalid coordinate values

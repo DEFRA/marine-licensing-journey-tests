@@ -82,31 +82,52 @@ export default class ApplyForExemption extends BaseBuilder {
   }
 
   activityDates(dates) {
-    return this.setProperty('activityDates', dates)
+    if (this.data.siteDetails?.sites?.[0]) {
+      this.data.siteDetails.sites[0].activityDates = dates
+    }
+    return this
   }
 
   latitude(value) {
-    return this.setSafeProperty('siteDetails.circleData.latitude', value)
+    if (this.data.siteDetails?.sites?.[0]?.circleData) {
+      this.data.siteDetails.sites[0].circleData.latitude = value
+    }
+    return this
   }
 
   longitude(value) {
-    return this.setSafeProperty('siteDetails.circleData.longitude', value)
+    if (this.data.siteDetails?.sites?.[0]?.circleData) {
+      this.data.siteDetails.sites[0].circleData.longitude = value
+    }
+    return this
   }
 
   eastings(value) {
-    return this.setSafeProperty('siteDetails.circleData.eastings', value)
+    if (this.data.siteDetails?.sites?.[0]?.circleData) {
+      this.data.siteDetails.sites[0].circleData.eastings = value
+    }
+    return this
   }
 
   northings(value) {
-    return this.setSafeProperty('siteDetails.circleData.northings', value)
+    if (this.data.siteDetails?.sites?.[0]?.circleData) {
+      this.data.siteDetails.sites[0].circleData.northings = value
+    }
+    return this
   }
 
   width(value) {
-    return this.setSafeProperty('siteDetails.circleData.width', value)
+    if (this.data.siteDetails?.sites?.[0]?.circleData) {
+      this.data.siteDetails.sites[0].circleData.width = value
+    }
+    return this
   }
 
   withCoordinatePoints(points) {
-    return this.setSafeProperty('siteDetails.polygonData.coordinates', points)
+    if (this.data.siteDetails?.sites?.[0]?.polygonData) {
+      this.data.siteDetails.sites[0].polygonData.coordinates = points
+    }
+    return this
   }
 
   get andSiteDetails() {
