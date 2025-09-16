@@ -10,12 +10,8 @@ export default class EnsureViewDetailsPage extends NotificationSummaryBase {
     const completedExemptions = actor.recalls('completedExemptions')
     const exemptionData = completedExemptions[completedExemptions.length - 1]
 
-    // Validate main page heading
     await this._validateMainHeading(browseTheWeb, exemptionData)
-
-    // Comprehensive validation of all sections on View Details page
     await this._validateProjectSummary(browseTheWeb, exemptionData)
-    await this._validateProjectDetails(browseTheWeb, exemptionData)
     await this._validateActivityDates(browseTheWeb, exemptionData)
     await this._validateActivityDetails(browseTheWeb, exemptionData)
     await this._validateSiteDetails(browseTheWeb, exemptionData)

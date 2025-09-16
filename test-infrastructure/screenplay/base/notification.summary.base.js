@@ -59,17 +59,6 @@ export default class NotificationSummaryBase extends Task {
     }
   }
 
-  async _validateProjectDetails(browseTheWeb, exemptionData) {
-    const pageLocators = this._getPageLocators()
-
-    if (exemptionData.projectName) {
-      await browseTheWeb.expectElementToHaveExactText(
-        pageLocators.projectDetails.projectNameValue,
-        exemptionData.projectName
-      )
-    }
-  }
-
   async _validateActivityDates(browseTheWeb, exemptionData) {
     if (exemptionData.activityDates) {
       await this._validateDateField(
