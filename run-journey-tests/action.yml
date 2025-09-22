@@ -209,7 +209,6 @@ runs:
       working-directory: ./marine-licensing-journey-tests
       env:
         CHROMEDRIVER_URL: localhost
-        # Use local infrastructure endpoints
       run: |
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
@@ -229,14 +228,121 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        npm run report:github
+        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
+
+    - name: Parse test results
+      if: always() && github.event_name == 'pull_request'
+      id: test-results
+      shell: bash
+      working-directory: ./marine-licensing-journey-tests
+      run: |
+        # Count test results by status
+        if [ -d "allure-results" ]; then
+          # Count each status type (safer approach)
+          PASSED=0
+          FAILED=0
+          BROKEN=0
+          SKIPPED=0
+          
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              if grep -q '"status":"passed"' "$file" 2>/dev/null; then
+                PASSED=$((PASSED + 1))
+              elif grep -q '"status":"failed"' "$file" 2>/dev/null; then
+                FAILED=$((FAILED + 1))
+              elif grep -q '"status":"broken"' "$file" 2>/dev/null; then
+                BROKEN=$((BROKEN + 1))
+              elif grep -q '"status":"skipped"' "$file" 2>/dev/null; then
+                SKIPPED=$((SKIPPED + 1))
+              fi
+            fi
+          done
+          
+          TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
+          
+          # Determine status
+          if [ $FAILED -eq 0 ] && [ $BROKEN -eq 0 ] && [ $TOTAL -gt 0 ]; then
+            STATUS_EMOJI="✅"
+            STATUS_TEXT="All tests passed"
+          elif [ $TOTAL -eq 0 ]; then
+            STATUS_EMOJI="⚠️"
+            STATUS_TEXT="No tests were executed"
+          else
+            STATUS_EMOJI="❌"
+            STATUS_TEXT="Test failures detected"
+          fi
+          
+          # Calculate pass rate
+          if [ $TOTAL -gt 0 ]; then
+            PASS_RATE=$((PASSED * 100 / TOTAL))
+          else
+            PASS_RATE=0
+          fi
+        else
+          PASSED=0
+          FAILED=0
+          BROKEN=0
+          SKIPPED=0
+          TOTAL=0
+          PASS_RATE=0
+          STATUS_EMOJI="⚠️"
+          STATUS_TEXT="No test results found"
+        fi
+
+        # Debug output
+        echo "Debug: TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
+        echo "Debug: PASS_RATE=$PASS_RATE, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+
+        # Set outputs
+        echo "total=$TOTAL" >> $GITHUB_OUTPUT
+        echo "passed=$PASSED" >> $GITHUB_OUTPUT
+        echo "failed=$FAILED" >> $GITHUB_OUTPUT
+        echo "broken=$BROKEN" >> $GITHUB_OUTPUT
+        echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+        echo "pass_rate=$PASS_RATE" >> $GITHUB_OUTPUT
+        echo "status_emoji=$STATUS_EMOJI" >> $GITHUB_OUTPUT
+        echo "status_text=$STATUS_TEXT" >> $GITHUB_OUTPUT
+
+    - name: Find existing comment
+      if: always() && github.event_name == 'pull_request'
+      uses: peter-evans/find-comment@v3
+      id: find-comment
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: Marine Licensing Journey Tests
+
+    - name: Create or update PR comment with test results
+      if: always() && github.event_name == 'pull_request'
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        edit-mode: replace
+        body: |
+          ## Marine Licensing Journey Tests
+
+          ### ${{ steps.test-results.outputs.status_emoji || '⚠️' }} ${{ steps.test-results.outputs.status_text || 'Test Results' }}
+
+          | Metric | Count |
+          |:-------|------:|
+          | **Total Tests** | ${{ steps.test-results.outputs.total || '0' }} |
+          | **Passed** | ${{ steps.test-results.outputs.passed || '0' }} |
+          | **Failed** | ${{ steps.test-results.outputs.failed || '0' }} |
+          | **Broken** | ${{ steps.test-results.outputs.broken || '0' }} |
+          | **Skipped** | ${{ steps.test-results.outputs.skipped || '0' }} |
+          | **Pass Rate** | ${{ steps.test-results.outputs.pass_rate || '0' }}% |
+
+          ---
+
+          **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
     - name: Upload Allure report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: ./marine-licensing-journey-tests/allure-report/index.html # Single HTML file (not folder structure)
+        path: ./marine-licensing-journey-tests/allure-report/index.html
 
     - name: Upload docker compose logs
       if: always()

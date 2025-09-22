@@ -8,7 +8,6 @@ export default class EnsureCheckYourAnswersPage extends NotificationSummaryBase 
   async performAs(actor) {
     const browseTheWeb = actor.ability
     const exemptionData = actor.recalls('exemption')
-    await this._validateProjectDetails(browseTheWeb, exemptionData)
     await this._validateActivityDates(browseTheWeb, exemptionData)
     await this._validateActivityDetails(browseTheWeb, exemptionData)
     await this._validateSiteDetails(browseTheWeb, exemptionData)

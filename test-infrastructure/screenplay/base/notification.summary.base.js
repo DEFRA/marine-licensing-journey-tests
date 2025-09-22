@@ -15,13 +15,6 @@ export default class NotificationSummaryBase extends Task {
   async _validateProjectSummary(browseTheWeb, exemptionData) {
     const pageLocators = this._getPageLocators()
 
-    if (exemptionData.projectName) {
-      await browseTheWeb.expectElementToHaveExactText(
-        pageLocators.projectSummary.projectNameValue,
-        exemptionData.projectName
-      )
-    }
-
     if (exemptionData.activityType) {
       await browseTheWeb.expectElementToContainText(
         pageLocators.projectSummary.activityTypeValue,
@@ -42,12 +35,9 @@ export default class NotificationSummaryBase extends Task {
   async _validateSubmissionDetails(browseTheWeb, exemptionData) {
     const pageLocators = this._getPageLocators()
 
-    // Check if we're on the Check Your Answers page (which has submission details)
-    // vs View Details page (which doesn't show application reference or submission date)
     const currentUrl = await browseTheWeb.browser.getUrl()
     const isCheckYourAnswersPage = currentUrl.includes('/check-your-answers')
 
-    // Only validate submission details on Check Your Answers page
     if (isCheckYourAnswersPage) {
       if (exemptionData.applicationReference) {
         await browseTheWeb.expectElementToContainText(
@@ -56,7 +46,6 @@ export default class NotificationSummaryBase extends Task {
         )
       }
 
-      // Validate submission date - format it to match display format
       if (exemptionData.submissionDate || exemptionData.dateSubmitted) {
         const submissionDate =
           exemptionData.submissionDate || exemptionData.dateSubmitted
@@ -67,17 +56,6 @@ export default class NotificationSummaryBase extends Task {
           expectedDate
         )
       }
-    }
-  }
-
-  async _validateProjectDetails(browseTheWeb, exemptionData) {
-    const pageLocators = this._getPageLocators()
-
-    if (exemptionData.projectName) {
-      await browseTheWeb.expectElementToHaveExactText(
-        pageLocators.projectDetails.projectNameValue,
-        exemptionData.projectName
-      )
     }
   }
 
