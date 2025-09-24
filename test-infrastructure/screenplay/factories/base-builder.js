@@ -11,10 +11,6 @@ export default class BaseBuilder {
     return this._setPropertyWithTraversal(path, value, true)
   }
 
-  setSafeProperty(path, value) {
-    return this._setPropertyWithTraversal(path, value, false)
-  }
-
   _setPropertyWithTraversal(path, value, createPath) {
     const pathArray = path.split('.')
     let current = this.data

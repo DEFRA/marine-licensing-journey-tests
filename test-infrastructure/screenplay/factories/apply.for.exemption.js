@@ -81,18 +81,6 @@ export default class ApplyForExemption extends BaseBuilder {
     )
   }
 
-  static rejectingCookies() {
-    const exemption = ExemptionFactory.createValidProjectName()
-    exemption.cookiePreferences = 'reject'
-    return new ApplyForExemption(exemption)
-  }
-
-  static withoutCookieSelection() {
-    const exemption = ExemptionFactory.createValidProjectName()
-    exemption.cookiePreferences = 'none'
-    return new ApplyForExemption(exemption)
-  }
-
   static withNoPreviousCookieDecision() {
     const exemption = ExemptionFactory.createValidProjectName()
     exemption.cookiePreferences = 'none'

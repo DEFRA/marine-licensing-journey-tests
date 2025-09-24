@@ -30,14 +30,6 @@ export default class ActivityDatesPageInteractions {
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
   }
 
-  static async clickContinue(browseTheWeb) {
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
-  }
-
-  static async clickBack(browseTheWeb) {
-    await browseTheWeb.click(CommonElementsPage.backLink)
-  }
-
   static async clickCancel(browseTheWeb) {
     await browseTheWeb.click(CommonElementsPage.cancelLink)
   }

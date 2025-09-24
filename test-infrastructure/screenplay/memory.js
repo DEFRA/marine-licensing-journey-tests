@@ -41,14 +41,4 @@ export default class Memory {
     }
     return (exemption) => (exemption.activityDates = activityDates)
   }
-
-  static ofCookiePreferences(preference) {
-    const validPreferences = ['accept', 'reject', 'none']
-    if (!validPreferences.includes(preference)) {
-      expect.fail(
-        `Cookie preference must be one of: ${validPreferences.join(', ')}`
-      )
-    }
-    return (exemption) => (exemption.cookiePreferences = preference)
-  }
 }

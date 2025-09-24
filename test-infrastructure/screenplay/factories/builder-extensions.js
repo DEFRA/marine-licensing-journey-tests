@@ -58,10 +58,6 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forMultipleSites: (builder) => {
-    builder.setProperty('siteDetails', SiteDetailsFactory.createMultipleSites())
-    return builder
-  },
   forMixedMultipleSites: (builder) => {
     builder.setProperty(
       'siteDetails',
