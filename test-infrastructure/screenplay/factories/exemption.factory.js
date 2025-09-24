@@ -23,6 +23,7 @@ export default class ExemptionFactory {
       activityDates: null,
       publicRegister: null,
       fileType: null,
+      cookiePreferences: 'accept',
       projectNameTaskCompleted: false,
       activityDescriptionTaskCompleted: false,
       activityDatesTaskCompleted: false,

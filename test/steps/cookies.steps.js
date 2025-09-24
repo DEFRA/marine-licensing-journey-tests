@@ -16,7 +16,7 @@ import {
 Given('a user has not made a decision about cookies', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
-  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
+  this.actor.intendsTo(ApplyForExemption.withNoPreviousCookieDecision())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
 })
 

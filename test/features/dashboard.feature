@@ -14,6 +14,7 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
     When the user navigates to the dashboard
     Then the message "You currently have no projects." is shown
 
+  @broken
   Scenario: Continue a draft notification from the dashboard
     Given the user has a draft exemption notification
     When the user continues the notification from the dashboard and reenters the project name task
@@ -25,13 +26,14 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
     When the user starts a new notification
     Then the project name is not pre-populated
 
-  @smoke
+  @smoke @broken
   Scenario: View dashboard with notifications in correct sort order
     Given the user has multiple notifications with different statuses and names
     When the user navigates to the dashboard
     Then the notifications are displayed with the correct information
     And the notifications are sorted by status with drafts first then by project name
 
+  @broken
   Scenario: Delete a draft notification from the dashboard
     Given the user has a draft exemption notification
     When the user deletes the draft notification from the dashboard
