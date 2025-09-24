@@ -10,7 +10,6 @@ Feature: Cookies policy page allows users to manage cookie preferences
     When the cookies link is clicked in the footer
     Then the cookies policy page is displayed
 
-  @broken
   Scenario: Analytics cookies are not accepted by default
     Given a user has not made a decision about cookies
     When the cookies link is clicked in the footer
