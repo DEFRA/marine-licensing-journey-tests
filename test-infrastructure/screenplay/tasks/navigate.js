@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import ProjectNamePage from '~/test-infrastructure/pages/project.name.page'
 import { constructIatUrl } from '../../helpers/iat-url-builder.js'
 import Task from '../base/task.js'
+import AcceptCookiesFromBanner from '../interactions/accept.cookies.from.banner.js'
 import AuthenticateWithAPermanentUser from '../interactions/authenticate.with.a.permanent.user.js'
 import AuthenticateWith from '../interactions/authenticate.with.js'
 
@@ -47,6 +48,7 @@ export default class Navigate extends Task {
     if (!actor.hasMemoryOf('isAuthenticated')) {
       await actor.attemptsTo(AuthenticateWithAPermanentUser.now())
       actor.remembers('isAuthenticated', true)
+      await actor.attemptsTo(AcceptCookiesFromBanner.now())
     }
   }
 
@@ -59,6 +61,7 @@ export default class Navigate extends Task {
     if (!actor.hasMemoryOf('isAuthenticated')) {
       await actor.attemptsTo(AuthenticateWith.theTestUser())
       actor.remembers('isAuthenticated', true)
+      await actor.attemptsTo(AcceptCookiesFromBanner.now())
     }
   }
 }

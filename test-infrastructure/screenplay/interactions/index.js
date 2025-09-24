@@ -1,4 +1,5 @@
 export * from '../page-interactions'
+export { default as AcceptCookiesFromBanner } from './accept.cookies.from.banner'
 export { default as ClickAddAnotherPoint } from './button-interactions/click.add.another.point'
 export { default as ClickButton } from './button-interactions/click.button'
 export { default as ClickCancel } from './button-interactions/click.cancel'
