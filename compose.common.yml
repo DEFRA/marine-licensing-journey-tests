@@ -60,6 +60,7 @@ services:
       CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
       APP_BASE_URL: http://marine-licensing-frontend:3000
       DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
+      ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
       REDIS_PORT: 6380
     command: 'node .'
