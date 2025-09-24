@@ -18,12 +18,9 @@ export default class HandleCookieBanner extends Task {
   }
 
   shouldSkipCookieHandling(actor, exemption) {
-    // Skip if test explicitly wants no previous cookie decision
     if (exemption?.noPreviousCookieDecision) {
       return true
     }
-
-    // Skip if cookie preferences have already been set
     return (
       actor.hasMemoryOf('cookiePreferencesSet') &&
       actor.recalls('cookiePreferencesSet')
