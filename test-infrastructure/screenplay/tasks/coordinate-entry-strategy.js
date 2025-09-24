@@ -61,12 +61,10 @@ export class CoordinateEntryStrategy {
       await widthElement.waitForExist({ timeout: 1000 })
 
       const width = siteDetails.circleData?.width
-      if (width) {
-        await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
-          this.browseTheWeb,
-          width
-        )
-      }
+      await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
+        this.browseTheWeb,
+        width || ''
+      )
     } catch {
       // Width page not present - continue without entering width
     }
