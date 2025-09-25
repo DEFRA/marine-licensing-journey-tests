@@ -1,7 +1,7 @@
 @issue=ML-114 @issue=ML-228 @issue=ML-419 @issue=ML-420 @issue=ML-421 @issue=ML-361 @issue=ML-608
 Feature: Multi-site: Provide multiple sites for an exemption notification
 
-  @smoke
+  @smoke @broken
   Scenario: Complete mixed site details with separate activity dates and descriptions
     Given a user is providing mixed site details for multiple sites with separate activity dates and descriptions
     And the site details task is reached

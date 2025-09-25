@@ -25,11 +25,11 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   }
 
   static getSiteCoordinateMethodValue(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::dl//dt[contains(text(), "Single or multiple sets of coordinates")]/following-sibling::dd`
+    return `(//dt[contains(normalize-space(text()), "Single or multiple sets of coordinates")]/following-sibling::dd)[${siteNumber}]`
   }
 
   static getSiteCoordinateSystemValue(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::dl//dt[contains(text(), "Coordinate system")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(normalize-space(text()), "Coordinate system")]/following-sibling::dd`
   }
 
   static providingTheSiteLocationCard =
