@@ -18,6 +18,7 @@ export default class EnsureActivityDetailsCard extends Task {
 
   shouldValidateCard(siteDetails) {
     if (!siteDetails) return false
+    if (siteDetails.coordinatesEntryMethod === 'file-upload') return false
 
     const hasSharedDates = this.hasSharedActivityDates(siteDetails)
     const hasSharedDescriptions =
@@ -60,7 +61,8 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   hasSharedActivityDates(siteDetails) {
-    if (siteDetails.multipleSitesEnabled !== 'yes') return true
+    // Single sites don't have separate Activity details card
+    if (siteDetails.multipleSitesEnabled !== 'yes') return false
 
     return (
       siteDetails?.sharedActivityDates === 'yes' ||
@@ -69,7 +71,8 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   hasSharedActivityDescriptions(siteDetails) {
-    if (siteDetails.multipleSitesEnabled !== 'yes') return true
+    // Single sites don't have separate Activity details card
+    if (siteDetails.multipleSitesEnabled !== 'yes') return false
 
     return (
       siteDetails?.sharedActivityDescriptions === 'yes' ||
