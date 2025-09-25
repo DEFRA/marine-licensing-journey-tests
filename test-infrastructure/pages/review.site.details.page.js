@@ -46,15 +46,15 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
 
   // Site-specific selectors for individual site cards
   static getSiteName(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Site name")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd`
   }
 
   static getSiteActivityDates(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Activity dates")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd`
   }
 
   static getSiteActivityDescription(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Activity description")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd`
   }
 
   static saveAndContinueButton = 'button*=Save and continue'
