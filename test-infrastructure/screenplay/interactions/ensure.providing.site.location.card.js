@@ -11,6 +11,11 @@ export default class EnsureProvidingSiteLocationCard extends Task {
     const exemption = actor.recalls('exemption')
     const siteDetails = exemption?.siteDetails
 
+    if (!siteDetails) return
+
+    // Skip for file upload scenarios - they don't have this card structure
+    if (siteDetails.coordinatesEntryMethod === 'file-upload') return
+
     await this.verifyCardExists(browseTheWeb)
     await this.verifyMethodOfProvidingSiteLocation(browseTheWeb, siteDetails)
     await this.verifyMoreThanOneSite(browseTheWeb, siteDetails)
