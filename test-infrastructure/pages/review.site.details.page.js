@@ -37,6 +37,26 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static moreThanOneSiteValue =
     '//dt[contains(text(), "More than one site")]/following-sibling::dd'
 
+  // Activity details card selectors
+  static activityDetailsCard = '//h2[contains(text(), "Activity details")]'
+  static activityDatesValue =
+    '//h2[contains(text(), "Activity details")]/following-sibling::*//dt[contains(text(), "Activity dates")]/following-sibling::dd'
+  static activityDescriptionValue =
+    '//h2[contains(text(), "Activity details")]/following-sibling::*//dt[contains(text(), "Activity description")]/following-sibling::dd'
+
+  // Site-specific selectors for individual site cards
+  static getSiteName(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Site name")]/following-sibling::dd`
+  }
+
+  static getSiteActivityDates(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Activity dates")]/following-sibling::dd`
+  }
+
+  static getSiteActivityDescription(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(text(), "Activity description")]/following-sibling::dd`
+  }
+
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
   static backLink = 'a.govuk-back-link'

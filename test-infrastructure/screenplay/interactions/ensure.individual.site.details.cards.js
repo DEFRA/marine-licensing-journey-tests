@@ -45,20 +45,33 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
   }
 
   async verifySiteName(browseTheWeb, siteNumber, site) {
-    // TODO: Add site name verification when selector is available
-    // This would be implemented when ML-228 (provide site name) is fully integrated
+    // Verify site name is displayed if provided
+    if (site.siteName) {
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.getSiteName(siteNumber),
+        site.siteName
+      )
+    }
   }
 
   async verifyActivityDates(browseTheWeb, siteNumber, site) {
-    // TODO: Add activity dates verification for individual sites
-    // Only verify if dates are NOT shared (i.e., user answered "No" to "Are all activity dates the same?")
-    // Per ML-608 AC2: "Activity dates - This row is only displayed if I selected that the dates are not the same for every site"
+    // Only verify if dates are NOT shared (different per site)
+    if (site.activityStartDate && site.activityEndDate) {
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
+        `${site.activityStartDate} to ${site.activityEndDate}`
+      )
+    }
   }
 
   async verifyActivityDescription(browseTheWeb, siteNumber, site) {
-    // TODO: Add activity description verification for individual sites
-    // Only verify if descriptions are NOT shared (i.e., user answered "No" to "Are all activity descriptions the same?")
-    // Per ML-608 AC2: "Activity description - This row is only displayed if I selected that the description is not the same for every site"
+    // Only verify if descriptions are NOT shared (different per site)
+    if (site.activityDescription) {
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber),
+        site.activityDescription
+      )
+    }
   }
 
   determineSiteSpecificMethod(site) {
