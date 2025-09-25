@@ -33,7 +33,7 @@ runs:
           PR_BODY=$(jq -r '.pull_request.body // empty' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
           if [ -n "$PR_BODY" ]; then
             # Look for lines mentioning depends-on and this repo
-            DEP_LINE=$(printf '%s\n' "$PR_BODY" | grep -iE 'depends[- ]on.*marine-licensing-journey-tests' | head -1 || true)
+            DEP_LINE=$(printf '%s\n' "$PR_BODY" | grep -iE 'depends[- ]?on[: ]+.*marine-licensing-journey-tests' | head -1 || true)
 
             # Case 1: explicit branch using @ or :
             if [ -n "$DEP_LINE" ]; then
