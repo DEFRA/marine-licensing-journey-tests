@@ -1,8 +1,8 @@
 export default class HowDoYouWantToEnterTheCoordinatesPage {
-  static circularSite = '#coordinatesEntry'
-  static triangleSite = '#coordinatesEntry-2'
+  static circularSite = 'input[name="coordinatesEntry"][value="single"]'
+  static triangleSite = 'input[name="coordinatesEntry"][value="multiple"]'
   static saveAndContinue = 'button[type="submit"]'
-  static coordinatesEntryError = '#coordinatesEntry-error'
+  static coordinatesEntryError = '.govuk-error-message'
 
   static getSiteTypeSelector(siteType) {
     if (siteType === 'circle') return this.circularSite

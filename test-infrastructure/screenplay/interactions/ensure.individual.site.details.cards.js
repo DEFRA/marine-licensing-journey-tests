@@ -1,4 +1,3 @@
-import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
@@ -29,8 +28,6 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
   async verifySiteCard(browseTheWeb, siteNumber, site) {
     await this.verifySiteCoordinateMethod(browseTheWeb, siteNumber, site)
     await this.verifySiteName(browseTheWeb, siteNumber, site)
-    await this.verifyActivityDates(browseTheWeb, siteNumber, site)
-    await this.verifyActivityDescription(browseTheWeb, siteNumber, site)
   }
 
   async verifySiteCoordinateMethod(browseTheWeb, siteNumber, site) {
@@ -46,23 +43,6 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
     await browseTheWeb.expectElementToContainText(
       ReviewSiteDetailsPage.getSiteName(siteNumber),
       site.siteName
-    )
-  }
-
-  async verifyActivityDates(browseTheWeb, siteNumber, site) {
-    const startDate = formatDateObjectToDisplay(site.activityDates.startDate)
-    const endDate = formatDateObjectToDisplay(site.activityDates.endDate)
-
-    await browseTheWeb.expectElementToContainText(
-      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
-      `${startDate} to ${endDate}`
-    )
-  }
-
-  async verifyActivityDescription(browseTheWeb, siteNumber, site) {
-    await browseTheWeb.expectElementToContainText(
-      ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber),
-      site.activityDescription
     )
   }
 

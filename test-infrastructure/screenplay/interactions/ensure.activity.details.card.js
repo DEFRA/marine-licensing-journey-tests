@@ -18,7 +18,6 @@ export default class EnsureActivityDetailsCard extends Task {
 
   shouldValidateCard(siteDetails) {
     if (!siteDetails) return false
-    if (siteDetails.coordinatesEntryMethod === 'file-upload') return false
 
     const hasSharedDates = this.hasSharedActivityDates(siteDetails)
     const hasSharedDescriptions =
