@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
@@ -12,7 +11,6 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
     const exemption = actor.recalls('exemption')
     const siteDetails = exemption?.siteDetails
 
-    // Only validate numbered site cards for multi-site scenarios (ML-361/ML-608)
     if (!siteDetails) return
     if (siteDetails.coordinatesEntryMethod === 'file-upload') return
     if (siteDetails.multipleSitesEnabled !== 'yes') return
@@ -28,21 +26,12 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
   }
 
   async verifySiteCard(browseTheWeb, siteNumber, site) {
-    // Verify the site card exists
     await browseTheWeb.isDisplayed(
       ReviewSiteDetailsPage.getSiteDetailsCardTitle(siteNumber)
     )
-
-    // Verify site-specific coordinate method text
     await this.verifySiteCoordinateMethod(browseTheWeb, siteNumber, site)
-
-    // Verify site name if present
     await this.verifySiteName(browseTheWeb, siteNumber, site)
-
-    // Verify activity dates if different for each site
     await this.verifyActivityDates(browseTheWeb, siteNumber, site)
-
-    // Verify activity description if different for each site
     await this.verifyActivityDescription(browseTheWeb, siteNumber, site)
   }
 
@@ -79,12 +68,6 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
       return 'Manually enter one set of coordinates and a width to create a circular site'
     }
 
-    if (siteType === 'triangle') {
-      return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
-    }
-
-    expect.fail(
-      `Unable to determine site-specific method for site type: ${siteType}`
-    )
+    return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
   }
 }

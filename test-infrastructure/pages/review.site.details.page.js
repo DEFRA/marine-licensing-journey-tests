@@ -20,13 +20,16 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     return `//dt[contains(text(), "Point ${pointNumber}")]/following-sibling::dd`
   }
 
-  // New selectors for multi-site review (ML-361/ML-608)
   static getSiteDetailsCardTitle(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]`
   }
 
   static getSiteCoordinateMethodValue(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::dl//dt[contains(text(), "Single or multiple sets of coordinates")]/following-sibling::dd`
+  }
+
+  static getSiteCoordinateSystemValue(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::dl//dt[contains(text(), "Coordinate system")]/following-sibling::dd`
   }
 
   static providingTheSiteLocationCard =

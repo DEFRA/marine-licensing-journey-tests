@@ -1,4 +1,4 @@
-@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-19 @issue=ML-38 @issue=ML-121
+@issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-19 @issue=ML-38 @issue=ML-121 @issue=ML-361 @issue=ML-608
 Feature: Site details: The user marks the boundary of a polygon site manually using WGS84 or OSGB36 coordinates
   These scenarios test the user journey for manually entering polygon site coordinates, covering:
 
