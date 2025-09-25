@@ -61,7 +61,6 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   hasSharedActivityDates(siteDetails) {
-    // Single sites don't have separate Activity details card
     if (siteDetails.multipleSitesEnabled !== 'yes') return false
 
     return (
@@ -71,7 +70,6 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   hasSharedActivityDescriptions(siteDetails) {
-    // Single sites don't have separate Activity details card
     if (siteDetails.multipleSitesEnabled !== 'yes') return false
 
     return (
