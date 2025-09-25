@@ -60,7 +60,9 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateActivityDates(browseTheWeb, exemptionData) {
-    const activityDates = exemptionData.siteDetails.sites[0].activityDates
+    // Use top-level activityDates (what check your answers displays)
+    // not site-specific dates
+    const activityDates = exemptionData.activityDates
     if (activityDates) {
       await this._validateDateField(browseTheWeb, activityDates, 'startDate')
       await this._validateDateField(browseTheWeb, activityDates, 'endDate')
