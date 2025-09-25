@@ -10,7 +10,7 @@ Feature: Activity dates: The user can provide activity dates for their marine pr
 
   The majority of validation scenarios are covered using integration tests within the frontend project.
 
-  @sm
+  @smoke
   Scenario: Save valid activity dates
     Given a notification has been created with a valid project name
     And the activity dates are valid
