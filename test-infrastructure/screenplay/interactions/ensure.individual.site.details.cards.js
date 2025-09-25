@@ -26,9 +26,6 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
   }
 
   async verifySiteCard(browseTheWeb, siteNumber, site) {
-    await browseTheWeb.isDisplayed(
-      ReviewSiteDetailsPage.getSiteDetailsCardTitle(siteNumber)
-    )
     await this.verifySiteCoordinateMethod(browseTheWeb, siteNumber, site)
     await this.verifySiteName(browseTheWeb, siteNumber, site)
     await this.verifyActivityDates(browseTheWeb, siteNumber, site)
@@ -45,33 +42,24 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
   }
 
   async verifySiteName(browseTheWeb, siteNumber, site) {
-    // Verify site name is displayed if provided
-    if (site.siteName) {
-      await browseTheWeb.expectElementToContainText(
-        ReviewSiteDetailsPage.getSiteName(siteNumber),
-        site.siteName
-      )
-    }
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.getSiteName(siteNumber),
+      site.siteName
+    )
   }
 
   async verifyActivityDates(browseTheWeb, siteNumber, site) {
-    // Only verify if dates are NOT shared (different per site)
-    if (site.activityStartDate && site.activityEndDate) {
-      await browseTheWeb.expectElementToContainText(
-        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
-        `${site.activityStartDate} to ${site.activityEndDate}`
-      )
-    }
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
+      `${site.activityStartDate} to ${site.activityEndDate}`
+    )
   }
 
   async verifyActivityDescription(browseTheWeb, siteNumber, site) {
-    // Only verify if descriptions are NOT shared (different per site)
-    if (site.activityDescription) {
-      await browseTheWeb.expectElementToContainText(
-        ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber),
-        site.activityDescription
-      )
-    }
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber),
+      site.activityDescription
+    )
   }
 
   determineSiteSpecificMethod(site) {
