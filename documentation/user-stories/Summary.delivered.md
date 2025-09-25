@@ -68,6 +68,12 @@ Multiple pathways available:
 - **Intelligent Conditional Routing**: Skip previously answered questions when adding additional sites
 - **Efficient Workflow**: "Add another site" button enables streamlined multi-site entry
 
+#### Site Review and Management
+
+- **ML-361**: Display first manually entered site on review site details ✅
+- **ML-608**: Display multiple manually entered sites on review site details ✅
+- **ML-233**: Delete site from review site details ✅
+
 ### 🔐 Authentication & Navigation
 
 - **ML-277**: Defra account management ✅
@@ -142,6 +148,18 @@ When testing activity dates and descriptions:
 7. Check answers showing all site variations (ML-140)
 8. Submit with comprehensive multi-site data (ML-84)
 
+### 5. Site Review and Management Journey
+
+1. Create project with multiple sites (ML-1)
+2. Enter first site manually (any coordinate type)
+3. Review first site details with enhanced summary cards (ML-361)
+4. Add additional sites using "Add another site" functionality (ML-362)
+5. Review multiple sites with scalable display (ML-608)
+6. Test delete functionality for individual sites (ML-233)
+7. Verify confirmation dialog for site deletion
+8. Confirm site renumbering after deletion
+9. Test deletion of last site (returns to task list with "Not yet started" status)
+
 ## Known Considerations
 
 ### Session Management
@@ -171,11 +189,13 @@ When testing activity dates and descriptions:
 2. **Progress to multi-site scenarios** to test enhanced features
 3. **Test "Add another site" workflow** (ML-362) with intelligent conditional routing
 4. **Try mixed site types** - combine circular and polygon sites in one notification
-5. **Test navigation flows** including back button and cancel behaviours
-6. **Verify data persistence** across the user journey
-7. **Check validation messages** for clarity and helpfulness
-8. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
-9. **Confirm submission process** works as expected in your test environment
+5. **Test site review functionality** (ML-361, ML-608) with enhanced summary cards and scalable site display
+6. **Test site deletion capability** (ML-233) including confirmation dialogs and site renumbering
+7. **Test navigation flows** including back button and cancel behaviours
+8. **Verify data persistence** across the user journey
+9. **Check validation messages** for clarity and helpfulness
+10. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
+11. **Confirm submission process** works as expected in your test environment
 
 ## Support & Documentation
 
@@ -184,4 +204,4 @@ When testing activity dates and descriptions:
 
 ---
 
-_Last Updated: 15 September 2025_
+_Last Updated: 25 September 2025_
