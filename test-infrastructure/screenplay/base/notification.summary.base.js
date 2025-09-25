@@ -60,17 +60,10 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateActivityDates(browseTheWeb, exemptionData) {
-    if (exemptionData.activityDates) {
-      await this._validateDateField(
-        browseTheWeb,
-        exemptionData.activityDates,
-        'startDate'
-      )
-      await this._validateDateField(
-        browseTheWeb,
-        exemptionData.activityDates,
-        'endDate'
-      )
+    const activityDates = exemptionData.siteDetails.sites[0].activityDates
+    if (activityDates) {
+      await this._validateDateField(browseTheWeb, activityDates, 'startDate')
+      await this._validateDateField(browseTheWeb, activityDates, 'endDate')
     }
   }
 
@@ -86,10 +79,12 @@ export default class NotificationSummaryBase extends Task {
   async _validateActivityDetails(browseTheWeb, exemptionData) {
     const pageLocators = this._getPageLocators()
 
-    if (exemptionData.activityDetails?.description) {
+    const activityDescription =
+      exemptionData.siteDetails.sites[0].activityDescription
+    if (activityDescription) {
       await browseTheWeb.expectElementToContainText(
         pageLocators.activityDetails.activityDescriptionValue,
-        exemptionData.activityDetails.description
+        activityDescription
       )
     }
   }
@@ -120,17 +115,19 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
-    if (siteDetails.siteType === 'circle') {
+    const firstSiteType = siteDetails.sites[0].siteType
+
+    if (firstSiteType === 'circle') {
       await this.verifyCircleSiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
-    if (siteDetails.siteType === 'triangle') {
+    if (firstSiteType === 'triangle') {
       await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
-    expect.fail(`Unexpected site type: ${siteDetails.siteType}`)
+    expect.fail(`Unexpected site type: ${firstSiteType}`)
   }
 
   async verifyCircleSiteDisplay(browseTheWeb, siteDetails) {
@@ -166,7 +163,7 @@ export default class NotificationSummaryBase extends Task {
 
     if (this._isFileUpload(siteDetails)) {
       expectedText = 'Upload a file with the coordinates of the site'
-    } else if (siteDetails.siteType === 'triangle') {
+    } else if (siteDetails.sites[0].siteType === 'triangle') {
       expectedText =
         'Manually enter multiple sets of coordinates to mark the boundary of the site'
     } else {

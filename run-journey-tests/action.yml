@@ -236,62 +236,91 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        # Count test results by status
+        echo "=== Checking WebDriverIO Results First ==="
+
+        # Check if WDIO created a FAILED file (more reliable than Allure for failures)
+        if [ -f "FAILED" ]; then
+          echo "Found FAILED file - reading WebDriverIO results"
+          WDIO_RESULTS=$(cat FAILED)
+          echo "WDIO Results: $WDIO_RESULTS"
+        fi
+
+        # Initialize counters
+        PASSED=0
+        FAILED=0
+        BROKEN=0
+        SKIPPED=0
+
+        # Count test results from Allure (scenarios/steps level)
         if [ -d "allure-results" ]; then
-          # Count each status type (safer approach)
-          PASSED=0
-          FAILED=0
-          BROKEN=0
-          SKIPPED=0
-          
+          echo "=== Processing Allure result files ==="
           for file in allure-results/*-result.json; do
             if [ -f "$file" ]; then
-              if grep -q '"status":"passed"' "$file" 2>/dev/null; then
-                PASSED=$((PASSED + 1))
-              elif grep -q '"status":"failed"' "$file" 2>/dev/null; then
-                FAILED=$((FAILED + 1))
-              elif grep -q '"status":"broken"' "$file" 2>/dev/null; then
-                BROKEN=$((BROKEN + 1))
-              elif grep -q '"status":"skipped"' "$file" 2>/dev/null; then
-                SKIPPED=$((SKIPPED + 1))
-              fi
+              # Extract the status field more reliably using sed
+              STATUS=$(sed -n 's/.*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$file" | head -1)
+              case "$STATUS" in
+                "passed")
+                  PASSED=$((PASSED + 1))
+                  ;;
+                "failed")
+                  FAILED=$((FAILED + 1))
+                  ;;
+                "broken")
+                  BROKEN=$((BROKEN + 1))
+                  ;;
+                "skipped")
+                  SKIPPED=$((SKIPPED + 1))
+                  ;;
+              esac
             fi
           done
+        fi
+
+        # If we have FAILED file but no failed tests in Allure, there's a discrepancy
+        if [ -f "FAILED" ] && [ $FAILED -eq 0 ]; then
+          echo "⚠️ DISCREPANCY DETECTED: WDIO shows failures but Allure shows none"
+          echo "This indicates failed tests weren't captured by Allure reporter"
           
-          TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
-          
-          # Determine status
-          if [ $FAILED -eq 0 ] && [ $BROKEN -eq 0 ] && [ $TOTAL -gt 0 ]; then
-            STATUS_EMOJI="✅"
-            STATUS_TEXT="All tests passed"
-          elif [ $TOTAL -eq 0 ]; then
-            STATUS_EMOJI="⚠️"
-            STATUS_TEXT="No tests were executed"
-          else
-            STATUS_EMOJI="❌"
-            STATUS_TEXT="Test failures detected"
+          # Extract failure count from WDIO results if possible
+          if echo "$WDIO_RESULTS" | grep -q '"failed"'; then
+            WDIO_FAILED=$(echo "$WDIO_RESULTS" | sed -n 's/.*"failed":\s*\([0-9]\+\).*/\1/p')
+            if [ ! -z "$WDIO_FAILED" ] && [ "$WDIO_FAILED" -gt 0 ]; then
+              echo "Using WDIO failed count: $WDIO_FAILED"
+              FAILED=$WDIO_FAILED
+              # Adjust total to account for failed tests not in Allure
+              PASSED=$((PASSED - FAILED))
+              if [ $PASSED -lt 0 ]; then PASSED=0; fi
+            fi
           fi
-          
-          # Calculate pass rate
-          if [ $TOTAL -gt 0 ]; then
-            PASS_RATE=$((PASSED * 100 / TOTAL))
-          else
-            PASS_RATE=0
-          fi
-        else
-          PASSED=0
-          FAILED=0
-          BROKEN=0
-          SKIPPED=0
-          TOTAL=0
-          PASS_RATE=0
+        fi
+
+        TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
+
+        # Determine status
+        if [ $FAILED -eq 0 ] && [ $BROKEN -eq 0 ] && [ $TOTAL -gt 0 ]; then
+          STATUS_EMOJI="✅"
+          STATUS_TEXT="All tests passed"
+        elif [ $TOTAL -eq 0 ]; then
           STATUS_EMOJI="⚠️"
-          STATUS_TEXT="No test results found"
+          STATUS_TEXT="No tests were executed"
+        else
+          STATUS_EMOJI="❌"
+          STATUS_TEXT="Test failures detected"
+        fi
+
+        # Calculate pass rate
+        if [ $TOTAL -gt 0 ]; then
+          PASS_RATE=$((PASSED * 100 / TOTAL))
+        else
+          PASS_RATE=0
         fi
 
         # Debug output
-        echo "Debug: TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
-        echo "Debug: PASS_RATE=$PASS_RATE, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+        echo "=== Test Results Summary ==="
+        echo "Allure files processed: $(ls -1 allure-results/*-result.json 2>/dev/null | wc -l)"
+        echo "TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
+        echo "PASS_RATE=$PASS_RATE%, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
+        echo "WDIO FAILED file exists: $([ -f 'FAILED' ] && echo 'YES' || echo 'NO')"
 
         # Set outputs
         echo "total=$TOTAL" >> $GITHUB_OUTPUT

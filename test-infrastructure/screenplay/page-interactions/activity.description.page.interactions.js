@@ -13,14 +13,6 @@ export default class ActivityDescriptionPageInteractions {
     await browseTheWeb.click(CommonElementsPage.submitButton)
   }
 
-  static async clickContinue(browseTheWeb) {
-    await browseTheWeb.click(CommonElementsPage.submitButton)
-  }
-
-  static async clickBack(browseTheWeb) {
-    await browseTheWeb.click(CommonElementsPage.backLink)
-  }
-
   static async clickCancel(browseTheWeb) {
     await browseTheWeb.click(CommonElementsPage.cancelLink)
   }

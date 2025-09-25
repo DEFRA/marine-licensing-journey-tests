@@ -69,28 +69,46 @@ export default class SiteDetailsFactory {
     const siteType = shape === 'circle' ? 'circle' : 'triangle'
     const data = this.defaultData[shape]?.[coordinateSystem]
 
-    if (!data) return this._createSiteDetails(siteType, coordinateSystem)
-
-    if (shape === 'circle') {
-      const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
-        circleData: data
-      })
-      return this._wrapInSitesArray(siteDetails)
+    if (!data) {
+      const baseData = this._createSiteDetails(siteType, coordinateSystem)
+      return {
+        coordinatesEntryMethod: 'enter-manually',
+        sites: [
+          {
+            siteName: 'Main Research Site',
+            siteNumber: 1,
+            activityDescription:
+              ActivityDescriptionModel.generateActivityDescription(),
+            ...baseData
+          }
+        ]
+      }
     }
 
-    const siteDetails = this._createSiteDetails(siteType, coordinateSystem, {
-      polygonData: this._createCoordinateSet(data, coordinateSystem)
-    })
-    return this._wrapInSitesArray(siteDetails)
+    const baseData = this._createSiteDetails(
+      siteType,
+      coordinateSystem,
+      shape === 'circle'
+        ? { circleData: data }
+        : { polygonData: this._createCoordinateSet(data, coordinateSystem) }
+    )
+
+    return {
+      coordinatesEntryMethod: 'enter-manually',
+      sites: [
+        {
+          siteName: 'Main Research Site',
+          siteNumber: 1,
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          ...baseData
+        }
+      ]
+    }
   }
 
   static createFileUpload() {
-    return {
-      coordinatesEntryMethod: 'file-upload',
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription()
-    }
+    return this._createFileUpload()
   }
 
   static createMultipleSites() {
@@ -98,12 +116,6 @@ export default class SiteDetailsFactory {
       multipleSitesEnabled: 'yes',
       sameActivityDates: 'yes',
       coordinatesEntryMethod: 'enter-manually',
-      siteType: 'circle',
-      coordinateSystem: 'WGS84',
-      circleData: this.defaultData.circle.WGS84,
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
       sites: [
         {
           siteName: 'Main Research Site',
@@ -120,14 +132,73 @@ export default class SiteDetailsFactory {
           activityDescription:
             ActivityDescriptionModel.generateActivityDescription(),
           ...this._createSiteDetails('circle', 'WGS84', {
-            circleData: {
-              latitude: 51.51,
-              longitude: -0.13,
-              width: 25,
-              easting: null,
-              northing: null
-            }
+            circleData: this.defaultData.circle.WGS84
           })
+        }
+      ]
+    }
+  }
+
+  static createMixedMultipleSites() {
+    const firstSiteActivityDates =
+      ActivityDatesModel.generateValidActivityDates()
+    const firstSiteActivityDescription =
+      ActivityDescriptionModel.generateActivityDescription()
+
+    return {
+      multipleSitesEnabled: 'yes',
+      sameActivityDates: 'no',
+      sameActivityDescription: 'no',
+      coordinatesEntryMethod: 'enter-manually',
+      sites: [
+        {
+          siteName: 'Circular Research Area Alpha',
+          siteNumber: 1,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'WGS84',
+          activityDates: firstSiteActivityDates,
+          activityDescription: firstSiteActivityDescription,
+          circleData: this.defaultData.circle.WGS84
+        },
+        {
+          siteName: 'Triangular Survey Zone Beta',
+          siteNumber: 2,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'triangle',
+          coordinateSystem: 'WGS84',
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          polygonData: this._createCoordinateSet(
+            this.defaultData.triangle.WGS84,
+            'WGS84'
+          )
+        },
+        {
+          siteName: 'Circular Monitoring Point Gamma',
+          siteNumber: 3,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'circle',
+          coordinateSystem: 'OSGB36',
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          circleData: this.defaultData.circle.OSGB36
+        },
+        {
+          siteName: 'Quadrilateral Study Area Delta',
+          siteNumber: 4,
+          coordinatesEntryMethod: 'enter-manually',
+          siteType: 'triangle',
+          coordinateSystem: 'OSGB36',
+          activityDates: ActivityDatesModel.generateValidActivityDates(),
+          activityDescription:
+            ActivityDescriptionModel.generateActivityDescription(),
+          polygonData: this._createCoordinateSet(
+            this.defaultData.quadrilateral.OSGB36,
+            'OSGB36'
+          )
         }
       ]
     }
@@ -147,30 +218,29 @@ export default class SiteDetailsFactory {
     )
   }
 
-  static _createFileUpload(fileType, filePath) {
-    const siteDetails = {
+  static _createFileUpload(fileType = null, filePath = null) {
+    const baseData = {
+      coordinatesEntryMethod: 'file-upload'
+    }
+
+    if (fileType) baseData.fileType = fileType
+    if (filePath) baseData.filePath = filePath
+
+    const siteData = {
+      siteName: 'Main Research Site',
+      siteNumber: 1,
       coordinatesEntryMethod: 'file-upload',
-      fileType,
-      filePath,
       activityDates: ActivityDatesModel.generateValidActivityDates(),
       activityDescription:
         ActivityDescriptionModel.generateActivityDescription()
     }
-    return this._wrapInSitesArray(siteDetails)
-  }
 
-  static _wrapInSitesArray(siteDetails, siteName = 'Main Research Site') {
-    const { activityDescription, ...siteData } = siteDetails
+    if (fileType) siteData.fileType = fileType
+    if (filePath) siteData.filePath = filePath
+
     return {
-      ...siteDetails,
-      sites: [
-        {
-          siteName,
-          siteNumber: 1,
-          activityDescription,
-          ...siteData
-        }
-      ]
+      ...baseData,
+      sites: [siteData]
     }
   }
 

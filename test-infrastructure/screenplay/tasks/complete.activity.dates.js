@@ -19,11 +19,18 @@ export default class CompleteActivityDates extends Task {
     if (!exemption) {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
     }
-    const activityDates = exemption.activityDates
+    const activityDates =
+      exemption.siteDetails?.sites?.[0]?.activityDates ||
+      exemption.activityDates
     if (!activityDates) {
       expect.fail(ERROR_MESSAGES.MISSING_ACTIVITY_DATES)
     }
-    const browseTheWeb = actor.ability
+
+    await this.fillActivityDates(actor.ability, activityDates)
+    await this.handleAction(actor)
+  }
+
+  async fillActivityDates(browseTheWeb, activityDates) {
     await browseTheWeb.sendKeys(
       ActivityDatesPage.activityStartDateDay,
       activityDates.startDate.day
@@ -48,8 +55,10 @@ export default class CompleteActivityDates extends Task {
       ActivityDatesPage.activityEndDateYear,
       activityDates.endDate.year
     )
+  }
 
-    // Handle different action types
+  async handleAction(actor) {
+    const browseTheWeb = actor.ability
     switch (this.actionType) {
       case 'back':
         await browseTheWeb.click(ActivityDatesPage.backLink)

@@ -16,9 +16,12 @@ export default class CompleteActivityDescription extends Task {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
     }
     const browseTheWeb = actor.ability
+    const activityDescription =
+      exemption.siteDetails?.sites?.[0]?.activityDescription ||
+      exemption.activityDescription
     await browseTheWeb.sendKeys(
       ActivityDescriptionPage.activityDescriptionInput,
-      exemption.activityDescription
+      activityDescription
     )
     await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
 

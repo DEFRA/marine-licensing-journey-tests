@@ -54,13 +54,13 @@ services:
       - './docker/config/defaults.env'
     environment:
       PORT: 3000
-      DEFRA_ID_ENABLED: true
       NODE_ENV: development
       USE_SINGLE_INSTANCE_CACHE: true
       MARINE_LICENSING_BACKEND_API_URL: http://marine-licensing-backend:3001
       CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
       APP_BASE_URL: http://marine-licensing-frontend:3000
       DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
+      ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
       REDIS_PORT: 6380
     command: 'node .'
@@ -163,7 +163,6 @@ services:
     environment:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
-      - DEFRA_ID_ENABLED=true
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
     depends_on:
       mongodb:

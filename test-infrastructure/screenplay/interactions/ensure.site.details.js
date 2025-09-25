@@ -77,17 +77,19 @@ export default class EnsureSiteDetails extends Task {
   }
 
   async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
-    if (siteDetails.siteType === 'circle') {
+    const firstSiteType = siteDetails.sites[0].siteType
+
+    if (firstSiteType === 'circle') {
       await this.verifyCircleSiteDisplay(browseTheWeb)
       return
     }
 
-    if (siteDetails.siteType === 'triangle') {
+    if (firstSiteType === 'triangle') {
       await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
-    expect.fail(`Unexpected site type: ${siteDetails.siteType}`)
+    expect.fail(`Unexpected site type: ${firstSiteType}`)
   }
 
   async verifyCircleSiteDisplay(browseTheWeb) {
@@ -182,11 +184,13 @@ export default class EnsureSiteDetails extends Task {
       return 'Upload a file with the coordinates of the site'
     }
 
-    if (siteDetails?.siteType === 'circle') {
+    const firstSiteType = siteDetails?.sites?.[0]?.siteType
+
+    if (firstSiteType === 'circle') {
       return 'Manually enter one set of coordinates and a width to create a circular site'
     }
 
-    if (siteDetails?.siteType === 'triangle') {
+    if (firstSiteType === 'triangle') {
       return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
     }
 

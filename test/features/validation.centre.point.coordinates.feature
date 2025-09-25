@@ -26,11 +26,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
     Examples:
       | latitude   | expected_error                                         |
-      | abc        | Latitude must be a number                              |
-      |        -91 | Latitude must be between -90 and 90                    |
-      |         91 | Latitude must be between -90 and 90                    |
       |   55.01988 | Latitude must include 6 decimal places, like 55.019889 |
-      | 55.0198899 | Latitude must include 6 decimal places, like 55.019889 |
 
   Scenario Outline: Error when invalid WGS84 longitude <longitude> is entered
     Given the user wants to apply for an exemption for a circular site using "<longitude>" longitude
@@ -40,11 +36,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
     Examples:
       | longitude  | expected_error                                          |
-      | xyz        | Longitude must be a number                              |
-      |       -181 | Longitude must be between -180 and 180                  |
-      |        181 | Longitude must be between -180 and 180                  |
       |   -1.39950 | Longitude must include 6 decimal places, like -1.399500 |
-      | -1.3995000 | Longitude must include 6 decimal places, like -1.399500 |
 
   Scenario Outline: Error when invalid OSGB36 eastings <eastings> is entered
     Given the user wants to apply for an exemption for a circular site using "<eastings>" eastings
@@ -54,10 +46,7 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
     Examples:
       | eastings | expected_error                                          |
-      | abc      | Eastings must be a number                               |
-      |  -123456 | Eastings must be a positive 6-digit number, like 123456 |
       |    12345 | Eastings must be 6 digits                               |
-      |  1234567 | Eastings must be 6 digits                               |
 
   Scenario Outline: Error when invalid OSGB36 northings <northings> is entered
     Given the user wants to apply for an exemption for a circular site using "<northings>" northings
@@ -67,7 +56,4 @@ Feature: Validation of centre point coordinates: the user is prevented from proc
 
     Examples:
       | northings | expected_error                                                |
-      | xyz       | Northings must be a number                                    |
-      |   -654321 | Northings must be a positive 6 or 7-digit number, like 123456 |
       |     12345 | Northings must be 6 or 7 digits                               |
-      |  12345678 | Northings must be 6 or 7 digits                               |

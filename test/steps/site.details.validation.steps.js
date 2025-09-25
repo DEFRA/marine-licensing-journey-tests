@@ -242,13 +242,6 @@ When(
   }
 )
 
-When(
-  'the Continue button is clicked without providing any width',
-  async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
-  }
-)
-
 Then(
   'the coordinates type error: {string} is displayed',
   async function (errorMessage) {
