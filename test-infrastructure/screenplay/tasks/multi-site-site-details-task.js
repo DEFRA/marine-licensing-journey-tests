@@ -31,7 +31,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
       const isFirstSite = siteIndex === 0
       const isLastSite = siteIndex === sites.length - 1
 
-      await this.enterSiteName(currentSite.siteName)
+      await this.enterSiteName(currentSite.siteName, isFirstSite)
 
       if (isFirstSite) {
         await this.handleFirstSitePreferences(
@@ -58,7 +58,15 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
     }
   }
 
-  async enterSiteName(siteName) {
+  async enterSiteName(siteName, isFirstSite = false) {
+    // For sites after the first, wait for navigation to complete
+    if (!isFirstSite) {
+      await this.browseTheWeb.waitForNavigationTo(
+        '/exemption/site-name',
+        '#siteName'
+      )
+    }
+
     await this.browseTheWeb.setValue('#siteName', siteName)
     await this.browseTheWeb.click('button[type="submit"]')
   }

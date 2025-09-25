@@ -184,4 +184,25 @@ export default class BrowseTheWeb extends Ability {
     const cookie = await this.expectCookieToExist(cookieName)
     await expect(cookie.value).toBe(expectedValue)
   }
+
+  async waitForNavigationTo(urlPattern, elementSelector) {
+    // Wait for both URL navigation and element presence
+    await this.browser.waitUntil(
+      async () => {
+        const url = await this.browser.getUrl()
+        const urlMatches = url.includes(urlPattern)
+
+        try {
+          await this.browser.$(elementSelector).waitForExist({ timeout: 1000 })
+          return urlMatches
+        } catch {
+          return false
+        }
+      },
+      {
+        timeout: 15000,
+        timeoutMsg: `Expected navigation to ${urlPattern} with ${elementSelector} element`
+      }
+    )
+  }
 }
