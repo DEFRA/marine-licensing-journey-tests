@@ -20,20 +20,54 @@ runs:
         repository: DEFRA/marine-licensing-journey-tests
         path: ./marine-licensing-journey-tests
 
-    - name: Alternative checkout attempt (only if called from different repo)
-      if: github.repository != 'DEFRA/marine-licensing-journey-tests'
-      run: |
-        rm -rf ./marine-licensing-journey-tests
-        git clone https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests
-        cd ./marine-licensing-journey-tests
-        git checkout ${{ inputs.branch }} || echo "Using default branch"
-
-      shell: bash
-
     - name: Extract dependent Pull Requests
       uses: depends-on/depends-on-action@0.15.0
       with:
         token: ${{ github.token }}
+        path: ./marine-licensing-journey-tests
+
+    - name: Determine journey-tests branch
+      id: resolve_tests_branch
+      shell: bash
+      run: |
+        set -e
+
+        DEFAULT_BRANCH="${{ inputs.branch }}"
+        BRANCH_TO_USE="$DEFAULT_BRANCH"
+
+        DEPENDS_FILE='./marine-licensing-journey-tests/depends-on.json'
+        if [ -f "$DEPENDS_FILE" ]; then
+          BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$DEPENDS_FILE")
+          if [ -n "$BRANCH_FROM_DEPENDS" ]; then
+            if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
+              echo "✅ Using depends-on branch from depends-on action: $BRANCH_FROM_DEPENDS"
+              BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
+              echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
+            else
+              echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
+            fi
+          fi
+        fi
+
+        echo "branch=$BRANCH_TO_USE" >> "$GITHUB_OUTPUT"
+        echo "📦 Selected journey-tests branch: $BRANCH_TO_USE"
+
+    - name: Alternative checkout attempt (only if called from different repo)
+      if: github.repository != 'DEFRA/marine-licensing-journey-tests'
+      run: |
+        set -e
+        rm -rf ./marine-licensing-journey-tests
+
+        BRANCH_TO_USE='${{ steps.resolve_tests_branch.outputs.branch }}'
+        DEFAULT_BRANCH='${{ inputs.branch }}'
+
+        echo "Cloning marine-licensing-journey-tests branch: $BRANCH_TO_USE"
+        git clone --branch "$BRANCH_TO_USE" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests || {
+          echo "Falling back to default branch: $DEFAULT_BRANCH"
+          git clone --branch "$DEFAULT_BRANCH" --depth 1 https://github.com/DEFRA/marine-licensing-journey-tests.git ./marine-licensing-journey-tests
+        }
+
+      shell: bash
 
     - name: Build marine-licensing-frontend image
       run: |
