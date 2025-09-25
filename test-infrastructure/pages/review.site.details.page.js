@@ -20,6 +20,20 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     return `//dt[contains(text(), "Point ${pointNumber}")]/following-sibling::dd`
   }
 
+  // New selectors for multi-site review (ML-361/ML-608)
+  static getSiteDetailsCardTitle(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]`
+  }
+
+  static getSiteCoordinateMethodValue(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::dl//dt[contains(text(), "Single or multiple sets of coordinates")]/following-sibling::dd`
+  }
+
+  static providingTheSiteLocationCard =
+    '//h2[contains(text(), "Providing the site location")]'
+  static moreThanOneSiteValue =
+    '//dt[contains(text(), "More than one site")]/following-sibling::dd'
+
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
   static backLink = 'a.govuk-back-link'

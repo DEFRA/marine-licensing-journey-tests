@@ -11,6 +11,7 @@ export default class EnsureSiteDetails extends Task {
     const browseTheWeb = actor.ability
     await this.verifyMethodOfProvidingSiteLocationDisplayed(browseTheWeb, actor)
     await this.verifySiteDetailsAreDisplayed(browseTheWeb, actor)
+    await this.verifySiteSpecificCards(browseTheWeb, actor)
   }
 
   async verifyMethodOfProvidingSiteLocationDisplayed(browseTheWeb, actor) {
@@ -33,6 +34,49 @@ export default class EnsureSiteDetails extends Task {
     } else {
       await this.verifyManualEntrySiteDetails(browseTheWeb, actor)
     }
+  }
+
+  async verifySiteSpecificCards(browseTheWeb, actor) {
+    const exemption = actor.recalls('exemption')
+    const siteDetails = exemption?.siteDetails
+
+    if (!siteDetails || siteDetails?.coordinatesEntryMethod === 'file-upload') {
+      // Skip site-specific card validation for file uploads
+      return
+    }
+
+    // Check if this is a multi-site scenario (ML-361/ML-608) or single site
+    const isMultiSite = siteDetails?.multipleSitesEnabled === 'yes'
+
+    if (!isMultiSite) {
+      // For single sites, skip the new numbered site cards - they use the old structure
+      return
+    }
+
+    // Only verify numbered site cards for multi-site scenarios
+    const sites = siteDetails?.sites || [siteDetails]
+
+    for (let i = 0; i < sites.length; i++) {
+      const siteNumber = i + 1
+      const site = sites[i]
+
+      await this.verifySiteSpecificCard(browseTheWeb, siteNumber, site)
+    }
+  }
+
+  async verifySiteSpecificCard(browseTheWeb, siteNumber, site) {
+    // Verify the site card exists
+    await browseTheWeb.isDisplayed(
+      ReviewSiteDetailsPage.getSiteDetailsCardTitle(siteNumber)
+    )
+
+    // Verify the coordinate method text for this specific site
+    const expectedSiteMethod = this.determineSiteSpecificMethod(site)
+
+    await browseTheWeb.expectElementToContainText(
+      ReviewSiteDetailsPage.getSiteCoordinateMethodValue(siteNumber),
+      expectedSiteMethod
+    )
   }
 
   async verifyFileUploadSiteDetails(browseTheWeb, actor) {
@@ -184,18 +228,23 @@ export default class EnsureSiteDetails extends Task {
       return 'Upload a file with the coordinates of the site'
     }
 
-    const firstSiteType = siteDetails?.sites?.[0]?.siteType
+    // For manual entry, return the general method text (ML-608 AC3)
+    return 'Enter the coordinates of the site manually'
+  }
 
-    if (firstSiteType === 'circle') {
+  determineSiteSpecificMethod(site) {
+    const siteType = site?.siteType
+
+    if (siteType === 'circle') {
       return 'Manually enter one set of coordinates and a width to create a circular site'
     }
 
-    if (firstSiteType === 'triangle') {
+    if (siteType === 'triangle') {
       return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
     }
 
     expect.fail(
-      `Unable to determine expected method from actor's memory. Site details: ${JSON.stringify(siteDetails)}`
+      `Unable to determine site-specific method for site type: ${siteType}`
     )
   }
 
