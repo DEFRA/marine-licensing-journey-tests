@@ -39,7 +39,7 @@ runs:
         ROOT_DEPENDS_FILE='./depends-on.json'
 
         if [ -f "$DEPENDS_FILE" ]; then
-          BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$DEPENDS_FILE")
+          BRANCH_FROM_DEPENDS=$(jq -r 'if type == "array" then .[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty else (select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) end' "$DEPENDS_FILE")
           if [ -n "$BRANCH_FROM_DEPENDS" ]; then
             if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
               echo "✅ Using depends-on branch from depends-on action: $BRANCH_FROM_DEPENDS"
@@ -50,7 +50,7 @@ runs:
             fi
           fi
         elif [ -f "$ROOT_DEPENDS_FILE" ]; then
-          BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$ROOT_DEPENDS_FILE")
+          BRANCH_FROM_DEPENDS=$(jq -r 'if type == "array" then .[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty else (select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) end' "$ROOT_DEPENDS_FILE")
           if [ -n "$BRANCH_FROM_DEPENDS" ]; then
             if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
               echo "✅ Using depends-on branch from depends-on action (root): $BRANCH_FROM_DEPENDS"
