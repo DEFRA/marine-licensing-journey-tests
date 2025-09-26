@@ -42,15 +42,15 @@ runs:
           local file="$1"
           local branch=""
 
-          echo "ℹ️ depends-on.json detected at $file"
-          echo "--- depends-on.json contents ---"
-          cat "$file"
-          echo "--- end depends-on.json ---"
+          >&2 echo "ℹ️ depends-on.json detected at $file"
+          >&2 echo "--- depends-on-json-start ---"
+          cat "$file" >&2
+          >&2 echo "--- depends-on-json-end ---"
 
           branch=$(jq -r '.dependencies[]? | select(.repo == "DEFRA/marine-licensing-journey-tests") | .ref // empty' "$file" 2>/dev/null | head -1)
 
           if [ -z "$branch" ]; then
-            branch=$(jq -r '.branch // empty' "$file" 2>/dev/null | head -1)
+            branch=$(jq -r 'if type == "array" then (.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) else (.branch // empty) end' "$file" 2>/dev/null | head -1)
           fi
 
           if [ -z "$branch" ]; then
@@ -71,7 +71,7 @@ runs:
                     pr_num=$(printf '%s\n' "$dep_line" | sed -nE 's#.*marine-licensing-journey-tests[^0-9]*([0-9]+).*#\1#p')
                   fi
                   if [ -n "$pr_num" ]; then
-                    echo "ℹ️  Resolving PR #$pr_num head branch for marine-licensing-journey-tests"
+                    >&2 echo "ℹ️  Resolving PR #$pr_num head branch for marine-licensing-journey-tests"
                     branch=$(curl -sS -H "Accept: application/vnd.github+json" "https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$pr_num" | jq -r '.head.ref // empty')
                   fi
                 fi
