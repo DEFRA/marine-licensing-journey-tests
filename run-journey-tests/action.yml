@@ -39,6 +39,10 @@ runs:
         ROOT_DEPENDS_FILE='./depends-on.json'
 
         if [ -f "$DEPENDS_FILE" ]; then
+          echo "ℹ️ depends-on.json detected at $DEPENDS_FILE"
+          echo "--- depends-on.json contents ---"
+          cat "$DEPENDS_FILE"
+          echo "--- end depends-on.json ---"
           BRANCH_FROM_DEPENDS=$(jq -r 'if type == "array" then .[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty else (select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) end' "$DEPENDS_FILE")
           if [ -n "$BRANCH_FROM_DEPENDS" ]; then
             if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
@@ -48,8 +52,14 @@ runs:
             else
               echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
             fi
+          else
+            echo "ℹ️ depends-on.json did not contain an entry for DEFRA/marine-licensing-journey-tests"
           fi
         elif [ -f "$ROOT_DEPENDS_FILE" ]; then
+          echo "ℹ️ depends-on.json detected at $ROOT_DEPENDS_FILE"
+          echo "--- depends-on.json contents ---"
+          cat "$ROOT_DEPENDS_FILE"
+          echo "--- end depends-on.json ---"
           BRANCH_FROM_DEPENDS=$(jq -r 'if type == "array" then .[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty else (select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) end' "$ROOT_DEPENDS_FILE")
           if [ -n "$BRANCH_FROM_DEPENDS" ]; then
             if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
@@ -59,7 +69,11 @@ runs:
             else
               echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json (root) not found on remote; retaining default: $DEFAULT_BRANCH"
             fi
+          else
+            echo "ℹ️ depends-on.json (root) did not contain an entry for DEFRA/marine-licensing-journey-tests"
           fi
+        else
+          echo "ℹ️ No depends-on.json found; using default branch $DEFAULT_BRANCH"
         fi
 
         echo "branch=$BRANCH_TO_USE" >> "$GITHUB_OUTPUT"
