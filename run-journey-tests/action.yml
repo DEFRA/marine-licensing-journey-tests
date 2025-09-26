@@ -36,6 +36,8 @@ runs:
         BRANCH_TO_USE="$DEFAULT_BRANCH"
 
         DEPENDS_FILE='./marine-licensing-journey-tests/depends-on.json'
+        ROOT_DEPENDS_FILE='./depends-on.json'
+
         if [ -f "$DEPENDS_FILE" ]; then
           BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$DEPENDS_FILE")
           if [ -n "$BRANCH_FROM_DEPENDS" ]; then
@@ -45,6 +47,17 @@ runs:
               echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
             else
               echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
+            fi
+          fi
+        elif [ -f "$ROOT_DEPENDS_FILE" ]; then
+          BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$ROOT_DEPENDS_FILE")
+          if [ -n "$BRANCH_FROM_DEPENDS" ]; then
+            if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
+              echo "✅ Using depends-on branch from depends-on action (root): $BRANCH_FROM_DEPENDS"
+              BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
+              echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
+            else
+              echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json (root) not found on remote; retaining default: $DEFAULT_BRANCH"
             fi
           fi
         fi
