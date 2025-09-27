@@ -50,10 +50,6 @@ runs:
           branch=$(jq -r '.dependencies[]? | select(.repo == "DEFRA/marine-licensing-journey-tests") | .ref // empty' "$file" 2>/dev/null | head -1)
 
           if [ -z "$branch" ]; then
-            branch=$(jq -r 'if type == "array" then (.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty) else (.branch // empty) end' "$file" 2>/dev/null | head -1)
-          fi
-
-          if [ -z "$branch" ]; then
             local description
             description=$(jq -r '.description // empty' "$file" 2>/dev/null)
             if [ -n "$description" ]; then
@@ -72,7 +68,11 @@ runs:
                   fi
                   if [ -n "$pr_num" ]; then
                     >&2 echo "ℹ️  Resolving PR #$pr_num head branch for marine-licensing-journey-tests"
-                    branch=$(curl -sS -H "Accept: application/vnd.github+json" "https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$pr_num" | jq -r '.head.ref // empty')
+                    local api_headers=("-H" "Accept: application/vnd.github+json")
+                    if [ -n "$GITHUB_TOKEN" ]; then
+                      api_headers+=("-H" "Authorization: Bearer $GITHUB_TOKEN")
+                    fi
+                    branch=$(curl -sS "https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$pr_num" "${api_headers[@]}" | jq -r '.head.ref // empty')
                   fi
                 fi
               fi
@@ -104,10 +104,7 @@ runs:
             BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
             echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
           else
-            echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; checking for local branch"
-            echo "ℹ️ Attempting to use local workspace branch '$BRANCH_FROM_DEPENDS'"
-            BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
-            echo "branch_discovered_source=depends-on-fallback" >> "$GITHUB_OUTPUT"
+            echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
           fi
         fi
 
