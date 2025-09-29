@@ -41,32 +41,29 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   async verifySharedActivityDates(browseTheWeb, siteDetails, actor) {
-    const exemption = actor.recalls('exemption')
-    const activityDates =
-      exemption?.activityDates || siteDetails.sites?.[0]?.activityDates
-
+    const activityDates = this.getActivityDates(actor, siteDetails)
     if (!activityDates) return
 
-    // Handle both test format and backend format
-    let expectedDateRange
+    await this.assertActivityDates(browseTheWeb, activityDates)
+  }
+
+  getActivityDates(actor, siteDetails) {
+    const exemption = actor.recalls('exemption')
+    return exemption?.activityDates || siteDetails.sites?.[0]?.activityDates
+  }
+
+  async assertActivityDates(browseTheWeb, activityDates) {
     if (activityDates.start && activityDates.end) {
-      // Backend format (formatted strings)
-      expectedDateRange = `${activityDates.start} to ${activityDates.end}`
+      const expectedDateRange = `${activityDates.start} to ${activityDates.end}`
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.activityDatesValue,
+        expectedDateRange
+      )
     } else if (activityDates.startDate && activityDates.endDate) {
-      // Test model format - just verify element exists, don't check exact content
-      // since we can't easily format the test dates to match UI formatting
       await browseTheWeb.expectElementToBePresent(
         ReviewSiteDetailsPage.activityDatesValue
       )
-      return
-    } else {
-      return
     }
-
-    await browseTheWeb.expectElementToContainText(
-      ReviewSiteDetailsPage.activityDatesValue,
-      expectedDateRange
-    )
   }
 
   async verifySharedActivityDescription(browseTheWeb, siteDetails, actor) {
