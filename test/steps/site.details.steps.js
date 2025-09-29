@@ -28,6 +28,17 @@ Given(
 )
 
 Given(
+  'a user is providing mixed site details for multiple sites with same activity dates and descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMixedMultipleSitesWithSameActivityDatesAndDescriptions()
+    )
+  }
+)
+
+Given(
   'an exemption for a triangular site using WGS84 coordinates with point 1 {string}, {string}, point 2 {string}, {string} and point 3 {string}, {string}',
   function (lat1, lng1, lat2, lng2, lat3, lng3) {
     this.actor = new Actor('Alice')

@@ -37,20 +37,20 @@ export const config = {
   capabilities: debug
     ? [{ browserName: 'chrome' }]
     : [
-        {
-          // Remove maxInstances from capability level to use global setting
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: [
-              '--no-sandbox',
-              '--disable-infobars',
-              '--disable-gpu',
-              '--window-size=1920,1080',
-              ...(process.env.HEADLESS === 'true' ? ['--headless'] : [])
-            ]
-          }
+      {
+        // Remove maxInstances from capability level to use global setting
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          args: [
+            '--no-sandbox',
+            '--disable-infobars',
+            '--disable-gpu',
+            '--window-size=1920,1080',
+            ...(process.env.HEADLESS === 'true' ? ['--headless'] : [])
+          ]
         }
-      ],
+      }
+    ],
   execArgv,
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
@@ -81,7 +81,7 @@ export const config = {
     await browser.takeScreenshot()
   },
   afterScenario: async function (scenario, world) {
-    if (scenario.result.status === 'FAILED') {
+    if (scenario.result?.status === 'FAILED') {
       await browser.takeScreenshot()
     }
 

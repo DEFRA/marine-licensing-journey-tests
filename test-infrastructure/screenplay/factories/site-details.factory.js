@@ -4,107 +4,58 @@ import {
 } from '../models/index.js'
 
 export default class SiteDetailsFactory {
-  static defaultData = {
+  static ENTRY_METHODS = {
+    MANUAL: 'enter-manually',
+    FILE_UPLOAD: 'file-upload'
+  }
+
+  static COORDINATE_SYSTEMS = {
+    WGS84: 'WGS84',
+    OSGB36: 'OSGB36'
+  }
+
+  static SITE_TYPES = {
+    CIRCLE: 'circle',
+    TRIANGLE: 'triangle'
+  }
+
+  static RESPONSES = {
+    YES: 'yes',
+    NO: 'no'
+  }
+
+  static DEFAULT_COORDINATES = {
     circle: {
-      WGS84: {
-        latitude: 51.507412,
-        longitude: -0.127812,
-        width: 20,
-        easting: null,
-        northing: null
-      },
-      OSGB36: {
-        eastings: 432675,
-        northings: 181310,
-        width: 20,
-        latitude: null,
-        longitude: null
-      }
+      WGS84: { latitude: 51.507412, longitude: -0.127812, width: 20 },
+      OSGB36: { eastings: 432675, northings: 181310, width: 20 }
     },
     triangle: {
-      WGS84: [
-        ['50.000000', '-1.000000'],
-        ['50.001000', '-0.999000'],
-        ['50.000500', '-0.999500']
-      ],
-      OSGB36: [
-        ['432675', '181310'],
-        ['433000', '181500'],
-        ['432800', '181700']
-      ]
+      WGS84: [['50.000000', '-1.000000'], ['50.001000', '-0.999000'], ['50.000500', '-0.999500']],
+      OSGB36: [['432675', '181310'], ['433000', '181500'], ['432800', '181700']]
     },
     quadrilateral: {
-      WGS84: [
-        ['50.000000', '-1.000000'],
-        ['50.001000', '-1.000000'],
-        ['50.001000', '-0.999000'],
-        ['50.000000', '-0.999000']
-      ],
-      OSGB36: [
-        ['432675', '181310'],
-        ['433000', '181310'],
-        ['433000', '181500'],
-        ['432675', '181500']
-      ]
+      WGS84: [['50.000000', '-1.000000'], ['50.001000', '-1.000000'], ['50.001000', '-0.999000'], ['50.000000', '-0.999000']],
+      OSGB36: [['432675', '181310'], ['433000', '181310'], ['433000', '181500'], ['432675', '181500']]
     },
     pentagon: {
-      WGS84: [
-        ['50.000000', '-1.000000'],
-        ['50.001000', '-1.000000'],
-        ['50.001500', '-0.999500'],
-        ['50.001000', '-0.999000'],
-        ['50.000000', '-0.999000']
-      ],
-      OSGB36: [
-        ['432675', '181310'],
-        ['433000', '181310'],
-        ['433200', '181400'],
-        ['433000', '181500'],
-        ['432675', '181500']
-      ]
+      WGS84: [['50.000000', '-1.000000'], ['50.001000', '-1.000000'], ['50.001500', '-0.999500'], ['50.001000', '-0.999000'], ['50.000000', '-0.999000']],
+      OSGB36: [['432675', '181310'], ['433000', '181310'], ['433200', '181400'], ['433000', '181500'], ['432675', '181500']]
     }
   }
 
   static create(shape, coordinateSystem) {
-    const siteType = shape === 'circle' ? 'circle' : 'triangle'
-    const data = this.defaultData[shape]?.[coordinateSystem]
+    const siteType = shape === this.SITE_TYPES.CIRCLE ? this.SITE_TYPES.CIRCLE : this.SITE_TYPES.TRIANGLE
+    const coordinateData = this._getCoordinateData(shape, coordinateSystem)
 
-    if (!data) {
-      const baseData = this._createSiteDetails(siteType, coordinateSystem)
-      return {
-        coordinatesEntryMethod: 'enter-manually',
-        sites: [
-          {
-            siteName: 'Main Research Site',
-            siteNumber: 1,
-            activityDescription:
-              ActivityDescriptionModel.generateActivityDescription(),
-            ...baseData
-          }
-        ]
-      }
-    }
-
-    const baseData = this._createSiteDetails(
-      siteType,
-      coordinateSystem,
-      shape === 'circle'
-        ? { circleData: data }
-        : { polygonData: this._createCoordinateSet(data, coordinateSystem) }
-    )
-
-    return {
-      coordinatesEntryMethod: 'enter-manually',
-      sites: [
-        {
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          ...baseData
-        }
-      ]
-    }
+    return this._createSiteDetailsStructure([
+      this._createSingleSite({
+        siteName: 'Main Research Site',
+        siteNumber: 1,
+        siteType,
+        coordinateSystem,
+        coordinateData
+      })
+    ])
   }
 
   static createFileUpload() {
@@ -112,153 +63,138 @@ export default class SiteDetailsFactory {
   }
 
   static createMultipleSites() {
-    return {
-      multipleSitesEnabled: 'yes',
-      sameActivityDates: 'yes',
-      coordinatesEntryMethod: 'enter-manually',
+    const circleData = this._getCoordinateData(this.SITE_TYPES.CIRCLE, this.COORDINATE_SYSTEMS.WGS84)
+
+    return this._createMultiSiteStructure({
+      sameActivityDates: true,
+      sameActivityDescription: false,
       sites: [
-        {
+        this._createSingleSite({
           siteName: 'Main Research Site',
           siteNumber: 1,
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('circle', 'WGS84', {
-            circleData: this.defaultData.circle.WGS84
-          })
-        },
-        {
+          siteType: this.SITE_TYPES.CIRCLE,
+          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
+          coordinateData: circleData
+        }),
+        this._createSingleSite({
           siteName: 'Marine Research Site Beta',
           siteNumber: 2,
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          ...this._createSiteDetails('circle', 'WGS84', {
-            circleData: this.defaultData.circle.WGS84
-          })
-        }
+          siteType: this.SITE_TYPES.CIRCLE,
+          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
+          coordinateData: circleData
+        })
       ]
-    }
+    })
   }
 
   static createMixedMultipleSites() {
-    const firstSiteActivityDates =
-      ActivityDatesModel.generateValidActivityDates()
-    const firstSiteActivityDescription =
-      ActivityDescriptionModel.generateActivityDescription()
+    return this._createMixedMultipleSites({ sameActivityDates: false, sameActivityDescription: false })
+  }
 
-    return {
-      multipleSitesEnabled: 'yes',
-      sameActivityDates: 'no',
-      sameActivityDescription: 'no',
-      coordinatesEntryMethod: 'enter-manually',
-      sites: [
-        {
-          siteName: 'Circular Research Area Alpha',
-          siteNumber: 1,
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'circle',
-          coordinateSystem: 'WGS84',
-          activityDates: firstSiteActivityDates,
-          activityDescription: firstSiteActivityDescription,
-          circleData: this.defaultData.circle.WGS84
-        },
-        {
-          siteName: 'Triangular Survey Zone Beta',
-          siteNumber: 2,
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'triangle',
-          coordinateSystem: 'WGS84',
-          activityDates: ActivityDatesModel.generateValidActivityDates(),
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          polygonData: this._createCoordinateSet(
-            this.defaultData.triangle.WGS84,
-            'WGS84'
-          )
-        },
-        {
-          siteName: 'Circular Monitoring Point Gamma',
-          siteNumber: 3,
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'circle',
-          coordinateSystem: 'OSGB36',
-          activityDates: ActivityDatesModel.generateValidActivityDates(),
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          circleData: this.defaultData.circle.OSGB36
-        },
-        {
-          siteName: 'Quadrilateral Study Area Delta',
-          siteNumber: 4,
-          coordinatesEntryMethod: 'enter-manually',
-          siteType: 'triangle',
-          coordinateSystem: 'OSGB36',
-          activityDates: ActivityDatesModel.generateValidActivityDates(),
-          activityDescription:
-            ActivityDescriptionModel.generateActivityDescription(),
-          polygonData: this._createCoordinateSet(
-            this.defaultData.quadrilateral.OSGB36,
-            'OSGB36'
-          )
-        }
-      ]
-    }
+  static createMixedMultipleSitesWithSameActivityDatesAndDescriptions() {
+    return this._createMixedMultipleSites({ sameActivityDates: true, sameActivityDescription: true })
   }
 
   static createKMLUpload() {
-    return this._createFileUpload(
-      'KML',
-      'test/resources/EXE_2025_00009-LOCATIONS.kml'
-    )
+    return this._createFileUpload('KML', 'test/resources/EXE_2025_00009-LOCATIONS.kml')
   }
 
   static createShapefileUpload() {
-    return this._createFileUpload(
-      'Shapefile',
-      'test/resources/valid-shapefile.zip'
-    )
+    return this._createFileUpload('Shapefile', 'test/resources/valid-shapefile.zip')
+  }
+
+  static _createMixedMultipleSites({ sameActivityDates, sameActivityDescription }) {
+    const sharedActivityDates = ActivityDatesModel.generateValidActivityDates()
+    const sharedActivityDescription = ActivityDescriptionModel.generateActivityDescription()
+
+    const siteDefinitions = [
+      { name: 'Circular Research Area Alpha', number: 1, type: this.SITE_TYPES.CIRCLE, system: this.COORDINATE_SYSTEMS.WGS84 },
+      { name: 'Triangular Survey Zone Beta', number: 2, type: this.SITE_TYPES.TRIANGLE, system: this.COORDINATE_SYSTEMS.WGS84 },
+      { name: 'Circular Monitoring Point Gamma', number: 3, type: this.SITE_TYPES.CIRCLE, system: this.COORDINATE_SYSTEMS.OSGB36 },
+      { name: 'Quadrilateral Study Area Delta', number: 4, type: this.SITE_TYPES.TRIANGLE, system: this.COORDINATE_SYSTEMS.OSGB36 }
+    ]
+
+    const sites = siteDefinitions.map(def => {
+      const coordinateData = this._getCoordinateData(def.number === 4 ? 'quadrilateral' : def.type, def.system)
+      const activityDates = sameActivityDates ? sharedActivityDates : ActivityDatesModel.generateValidActivityDates()
+      const activityDescription = sameActivityDescription ? sharedActivityDescription : ActivityDescriptionModel.generateActivityDescription()
+
+      return this._createSingleSite({
+        siteName: def.name,
+        siteNumber: def.number,
+        siteType: def.type,
+        coordinateSystem: def.system,
+        coordinateData,
+        activityDates,
+        activityDescription
+      })
+    })
+
+    return this._createMultiSiteStructure({ sameActivityDates, sameActivityDescription, sites })
+  }
+
+  static _createSiteDetailsStructure(sites) {
+    return {
+      coordinatesEntryMethod: this.ENTRY_METHODS.MANUAL,
+      sites
+    }
+  }
+
+  static _createMultiSiteStructure({ sameActivityDates, sameActivityDescription, sites }) {
+    return {
+      multipleSitesEnabled: this.RESPONSES.YES,
+      sameActivityDates: sameActivityDates ? this.RESPONSES.YES : this.RESPONSES.NO,
+      sameActivityDescription: sameActivityDescription ? this.RESPONSES.YES : this.RESPONSES.NO,
+      coordinatesEntryMethod: this.ENTRY_METHODS.MANUAL,
+      sites
+    }
+  }
+
+  static _createSingleSite(options) {
+    const { siteName, siteNumber, siteType, coordinateSystem, coordinateData, activityDates, activityDescription } = options
+    return {
+      siteName,
+      siteNumber,
+      coordinatesEntryMethod: this.ENTRY_METHODS.MANUAL,
+      siteType,
+      coordinateSystem,
+      activityDates: activityDates || ActivityDatesModel.generateValidActivityDates(),
+      activityDescription: activityDescription || ActivityDescriptionModel.generateActivityDescription(),
+      ...coordinateData
+    }
+  }
+
+  static _getCoordinateData(shape, coordinateSystem) {
+    const coordinates = this.DEFAULT_COORDINATES[shape]?.[coordinateSystem]
+    if (!coordinates) return {}
+
+    return shape === this.SITE_TYPES.CIRCLE
+      ? { circleData: coordinates }
+      : { polygonData: this._createCoordinateSet(coordinates, coordinateSystem) }
   }
 
   static _createFileUpload(fileType = null, filePath = null) {
-    const baseData = {
-      coordinatesEntryMethod: 'file-upload'
-    }
-
-    if (fileType) baseData.fileType = fileType
-    if (filePath) baseData.filePath = filePath
-
     const siteData = {
       siteName: 'Main Research Site',
       siteNumber: 1,
-      coordinatesEntryMethod: 'file-upload',
+      coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
       activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription()
+      activityDescription: ActivityDescriptionModel.generateActivityDescription()
     }
 
     if (fileType) siteData.fileType = fileType
     if (filePath) siteData.filePath = filePath
 
-    return {
-      ...baseData,
-      sites: [siteData]
-    }
-  }
+    const baseData = { coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD }
+    if (fileType) baseData.fileType = fileType
+    if (filePath) baseData.filePath = filePath
 
-  static _createSiteDetails(siteType, coordinateSystem, additionalData = {}) {
-    return {
-      coordinatesEntryMethod: 'enter-manually',
-      siteType,
-      coordinateSystem,
-      activityDates: ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      ...additionalData
-    }
+    return { ...baseData, sites: [siteData] }
   }
 
   static _createCoordinateSet(coordinatePairs, system) {
     const coordinates = coordinatePairs.map(([first, second]) =>
-      system === 'WGS84'
+      system === this.COORDINATE_SYSTEMS.WGS84
         ? { latitude: first, longitude: second }
         : { eastings: first, northings: second }
     )
