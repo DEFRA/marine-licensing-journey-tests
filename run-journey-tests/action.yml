@@ -27,6 +27,7 @@ runs:
         path: ./marine-licensing-journey-tests
 
     - name: Determine journey-tests branch
+      if: github.repository != 'DEFRA/marine-licensing-journey-tests'
       id: resolve_tests_branch
       shell: bash
       run: |
@@ -53,8 +54,23 @@ runs:
             local description
             description=$(jq -r '.description // empty' "$file" 2>/dev/null)
             if [ -n "$description" ]; then
+              local depends_lines
+              depends_lines=$(printf '%s\n' "$description" | grep -iE '^\s*depends[- ]?on[: ]+' || true)
+
+              if [ -n "$depends_lines" ] && ! printf '%s\n' "$depends_lines" | grep -qiE 'https://github.com/.*/pull/[0-9]+'; then
+                local invalid_placeholder
+                invalid_placeholder=$(printf '%s\n' "$depends_lines" | sed -nE 's/.*(<[^>]*-pr-link>).*/\1/p' | head -1)
+
+                if [ -z "$invalid_placeholder" ]; then
+                  invalid_placeholder='<pr-link>'
+                fi
+
+                >&2 echo "ValueError: Invalid URL $invalid_placeholder"
+                exit 1
+              fi
+
               local dep_line
-              dep_line=$(printf '%s\n' "$description" | grep -iE 'depends[- ]?on[: ]+.*marine-licensing-journey-tests' | head -1 || true)
+              dep_line=$(printf '%s\n' "${depends_lines:-$description}" | grep -iE 'depends[- ]?on[: ]+.*marine-licensing-journey-tests' | head -1 || true)
               if [ -n "$dep_line" ]; then
                 local candidate
                 candidate=$(printf '%s\n' "$dep_line" | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
