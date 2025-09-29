@@ -40,9 +40,9 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   // Activity details card selectors
   static activityDetailsCard = '//h2[contains(text(), "Activity details")]'
   static activityDatesValue =
-    '//h2[contains(text(), "Activity details")]/following-sibling::*//dt[contains(text(), "Activity dates")]/following-sibling::dd'
+    '//dt[contains(text(), "Activity dates")]/following-sibling::dd'
   static activityDescriptionValue =
-    '//h2[contains(text(), "Activity details")]/following-sibling::*//dt[contains(text(), "Activity description")]/following-sibling::dd'
+    '//dt[contains(text(), "Activity description")]/following-sibling::dd'
 
   // Site-specific selectors for individual site cards
   static getSiteName(siteNumber) {
