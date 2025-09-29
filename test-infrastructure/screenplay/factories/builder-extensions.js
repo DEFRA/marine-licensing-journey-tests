@@ -1,6 +1,21 @@
 import ActivityDatesFactory from './activity-dates.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
+function setExemptionLevelProperties(builder, siteDetails) {
+  const firstSite = siteDetails.sites?.[0]
+
+  if (siteDetails.sameActivityDates === 'yes' && firstSite?.activityDates) {
+    builder.setProperty('activityDates', firstSite.activityDates)
+  }
+
+  if (
+    siteDetails.sameActivityDescription === 'yes' &&
+    firstSite?.activityDescription
+  ) {
+    builder.setProperty('activityDescription', firstSite.activityDescription)
+  }
+}
+
 export const siteDetailsExtension = {
   forACircleWithWGS84Coordinates: (builder) => {
     builder.setProperty(
@@ -70,24 +85,7 @@ export const siteDetailsExtension = {
       SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDescriptions()
     builder.setProperty('siteDetails', siteDetails)
 
-    // Set exemption-level activity dates when same activity dates are used
-    if (
-      siteDetails.sameActivityDates === 'yes' &&
-      siteDetails.sites?.[0]?.activityDates
-    ) {
-      builder.setProperty('activityDates', siteDetails.sites[0].activityDates)
-    }
-
-    // Set exemption-level activity description when same activity description is used
-    if (
-      siteDetails.sameActivityDescription === 'yes' &&
-      siteDetails.sites?.[0]?.activityDescription
-    ) {
-      builder.setProperty(
-        'activityDescription',
-        siteDetails.sites[0].activityDescription
-      )
-    }
+    setExemptionLevelProperties(builder, siteDetails)
 
     return builder
   },
