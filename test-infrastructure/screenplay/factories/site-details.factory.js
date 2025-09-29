@@ -243,13 +243,9 @@ export default class SiteDetailsFactory {
     sites
   }) {
     return {
-      multipleSitesEnabled: this.RESPONSES.YES,
-      sameActivityDates: sameActivityDates
-        ? this.RESPONSES.YES
-        : this.RESPONSES.NO,
-      sameActivityDescription: sameActivityDescription
-        ? this.RESPONSES.YES
-        : this.RESPONSES.NO,
+      multipleSitesEnabled: true,
+      sameActivityDates,
+      sameActivityDescription,
       coordinatesEntryMethod: this.ENTRY_METHODS.MANUAL,
       sites
     }

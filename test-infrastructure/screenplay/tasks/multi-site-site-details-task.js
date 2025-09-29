@@ -22,9 +22,9 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
 
   async processSites() {
     const sites = this.siteDetails.sites
-    const isSharedActivityDates = this.siteDetails.sameActivityDates === 'yes'
+    const isSharedActivityDates = this.siteDetails.sameActivityDates === true
     const isSharedActivityDescription =
-      this.siteDetails.sameActivityDescription === 'yes'
+      this.siteDetails.sameActivityDescription === true
 
     for (let siteIndex = 0; siteIndex < sites.length; siteIndex++) {
       const currentSite = sites[siteIndex]
@@ -125,7 +125,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
       if (isFirstSite) {
         await this.selectActivityDescriptionPreference()
 
-        if (this.siteDetails.sameActivityDescription === 'yes') {
+        if (this.siteDetails.sameActivityDescription === true) {
           await this.enterSharedActivityDescription()
         }
       }

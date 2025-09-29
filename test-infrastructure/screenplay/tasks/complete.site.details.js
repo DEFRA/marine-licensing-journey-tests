@@ -57,6 +57,6 @@ export default class CompleteSiteDetails extends Task {
   }
 
   isMultiSiteFlow(siteDetails) {
-    return siteDetails?.multipleSitesEnabled === 'yes'
+    return siteDetails?.multipleSitesEnabled === true
   }
 }

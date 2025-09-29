@@ -39,7 +39,7 @@ export default class BaseSiteDetailsTask extends Task {
   }
 
   async handleSingleOrMultipleSites() {
-    const multipleSitesEnabled = this.siteDetails.multipleSitesEnabled === 'yes'
+    const multipleSitesEnabled = this.siteDetails.multipleSitesEnabled === true
 
     if (multipleSitesEnabled) {
       await DoYouNeedToTellUsAboutMoreThanOneSitePageInteractions.selectMoreThanOneSiteAndContinue(

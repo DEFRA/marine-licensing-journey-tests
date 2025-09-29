@@ -5,10 +5,9 @@ export default class SameActivityDatesPageInteractions {
     browseTheWeb,
     sameActivityDates
   ) {
-    const selector =
-      sameActivityDates === 'yes'
-        ? SameActivityDatesPage.locators.yesRadioButton
-        : SameActivityDatesPage.locators.noRadioButton
+    const selector = sameActivityDates
+      ? SameActivityDatesPage.locators.yesRadioButton
+      : SameActivityDatesPage.locators.noRadioButton
 
     await browseTheWeb.click(selector)
     await browseTheWeb.click(SameActivityDatesPage.locators.continueButton)

@@ -37,7 +37,7 @@ export default class EnsureProvidingSiteLocationCard extends Task {
   }
 
   async verifyMoreThanOneSite(browseTheWeb, siteDetails) {
-    const isMultiSite = siteDetails?.multipleSitesEnabled === 'yes'
+    const isMultiSite = siteDetails?.multipleSitesEnabled === true
 
     if (isMultiSite) {
       await browseTheWeb.expectElementToContainText(

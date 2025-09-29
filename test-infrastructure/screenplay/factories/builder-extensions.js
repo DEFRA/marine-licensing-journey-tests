@@ -4,14 +4,11 @@ import SiteDetailsFactory from './site-details.factory.js'
 function setExemptionLevelProperties(builder, siteDetails) {
   const firstSite = siteDetails.sites?.[0]
 
-  if (siteDetails.sameActivityDates === 'yes' && firstSite?.activityDates) {
+  if (siteDetails.sameActivityDates && firstSite?.activityDates) {
     builder.setProperty('activityDates', firstSite.activityDates)
   }
 
-  if (
-    siteDetails.sameActivityDescription === 'yes' &&
-    firstSite?.activityDescription
-  ) {
+  if (siteDetails.sameActivityDescription && firstSite?.activityDescription) {
     builder.setProperty('activityDescription', firstSite.activityDescription)
   }
 }

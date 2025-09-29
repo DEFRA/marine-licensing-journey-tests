@@ -5,10 +5,9 @@ export default class SameActivityDescriptionPageInteractions {
     browseTheWeb,
     sameActivityDescription
   ) {
-    const selector =
-      sameActivityDescription === 'yes'
-        ? SameActivityDescriptionPage.locators.yesRadioButton
-        : SameActivityDescriptionPage.locators.noRadioButton
+    const selector = sameActivityDescription
+      ? SameActivityDescriptionPage.locators.yesRadioButton
+      : SameActivityDescriptionPage.locators.noRadioButton
 
     await browseTheWeb.click(selector)
     await browseTheWeb.click(

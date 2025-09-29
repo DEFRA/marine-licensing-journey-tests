@@ -13,7 +13,7 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
 
     if (!siteDetails) return
     if (siteDetails.coordinatesEntryMethod === 'file-upload') return
-    if (siteDetails.multipleSitesEnabled !== 'yes') return
+    if (!siteDetails.multipleSitesEnabled) return
 
     const sites = siteDetails?.sites || [siteDetails]
 
