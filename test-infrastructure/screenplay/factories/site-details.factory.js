@@ -137,6 +137,20 @@ export default class SiteDetailsFactory {
     })
   }
 
+  static createMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions() {
+    return this._createMixedMultipleSites({
+      sameActivityDates: true,
+      sameActivityDescription: false
+    })
+  }
+
+  static createMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions() {
+    return this._createMixedMultipleSites({
+      sameActivityDates: false,
+      sameActivityDescription: true
+    })
+  }
+
   static createKMLUpload() {
     return this._createFileUpload(
       'KML',

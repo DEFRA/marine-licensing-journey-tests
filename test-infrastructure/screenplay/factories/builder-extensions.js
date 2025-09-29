@@ -89,6 +89,28 @@ export const siteDetailsExtension = {
 
     return builder
   },
+  forMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions: (
+    builder
+  ) => {
+    const siteDetails =
+      SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions()
+    builder.setProperty('siteDetails', siteDetails)
+
+    setExemptionLevelProperties(builder, siteDetails)
+
+    return builder
+  },
+  forMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions: (
+    builder
+  ) => {
+    const siteDetails =
+      SiteDetailsFactory.createMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions()
+    builder.setProperty('siteDetails', siteDetails)
+
+    setExemptionLevelProperties(builder, siteDetails)
+
+    return builder
+  },
   withKMLUpload: (builder) => {
     builder.setProperty('siteDetails', SiteDetailsFactory.createKMLUpload())
     return builder

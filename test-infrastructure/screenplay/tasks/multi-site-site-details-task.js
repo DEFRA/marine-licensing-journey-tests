@@ -153,6 +153,10 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
     isSharedActivityDescription
   ) {
     if (!isSharedActivityDescription) {
+      await this.browseTheWeb.waitForNavigationTo(
+        '/exemption/site-details-activity-description',
+        '#activityDescription'
+      )
       await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
         this.browseTheWeb,
         currentSite.activityDescription

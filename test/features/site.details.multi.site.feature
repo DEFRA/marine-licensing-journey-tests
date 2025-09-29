@@ -16,8 +16,16 @@ Feature: Multi-site: Provide multiple sites for an exemption notification
     Then the site details review page shows the site details
     And the "Site details" task status is "Completed"
 
-  @wip
   Scenario: Complete mixed site details with same activity dates and different descriptions
+    Given a user is providing mixed site details for multiple sites with same activity dates and different descriptions
+    And the site details task is reached
+    When the site details task is completed
+    Then the site details review page shows the site details
+    And the "Site details" task status is "Completed"
 
-  @wip
   Scenario: Complete mixed site details with different activity dates and same descriptions
+    Given a user is providing mixed site details for multiple sites with different activity dates and same descriptions
+    And the site details task is reached
+    When the site details task is completed
+    Then the site details review page shows the site details
+    And the "Site details" task status is "Completed"
