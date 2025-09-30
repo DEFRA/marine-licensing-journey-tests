@@ -1,6 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import {
+  AcceptCookiesFromBanner,
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
@@ -10,6 +11,7 @@ import {
   EnsureCookiesPolicyPage,
   EnsureCookiesRadioButtonSelected,
   Navigate,
+  RejectCookiesFromBanner,
   SaveCookiePreferences
 } from '~/test-infrastructure/screenplay'
 
@@ -99,3 +101,27 @@ When('returning to the cookies policy page', async function () {
   await this.actor.attemptsTo(ClickCookiesLink.now())
   await this.actor.attemptsTo(EnsureCookiesPolicyPage.isDisplayed())
 })
+
+When(
+  'the analytics cookies are accepted from the cookie banner',
+  async function () {
+    await this.actor.attemptsTo(AcceptCookiesFromBanner.now())
+  }
+)
+
+When(
+  'the analytics cookies are rejected from the cookie banner',
+  async function () {
+    await this.actor.attemptsTo(RejectCookiesFromBanner.now())
+  }
+)
+
+Given(
+  'the project name page is displayed with the cookie banner visible',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(new BrowseTheWeb(browser))
+    this.actor.intendsTo(ApplyForExemption.withNoPreviousCookieDecision())
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  }
+)

@@ -1,4 +1,5 @@
 export * from '../page-interactions'
+export { default as AcceptCookiesFromBanner } from './accept.cookies.from.banner'
 export { default as ClickAddAnotherPoint } from './button-interactions/click.add.another.point'
 export { default as ClickButton } from './button-interactions/click.button'
 export { default as ClickCancel } from './button-interactions/click.cancel'
@@ -44,6 +45,7 @@ export { default as EnsureThatIatIsDisplayed } from './ensure.that.iat.is.displa
 export { default as EnsureThatTheExemptionDetailsAreCorrect } from './ensure.that.the.exemption.details.are.correct'
 export { default as EnsureViewDetailsPage } from './ensure.view.details.page'
 export { default as HandleCookieBanner } from './handle.cookie.banner'
+export { default as RejectCookiesFromBanner } from './reject.cookies.from.banner'
 export { default as RememberTheExemptionReferenceNumber } from './remember.the.exemption.reference.number'
 export { default as SaveCookiePreferences } from './save.cookie.preferences'
 export { default as SelectTheTask } from './select.task'
