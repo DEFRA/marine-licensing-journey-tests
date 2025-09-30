@@ -20,10 +20,10 @@ Feature: Submit exemption notification: A unique reference number is generated f
   Scenario: After successfully completing all the tasks on the task list, the user is able to submit their notification
     Given the user has completed all the tasks on the task list and is on the Check your answers page
     When the user clicks Confirm and send
-    Then the confirmation page is displayed with an application reference  
+    Then the confirmation page is displayed with an application reference
 
-  @bug @wip
-  Scenario: Site details completion fails after switching from file upload to manual entry
-    Given the user has explored file upload options during site details entry
-    When the user completes site details using manual coordinate entry instead  
-    Then the site details task should be marked as completed
+  @new @wip
+  Scenario: After a notification has been submitted, the internal user is able to see the details from the link in MCMS
+    Given the user has submitted an exemption notification
+    When the internal user views follows the link to view the exemption notification from D365
+    Then the submitted exemption notification is displayed
