@@ -43,11 +43,6 @@ runs:
           local file="$1"
           local branch=""
 
-          >&2 echo "ℹ️ depends-on.json detected at $file"
-          >&2 echo "--- depends-on-json-start ---"
-          cat "$file" >&2
-          >&2 echo "--- depends-on-json-end ---"
-
           branch=$(jq -r '.dependencies[]? | select(.repo == "DEFRA/marine-licensing-journey-tests") | .ref // empty' "$file" 2>/dev/null | head -1)
 
           if [ -z "$branch" ]; then
