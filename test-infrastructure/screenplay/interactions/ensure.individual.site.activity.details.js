@@ -64,14 +64,10 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
     const activityDates = site?.activityDates
     if (!activityDates) return
 
-    // Handle both test format and backend format
     let expectedDateRange
     if (activityDates.start && activityDates.end) {
-      // Backend format (formatted strings)
       expectedDateRange = `${activityDates.start} to ${activityDates.end}`
     } else if (activityDates.startDate && activityDates.endDate) {
-      // Test model format - just verify element exists, don't check exact content
-      // since we can't easily format the test dates to match UI formatting
       await browseTheWeb.expectElementToBePresent(
         ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
       )
