@@ -147,9 +147,10 @@ When(
     // Set the Authorization header
     await browseD365.setAuthenticationToken(d365Token)
 
-    const testUrl = process.env.ENVIRONMENT === 'test'
-      ? 'https://marine-licensing-frontend.test.cdp-int.defra.cloud'
-      : 'http://localhost:3000'
+    const testUrl =
+      process.env.ENVIRONMENT === 'test'
+        ? 'https://marine-licensing-frontend.test.cdp-int.defra.cloud'
+        : 'http://localhost:3000'
 
     // Navigate to the protected URL
     await browseD365.page.goto(`${testUrl}${this.notificationUrl}`)
@@ -163,7 +164,7 @@ Then('the submitted exemption notification is displayed', async function () {
   const currentUrl = browseD365.page.url()
   await expect(currentUrl).toContain(this.notificationUrl)
 
-  // Verify page content  
+  // Verify page content
   const completedExemptions = this.actor.recalls('completedExemptions')
   const latestExemption = completedExemptions[completedExemptions.length - 1]
 

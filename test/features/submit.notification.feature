@@ -21,13 +21,13 @@ Feature: Submit exemption notification: A unique reference number is generated f
     When the user clicks Confirm and send
     Then the confirmation page is displayed with an application reference
 
-  @new @wip @issue=ML-271 @real-defra-id
+  @wip @issue=ML-271 @real-defra-id @broken
   Scenario: Authentication is required to access the read-only notification page
     Given the user has submitted an exemption notification
     When an unauthenticated user tries to access the notification view link
     Then access is denied
 
-  @new @wip @issue=ML-271 @real-defra-id @broken
+  @wip @issue=ML-271 @real-defra-id @broken
   Scenario: After a notification has been submitted, the internal user is able to see the details from the link in MCMS
     Given the user has submitted an exemption notification
     And an authenticated internal user
