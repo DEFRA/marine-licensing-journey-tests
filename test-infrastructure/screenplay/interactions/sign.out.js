@@ -12,7 +12,7 @@ export default class SignOut extends Task {
     await browseTheWeb.browser.waitUntil(
       async () => {
         const url = await browseTheWeb.browser.getUrl()
-        return url.includes('/login') || url.includes('cdp-defra-id-stub')
+        return url.includes('/login') || url.includes('cdp-defra-id-stub') || url.includes('sign-out-successful')
       },
       { timeout: 10000 }
     )

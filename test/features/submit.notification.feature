@@ -1,6 +1,5 @@
 @issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-21 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-82 @issue=ML-84
 Feature: Submit exemption notification: A unique reference number is generated for the notification and the notification is submitted.
-  
   - ML-1: Provide project name
   - ML-9: View the task list
   - ML-10: Provide activity dates
@@ -22,8 +21,15 @@ Feature: Submit exemption notification: A unique reference number is generated f
     When the user clicks Confirm and send
     Then the confirmation page is displayed with an application reference
 
-  @new @wip
+  @new @wip @issue=ML-271 @real-defra-id
+  Scenario: Authentication is required to access the read-only notification page
+    Given the user has submitted an exemption notification
+    When an unauthenticated user tries to access the notification view link
+    Then access is denied
+
+  @new @wip @issue=ML-271 @real-defra-id @broken
   Scenario: After a notification has been submitted, the internal user is able to see the details from the link in MCMS
     Given the user has submitted an exemption notification
-    When the internal user views follows the link to view the exemption notification from D365
+    And an authenticated internal user
+    When the internal user follows the link to view the exemption notification from D365
     Then the submitted exemption notification is displayed
