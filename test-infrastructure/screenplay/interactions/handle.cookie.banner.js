@@ -7,7 +7,9 @@ export default class HandleCookieBanner extends Task {
   }
 
   async performAs(actor) {
-    const exemption = actor.recalls('exemption')
+    const exemption = actor.hasMemoryOf('exemption')
+      ? actor.recalls('exemption')
+      : null
 
     if (this.shouldSkipCookieHandling(actor, exemption)) {
       return

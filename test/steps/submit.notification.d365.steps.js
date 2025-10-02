@@ -11,8 +11,10 @@ import {
   EnsureThatTheExemptionDetailsAreCorrect,
   LoginToD365,
   RememberTheExemptionReferenceNumber,
+  RetrieveTheViewDetailsLink,
   ViewSubmittedExemptionNotification
 } from '~/test-infrastructure/screenplay'
+import NavigateToDashboard from '~/test-infrastructure/screenplay/tasks/navigate.to.dashboard'
 
 Given('the user has submitted an exemption notification', async function () {
   this.actor = new Actor('Alice')
@@ -24,6 +26,8 @@ Given('the user has submitted an exemption notification', async function () {
   await this.actor.attemptsTo(ClickReviewAndSend.now())
   await this.actor.attemptsTo(ClickConfirmAndSend.now())
   await this.actor.attemptsTo(RememberTheExemptionReferenceNumber.now())
+  await this.actor.attemptsTo(NavigateToDashboard.now())
+  await this.actor.attemptsTo(RetrieveTheViewDetailsLink.now())
 })
 
 When(
