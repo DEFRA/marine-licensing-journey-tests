@@ -65,9 +65,10 @@ export default class BrowseD365 {
       ]
     }
 
-    if (process.env.ENVIRONMENT === 'test') {
-      options.executablePath = '/usr/lib/chromium/chromium'
-    }
+    // Let Playwright use its bundled Chromium instead of hardcoded path
+    // if (process.env.ENVIRONMENT === 'test') {
+    //   options.executablePath = '/usr/lib/chromium/chromium'
+    // }
 
     return options
   }

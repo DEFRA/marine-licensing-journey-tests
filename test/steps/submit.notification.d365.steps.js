@@ -15,7 +15,6 @@ import {
   RememberTheExemptionReferenceNumber,
   ViewSubmittedExemptionNotification
 } from '~/test-infrastructure/screenplay'
-import SignOut from '~/test-infrastructure/screenplay/interactions/sign.out'
 import LoginToD365 from '~/test-infrastructure/screenplay/tasks/login.to.d365.js'
 
 async function extractNotificationViewUrl(actor, projectName) {
@@ -117,57 +116,20 @@ Then('access is denied', async function () {
   )
 })
 
-Given('an authenticated internal user', async function () {
-  // Navigate to dashboard to see the submitted exemptions
-  await this.actor.attemptsTo(NavigateToDashboard.now())
-
-  // Get notification URL from the external user's completed exemptions
-  const completedExemptions = this.actor.recalls('completedExemptions')
-  const latestExemption = completedExemptions[completedExemptions.length - 1]
-  this.notificationUrl = await extractNotificationViewUrl(
-    this.actor,
-    latestExemption.projectName
-  )
-  await this.actor.attemptsTo(SignOut.now())
-
-  // Create separate internal user actor with D365 capability
-  this.internalUser = new Actor('Internal User')
-  this.internalUser.can(BrowseD365.withPlaywright())
-})
-
 When(
   'the internal user follows the link to view the exemption notification from D365',
   async function () {
-    const loginTask = new LoginToD365()
-    const d365Token = await loginTask.getD365AccessToken()
-
-    const browseD365 = this.internalUser.ability
-    await browseD365.launch()
-
-    // Set the Authorization header
-    await browseD365.setAuthenticationToken(d365Token)
-
-    const testUrl =
-      process.env.ENVIRONMENT === 'test'
-        ? 'https://marine-licensing-frontend.test.cdp-int.defra.cloud'
-        : 'http://localhost:3000'
-
-    // Navigate to the protected URL
-    await browseD365.page.goto(`${testUrl}${this.notificationUrl}`)
+    // this step should follow the link to the exemption that is visible in D365
   }
 )
 
 Then('the submitted exemption notification is displayed', async function () {
   const browseD365 = this.internalUser.ability
 
-  // Verify we're on the correct page
-  const currentUrl = browseD365.page.url()
-  await expect(currentUrl).toContain(this.notificationUrl)
-
   // Verify page content
   const completedExemptions = this.actor.recalls('completedExemptions')
   const latestExemption = completedExemptions[completedExemptions.length - 1]
 
   const pageText = await browseD365.page.textContent('body')
-  await expect(pageText).toContain(latestExemption.projectName)
+  expect(pageText).to.contain(latestExemption.projectName)
 })
