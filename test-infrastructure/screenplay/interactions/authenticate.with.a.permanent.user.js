@@ -3,6 +3,7 @@ import { logOperation } from '~/test-infrastructure/capture/index.js'
 import DefraIdLoginPage from '~/test-infrastructure/pages/defra.id.login.page.js'
 import Task from '../base/task.js'
 import SelectGovernmentGatewayAuthentication from './select.government.gateway.authentication.js'
+import SelectOrganisation from './select.organisation.js'
 
 export default class AuthenticateWithAPermanentUser extends Task {
   static now() {
@@ -12,7 +13,7 @@ export default class AuthenticateWithAPermanentUser extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
     const testUser = {
-      id: '38 51 93 67 55 42',
+      id: '63 48 83 70 56 07',
       password: process.env.DEFRA_ID_USER_PASSWORD
     }
 
@@ -31,6 +32,10 @@ export default class AuthenticateWithAPermanentUser extends Task {
     await browseTheWeb.waitForEnabled(DefraIdLoginPage.signInButton)
 
     await browseTheWeb.click(DefraIdLoginPage.signInButton)
+
+    // Handle organisation selection if user has multiple orgs
+    await actor.attemptsTo(SelectOrganisation.now())
+
     logOperation(
       'Authentication',
       `Successfully authenticated as: ${testUser.id}`
