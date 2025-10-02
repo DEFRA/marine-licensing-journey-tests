@@ -205,9 +205,16 @@ export default class BrowseD365 {
     await this.captureNetworkDebuggingInfo()
   }
 
-  async clickElement(selector) {
+  async clickElement(selector, options = {}) {
     const page = await this.launch()
-    await page.locator(selector).click()
+    await page.locator(selector).click(options)
+  }
+
+  async reload() {
+    const page = await this.launch()
+    console.log('Reloading D365 page...')
+    await page.reload({ waitUntil: 'domcontentloaded' })
+    console.log('D365 page reloaded successfully')
   }
 
   async clickByRole(role, name, timeout = 60000) {

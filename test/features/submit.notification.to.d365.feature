@@ -13,7 +13,7 @@ This feature logs into the Dynamics 365 UI and checks the new case has been crea
     When an unauthenticated user tries to access the notification view link
     Then access is denied
 
-  @issue=ML-271
+  @issue=ML-271 @run-only
   Scenario: After a notification has been submitted, the internal user is able to see the details from the link in MCMS
     Given the user has submitted an exemption notification
     When the internal user views the submitted exemption notification in D365

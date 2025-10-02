@@ -11,6 +11,37 @@ export default class ViewSubmittedExemptionNotification extends Task {
     this.applicationReference = applicationReference
   }
 
+  async retryWithPageRefresh(
+    browseD365,
+    action,
+    maxRetries = 5,
+    retryDelay = 10000
+  ) {
+    let lastError
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await action()
+        return
+      } catch (error) {
+        lastError = error
+        console.log(`Attempt ${attempt} failed: ${error.message}`)
+
+        if (attempt < maxRetries) {
+          console.log(
+            `Waiting ${retryDelay}ms before reloading and retrying...`
+          )
+          await new Promise((resolve) => setTimeout(resolve, retryDelay))
+          await browseD365.reload()
+          console.log(`Page reloaded, attempting again...`)
+        }
+      }
+    }
+
+    throw new Error(
+      `Failed after ${maxRetries} attempts. Last error: ${lastError.message}`
+    )
+  }
+
   async performAs(actor) {
     const browseD365 = actor.abilityTo('BrowseD365')
     if (!browseD365) {
@@ -21,7 +52,9 @@ export default class ViewSubmittedExemptionNotification extends Task {
     const referenceSelector = D365Page.getCaseRecordLink(
       this.applicationReference
     )
-    await browseD365.takeScreenshot('D365 Before Clicking Case Record')
-    await browseD365.clickElement(referenceSelector)
+
+    await this.retryWithPageRefresh(browseD365, async () => {
+      await browseD365.clickElement(referenceSelector, { timeout: 5000 })
+    })
   }
 }

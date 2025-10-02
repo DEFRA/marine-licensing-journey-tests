@@ -119,17 +119,46 @@ Then('access is denied', async function () {
 When(
   'the internal user follows the link to view the exemption notification from D365',
   async function () {
-    // this step should follow the link to the exemption that is visible in D365
+    const browseD365 = this.mmoUser.abilityTo('BrowseD365')
+
+    // Wait for new page and click link simultaneously
+    const [newPage] = await Promise.all([
+      browseD365.context.waitForEvent('page'),
+      browseD365.page.getByRole('link', { name: 'Navigate to website' }).click()
+    ])
+
+    // Wait for URL to stabilize (handles D365 authentication redirects)
+    try {
+      await newPage.waitForURL('**/view-details/**', {
+        waitUntil: 'load',
+        timeout: 30000
+      })
+    } catch (error) {
+      // If URL wait fails, check if page is closed
+      if (newPage.isClosed()) {
+        console.log('New page was closed, checking all pages...')
+        const pages = browseD365.context.pages()
+        console.log(
+          'Available pages:',
+          pages.map((p) => p.url())
+        )
+        // Use the last opened page
+        this.notificationPage = pages[pages.length - 1]
+        return
+      }
+      throw error
+    }
+
+    // Store the new page for the next step to use
+    this.notificationPage = newPage
   }
 )
 
 Then('the submitted exemption notification is displayed', async function () {
-  const browseD365 = this.internalUser.ability
-
-  // Verify page content
+  // Use the page that navigated to the notification
+  const page = this.notificationPage
   const completedExemptions = this.actor.recalls('completedExemptions')
   const latestExemption = completedExemptions[completedExemptions.length - 1]
-
-  const pageText = await browseD365.page.textContent('body')
+  const pageText = await page.textContent('body')
   expect(pageText).to.contain(latestExemption.projectName)
 })
