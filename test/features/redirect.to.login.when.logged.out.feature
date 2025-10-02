@@ -1,4 +1,4 @@
-@issue=ML-671
+@issue=ML-620
 Feature: Applicants need to see exemption details afterwards. They will need to be able to access them from their confirmation email.
 AS an applicant who is logged out
 I WANT to see my exception notification details if I click the link in my confirmation email
