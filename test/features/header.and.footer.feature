@@ -1,4 +1,4 @@
-@issue=ML-20 @issue=ML-279 @issue=ML-543 @issue=ML-644
+@issue=ML-20 @issue=ML-279 @issue=ML-543 @issue=ML-644 @issue=ML-726
 Feature: Header and footer verification feature
   As a user of the marine licensing service
   I want to see the correct service name "Get permission for marine work" displayed consistently
@@ -16,6 +16,10 @@ Feature: Header and footer verification feature
   I WANT to see the privacy policy of MMO in the footer of every page
   SO THAT I can be sure my data is being used legally
 
+  AS an employee user
+  I WANT to be able to log in and carry out work for my organisation
+  SO THAT my work is associated with my organisation
+
   @smoke
   Scenario: The header and footer are correct on the dashboard
     Given a user has submitted an exemption notification
@@ -29,6 +33,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   @smoke
   Scenario: The header and footer are correct on the task list
@@ -45,6 +50,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   @smoke
   Scenario: The header and footer are correct on the project name page
@@ -57,6 +63,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   Scenario: The header and footer are correct on the activity dates page
     Given a notification has been created with a valid project name
@@ -71,6 +78,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   Scenario: The header and footer are correct on the activity description page
     Given a notification has been created with a valid project name
@@ -85,6 +93,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   Scenario: The header and footer are correct on the site details page
     Given a notification has been created with a valid project name
@@ -99,6 +108,7 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header
 
   Scenario: The header and footer are correct on the public register page
     Given a notification has been created with a valid project name
@@ -113,3 +123,4 @@ Feature: Header and footer verification feature
       | Cookies                      |
       | Open Government Licence v3.0 |
       | © Crown copyright            |
+    And the organisation name is displayed in the header

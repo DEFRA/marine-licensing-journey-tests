@@ -11,7 +11,7 @@ import {
 } from './src/processors/file-processor.js'
 import { printFixingTips } from './src/reporters/violation-reporter.js'
 
-const MAX_STEPS = 6
+const MAX_STEPS = 7
 const FEATURE_FILES_PATTERN = 'test/features/**/*.feature'
 
 /**

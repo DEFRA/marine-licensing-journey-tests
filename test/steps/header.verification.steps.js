@@ -2,6 +2,7 @@ import { Then } from '@cucumber/cucumber'
 import {
   EnsureFooterNavigationLinks,
   EnsureHeaderNavigationLinks,
+  EnsureOrganisationName,
   EnsureServiceName
 } from '~/test-infrastructure/screenplay'
 
@@ -31,4 +32,8 @@ Then('the links are displayed in the footer:', async function (dataTable) {
   await this.actor.attemptsTo(
     EnsureFooterNavigationLinks.areDisplayed(expectedLinks)
   )
+})
+
+Then('the organisation name is displayed in the header', async function () {
+  await this.actor.attemptsTo(EnsureOrganisationName.isDisplayed())
 })
