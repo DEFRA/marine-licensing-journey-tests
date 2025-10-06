@@ -163,22 +163,21 @@ export default class EnsureCoreSiteDetails extends Task {
 
   async getActualCoordinatesFromDOM(browseTheWeb) {
     try {
-      const siteDetailsElement = await browseTheWeb.getElement(
-        ReviewSiteDetailsPage.siteDetailsDataScript
-      )
-      const siteDetailsHTML = await siteDetailsElement.getHTML(false)
+      // The frontend now outputs: var geoJSON1 = {...}; in a script tag
+      // We need to extract this via JavaScript execution
+      const geoJSON = await browseTheWeb.browser.execute(() => {
+        // eslint-disable-next-line no-undef
+        return typeof geoJSON1 !== 'undefined' ? geoJSON1 : null
+      })
 
-      if (siteDetailsHTML && siteDetailsHTML.trim()) {
-        const siteDetailsData = JSON.parse(siteDetailsHTML.trim())
-        if (siteDetailsData?.geoJSON) {
-          return siteDetailsData.geoJSON
-        }
+      if (geoJSON) {
+        return geoJSON
       }
     } catch (error) {
       expect.fail('No coordinates were extracted from the file')
     }
 
-    expect.fail('No coordinate data found in #site-details-data script element')
+    expect.fail('No coordinate data found in geoJSON1 variable')
   }
 
   extractCoordinatesFromGeoJSON(geoJSON) {
