@@ -45,7 +45,6 @@ export { default as EnsureThatIatIsDisplayed } from './ensure.that.iat.is.displa
 export { default as EnsureThatTheExemptionDetailsAreCorrect } from './ensure.that.the.exemption.details.are.correct'
 export { default as EnsureViewDetailsPage } from './ensure.view.details.page'
 export { default as HandleCookieBanner } from './handle.cookie.banner'
-export { default as NavigateToViewDetailsLink } from './navigate.to.view.details.link'
 export { default as RejectCookiesFromBanner } from './reject.cookies.from.banner'
 export { default as RememberTheExemptionReferenceNumber } from './remember.the.exemption.reference.number'
 export { default as RetrieveTheViewDetailsLink } from './retrieve.the.view.details.link'
