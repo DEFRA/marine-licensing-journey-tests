@@ -33,7 +33,7 @@ When('the user clicks Confirm and send', async function () {
 })
 
 Then(
-  'the confirmation page is displayed with an application reference',
+  'the confirmation page is displayed with an application reference and survey link',
   async function () {
     await this.actor.attemptsTo(
       EnsureConfirmationPage.isDisplayedWithApplicationReference()
