@@ -32,6 +32,7 @@ Multiple pathways available:
 
 - **ML-82, ML-139, ML-140**: Check your answers ✅
 - **ML-84**: Submit notification ✅
+- **ML-715**: Feedback survey link on confirmation page ✅
 - **ML-21**: Generate application reference ✅
 - **ML-379**: D365 integration ✅
 
