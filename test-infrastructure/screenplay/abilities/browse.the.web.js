@@ -114,6 +114,12 @@ export default class BrowseTheWeb extends Ability {
     await expect(element).toHaveAttribute('value', expectedValue)
   }
 
+  async expectElementToHaveAttribute(locator, attributeName, expectedValue) {
+    const element = await this.getElement(locator)
+    const actualValue = await element.getAttribute(attributeName)
+    await expect(actualValue).toBe(expectedValue)
+  }
+
   async isSelected(locator) {
     const element = await this.getElement(locator)
     const isSelected = await element.isSelected()

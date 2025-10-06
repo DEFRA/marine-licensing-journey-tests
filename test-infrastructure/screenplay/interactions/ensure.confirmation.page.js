@@ -22,6 +22,17 @@ export default class EnsureConfirmationPage extends Task {
     )
 
     this._validateApplicationReferenceFormat(referenceText)
+
+    await browseTheWeb.isDisplayed(ConfirmationPage.locators.feedbackLink)
+    await browseTheWeb.expectElementToContainText(
+      ConfirmationPage.locators.feedbackLink,
+      'What did you think of this service?'
+    )
+    await browseTheWeb.expectElementToHaveAttribute(
+      ConfirmationPage.locators.feedbackLink,
+      'href',
+      ConfirmationPage.expectedFeedbackUrl
+    )
   }
 
   _validateApplicationReferenceFormat(referenceText) {
