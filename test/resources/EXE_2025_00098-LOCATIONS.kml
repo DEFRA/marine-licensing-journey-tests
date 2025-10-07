@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd">
+<Folder>
+<name>EXE/2025/00098</name>
+<Document id="SL914071">
+<name>mmo_advice_sites</name>
+<description>MMO Advice Sites</description>
+<Style id="s_advice_main_line_point">
+<LineStyle><color>FF000000</color></LineStyle>
+<PolyStyle><color>FFFFFFFF</color></PolyStyle>
+</Style>
+<Placemark id="SID12796347">
+<name>Kentish Flats and Kentish Flats Extension</name>
+<description>Kentish Flats and Kentish Flats Extension</description>
+<styleUrl>#s_advice_main_line_point</styleUrl>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing><coordinates>1.02333333333333333333333333333333333334,51.46906666666666666666666666666666666667,0 1.06491666666666666666666666666666666667,51.43608333333333333333333333333333333333,0 1.15086666666666666666666666666666666667,51.44465,0 1.10945,51.47773333333333333333333333333333333334,0 1.02333333333333333333333333333333333334,51.46906666666666666666666666666666666667,0 </coordinates></LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+<Placemark id="SID12796357">
+<name>Thanet Offshore Wind Farm</name>
+<description>Thanet Offshore Wind Farm</description>
+<styleUrl>#s_advice_main_line_point</styleUrl>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing><coordinates>1.56861666666666666666666666666666666667,51.44065,0 1.62476666666666666666666666666666666667,51.40178333333333333333333333333333333333,0 1.67171666666666666666666666666666666667,51.3993,0 1.6872,51.4033,0 1.68791666666666666666666666666666666666,51.42575,0 1.6379,51.46043333333333333333333333333333333333,0 1.62093333333333333333333333333333333334,51.46131666666666666666666666666666666667,0 1.60503333333333333333333333333333333333,51.46215,0 1.59275,51.45896666666666666666666666666666666667,0 1.57651666666666666666666666666666666667,51.4498,0 1.56861666666666666666666666666666666667,51.44065,0 </coordinates></LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+</Document>
+</Folder>
+</kml>

@@ -165,6 +165,17 @@ export default class SiteDetailsFactory {
     )
   }
 
+  static createMultiSiteKMLUpload() {
+    return this._createMultiSiteFileUpload(
+      'KML',
+      'test/resources/EXE_2025_00098-LOCATIONS.kml',
+      {
+        sameActivityDates: false,
+        sameActivityDescription: false
+      }
+    )
+  }
+
   static _createMixedMultipleSites({
     sameActivityDates,
     sameActivityDescription
@@ -305,6 +316,51 @@ export default class SiteDetailsFactory {
     if (filePath) baseData.filePath = filePath
 
     return { ...baseData, sites: [siteData] }
+  }
+
+  static _createMultiSiteFileUpload(
+    fileType,
+    filePath,
+    { sameActivityDates, sameActivityDescription }
+  ) {
+    const sharedActivityDates = ActivityDatesModel.generateValidActivityDates()
+    const sharedActivityDescription =
+      ActivityDescriptionModel.generateActivityDescription()
+
+    // Site names will come from the uploaded file (KML Placemark names)
+    const siteNames = [
+      'Kentish Flats and Kentish Flats Extension',
+      'Thanet Offshore Wind Farm'
+    ]
+
+    const sites = siteNames.map((name, index) => {
+      const activityDates = sameActivityDates
+        ? sharedActivityDates
+        : ActivityDatesModel.generateValidActivityDates()
+      const activityDescription = sameActivityDescription
+        ? sharedActivityDescription
+        : ActivityDescriptionModel.generateActivityDescription()
+
+      return {
+        siteName: name,
+        siteNumber: index + 1,
+        coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
+        fileType,
+        filePath,
+        activityDates,
+        activityDescription
+      }
+    })
+
+    return {
+      multipleSitesEnabled: true,
+      sameActivityDates,
+      sameActivityDescription,
+      coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
+      fileType,
+      filePath,
+      sites
+    }
   }
 
   static _createCoordinateSet(coordinatePairs, system) {

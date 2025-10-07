@@ -118,6 +118,13 @@ export const siteDetailsExtension = {
       SiteDetailsFactory.createShapefileUpload()
     )
     return builder
+  },
+  forMultiSiteKMLUpload: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.createMultiSiteKMLUpload()
+    )
+    return builder
   }
 }
 
