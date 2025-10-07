@@ -76,29 +76,35 @@ export default class ExemptionFactory {
 
     const siteDetails = {
       ...SiteDetailsFactory.createFileUpload(),
-      fileType:
-        fileType === 'kml'
-          ? FileTypeModel.generateKML()
-          : FileTypeModel.generateShapefile(),
+      fileType: this.generateFileTypeModel(fileType),
       ...(actualFilePath && { filePath: actualFilePath })
     }
 
-    if (actualFilePath) {
-      const expectedData =
-        CoordinateFiles.loadExpectedCoordinates(actualFilePath)
-      if (expectedData?.extractedCoordinates) {
-        siteDetails.expectedCoordinates = expectedData.extractedCoordinates
-      }
-      if (expectedData?.extractedSites) {
-        siteDetails.expectedSites = expectedData.extractedSites
-      }
-    }
+    this.loadExpectedDataIntoSiteDetails(siteDetails, actualFilePath)
 
     return this.createBaseExemption({
       activityDates: ActivityDatesFactory.createValidDates(),
       publicRegister: { consent: true },
       siteDetails
     })
+  }
+
+  static generateFileTypeModel(fileType) {
+    return fileType === 'kml'
+      ? FileTypeModel.generateKML()
+      : FileTypeModel.generateShapefile()
+  }
+
+  static loadExpectedDataIntoSiteDetails(siteDetails, filePath) {
+    if (!filePath) return
+
+    const expectedData = CoordinateFiles.loadExpectedCoordinates(filePath)
+    if (expectedData?.extractedCoordinates) {
+      siteDetails.expectedCoordinates = expectedData.extractedCoordinates
+    }
+    if (expectedData?.extractedSites) {
+      siteDetails.expectedSites = expectedData.extractedSites
+    }
   }
 
   static createKMLUpload() {
