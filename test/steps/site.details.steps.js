@@ -61,7 +61,7 @@ Given(
 )
 
 Given(
-  'a user is providing mixed site details for multiple sites with different activity dates and different descriptions',
+  'a user is uploading a kml file with multiple sites with different activity dates and different descriptions',
   function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
