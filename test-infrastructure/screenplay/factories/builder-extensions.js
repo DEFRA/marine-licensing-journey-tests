@@ -14,6 +14,17 @@ function setExemptionLevelProperties(builder, siteDetails) {
   }
 }
 
+function loadExpectedSitesFromFile(siteDetails) {
+  if (siteDetails.filePath) {
+    const expectedData = CoordinateFiles.loadExpectedCoordinates(
+      siteDetails.filePath
+    )
+    if (expectedData?.extractedSites) {
+      siteDetails.expectedSites = expectedData.extractedSites
+    }
+  }
+}
+
 export const siteDetailsExtension = {
   forACircleWithWGS84Coordinates: (builder) => {
     builder.setProperty(
@@ -122,17 +133,7 @@ export const siteDetailsExtension = {
   },
   forMultiSiteKMLUpload: (builder) => {
     const siteDetails = SiteDetailsFactory.createMultiSiteKMLUpload()
-
-    // Load expected sites from sidecar file if file path exists
-    if (siteDetails.filePath) {
-      const expectedData = CoordinateFiles.loadExpectedCoordinates(
-        siteDetails.filePath
-      )
-      if (expectedData?.extractedSites) {
-        siteDetails.expectedSites = expectedData.extractedSites
-      }
-    }
-
+    loadExpectedSitesFromFile(siteDetails)
     builder.setProperty('siteDetails', siteDetails)
     return builder
   },
@@ -140,17 +141,7 @@ export const siteDetailsExtension = {
   forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions: (builder) => {
     const siteDetails =
       SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
-
-    // Load expected sites from sidecar file if file path exists
-    if (siteDetails.filePath) {
-      const expectedData = CoordinateFiles.loadExpectedCoordinates(
-        siteDetails.filePath
-      )
-      if (expectedData?.extractedSites) {
-        siteDetails.expectedSites = expectedData.extractedSites
-      }
-    }
-
+    loadExpectedSitesFromFile(siteDetails)
     builder.setProperty('siteDetails', siteDetails)
     setExemptionLevelProperties(builder, siteDetails)
     return builder

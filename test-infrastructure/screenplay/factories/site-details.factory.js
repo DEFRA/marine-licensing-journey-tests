@@ -24,6 +24,8 @@ export default class SiteDetailsFactory {
     NO: 'no'
   }
 
+  static MULTI_SITE_KML_FILE = 'test/resources/EXE_2025_00098-LOCATIONS.kml'
+
   static DEFAULT_COORDINATES = {
     circle: {
       WGS84: { latitude: 51.507412, longitude: -0.127812, width: 20 },
@@ -166,25 +168,17 @@ export default class SiteDetailsFactory {
   }
 
   static createMultiSiteKMLUpload() {
-    return this._createMultiSiteFileUpload(
-      'KML',
-      'test/resources/EXE_2025_00098-LOCATIONS.kml',
-      {
-        sameActivityDates: false,
-        sameActivityDescription: false
-      }
-    )
+    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
+      sameActivityDates: false,
+      sameActivityDescription: false
+    })
   }
 
   static createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions() {
-    return this._createMultiSiteFileUpload(
-      'KML',
-      'test/resources/EXE_2025_00098-LOCATIONS.kml',
-      {
-        sameActivityDates: true,
-        sameActivityDescription: true
-      }
-    )
+    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
+      sameActivityDates: true,
+      sameActivityDescription: true
+    })
   }
 
   static _createMixedMultipleSites({
@@ -305,8 +299,8 @@ export default class SiteDetailsFactory {
     return shape === this.SITE_TYPES.CIRCLE
       ? { circleData: coordinates }
       : {
-          polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
-        }
+        polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
+      }
   }
 
   static _createFileUpload(fileType = null, filePath = null) {
