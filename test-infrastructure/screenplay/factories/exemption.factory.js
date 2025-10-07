@@ -89,6 +89,9 @@ export default class ExemptionFactory {
       if (expectedData?.extractedCoordinates) {
         siteDetails.expectedCoordinates = expectedData.extractedCoordinates
       }
+      if (expectedData?.extractedSites) {
+        siteDetails.expectedSites = expectedData.extractedSites
+      }
     }
 
     return this.createBaseExemption({

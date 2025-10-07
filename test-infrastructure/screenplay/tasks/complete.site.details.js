@@ -1,6 +1,7 @@
 import Task from '../base/task.js'
 import FileUploadSiteDetailsTask from './file-upload-site-details-task.js'
 import ManualCoordinatesSiteDetailsTask from './manual-coordinates-site-details-task.js'
+import MultiSiteFileUploadSiteDetailsTask from './multi-site-file-upload-site-details-task.js'
 import MultiSiteSiteDetailsTask from './multi-site-site-details-task.js'
 import { SiteDetailsConfig } from './site-details-config.js'
 
@@ -41,6 +42,10 @@ export default class CompleteSiteDetails extends Task {
   }
 
   createTaskDelegate(siteDetails) {
+    if (this.isMultiSiteFileUploadFlow(siteDetails)) {
+      return MultiSiteFileUploadSiteDetailsTask.withConfig(this.config)
+    }
+
     if (this.isFileUploadFlow(siteDetails)) {
       return FileUploadSiteDetailsTask.withConfig(this.config)
     }
@@ -50,6 +55,13 @@ export default class CompleteSiteDetails extends Task {
     }
 
     return ManualCoordinatesSiteDetailsTask.withConfig(this.config)
+  }
+
+  isMultiSiteFileUploadFlow(siteDetails) {
+    return (
+      siteDetails?.multipleSitesEnabled === true &&
+      siteDetails?.coordinatesEntryMethod === 'file-upload'
+    )
   }
 
   isFileUploadFlow(siteDetails) {

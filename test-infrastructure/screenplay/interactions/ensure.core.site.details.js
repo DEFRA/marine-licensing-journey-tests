@@ -37,6 +37,7 @@ export default class EnsureCoreSiteDetails extends Task {
 
     await this.verifyUploadedFileName(browseTheWeb)
     await this.verifyExtractedCoordinates(browseTheWeb, actor)
+    await this.verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails)
   }
 
   async verifyUploadedFileName(browseTheWeb) {
@@ -136,13 +137,117 @@ export default class EnsureCoreSiteDetails extends Task {
   async verifyExtractedCoordinates(browseTheWeb, actor) {
     const exemption = actor.recalls('exemption')
     const expectedCoordinates = exemption?.siteDetails?.expectedCoordinates
+    const expectedSites = exemption?.siteDetails?.expectedSites
 
+    // Handle multi-site verification
+    if (expectedSites) {
+      await this.verifyMultiSiteExtractedCoordinates(
+        browseTheWeb,
+        expectedSites
+      )
+      return
+    }
+
+    // Handle single-site verification
     this.validateExpectedCoordinates(expectedCoordinates)
 
     const actualGeoJSON = await this.getActualCoordinatesFromDOM(browseTheWeb)
     const actualCoordinates = this.extractCoordinatesFromGeoJSON(actualGeoJSON)
 
     expect(actualCoordinates).to.deep.equal(expectedCoordinates)
+  }
+
+  async verifyMultiSiteExtractedCoordinates(browseTheWeb, expectedSites) {
+    for (let i = 0; i < expectedSites.length; i++) {
+      const expectedSite = expectedSites[i]
+      const siteIndex = i + 1
+      const geoJSONVarName = `geoJSON${siteIndex}`
+
+      const actualGeoJSON = await browseTheWeb.browser.execute((varName) => {
+        return typeof window[varName] !== 'undefined' ? window[varName] : null
+      }, geoJSONVarName)
+
+      if (!actualGeoJSON) {
+        expect.fail(
+          `No ${geoJSONVarName} found for site "${expectedSite.siteName}"`
+        )
+      }
+
+      const actualCoordinates =
+        this.extractCoordinatesFromGeoJSON(actualGeoJSON)
+      expect(actualCoordinates).to.deep.equal(
+        expectedSite.extractedCoordinates,
+        `Coordinates mismatch for site "${expectedSite.siteName}" (${geoJSONVarName})`
+      )
+    }
+  }
+
+  async verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails) {
+    // Only verify incomplete fields for multi-site file uploads with different dates/descriptions
+    if (!siteDetails?.multipleSitesEnabled || !siteDetails?.expectedSites) {
+      return
+    }
+
+    const hasDifferentDates = siteDetails.sameActivityDates === false
+    const hasDifferentDescriptions =
+      siteDetails.sameActivityDescription === false
+
+    // If dates and descriptions are the same, they won't be marked as incomplete
+    if (!hasDifferentDates && !hasDifferentDescriptions) {
+      return
+    }
+
+    const numberOfSites = siteDetails.expectedSites.length
+
+    for (let i = 1; i <= numberOfSites; i++) {
+      await this.verifySiteIncompleteFields(
+        browseTheWeb,
+        i,
+        hasDifferentDates,
+        hasDifferentDescriptions
+      )
+    }
+  }
+
+  async verifySiteIncompleteFields(
+    browseTheWeb,
+    siteNumber,
+    hasDifferentDates,
+    hasDifferentDescriptions
+  ) {
+    // Verify Site name is Incomplete (always incomplete for file uploads until ML-361)
+    const siteNameElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteName(siteNumber)
+    )
+    const siteNameText = await siteNameElement.getText()
+    expect(siteNameText.trim()).to.equal(
+      'Incomplete',
+      `Site ${siteNumber} name should be "Incomplete"`
+    )
+
+    // Verify Activity dates is Incomplete (if different dates were selected)
+    if (hasDifferentDates) {
+      const datesElement = await browseTheWeb.getElement(
+        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
+      )
+      const datesText = await datesElement.getText()
+      expect(datesText.trim()).to.equal(
+        'Incomplete',
+        `Site ${siteNumber} activity dates should be "Incomplete"`
+      )
+    }
+
+    // Verify Activity description is Incomplete (if different descriptions were selected)
+    if (hasDifferentDescriptions) {
+      const descriptionElement = await browseTheWeb.getElement(
+        ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber)
+      )
+      const descriptionText = await descriptionElement.getText()
+      expect(descriptionText.trim()).to.equal(
+        'Incomplete',
+        `Site ${siteNumber} activity description should be "Incomplete"`
+      )
+    }
   }
 
   validateFileType(expectedFileType, siteDetails) {
@@ -199,7 +304,9 @@ export default class EnsureCoreSiteDetails extends Task {
       case 'LineString':
         return coordinates
       case 'Polygon':
-        return coordinates
+        // Polygon coordinates are [outerRing, hole1, hole2, ...]
+        // We only need the outer ring
+        return coordinates[0]
       case 'Point':
         return [coordinates]
       default:

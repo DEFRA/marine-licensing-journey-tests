@@ -1,50 +1,33 @@
 {
-  "type": "FeatureCollection",
-  "features": [
+  "extractedSites": [
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Kentish Flats and Kentish Flats Extension",
-        "description": "Kentish Flats and Kentish Flats Extension"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [1.02333333333333, 51.46906666666667, 0],
-            [1.06491666666667, 51.43608333333333, 0],
-            [1.15086666666667, 51.44465, 0],
-            [1.10945, 51.47773333333333, 0],
-            [1.02333333333333, 51.46906666666667, 0]
-          ]
-        ]
-      }
+      "siteName": "Kentish Flats and Kentish Flats Extension",
+      "extractedCoordinates": [
+        [1.0233333333333334, 51.46906666666667, 0],
+        [1.0649166666666667, 51.436083333333336, 0],
+        [1.1508666666666667, 51.44465, 0],
+        [1.10945, 51.47773333333333, 0],
+        [1.0233333333333334, 51.46906666666667, 0]
+      ],
+      "geometryType": "Polygon"
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Thanet Offshore Wind Farm",
-        "description": "Thanet Offshore Wind Farm"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [1.56861666666667, 51.44065, 0],
-            [1.62476666666667, 51.40178333333333, 0],
-            [1.67171666666667, 51.3993, 0],
-            [1.6872, 51.4033, 0],
-            [1.68791666666667, 51.42575, 0],
-            [1.6379, 51.46043333333333, 0],
-            [1.62093333333333, 51.46131666666667, 0],
-            [1.60503333333333, 51.46215, 0],
-            [1.59275, 51.45896666666667, 0],
-            [1.57651666666667, 51.4498, 0],
-            [1.56861666666667, 51.44065, 0]
-          ]
-        ]
-      }
+      "siteName": "Thanet Offshore Wind Farm",
+      "extractedCoordinates": [
+        [1.5686166666666668, 51.44065, 0],
+        [1.6247666666666667, 51.401783333333334, 0],
+        [1.6717166666666667, 51.3993, 0],
+        [1.6872, 51.4033, 0],
+        [1.6879166666666667, 51.42575, 0],
+        [1.6379, 51.460433333333334, 0],
+        [1.6209333333333333, 51.46131666666667, 0],
+        [1.6050333333333333, 51.46215, 0],
+        [1.59275, 51.45896666666667, 0],
+        [1.5765166666666666, 51.4498, 0],
+        [1.5686166666666668, 51.44065, 0]
+      ],
+      "geometryType": "Polygon"
     }
   ],
-  "description": "Multi-site KML file with 2 offshore wind farm sites in Thames Estuary area for testing multiple uploaded sites"
+  "description": "Multi-site KML file with 2 offshore wind farm sites in Thames Estuary area"
 }
