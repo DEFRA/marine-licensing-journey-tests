@@ -37,7 +37,7 @@ export default class ExemptionFactory {
           activityPurpose: activityType.supportsPurpose
             ? faker.helpers.arrayElement(ACTIVITY_PURPOSES)
             : null,
-          pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
+          pdfUrl: `https://marinelicensing.marinemanagement.org.uk/path/journey/self-service/outcome-document/${faker.string.uuid()}`
         }
       })(),
       ...overrides
