@@ -31,9 +31,17 @@ Feature: Multi-site: Provide multiple sites for an exemption notification
     Then the site details review page shows the site details
     And the "Site details" task status is "Completed"
 
-  @kml
+  @kml @smoke
   Scenario: Complete a multi-site kml file upload with different activity dates and different descriptions
     Given a user is uploading a kml file with multiple sites with different activity dates and different descriptions
+    And the site details task is reached
+    When the site details task is completed
+    Then the site details review page shows the site details
+    And the "Site details" task status is "Completed"
+
+  @kml @smoke
+  Scenario: Complete a multi-site kml file upload with same activity dates and descriptions
+    Given a user is uploading a kml file with multiple sites with same activity dates and descriptions
     And the site details task is reached
     When the site details task is completed
     Then the site details review page shows the site details

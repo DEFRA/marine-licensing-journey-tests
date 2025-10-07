@@ -1,6 +1,6 @@
+import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
 import ActivityDatesFactory from './activity-dates.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
-import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
 
 function setExemptionLevelProperties(builder, siteDetails) {
   const firstSite = siteDetails.sites?.[0]
@@ -134,6 +134,25 @@ export const siteDetailsExtension = {
     }
 
     builder.setProperty('siteDetails', siteDetails)
+    return builder
+  },
+
+  forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions: (builder) => {
+    const siteDetails =
+      SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+
+    // Load expected sites from sidecar file if file path exists
+    if (siteDetails.filePath) {
+      const expectedData = CoordinateFiles.loadExpectedCoordinates(
+        siteDetails.filePath
+      )
+      if (expectedData?.extractedSites) {
+        siteDetails.expectedSites = expectedData.extractedSites
+      }
+    }
+
+    builder.setProperty('siteDetails', siteDetails)
+    setExemptionLevelProperties(builder, siteDetails)
     return builder
   }
 }

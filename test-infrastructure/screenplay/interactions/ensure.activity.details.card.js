@@ -53,16 +53,13 @@ export default class EnsureActivityDetailsCard extends Task {
   }
 
   async assertActivityDates(browseTheWeb, activityDates) {
+    const locator = ReviewSiteDetailsPage.activityDatesValue
+
     if (activityDates.start && activityDates.end) {
       const expectedDateRange = `${activityDates.start} to ${activityDates.end}`
-      await browseTheWeb.expectElementToContainText(
-        ReviewSiteDetailsPage.activityDatesValue,
-        expectedDateRange
-      )
+      await browseTheWeb.expectElementToContainText(locator, expectedDateRange)
     } else if (activityDates.startDate && activityDates.endDate) {
-      await browseTheWeb.expectElementToBePresent(
-        ReviewSiteDetailsPage.activityDatesValue
-      )
+      await browseTheWeb.expectElementToBePresent(locator)
     }
   }
 

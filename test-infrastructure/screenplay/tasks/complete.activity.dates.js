@@ -19,7 +19,13 @@ export default class CompleteActivityDates extends Task {
     if (!exemption) {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
     }
-    const activityDates = exemption.activityDates
+
+    // For multi-site scenarios, dates may be stored in siteDetails.sites[0].activityDates
+    let activityDates = exemption.activityDates
+    if (!activityDates && exemption.siteDetails?.sites?.[0]?.activityDates) {
+      activityDates = exemption.siteDetails.sites[0].activityDates
+    }
+
     if (!activityDates) {
       expect.fail(ERROR_MESSAGES.MISSING_ACTIVITY_DATES)
     }

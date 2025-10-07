@@ -183,7 +183,7 @@ export default class EnsureCoreSiteDetails extends Task {
   }
 
   async verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails) {
-    // Only verify incomplete fields for multi-site file uploads with different dates/descriptions
+    // Only verify "Incomplete" fields for multi-site file uploads with different dates/descriptions
     if (!siteDetails?.multipleSitesEnabled || !siteDetails?.expectedSites) {
       return
     }
@@ -192,11 +192,12 @@ export default class EnsureCoreSiteDetails extends Task {
     const hasDifferentDescriptions =
       siteDetails.sameActivityDescription === false
 
-    // If dates and descriptions are the same, they won't be marked as incomplete
+    // If dates and descriptions are the same, EnsureActivityDetailsCard will verify them
     if (!hasDifferentDates && !hasDifferentDescriptions) {
       return
     }
 
+    // Verify incomplete fields on individual sites (only when dates/descriptions are different)
     const numberOfSites = siteDetails.expectedSites.length
 
     for (let i = 1; i <= numberOfSites; i++) {

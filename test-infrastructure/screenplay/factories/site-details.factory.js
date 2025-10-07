@@ -176,6 +176,17 @@ export default class SiteDetailsFactory {
     )
   }
 
+  static createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions() {
+    return this._createMultiSiteFileUpload(
+      'KML',
+      'test/resources/EXE_2025_00098-LOCATIONS.kml',
+      {
+        sameActivityDates: true,
+        sameActivityDescription: true
+      }
+    )
+  }
+
   static _createMixedMultipleSites({
     sameActivityDates,
     sameActivityDescription
