@@ -25,6 +25,13 @@ function loadExpectedSitesFromFile(siteDetails) {
   }
 }
 
+function createMultiSiteBuilder(siteDetails, builder) {
+  loadExpectedSitesFromFile(siteDetails)
+  builder.setProperty('siteDetails', siteDetails)
+  setExemptionLevelProperties(builder, siteDetails)
+  return builder
+}
+
 export const siteDetailsExtension = {
   forACircleWithWGS84Coordinates: (builder) => {
     builder.setProperty(
@@ -89,37 +96,25 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forMixedMultipleSitesWithSameActivityDatesAndDescriptions: (builder) => {
-    const siteDetails =
-      SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDescriptions()
-    builder.setProperty('siteDetails', siteDetails)
-
-    setExemptionLevelProperties(builder, siteDetails)
-
-    return builder
-  },
+  forMixedMultipleSitesWithSameActivityDatesAndDescriptions: (builder) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDescriptions(),
+      builder
+    ),
   forMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions: (
     builder
-  ) => {
-    const siteDetails =
-      SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions()
-    builder.setProperty('siteDetails', siteDetails)
-
-    setExemptionLevelProperties(builder, siteDetails)
-
-    return builder
-  },
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions(),
+      builder
+    ),
   forMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions: (
     builder
-  ) => {
-    const siteDetails =
-      SiteDetailsFactory.createMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions()
-    builder.setProperty('siteDetails', siteDetails)
-
-    setExemptionLevelProperties(builder, siteDetails)
-
-    return builder
-  },
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions(),
+      builder
+    ),
   withKMLUpload: (builder) => {
     builder.setProperty('siteDetails', SiteDetailsFactory.createKMLUpload())
     return builder
@@ -138,14 +133,27 @@ export const siteDetailsExtension = {
     return builder
   },
 
-  forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions: (builder) => {
-    const siteDetails =
-      SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
-    loadExpectedSitesFromFile(siteDetails)
-    builder.setProperty('siteDetails', siteDetails)
-    setExemptionLevelProperties(builder, siteDetails)
-    return builder
-  }
+  forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions: (builder) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions(),
+      builder
+    ),
+
+  forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions: (
+    builder
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions(),
+      builder
+    ),
+
+  forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions: (
+    builder
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions(),
+      builder
+    )
 }
 
 export const activityDatesExtension = {

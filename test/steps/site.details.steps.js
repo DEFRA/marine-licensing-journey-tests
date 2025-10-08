@@ -83,6 +83,28 @@ Given(
 )
 
 Given(
+  'a user is uploading a kml file with multiple sites with different activity dates and same descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a kml file with multiple sites with same activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
   'an exemption for a triangular site using WGS84 coordinates with point 1 {string}, {string}, point 2 {string}, {string} and point 3 {string}, {string}',
   function (lat1, lng1, lat2, lng2, lat3, lng3) {
     this.actor = new Actor('Alice')
