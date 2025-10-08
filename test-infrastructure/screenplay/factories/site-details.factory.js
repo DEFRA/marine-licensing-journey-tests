@@ -332,7 +332,6 @@ export default class SiteDetailsFactory {
     const sharedActivityDescription =
       ActivityDescriptionModel.generateActivityDescription()
 
-    // Site names will come from the uploaded file (KML Placemark names)
     const siteNames = [
       'Kentish Flats and Kentish Flats Extension',
       'Thanet Offshore Wind Farm'
