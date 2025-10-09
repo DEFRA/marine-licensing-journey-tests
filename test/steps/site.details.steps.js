@@ -66,7 +66,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUpload()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions()
     )
   }
 )
@@ -100,6 +100,50 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with different activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with same activity dates and descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with different activity dates and same descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with same activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions()
     )
   }
 )

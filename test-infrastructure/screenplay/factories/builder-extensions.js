@@ -153,7 +153,51 @@ export const siteDetailsExtension = {
     createMultiSiteBuilder(
       SiteDetailsFactory.createMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions(),
       builder
-    )
+    ),
+
+  forMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions: (
+    builder
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions(),
+      builder
+    ),
+
+  forMultiSiteShapefileUpload: (builder) => {
+    const siteDetails = SiteDetailsFactory.createMultiSiteShapefileUpload()
+    loadExpectedSitesFromFile(siteDetails)
+    builder.setProperty('siteDetails', siteDetails)
+    return builder
+  },
+
+  forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions: (builder) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions(),
+      builder
+    ),
+
+  forMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions: (
+    builder
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions(),
+      builder
+    ),
+
+  forMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions: (
+    builder
+  ) =>
+    createMultiSiteBuilder(
+      SiteDetailsFactory.createMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions(),
+      builder
+    ),
+
+  forMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions:
+    (builder) =>
+      createMultiSiteBuilder(
+        SiteDetailsFactory.createMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions(),
+        builder
+      )
 }
 
 export const activityDatesExtension = {

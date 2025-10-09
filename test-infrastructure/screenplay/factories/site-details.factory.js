@@ -25,6 +25,7 @@ export default class SiteDetailsFactory {
   }
 
   static MULTI_SITE_KML_FILE = 'test/resources/EXE_2025_00098-LOCATIONS.kml'
+  static MULTI_SITE_SHAPEFILE = 'test/resources/Suffolk MMO shapefiles.zip'
 
   static DEFAULT_COORDINATES = {
     circle: {
@@ -193,6 +194,68 @@ export default class SiteDetailsFactory {
       sameActivityDates: true,
       sameActivityDescription: false
     })
+  }
+
+  static createMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions() {
+    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
+      sameActivityDates: false,
+      sameActivityDescription: false
+    })
+  }
+
+  static createMultiSiteShapefileUpload() {
+    return this._createMultiSiteFileUpload(
+      'Shapefile',
+      this.MULTI_SITE_SHAPEFILE,
+      {
+        sameActivityDates: false,
+        sameActivityDescription: false
+      }
+    )
+  }
+
+  static createMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions() {
+    return this._createMultiSiteFileUpload(
+      'Shapefile',
+      this.MULTI_SITE_SHAPEFILE,
+      {
+        sameActivityDates: true,
+        sameActivityDescription: true
+      }
+    )
+  }
+
+  static createMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions() {
+    return this._createMultiSiteFileUpload(
+      'Shapefile',
+      this.MULTI_SITE_SHAPEFILE,
+      {
+        sameActivityDates: false,
+        sameActivityDescription: true
+      }
+    )
+  }
+
+  static createMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions() {
+    return this._createMultiSiteFileUpload(
+      'Shapefile',
+      this.MULTI_SITE_SHAPEFILE,
+      {
+        sameActivityDates: true,
+        sameActivityDescription: false
+      }
+    )
+  }
+
+  static createMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions() {
+    return this._createMultiSiteFileUpload(
+      'Shapefile',
+      this.MULTI_SITE_SHAPEFILE,
+      {
+        sameActivityDates: false,
+        sameActivityDescription: false
+      }
+    )
   }
 
   static _createMixedMultipleSites({

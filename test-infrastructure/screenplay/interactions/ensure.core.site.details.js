@@ -269,8 +269,6 @@ export default class EnsureCoreSiteDetails extends Task {
 
   async getActualCoordinatesFromDOM(browseTheWeb) {
     try {
-      // The frontend now outputs: var geoJSON1 = {...}; in a script tag
-      // We need to extract this via JavaScript execution
       const geoJSON = await browseTheWeb.browser.execute(() => {
         // eslint-disable-next-line no-undef
         return typeof geoJSON1 !== 'undefined' ? geoJSON1 : null
