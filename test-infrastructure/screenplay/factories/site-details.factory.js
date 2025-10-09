@@ -168,94 +168,30 @@ export default class SiteDetailsFactory {
     )
   }
 
-  static createMultiSiteKMLUpload() {
-    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
-      sameActivityDates: false,
-      sameActivityDescription: false
+  static createMultiSiteFileUploadByType(
+    fileType,
+    { sameActivityDates = false, sameActivityDescription = false } = {}
+  ) {
+    const fileConfig = {
+      KML: this.MULTI_SITE_KML_FILE,
+      Shapefile: this.MULTI_SITE_SHAPEFILE
+    }
+    const filePath = fileConfig[fileType]
+    if (!filePath) {
+      throw new Error(`Unsupported file type: ${fileType}`)
+    }
+    return this._createMultiSiteFileUpload(fileType, filePath, {
+      sameActivityDates,
+      sameActivityDescription
     })
   }
 
-  static createMultiSiteKMLUploadWithSameActivityDatesAndDescriptions() {
-    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
-      sameActivityDates: true,
-      sameActivityDescription: true
-    })
+  static createMultiSiteKMLUpload(options) {
+    return this.createMultiSiteFileUploadByType('KML', options)
   }
 
-  static createMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions() {
-    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
-      sameActivityDates: false,
-      sameActivityDescription: true
-    })
-  }
-
-  static createMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions() {
-    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
-      sameActivityDates: true,
-      sameActivityDescription: false
-    })
-  }
-
-  static createMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions() {
-    return this._createMultiSiteFileUpload('KML', this.MULTI_SITE_KML_FILE, {
-      sameActivityDates: false,
-      sameActivityDescription: false
-    })
-  }
-
-  static createMultiSiteShapefileUpload() {
-    return this._createMultiSiteFileUpload(
-      'Shapefile',
-      this.MULTI_SITE_SHAPEFILE,
-      {
-        sameActivityDates: false,
-        sameActivityDescription: false
-      }
-    )
-  }
-
-  static createMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions() {
-    return this._createMultiSiteFileUpload(
-      'Shapefile',
-      this.MULTI_SITE_SHAPEFILE,
-      {
-        sameActivityDates: true,
-        sameActivityDescription: true
-      }
-    )
-  }
-
-  static createMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions() {
-    return this._createMultiSiteFileUpload(
-      'Shapefile',
-      this.MULTI_SITE_SHAPEFILE,
-      {
-        sameActivityDates: false,
-        sameActivityDescription: true
-      }
-    )
-  }
-
-  static createMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions() {
-    return this._createMultiSiteFileUpload(
-      'Shapefile',
-      this.MULTI_SITE_SHAPEFILE,
-      {
-        sameActivityDates: true,
-        sameActivityDescription: false
-      }
-    )
-  }
-
-  static createMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions() {
-    return this._createMultiSiteFileUpload(
-      'Shapefile',
-      this.MULTI_SITE_SHAPEFILE,
-      {
-        sameActivityDates: false,
-        sameActivityDescription: false
-      }
-    )
+  static createMultiSiteShapefileUpload(options) {
+    return this.createMultiSiteFileUploadByType('Shapefile', options)
   }
 
   static _createMixedMultipleSites({
