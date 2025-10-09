@@ -6,6 +6,19 @@ export default class HandleCookieBanner extends Task {
     return new HandleCookieBanner()
   }
 
+  static accepting() {
+    return new HandleCookieBanner('accept')
+  }
+
+  static rejecting() {
+    return new HandleCookieBanner('reject')
+  }
+
+  constructor(forcedChoice = null) {
+    super()
+    this.forcedChoice = forcedChoice
+  }
+
   async performAs(actor) {
     const exemption = actor.hasMemoryOf('exemption')
       ? actor.recalls('exemption')
@@ -15,7 +28,8 @@ export default class HandleCookieBanner extends Task {
       return
     }
 
-    const cookiePreferences = exemption?.cookiePreferences || 'accept'
+    const cookiePreferences =
+      this.forcedChoice || exemption?.cookiePreferences || 'accept'
     await this.handleCookieChoice(actor, cookiePreferences)
   }
 

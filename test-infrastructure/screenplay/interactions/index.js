@@ -1,5 +1,4 @@
 export * from '../page-interactions'
-export { default as AcceptCookiesFromBanner } from './accept.cookies.from.banner'
 export { default as ClickAddAnotherPoint } from './button-interactions/click.add.another.point'
 export { default as ClickButton } from './button-interactions/click.button'
 export { default as ClickCancel } from './button-interactions/click.cancel'
@@ -21,19 +20,22 @@ export { default as EnsureCookiesPolicyPage } from './ensure.cookies.policy.page
 export { default as EnsureCookiesRadioButtonSelected } from './ensure.cookies.radio.button.selected'
 export { default as EnsureDashboardSortOrder } from './ensure.dashboard.sort.order'
 export { default as EnsureEmptyStateMessage } from './ensure.empty.state.message'
-export { default as EnsureErrorDisplayed } from './ensure.error'
-export { default as EnsureErrorNotDisplayed } from './ensure.error.not.displayed'
+export {
+  default as EnsureError,
+  default as EnsureErrorDisplayed
+} from './ensure.error'
 export { default as EnsureFooterNavigationLinks } from './ensure.footer.navigation.links'
 export { default as EnsureHeaderNavigationLinks } from './ensure.header.navigation.links'
 export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.errors.are.displayed'
-export { default as EnsureNoErrorsDisplayed } from './ensure.no.errors.displayed'
 export { default as EnsureNotificationRemoved } from './ensure.notification.removed'
 export { default as EnsureNotificationsAreDisplayedOnTheDashboard } from './ensure.notifications.are.displayed.on.the.dashboard'
 export { default as EnsurePageHeading } from './ensure.page.heading'
 export { default as EnsurePrivacyPolicyPage } from './ensure.privacy.policy.page'
-export { default as EnsureThatProjectName } from './ensure.project.name'
+export {
+  default as EnsureProjectName,
+  default as EnsureThatProjectName
+} from './ensure.project.name'
 export { default as EnsureProjectNameDisplayedAsCaption } from './ensure.project.name.displayed.as.caption'
-export { default as EnsureThatProjectNameIsEmpty } from './ensure.project.name.is.empty'
 export { default as EnsureProjectSummaryCard } from './ensure.project.summary.card.js'
 export { default as EnsurePublicRegisterTask } from './ensure.public.register'
 export { default as EnsurePublicRegisterNewTab } from './ensure.public.register.new.tab'
@@ -45,7 +47,6 @@ export { default as EnsureThatIatIsDisplayed } from './ensure.that.iat.is.displa
 export { default as EnsureThatTheExemptionDetailsAreCorrect } from './ensure.that.the.exemption.details.are.correct'
 export { default as EnsureViewDetailsPage } from './ensure.view.details.page'
 export { default as HandleCookieBanner } from './handle.cookie.banner'
-export { default as RejectCookiesFromBanner } from './reject.cookies.from.banner'
 export { default as RememberTheExemptionReferenceNumber } from './remember.the.exemption.reference.number'
 export { default as RetrieveTheViewDetailsLink } from './retrieve.the.view.details.link'
 export { default as SaveCookiePreferences } from './save.cookie.preferences'

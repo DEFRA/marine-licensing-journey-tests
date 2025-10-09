@@ -1,5 +1,6 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
+import DashboardPage from '~/test-infrastructure/pages/dashboard.page'
 import {
   Actor,
   ApplyForExemption,
@@ -12,7 +13,7 @@ import {
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
   EnsureNotificationsAreDisplayedOnTheDashboard,
-  EnsureThatProjectNameIsEmpty,
+  EnsureProjectName,
   EnsureViewDetailsPage,
   Navigate,
   NavigateToLink,
@@ -22,7 +23,6 @@ import {
   SubmitAnExemptionNotification
 } from '~/test-infrastructure/screenplay'
 import CompleteProjectName from '~/test-infrastructure/screenplay/tasks/complete.project.name'
-import DashboardPage from '~/test-infrastructure/pages/dashboard.page'
 
 Given('the user has not submitted any notifications', async function () {
   this.actor = new Actor('Alice')
@@ -131,7 +131,7 @@ When('the user starts a new notification', async function () {
 })
 
 Then('the project name is not pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectNameIsEmpty.now())
+  await this.actor.attemptsTo(EnsureProjectName.isEmpty())
 })
 
 Then('the notification is removed from the dashboard', async function () {

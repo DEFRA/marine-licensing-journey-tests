@@ -1,7 +1,6 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
 import {
-  AcceptCookiesFromBanner,
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
@@ -10,8 +9,8 @@ import {
   EnsureCookieConfirmationBanner,
   EnsureCookiesPolicyPage,
   EnsureCookiesRadioButtonSelected,
+  HandleCookieBanner,
   Navigate,
-  RejectCookiesFromBanner,
   SaveCookiePreferences
 } from '~/test-infrastructure/screenplay'
 
@@ -105,14 +104,14 @@ When('returning to the cookies policy page', async function () {
 When(
   'the analytics cookies are accepted from the cookie banner',
   async function () {
-    await this.actor.attemptsTo(AcceptCookiesFromBanner.now())
+    await this.actor.attemptsTo(HandleCookieBanner.accepting())
   }
 )
 
 When(
   'the analytics cookies are rejected from the cookie banner',
   async function () {
-    await this.actor.attemptsTo(RejectCookiesFromBanner.now())
+    await this.actor.attemptsTo(HandleCookieBanner.rejecting())
   }
 )
 

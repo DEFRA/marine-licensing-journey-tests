@@ -4,8 +4,7 @@ import { browser } from '@wdio/globals'
 import {
   ClickSaveAndContinue,
   ContinueFromBeforeYouStartSiteDetailsPage,
-  EnsureErrorDisplayed,
-  EnsureNoErrorsDisplayed,
+  EnsureError,
   SelectTheTask
 } from '~/test-infrastructure/screenplay/interactions/index.js'
 
@@ -207,17 +206,14 @@ When('completing the site details task', async function () {
 })
 
 Then('the file is successfully processed', async function () {
-  await this.actor.attemptsTo(EnsureNoErrorsDisplayed.onPage())
+  await this.actor.attemptsTo(EnsureError.noneOnPage())
 })
 
 Then(
   'the file upload error {string} is displayed',
   async function (expectedErrorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
-        FileUploadPage.fileUploadError,
-        expectedErrorMessage
-      )
+      EnsureError.is(FileUploadPage.fileUploadError, expectedErrorMessage)
     )
   }
 )

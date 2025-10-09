@@ -16,8 +16,7 @@ import {
   ClickSaveAndContinue,
   CompleteProjectName,
   ContinueFromBeforeYouStartSiteDetailsPage,
-  EnsureErrorDisplayed,
-  EnsureErrorNotDisplayed,
+  EnsureError,
   EnsureMultipleErrorsAreDisplayed,
   EnsurePageHeading,
   Navigate,
@@ -246,7 +245,7 @@ Then(
   'the coordinates type error: {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
+      EnsureError.is(
         HowDoYouWantToProvideCoordinatesPage.coordinatesTypeError,
         errorMessage
       )
@@ -258,7 +257,7 @@ Then(
   'the coordinates entry method error: {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
+      EnsureError.is(
         HowDoYouWantToEnterTheCoordinatesPage.coordinatesEntryError,
         errorMessage
       )
@@ -270,7 +269,7 @@ Then(
   'the coordinates system error {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
+      EnsureError.is(
         WhatCoordinateSystemPage.coordinatesSystemError,
         errorMessage
       )
@@ -280,10 +279,7 @@ Then(
 
 Then('the latitude error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
-    EnsureErrorDisplayed.is(
-      EnterCoordinatesCentrePointPage.latitudeError,
-      errorMessage
-    )
+    EnsureError.is(EnterCoordinatesCentrePointPage.latitudeError, errorMessage)
   )
 })
 
@@ -291,7 +287,7 @@ Then(
   'the longitude error {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
+      EnsureError.is(
         EnterCoordinatesCentrePointPage.longitudeError,
         errorMessage
       )
@@ -301,10 +297,7 @@ Then(
 
 Then('the eastings error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
-    EnsureErrorDisplayed.is(
-      EnterCoordinatesCentrePointPage.eastingsError,
-      errorMessage
-    )
+    EnsureError.is(EnterCoordinatesCentrePointPage.eastingsError, errorMessage)
   )
 })
 
@@ -312,7 +305,7 @@ Then(
   'the northings error {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
+      EnsureError.is(
         EnterCoordinatesCentrePointPage.northingsError,
         errorMessage
       )
@@ -322,7 +315,7 @@ Then(
 
 Then('the width error {string} is displayed', async function (errorMessage) {
   await this.actor.attemptsTo(
-    EnsureErrorDisplayed.is(WidthOfCircularSitePage.widthError, errorMessage)
+    EnsureError.is(WidthOfCircularSitePage.widthError, errorMessage)
   )
 })
 
@@ -356,7 +349,7 @@ Then(
       pointNumber - 1
     )
     await this.actor.attemptsTo(
-      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+      EnsureError.isNotDisplayed(errorLocator, `point ${pointNumber}`)
     )
   }
 )
@@ -368,7 +361,7 @@ Then(
       pointNumber - 1
     )
     await this.actor.attemptsTo(
-      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+      EnsureError.isNotDisplayed(errorLocator, `point ${pointNumber}`)
     )
   }
 )
@@ -380,7 +373,7 @@ Then(
       pointNumber - 1
     )
     await this.actor.attemptsTo(
-      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+      EnsureError.isNotDisplayed(errorLocator, `point ${pointNumber}`)
     )
   }
 )
@@ -392,7 +385,7 @@ Then(
       pointNumber - 1
     )
     await this.actor.attemptsTo(
-      EnsureErrorNotDisplayed.is(errorLocator, `point ${pointNumber}`)
+      EnsureError.isNotDisplayed(errorLocator, `point ${pointNumber}`)
     )
   }
 )
