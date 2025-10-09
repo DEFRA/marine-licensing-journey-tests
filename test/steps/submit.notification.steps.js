@@ -1,17 +1,18 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
+import DefraAccountPage from '~/test-infrastructure/pages/defra.account.page'
+import HeaderPage from '~/test-infrastructure/pages/header.page'
 import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  Click,
   ClickConfirmAndSend,
   ClickReviewAndSend,
   CompleteAllTasks,
   EnsureConfirmationPage,
   Navigate
 } from '~/test-infrastructure/screenplay'
-import ClickDefraAccount from '~/test-infrastructure/screenplay/interactions/click.defra.account'
-import ClickMarineLicensingService from '~/test-infrastructure/screenplay/interactions/click.marine.licensing.service'
 import EnsureDashboardPage from '~/test-infrastructure/screenplay/interactions/ensure.dashboard.page'
 import EnsureDefraAccountPage from '~/test-infrastructure/screenplay/interactions/ensure.defra.account.page'
 
@@ -49,7 +50,7 @@ Given('the user is on any page within the service', async function () {
 })
 
 When('the user clicks the Defra account link in the header', async function () {
-  await this.actor.attemptsTo(ClickDefraAccount.now())
+  await this.actor.attemptsTo(Click.on(HeaderPage.locators.defraAccountLink))
 })
 
 Then(
@@ -64,7 +65,7 @@ Given('the user is on the Defra account management page', async function () {
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(ClickDefraAccount.now())
+  await this.actor.attemptsTo(Click.on(HeaderPage.locators.defraAccountLink))
   await this.actor.attemptsTo(EnsureDefraAccountPage.isDisplayed())
 })
 
@@ -75,7 +76,9 @@ When(
       linkText === 'Get Permission For Marine Work' &&
       sectionText === 'Your services'
     ) {
-      await this.actor.attemptsTo(ClickMarineLicensingService.now())
+      await this.actor.attemptsTo(
+        Click.on(DefraAccountPage.locators.marineLicensingServiceLink)
+      )
     }
   }
 )

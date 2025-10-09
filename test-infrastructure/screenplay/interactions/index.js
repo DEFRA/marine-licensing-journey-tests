@@ -6,9 +6,8 @@ export { default as ClickConfirmAndSend } from './button-interactions/click.conf
 export { default as ClickRemovePointButton } from './button-interactions/click.remove.point.button'
 export { default as ClickReviewAndSend } from './button-interactions/click.review.and.send'
 export { default as ClickSaveAndContinue } from './button-interactions/click.save.and.continue'
+export { default as Click } from './click'
 export { default as ClickContinueLink } from './click.continue.link'
-export { default as ClickCookiesLink } from './click.cookies.link'
-export { default as ClickPrivacyPolicyLink } from './click.privacy.policy.link'
 export { default as ClickPublicRegisterLink } from './click.public.register.link'
 export { default as ClickViewDetailsLink } from './click.view.details.link'
 export { default as ContinueFromBeforeYouStartSiteDetailsPage } from './continue.from.before.you.start.site.details.page'
@@ -24,9 +23,8 @@ export {
   default as EnsureError,
   default as EnsureErrorDisplayed
 } from './ensure.error'
-export { default as EnsureFooterNavigationLinks } from './ensure.footer.navigation.links'
-export { default as EnsureHeaderNavigationLinks } from './ensure.header.navigation.links'
 export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.errors.are.displayed'
+export { default as EnsureNavigationLinks } from './ensure.navigation.links'
 export { default as EnsureNotificationRemoved } from './ensure.notification.removed'
 export { default as EnsureNotificationsAreDisplayedOnTheDashboard } from './ensure.notifications.are.displayed.on.the.dashboard'
 export { default as EnsurePageHeading } from './ensure.page.heading'
