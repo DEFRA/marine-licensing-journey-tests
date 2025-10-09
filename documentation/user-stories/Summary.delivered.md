@@ -54,6 +54,8 @@ Multiple pathways available:
 
 #### Current Multi-Site Flow (ACTIVE)
 
+**Manual Entry:**
+
 - **ML-114**: Are all activity descriptions the same? ✅
 - **ML-228**: Provide site name ✅
 - **ML-419**: Are all activity dates the same? ✅
@@ -63,14 +65,25 @@ Multiple pathways available:
 - **ML-421**: Activity description for multiple manual entry sites ✅
 - **ML-362**: Add another site from review site details ✅
 
+**File Upload (KML & Shapefile):**
+
+- **ML-75**: Provide dates for multiple uploaded sites ✅
+- **ML-76**: Provide activity description for multiple uploaded sites ✅
+- **ML-119**: Are all activity dates the same? (file upload) ✅
+- **ML-120**: Are all activity descriptions the same? (file upload) ✅
+- **ML-232**: Display multiple uploaded sites on review site details ✅
+
 #### Advanced Multi-Site Capabilities
 
 - **Mixed Site Types**: Support for combining circular and polygon sites within single notifications
 - **Intelligent Conditional Routing**: Skip previously answered questions when adding additional sites
 - **Efficient Workflow**: "Add another site" button enables streamlined multi-site entry
+- **File Upload Multi-Site**: KML and Shapefile formats can contain multiple sites with automatic extraction
+- **Flexible Activity Information**: Choose to apply same dates/descriptions to all sites or provide individual values per site
 
 #### Site Review and Management
 
+- **ML-232**: Display multiple uploaded sites on review site details (file upload) ✅
 - **ML-361**: Display first manually entered site on review site details ✅
 - **ML-608**: Display multiple manually entered sites on review site details ✅
 - **ML-233**: Delete site from review site details ✅
@@ -91,8 +104,12 @@ Multiple pathways available:
 When testing activity dates and descriptions:
 
 - **For single site entries**: The system goes directly to date/description entry
-- **For multiple sites**: The system first asks if dates/descriptions are the same for all sites
-- **File uploads**: Can contain multiple sites automatically parsed from KML/GeoJSON files
+- **For manual multiple sites**: The system first asks if dates/descriptions are the same for all sites (ML-114, ML-419)
+- **File uploads (KML/Shapefile)**: Can contain multiple sites automatically parsed and extracted (ML-232)
+  - System asks if dates are the same for all sites (ML-119)
+  - System asks if descriptions are the same for all sites (ML-120)
+  - Supports both KML and Shapefile formats with multiple site geometries
+  - Each site is displayed with its map, coordinates, and individual activity information
 
 ### 2. Superseded vs Enhanced Features
 
@@ -128,15 +145,33 @@ When testing activity dates and descriptions:
 10. Check answers (ML-140)
 11. Submit (ML-84)
 
-### 3. File Upload Journey
+### 3. File Upload Journey (Single Site)
 
 1. Create project (ML-1)
 2. Choose file upload (ML-69)
-3. Upload KML/GeoJSON file (ML-70)
-4. Review extracted sites (ML-74)
-5. Provide activity information per site
+3. Upload KML/GeoJSON/Shapefile file (ML-70)
+4. Review extracted site (ML-74)
+5. Provide activity information
 6. Check answers (ML-140)
 7. Submit (ML-84)
+
+### 3a. File Upload Journey (Multi-Site with KML or Shapefile)
+
+1. Create project (ML-1)
+2. Choose file upload (ML-69)
+3. Upload KML or Shapefile containing multiple sites (ML-70)
+4. System extracts all sites automatically (ML-232)
+5. Decision: Same dates for all sites? (ML-119)
+6. Provide dates for sites (ML-75)
+   - If same: Enter once for all sites
+   - If different: Enter for each site individually
+7. Decision: Same description for all sites? (ML-120)
+8. Provide descriptions for sites (ML-76)
+   - If same: Enter once for all sites
+   - If different: Enter for each site individually
+9. Review all extracted sites with maps and coordinates (ML-232)
+10. Check answers showing all sites (ML-140)
+11. Submit (ML-84)
 
 ### 4. Mixed Site Types Journey (Advanced Testing)
 
@@ -177,6 +212,7 @@ When testing activity dates and descriptions:
 - Date validation: Must be today or future, end date after start date
 - Description: Maximum 4000 characters
 - Coordinates: Support for both WGS84 and OSGB36 systems
+- File uploads: Both KML and Shapefile formats validated for correct structure and coordinate data
 
 ### D365 Integration
 
@@ -188,15 +224,21 @@ When testing activity dates and descriptions:
 
 1. **Start with single-site scenarios** to understand core functionality
 2. **Progress to multi-site scenarios** to test enhanced features
-3. **Test "Add another site" workflow** (ML-362) with intelligent conditional routing
-4. **Try mixed site types** - combine circular and polygon sites in one notification
-5. **Test site review functionality** (ML-361, ML-608) with enhanced summary cards and scalable site display
-6. **Test site deletion capability** (ML-233) including confirmation dialogs and site renumbering
-7. **Test navigation flows** including back button and cancel behaviours
-8. **Verify data persistence** across the user journey
-9. **Check validation messages** for clarity and helpfulness
-10. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
-11. **Confirm submission process** works as expected in your test environment
+3. **Test file upload multi-site functionality** (ML-75, ML-76, ML-119, ML-120, ML-232):
+   - Upload KML files with multiple sites
+   - Upload Shapefile archives with multiple sites
+   - Test "same dates/descriptions for all sites" workflow
+   - Test "different dates/descriptions per site" workflow
+   - Verify all sites display correctly with maps and coordinates
+4. **Test "Add another site" workflow** (ML-362) with intelligent conditional routing
+5. **Try mixed site types** - combine circular and polygon sites in one notification
+6. **Test site review functionality** (ML-361, ML-608) with enhanced summary cards and scalable site display
+7. **Test site deletion capability** (ML-233) including confirmation dialogs and site renumbering
+8. **Test navigation flows** including back button and cancel behaviours
+9. **Verify data persistence** across the user journey
+10. **Check validation messages** for clarity and helpfulness
+11. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
+12. **Confirm submission process** works as expected in your test environment
 
 ## Support & Documentation
 
@@ -205,4 +247,4 @@ When testing activity dates and descriptions:
 
 ---
 
-_Last Updated: 25 September 2025_
+_Last Updated: 9 October 2025_
