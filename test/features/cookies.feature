@@ -15,13 +15,11 @@ Feature: Cookies policy page allows users to manage cookie preferences
     When the cookies link is clicked in the footer
     Then the "No" radio button is selected for analytics cookies
 
-  @new
   Scenario: Analytics cookies accepted from the cookie banner
     Given the project name page is displayed with the cookie banner visible
     When the analytics cookies are accepted from the cookie banner
     Then the analytics cookies are enabled
 
-  @new
   Scenario: Analytics cookies rejected from the cookie banner
     Given the project name page is displayed with the cookie banner visible
     When the analytics cookies are rejected from the cookie banner

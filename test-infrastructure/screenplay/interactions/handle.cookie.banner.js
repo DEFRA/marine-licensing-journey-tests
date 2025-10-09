@@ -20,6 +20,13 @@ export default class HandleCookieBanner extends Task {
   }
 
   async performAs(actor) {
+    // When forcedChoice is set (accepting/rejecting), always perform the action
+    if (this.forcedChoice) {
+      await this.handleCookieChoice(actor, this.forcedChoice)
+      return
+    }
+
+    // For .now() method, check if we should skip based on context
     const exemption = actor.hasMemoryOf('exemption')
       ? actor.recalls('exemption')
       : null
@@ -28,8 +35,7 @@ export default class HandleCookieBanner extends Task {
       return
     }
 
-    const cookiePreferences =
-      this.forcedChoice || exemption?.cookiePreferences || 'accept'
+    const cookiePreferences = exemption?.cookiePreferences || 'accept'
     await this.handleCookieChoice(actor, cookiePreferences)
   }
 
