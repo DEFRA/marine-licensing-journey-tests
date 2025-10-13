@@ -10,10 +10,6 @@ export default class EnsureProjectName extends Task {
     return new EnsureProjectName('empty')
   }
 
-  static hasValue(expectedValue) {
-    return new EnsureProjectName('value', expectedValue)
-  }
-
   constructor(mode, expectedValue = null) {
     super()
     this.mode = mode

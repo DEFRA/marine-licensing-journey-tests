@@ -126,12 +126,6 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forMultiSiteKMLUpload: (builder) => {
-    const siteDetails = SiteDetailsFactory.createMultiSiteKMLUpload()
-    loadExpectedSitesFromFile(siteDetails)
-    builder.setProperty('siteDetails', siteDetails)
-    return builder
-  },
 
   forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions: (builder) =>
     createMultiSiteBuilder(
@@ -174,13 +168,6 @@ export const siteDetailsExtension = {
       }),
       builder
     ),
-
-  forMultiSiteShapefileUpload: (builder) => {
-    const siteDetails = SiteDetailsFactory.createMultiSiteShapefileUpload()
-    loadExpectedSitesFromFile(siteDetails)
-    builder.setProperty('siteDetails', siteDetails)
-    return builder
-  },
 
   forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions: (builder) =>
     createMultiSiteBuilder(

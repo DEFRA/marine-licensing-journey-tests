@@ -98,34 +98,6 @@ export default class SiteDetailsFactory {
     return this._createFileUpload()
   }
 
-  static createMultipleSites() {
-    const circleData = this._getCoordinateData(
-      this.SITE_TYPES.CIRCLE,
-      this.COORDINATE_SYSTEMS.WGS84
-    )
-
-    return this._createMultiSiteStructure({
-      sameActivityDates: true,
-      sameActivityDescription: false,
-      sites: [
-        this._createSingleSite({
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          siteType: this.SITE_TYPES.CIRCLE,
-          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
-          coordinateData: circleData
-        }),
-        this._createSingleSite({
-          siteName: 'Marine Research Site Beta',
-          siteNumber: 2,
-          siteType: this.SITE_TYPES.CIRCLE,
-          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
-          coordinateData: circleData
-        })
-      ]
-    })
-  }
-
   static createMixedMultipleSites() {
     return this._createMixedMultipleSites({
       sameActivityDates: false,
