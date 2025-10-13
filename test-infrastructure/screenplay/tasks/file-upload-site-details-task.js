@@ -17,9 +17,14 @@ export default class FileUploadSiteDetailsTask extends BaseSiteDetailsTask {
     await this.navigateToSiteDetailsStart()
     await this.selectFileType()
     await this.uploadFile()
-    await this.provideActivityDates()
-    await this.provideActivityDescription()
-    await this.saveIfRequired()
+
+    // Only provide dates and description if we don't expect validation errors
+    // This is set in the test data factory for error scenarios
+    if (!this.siteDetails.expectValidationError) {
+      await this.provideActivityDates()
+      await this.provideActivityDescription()
+      await this.saveIfRequired()
+    }
   }
 
   async selectFileType() {
