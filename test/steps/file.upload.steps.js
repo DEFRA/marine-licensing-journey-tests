@@ -26,10 +26,6 @@ import {
 import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
 import { FileUploadPage } from '~/test-infrastructure/pages/index.js'
 
-// ========================================
-// KML UPLOAD SCENARIOS (7 step definitions)
-// ========================================
-
 Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
@@ -111,10 +107,6 @@ When(
     await this.actor.attemptsTo(ClickSaveAndContinue.now())
   }
 )
-
-// ========================================
-// SHAPEFILE UPLOAD SCENARIOS (7 step definitions)
-// ========================================
 
 Given('an exemption notification with a valid Shapefile', async function () {
   this.actor = new Actor('Alice')
@@ -198,10 +190,6 @@ When(
   }
 )
 
-// ========================================
-// SHARED STEP DEFINITIONS
-// ========================================
-
 When('completing the site details task', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
 })
@@ -221,7 +209,3 @@ Then(
     )
   }
 )
-
-Then('the spinner page displays during upload process', async function () {
-  await this.actor.ability.isDisplayed(FileUploadPage.spinner)
-})

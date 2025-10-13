@@ -134,11 +134,17 @@ export default class ExemptionFactory {
   }
 
   static createKMLLargeFile(filePath) {
-    return this.createFileUploadBase('kml', { filePath })
+    return this.createFileUploadBase('kml', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createKMLEmptyFile(filePath) {
-    return this.createFileUploadBase('kml', { filePath })
+    return this.createFileUploadBase('kml', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createShapefileUpload() {
@@ -167,10 +173,16 @@ export default class ExemptionFactory {
   }
 
   static createShapefileLargeFile(filePath) {
-    return this.createFileUploadBase('shapefile', { filePath })
+    return this.createFileUploadBase('shapefile', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createShapefileEmptyFile(filePath) {
-    return this.createFileUploadBase('shapefile', { filePath })
+    return this.createFileUploadBase('shapefile', {
+      filePath,
+      expectValidationError: true
+    })
   }
 }
