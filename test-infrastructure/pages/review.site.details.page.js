@@ -37,14 +37,12 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static moreThanOneSiteValue =
     '//dt[contains(text(), "More than one site")]/following-sibling::dd'
 
-  // Activity details card selectors
   static activityDetailsCard = '//h2[contains(text(), "Activity details")]'
   static activityDatesValue =
     '//dt[contains(text(), "Activity dates")]/following-sibling::dd'
   static activityDescriptionValue =
     '//dt[contains(text(), "Activity description")]/following-sibling::dd'
 
-  // Site-specific selectors for individual site cards
   static getSiteName(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd`
   }
@@ -55,6 +53,18 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
 
   static getSiteActivityDescription(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd`
+  }
+
+  static getSiteNameAddLink(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
+  }
+
+  static getSiteActivityDatesAddLink(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
+  }
+
+  static getSiteActivityDescriptionAddLink(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
   }
 
   static saveAndContinueButton = 'button*=Save and continue'

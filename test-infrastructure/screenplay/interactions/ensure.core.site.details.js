@@ -139,7 +139,6 @@ export default class EnsureCoreSiteDetails extends Task {
     const expectedCoordinates = exemption?.siteDetails?.expectedCoordinates
     const expectedSites = exemption?.siteDetails?.expectedSites
 
-    // Handle multi-site verification
     if (expectedSites) {
       await this.verifyMultiSiteExtractedCoordinates(
         browseTheWeb,
@@ -148,7 +147,6 @@ export default class EnsureCoreSiteDetails extends Task {
       return
     }
 
-    // Handle single-site verification
     this.validateExpectedCoordinates(expectedCoordinates)
 
     const actualGeoJSON = await this.getActualCoordinatesFromDOM(browseTheWeb)
@@ -183,7 +181,6 @@ export default class EnsureCoreSiteDetails extends Task {
   }
 
   async verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails) {
-    // Only verify "Incomplete" fields for multi-site file uploads with different dates/descriptions
     if (!siteDetails?.multipleSitesEnabled || !siteDetails?.expectedSites) {
       return
     }
@@ -192,12 +189,10 @@ export default class EnsureCoreSiteDetails extends Task {
     const hasDifferentDescriptions =
       siteDetails.sameActivityDescription === false
 
-    // If dates and descriptions are the same, EnsureActivityDetailsCard will verify them
     if (!hasDifferentDates && !hasDifferentDescriptions) {
       return
     }
 
-    // Verify incomplete fields on individual sites (only when dates/descriptions are different)
     const numberOfSites = siteDetails.expectedSites.length
 
     for (let i = 1; i <= numberOfSites; i++) {
@@ -216,37 +211,46 @@ export default class EnsureCoreSiteDetails extends Task {
     hasDifferentDates,
     hasDifferentDescriptions
   ) {
-    // Verify Site name is Incomplete (always incomplete for file uploads until ML-361)
     const siteNameElement = await browseTheWeb.getElement(
       ReviewSiteDetailsPage.getSiteName(siteNumber)
     )
     const siteNameText = await siteNameElement.getText()
-    expect(siteNameText.trim()).to.equal(
+    expect(siteNameText.trim()).to.not.equal(
       'Incomplete',
-      `Site ${siteNumber} name should be "Incomplete"`
+      `Site ${siteNumber} name should not be "Incomplete" after ML-364 implementation`
+    )
+    expect(siteNameText.trim()).to.have.length.greaterThan(
+      0,
+      `Site ${siteNumber} should have a name`
     )
 
-    // Verify Activity dates is Incomplete (if different dates were selected)
     if (hasDifferentDates) {
       const datesElement = await browseTheWeb.getElement(
         ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
       )
       const datesText = await datesElement.getText()
-      expect(datesText.trim()).to.equal(
+      expect(datesText.trim()).to.not.equal(
         'Incomplete',
-        `Site ${siteNumber} activity dates should be "Incomplete"`
+        `Site ${siteNumber} activity dates should not be "Incomplete" after ML-364 implementation`
+      )
+      expect(datesText.trim()).to.have.length.greaterThan(
+        0,
+        `Site ${siteNumber} should have activity dates`
       )
     }
 
-    // Verify Activity description is Incomplete (if different descriptions were selected)
     if (hasDifferentDescriptions) {
       const descriptionElement = await browseTheWeb.getElement(
         ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber)
       )
       const descriptionText = await descriptionElement.getText()
-      expect(descriptionText.trim()).to.equal(
+      expect(descriptionText.trim()).to.not.equal(
         'Incomplete',
-        `Site ${siteNumber} activity description should be "Incomplete"`
+        `Site ${siteNumber} activity description should not be "Incomplete" after ML-364 implementation`
+      )
+      expect(descriptionText.trim()).to.have.length.greaterThan(
+        0,
+        `Site ${siteNumber} should have an activity description`
       )
     }
   }
@@ -303,8 +307,6 @@ export default class EnsureCoreSiteDetails extends Task {
       case 'LineString':
         return coordinates
       case 'Polygon':
-        // Polygon coordinates are [outerRing, hole1, hole2, ...]
-        // We only need the outer ring
         return coordinates[0]
       case 'Point':
         return [coordinates]
