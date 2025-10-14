@@ -5,13 +5,18 @@ import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import Memory from '../memory.js'
 
 export default class CompleteActivityDates extends Task {
-  constructor(actionType = 'saveAndContinue') {
+  constructor(actionType = 'saveAndContinue', siteNumber = null) {
     super()
     this.actionType = actionType
+    this.siteNumber = siteNumber
   }
 
   static now() {
-    return new CompleteActivityDates()
+    return new CompleteActivityDates('saveAndContinue', null)
+  }
+
+  static forSite(siteNumber) {
+    return new CompleteActivityDates('saveAndContinue', siteNumber)
   }
 
   async performAs(actor) {
@@ -20,11 +25,9 @@ export default class CompleteActivityDates extends Task {
       expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
     }
 
-    // For multi-site scenarios, dates may be stored in siteDetails.sites[0].activityDates
-    let activityDates = exemption.activityDates
-    if (!activityDates && exemption.siteDetails?.sites?.[0]?.activityDates) {
-      activityDates = exemption.siteDetails.sites[0].activityDates
-    }
+    const siteIndex = this.siteNumber ? this.siteNumber - 1 : 0
+    const activityDates =
+      exemption.siteDetails?.sites?.[siteIndex]?.activityDates
 
     if (!activityDates) {
       expect.fail(ERROR_MESSAGES.MISSING_ACTIVITY_DATES)

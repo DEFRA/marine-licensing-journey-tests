@@ -20,6 +20,6 @@ export default class AddMissingActivityDates extends Task {
     )
     await addLink.click()
 
-    await actor.attemptsTo(CompleteActivityDates.now())
+    await actor.attemptsTo(CompleteActivityDates.forSite(this.siteNumber))
   }
 }
