@@ -307,83 +307,25 @@ While automated tests provide excellent coverage, manual UAT testing should focu
 - Dashboard reflects actual D365 case status
 - Reference numbers are generated upon successful submission
 
-## 🚨 Critical Risks That Actually Matter to Real Users
+## Private Beta UAT
 
-While automated tests show 100% pass rate, the real risks aren't about technical failures - they're about harm to actual people using the service:
+**Context:** Testing low-risk exemption type with 2 people for 2 weeks  
+**Question:** Is this ready for beta users?
 
-### Who Gets Hurt When Things Go Wrong?
+### What You Need to Test
 
-| Real Person                 | Their Nightmare                                 | What They Lose                               | Critical Investigation Focus                                                                                                            |
-| --------------------------- | ----------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **Sarah** (Property owner)  | Wrong coordinates lead to working in wrong area | Legal compliance, fines, project delays      | [Coordinate anxiety and abandonment triggers](../test-charters/critical-risk-investigation-guide.md#2-the-coordinate-anxiety-challenge) |
-| **Marcus** (Port authority) | System fails during £10M development            | Professional reputation, millions in delays  | [Professional trust and reliability](../test-charters/critical-risk-investigation-guide.md#3-the-professional-trust-challenge)          |
-| **Elena** (Consultant)      | Mixes up client data across projects            | Professional liability, client relationships | [Multi-site confusion and data mixing](../test-charters/critical-risk-investigation-guide.md#1-the-multi-site-confusion-challenge)      |
-| **Dr. James** (Researcher)  | Loses precision in scientific coordinates       | Research validity, funding, months of work   | [Scientific precision preservation](../test-charters/critical-risk-investigation-guide.md#4-the-research-precision-challenge)           |
-| **Rachel** (MMO officer)    | Invalid exemption causes environmental damage   | Regulatory failure, public trust             | [Compliance and threshold validation](../test-charters/critical-risk-investigation-guide.md#5-the-regulatory-compliance-challenge)      |
+1. Can users complete applications without calling MMO?
+2. What breaks when real users try this?
+3. What must be fixed before beta?
+4. Will this reduce your workload?
 
-### The Real Risks to Investigate
+### UAT Guide
 
-**Stop looking for bugs. Start preventing harm:**
+See [Beta UAT Essentials](../test-charters/beta-uat-essentials.md) - a focused 2-page guide.
 
-1. **The Overwhelm Point** - Where each user type gives up
-2. **The Mistake Multiplier** - How small errors become disasters
-3. **The Trust Moment** - What makes users doubt the system
-4. **The Abandonment Trigger** - Why people call MMO instead
+### Your Decision
 
-See the [Critical Risk Investigation Guide](../test-charters/critical-risk-investigation-guide.md) for a new approach to finding what actually matters.
-
-## Recommendations for UAT Team
-
-### Think Like Real Users, Not Testers
-
-**Don't test features. Investigate whether real people can achieve real goals.**
-
-### Phase 1: Become Your Users (First Week)
-
-Pick a persona and truly become them:
-
-1. **Be Sarah** - You're anxious about coordinates, this is your first time, you're using Google Maps on your phone
-2. **Be Marcus** - You have a £10M project depending on this, you need everything documented, you trust paper more than computers
-3. **Be Elena** - You're juggling 5 clients' applications simultaneously, you're worried about mixing up data
-4. **Be Dr. James** - Your GPS equipment cost £50k, you need exact precision, your research depends on these coordinates
-
-For each persona, try to complete a full application with their mindset, tools, and pressures.
-
-### Phase 2: Find Breaking Points (Second Week)
-
-Investigate where value gets destroyed:
-
-5. **Find each user's overwhelm point** - When does complexity make them give up?
-6. **Test mistake multiplication** - How do small errors cascade in multi-site scenarios?
-7. **Identify trust breakers** - What makes each user lose confidence?
-8. **Discover abandonment triggers** - What makes them phone MMO instead?
-
-Document the human impact, not just the technical issue.
-
-### Phase 3: Validate Critical Protections (Third Week)
-
-Confirm the system protects against real harm:
-
-9. **Environmental protection** - Can invalid exemptions slip through?
-10. **Data integrity** - Can client data get mixed up?
-11. **Accessibility** - Can disabled users complete applications independently?
-12. **Professional trust** - Would you use this for your own critical project?
-
-### How to Document Your Findings
-
-Instead of: "Bug: System accepts invalid coordinates"
-
-Write: "Risk: Sarah could accidentally request permission for the wrong location, potentially facing legal action she doesn't understand. She entered coordinates from Google Maps but the system expected a different format. After three attempts with confusing error messages, she gave up."
-
-### Questions That Matter More Than Test Cases
-
-Before reporting any issue, ask:
-
-- Who is harmed by this?
-- What do they lose?
-- How likely is this to happen?
-- Can they recover?
-- Will they trust us again?
+**Should beta proceed?** If not, what must change first?
 
 ## Support & Documentation
 
