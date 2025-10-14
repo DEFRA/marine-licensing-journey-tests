@@ -43,7 +43,7 @@ Test as different user types you know:
 
 - Nice-to-have improvements
 - Edge cases
-- Performance optimizations
+- Performance optimisations
 - Additional guidance
 
 ## What We Need From You

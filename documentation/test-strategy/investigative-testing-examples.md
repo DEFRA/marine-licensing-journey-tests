@@ -69,7 +69,7 @@ This investigation connects directly with [Marcus's persona](../personas/marcus-
    - Attempt to access different sections directly
    - _Look for:_ Keyboard accessibility, navigation efficiency, shortcut support
 
-2. **Data entry optimization** (15 minutes)
+2. **Data entry optimisation** (15 minutes)
    - Complete forms with minimal clicks/keystrokes
    - Test copy-paste functionality for complex data
    - Attempt to reuse previously entered information
@@ -155,7 +155,7 @@ This investigation connects with [David's persona](../personas/david-compliance-
    - Review how submitted applications appear to staff
    - Look for search and filtering capabilities
    - Test case reference and identification features
-   - _Look for:_ Data organization, search effectiveness, information accessibility
+   - _Look for:_ Data organisation, search effectiveness, information accessibility
 
 2. **Support scenarios** (15 minutes)
    - Simulate responding to applicant queries

@@ -82,7 +82,7 @@ Rachel works as an enforcement officer but also manages regional workbasket dist
 ### UX Requirements
 
 - **Role switching**: Clear transitions between enforcement and admin functions
-- **Geographic visualization**: Maps and location-based assignment tools
+- **Geographic visualisation**: Maps and location-based assignment tools
 - **Workload dashboards**: Team overview and individual case management
 - **Mobile optimisation**: Field-friendly interfaces for enforcement work
 

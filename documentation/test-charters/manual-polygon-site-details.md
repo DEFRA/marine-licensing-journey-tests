@@ -83,7 +83,7 @@
 
 ### 💡 Ideas to explore
 
-- Could polygon boundary visualization help users understand coordinate relationships?
+- Could polygon boundary visualisation help users understand coordinate relationships?
 - Are there opportunities to validate coordinate sequences for logical boundary definition?
 - How might add/remove interactions be made clearer for JavaScript-disabled users?
 - What guidance could help users determine how many coordinate points they need?
