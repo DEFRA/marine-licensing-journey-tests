@@ -2,7 +2,6 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import ActivityDatesPage from '~/test-infrastructure/pages/activity.dates.page'
 import {
   ActivityDatesModel,
-  CompleteActivityDates,
   Memory,
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
@@ -14,32 +13,6 @@ Given('the activity dates are valid', function () {
     Memory.ofActivityDatesWith(ActivityDatesModel.generateValidActivityDates())
   )
 })
-
-Given('the activity dates task has been completed', async function () {
-  this.actor.updates(
-    Memory.ofActivityDatesWith(ActivityDatesModel.generateTodayAsStartDate())
-  )
-  await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-  await this.actor.attemptsTo(CompleteActivityDates.now())
-})
-
-When('completing the activity dates task', async function () {
-  await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-  await this.actor.attemptsTo(CompleteActivityDates.now())
-})
-
-When(
-  'completing the activity dates task with different dates',
-  async function () {
-    this.actor.updates(
-      Memory.ofActivityDatesWith(
-        ActivityDatesModel.generateValidActivityDates()
-      )
-    )
-    await this.actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-  }
-)
 
 When(
   'clicking save and continue without entering any dates',
