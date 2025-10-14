@@ -10,7 +10,7 @@
 
 Only if you have specific concerns:
 
-- [Accessibility](./accessibility-investigation.md) - Quick check if beta includes disabled users
+- [Accessibility](./accessibility-investigation.md) - Gov.UK compliant WCAG 2.1 AA testing guide
 - [Form Interactions](./form-interactions.md) - Basic form testing
 - [Site Details](./site-details.md) - Coordinate entry issues
 
