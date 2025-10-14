@@ -79,11 +79,6 @@ export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsT
     // If false, descriptions will be added manually on review page (ML-364)
   }
 
-  /**
-   * ML-364: Add missing site name, dates, and descriptions from Review Site Details page
-   * Site names are ALWAYS incomplete for multi-site file uploads
-   * Dates/descriptions are only incomplete if sameActivityDates/sameActivityDescription = false
-   */
   async addMissingDataFromReviewPage() {
     const hasDifferentDates = this.siteDetails.sameActivityDates === false
     const hasDifferentDescriptions =
@@ -95,17 +90,14 @@ export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsT
       const siteNumber = i + 1
       const site = this.siteDetails.sites[i]
 
-      // Site names are always incomplete for multi-site file uploads (ML-364 AC1)
       await this.actor.attemptsTo(
         AddMissingSiteName.forSite(siteNumber, site.siteName)
       )
 
-      // Add activity dates if different dates were selected (ML-364 AC2)
       if (hasDifferentDates) {
         await this.actor.attemptsTo(AddMissingActivityDates.forSite(siteNumber))
       }
 
-      // Add activity description if different descriptions were selected (ML-364 AC3)
       if (hasDifferentDescriptions) {
         await this.actor.attemptsTo(
           AddMissingActivityDescription.forSite(
