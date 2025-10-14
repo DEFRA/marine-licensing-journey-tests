@@ -1,279 +1,123 @@
-# Missing Test Coverage - File Upload Journey
+# Test Consolidation - Multi-Site File Upload
 
-## Status: ML-389, ML-390, ML-364, ML-388, ML-428, ML-627
+## Status: ✅ ALL WORK COMPLETE - READY FOR CONSOLIDATION
 
-Date: 2025-10-13
-
-Last Updated: 2025-10-13
-
----
-
-## 📊 Executive Summary
-
-### Key Recommendations
-
-1. **Reduce test duplication**: Remove 6 redundant multi-site scenarios (50% reduction)
-2. **Enhance 1 existing test**: Add ML-364 incomplete data flow to existing KML scenario
-3. **Move ML-627 to backend**: Coordinate system transformation is backend concern
-4. **Result**: Better coverage with fewer, more focused tests
-
-### Impact
-
-- **Before**: 12 multi-site scenarios + need for 8-10 new tests
-- **After**: 6 multi-site scenarios with ML-364/388/428 integrated
-- **Benefit**: Faster execution, easier maintenance, no coverage loss
-
----
-
-## Test Suite Analysis
-
-### Current Test Duplication
-
-We currently have **12 multi-site scenarios** testing the same 4 combinations across 3 input methods:
-
-| File                                        | Scenarios | Same Dates/Desc | Different Dates/Desc | Mixed Combinations |
-| ------------------------------------------- | --------- | --------------- | -------------------- | ------------------ |
-| `kml.file.site.details.multi.site.feature`  | 4         | ✓               | ✓                    | 2 scenarios        |
-| `shapefile.site.details.multi.site.feature` | 4         | ✓               | ✓                    | 2 scenarios        |
-| `manual.site.details.multi.site.feature`    | 4         | ✓               | ✓                    | 2 scenarios        |
-
-**This is excessive duplication** - we're testing the same business logic 3 times with only the input method changing.
-
-### Recommended Consolidation
-
-**Keep comprehensive coverage for ONE method (e.g., KML):**
-
-- All 4 date/description combinations
-
-**Reduce others to smoke tests only:**
-
-- Shapefile: 1 scenario (most complex case)
-- Manual: 1 scenario (most complex case)
-
-**Reduction: From 12 scenarios to 6 scenarios (50% reduction)**
+Last Updated: 2025-10-14
 
 ---
 
 ## Summary
 
-This document tracks test coverage following implementation of multiple user stories. The strategy focuses on:
+### ✅ Implementation Complete
 
-1. **Consolidating duplicate tests** across file types
-2. **Enhancing existing journeys** rather than creating new isolated tests
-3. **Testing at the appropriate level** (journey vs frontend vs backend)
+All user stories implemented and tested:
 
-### Test Strategy After Consolidation
+- **ML-389**: Activity dates for single-site uploads
+- **ML-390**: Activity description for single-site uploads
+- **ML-364**: Add missing data from Review Site Details
+- **ML-388**: Task status handling (bug fixed)
+- **ML-428**: Task list navigation (already covered)
 
-| Story      | Approach                              | Implementation                                            |
-| ---------- | ------------------------------------- | --------------------------------------------------------- |
-| **ML-389** | ✅ Implicitly tested                  | Already covered in existing upload tests                  |
-| **ML-390** | ✅ Implicitly tested                  | Already covered in existing upload tests                  |
-| **ML-364** | 🔴 **Enhance existing test**          | Add incomplete data steps to ONE multi-site scenario      |
-| **ML-388** | ✅ Implicitly tested                  | Already covered by task status checks in multi-site tests |
-| **ML-428** | ✅ Implicitly tested                  | Add navigation check to existing test                     |
-| **ML-627** | ❌ **Out of scope for journey tests** | Backend/integration tests only                            |
+**Key Deliverables**:
 
-**Net Change After Consolidation:**
+- Dynamic site generation from `.expected.json` files
+- `CompleteActivityDates.forSite(siteNumber)` for site-specific dates
+- New interactions: `AddMissingSiteName`, `AddMissingActivityDates`, `AddMissingActivityDescription`
+- Strengthened assertions checking exact value equality
 
-- **Remove**: 6 duplicate multi-site scenarios
-- **Enhance**: 1 existing multi-site scenario (add ML-364 incomplete data flow)
-- **Result**: From 12 to 6 multi-site tests, with better coverage
+**Result**: All 40 tests passing ✅
 
----
+### 📝 Next Action: Test Consolidation
 
-## 🔧 Test Consolidation Plan
+**Current**: 12 multi-site scenarios (KML: 4, Shapefile: 4, Manual: 4)
 
-### Tests to Keep (Primary Coverage)
+**Goal**: 6 multi-site scenarios (KML: 4, Shapefile: 1, Manual: 1)
 
-#### `kml.file.site.details.multi.site.feature` - Keep ALL 4 scenarios
-
-These provide comprehensive coverage of the date/description combinations:
-
-1. ✅ Different dates, different descriptions (@smoke)
-2. ✅ Same dates, same descriptions (@smoke)
-3. ✅ Different dates, same descriptions
-4. ✅ Same dates, different descriptions
-
-**Enhancement for ML-364**: Modify scenario 1 to include incomplete data flow:
-
-```gherkin
-@kml @smoke @issue=ML-364 @issue=ML-388 @issue=ML-428
-Scenario: Complete a multi-site kml file upload with different dates and descriptions including incomplete data
-  Given a user is uploading a kml file with multiple sites with different activity dates and different descriptions
-  And the site details task is reached
-  When the file is uploaded without providing individual site data
-  Then the "Site details" task status is "In progress"
-  When I select the "Site details" task from the task list  # ML-428
-  And I add missing site names from Review Site Details      # ML-364
-  And I add missing activity dates from Review Site Details  # ML-364
-  And I add missing descriptions from Review Site Details    # ML-364
-  And the site details task is completed
-  Then the site details review page shows the site details
-  And the "Site details" task status is "Completed"
-```
-
-### Tests to Reduce (Smoke Only)
-
-#### `shapefile.site.details.multi.site.feature` - Keep ONLY 1 scenario
-
-Remove scenarios 2, 3, 4. Keep only:
-
-- ✅ Different dates, different descriptions (@smoke) - most complex case
-
-#### `manual.site.details.multi.site.feature` - Keep ONLY 1 scenario
-
-Remove scenarios 2, 3, 4. Keep only:
-
-- ✅ Different dates, different descriptions (@smoke) - most complex case
-
-### Tests to Keep As-Is
-
-#### `upload.coordinate.file.feature` - Keep ALL scenarios
-
-These test error conditions and single-site uploads (different from multi-site):
-
-- ✅ All 10 scenarios remain (2 success, 8 error cases)
+**Benefit**: 50% reduction in multi-site tests, faster execution, no coverage loss
 
 ---
 
-## 🟡 Test Enhancements to Existing Scenarios
+## Consolidation Plan
 
-### Already Covered by Enhancement
+### Actions Required
 
-The enhancement to scenario 1 of `kml.file.site.details.multi.site.feature` covers:
+#### 1. `shapefile.site.details.multi.site.feature` - Remove 3 scenarios
 
-- ✅ **ML-388** - Task status "In progress" when incomplete
-- ✅ **ML-428** - Navigation from task list to Review Site Details
-- ✅ **ML-364** - Adding missing data from Review Site Details
+Keep only:
 
-No additional test enhancements needed.
+- Scenario 1: "different activity dates and different descriptions" (@smoke)
 
----
+Remove:
 
-## ✅ Already Covered (No Action Needed)
+- Scenario 2: "same activity dates and descriptions"
+- Scenario 3: "different activity dates and same descriptions"
+- Scenario 4: "same activity dates and different descriptions"
 
-### ML-389 & ML-390 (Single Site Activity Dates and Description)
+#### 2. `manual.site.details.multi.site.feature` - Remove 3 scenarios
 
-**Coverage:** `upload.coordinate.file.feature` lines 8-19
+Keep only:
 
-- These scenarios already complete the full flow including dates and descriptions
-- The factory methods already create the necessary data
-- The flow is implicitly tested as part of successful uploads
+- Scenario 1: "different activity dates and different descriptions" (@smoke)
 
-### ML-388 AC2 (Task Shows "Completed")
+Remove:
 
-**Coverage:** All multi-site tests already verify "Completed" status
+- Scenario 2: "same activity dates and descriptions"
+- Scenario 3: "different activity dates and same descriptions"
+- Scenario 4: "same activity dates and different descriptions"
 
-- `kml.file.site.details.multi.site.feature` lines 11, 19, 27, 35
-- `shapefile.site.details.multi.site.feature` - similar coverage
+#### 3. `kml.file.site.details.multi.site.feature` - Keep all 4 scenarios ✅
 
----
+No changes - this provides comprehensive coverage.
 
-## ❌ Out of Scope for Journey Tests
+#### 4. `upload.coordinate.file.feature` - Keep all scenarios ✅
 
-These items should be tested at different levels for efficiency:
-
-### Backend/Integration Tests (marine-licensing-backend)
-
-**ML-627 - Coordinate Reference System Support**
-
-- ✅ Parse .prj file and extract CRS
-- ✅ Transform OSGB36 to WGS84 with accuracy validation
-- ✅ Transform other common UK CRS to WGS84
-- ✅ Detect unsupported coordinate systems
-- ✅ Handle missing .prj file gracefully
-- ✅ Validate transformed coordinates fall within expected bounds
-- ✅ Test performance with large Shapefiles (1000+ features)
-- ✅ Verify GeoJSON output conforms to RFC 7946
-- ✅ Maintain backward compatibility with WGS84 Shapefiles
-
-### Frontend Tests (DOM Testing Library)
-
-**Page-Level Behavior**
-
-- ✅ Field validation (dates, descriptions, site names)
-- ✅ Default values and pre-population
-- ✅ Page captions and layout
-- ✅ Error message display
-- ✅ Form field character limits
-- ✅ Date picker behavior
-- ✅ Text area character counting
-- ✅ Radio button conditional reveals
-- ✅ Back button state preservation
-
-### Unit Tests
-
-**Business Logic**
-
-- ✅ Date validation rules
-- ✅ Description character limit validation
-- ✅ Site name uniqueness (if required)
-- ✅ Coordinate transformation calculations
-- ✅ GeoJSON structure validation
-- ✅ File size calculations
-- ✅ Virus scanning integration
+No changes - single-site and error scenarios.
 
 ---
 
-## Implementation Checklist
+## Checklist
 
-### Phase 1: Test Consolidation (Reduce Duplication)
+### Test Consolidation
 
-- [ ] **Remove 3 scenarios** from `shapefile.site.details.multi.site.feature` (keep only scenario 1)
-- [ ] **Remove 3 scenarios** from `manual.site.details.multi.site.feature` (keep only scenario 1)
-- [ ] **Verify** remaining tests still pass
+- [ ] Remove 3 scenarios from `shapefile.site.details.multi.site.feature`
+- [ ] Remove 3 scenarios from `manual.site.details.multi.site.feature`
+- [ ] Run full test suite to verify all tests pass
+- [ ] Confirm test execution time improvements
+- [ ] Update documentation to reflect final test count
 
-### Phase 2: Test Enhancement (Add ML-364 Coverage)
+### @wip Scenarios - Awaiting Multi-Site Implementation
 
-- [ ] **Enhance scenario 1** of `kml.file.site.details.multi.site.feature`:
-  - [ ] Modify factory to support incomplete data flow
-  - [ ] Add step for uploading without individual site data
-  - [ ] Add steps for adding missing data from RSD
-  - [ ] Add step for task list navigation (ML-428)
-  - [ ] Verify "In progress" status (ML-388)
+The following scenarios are marked `@wip` and blocked until multi-site changes are implemented in the application:
 
-### Phase 3: Implementation Details
+**`check.your.answers.feature`** - Entire feature marked @wip
 
-- [ ] **Factory updates**:
-  - [ ] Add `skipIndividualSiteData` flag to KML multi-site factory
-  - [ ] Support incomplete site data generation
-- [ ] **Step definitions**:
-  - [ ] "When the file is uploaded without providing individual site data"
-  - [ ] "When I add missing site names from Review Site Details"
-  - [ ] "When I add missing activity dates from Review Site Details"
-  - [ ] "When I add missing descriptions from Review Site Details"
-- [ ] **Page objects**:
-  - [ ] ReviewSiteDetailsPage - add "Add" link interactions
-  - [ ] ReviewSiteDetailsPage - verify incomplete labels
+- **Blocker**: Check Your Answers page not updated to handle site details activity dates and descriptions for multi-site
+- **Action**: Implement CYA multi-site support, then re-enable and update tests
+
+**`dashboard.feature`** - "View submitted notification via dashboard"
+
+- **Blocker**: Dashboard view details not updated for multi-site activity dates/descriptions
+- **Action**: Implement dashboard multi-site support, then re-enable test
+
+**`redirect.to.login.when.logged.out.feature`** - "View Details redirect when logged out"
+
+- **Blocker**: View Details page not updated for multi-site activity dates/descriptions
+- **Action**: Implement View Details multi-site support, then re-enable test
+
+### Future: Top-Level Task Removal
+
+**Application Change**: Top-level Activity Dates and Activity Description tasks will be deleted (moved into Site Details flow)
+
+**Impact on Tests**:
+
+- `activity.dates.feature` - Review and either remove or integrate scenarios into site details tests
+- `activity.description.feature` - Review and either remove or integrate scenarios into site details tests
+- Any scenarios testing top-level activity dates/description tasks independently will need updating
+
+**Action**: After application changes are deployed, audit and refactor affected test scenarios
 
 ---
 
-## Notes
+## Out of Scope
 
-### Why This Approach?
-
-1. **Reduces test duplication by 50%** - From 12 to 6 multi-site scenarios
-2. **Enhances existing tests** - No new isolated test files needed
-3. **Tests real user journeys** - ML-364 flow integrated into existing journey
-4. **Appropriate test levels** - Backend logic in backend tests, UI details in frontend tests
-5. **Implicit coverage** - ML-388 and ML-428 naturally covered in enhanced flow
-
-### Test Coverage Matrix
-
-| Functionality            | KML | Shapefile | Manual | Single Site | Multi-Site | Error Cases |
-| ------------------------ | --- | --------- | ------ | ----------- | ---------- | ----------- |
-| Same dates/desc          | ✓   | ✓         | ✓      | ✓           | ✓          | N/A         |
-| Different dates/desc     | ✓   | ✓         | ✓      | ✓           | ✓          | N/A         |
-| Mixed combinations       | ✓   | -         | -      | N/A         | ✓          | N/A         |
-| Incomplete data (ML-364) | ✓   | -         | -      | -           | ✓          | N/A         |
-| Task status (ML-388)     | ✓   | ✓         | ✓      | ✓           | ✓          | N/A         |
-| Navigation (ML-428)      | ✓   | -         | -      | -           | ✓          | N/A         |
-| Error handling           | ✓   | ✓         | N/A    | ✓           | N/A        | ✓           |
-
-### Success Criteria
-
-- **Test suite remains under 15 minutes** for full regression
-- **Smoke tests under 5 minutes** (@smoke scenarios only)
-- **No duplicate test logic** across different input methods
-- **All critical user paths covered** at journey level
-- **Clear separation** between journey, frontend, and backend tests
+**ML-627 - Multiple CRS support**: Backend/integration tests only - coordinate transformation testing belongs in backend test suite.

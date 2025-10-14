@@ -15,9 +15,11 @@ This document provides a comprehensive overview of the marine licensing features
 
 #### 2. Activity Information
 
-- **ML-10**: Activity dates (SUPERSEDED for multi-site - see ML-416, ML-419, ML-420)
-- **ML-11**: Activity description (SUPERSEDED for multi-site - see ML-417, ML-421)
+- **ML-10**: Activity dates (WILL BE REMOVED - moved to site details flow)
+- **ML-11**: Activity description (WILL BE REMOVED - moved to site details flow)
 - **ML-12**: Public register consent ✅
+
+> **Note**: Top-level activity dates and activity description tasks are being phased out. These are now captured as part of the site details flow (ML-389, ML-390, ML-416, ML-417, ML-419, ML-420, ML-421).
 
 #### 3. Site Details Entry
 
@@ -30,18 +32,22 @@ Multiple pathways available:
 
 #### 4. Submission & Confirmation
 
-- **ML-82, ML-139, ML-140**: Check your answers ✅
+- **ML-82, ML-139, ML-140**: Check your answers 🔄 (WIP - awaiting multi-site support)
 - **ML-84**: Submit notification ✅
 - **ML-715**: Feedback survey link on confirmation page ✅
 - **ML-21**: Generate application reference ✅
 - **ML-379**: D365 integration ✅
 
+> **Note**: Check Your Answers page is currently being updated to support multi-site activity dates and descriptions. Tests are marked @wip until implementation is complete.
+
 #### 5. Dashboard & Case Management
 
-- **ML-96**: View dashboard ✅
+- **ML-96**: View dashboard 🔄 (WIP - view details awaiting multi-site support)
 - **ML-99**: Continue draft notification ✅
 - **ML-100**: Delete draft notification ✅
 - **ML-124, ML-591**: Dashboard status management ✅
+
+> **Note**: Dashboard "View Details" functionality for submitted notifications is currently being updated to support multi-site activity dates and descriptions.
 
 ### 🔄 Multi-Site Enhancement (Current Focus)
 
@@ -67,11 +73,14 @@ Multiple pathways available:
 
 **File Upload (KML & Shapefile):**
 
+- **ML-389**: Activity dates for single uploaded site ✅
+- **ML-390**: Activity description for single uploaded site ✅
 - **ML-75**: Provide dates for multiple uploaded sites ✅
 - **ML-76**: Provide activity description for multiple uploaded sites ✅
 - **ML-119**: Are all activity dates the same? (file upload) ✅
 - **ML-120**: Are all activity descriptions the same? (file upload) ✅
 - **ML-232**: Display multiple uploaded sites on review site details ✅
+- **ML-364**: Add missing site name, dates, and descriptions from Review Site Details ✅
 
 #### Advanced Multi-Site Capabilities
 
@@ -198,6 +207,22 @@ When testing activity dates and descriptions:
 
 ## Known Considerations
 
+### Features Currently In Development (@wip)
+
+The following features are marked as Work In Progress and tests are temporarily disabled:
+
+- **Check Your Answers**: Being updated to display multi-site activity dates and descriptions
+- **Dashboard - View Details**: Being updated to display multi-site activity dates and descriptions for submitted notifications
+- **Login Redirect to View Details**: Dependent on View Details multi-site support
+
+**Testing Impact**: These scenarios are marked `@wip` and will not run until the multi-site implementation is complete.
+
+### Top-Level Task Removal (Future)
+
+- **ML-10** (Activity Dates) and **ML-11** (Activity Description) top-level tasks will be removed
+- Activity information is now captured within the Site Details flow
+- Tests for standalone activity dates/description tasks will be refactored after application changes
+
 ### Session Management
 
 - Session data persists between navigation steps
@@ -247,4 +272,4 @@ When testing activity dates and descriptions:
 
 ---
 
-_Last Updated: 9 October 2025_
+_Last Updated: 14 October 2025_
