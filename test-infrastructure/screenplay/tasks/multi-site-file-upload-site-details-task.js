@@ -1,7 +1,11 @@
 import { expect } from 'chai'
-import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
-import { UploadFileAndContinue } from '../interactions/index.js'
+import {
+  AddMissingActivityDates,
+  AddMissingActivityDescription,
+  AddMissingSiteName,
+  UploadFileAndContinue
+} from '../interactions/index.js'
 import {
   ActivityDescriptionPageInteractions,
   SameActivityDatesPageInteractions,
@@ -75,6 +79,11 @@ export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsT
     // If false, descriptions will be added manually on review page (ML-364)
   }
 
+  /**
+   * ML-364: Add missing site name, dates, and descriptions from Review Site Details page
+   * Site names are ALWAYS incomplete for multi-site file uploads
+   * Dates/descriptions are only incomplete if sameActivityDates/sameActivityDescription = false
+   */
   async addMissingDataFromReviewPage() {
     const hasDifferentDates = this.siteDetails.sameActivityDates === false
     const hasDifferentDescriptions =
@@ -86,57 +95,25 @@ export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsT
       const siteNumber = i + 1
       const site = this.siteDetails.sites[i]
 
-      await this.addMissingSiteName(siteNumber, site.siteName)
+      // Site names are always incomplete for multi-site file uploads (ML-364 AC1)
+      await this.actor.attemptsTo(
+        AddMissingSiteName.forSite(siteNumber, site.siteName)
+      )
 
+      // Add activity dates if different dates were selected (ML-364 AC2)
       if (hasDifferentDates) {
-        await this.addMissingActivityDates(siteNumber, site.activityDates)
+        await this.actor.attemptsTo(AddMissingActivityDates.forSite(siteNumber))
       }
 
+      // Add activity description if different descriptions were selected (ML-364 AC3)
       if (hasDifferentDescriptions) {
-        await this.addMissingActivityDescription(
-          siteNumber,
-          site.activityDescription
+        await this.actor.attemptsTo(
+          AddMissingActivityDescription.forSite(
+            siteNumber,
+            site.activityDescription
+          )
         )
       }
     }
-  }
-
-  async addMissingSiteName(siteNumber, siteName) {
-    const addLink = await this.browseTheWeb.getElement(
-      ReviewSiteDetailsPage.getSiteNameAddLink(siteNumber)
-    )
-    await addLink.click()
-    await this.browseTheWeb.waitForNavigationTo(
-      '/exemption/site-name',
-      '#siteName'
-    )
-    await this.browseTheWeb.setValue('#siteName', siteName)
-    await this.browseTheWeb.click('button[type="submit"]')
-  }
-
-  async addMissingActivityDates(siteNumber, activityDates) {
-    const addLink = await this.browseTheWeb.getElement(
-      ReviewSiteDetailsPage.getSiteActivityDatesAddLink(siteNumber)
-    )
-    await addLink.click()
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-  }
-
-  async addMissingActivityDescription(siteNumber, activityDescription) {
-    const addLink = await this.browseTheWeb.getElement(
-      ReviewSiteDetailsPage.getSiteActivityDescriptionAddLink(siteNumber)
-    )
-    await addLink.click()
-    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      activityDescription
-    )
-  }
-
-  async saveAndContinueFromReview() {
-    const saveButton = await this.browseTheWeb.getElement(
-      ReviewSiteDetailsPage.saveAndContinueButton
-    )
-    await saveButton.click()
   }
 }

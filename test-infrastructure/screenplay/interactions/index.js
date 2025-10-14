@@ -1,4 +1,7 @@
 export * from '../page-interactions'
+export { default as AddMissingActivityDates } from './add.missing.activity.dates'
+export { default as AddMissingActivityDescription } from './add.missing.activity.description'
+export { default as AddMissingSiteName } from './add.missing.site.name'
 export { default as ClickAddAnotherPoint } from './button-interactions/click.add.another.point'
 export { default as ClickButton } from './button-interactions/click.button'
 export { default as ClickCancel } from './button-interactions/click.cancel'

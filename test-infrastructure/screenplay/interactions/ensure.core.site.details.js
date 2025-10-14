@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
@@ -189,70 +190,104 @@ export default class EnsureCoreSiteDetails extends Task {
     const hasDifferentDescriptions =
       siteDetails.sameActivityDescription === false
 
-    if (!hasDifferentDates && !hasDifferentDescriptions) {
-      return
-    }
-
     const numberOfSites = siteDetails.expectedSites.length
 
-    for (let i = 1; i <= numberOfSites; i++) {
-      await this.verifySiteIncompleteFields(
-        browseTheWeb,
-        i,
+    for (let i = 0; i < numberOfSites; i++) {
+      const siteNumber = i + 1
+      const expectedSite = siteDetails.sites[i]
+
+      await this.verifySiteFields(browseTheWeb, {
+        siteNumber,
+        expectedSite,
         hasDifferentDates,
         hasDifferentDescriptions
+      })
+    }
+  }
+
+  async verifySiteFields(browseTheWeb, options) {
+    const {
+      siteNumber,
+      expectedSite,
+      hasDifferentDates,
+      hasDifferentDescriptions
+    } = options
+
+    const siteNameElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteName(siteNumber)
+    )
+    const actualSiteName = await siteNameElement.getText()
+    expect(actualSiteName.trim()).to.equal(
+      expectedSite.siteName,
+      `Site ${siteNumber} name mismatch`
+    )
+
+    if (hasDifferentDates) {
+      await this.verifyActivityDates(browseTheWeb, siteNumber, expectedSite)
+    }
+
+    if (hasDifferentDescriptions) {
+      await this.verifyActivityDescription(
+        browseTheWeb,
+        siteNumber,
+        expectedSite
       )
     }
   }
 
-  async verifySiteIncompleteFields(
-    browseTheWeb,
-    siteNumber,
-    hasDifferentDates,
-    hasDifferentDescriptions
-  ) {
-    const siteNameElement = await browseTheWeb.getElement(
-      ReviewSiteDetailsPage.getSiteName(siteNumber)
+  async verifyActivityDates(browseTheWeb, siteNumber, expectedSite) {
+    const datesElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
     )
-    const siteNameText = await siteNameElement.getText()
-    expect(siteNameText.trim()).to.not.equal(
-      'Incomplete',
-      `Site ${siteNumber} name should not be "Incomplete" after ML-364 implementation`
+    const actualDatesText = await datesElement.getText()
+    const expectedDatesText = this.formatActivityDatesForDisplay(
+      expectedSite.activityDates
     )
-    expect(siteNameText.trim()).to.have.length.greaterThan(
-      0,
-      `Site ${siteNumber} should have a name`
+    expect(actualDatesText.trim()).to.equal(
+      expectedDatesText,
+      `Site ${siteNumber} activity dates mismatch`
     )
+  }
 
-    if (hasDifferentDates) {
-      const datesElement = await browseTheWeb.getElement(
-        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
-      )
-      const datesText = await datesElement.getText()
-      expect(datesText.trim()).to.not.equal(
-        'Incomplete',
-        `Site ${siteNumber} activity dates should not be "Incomplete" after ML-364 implementation`
-      )
-      expect(datesText.trim()).to.have.length.greaterThan(
-        0,
-        `Site ${siteNumber} should have activity dates`
-      )
+  async verifyActivityDescription(browseTheWeb, siteNumber, expectedSite) {
+    const descriptionElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber)
+    )
+    const actualDescription = await descriptionElement.getText()
+    expect(actualDescription.trim()).to.equal(
+      expectedSite.activityDescription,
+      `Site ${siteNumber} activity description mismatch`
+    )
+  }
+
+  formatActivityDatesForDisplay(activityDates) {
+    if (!this.hasValidActivityDatesStructure(activityDates)) {
+      return ''
     }
 
-    if (hasDifferentDescriptions) {
-      const descriptionElement = await browseTheWeb.getElement(
-        ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber)
-      )
-      const descriptionText = await descriptionElement.getText()
-      expect(descriptionText.trim()).to.not.equal(
-        'Incomplete',
-        `Site ${siteNumber} activity description should not be "Incomplete" after ML-364 implementation`
-      )
-      expect(descriptionText.trim()).to.have.length.greaterThan(
-        0,
-        `Site ${siteNumber} should have an activity description`
-      )
+    const formattedStart = formatDateObjectToDisplay(activityDates.startDate)
+    const formattedEnd = formatDateObjectToDisplay(activityDates.endDate)
+
+    return `${formattedStart} to ${formattedEnd}`
+  }
+
+  hasValidActivityDatesStructure(activityDates) {
+    if (!activityDates) {
+      return false
     }
+
+    if (!activityDates.startDate || !activityDates.endDate) {
+      return false
+    }
+
+    return (
+      this.hasValidDateObject(activityDates.startDate) &&
+      this.hasValidDateObject(activityDates.endDate)
+    )
+  }
+
+  hasValidDateObject(dateObject) {
+    return dateObject.day && dateObject.month && dateObject.year
   }
 
   validateFileType(expectedFileType, siteDetails) {
