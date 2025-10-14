@@ -4,6 +4,34 @@
 
 This document provides a comprehensive overview of the marine licensing features delivered for UAT testing, clarifying which requirements are current and which have been superseded. The application has evolved from supporting single-site notifications to comprehensive multi-site functionality, resulting in some earlier user stories being enhanced or replaced.
 
+## Testing Overview
+
+### Current Test Suite Status (14 October 2025)
+
+- **Total Test Cases**: 96 automated journey tests
+- **Pass Rate**: 100% (all tests passing)
+- **Test Execution Time**: ~6-7 minutes for full suite
+- **Test Coverage**: End-to-end user journeys across all major features
+- **Test Framework**: WebDriverIO with Allure reporting
+
+### Test Coverage Breakdown
+
+| Feature Area                    | Test Count | Status     | Notes                               |
+| ------------------------------- | ---------- | ---------- | ----------------------------------- |
+| **Cookies Policy**              | 10         | ✅ Passing | Full cookie preference management   |
+| **File Upload (KML/Shapefile)** | 10         | ✅ Passing | Single and multi-site file handling |
+| **Public Register**             | 9          | ✅ Passing | Consent and withholding options     |
+| **Header & Footer**             | 7          | ✅ Passing | Navigation and compliance           |
+| **Polygon Sites**               | 6          | ✅ Passing | WGS84 and OSGB36 coordinates        |
+| **Coordinate Validation**       | 6          | ✅ Passing | Centre point validation             |
+| **Width Validation**            | 6          | ✅ Passing | Circular site width validation      |
+| **Activity Description**        | 5          | ✅ Passing | Description entry and validation    |
+| **Dashboard**                   | 5          | ✅ Passing | Application management              |
+| **Multi-site KML**              | 4          | ✅ Passing | Multiple sites in KML files         |
+| **Multi-site Shapefile**        | 4          | ✅ Passing | Multiple sites in Shapefiles        |
+| **Multi-site Manual**           | 4          | ✅ Passing | Mixed site type entry               |
+| **Other Features**              | 20         | ✅ Passing | Validation, submission, privacy     |
+
 ## Current Status of Delivered Features
 
 ### ✅ Core User Journey (Fully Delivered)
@@ -49,9 +77,9 @@ Multiple pathways available:
 
 > **Note**: Dashboard "View Details" functionality for submitted notifications is currently being updated to support multi-site activity dates and descriptions.
 
-### 🔄 Multi-Site Enhancement (Current Focus)
+### ✅ Multi-Site Enhancement (Fully Delivered)
 
-**IMPORTANT**: The application now supports multiple sites per notification. This has resulted in significant changes to the activity dates and descriptions workflow:
+**IMPORTANT**: The application now fully supports multiple sites per notification with comprehensive testing across all entry methods. This has resulted in significant changes to the activity dates and descriptions workflow:
 
 #### Original Single-Site Flow (PARTIALLY SUPERSEDED)
 
@@ -89,6 +117,29 @@ Multiple pathways available:
 - **Efficient Workflow**: "Add another site" button enables streamlined multi-site entry
 - **File Upload Multi-Site**: KML and Shapefile formats can contain multiple sites with automatic extraction
 - **Flexible Activity Information**: Choose to apply same dates/descriptions to all sites or provide individual values per site
+
+#### Multi-Site Test Coverage (All Passing)
+
+**Manual Entry Mixed Sites (4 comprehensive scenarios)**:
+
+- Complete mixed site details with separate activity dates and descriptions
+- Complete mixed site details with same activity dates and descriptions
+- Complete mixed site details with same activity dates and different descriptions
+- Complete mixed site details with different activity dates and same descriptions
+
+**KML Multi-Site Upload (4 comprehensive scenarios)**:
+
+- Multi-site KML with different activity dates and different descriptions
+- Multi-site KML with same activity dates and descriptions
+- Multi-site KML with same activity dates and different descriptions
+- Multi-site KML with different activity dates and same descriptions
+
+**Shapefile Multi-Site Upload (4 comprehensive scenarios)**:
+
+- Multi-site Shapefile with different activity dates and different descriptions
+- Multi-site Shapefile with same activity dates and descriptions
+- Multi-site Shapefile with same activity dates and different descriptions
+- Multi-site Shapefile with different activity dates and same descriptions
 
 #### Site Review and Management
 
@@ -207,15 +258,26 @@ When testing activity dates and descriptions:
 
 ## Known Considerations
 
-### Features Currently In Development (@wip)
+### Test Suite Health
 
-The following features are marked as Work In Progress and tests are temporarily disabled:
+As of 14 October 2025, all 96 automated tests are passing with 100% success rate. The test suite covers:
 
-- **Check Your Answers**: Being updated to display multi-site activity dates and descriptions
-- **Dashboard - View Details**: Being updated to display multi-site activity dates and descriptions for submitted notifications
-- **Login Redirect to View Details**: Dependent on View Details multi-site support
+- Single-site journeys
+- Multi-site journeys (manual, KML, and Shapefile)
+- Mixed site type entries (circular and polygon combinations)
+- Comprehensive validation scenarios
+- Complete end-to-end workflows including submission
 
-**Testing Impact**: These scenarios are marked `@wip` and will not run until the multi-site implementation is complete.
+### Areas Requiring Manual UAT Focus
+
+While automated tests provide excellent coverage, manual UAT testing should focus on:
+
+- User experience and interface responsiveness
+- Edge cases not covered by automated tests
+- Performance with large files or many sites
+- Browser compatibility across different devices
+- Accessibility features and screen reader compatibility
+- Integration with external systems (D365 in production environment)
 
 ### Top-Level Task Removal (Future)
 
@@ -245,25 +307,83 @@ The following features are marked as Work In Progress and tests are temporarily 
 - Dashboard reflects actual D365 case status
 - Reference numbers are generated upon successful submission
 
+## 🚨 Critical Risks That Actually Matter to Real Users
+
+While automated tests show 100% pass rate, the real risks aren't about technical failures - they're about harm to actual people using the service:
+
+### Who Gets Hurt When Things Go Wrong?
+
+| Real Person                 | Their Nightmare                                 | What They Lose                               | Critical Investigation Focus                                                                                                            |
+| --------------------------- | ----------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sarah** (Property owner)  | Wrong coordinates lead to working in wrong area | Legal compliance, fines, project delays      | [Coordinate anxiety and abandonment triggers](../test-charters/critical-risk-investigation-guide.md#2-the-coordinate-anxiety-challenge) |
+| **Marcus** (Port authority) | System fails during £10M development            | Professional reputation, millions in delays  | [Professional trust and reliability](../test-charters/critical-risk-investigation-guide.md#3-the-professional-trust-challenge)          |
+| **Elena** (Consultant)      | Mixes up client data across projects            | Professional liability, client relationships | [Multi-site confusion and data mixing](../test-charters/critical-risk-investigation-guide.md#1-the-multi-site-confusion-challenge)      |
+| **Dr. James** (Researcher)  | Loses precision in scientific coordinates       | Research validity, funding, months of work   | [Scientific precision preservation](../test-charters/critical-risk-investigation-guide.md#4-the-research-precision-challenge)           |
+| **Rachel** (MMO officer)    | Invalid exemption causes environmental damage   | Regulatory failure, public trust             | [Compliance and threshold validation](../test-charters/critical-risk-investigation-guide.md#5-the-regulatory-compliance-challenge)      |
+
+### The Real Risks to Investigate
+
+**Stop looking for bugs. Start preventing harm:**
+
+1. **The Overwhelm Point** - Where each user type gives up
+2. **The Mistake Multiplier** - How small errors become disasters
+3. **The Trust Moment** - What makes users doubt the system
+4. **The Abandonment Trigger** - Why people call MMO instead
+
+See the [Critical Risk Investigation Guide](../test-charters/critical-risk-investigation-guide.md) for a new approach to finding what actually matters.
+
 ## Recommendations for UAT Team
 
-1. **Start with single-site scenarios** to understand core functionality
-2. **Progress to multi-site scenarios** to test enhanced features
-3. **Test file upload multi-site functionality** (ML-75, ML-76, ML-119, ML-120, ML-232):
-   - Upload KML files with multiple sites
-   - Upload Shapefile archives with multiple sites
-   - Test "same dates/descriptions for all sites" workflow
-   - Test "different dates/descriptions per site" workflow
-   - Verify all sites display correctly with maps and coordinates
-4. **Test "Add another site" workflow** (ML-362) with intelligent conditional routing
-5. **Try mixed site types** - combine circular and polygon sites in one notification
-6. **Test site review functionality** (ML-361, ML-608) with enhanced summary cards and scalable site display
-7. **Test site deletion capability** (ML-233) including confirmation dialogs and site renumbering
-8. **Test navigation flows** including back button and cancel behaviours
-9. **Verify data persistence** across the user journey
-10. **Check validation messages** for clarity and helpfulness
-11. **Test coordinate system variations** (WGS84 and OSGB36) within multi-site notifications
-12. **Confirm submission process** works as expected in your test environment
+### Think Like Real Users, Not Testers
+
+**Don't test features. Investigate whether real people can achieve real goals.**
+
+### Phase 1: Become Your Users (First Week)
+
+Pick a persona and truly become them:
+
+1. **Be Sarah** - You're anxious about coordinates, this is your first time, you're using Google Maps on your phone
+2. **Be Marcus** - You have a £10M project depending on this, you need everything documented, you trust paper more than computers
+3. **Be Elena** - You're juggling 5 clients' applications simultaneously, you're worried about mixing up data
+4. **Be Dr. James** - Your GPS equipment cost £50k, you need exact precision, your research depends on these coordinates
+
+For each persona, try to complete a full application with their mindset, tools, and pressures.
+
+### Phase 2: Find Breaking Points (Second Week)
+
+Investigate where value gets destroyed:
+
+5. **Find each user's overwhelm point** - When does complexity make them give up?
+6. **Test mistake multiplication** - How do small errors cascade in multi-site scenarios?
+7. **Identify trust breakers** - What makes each user lose confidence?
+8. **Discover abandonment triggers** - What makes them phone MMO instead?
+
+Document the human impact, not just the technical issue.
+
+### Phase 3: Validate Critical Protections (Third Week)
+
+Confirm the system protects against real harm:
+
+9. **Environmental protection** - Can invalid exemptions slip through?
+10. **Data integrity** - Can client data get mixed up?
+11. **Accessibility** - Can disabled users complete applications independently?
+12. **Professional trust** - Would you use this for your own critical project?
+
+### How to Document Your Findings
+
+Instead of: "Bug: System accepts invalid coordinates"
+
+Write: "Risk: Sarah could accidentally request permission for the wrong location, potentially facing legal action she doesn't understand. She entered coordinates from Google Maps but the system expected a different format. After three attempts with confusing error messages, she gave up."
+
+### Questions That Matter More Than Test Cases
+
+Before reporting any issue, ask:
+
+- Who is harmed by this?
+- What do they lose?
+- How likely is this to happen?
+- Can they recover?
+- Will they trust us again?
 
 ## Support & Documentation
 

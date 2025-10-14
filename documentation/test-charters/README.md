@@ -1,231 +1,117 @@
-# Test Charters - Investigative Testing Plans
+# Test Charters: Finding What Threatens Real User Value
 
-> **Charter structure update:**
-> Charters now focus on investigation context, activities, and evidence collection. Requirements and persona details are referenced, not restated. See the template below for new charters.
-
----
-
-## Charter Template (for new charters)
-
-```
-# [Charter Title]: [Short Description]
-
-## Investigation Plan
-
-**EXPLORE:** [Area or workflow to investigate]
-**AS:** [Persona or user type] (see References)
-**BECAUSE:** [Why this investigation matters]
-**LOOKING FOR:** [Problems, risks, or insights sought]
-
-**Duration:** [e.g. 60-90 minutes]
-**Priority:** [High/Medium/Low]
-
-## References
-- **Requirements:**
-  - [User story 1](../user-stories/...)
-  - [User story 2](../user-stories/...)
-- **Personas:**
-  - [Persona 1](../personas/...)
-  - [Persona 2](../personas/...)
-
-## Scenario Context
-- [Short summary of the investigation context. For detailed requirements and persona context, see References above.]
-
-## Realistic Activities
-- [List the main investigation activities, not acceptance criteria.]
-
-## Evidence Framework
-
-### ✅ Positive signals
-- [What good looks like.]
-
-### ⚠️ Warning signs
-- [What problems or risks look like.]
-
-### 🤔 Questions to investigate
-- [Key questions for the session.]
-
-### 💡 Ideas to explore
-- [Improvement or automation ideas.]
-
-## Session Notes Template
-
-```
-
-```
-SESSION: [Charter Title] - [Date]
-DURATION: [Actual time]
-INVESTIGATOR: [Name]
-
-[OBSERVATIONS/NOTES STRUCTURE]
-
-IMMEDIATE ACTIONS:
-□ [Action 1 - who will address]
-□ [Action 2 - who will address]
-□ [Action 3 - who will address]
-```
+> **Our new approach**: Stop following test scripts. Start investigating real human impact.  
+> **Start here →** [Critical Risk Investigation Guide](./critical-risk-investigation-guide.md)
 
 ---
 
-This section contains **investigative testing charters** for marine licensing user stories. Each charter provides structured guidance for **60-90 minute investigation sessions** that combine systematic exploration with realistic user scenarios for **delivered functionality**.
+## The People We're Protecting
 
-> **🔗 Powered by investigative testing**  
-> These charters implement the **[investigative testing](../test-strategy/investigative-testing.md)** approach - combining session-based structure with rich scenario content and systematic heuristics.
+Before you test anything, know who you're protecting:
 
-## 🧠 Charter purpose
+- **Sarah** - First-time user with coordinate anxiety who might give up
+- **Marcus** - Port authority with millions at stake who needs to trust us
+- **Elena** - Consultant juggling multiple clients who can't afford mix-ups
+- **Dr. James** - Researcher whose work depends on coordinate precision
+- **Rachel** - MMO officer who prevents environmental disasters
+- **David** - Blind business owner who needs independence (accessibility)
+- **Margaret** - Professional with arthritis who can't use a mouse
+- **Tom** - Contractor with dyslexia who struggles with complexity
 
-Test charters bridge the gap between:
+## Available Investigations
 
-- **User story requirements** - What the delivered features should do
-- **Systematic investigation** - How we discover what they actually do through realistic scenarios
-- **Real user needs** - Whether delivered features serve marine licensing personas effectively
-- **Evidence collection** - Actionable insights for development teams
+### Core User Journey Investigations
 
-## 📋 Available investigation sessions
+These focus on where real value gets destroyed for real people:
 
-| Theme                           | Charter name                                                    | Focus                                                      | Personas                 | Priority | Status     |
-| ------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------ | -------- | ---------- |
-| **First-time user experience**  | [Novice journey](./novice-journey.md)                           | Complete exemption notification workflow for newcomers     | Sarah                    | High     | 🔄 Updated |
-| **Professional workflows**      | [Expert workflows](./expert-workflows.md)                       | Professional efficiency patterns across delivered features | Marcus, Elena, Dr. James | High     | 🔄 Updated |
-| **Form behaviour & validation** | [Form interactions](./form-interactions.md)                     | Input validation, error handling across all forms          | All personas             | High     | 🔄 Updated |
-| **Coordinate entry workflows**  | [Site details](./site-details.md)                               | Complete site details entry with coordinate systems        | All personas             | High     | 🔄 Updated |
-| **Manual polygon entry**        | [Manual polygon site details](./manual-polygon-site-details.md) | Multi-point coordinate entry with add/remove functionality | All personas             | High     | 🆕 New     |
-| **Review and submission**       | [Review and submission](./review-and-submission.md)             | Check your answers and notification submission workflow    | All personas             | High     | 🆕 New     |
-| **Navigation consistency**      | [Back and cancel navigation](./back-and-cancel-navigation.md)   | Cross-workflow navigation behaviour and consistency        | All personas             | High     | 🆕 New     |
+| Investigation                                                                      | The Human Question                      | Start With This When...                 |
+| ---------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------- |
+| [**Critical Risk Investigation Guide**](./critical-risk-investigation-guide.md) 🔥 | What actually threatens user value?     | You want to find what really matters    |
+| [**Novice Journey**](./novice-journey.md)                                          | Where does Sarah give up?               | You see high abandonment rates          |
+| [**Expert Workflows**](./expert-workflows.md)                                      | Why doesn't Marcus trust us?            | Professionals complain about efficiency |
+| [**Form Interactions**](./form-interactions.md)                                    | Where do mistakes multiply?             | Error rates are high                    |
+| [**Site Details**](./site-details.md)                                              | Why are coordinates so scary?           | Users call for help with locations      |
+| [**Manual Polygon Site Details**](./manual-polygon-site-details.md)                | When does complexity overwhelm?         | Multi-point entry causes problems       |
+| [**Review and Submission**](./review-and-submission.md)                            | Do users trust what they're submitting? | Users submit incorrect data             |
+| [**Back and Cancel Navigation**](./back-and-cancel-navigation.md)                  | Where does progress get lost?           | Users complain about losing work        |
+| [**Accessibility**](./accessibility-investigation.md)                              | Who gets excluded?                      | You need to ensure dignity for all      |
 
-### **Charter lifecycle**
+### Previous Testing Sessions
 
-**Charters are updated based on delivered functionality** to ensure they remain aligned with current system capabilities:
+Real investigations that found real problems:
 
-- **New features delivered** → Charter activities updated to include new workflows
-- **Feature enhancements** → Existing charters updated to reflect improved behaviour
-- **Validation improvements** → Form interaction testing updated for new error handling
-- **User research insights** → Charter priorities adjusted based on persona research
-- **Navigation consistency gaps** → New charter created to investigate cross-workflow behaviour patterns
+| Session                                                                                     | What We Found                          | Why It Mattered             |
+| ------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------------- |
+| [Back/Cancel Navigation](./session-output/back-and-cancel-navigation-session-2025-06-25.md) | Inconsistent patterns confuse users    | Sarah loses confidence      |
+| [Manual Polygon Entry](./session-output/manual-polygon-site-details-session-2025-07-14.md)  | Validation bugs trap users             | All users get stuck         |
+| [Novice Journey](./session-output/novice-journey-session-2025-06-26.md)                     | Coordinate entry is the breaking point | Sarah's abandonment trigger |
 
-**Research-Based Personas**: All charters now use research-based personas derived from direct user interviews, MMO staff observations, and beta service feedback. These replace assumption-based personas with evidence from real marine licensing users.
+## How to Investigate (Not Test)
 
-This approach ensures our investigation sessions always target **delivered system functionality** and real user patterns rather than hypothetical scenarios.
+### 1. Pick a Real Person
 
-## 🏗️ Charter structure
+Don't be "a tester". Be Sarah, Marcus, Elena, or David. Adopt their mindset, fears, and pressures.
 
-All charters follow the **investigative testing framework**:
+### 2. Try Their Real Task
 
-```
-EXPLORE: [Delivered feature area or workflow]
-AS: [Research-based persona - Marcus, Elena, Dr. James, Sarah, etc.]
-BECAUSE: [What you're concerned about or want to validate]
-LOOKING FOR: [Types of problems or insights based on delivered functionality]
+Not "test the multi-site feature" but "Elena needs to submit 5 applications before lunch without mixing up client data."
 
-SCENARIO CONTEXT:
-THEME: [Rich user context from persona research]
-SETUP: [Realistic pressures based on persona research]
-PERSONA: [Specific research-based persona with direct quotes]
+### 3. Feel Their Pressure
 
-REALISTIC ACTIVITIES:
-- [Activities testing delivered features only]
-- [Include friction and patterns observed in research]
-- [Test edge cases within delivered functionality]
+- Sarah's anxiety about getting it wrong
+- Marcus's need for audit trails
+- Elena's juggling multiple clients
+- David's need for independence
 
-EVIDENCE FRAMEWORK:
-+ Things that worked well
-- Problems discovered
-? Questions raised
-! Ideas for improvement
+### 4. Document Human Impact
 
-Duration: 60-90 minutes
-Priority: [High/Medium/Low based on delivered feature risk and user impact]
-```
+Not "validation error on coordinate field" but "Sarah tried three times with coordinates from Google Maps, got confused by error messages, gave up, called MMO."
 
-## 🚀 Using test charters
+## What Makes a Good Investigation?
 
-### **Charter execution (60-90 minutes)**
+### ✅ Good Investigation
 
-```
-📋 Setup (10 minutes)
-├── Pick delivered feature area to explore
-├── Choose realistic user context from research personas
-└── Decide what questions to answer about delivered functionality
+"When Elena manages applications for 5 different clients, she loses track of which sites belong to which client after about 12 sites total. The interface doesn't help her maintain this critical separation. Risk: Professional liability from mixed client data."
 
-🔍 Exploration (45-70 minutes)
-├── Follow realistic user workflows through delivered features
-├── Try variations and edge cases within current capabilities
-├── Note anything odd, slow, or confusing in delivered functionality
-└── Test scenarios automation might miss
+### ❌ Poor Test Report
 
-📝 Wrap-up (5-10 minutes)
-├── Document key findings about delivered features
-├── Identify follow-up actions for development team
-└── Share insights with team
-```
+"Multi-site functionality allows >50 sites. Performance degrades at N=47. Memory consumption exceeds threshold."
 
-### **After completion**
+### ✅ Good Finding
 
-1. **Summarise key discoveries** - Focus on delivered feature performance and user experience
-2. **Create actionable reports** - Link findings to specific user impact and business risk
-3. **Identify automation opportunities** - What scenarios should automated tests validate?
-4. **Plan follow-up sessions** - Which delivered features need deeper investigation?
+"Tom (dyslexia + ADHD) cannot complete the form when session timeout is 20 minutes. He needs breaks to process information. Extending timeout to 60 minutes would prevent discrimination."
 
-## 🔮 Delivered Feature Coverage
+### ❌ Poor Bug Report
 
-All current charters focus exclusively on **delivered functionality**:
+"WCAG 2.1 violation: 2.2.1 Timing Adjustable not implemented correctly."
 
-### **Complete Exemption Notification Workflow**
+## Questions That Matter
 
-- Project name entry and exemption creation (ML-1)
-- Task list navigation and progress tracking (ML-9)
-- Activity dates with enhanced validation (ML-10)
-- Activity description entry (ML-11)
-- Public register consent decisions (ML-12)
-- Check answers before submission (ML-82)
-- Submit notification and confirmation (ML-84)
-- Application reference generation (ML-21)
+Before documenting any issue, ask:
 
-### **Site Details Coordinate Entry Workflow**
+1. **Who** is harmed by this?
+2. **What** do they lose? (time, money, dignity, opportunity)
+3. **How likely** is this scenario?
+4. **Can they recover** without help?
+5. **Will they trust us** again?
 
-- Location method selection - manual entry and file upload (ML-16)
-- File type selection for upload (KML/Shapefile) (ML-69)
-- Circle vs coordinate list selection (ML-17)
-- Coordinate system selection (WGS84/OSGB36) (ML-18)
-- Centre point coordinate entry with validation (ML-35)
-- Circle width entry (ML-36)
-- Site details review and completion (ML-37)
+If you can't answer these questions, you haven't found a real risk.
 
-### **Manual Polygon Coordinate Entry**
+## Creating New Investigations
 
-- Multi-point polygon boundary definition (ML-19)
-- "Add another point" interaction with MOJ pattern (ML-38)
-- Dynamic point addition and removal functionality
-- Sequential coordinate numbering and re-numbering
-- Multi-point validation for both WGS84 and OSGB36 systems
+When you identify a new risk area:
 
-### **Review and Submission Workflow**
+1. **Start with a real person's real problem**
+2. **Write their nightmare scenario**
+3. **Design investigations, not test cases**
+4. **Focus on preventing harm, not finding bugs**
 
-- Information verification and accuracy checking (ML-82)
-- Declaration comprehension and submission confidence
-- "Confirm and send" interaction patterns (ML-84)
-- Application reference understanding and next steps (ML-21)
-- Error detection and correction at final stage
+## Remember
 
-### **Form Validation and Interaction Patterns**
+> "The best testing protects real people from real harm."
 
-- Enhanced validation with specific error messages
-- Cross-form consistency and state management
-- Accessibility and keyboard navigation
-- Error recovery and user guidance
-
-## 🔗 Related resources
-
-- **[User stories](../user-stories/README.md)** - Requirements and acceptance criteria for delivered features
-- **[Investigative testing guide](../test-strategy/investigative-testing.md)** - Complete framework and methodology
-- **[Research-based personas](../personas/README.md)** - Evidence-based user types from direct research
-- **[Testing heuristics](../test-strategy/heuristics.md)** - Systematic thinking frameworks for investigation
-- **[Feature files](../../test/features/)** - Automated test scenarios that validate delivered functionality
-
-## 🛠️ Testing tools & resources
-
-- **[Big list of naughty strings](https://github.com/minimaxir/big-list-of-naughty-strings)** - Comprehensive collection of problematic input strings for testing form validation and edge cases
+Every investigation should make you think: "What would happen to Sarah/Marcus/Elena/David if this went wrong?"
 
 ---
 
-_Test charters provide ready-to-execute investigation plans that combine systematic exploration with realistic user scenarios - revealing how delivered features actually serve marine licensing users under authentic conditions based on real research insights._
+_These investigations are living documents. When you learn something new about our users' reality, update them. The goal isn't comprehensive testing - it's protecting the people who depend on this service._
