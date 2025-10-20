@@ -338,7 +338,7 @@ Then(
 )
 
 When(
-  'the Continue button is clicked without providing any coordinates',
+  'the Save and continue button is clicked without providing any coordinates',
   async function () {
     await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
