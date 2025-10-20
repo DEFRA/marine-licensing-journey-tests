@@ -57,7 +57,7 @@ export default class BaseSiteDetailsTask extends Task {
 
   async saveIfRequired() {
     if (this.config.saveAndContinue) {
-      await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
+      await this.actor.attemptsTo(ClickButton.withText('Continue'))
       this.actor.updates(Memory.markTaskCompleted('siteDetails'))
     }
   }
