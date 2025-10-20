@@ -2,7 +2,7 @@ import { Given, Then, When } from '@wdio/cucumber-framework'
 import { browser } from '@wdio/globals'
 
 import {
-  ClickSaveAndContinue,
+  ClickButton,
   ContinueFromBeforeYouStartSiteDetailsPage,
   EnsureError,
   SelectTheTask
@@ -103,7 +103,7 @@ When(
       'KML'
     )
 
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 
@@ -185,7 +185,7 @@ When(
       'Shapefile'
     )
 
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 

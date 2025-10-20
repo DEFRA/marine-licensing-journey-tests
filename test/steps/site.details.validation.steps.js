@@ -12,8 +12,8 @@ import {
   ApplyForExemption,
   BrowseTheWeb,
   ClickAddAnotherPoint,
+  ClickButton,
   ClickRemovePointButton,
-  ClickSaveAndContinue,
   CompleteProjectName,
   ContinueFromBeforeYouStartSiteDetailsPage,
   EnsureError,
@@ -194,40 +194,40 @@ Given(
       await this.actor.attemptsTo(ClickAddAnotherPoint.now())
     }
 
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
 When(
   'the Continue button is clicked without selecting a coordinate entry method',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
 When(
   'the Continue button is clicked without selecting a coordinate system',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
 When(
   'the Continue button is clicked with providing any coordinates',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
 When('the Continue button is clicked', async function () {
-  await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  await this.actor.attemptsTo(ClickButton.withText('Continue'))
 })
 
 When('the Add another point button is clicked', async function () {

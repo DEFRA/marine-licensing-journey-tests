@@ -1,4 +1,5 @@
 import Task from '../base/task.js'
+import ClickButton from './button-interactions/click.button.js'
 import UploadFile from './upload.file.js'
 
 export default class UploadFileAndContinue extends Task {
@@ -13,6 +14,6 @@ export default class UploadFileAndContinue extends Task {
 
   async performAs(actor) {
     await actor.attemptsTo(UploadFile.withPath(this.filePath))
-    await actor.ability.clickSubmit()
+    await actor.attemptsTo(ClickButton.withText('Continue'))
   }
 }
