@@ -103,7 +103,7 @@ When(
       'KML'
     )
 
-    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
@@ -185,7 +185,7 @@ When(
       'Shapefile'
     )
 
-    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
