@@ -5,6 +5,7 @@ import {
 } from '~/test-infrastructure/helpers/date-formatter.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
+import { getActivityPurposeDisplay } from '~/test-infrastructure/screenplay/factories/iat-constants.js'
 import Task from './task.js'
 
 export default class NotificationSummaryBase extends Task {
@@ -15,19 +16,31 @@ export default class NotificationSummaryBase extends Task {
   async _validateProjectSummary(browseTheWeb, exemptionData) {
     const pageLocators = this._getPageLocators()
 
-    if (exemptionData.activityType) {
-      await browseTheWeb.expectElementToContainText(
-        pageLocators.projectSummary.activityTypeValue,
-        exemptionData.activityType
+    await browseTheWeb.expectElementToContainText(
+      pageLocators.projectSummary.activityTypeValue,
+      exemptionData.iatContext.activityType.display
+    )
+
+    const expectedPurpose = getActivityPurposeDisplay(
+      exemptionData.iatContext.activityType.code,
+      exemptionData.iatContext.articleCode.code
+    )
+
+    if (expectedPurpose) {
+      await browseTheWeb.expectElementToHaveExactText(
+        pageLocators.projectSummary.activityPurposeValue,
+        expectedPurpose
+      )
+    } else {
+      await browseTheWeb.isNotDisplayed(
+        pageLocators.projectSummary.activityPurposeTerm
       )
     }
 
-    if (exemptionData.exemptionReason) {
-      await browseTheWeb.expectElementToContainText(
-        pageLocators.projectSummary.exemptionReasonValue,
-        exemptionData.exemptionReason
-      )
-    }
+    await browseTheWeb.expectElementToContainText(
+      pageLocators.projectSummary.exemptionReasonValue,
+      `Article ${exemptionData.iatContext.articleCode.code} of the Marine Licensing (Exempted Activities) Order 2011`
+    )
 
     await browseTheWeb.isDisplayed(pageLocators.projectSummary.pdfDownloadLink)
   }

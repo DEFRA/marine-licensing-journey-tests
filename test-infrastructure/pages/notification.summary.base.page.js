@@ -13,6 +13,10 @@ export default class NotificationSummaryBasePage {
       activityTypeTerm: '//dt[contains(text(), "Type of activity")]',
       activityTypeValue:
         '//dt[contains(text(), "Type of activity")]/following-sibling::dd[1]',
+      activityPurposeTerm:
+        '//dt[contains(text(), "The purpose of the activity")]',
+      activityPurposeValue:
+        '//dt[contains(text(), "The purpose of the activity")]/following-sibling::dd[1]',
       exemptionReasonTerm:
         '//dt[contains(text(), "Why this activity is exempt")]',
       exemptionReasonValue:

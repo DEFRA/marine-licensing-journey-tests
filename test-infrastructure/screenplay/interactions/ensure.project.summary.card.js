@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
+import { getActivityPurposeDisplay } from '~/test-infrastructure/screenplay/factories/iat-constants.js'
 import Task from '../base/task.js'
 
 export default class EnsureProjectSummaryCard extends Task {
@@ -17,6 +18,7 @@ export default class EnsureProjectSummaryCard extends Task {
 
     await this._validateProjectName(browseTheWeb, exemptionData)
     await this._validateActivityType(browseTheWeb, exemptionData)
+    await this._validateActivityPurpose(browseTheWeb, exemptionData)
     await this._validateExemptionReason(browseTheWeb, exemptionData)
     await this._validatePdfDownload(browseTheWeb, exemptionData)
   }
@@ -34,6 +36,27 @@ export default class EnsureProjectSummaryCard extends Task {
       await browseTheWeb.expectElementToHaveExactText(
         CheckYourAnswersPage.locators.projectSummary.activityTypeValue,
         expectedActivityType
+      )
+    }
+  }
+
+  async _validateActivityPurpose(browseTheWeb, exemptionData) {
+    const activityTypeCode = exemptionData.iatContext?.activityType?.code
+    const articleCode = exemptionData.iatContext?.articleCode?.code
+
+    const expectedPurpose = getActivityPurposeDisplay(
+      activityTypeCode,
+      articleCode
+    )
+
+    if (expectedPurpose) {
+      await browseTheWeb.expectElementToHaveExactText(
+        CheckYourAnswersPage.locators.projectSummary.activityPurposeValue,
+        expectedPurpose
+      )
+    } else {
+      await browseTheWeb.isNotDisplayed(
+        CheckYourAnswersPage.locators.projectSummary.activityPurposeTerm
       )
     }
   }

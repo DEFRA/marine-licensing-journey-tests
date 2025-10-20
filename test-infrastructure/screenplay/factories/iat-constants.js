@@ -84,6 +84,12 @@ export const ARTICLE_CODES = [
       'Article 25A of the Marine Licence (Exempted Activities) Order 2011 (as amended)'
   },
   {
+    code: '26',
+    link: 'http://www.legislation.gov.uk/uksi/2011/409/article/26',
+    display:
+      'Article 26 of the Marine Licence (Exempted Activities) Order 2011 (as amended)'
+  },
+  {
     code: '26A',
     link: 'http://www.legislation.gov.uk/uksi/2011/409/article/26A',
     display:
@@ -124,3 +130,52 @@ export const ACTIVITY_PURPOSES = [
   'shellfish',
   'waste'
 ]
+
+export const ACTIVITY_PURPOSE_DISPLAY = {
+  CON: {
+    25: 'Moorings or aids to navigation',
+    '25A': 'Pontoons',
+    35: 'Bored tunnels'
+  },
+  DEPOSIT: {
+    13: 'Shellfish propagation or cultivation',
+    17: 'Scientific instruments and associated equipment',
+    20: 'Flood or flood risk',
+    25: 'Moorings or aids to navigation',
+    '25A': 'Pontoons',
+    26: 'Markers for European marine sites and conservation zones',
+    '26A': 'Temporary markers',
+    34: 'Cables and pipelines'
+  },
+  REMOVAL: {
+    13: 'Shellfish propagation or cultivation',
+    17: 'Scientific instruments and associated equipment',
+    '17A': 'Samples for testing and analysis',
+    '17B': 'Accidental deposits',
+    20: 'Flood or flood risk',
+    21: 'Dead animals',
+    25: 'Moorings or aids to navigation',
+    '25A': 'Pontoons',
+    26: 'Markers for European marine sites and conservation zones',
+    '26A': 'Temporary markers',
+    34: 'Cables and pipelines'
+  },
+  DREDGE: {
+    '18A': 'Navigational dredging',
+    20: 'Flood or flood risk',
+    34: 'Cables and pipelines'
+  }
+}
+
+export function getActivityPurposeDisplay(activityTypeCode, articleCode) {
+  if (!activityTypeCode || !articleCode) {
+    return null
+  }
+
+  const purposeMap = ACTIVITY_PURPOSE_DISPLAY[activityTypeCode]
+  if (!purposeMap) {
+    return null
+  }
+
+  return purposeMap[articleCode] || null
+}
