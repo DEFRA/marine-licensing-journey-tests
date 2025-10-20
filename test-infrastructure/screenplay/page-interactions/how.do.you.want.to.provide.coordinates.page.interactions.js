@@ -1,4 +1,3 @@
-import CommonElementsPage from '~/test-infrastructure/pages/common.elements.page.js'
 import HowDoYouWantToProvideCoordinatesPage from '~/test-infrastructure/pages/how.do.you.want.to.provide.coordinates.page.js'
 
 export default class HowDoYouWantToProvideCoordinatesPageInteractions {
@@ -20,6 +19,7 @@ export default class HowDoYouWantToProvideCoordinatesPageInteractions {
     await browseTheWeb.click(
       HowDoYouWantToProvideCoordinatesPage.enterCoordinates
     )
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
+    const continueButton = await browseTheWeb.browser.$('button*=Continue')
+    await continueButton.click()
   }
 }
