@@ -60,23 +60,6 @@ export default class BrowseTheWeb extends Ability {
     await element.click()
   }
 
-  async clickSaveAndContinue() {
-    const saveAndContinueButton = await this.browser.$(
-      'button*=Save and continue'
-    )
-    const isExisting = await saveAndContinueButton.isExisting()
-    if (isExisting) {
-      await saveAndContinueButton.click()
-      return
-    }
-
-    await this.clickSubmit()
-  }
-
-  async clickSubmit() {
-    await this.click(CommonElementsPage.submitButton)
-  }
-
   async expectElementToContainText(locator, expectedSubstring) {
     const element = await this.getElement(locator)
     await element.waitForExist()
@@ -112,6 +95,12 @@ export default class BrowseTheWeb extends Ability {
   async expectElementToHaveValue(locator, expectedValue) {
     const element = await this.getElement(locator)
     await expect(element).toHaveAttribute('value', expectedValue)
+  }
+
+  async expectElementToHaveAttribute(locator, attributeName, expectedValue) {
+    const element = await this.getElement(locator)
+    const actualValue = await element.getAttribute(attributeName)
+    await expect(actualValue).toBe(expectedValue)
   }
 
   async isSelected(locator) {

@@ -1,5 +1,6 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 import { browser } from '@wdio/globals'
+import DashboardPage from '~/test-infrastructure/pages/dashboard.page'
 import {
   Actor,
   ApplyForExemption,
@@ -12,10 +13,10 @@ import {
   EnsureEmptyStateMessage,
   EnsureNotificationRemoved,
   EnsureNotificationsAreDisplayedOnTheDashboard,
-  EnsureThatProjectNameIsEmpty,
+  EnsureProjectName,
   EnsureViewDetailsPage,
   Navigate,
-  NavigateToDashboard,
+  NavigateToLink,
   SelectTheTask,
   SignIn,
   SignOut,
@@ -82,14 +83,14 @@ When(
 )
 
 When('the user navigates to the dashboard', async function () {
-  await this.actor.attemptsTo(NavigateToDashboard.now())
+  await this.actor.attemptsTo(NavigateToLink.to(DashboardPage.url))
 })
 
 When(
   'the user continues the notification from the dashboard and reenters the project name task',
   async function () {
     await this.actor.attemptsTo(SignIn.now())
-    await this.actor.attemptsTo(NavigateToDashboard.now())
+    await this.actor.attemptsTo(NavigateToLink.to(DashboardPage.url))
     await this.actor.attemptsTo(
       ClickContinueLink.forExemptionWithProjectName(
         this.actor.recalls('exemption').projectName
@@ -114,7 +115,7 @@ When(
   'the user deletes the draft notification from the dashboard',
   async function () {
     await this.actor.attemptsTo(SignIn.now())
-    await this.actor.attemptsTo(NavigateToDashboard.now())
+    await this.actor.attemptsTo(NavigateToLink.to(DashboardPage.url))
     await this.actor.attemptsTo(
       DeleteDraftNotification.withProjectName(
         this.actor.recalls('exemption').projectName
@@ -130,7 +131,7 @@ When('the user starts a new notification', async function () {
 })
 
 Then('the project name is not pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectNameIsEmpty.now())
+  await this.actor.attemptsTo(EnsureProjectName.isEmpty())
 })
 
 Then('the notification is removed from the dashboard', async function () {

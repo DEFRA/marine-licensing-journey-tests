@@ -31,6 +31,25 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
+  vulnerability-scan:
+    name: Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+
+      - name: Audit npm dependencies
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Run npm audit and fail on high/critical vulnerabilities
+        run: |
+          npm ci
+          npm audit --audit-level=high --production || (echo 'Vulnerabilities found!' && exit 1)
   tests:
     name: Run Journey Tests
     runs-on: ubuntu-latest

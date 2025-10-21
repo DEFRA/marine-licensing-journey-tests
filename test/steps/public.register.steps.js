@@ -7,8 +7,8 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickButton,
   ClickPublicRegisterLink,
-  ClickSaveAndContinue,
   CompleteProjectName,
   CompletePublicRegisterTask,
   EnsureErrorDisplayed,
@@ -109,7 +109,7 @@ When(
 When(
   'the Save and continue button is clicked without choosing a radio option',
   async function () {
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 

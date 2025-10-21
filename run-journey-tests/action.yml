@@ -27,6 +27,7 @@ runs:
         path: ./marine-licensing-journey-tests
 
     - name: Determine journey-tests branch
+      if: github.repository != 'DEFRA/marine-licensing-journey-tests'
       id: resolve_tests_branch
       shell: bash
       run: |
@@ -36,16 +37,85 @@ runs:
         BRANCH_TO_USE="$DEFAULT_BRANCH"
 
         DEPENDS_FILE='./marine-licensing-journey-tests/depends-on.json'
-        if [ -f "$DEPENDS_FILE" ]; then
-          BRANCH_FROM_DEPENDS=$(jq -r '.[] | select(.repository == "DEFRA/marine-licensing-journey-tests") | .branch // empty' "$DEPENDS_FILE")
-          if [ -n "$BRANCH_FROM_DEPENDS" ]; then
-            if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
-              echo "✅ Using depends-on branch from depends-on action: $BRANCH_FROM_DEPENDS"
-              BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
-              echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
-            else
-              echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
+        ROOT_DEPENDS_FILE='./depends-on.json'
+
+        resolve_branch_from_depends() {
+          local file="$1"
+          local branch=""
+
+          branch=$(jq -r '.dependencies[]? | select(.repo == "DEFRA/marine-licensing-journey-tests") | .ref // empty' "$file" 2>/dev/null | head -1)
+
+          if [ -z "$branch" ]; then
+            local description
+            description=$(jq -r '.description // empty' "$file" 2>/dev/null)
+            if [ -n "$description" ]; then
+              local depends_lines
+              depends_lines=$(printf '%s\n' "$description" | grep -iE '^\s*depends[- ]?on[: ]+' || true)
+
+              if [ -n "$depends_lines" ] && ! printf '%s\n' "$depends_lines" | grep -qiE 'https://github.com/.*/pull/[0-9]+'; then
+                local invalid_placeholder
+                invalid_placeholder=$(printf '%s\n' "$depends_lines" | sed -nE 's/.*(<[^>]*-pr-link>).*/\1/p' | head -1)
+
+                if [ -z "$invalid_placeholder" ]; then
+                  invalid_placeholder='<pr-link>'
+                fi
+
+                >&2 echo "ValueError: Invalid URL $invalid_placeholder"
+                exit 1
+              fi
+
+              local dep_line
+              dep_line=$(printf '%s\n' "${depends_lines:-$description}" | grep -iE 'depends[- ]?on[: ]+.*marine-licensing-journey-tests' | head -1 || true)
+              if [ -n "$dep_line" ]; then
+                local candidate
+                candidate=$(printf '%s\n' "$dep_line" | sed -E 's#^.*marine-licensing-journey-tests[@:]+([A-Za-z0-9._/\-]+).*$#\1#I')
+                if [ -n "$candidate" ] && [ "$candidate" != "$dep_line" ]; then
+                  branch="$candidate"
+                else
+                  local pr_num
+                  pr_num=$(printf '%s\n' "$dep_line" | sed -nE 's#.*marine-licensing-journey-tests.*/pull/([0-9]+).*#\1#p')
+                  if [ -z "$pr_num" ]; then
+                    pr_num=$(printf '%s\n' "$dep_line" | sed -nE 's#.*marine-licensing-journey-tests[^0-9]*([0-9]+).*#\1#p')
+                  fi
+                  if [ -n "$pr_num" ]; then
+                    >&2 echo "ℹ️  Resolving PR #$pr_num head branch for marine-licensing-journey-tests"
+                    local api_headers=("-H" "Accept: application/vnd.github+json")
+                    if [ -n "$GITHUB_TOKEN" ]; then
+                      api_headers+=("-H" "Authorization: Bearer $GITHUB_TOKEN")
+                    fi
+                    branch=$(curl -sS "https://api.github.com/repos/DEFRA/marine-licensing-journey-tests/pulls/$pr_num" "${api_headers[@]}" | jq -r '.head.ref // empty')
+                  fi
+                fi
+              fi
             fi
+          fi
+
+          printf '%s' "$branch"
+        }
+
+        BRANCH_FROM_DEPENDS=""
+
+        if [ -f "$DEPENDS_FILE" ]; then
+          BRANCH_FROM_DEPENDS="$(resolve_branch_from_depends "$DEPENDS_FILE")"
+          if [ -z "$BRANCH_FROM_DEPENDS" ]; then
+            echo "ℹ️ depends-on.json did not contain an entry for DEFRA/marine-licensing-journey-tests"
+          fi
+        elif [ -f "$ROOT_DEPENDS_FILE" ]; then
+          BRANCH_FROM_DEPENDS="$(resolve_branch_from_depends "$ROOT_DEPENDS_FILE")"
+          if [ -z "$BRANCH_FROM_DEPENDS" ]; then
+            echo "ℹ️ depends-on.json (root) did not contain an entry for DEFRA/marine-licensing-journey-tests"
+          fi
+        else
+          echo "ℹ️ No depends-on.json found; using default branch $DEFAULT_BRANCH"
+        fi
+
+        if [ -n "$BRANCH_FROM_DEPENDS" ]; then
+          if git ls-remote --exit-code --heads https://github.com/DEFRA/marine-licensing-journey-tests.git "$BRANCH_FROM_DEPENDS" >/dev/null 2>&1; then
+            echo "✅ Using depends-on branch from depends-on action: $BRANCH_FROM_DEPENDS"
+            BRANCH_TO_USE="$BRANCH_FROM_DEPENDS"
+            echo "branch_discovered_source=depends-on-json" >> "$GITHUB_OUTPUT"
+          else
+            echo "⚠️ Branch '$BRANCH_FROM_DEPENDS' from depends-on.json not found on remote; retaining default: $DEFAULT_BRANCH"
           fi
         fi
 

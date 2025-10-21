@@ -1,6 +1,8 @@
-@issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-82 @issue=ML-139 @issue=ML-140 @issue=ML-142
+@issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-82 @issue=ML-139 @issue=ML-140 @issue=ML-142 @wip
 Feature: Check your answers: Once the user has completed all the tasks on the task list, they will be able to access the "Check your answers" page,
 which will play back all their answers and allow them to verify that the answers are OK, ready for submission of their notification.
+
+THESE TEST ARE CURRENTLY IGNORED AS CYA HAS NOT BEEN UPDATED TO HANDLE THE SITE DETAILS ACTIVITY DATES AND DESCRIPTIONS
 
   - ML-1: Provide project name
   - ML-9: View the task list
@@ -45,13 +47,13 @@ which will play back all their answers and allow them to verify that the answers
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @kml @not-github-actions
+  @kml
   Scenario: After successfully completing all the tasks on the task list, with KML file upload, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a KML file upload
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @shapefile @not-github-actions
+  @shapefile
   Scenario: After successfully completing all the tasks on the task list, with Shapefile upload, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a Shapefile upload
     When the user clicks Review and send

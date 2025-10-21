@@ -7,9 +7,9 @@ import {
   ApplyForExemption,
   BrowseTheWeb,
   CompleteProjectName,
-  EnsureErrorDisplayed,
+  EnsureError,
+  EnsureProjectName,
   EnsureProjectNameDisplayedAsCaption,
-  EnsureThatProjectName,
   Navigate
 } from '~/test-infrastructure/screenplay'
 import { MarineProjectModel } from '~/test-infrastructure/screenplay/models'
@@ -55,13 +55,13 @@ Then(
   'the project name error {string} is displayed',
   async function (errorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(ProjectNamePage.projectNameError, errorMessage)
+      EnsureError.is(ProjectNamePage.projectNameError, errorMessage)
     )
   }
 )
 
 Then('the project name is pre-populated', async function () {
-  await this.actor.attemptsTo(EnsureThatProjectName.isCorrect())
+  await this.actor.attemptsTo(EnsureProjectName.isCorrect())
 })
 
 Then(

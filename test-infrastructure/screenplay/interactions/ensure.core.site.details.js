@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
@@ -37,6 +38,7 @@ export default class EnsureCoreSiteDetails extends Task {
 
     await this.verifyUploadedFileName(browseTheWeb)
     await this.verifyExtractedCoordinates(browseTheWeb, actor)
+    await this.verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails)
   }
 
   async verifyUploadedFileName(browseTheWeb) {
@@ -136,6 +138,15 @@ export default class EnsureCoreSiteDetails extends Task {
   async verifyExtractedCoordinates(browseTheWeb, actor) {
     const exemption = actor.recalls('exemption')
     const expectedCoordinates = exemption?.siteDetails?.expectedCoordinates
+    const expectedSites = exemption?.siteDetails?.expectedSites
+
+    if (expectedSites) {
+      await this.verifyMultiSiteExtractedCoordinates(
+        browseTheWeb,
+        expectedSites
+      )
+      return
+    }
 
     this.validateExpectedCoordinates(expectedCoordinates)
 
@@ -143,6 +154,140 @@ export default class EnsureCoreSiteDetails extends Task {
     const actualCoordinates = this.extractCoordinatesFromGeoJSON(actualGeoJSON)
 
     expect(actualCoordinates).to.deep.equal(expectedCoordinates)
+  }
+
+  async verifyMultiSiteExtractedCoordinates(browseTheWeb, expectedSites) {
+    for (let i = 0; i < expectedSites.length; i++) {
+      const expectedSite = expectedSites[i]
+      const siteIndex = i + 1
+      const geoJSONVarName = `geoJSON${siteIndex}`
+
+      const actualGeoJSON = await browseTheWeb.browser.execute((varName) => {
+        return typeof window[varName] !== 'undefined' ? window[varName] : null
+      }, geoJSONVarName)
+
+      if (!actualGeoJSON) {
+        expect.fail(
+          `No ${geoJSONVarName} found for site "${expectedSite.siteName}"`
+        )
+      }
+
+      const actualCoordinates =
+        this.extractCoordinatesFromGeoJSON(actualGeoJSON)
+      expect(actualCoordinates).to.deep.equal(
+        expectedSite.extractedCoordinates,
+        `Coordinates mismatch for site "${expectedSite.siteName}" (${geoJSONVarName})`
+      )
+    }
+  }
+
+  async verifyMultiSiteIncompleteFields(browseTheWeb, siteDetails) {
+    if (!siteDetails?.multipleSitesEnabled || !siteDetails?.expectedSites) {
+      return
+    }
+
+    const hasDifferentDates = siteDetails.sameActivityDates === false
+    const hasDifferentDescriptions =
+      siteDetails.sameActivityDescription === false
+
+    const numberOfSites = siteDetails.expectedSites.length
+
+    for (let i = 0; i < numberOfSites; i++) {
+      const siteNumber = i + 1
+      const expectedSite = siteDetails.sites[i]
+
+      await this.verifySiteFields(browseTheWeb, {
+        siteNumber,
+        expectedSite,
+        hasDifferentDates,
+        hasDifferentDescriptions
+      })
+    }
+  }
+
+  async verifySiteFields(browseTheWeb, options) {
+    const {
+      siteNumber,
+      expectedSite,
+      hasDifferentDates,
+      hasDifferentDescriptions
+    } = options
+
+    const siteNameElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteName(siteNumber)
+    )
+    const actualSiteName = await siteNameElement.getText()
+    expect(actualSiteName.trim()).to.equal(
+      expectedSite.siteName,
+      `Site ${siteNumber} name mismatch`
+    )
+
+    if (hasDifferentDates) {
+      await this.verifyActivityDates(browseTheWeb, siteNumber, expectedSite)
+    }
+
+    if (hasDifferentDescriptions) {
+      await this.verifyActivityDescription(
+        browseTheWeb,
+        siteNumber,
+        expectedSite
+      )
+    }
+  }
+
+  async verifyActivityDates(browseTheWeb, siteNumber, expectedSite) {
+    const datesElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
+    )
+    const actualDatesText = await datesElement.getText()
+    const expectedDatesText = this.formatActivityDatesForDisplay(
+      expectedSite.activityDates
+    )
+    expect(actualDatesText.trim()).to.equal(
+      expectedDatesText,
+      `Site ${siteNumber} activity dates mismatch`
+    )
+  }
+
+  async verifyActivityDescription(browseTheWeb, siteNumber, expectedSite) {
+    const descriptionElement = await browseTheWeb.getElement(
+      ReviewSiteDetailsPage.getSiteActivityDescription(siteNumber)
+    )
+    const actualDescription = await descriptionElement.getText()
+    expect(actualDescription.trim()).to.equal(
+      expectedSite.activityDescription,
+      `Site ${siteNumber} activity description mismatch`
+    )
+  }
+
+  formatActivityDatesForDisplay(activityDates) {
+    if (!this.hasValidActivityDatesStructure(activityDates)) {
+      return ''
+    }
+
+    const formattedStart = formatDateObjectToDisplay(activityDates.startDate)
+    const formattedEnd = formatDateObjectToDisplay(activityDates.endDate)
+
+    return `${formattedStart} to ${formattedEnd}`
+  }
+
+  hasValidActivityDatesStructure(activityDates) {
+    if (!activityDates) {
+      return false
+    }
+
+    if (!activityDates.startDate || !activityDates.endDate) {
+      return false
+    }
+
+    return (
+      this.hasValidDateObject(activityDates.startDate) &&
+      this.hasValidDateObject(activityDates.endDate)
+    )
+  }
+
+  hasValidDateObject(dateObject) {
+    return dateObject.day && dateObject.month && dateObject.year
   }
 
   validateFileType(expectedFileType, siteDetails) {
@@ -163,22 +308,19 @@ export default class EnsureCoreSiteDetails extends Task {
 
   async getActualCoordinatesFromDOM(browseTheWeb) {
     try {
-      const siteDetailsElement = await browseTheWeb.getElement(
-        ReviewSiteDetailsPage.siteDetailsDataScript
-      )
-      const siteDetailsHTML = await siteDetailsElement.getHTML(false)
+      const geoJSON = await browseTheWeb.browser.execute(() => {
+        // eslint-disable-next-line no-undef
+        return typeof geoJSON1 !== 'undefined' ? geoJSON1 : null
+      })
 
-      if (siteDetailsHTML && siteDetailsHTML.trim()) {
-        const siteDetailsData = JSON.parse(siteDetailsHTML.trim())
-        if (siteDetailsData?.geoJSON) {
-          return siteDetailsData.geoJSON
-        }
+      if (geoJSON) {
+        return geoJSON
       }
     } catch (error) {
       expect.fail('No coordinates were extracted from the file')
     }
 
-    expect.fail('No coordinate data found in #site-details-data script element')
+    expect.fail('No coordinate data found in geoJSON1 variable')
   }
 
   extractCoordinatesFromGeoJSON(geoJSON) {
@@ -200,7 +342,7 @@ export default class EnsureCoreSiteDetails extends Task {
       case 'LineString':
         return coordinates
       case 'Polygon':
-        return coordinates
+        return coordinates[0]
       case 'Point':
         return [coordinates]
       default:

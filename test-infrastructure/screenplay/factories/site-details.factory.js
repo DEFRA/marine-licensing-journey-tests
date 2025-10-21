@@ -1,7 +1,13 @@
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import {
   ActivityDatesModel,
   ActivityDescriptionModel
 } from '../models/index.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default class SiteDetailsFactory {
   static ENTRY_METHODS = {
@@ -23,6 +29,9 @@ export default class SiteDetailsFactory {
     YES: 'yes',
     NO: 'no'
   }
+
+  static MULTI_SITE_KML_FILE = 'test/resources/EXE_2025_00098-LOCATIONS.kml'
+  static MULTI_SITE_SHAPEFILE = 'test/resources/Suffolk MMO shapefiles.zip'
 
   static DEFAULT_COORDINATES = {
     circle: {
@@ -95,34 +104,6 @@ export default class SiteDetailsFactory {
     return this._createFileUpload()
   }
 
-  static createMultipleSites() {
-    const circleData = this._getCoordinateData(
-      this.SITE_TYPES.CIRCLE,
-      this.COORDINATE_SYSTEMS.WGS84
-    )
-
-    return this._createMultiSiteStructure({
-      sameActivityDates: true,
-      sameActivityDescription: false,
-      sites: [
-        this._createSingleSite({
-          siteName: 'Main Research Site',
-          siteNumber: 1,
-          siteType: this.SITE_TYPES.CIRCLE,
-          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
-          coordinateData: circleData
-        }),
-        this._createSingleSite({
-          siteName: 'Marine Research Site Beta',
-          siteNumber: 2,
-          siteType: this.SITE_TYPES.CIRCLE,
-          coordinateSystem: this.COORDINATE_SYSTEMS.WGS84,
-          coordinateData: circleData
-        })
-      ]
-    })
-  }
-
   static createMixedMultipleSites() {
     return this._createMixedMultipleSites({
       sameActivityDates: false,
@@ -163,6 +144,32 @@ export default class SiteDetailsFactory {
       'Shapefile',
       'test/resources/valid-shapefile.zip'
     )
+  }
+
+  static createMultiSiteFileUploadByType(
+    fileType,
+    { sameActivityDates = false, sameActivityDescription = false } = {}
+  ) {
+    const fileConfig = {
+      KML: this.MULTI_SITE_KML_FILE,
+      Shapefile: this.MULTI_SITE_SHAPEFILE
+    }
+    const filePath = fileConfig[fileType]
+    if (!filePath) {
+      throw new Error(`Unsupported file type: ${fileType}`)
+    }
+    return this._createMultiSiteFileUpload(fileType, filePath, {
+      sameActivityDates,
+      sameActivityDescription
+    })
+  }
+
+  static createMultiSiteKMLUpload(options) {
+    return this.createMultiSiteFileUploadByType('KML', options)
+  }
+
+  static createMultiSiteShapefileUpload(options) {
+    return this.createMultiSiteFileUploadByType('Shapefile', options)
   }
 
   static _createMixedMultipleSites({
@@ -305,6 +312,72 @@ export default class SiteDetailsFactory {
     if (filePath) baseData.filePath = filePath
 
     return { ...baseData, sites: [siteData] }
+  }
+
+  static _createMultiSiteFileUpload(
+    fileType,
+    filePath,
+    { sameActivityDates, sameActivityDescription }
+  ) {
+    const sharedActivityDates = ActivityDatesModel.generateValidActivityDates()
+    const sharedActivityDescription =
+      ActivityDescriptionModel.generateActivityDescription()
+
+    const expectedJsonPath = filePath.replace(/\.(kml|zip)$/, '.expected.json')
+    let numberOfSites = 2 // Default to 2 sites
+
+    try {
+      const fullPath = path.resolve(__dirname, '../../..', expectedJsonPath)
+      const expectedData = JSON.parse(fs.readFileSync(fullPath, 'utf8'))
+
+      numberOfSites = expectedData.extractedSites.length
+    } catch (error) {
+      console.warn(
+        `Could not read expected JSON file: ${expectedJsonPath}. Using default number of sites (2).`
+      )
+    }
+
+    const siteNamePatterns = [
+      'Kentish Flats and Kentish Flats Extension',
+      'Thanet Offshore Wind Farm',
+      'Greater Gabbard Wind Farm',
+      'London Array Offshore Wind Farm',
+      'Galloper Wind Farm',
+      'Race Bank Wind Farm',
+      'Dudgeon Offshore Wind Farm',
+      'Sheringham Shoal Offshore Wind Farm'
+    ]
+
+    const sites = Array.from({ length: numberOfSites }, (_, index) => {
+      const siteName = siteNamePatterns[index] || `Marine Site ${index + 1}`
+
+      const activityDates = sameActivityDates
+        ? sharedActivityDates
+        : ActivityDatesModel.generateValidActivityDates()
+      const activityDescription = sameActivityDescription
+        ? sharedActivityDescription
+        : ActivityDescriptionModel.generateActivityDescription()
+
+      return {
+        siteName,
+        siteNumber: index + 1,
+        coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
+        fileType,
+        filePath,
+        activityDates,
+        activityDescription
+      }
+    })
+
+    return {
+      multipleSitesEnabled: true,
+      sameActivityDates,
+      sameActivityDescription,
+      coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
+      fileType,
+      filePath,
+      sites
+    }
   }
 
   static _createCoordinateSet(coordinatePairs, system) {

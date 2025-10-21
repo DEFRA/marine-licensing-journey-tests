@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import Task from '../base/task.js'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
-import { ClickSaveAndContinue } from '../interactions/index.js'
+import { ClickButton } from '../interactions/index.js'
 import Memory from '../memory.js'
 import {
   BeforeYouStartSiteDetailsPageInteractions,
@@ -57,7 +57,7 @@ export default class BaseSiteDetailsTask extends Task {
 
   async saveIfRequired() {
     if (this.config.saveAndContinue) {
-      await this.actor.attemptsTo(ClickSaveAndContinue.now())
+      await this.actor.attemptsTo(ClickButton.withText('Continue'))
       this.actor.updates(Memory.markTaskCompleted('siteDetails'))
     }
   }

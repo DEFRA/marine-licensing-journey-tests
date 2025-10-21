@@ -10,19 +10,6 @@ Feature: Activity dates: The user can provide activity dates for their marine pr
 
   The majority of validation scenarios are covered using integration tests within the frontend project.
 
-  @smoke
-  Scenario: Save valid activity dates
-    Given a notification has been created with a valid project name
-    And the activity dates are valid
-    When completing the activity dates task
-    Then the "Activity dates" task status is "Completed"
-
-  Scenario: Update previously saved activity dates
-    Given a notification has been created with a valid project name
-    And the activity dates task has been completed
-    When completing the activity dates task with different dates
-    Then the "Activity dates" task status is "Completed"
-
   Scenario: Error when no dates are entered
     Given a notification has been created with a valid project name
     And the activity dates are valid

@@ -37,7 +37,7 @@ export default class ExemptionFactory {
           activityPurpose: activityType.supportsPurpose
             ? faker.helpers.arrayElement(ACTIVITY_PURPOSES)
             : null,
-          pdfUrl: `https://example.com/iat-answers/${faker.string.uuid()}.pdf`
+          pdfUrl: `https://marinelicensing.marinemanagement.org.uk/path/journey/self-service/outcome-document/${faker.string.uuid()}`
         }
       })(),
       ...overrides
@@ -71,31 +71,41 @@ export default class ExemptionFactory {
   }
 
   static createFileUploadBase(fileType, options = {}) {
-    const { filePath, generateFile } = options
+    const { filePath, generateFile, expectValidationError = false } = options
     const actualFilePath = generateFile ? generateFile() : filePath
 
     const siteDetails = {
       ...SiteDetailsFactory.createFileUpload(),
-      fileType:
-        fileType === 'kml'
-          ? FileTypeModel.generateKML()
-          : FileTypeModel.generateShapefile(),
-      ...(actualFilePath && { filePath: actualFilePath })
+      fileType: this.generateFileTypeModel(fileType),
+      ...(actualFilePath && { filePath: actualFilePath }),
+      expectValidationError
     }
 
-    if (actualFilePath) {
-      const expectedData =
-        CoordinateFiles.loadExpectedCoordinates(actualFilePath)
-      if (expectedData?.extractedCoordinates) {
-        siteDetails.expectedCoordinates = expectedData.extractedCoordinates
-      }
-    }
+    this.loadExpectedDataIntoSiteDetails(siteDetails, actualFilePath)
 
     return this.createBaseExemption({
       activityDates: ActivityDatesFactory.createValidDates(),
       publicRegister: { consent: true },
       siteDetails
     })
+  }
+
+  static generateFileTypeModel(fileType) {
+    return fileType === 'kml'
+      ? FileTypeModel.generateKML()
+      : FileTypeModel.generateShapefile()
+  }
+
+  static loadExpectedDataIntoSiteDetails(siteDetails, filePath) {
+    if (!filePath) return
+
+    const expectedData = CoordinateFiles.loadExpectedCoordinates(filePath)
+    if (expectedData?.extractedCoordinates) {
+      siteDetails.expectedCoordinates = expectedData.extractedCoordinates
+    }
+    if (expectedData?.extractedSites) {
+      siteDetails.expectedSites = expectedData.extractedSites
+    }
   }
 
   static createKMLUpload() {
@@ -106,7 +116,8 @@ export default class ExemptionFactory {
 
   static createKMLVirusUpload() {
     return this.createFileUploadBase('kml', {
-      filePath: 'test/resources/nasty-virus-here.kml'
+      filePath: 'test/resources/nasty-virus-here.kml',
+      expectValidationError: true
     })
   }
 
@@ -117,16 +128,23 @@ export default class ExemptionFactory {
   static createKMLWrongFileType() {
     return this.createFileUploadBase('kml', {
       filePath:
-        'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html'
+        'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html',
+      expectValidationError: true
     })
   }
 
   static createKMLLargeFile(filePath) {
-    return this.createFileUploadBase('kml', { filePath })
+    return this.createFileUploadBase('kml', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createKMLEmptyFile(filePath) {
-    return this.createFileUploadBase('kml', { filePath })
+    return this.createFileUploadBase('kml', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createShapefileUpload() {
@@ -137,7 +155,8 @@ export default class ExemptionFactory {
 
   static createShapefileVirusUpload() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/mygeodata-virus.zip'
+      filePath: 'test/resources/mygeodata-virus.zip',
+      expectValidationError: true
     })
   }
 
@@ -148,15 +167,22 @@ export default class ExemptionFactory {
   static createShapefileWrongFileType() {
     return this.createFileUploadBase('shapefile', {
       filePath:
-        'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html'
+        'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html',
+      expectValidationError: true
     })
   }
 
   static createShapefileLargeFile(filePath) {
-    return this.createFileUploadBase('shapefile', { filePath })
+    return this.createFileUploadBase('shapefile', {
+      filePath,
+      expectValidationError: true
+    })
   }
 
   static createShapefileEmptyFile(filePath) {
-    return this.createFileUploadBase('shapefile', { filePath })
+    return this.createFileUploadBase('shapefile', {
+      filePath,
+      expectValidationError: true
+    })
   }
 }

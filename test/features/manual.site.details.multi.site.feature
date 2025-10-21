@@ -1,6 +1,5 @@
 @issue=ML-114 @issue=ML-228 @issue=ML-419 @issue=ML-420 @issue=ML-421 @issue=ML-361 @issue=ML-608
-Feature: Multi-site: Provide multiple sites for an exemption notification
-
+Feature: Multi-site: Manually provide multiple sites for an exemption notification
   These tests use a mix of circle and polygon sites with OSGB36 and WGS84 coordinate systems.
 
   @smoke

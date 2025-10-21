@@ -164,6 +164,7 @@ services:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
+      - AWS_S3_ENDPOINT=http://localstack:4566
     depends_on:
       mongodb:
         condition: service_healthy

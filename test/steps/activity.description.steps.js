@@ -6,8 +6,8 @@ import {
   Actor,
   ApplyForExemption,
   BrowseTheWeb,
+  ClickButton,
   ClickCancel,
-  ClickSaveAndContinue,
   CompleteActivityDescription,
   CompleteProjectName,
   EnsureErrorDisplayed,
@@ -48,7 +48,7 @@ When(
   'the Activity description task is selected and saved without entering text',
   async function () {
     await this.actor.attemptsTo(SelectTheTask.withName('Activity description'))
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 

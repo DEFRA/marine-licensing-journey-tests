@@ -27,7 +27,8 @@ export default class ActivityDatesPageInteractions {
       ActivityDatesPage.activityEndDateYear,
       activityDates.endDate.year
     )
-    await browseTheWeb.click(CommonElementsPage.saveAndContinueButton)
+    const button = await browseTheWeb.browser.$('button[type="submit"]')
+    await button.click()
   }
 
   static async clickCancel(browseTheWeb) {

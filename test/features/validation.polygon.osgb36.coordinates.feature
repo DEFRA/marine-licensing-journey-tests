@@ -6,7 +6,7 @@ Feature: Validation of polygon coordinates: preventing entry of invalid coordina
 
   Scenario: Error when no OSGB36 coordinates are entered for polygon
     Given the Enter multiple sets of coordinates to mark the boundary of the site for OSGB36 coordinates page is displayed
-    When the Continue button is clicked without providing any coordinates
+    When the Save and continue button is clicked without providing any coordinates
     Then the following validation errors are displayed:
       | Field                         | Error Message                              |
       | Start and end point eastings  | Enter the eastings of start and end point  |

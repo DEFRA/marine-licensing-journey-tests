@@ -6,8 +6,30 @@ export default class HandleCookieBanner extends Task {
     return new HandleCookieBanner()
   }
 
+  static accepting() {
+    return new HandleCookieBanner('accept')
+  }
+
+  static rejecting() {
+    return new HandleCookieBanner('reject')
+  }
+
+  constructor(forcedChoice = null) {
+    super()
+    this.forcedChoice = forcedChoice
+  }
+
   async performAs(actor) {
-    const exemption = actor.recalls('exemption')
+    // When forcedChoice is set (accepting/rejecting), always perform the action
+    if (this.forcedChoice) {
+      await this.handleCookieChoice(actor, this.forcedChoice)
+      return
+    }
+
+    // For .now() method, check if we should skip based on context
+    const exemption = actor.hasMemoryOf('exemption')
+      ? actor.recalls('exemption')
+      : null
 
     if (this.shouldSkipCookieHandling(actor, exemption)) {
       return

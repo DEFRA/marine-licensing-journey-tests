@@ -2,10 +2,9 @@ import { Given, Then, When } from '@wdio/cucumber-framework'
 import { browser } from '@wdio/globals'
 
 import {
-  ClickSaveAndContinue,
+  ClickButton,
   ContinueFromBeforeYouStartSiteDetailsPage,
-  EnsureErrorDisplayed,
-  EnsureNoErrorsDisplayed,
+  EnsureError,
   SelectTheTask
 } from '~/test-infrastructure/screenplay/interactions/index.js'
 
@@ -25,10 +24,6 @@ import {
 
 import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
 import { FileUploadPage } from '~/test-infrastructure/pages/index.js'
-
-// ========================================
-// KML UPLOAD SCENARIOS (7 step definitions)
-// ========================================
 
 Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
@@ -108,13 +103,9 @@ When(
       'KML'
     )
 
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
-
-// ========================================
-// SHAPEFILE UPLOAD SCENARIOS (7 step definitions)
-// ========================================
 
 Given('an exemption notification with a valid Shapefile', async function () {
   this.actor = new Actor('Alice')
@@ -194,34 +185,23 @@ When(
       'Shapefile'
     )
 
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
-
-// ========================================
-// SHARED STEP DEFINITIONS
-// ========================================
 
 When('completing the site details task', async function () {
   await this.actor.attemptsTo(CompleteSiteDetails.now())
 })
 
 Then('the file is successfully processed', async function () {
-  await this.actor.attemptsTo(EnsureNoErrorsDisplayed.onPage())
+  await this.actor.attemptsTo(EnsureError.noneOnPage())
 })
 
 Then(
   'the file upload error {string} is displayed',
   async function (expectedErrorMessage) {
     await this.actor.attemptsTo(
-      EnsureErrorDisplayed.is(
-        FileUploadPage.fileUploadError,
-        expectedErrorMessage
-      )
+      EnsureError.is(FileUploadPage.fileUploadError, expectedErrorMessage)
     )
   }
 )
-
-Then('the spinner page displays during upload process', async function () {
-  await this.actor.ability.isDisplayed(FileUploadPage.spinner)
-})

@@ -5,7 +5,6 @@ import {
   ApplyForExemption,
   BrowseTheWeb,
   ClickButton,
-  ClickSaveAndContinue,
   CompleteProjectName,
   CompleteSiteDetails,
   ContinueFromBeforeYouStartSiteDetailsPage,
@@ -56,6 +55,94 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a kml file with multiple sites with different activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithDifferentActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a kml file with multiple sites with same activity dates and descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a kml file with multiple sites with different activity dates and same descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a kml file with multiple sites with same activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with different activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithDifferentActivityDatesAndDifferentDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with same activity dates and descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with different activity dates and same descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithDifferentActivityDatesAndSameDescriptions()
+    )
+  }
+)
+
+Given(
+  'a user is uploading a shapefile with multiple sites with same activity dates and different descriptions',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDifferentDescriptions()
     )
   }
 )
@@ -238,7 +325,7 @@ When(
 Then('the site details review page shows the site details', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
-  await this.actor.attemptsTo(ClickSaveAndContinue.now())
+  await this.actor.attemptsTo(ClickButton.withText('Continue'))
 })
 
 Then(
@@ -246,14 +333,14 @@ Then(
   async function () {
     await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
     await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
-    await this.actor.attemptsTo(ClickSaveAndContinue.now())
+    await this.actor.attemptsTo(ClickButton.withText('Continue'))
   }
 )
 
 When(
-  'the Continue button is clicked without providing any coordinates',
+  'the Save and continue button is clicked without providing any coordinates',
   async function () {
-    await this.actor.attemptsTo(ClickButton.withText('Continue'))
+    await this.actor.attemptsTo(ClickButton.withText('Save and continue'))
   }
 )
 
