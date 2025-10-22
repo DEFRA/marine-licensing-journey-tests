@@ -14,4 +14,3 @@ export { default as NavigateToLink } from './navigate.to.link'
 export { default as NavigateToSiteDetailsPage } from './navigate.to.site.details.page'
 export { default as SubmitAnExemptionNotification } from './submit.an.exemption.notification'
 export { default as ViewSubmittedExemptionNotification } from './view.submitted.exemption.notification'
-
