@@ -15,11 +15,11 @@ This document provides a comprehensive overview of the marine licensing features
 
 #### 2. Activity Information
 
-- **ML-10**: Activity dates (WILL BE REMOVED - moved to site details flow)
-- **ML-11**: Activity description (WILL BE REMOVED - moved to site details flow)
+- **ML-10**: Activity dates ~~(REMOVED in ML-762 - now captured per-site in site details flow)~~
+- **ML-11**: Activity description ~~(REMOVED in ML-762 - now captured per-site in site details flow)~~
 - **ML-12**: Public register consent ✅
 
-> **Note**: Top-level activity dates and activity description tasks are being phased out. These are now captured as part of the site details flow (ML-389, ML-390, ML-416, ML-417, ML-419, ML-420, ML-421).
+> **Note**: Top-level activity dates and activity description tasks have been removed (ML-762). Activity dates and descriptions are now captured per-site as part of the site details flow (ML-389, ML-390, ML-416, ML-417, ML-419, ML-420, ML-421).
 
 #### 3. Site Details Entry
 
@@ -53,10 +53,10 @@ Multiple pathways available:
 
 **IMPORTANT**: The application now supports multiple sites per notification. This has resulted in significant changes to the activity dates and descriptions workflow:
 
-#### Original Single-Site Flow (PARTIALLY SUPERSEDED)
+#### Original Single-Site Flow (REMOVED - ML-762)
 
-- **ML-10**: Activity dates at notification level
-- **ML-11**: Activity description at notification level
+- **ML-10**: Activity dates at notification level ~~(Removed - now per-site only)~~
+- **ML-11**: Activity description at notification level ~~(Removed - now per-site only)~~
 
 #### Current Multi-Site Flow (ACTIVE)
 
@@ -122,11 +122,11 @@ When testing activity dates and descriptions:
 
 ### 2. Superseded vs Enhanced Features
 
-| Original Story               | Status   | Current Implementation                       |
-| ---------------------------- | -------- | -------------------------------------------- |
-| ML-10 (Activity dates)       | ENHANCED | Now site-specific via ML-416/420             |
-| ML-11 (Activity description) | ENHANCED | Now site-specific via ML-417/421             |
-| Other core features          | ACTIVE   | Continue to function as originally specified |
+| Original Story               | Status  | Current Implementation                                      |
+| ---------------------------- | ------- | ----------------------------------------------------------- |
+| ML-10 (Activity dates)       | REMOVED | Replaced by site-specific dates (ML-416/420, ML-762)        |
+| ML-11 (Activity description) | REMOVED | Replaced by site-specific descriptions (ML-417/421, ML-762) |
+| Other core features          | ACTIVE  | Continue to function as originally specified                |
 
 ## Key Testing Scenarios
 
@@ -217,11 +217,12 @@ The following features are marked as Work In Progress and tests are temporarily 
 
 **Testing Impact**: These scenarios are marked `@wip` and will not run until the multi-site implementation is complete.
 
-### Top-Level Task Removal (Future)
+### Top-Level Task Removal (COMPLETED - ML-762)
 
-- **ML-10** (Activity Dates) and **ML-11** (Activity Description) top-level tasks will be removed
-- Activity information is now captured within the Site Details flow
-- Tests for standalone activity dates/description tasks will be refactored after application changes
+- ✅ **ML-10** (Activity Dates) and **ML-11** (Activity Description) top-level tasks have been removed
+- ✅ Activity information is now captured per-site within the Site Details flow
+- ✅ Tests for standalone activity dates/description tasks have been removed
+- ✅ All multi-site flows now correctly use site-specific dates and descriptions
 
 ### Session Management
 
@@ -272,4 +273,4 @@ The following features are marked as Work In Progress and tests are temporarily 
 
 ---
 
-_Last Updated: 14 October 2025_
+_Last Updated: 22 October 2025 (ML-762: Removed notification-wide activity date and description tasks)_
