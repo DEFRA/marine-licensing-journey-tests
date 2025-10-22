@@ -1,12 +1,10 @@
 import { faker } from '@faker-js/faker'
 import CoordinateFiles from '../../helpers/coordinate-files.js'
 import {
-  ActivityDescriptionModel,
   FileTypeModel,
   MarineProjectModel,
   PublicRegisterModel
 } from '../models/index.js'
-import ActivityDatesFactory from './activity-dates.factory.js'
 import {
   ACTIVITY_PURPOSES,
   ACTIVITY_TYPES,
@@ -18,15 +16,10 @@ export default class ExemptionFactory {
   static createBaseExemption(overrides = {}) {
     return {
       projectName: MarineProjectModel.generateProjectName(),
-      activityDescription:
-        ActivityDescriptionModel.generateActivityDescription(),
-      activityDates: null,
       publicRegister: null,
       fileType: null,
       cookiePreferences: 'accept',
       projectNameTaskCompleted: false,
-      activityDescriptionTaskCompleted: false,
-      activityDatesTaskCompleted: false,
       publicRegisterTaskCompleted: false,
       iatContext: (() => {
         const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
@@ -65,7 +58,6 @@ export default class ExemptionFactory {
 
   static createCompleteData() {
     return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createValidDates(),
       publicRegister: { consent: true }
     })
   }
@@ -84,7 +76,6 @@ export default class ExemptionFactory {
     this.loadExpectedDataIntoSiteDetails(siteDetails, actualFilePath)
 
     return this.createBaseExemption({
-      activityDates: ActivityDatesFactory.createValidDates(),
       publicRegister: { consent: true },
       siteDetails
     })

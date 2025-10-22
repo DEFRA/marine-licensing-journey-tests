@@ -1,7 +1,5 @@
 import { expect } from 'chai'
 import {
-  CompleteActivityDates,
-  CompleteActivityDescription,
   CompleteProjectName,
   CompletePublicRegisterTask,
   CompleteSiteDetails,
@@ -24,10 +22,6 @@ export default class CompleteAllTasks extends Task {
 
     await actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await actor.attemptsTo(CompleteProjectName.now())
-    await actor.attemptsTo(SelectTheTask.withName('Activity description'))
-    await actor.attemptsTo(CompleteActivityDescription.now())
-    await actor.attemptsTo(SelectTheTask.withName('Activity dates'))
-    await actor.attemptsTo(CompleteActivityDates.now())
     await actor.attemptsTo(SelectTheTask.withName('Site details'))
     await actor.attemptsTo(CompleteSiteDetails.andSave())
     await actor.attemptsTo(SelectTheTask.withName('Public register'))
