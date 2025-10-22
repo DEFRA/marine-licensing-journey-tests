@@ -22,7 +22,7 @@ export default class CompleteActivityDates extends Task {
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     if (!exemption) {
-      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity description'))
+      expect.fail(ERROR_MESSAGES.MISSING_EXEMPTION('activity dates'))
     }
 
     const siteIndex = this.siteNumber - 1
