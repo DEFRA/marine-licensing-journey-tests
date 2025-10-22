@@ -120,7 +120,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
     isSharedActivityDescription
   ) {
     if (!isSharedActivityDates) {
-      await this.enterSiteSpecificActivityDates(currentSite)
+      await this.enterSiteSpecificActivityDates(currentSite.siteNumber)
 
       if (isFirstSite) {
         await this.selectActivityDescriptionPreference()
@@ -132,20 +132,8 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
     }
   }
 
-  async enterSiteSpecificActivityDates(currentSite) {
-    // Temporarily update actor memory with site-specific dates
-    const originalActivityDates = this.actor.recalls('exemption').activityDates
-
-    this.actor.updates((exemption) => {
-      exemption.activityDates = currentSite.activityDates
-    })
-
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-
-    // Restore original activity dates
-    this.actor.updates((exemption) => {
-      exemption.activityDates = originalActivityDates
-    })
+  async enterSiteSpecificActivityDates(siteNumber) {
+    await this.actor.attemptsTo(CompleteActivityDates.forSite(siteNumber))
   }
 
   async handleSiteActivityDescription(

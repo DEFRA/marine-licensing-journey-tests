@@ -1,8 +1,8 @@
 # ML-762 Test Fixes Todo List
 
-## Overview
+## ✅ Status: COMPLETED
 
-Fixing tests broken by removal of notification-wide "Activity dates" and "Activity description" tasks.
+All tests passing after removal of notification-wide "Activity dates" and "Activity description" tasks.
 
 ## Test Files to Fix
 
@@ -21,108 +21,81 @@ Fixing tests broken by removal of notification-wide "Activity dates" and "Activi
 - [x] Update to skip "Activity description" task
 - [x] Ensure it only completes tasks that actually exist (Project name, Site details, Public register)
 
-### ❌ 3. Fix header and footer tests
+### ✅ 3. Fix header and footer tests
 
 **File:** `test/features/header.and.footer.feature`
 
-- [ ] Remove scenario: "The header and footer are correct on the activity dates page"
-- [ ] Remove scenario: "The header and footer are correct on the activity description page"
+- [x] Remove scenario: "The header and footer are correct on the activity dates page"
+- [x] Remove scenario: "The header and footer are correct on the activity description page"
 
-### ❌ 4. Fix dashboard tests
+### ✅ 4. Fix URL expectations for site-specific activity descriptions
 
-**File:** `test/features/dashboard.feature`
+**File:** `test-infrastructure/screenplay/tasks/multi-site-site-details-task.js`
 
-- [ ] Update scenarios that use `CompleteAllTasks` to submit notifications
-- [ ] Verify: "When a user has previously submitted a notification and starts a new one, no previously input data is shown"
-- [ ] Verify: "View dashboard with notifications in correct sort order"
+- [x] Updated URL from `/exemption/site-details-activity-description` to `/exemption/activity-description`
+- [x] Fixed navigation wait expectation for activity description page
 
-### ❌ 5. Fix task list tests
+### ✅ 5. All other tests
 
-**File:** `test/features/task.list.feature`
+All other tests now pass with the updated `CompleteAllTasks` helper that only completes:
 
-- [ ] Remove tests checking for "Activity dates" task
-- [ ] Remove tests checking for "Activity description" task
-- [ ] Update task list validation to only check: Project name, Site details, Public register
+- Project name
+- Site details (with per-site activity dates and descriptions)
+- Public register
 
-### ❌ 6. Fix multi-site file upload tests
+## ✅ Completed Work Summary
 
-**Files:**
-
-- [ ] `test/features/shapefile.site.details.multi.site.feature`
-- [ ] `test/features/kml.file.site.details.multi.site.feature`
-
-**Issue:** Looking for `#sameActivityDates-2` radio button ("Are all activity dates the same?")
-
-**Analysis needed:**
-
-- These pages may have been removed as part of ML-762
-- OR they may still exist but with different flow/selectors
-- Need to check if dates/descriptions are now always per-site
-
-### ❌ 7. Check manual site details multi-site tests
-
-**File:** `test/features/manual.site.details.multi.site.feature`
-
-- [ ] Review for any references to notification-wide dates/descriptions
-- [ ] Update if using CompleteAllTasks
-
-### ❌ 8. Other tests using submission flows
-
-- [ ] Review any other tests that submit notifications via CompleteAllTasks
-- [ ] Check for implicit dependencies on removed tasks
-
-## Questions to Answer
-
-1. **Multi-site flows:** Are "Are all activity dates/descriptions the same?" pages still needed?
-   - If YES: Fix the selectors/flow
-   - If NO: Remove those page interactions entirely
-
-2. **Site details task:** Should it now handle dates/descriptions per-site internally?
-   - This may already be implemented in the multi-site flows
-
-3. **Test data:** Do we need to update fixtures/test data that references these tasks?
-
-## Priority Order
+### Priority Order (All Completed)
 
 1. ✅ Remove standalone test files (activity.dates, activity.description)
 2. ✅ Fix CompleteAllTasks helper (blocks many tests)
 3. ✅ Remove top-level activity dates/descriptions from test data factory
 4. ✅ Simplified CompleteActivityDates and CompleteActivityDescription (default to site 1)
 5. ✅ Fix header/footer tests - removed activity dates and description scenarios
-6. ⏭️ Fix dashboard test (Site details link not found after submission)
-7. ⏭️ Investigate multi-site shapefile timeout (different dates/descriptions scenario)
-8. ⏭️ Final verification run
+6. ✅ Fix URL expectations for activity description navigation
+7. ✅ All tests passing
 
-## Test Results (Latest Run)
+## Final Test Results
 
-- **16 passing** test files ✅
-- **4 failing** test files ❌
-  1. `header.and.footer.feature` - ✅ Fixed (removed 2 scenarios), 1 remaining (dashboard)
-  2. `shapefile.site.details.multi.site.feature` - timeout on different dates/descriptions scenario
+- **All tests passing** ✅
+- Activity dates and descriptions are now handled per-site within the Site Details task
+- No notification-wide activity date/description tasks remain
 
-## Notes
+## Changes Made
 
-- Keep this file as working notes during the fix process
-- Delete this file once all tests pass
+### 1. Test Files Removed
 
-### Completed Factory/Data Updates
+- ✅ `test/features/activity.dates.feature`
+- ✅ `test/features/activity.description.feature`
+- ✅ `test/steps/activity.dates.steps.js`
+- ✅ `test/steps/activity.description.steps.js`
+- ✅ Two scenarios from `test/features/header.and.footer.feature`
 
-- ✅ Removed notification-wide `activityDescription` and `activityDates` from ExemptionFactory.createBaseExemption()
-- ✅ Removed `activityDescriptionTaskCompleted` and `activityDatesTaskCompleted` flags
-- ✅ Removed unused imports: ActivityDescriptionModel, ActivityDatesFactory
-- ✅ Removed Memory.ofActivityDescriptionWith() and Memory.ofActivityDatesWith() methods
-- ✅ Updated CompleteActivityDescription to only use site-specific data
-- ✅ Added `.forSite()` method to CompleteActivityDescription (matching CompleteActivityDates)
-- ✅ Simplified both CompleteActivityDescription and CompleteActivityDates to default to site 1
-- ℹ️ multi-site-site-details-task.js has legacy temporary swap code that's harmless
+### 2. Test Infrastructure Updates
 
-### TODO: Multi-Site Flow Refactoring
+- ✅ **CompleteAllTasks**: Removed attempts to complete "Activity dates" and "Activity description" tasks
+- ✅ **ExemptionFactory**: Removed notification-wide `activityDescription` and `activityDates` fields
+- ✅ **Memory helper**: Removed `ofActivityDescriptionWith()` and `ofActivityDatesWith()` methods
+- ✅ **CompleteActivityDescription**: Added `.forSite()` method, defaults to site 1
+- ✅ **CompleteActivityDates**: Updated to default to site 1 (matching CompleteActivityDescription)
+- ✅ **Task exports**: Removed exports for CompleteActivityDates and CompleteActivityDescription from top-level index
 
-- ⏭️ Consider refactoring multi-site flows to use `CompleteActivityDescription.forSite(siteNumber)` instead of `ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue()`
-  - Files to review:
-    - `multi-site-site-details-task.js` (lines 110, 160)
-    - `multi-site-file-upload-site-details-task.js` (line 74)
-    - `file-upload-site-details-task.js` (line 55)
-    - `manual-coordinates-site-details-task.js` (line 67)
-  - Benefits: More consistent with screenplay pattern, better abstraction
-  - Note: Current implementation works correctly but uses lower-level page interactions
+### 3. URL Fix
+
+- ✅ **multi-site-site-details-task.js**: Updated URL from `/exemption/site-details-activity-description` to `/exemption/activity-description`
+
+### 4. Multi-Site Site-Specific Data Fix
+
+- ✅ **multi-site-site-details-task.js**:
+  - Removed legacy temporary swap hack for activity dates
+  - Updated `enterSiteSpecificActivityDates()` to use `CompleteActivityDates.forSite(currentSite.siteNumber)`
+  - Ensured each site uses its own activity dates and description (not always site 1)
+- ✅ **multi-site-file-upload-site-details-task.js**: Already correctly using `.forSite(siteNumber)` pattern
+- ✅ **AddMissingActivityDates**: Already correctly using `CompleteActivityDates.forSite(siteNumber)`
+
+### 5. Architecture Notes
+
+- Activity dates and descriptions are now **site-specific only**
+- Multi-site flows handle dates/descriptions per-site within the Site Details task
+- The "Are activity dates/descriptions the same for all sites?" flow still exists for shared values
+- Each site correctly uses its own data via `.forSite(siteNumber)` pattern
