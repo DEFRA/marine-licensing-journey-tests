@@ -1,10 +1,8 @@
 import { expect } from 'chai'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
-import {
-  ActivityDatesPageInteractions,
-  ActivityDescriptionPageInteractions
-} from '../page-interactions/index.js'
 import BaseSiteDetailsTask from './base-site-details-task.js'
+import CompleteActivityDates from './complete.activity.dates.js'
+import CompleteActivityDescription from './complete.activity.description.js'
 import { CoordinateEntryStrategy } from './coordinate-entry-strategy.js'
 
 export default class ManualCoordinatesSiteDetailsTask extends BaseSiteDetailsTask {
@@ -57,17 +55,13 @@ export default class ManualCoordinatesSiteDetailsTask extends BaseSiteDetailsTas
   }
 
   async enterSiteActivityDates(site) {
-    await ActivityDatesPageInteractions.enterActivityDatesAndContinue(
-      this.browseTheWeb,
-      site.activityDates
-    )
+    // ML-416: For single manual site entry, provide activity dates directly
+    await this.actor.attemptsTo(CompleteActivityDates.now())
   }
 
   async enterSiteActivityDescription(site) {
-    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      site.activityDescription
-    )
+    // ML-417: For single manual site entry, provide activity description directly
+    await this.actor.attemptsTo(CompleteActivityDescription.now())
   }
 
   validateSiteType(siteType) {

@@ -1,11 +1,12 @@
 import {
-  ActivityDescriptionPageInteractions,
   SameActivityDatesPageInteractions,
   SameActivityDescriptionPageInteractions,
   SiteDetailsReviewPageInteractions
 } from '../page-interactions/index.js'
 import BaseSiteDetailsTask from './base-site-details-task.js'
 import CompleteActivityDates from './complete.activity.dates.js'
+import CompleteActivityDescription from './complete.activity.description.js'
+import CompleteSiteName from './complete.site.name.js'
 import { CoordinateEntryStrategy } from './coordinate-entry-strategy.js'
 
 export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
@@ -59,16 +60,10 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
   }
 
   async enterSiteName(siteName, isFirstSite = false) {
-    // For sites after the first, wait for navigation to complete
-    if (!isFirstSite) {
-      await this.browseTheWeb.waitForNavigationTo(
-        '/exemption/site-name',
-        '#siteName'
-      )
-    }
+    const siteNumber =
+      this.siteDetails.sites.findIndex((site) => site.siteName === siteName) + 1
 
-    await this.browseTheWeb.setValue('#siteName', siteName)
-    await this.browseTheWeb.click('button[type="submit"]')
+    await this.actor.attemptsTo(CompleteSiteName.forSite(siteNumber))
   }
 
   async handleFirstSitePreferences(
@@ -106,11 +101,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
   }
 
   async enterSharedActivityDescription() {
-    const firstSiteDescription = this.siteDetails.sites[0].activityDescription
-    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      firstSiteDescription
-    )
+    await this.actor.attemptsTo(CompleteActivityDescription.now())
   }
 
   async handleSiteActivityDates(
@@ -141,13 +132,8 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
     isSharedActivityDescription
   ) {
     if (!isSharedActivityDescription) {
-      await this.browseTheWeb.waitForNavigationTo(
-        '/exemption/activity-description',
-        '#activityDescription'
-      )
-      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-        this.browseTheWeb,
-        currentSite.activityDescription
+      await this.actor.attemptsTo(
+        CompleteActivityDescription.forSite(currentSite.siteNumber)
       )
     }
   }

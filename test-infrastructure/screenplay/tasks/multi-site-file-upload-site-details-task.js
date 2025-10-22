@@ -7,13 +7,13 @@ import {
   UploadFileAndContinue
 } from '../interactions/index.js'
 import {
-  ActivityDescriptionPageInteractions,
   SameActivityDatesPageInteractions,
   SameActivityDescriptionPageInteractions,
   WhichTypeOfFileDoYouWantToUploadPageInteractions
 } from '../page-interactions/index.js'
 import BaseSiteDetailsTask from './base-site-details-task.js'
 import CompleteActivityDates from './complete.activity.dates.js'
+import CompleteActivityDescription from './complete.activity.description.js'
 
 export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsTask {
   static withConfig(config) {
@@ -70,11 +70,7 @@ export default class MultiSiteFileUploadSiteDetailsTask extends BaseSiteDetailsT
     )
 
     if (isSharedActivityDescription) {
-      const firstSiteDescription = this.siteDetails.sites[0].activityDescription
-      await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-        this.browseTheWeb,
-        firstSiteDescription
-      )
+      await this.actor.attemptsTo(CompleteActivityDescription.now())
     }
     // If false, descriptions will be added manually on review page (ML-364)
   }

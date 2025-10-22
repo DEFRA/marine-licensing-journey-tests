@@ -89,9 +89,20 @@ All other tests now pass with the updated `CompleteAllTasks` helper that only co
 - ✅ **multi-site-site-details-task.js**:
   - Removed legacy temporary swap hack for activity dates
   - Updated `enterSiteSpecificActivityDates()` to use `CompleteActivityDates.forSite(currentSite.siteNumber)`
+  - Updated `handleSiteActivityDescription()` to use `CompleteActivityDescription.forSite(currentSite.siteNumber)`
+  - Updated `enterSharedActivityDescription()` to use screenplay task
+  - Updated `enterSiteName()` to use `CompleteSiteName.forSite(siteNumber)`
   - Ensured each site uses its own activity dates and description (not always site 1)
-- ✅ **multi-site-file-upload-site-details-task.js**: Already correctly using `.forSite(siteNumber)` pattern
+  - All site-level data entry now uses screenplay tasks for consistency
+- ✅ **multi-site-file-upload-site-details-task.js**:
+  - Updated to use `CompleteActivityDescription.now()` for shared descriptions
+  - Already correctly using `.forSite(siteNumber)` pattern for missing data
+- ✅ **file-upload-site-details-task.js**: Updated to use `CompleteActivityDescription.now()`
+- ✅ **manual-coordinates-site-details-task.js**: Updated to use screenplay tasks for both dates and descriptions
 - ✅ **AddMissingActivityDates**: Already correctly using `CompleteActivityDates.forSite(siteNumber)`
+- ✅ **AddMissingSiteName**: Updated to use `CompleteSiteName.forSite()` task for consistency
+- ✅ **Created CompleteSiteName**: New screenplay task following the same pattern as `CompleteActivityDates` and `CompleteActivityDescription`
+- ✅ **Created SiteNamePageInteractions**: New page interaction for entering site names following established patterns
 
 ### 5. Architecture Notes
 

@@ -1,6 +1,6 @@
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
-import SiteNamePage from '../../pages/site.name.page.js'
 import Task from '../base/task.js'
+import CompleteSiteName from '../tasks/complete.site.name.js'
 
 export default class AddMissingSiteName extends Task {
   constructor(siteNumber, siteName) {
@@ -16,16 +16,19 @@ export default class AddMissingSiteName extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
 
+    // Update the actor's memory with the site name for this site
+    actor.updates((exemption) => {
+      if (!exemption.siteDetails?.sites?.[this.siteNumber - 1]) {
+        throw new Error(`Site ${this.siteNumber} does not exist in exemption`)
+      }
+      exemption.siteDetails.sites[this.siteNumber - 1].siteName = this.siteName
+    })
+
     const addLink = await browseTheWeb.getElement(
       ReviewSiteDetailsPage.getSiteNameAddLink(this.siteNumber)
     )
     await addLink.click()
 
-    await browseTheWeb.waitForNavigationTo(
-      SiteNamePage.url,
-      SiteNamePage.siteNameInput
-    )
-    await browseTheWeb.setValue(SiteNamePage.siteNameInput, this.siteName)
-    await browseTheWeb.click(SiteNamePage.saveAndContinue)
+    await actor.attemptsTo(CompleteSiteName.forSite(this.siteNumber))
   }
 }

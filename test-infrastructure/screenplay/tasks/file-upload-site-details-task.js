@@ -1,12 +1,10 @@
 import { expect } from 'chai'
 import { ERROR_MESSAGES } from '../constants/error-messages.js'
 import { UploadFileAndContinue } from '../interactions/index.js'
-import {
-  ActivityDescriptionPageInteractions,
-  WhichTypeOfFileDoYouWantToUploadPageInteractions
-} from '../page-interactions/index.js'
+import { WhichTypeOfFileDoYouWantToUploadPageInteractions } from '../page-interactions/index.js'
 import BaseSiteDetailsTask from './base-site-details-task.js'
 import CompleteActivityDates from './complete.activity.dates.js'
+import CompleteActivityDescription from './complete.activity.description.js'
 
 export default class FileUploadSiteDetailsTask extends BaseSiteDetailsTask {
   static withConfig(config) {
@@ -51,10 +49,6 @@ export default class FileUploadSiteDetailsTask extends BaseSiteDetailsTask {
 
   async provideActivityDescription() {
     // ML-390: For single site file uploads, provide activity description directly
-    const firstSiteDescription = this.siteDetails.sites[0].activityDescription
-    await ActivityDescriptionPageInteractions.enterActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      firstSiteDescription
-    )
+    await this.actor.attemptsTo(CompleteActivityDescription.now())
   }
 }

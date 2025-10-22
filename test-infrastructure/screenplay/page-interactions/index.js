@@ -9,6 +9,7 @@ export { default as HowDoYouWantToProvideCoordinatesPageInteractions } from './h
 export { default as SameActivityDatesPageInteractions } from './same.activity.dates.page.interactions.js'
 export { default as SameActivityDescriptionPageInteractions } from './same.activity.description.page.interactions.js'
 export { default as SiteDetailsReviewPageInteractions } from './site.details.review.page.interactions.js'
+export { default as SiteNamePageInteractions } from './site.name.page.interactions.js'
 export { default as WhatCoordinateSystemPageInteractions } from './what.coordinate.system.page.interactions.js'
 export { default as WhichTypeOfFileDoYouWantToUploadPageInteractions } from './which.type.of.file.do.you.want.to.upload.page.interactions.js'
 export { default as WidthOfCircularSitePageInteractions } from './width.of.circular.site.page.interactions.js'
