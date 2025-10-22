@@ -29,6 +29,7 @@ export { default as EnsureMultipleErrorsAreDisplayed } from './ensure.multiple.e
 export { default as EnsureNavigationLinks } from './ensure.navigation.links'
 export { default as EnsureNotificationRemoved } from './ensure.notification.removed'
 export { default as EnsureNotificationsAreDisplayedOnTheDashboard } from './ensure.notifications.are.displayed.on.the.dashboard'
+export { default as EnsureOrganisationName } from './ensure.organisation.name'
 export { default as EnsurePageHeading } from './ensure.page.heading'
 export { default as EnsurePrivacyPolicyPage } from './ensure.privacy.policy.page'
 export {

@@ -5,4 +5,5 @@ export default class CommonElementsPage {
   static saveAndContinueButton = 'button[type="submit"]'
   static mainHeading = 'h1, h2'
   static serviceName = '.govuk-service-navigation__text'
+  static organisationName = '.app-border-bottom .govuk-body-s'
 }
