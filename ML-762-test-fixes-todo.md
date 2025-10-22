@@ -86,11 +86,19 @@ Fixing tests broken by removal of notification-wide "Activity dates" and "Activi
 
 1. ✅ Remove standalone test files (activity.dates, activity.description)
 2. ✅ Fix CompleteAllTasks helper (blocks many tests)
-3. ✅ Fix header/footer tests (simple removal)
-4. ✅ Fix task list tests (remove task checks)
-5. ✅ Fix dashboard tests (verify they work with updated CompleteAllTasks)
-6. ✅ Investigate and fix multi-site file upload flows
-7. ✅ Final verification run
+3. ✅ Remove top-level activity dates/descriptions from test data factory
+4. ✅ Simplified CompleteActivityDates and CompleteActivityDescription (default to site 1)
+5. ✅ Fix header/footer tests - removed activity dates and description scenarios
+6. ⏭️ Fix dashboard test (Site details link not found after submission)
+7. ⏭️ Investigate multi-site shapefile timeout (different dates/descriptions scenario)
+8. ⏭️ Final verification run
+
+## Test Results (Latest Run)
+
+- **16 passing** test files ✅
+- **4 failing** test files ❌
+  1. `header.and.footer.feature` - ✅ Fixed (removed 2 scenarios), 1 remaining (dashboard)
+  2. `shapefile.site.details.multi.site.feature` - timeout on different dates/descriptions scenario
 
 ## Notes
 

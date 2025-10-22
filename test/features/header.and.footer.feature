@@ -58,34 +58,6 @@ Feature: Header and footer verification feature
       | Open Government Licence v3.0 |
       | © Crown copyright            |
 
-  Scenario: The header and footer are correct on the activity dates page
-    Given a notification has been created with a valid project name
-    When the "Activity dates" task is selected
-    Then the service name "Get permission for marine work" is displayed in the header
-    And the links are displayed in the header:
-      | Projects      |
-      | Defra account |
-      | Sign out      |
-    And the links are displayed in the footer:
-      | Privacy                      |
-      | Cookies                      |
-      | Open Government Licence v3.0 |
-      | © Crown copyright            |
-
-  Scenario: The header and footer are correct on the activity description page
-    Given a notification has been created with a valid project name
-    When the "Activity description" task is selected
-    Then the service name "Get permission for marine work" is displayed in the header
-    And the links are displayed in the header:
-      | Projects      |
-      | Defra account |
-      | Sign out      |
-    And the links are displayed in the footer:
-      | Privacy                      |
-      | Cookies                      |
-      | Open Government Licence v3.0 |
-      | © Crown copyright            |
-
   Scenario: The header and footer are correct on the site details page
     Given a notification has been created with a valid project name
     When the "Site details" task is selected
