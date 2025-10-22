@@ -16,7 +16,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
 
   async executeFlow() {
     await this.navigateToSiteDetailsStart()
-    await this.handleSingleOrMultipleSites() // Will select 'yes' for multiple sites
+    await this.handleSingleOrMultipleSites()
     await this.processSites()
     await this.saveIfRequired()
   }
@@ -29,10 +29,11 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
 
     for (let siteIndex = 0; siteIndex < sites.length; siteIndex++) {
       const currentSite = sites[siteIndex]
+      const siteNumber = siteIndex + 1
       const isFirstSite = siteIndex === 0
       const isLastSite = siteIndex === sites.length - 1
 
-      await this.enterSiteName(currentSite.siteName, isFirstSite)
+      await this.actor.attemptsTo(CompleteSiteName.forSite(siteNumber))
 
       if (isFirstSite) {
         await this.handleFirstSitePreferences(
@@ -41,109 +42,70 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
         )
       }
 
-      await this.handleSiteActivityDates(
-        currentSite,
-        isSharedActivityDates,
-        isFirstSite,
-        isSharedActivityDescription
-      )
-      await this.handleSiteActivityDescription(
-        currentSite,
-        isSharedActivityDescription
-      )
-      await this.handleSiteCoordinates(currentSite)
+      if (!isSharedActivityDates) {
+        await this.handleSiteSpecificDates(
+          siteNumber,
+          isFirstSite,
+          isSharedActivityDescription
+        )
+      }
+
+      if (!isSharedActivityDescription) {
+        await this.actor.attemptsTo(
+          CompleteActivityDescription.forSite(siteNumber)
+        )
+      }
+
+      const strategy = new CoordinateEntryStrategy(this.browseTheWeb)
+      await strategy.enterCoordinates(currentSite, this.config)
 
       if (!isLastSite) {
-        await this.addAnotherSite()
+        await SiteDetailsReviewPageInteractions.addAnotherSite(
+          this.browseTheWeb
+        )
       }
     }
-  }
-
-  async enterSiteName(siteName, isFirstSite = false) {
-    const siteNumber =
-      this.siteDetails.sites.findIndex((site) => site.siteName === siteName) + 1
-
-    await this.actor.attemptsTo(CompleteSiteName.forSite(siteNumber))
   }
 
   async handleFirstSitePreferences(
     isSharedActivityDates,
     isSharedActivityDescription
   ) {
-    await this.selectActivityDatesPreference()
-
-    if (isSharedActivityDates) {
-      await this.enterSharedActivityDates()
-      await this.selectActivityDescriptionPreference()
-
-      if (isSharedActivityDescription) {
-        await this.enterSharedActivityDescription()
-      }
-    }
-  }
-
-  async selectActivityDatesPreference() {
     await SameActivityDatesPageInteractions.selectSameActivityDatesAndContinue(
       this.browseTheWeb,
       this.siteDetails.sameActivityDates
     )
-  }
 
-  async enterSharedActivityDates() {
-    await this.actor.attemptsTo(CompleteActivityDates.now())
-  }
+    if (isSharedActivityDates) {
+      await this.actor.attemptsTo(CompleteActivityDates.now())
 
-  async selectActivityDescriptionPreference() {
-    await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
-      this.browseTheWeb,
-      this.siteDetails.sameActivityDescription
-    )
-  }
+      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.sameActivityDescription
+      )
 
-  async enterSharedActivityDescription() {
-    await this.actor.attemptsTo(CompleteActivityDescription.now())
-  }
-
-  async handleSiteActivityDates(
-    currentSite,
-    isSharedActivityDates,
-    isFirstSite,
-    isSharedActivityDescription
-  ) {
-    if (!isSharedActivityDates) {
-      await this.enterSiteSpecificActivityDates(currentSite.siteNumber)
-
-      if (isFirstSite) {
-        await this.selectActivityDescriptionPreference()
-
-        if (this.siteDetails.sameActivityDescription === true) {
-          await this.enterSharedActivityDescription()
-        }
+      if (isSharedActivityDescription) {
+        await this.actor.attemptsTo(CompleteActivityDescription.now())
       }
     }
   }
 
-  async enterSiteSpecificActivityDates(siteNumber) {
-    await this.actor.attemptsTo(CompleteActivityDates.forSite(siteNumber))
-  }
-
-  async handleSiteActivityDescription(
-    currentSite,
+  async handleSiteSpecificDates(
+    siteNumber,
+    isFirstSite,
     isSharedActivityDescription
   ) {
-    if (!isSharedActivityDescription) {
-      await this.actor.attemptsTo(
-        CompleteActivityDescription.forSite(currentSite.siteNumber)
+    await this.actor.attemptsTo(CompleteActivityDates.forSite(siteNumber))
+
+    if (isFirstSite) {
+      await SameActivityDescriptionPageInteractions.selectSameActivityDescriptionAndContinue(
+        this.browseTheWeb,
+        this.siteDetails.sameActivityDescription
       )
+
+      if (isSharedActivityDescription) {
+        await this.actor.attemptsTo(CompleteActivityDescription.now())
+      }
     }
-  }
-
-  async handleSiteCoordinates(currentSite) {
-    const strategy = new CoordinateEntryStrategy(this.browseTheWeb)
-    await strategy.enterCoordinates(currentSite, this.config)
-  }
-
-  async addAnotherSite() {
-    await SiteDetailsReviewPageInteractions.addAnotherSite(this.browseTheWeb)
   }
 }
