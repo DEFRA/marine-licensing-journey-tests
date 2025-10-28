@@ -8,14 +8,14 @@ Feature: Public register: The user can consent or withhold from sharing informat
   Scenario: Allowing information to be added to the public register
     Given the Public register page is displayed
     When choosing not to withhold information from the public register
-    Then the "Public register" task status is "Completed"
+    Then the "Sharing your project information publicly" task status is "Completed"
     And the public register information is saved
 
   @smoke
   Scenario: Withholding information from the public register
     Given the Public register page is displayed
     When choosing to withhold information from the public register
-    Then the "Public register" task status is "Completed"
+    Then the "Sharing your project information publicly" task status is "Completed"
     And the public register information is saved
 
   Scenario: The user can follow the link to the public register
@@ -35,17 +35,17 @@ Feature: Public register: The user can consent or withhold from sharing informat
 
   Scenario: Public register task is not pre-populated if no information has been previously saved
     Given a notification has been created with a valid project name
-    When the "Public register" task is selected
+    When the "Sharing your project information publicly" task is selected
     Then no information is pre-populated
 
   Scenario: Project name appears on the Public register page
     Given a notification has been created with a valid project name
-    When the "Public register" task is selected
+    When the "Sharing your project information publicly" task is selected
     Then the project name is displayed on the Public register page
 
   Scenario: Public register task is pre-populated if information has been previously saved
     Given the Public register task has been completed with consent
-    When the "Public register" task is selected
+    When the "Sharing your project information publicly" task is selected
     Then the page is pre-populated with the previously entered information
 
   Scenario: Do not need to provide a reason when allowing information to be added to the public register

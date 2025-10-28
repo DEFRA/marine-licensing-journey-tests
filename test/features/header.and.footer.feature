@@ -82,7 +82,7 @@ Feature: Header and footer verification feature
 
   Scenario: The header and footer are correct on the public register page
     Given a notification has been created with a valid project name
-    When the "Public register" task is selected
+    When the "Sharing your project information publicly" task is selected
     Then the service name "Get permission for marine work" is displayed in the header
     And the links are displayed in the header:
       | Projects      |

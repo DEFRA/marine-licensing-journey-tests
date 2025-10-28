@@ -24,7 +24,9 @@ export default class CompleteAllTasks extends Task {
     await actor.attemptsTo(CompleteProjectName.now())
     await actor.attemptsTo(SelectTheTask.withName('Site details'))
     await actor.attemptsTo(CompleteSiteDetails.andSave())
-    await actor.attemptsTo(SelectTheTask.withName('Public register'))
+    await actor.attemptsTo(
+      SelectTheTask.withName('Sharing your project information publicly')
+    )
     await actor.attemptsTo(CompletePublicRegisterTask.andSave())
   }
 }
