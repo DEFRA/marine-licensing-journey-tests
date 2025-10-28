@@ -314,23 +314,36 @@ runs:
         echo "=== Organizing results by thread/run ==="
         mkdir -p allure-reports-by-run
 
-        # Extract thread information and group results
+        # Extract run number from parameter in each result file
+        run_count=0
         for file in allure-results/*-result.json; do
           if [ -f "$file" ]; then
-            # Extract thread label from result file
-            thread=$(grep -o '"name":"thread","value":"[^"]*"' "$file" | head -1 | sed 's/.*:"Run-\([0-9]*\)".*/\1/' || echo "unknown")
+            # Extract run number from the "Run Number" parameter
+            runnum=$(grep -o '"name":"Run Number","value":"[^"]*"' "$file" | sed 's/.*"value":"\([^"]*\)".*/\1/' | head -1)
             
-            if [ "$thread" != "unknown" ] && [ ! -z "$thread" ]; then
-              # Create directory for this run
-              mkdir -p "allure-results-run-$thread"
+            # If Run Number not found, try to extract from thread label
+            if [ -z "$runnum" ] || [ "$runnum" = "N/A" ]; then
+              runnum=$(grep -o '"name":"thread","value":"Run-[0-9]*"' "$file" | sed 's/.*Run-\([0-9]*\).*/\1/' | head -1)
+            fi
+            
+            # If still not found, assign sequential number
+            if [ -z "$runnum" ] || [ "$runnum" = "N/A" ]; then
+              runnum=$run_count
+              run_count=$((run_count + 1))
+            fi
+            
+            # Create directory for this run (sanitize the run number)
+            runnum_clean=$(echo "$runnum" | tr -cd '0-9')
+            if [ ! -z "$runnum_clean" ]; then
+              mkdir -p "allure-results-run-$runnum_clean"
               # Copy all related files for this test
-              cp "$file" "allure-results-run-$thread/"
+              cp "$file" "allure-results-run-$runnum_clean/"
               
               # Copy related attachments
               testId=$(basename "$file" | sed 's/-result.json//')
               for attachment in allure-results/*"$testId"*; do
                 if [ -f "$attachment" ]; then
-                  cp "$attachment" "allure-results-run-$thread/"
+                  cp "$attachment" "allure-results-run-$runnum_clean/" 2>/dev/null || true
                 fi
               done
             fi
@@ -351,13 +364,15 @@ runs:
           if [ -d "$rundir" ]; then
             runnum=$(echo "$rundir" | sed 's/allure-results-run-//')
             echo "Generating report for Run #$runnum"
+            
+            # Generate report to a clean directory name
             npx allure-commandline@latest generate "$rundir" --clean --single-file --output "allure-reports-by-run/run-$runnum"
             
             # Sanitize any files with invalid characters in this run's report
             if [ -d "allure-reports-by-run/run-$runnum" ]; then
-              find "allure-reports-by-run/run-$runnum" -depth -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' | while read -r file; do
+              find "allure-reports-by-run/run-$runnum" -depth \( -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' \) 2>/dev/null | while read -r file; do
                 newname=$(echo "$file" | sed 's/:/_/g; s/|/_/g; s/</_/g; s/>/_/g; s/?/_/g; s/"/_/g')
-                if [ "$file" != "$newname" ]; then
+                if [ "$file" != "$newname" ] && [ -e "$file" ]; then
                   mv "$file" "$newname" 2>/dev/null || true
                 fi
               done
