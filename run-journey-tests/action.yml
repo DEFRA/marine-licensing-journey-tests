@@ -276,16 +276,75 @@ runs:
         docker ps
       shell: bash
 
-    - name: Generate Allure report
+    - name: Generate Allure reports
       if: always()
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
         echo "=== Counting test result files ==="
         ls -la allure-results/ | wc -l
-        echo "=== Generating Allure report from all results ==="
+
+        echo "=== Generating consolidated single-file HTML report (all runs) ==="
+        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report-consolidated
+
+        echo "=== Generating full interactive HTML report (all runs) ==="
         npx allure-commandline@latest generate allure-results --clean --output allure-report
-        echo "=== Report generated successfully ==="
+
+        echo "=== Organizing results by thread/run ==="
+        mkdir -p allure-reports-by-run
+
+        # Extract thread information and group results
+        for file in allure-results/*-result.json; do
+          if [ -f "$file" ]; then
+            # Extract thread label from result file
+            thread=$(grep -o '"name":"thread","value":"[^"]*"' "$file" | head -1 | sed 's/.*:"Run-\([0-9]*\)".*/\1/' || echo "unknown")
+            
+            if [ "$thread" != "unknown" ] && [ ! -z "$thread" ]; then
+              # Create directory for this run
+              mkdir -p "allure-results-run-$thread"
+              # Copy all related files for this test
+              cp "$file" "allure-results-run-$thread/"
+              
+              # Copy related attachments
+              testId=$(basename "$file" | sed 's/-result.json//')
+              for attachment in allure-results/*"$testId"*; do
+                if [ -f "$attachment" ]; then
+                  cp "$attachment" "allure-results-run-$thread/"
+                fi
+              done
+            fi
+          fi
+        done
+
+        # Copy container files to each run directory
+        for container in allure-results/*-container.json; do
+          if [ -f "$container" ]; then
+            for rundir in allure-results-run-*; do
+              cp "$container" "$rundir/"
+            done
+          fi
+        done
+
+        echo "=== Generating individual HTML reports for each run ==="
+        for rundir in allure-results-run-*; do
+          if [ -d "$rundir" ]; then
+            runnum=$(echo "$rundir" | sed 's/allure-results-run-//')
+            echo "Generating report for Run #$runnum"
+            npx allure-commandline@latest generate "$rundir" --clean --single-file --output "allure-reports-by-run/run-$runnum"
+            
+            # Rename the index.html to include run number for clarity
+            if [ -f "allure-reports-by-run/run-$runnum/index.html" ]; then
+              cp "allure-reports-by-run/run-$runnum/index.html" "allure-reports-by-run/run-$runnum-report.html"
+              echo "✅ Created run-$runnum-report.html"
+            fi
+          fi
+        done
+
+        echo "=== Report generation complete ==="
+        echo "📊 Consolidated report: allure-report-consolidated/index.html"
+        echo "📊 Full report: allure-report/index.html"
+        echo "📊 Individual run reports: allure-reports-by-run/run-{1..15}-report.html"
+        ls -lh allure-reports-by-run/*.html 2>/dev/null || echo "No individual reports found"
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
@@ -423,20 +482,36 @@ runs:
 
           **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
-    - name: Upload Allure results
+    - name: Upload Allure results (raw)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-raw
         path: ./marine-licensing-journey-tests/allure-results/
         retention-days: 30
 
-    - name: Upload Allure report
+    - name: Upload Full Allure report (interactive)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report
+        name: allure-report-full
         path: ./marine-licensing-journey-tests/allure-report/
+        retention-days: 30
+
+    - name: Upload Consolidated Allure report (single HTML)
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report-consolidated
+        path: ./marine-licensing-journey-tests/allure-report-consolidated/
+        retention-days: 30
+
+    - name: Upload Individual Run Reports (15 separate HTMLs)
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-reports-by-run
+        path: ./marine-licensing-journey-tests/allure-reports-by-run/
         retention-days: 30
 
     - name: Upload docker compose logs
