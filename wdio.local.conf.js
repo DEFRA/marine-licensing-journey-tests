@@ -1,8 +1,8 @@
 import allure from 'allure-commandline'
 import {
   attachRichFeatureContext,
-  logUserCleanup,
-  logOperation
+  logOperation,
+  logUserCleanup
 } from './test-infrastructure/capture/index.js'
 
 const debug = process.env.DEBUG
@@ -38,20 +38,20 @@ export const config = {
   capabilities: debug
     ? [{ browserName: 'chrome' }]
     : [
-        {
-          // Remove maxInstances from capability level to use global setting
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: [
-              '--no-sandbox',
-              '--disable-infobars',
-              '--disable-gpu',
-              '--window-size=1920,1080',
-              ...(process.env.HEADLESS === 'true' ? ['--headless'] : [])
-            ]
-          }
+      {
+        // Remove maxInstances from capability level to use global setting
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          args: [
+            '--no-sandbox',
+            '--disable-infobars',
+            '--disable-gpu',
+            '--window-size=1920,1080',
+            ...(process.env.HEADLESS === 'true' ? ['--headless'] : [])
+          ]
         }
-      ],
+      }
+    ],
   execArgv,
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
