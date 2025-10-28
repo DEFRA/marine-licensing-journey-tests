@@ -283,13 +283,13 @@ runs:
       run: |
         echo "=== Counting test result files ==="
         ls -la allure-results/ | wc -l
-        
+
         echo "=== Generating consolidated single-file HTML report (all runs) ==="
         npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report-consolidated
-        
+
         echo "=== Generating full interactive HTML report (all runs) ==="
         npx allure-commandline@latest generate allure-results --clean --output allure-report-full
-        
+
         echo "=== Sanitizing filenames (removing colons and invalid chars) ==="
         # Fix any files with invalid characters in allure-report-full
         if [ -d "allure-report-full" ]; then
@@ -300,7 +300,7 @@ runs:
             fi
           done
         fi
-        
+
         # Fix any files with invalid characters in allure-report-consolidated
         if [ -d "allure-report-consolidated" ]; then
           find allure-report-consolidated -depth -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' | while read -r file; do
@@ -310,10 +310,10 @@ runs:
             fi
           done
         fi
-        
+
         echo "=== Organizing results by thread/run ==="
         mkdir -p allure-reports-by-run
-        
+
         # Extract thread information and group results
         for file in allure-results/*-result.json; do
           if [ -f "$file" ]; then
@@ -336,7 +336,7 @@ runs:
             fi
           fi
         done
-        
+
         # Copy container files to each run directory
         for container in allure-results/*-container.json; do
           if [ -f "$container" ]; then
@@ -345,7 +345,7 @@ runs:
             done
           fi
         done
-        
+
         echo "=== Generating individual HTML reports for each run ==="
         for rundir in allure-results-run-*; do
           if [ -d "$rundir" ]; then
@@ -370,7 +370,7 @@ runs:
             fi
           fi
         done
-        
+
         echo "=== Report generation complete ==="
         echo "📊 Consolidated report: allure-report-consolidated/index.html"
         echo "📊 Full report: allure-report-full/index.html"
