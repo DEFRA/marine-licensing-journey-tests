@@ -2,16 +2,16 @@ import CommonElementsPage from './common.elements.page'
 
 export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static methodOfProvidingSiteLocationValue =
-    '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd'
+    '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd[1]'
   static coordinateSystemValue =
-    '//dt[contains(text(), "Coordinate system")]/following-sibling::dd'
+    '//dt[contains(text(), "Coordinate system")]/following-sibling::dd[1]'
   static coordinatesAtCentreOfSiteValue =
-    '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd'
-  static widthValue = '//dt[contains(text(), "Width")]/following-sibling::dd'
+    '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd[1]'
+  static widthValue = '//dt[contains(text(), "Width")]/following-sibling::dd[1]'
   static fileTypeValue =
-    '//dt[contains(text(), "File type")]/following-sibling::dd'
+    '//dt[contains(text(), "File type")]/following-sibling::dd[1]'
   static fileUploadedValue =
-    '//dt[contains(text(), "File uploaded")]/following-sibling::dd'
+    '//dt[contains(text(), "File uploaded")]/following-sibling::dd[1]'
   static siteDetailsDataScript = '#site-details-data'
   static startAndEndPointsValue =
     '//dt[contains(text(), "Start and end points")]/following-sibling::dd'
@@ -25,11 +25,11 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   }
 
   static getSiteCoordinateMethodValue(siteNumber) {
-    return `(//dt[contains(normalize-space(text()), "Single or multiple sets of coordinates")]/following-sibling::dd)[${siteNumber}]`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Single or multiple sets of coordinates")]/following-sibling::dd[1]`
   }
 
   static getSiteCoordinateSystemValue(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/following-sibling::*//dt[contains(normalize-space(text()), "Coordinate system")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Coordinate system")]/following-sibling::dd[1]`
   }
 
   static providingTheSiteLocationCard =
@@ -44,15 +44,15 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     '//dt[contains(text(), "Activity description")]/following-sibling::dd'
 
   static getSiteName(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd[1]`
   }
 
   static getSiteActivityDates(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd[1]`
   }
 
   static getSiteActivityDescription(siteNumber) {
-    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd`
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd[1]`
   }
 
   static getSiteNameAddLink(siteNumber) {
