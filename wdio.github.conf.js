@@ -114,21 +114,54 @@ export const config = {
         issueLinkTemplate: 'https://eaflood.atlassian.net/browse/{}',
         disableWebdriverStepsReporting: true,
         useCucumberStepReporter: true,
-        disableMochaArtifacts: true
+        disableMochaArtifacts: true,
+        addConsoleLogs: false
       }
     ]
   ],
   beforeScenario: async function (world, context) {
-    console.log(`[WDIO] Starting scenario: "${world.pickle.name}"`)
+    const capabilities = browser.capabilities
+    const runNumber = capabilities['cjson:metadata']?.runNumber || 'N/A'
+    const sessionId = browser.sessionId
+
+    console.log(
+      `[WDIO] [Run #${runNumber}] [Session: ${sessionId}] Starting scenario: "${world.pickle.name}"`
+    )
+
+    // Add run information to Allure report
+    if (global.allure) {
+      global.allure.addLabel('thread', `Run-${runNumber}`)
+      global.allure.addLabel('host', `Session-${sessionId}`)
+      global.allure.addParameter('Run Number', runNumber)
+      global.allure.addParameter('Session ID', sessionId)
+    }
+
     await browser.reloadSession()
     attachRichFeatureContext(world)
   },
 
   afterScenario: async function (scenario, world) {
     if (scenario.result.status === 'FAILED') {
+      const capabilities = browser.capabilities
+      const runNumber = capabilities['cjson:metadata']?.runNumber || 'N/A'
+      const sessionId = browser.sessionId
+
       await browser.takeScreenshot()
       const currentUrl = await browser.getUrl()
-      logOperation('Test Failure URL', currentUrl, true)
+
+      console.log(
+        `[WDIO] [Run #${runNumber}] [Session: ${sessionId}] ❌ FAILED at URL: ${currentUrl}`
+      )
+      logOperation(`Test Failure [Run #${runNumber}]`, currentUrl, true)
+
+      // Add failure context to Allure
+      if (global.allure) {
+        global.allure.addAttachment(
+          `Failed URL (Run #${runNumber})`,
+          currentUrl,
+          'text/plain'
+        )
+      }
     }
     if (process.env.ENVIRONMENT !== 'test') {
       if (global.testUsersCreated && global.testUsersCreated.length > 0) {

@@ -260,11 +260,13 @@ runs:
       working-directory: ./marine-licensing-journey-tests
       env:
         CHROMEDRIVER_URL: localhost
+        MULTI_SITE_PARALLEL: 15
+        MAX_INSTANCES: 15
       run: |
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
-        echo "=== Running tests ==="
-        MULTI_SITE_PARALLEL=15 npm run test:github
+        echo "=== Running tests with MULTI_SITE_PARALLEL=$MULTI_SITE_PARALLEL and MAX_INSTANCES=$MAX_INSTANCES ==="
+        wdio run wdio.github.conf.js
 
     - name: debug
       if: always()
@@ -279,7 +281,11 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
+        echo "=== Counting test result files ==="
+        ls -la allure-results/ | wc -l
+        echo "=== Generating Allure report from all results ==="
+        npx allure-commandline@latest generate allure-results --clean --output allure-report
+        echo "=== Report generated successfully ==="
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
@@ -417,12 +423,21 @@ runs:
 
           **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
+    - name: Upload Allure results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results
+        path: ./marine-licensing-journey-tests/allure-results/
+        retention-days: 30
+
     - name: Upload Allure report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: ./marine-licensing-journey-tests/allure-report/index.html
+        path: ./marine-licensing-journey-tests/allure-report/
+        retention-days: 30
 
     - name: Upload docker compose logs
       if: always()
