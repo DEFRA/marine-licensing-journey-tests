@@ -19,9 +19,7 @@ export const config = {
 
   // Run multi-site feature multiple times in parallel if MULTI_SITE_PARALLEL is set
   specs: process.env.MULTI_SITE_PARALLEL
-    ? Array(parseInt(process.env.MULTI_SITE_PARALLEL)).fill(
-        'test/features/manual.site.details.multi.site.feature'
-      )
+    ? ['test/features/manual.site.details.multi.site.feature']
     : ['test/features/*.feature'],
 
   cucumberOpts: {
@@ -35,36 +33,58 @@ export const config = {
   // PARALLEL EXECUTION CONFIGURATION
   // ============================================================================
   // Number of instances to run in parallel
-  // Start with 3-5 for local development, can go higher for CI
-  // Each feature file will run in a separate worker process
-  maxInstances: process.env.MULTI_SITE_PARALLEL
-    ? parseInt(process.env.MULTI_SITE_PARALLEL)
-    : process.env.MAX_INSTANCES
-      ? parseInt(process.env.MAX_INSTANCES)
-      : 4,
+  // When MULTI_SITE_PARALLEL is set, maxInstances controls how many can run at once
+  maxInstances: process.env.MAX_INSTANCES
+    ? parseInt(process.env.MAX_INSTANCES)
+    : 4,
 
-  capabilities: [
-    {
-      browserName: 'chrome',
-      'goog:chromeOptions': {
-        args: [
-          '--no-sandbox',
-          '--disable-infobars',
-          '--headless',
-          '--disable-gpu',
-          '--window-size=1920,1080',
-          '--enable-features=NetworkService,NetworkServiceInProcess',
-          '--password-store=basic',
-          '--use-mock-keychain',
-          '--dns-prefetch-disable',
-          '--disable-background-networking',
-          '--disable-remote-fonts',
-          '--ignore-certificate-errors',
-          '--disable-dev-shm-usage'
-        ]
-      }
-    }
-  ],
+  // Create multiple capability instances to run the same feature multiple times
+  capabilities: process.env.MULTI_SITE_PARALLEL
+    ? Array(parseInt(process.env.MULTI_SITE_PARALLEL))
+        .fill(null)
+        .map((_, index) => ({
+          browserName: 'chrome',
+          'cjson:metadata': { runNumber: index + 1 },
+          'goog:chromeOptions': {
+            args: [
+              '--no-sandbox',
+              '--disable-infobars',
+              '--headless',
+              '--disable-gpu',
+              '--window-size=1920,1080',
+              '--enable-features=NetworkService,NetworkServiceInProcess',
+              '--password-store=basic',
+              '--use-mock-keychain',
+              '--dns-prefetch-disable',
+              '--disable-background-networking',
+              '--disable-remote-fonts',
+              '--ignore-certificate-errors',
+              '--disable-dev-shm-usage'
+            ]
+          }
+        }))
+    : [
+        {
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: [
+              '--no-sandbox',
+              '--disable-infobars',
+              '--headless',
+              '--disable-gpu',
+              '--window-size=1920,1080',
+              '--enable-features=NetworkService,NetworkServiceInProcess',
+              '--password-store=basic',
+              '--use-mock-keychain',
+              '--dns-prefetch-disable',
+              '--disable-background-networking',
+              '--disable-remote-fonts',
+              '--ignore-certificate-errors',
+              '--disable-dev-shm-usage'
+            ]
+          }
+        }
+      ],
 
   execArgv: ['--loader', 'esm-module-alias/loader'],
 
