@@ -205,12 +205,12 @@ Then(
   }
 )
 
-When('the user clicks the link to the public register', async function () {
+When('the user clicks the Explore Marine Plans link', async function () {
   await this.actor.attemptsTo(ClickPublicRegisterLink.now())
 })
 
 Then(
-  'the user is taken to the public register page in a new tab',
+  'the user is taken to the Explore Marine Plans page in a new tab',
   async function () {
     await this.actor.attemptsTo(EnsurePublicRegisterNewTab.isOpened())
   }

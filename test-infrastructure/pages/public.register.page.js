@@ -6,8 +6,7 @@ export default class PublicRegisterPage {
   static consentError = '#consent-error'
   static reasonError = '#reason-error'
   static projectName = 'span.govuk-caption-l'
-  static publicRegisterLink =
-    'a[href*="marinelicensing.marinemanagement.org.uk"]'
+  static publicRegisterLink = 'a[href*="explore-marine-plans"]'
 
   static getConsentSelector(consent) {
     if (consent === true) return this.consentYes

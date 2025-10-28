@@ -18,10 +18,10 @@ Feature: Public register: The user can consent or withhold from sharing informat
     Then the "Sharing your project information publicly" task status is "Completed"
     And the public register information is saved
 
-  Scenario: The user can follow the link to the public register
+  Scenario: The user can follow the Explore Marine Plans link
     Given the Public register page is displayed
-    When the user clicks the link to the public register
-    Then the user is taken to the public register page in a new tab
+    When the user clicks the Explore Marine Plans link
+    Then the user is taken to the Explore Marine Plans page in a new tab
 
   Scenario: Changing previously saved information from consent to withhold
     Given the Public register task has been completed with consent

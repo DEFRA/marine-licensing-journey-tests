@@ -14,4 +14,4 @@ Feature: Validation of Public register: the user is prevented from saving with i
   Scenario: Validate maximum length of reason text (1000 characters)
     Given the Public register page is displayed
     When the reason text provided is too long
-    Then the reason error message "Provide details of why you do not consent to your project information being published must be 1000 characters or less" is displayed
+    Then the reason error message "Details of why you do not consent must be 1000 characters or less" is displayed

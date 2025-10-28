@@ -22,9 +22,8 @@ export default class EnsurePublicRegisterNewTab extends Task {
 
     const currentUrl = await browseTheWeb.browser.getUrl()
     await expect(currentUrl).toContain(
-      'marinelicensing.marinemanagement.org.uk'
+      'www.gov.uk/guidance/explore-marine-plans'
     )
-    await expect(currentUrl).toContain('MMO_PUBLIC_REGISTER')
 
     await browseTheWeb.browser.switchToWindow(originalWindowHandle)
   }
