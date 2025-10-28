@@ -283,16 +283,37 @@ runs:
       run: |
         echo "=== Counting test result files ==="
         ls -la allure-results/ | wc -l
-
+        
         echo "=== Generating consolidated single-file HTML report (all runs) ==="
         npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report-consolidated
-
+        
         echo "=== Generating full interactive HTML report (all runs) ==="
-        npx allure-commandline@latest generate allure-results --clean --output allure-report
-
+        npx allure-commandline@latest generate allure-results --clean --output allure-report-full
+        
+        echo "=== Sanitizing filenames (removing colons and invalid chars) ==="
+        # Fix any files with invalid characters in allure-report-full
+        if [ -d "allure-report-full" ]; then
+          find allure-report-full -depth -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' | while read -r file; do
+            newname=$(echo "$file" | sed 's/:/_/g; s/|/_/g; s/</_/g; s/>/_/g; s/?/_/g; s/"/_/g')
+            if [ "$file" != "$newname" ]; then
+              mv "$file" "$newname"
+            fi
+          done
+        fi
+        
+        # Fix any files with invalid characters in allure-report-consolidated
+        if [ -d "allure-report-consolidated" ]; then
+          find allure-report-consolidated -depth -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' | while read -r file; do
+            newname=$(echo "$file" | sed 's/:/_/g; s/|/_/g; s/</_/g; s/>/_/g; s/?/_/g; s/"/_/g')
+            if [ "$file" != "$newname" ]; then
+              mv "$file" "$newname"
+            fi
+          done
+        fi
+        
         echo "=== Organizing results by thread/run ==="
         mkdir -p allure-reports-by-run
-
+        
         # Extract thread information and group results
         for file in allure-results/*-result.json; do
           if [ -f "$file" ]; then
@@ -315,16 +336,16 @@ runs:
             fi
           fi
         done
-
+        
         # Copy container files to each run directory
         for container in allure-results/*-container.json; do
           if [ -f "$container" ]; then
             for rundir in allure-results-run-*; do
-              cp "$container" "$rundir/"
+              cp "$container" "$rundir/" 2>/dev/null || true
             done
           fi
         done
-
+        
         echo "=== Generating individual HTML reports for each run ==="
         for rundir in allure-results-run-*; do
           if [ -d "$rundir" ]; then
@@ -332,17 +353,27 @@ runs:
             echo "Generating report for Run #$runnum"
             npx allure-commandline@latest generate "$rundir" --clean --single-file --output "allure-reports-by-run/run-$runnum"
             
-            # Rename the index.html to include run number for clarity
+            # Sanitize any files with invalid characters in this run's report
+            if [ -d "allure-reports-by-run/run-$runnum" ]; then
+              find "allure-reports-by-run/run-$runnum" -depth -name '*:*' -o -name '*|*' -o -name '*<*' -o -name '*>*' -o -name '*?*' -o -name '*"*' | while read -r file; do
+                newname=$(echo "$file" | sed 's/:/_/g; s/|/_/g; s/</_/g; s/>/_/g; s/?/_/g; s/"/_/g')
+                if [ "$file" != "$newname" ]; then
+                  mv "$file" "$newname" 2>/dev/null || true
+                fi
+              done
+            fi
+            
+            # Copy index.html to a numbered report file
             if [ -f "allure-reports-by-run/run-$runnum/index.html" ]; then
               cp "allure-reports-by-run/run-$runnum/index.html" "allure-reports-by-run/run-$runnum-report.html"
               echo "✅ Created run-$runnum-report.html"
             fi
           fi
         done
-
+        
         echo "=== Report generation complete ==="
         echo "📊 Consolidated report: allure-report-consolidated/index.html"
-        echo "📊 Full report: allure-report/index.html"
+        echo "📊 Full report: allure-report-full/index.html"
         echo "📊 Individual run reports: allure-reports-by-run/run-{1..15}-report.html"
         ls -lh allure-reports-by-run/*.html 2>/dev/null || echo "No individual reports found"
 
@@ -495,7 +526,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: allure-report-full
-        path: ./marine-licensing-journey-tests/allure-report/
+        path: ./marine-licensing-journey-tests/allure-report-full/
         retention-days: 30
 
     - name: Upload Consolidated Allure report (single HTML)

@@ -115,8 +115,7 @@ export const config = {
         disableWebdriverStepsReporting: true,
         useCucumberStepReporter: true,
         disableMochaArtifacts: true,
-        addConsoleLogs: false,
-        useCucumberStepReporter: true
+        addConsoleLogs: false
       }
     ]
   ],
