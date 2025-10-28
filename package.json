@@ -20,7 +20,7 @@
     "test:local": "npm run clean && wdio run wdio.local.conf.js",
     "test:local:headless": "npm run clean && HEADLESS=true wdio run wdio.local.conf.js",
     "test:local:debug": "npm run clean && DEBUG=true wdio run wdio.local.conf.js",
-    "test:github": "npm run clean && MAX_INSTANCES=20 wdio run wdio.github.conf.js",
+    "test:github": "npm run clean && MAX_INSTANCES=15 wdio run wdio.github.conf.js",
     "test:github:browserstack": "npm run clean && wdio run wdio.github.browserstack.conf.js",
     "test:parallel": "npm run clean && MAX_INSTANCES=5 wdio run wdio.conf.js",
     "test:parallel:local": "npm run clean && MAX_INSTANCES=3 wdio run wdio.local.conf.js",

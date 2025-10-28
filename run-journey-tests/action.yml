@@ -264,7 +264,7 @@ runs:
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
         echo "=== Running tests ==="
-        MULTI_SITE_PARALLEL=20 npm run test:github
+        MULTI_SITE_PARALLEL=15 npm run test:github
 
     - name: debug
       if: always()
