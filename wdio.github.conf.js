@@ -94,8 +94,8 @@ export const config = {
   bail: 0,
   waitforTimeout: 10000,
   waitforInterval: 200,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  connectionRetryTimeout: 180000, // Increased for high parallel load
+  connectionRetryCount: 5, // More retries for parallel execution
   framework: 'cucumber',
 
   reporters: [

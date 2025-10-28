@@ -16,6 +16,11 @@ services:
     image: selenium/standalone-chrome:123.0
     ports:
       - 4444:4444
+    shm_size: '2gb'
+    environment:
+      - SE_NODE_MAX_SESSIONS=15
+      - SE_NODE_SESSION_TIMEOUT=300
+      - SE_VNC_NO_PASSWORD=1
     networks:
       - cdp-tenant
 
