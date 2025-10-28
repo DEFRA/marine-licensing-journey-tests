@@ -19,9 +19,11 @@ export const config = {
 
   // Run multi-site feature multiple times in parallel if MULTI_SITE_PARALLEL is set
   specs: process.env.MULTI_SITE_PARALLEL
-    ? Array(parseInt(process.env.MULTI_SITE_PARALLEL)).fill('test/features/manual.site.details.multi.site.feature')
+    ? Array(parseInt(process.env.MULTI_SITE_PARALLEL)).fill(
+        'test/features/manual.site.details.multi.site.feature'
+      )
     : ['test/features/*.feature'],
-  
+
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: getTags(),
@@ -38,8 +40,8 @@ export const config = {
   maxInstances: process.env.MULTI_SITE_PARALLEL
     ? parseInt(process.env.MULTI_SITE_PARALLEL)
     : process.env.MAX_INSTANCES
-    ? parseInt(process.env.MAX_INSTANCES)
-    : 4,
+      ? parseInt(process.env.MAX_INSTANCES)
+      : 4,
 
   capabilities: [
     {
