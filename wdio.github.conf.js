@@ -17,7 +17,11 @@ export const config = {
   hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
-  specs: ['test/features/*.feature'],
+  // Run multi-site feature multiple times in parallel if MULTI_SITE_PARALLEL is set
+  specs: process.env.MULTI_SITE_PARALLEL
+    ? Array(parseInt(process.env.MULTI_SITE_PARALLEL)).fill('test/features/manual.site.details.multi.site.feature')
+    : ['test/features/*.feature'],
+  
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: getTags(),
@@ -31,7 +35,9 @@ export const config = {
   // Number of instances to run in parallel
   // Start with 3-5 for local development, can go higher for CI
   // Each feature file will run in a separate worker process
-  maxInstances: process.env.MAX_INSTANCES
+  maxInstances: process.env.MULTI_SITE_PARALLEL
+    ? parseInt(process.env.MULTI_SITE_PARALLEL)
+    : process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
     : 4,
 
