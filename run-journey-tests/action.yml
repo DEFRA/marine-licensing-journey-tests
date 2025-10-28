@@ -266,7 +266,7 @@ runs:
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
         echo "=== Running tests with MULTI_SITE_PARALLEL=$MULTI_SITE_PARALLEL and MAX_INSTANCES=$MAX_INSTANCES ==="
-        wdio run wdio.github.conf.js
+        MULTI_SITE_PARALLEL=15 npm run test:github
 
     - name: debug
       if: always()
