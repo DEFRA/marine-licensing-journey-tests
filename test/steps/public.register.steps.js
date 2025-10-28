@@ -30,7 +30,9 @@ Given('the Public register page is displayed', async function () {
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Public register'))
-  await this.actor.attemptsTo(EnsurePageHeading.is('Public register'))
+  await this.actor.attemptsTo(
+    EnsurePageHeading.is('Sharing your project information publicly')
+  )
 })
 
 Given(

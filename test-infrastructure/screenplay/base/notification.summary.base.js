@@ -278,8 +278,8 @@ export default class NotificationSummaryBase extends Task {
     if (exemptionData.publicRegister) {
       const pageLocators = this._getPageLocators()
       const expectedConsent = exemptionData.publicRegister.consent
-        ? 'No'
-        : 'Yes'
+        ? 'Yes'
+        : 'No'
       await browseTheWeb.expectElementToContainText(
         pageLocators.publicRegister.informationWithheldValue,
         expectedConsent

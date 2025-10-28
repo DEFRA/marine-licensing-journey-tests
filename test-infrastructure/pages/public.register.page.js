@@ -1,7 +1,7 @@
 export default class PublicRegisterPage {
-  static consentYes = '#consent' // "Yes" - withhold from public register
-  static consentNo = '#consent-2' // "No" - don't withhold (share on public register)
-  static withholdReason = '#reason'
+  static consentYes = '#consent'
+  static consentNo = '#consent-2'
+  static reason = '#reason'
   static saveAndContinue = 'button[type="submit"]'
   static consentError = '#consent-error'
   static reasonError = '#reason-error'
@@ -10,10 +10,12 @@ export default class PublicRegisterPage {
     'a[href*="marinelicensing.marinemanagement.org.uk"]'
 
   static getConsentSelector(consent) {
-    // consent: true = give consent to share = answer "No" to "should it be withheld?"
-    // consent: false = withhold consent = answer "Yes" to "should it be withheld?"
-    if (consent === true) return this.consentNo // Don't withhold (share)
-    if (consent === false) return this.consentYes // Withhold (don't share)
+    if (consent === true) return this.consentYes
+    if (consent === false) return this.consentNo
     return consent
+  }
+
+  static get withholdReason() {
+    return this.reason
   }
 }

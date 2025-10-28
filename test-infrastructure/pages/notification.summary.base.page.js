@@ -97,11 +97,11 @@ export default class NotificationSummaryBasePage {
 
     publicRegister: {
       heading:
-        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Public register")]',
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Sharing your project information publicly")]',
       informationWithheldTerm:
-        '//dt[contains(text(), "Information withheld from public register")]',
+        '//dt[contains(text(), "Consent to publish your project information")]',
       informationWithheldValue:
-        '//dt[contains(text(), "Information withheld from public register")]/following-sibling::dd[1]'
+        '//dt[contains(text(), "Consent to publish your project information")]/following-sibling::dd[1]'
     },
 
     // Common submission details locators
