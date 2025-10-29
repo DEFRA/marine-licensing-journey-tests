@@ -265,8 +265,8 @@ runs:
       run: |
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
-        echo "=== Running tests with MULTI_SITE_PARALLEL=$MULTI_SITE_PARALLEL and MAX_INSTANCES=$MAX_INSTANCES ==="
-        MULTI_SITE_PARALLEL=15 npm run test:github
+        echo "=== Running tests ==="
+        MULTI_SITE_PARALLEL=15npm run test:github
 
     - name: debug
       if: always()
@@ -276,12 +276,30 @@ runs:
         docker ps
       shell: bash
 
-    - name: Generate Allure reports
+    - name: Generate Allure report
       if: always()
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
+        echo "=== Gathering all allure results ==="
+        # Find all allure-results directories
+        ALLURE_DIRS=$(find . -maxdepth 1 -type d -name "allure-results*" | tr '\n' ' ')
+        
+        if [ -z "$ALLURE_DIRS" ]; then
+          echo "⚠️ No allure-results directories found"
+          exit 0
+        fi
+        
+        echo "Found allure result directories: $ALLURE_DIRS"
+        
+        # Count total result files
+        TOTAL_RESULTS=$(find $ALLURE_DIRS -name "*-result.json" 2>/dev/null | wc -l)
+        echo "Total test result files found: $TOTAL_RESULTS"
+        
+        # Generate report from all result directories
+        npx allure-commandline@latest generate $ALLURE_DIRS --clean --single-file --output allure-report
+        
+        echo "✅ Allure report generated successfully"
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
@@ -419,37 +437,12 @@ runs:
 
           **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
-    - name: Upload Allure results (raw)
+    - name: Upload Allure report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results-raw
-        path: ./marine-licensing-journey-tests/allure-results/
-        retention-days: 30
-
-    - name: Upload Full Allure report (interactive)
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report-full
-        path: ./marine-licensing-journey-tests/allure-report-full/
-        retention-days: 30
-
-    - name: Upload Consolidated Allure report (single HTML)
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report-consolidated
-        path: ./marine-licensing-journey-tests/allure-report-consolidated/
-        retention-days: 30
-
-    - name: Upload Individual Run Reports (15 separate HTMLs)
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-reports-by-run
-        path: ./marine-licensing-journey-tests/allure-reports-by-run/
-        retention-days: 30
+        name: allure-report
+        path: ./marine-licensing-journey-tests/allure-report/index.html
 
     - name: Upload docker compose logs
       if: always()
