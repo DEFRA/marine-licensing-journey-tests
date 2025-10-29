@@ -193,11 +193,12 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateCoordinateSystem(browseTheWeb, siteDetails) {
-    if (siteDetails.coordinateSystem) {
+    const coordinateSystem =
+      siteDetails.coordinateSystem || siteDetails.sites?.[0]?.coordinateSystem
+    if (coordinateSystem) {
       const pageLocators = this._getPageLocators()
-      const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
-        siteDetails.coordinateSystem
-      )
+      const expectedDisplayText =
+        this._mapCoordinateSystemToDisplayText(coordinateSystem)
 
       const actualText = await browseTheWeb.getText(
         pageLocators.siteDetails.coordinateSystemValue
@@ -214,15 +215,19 @@ export default class NotificationSummaryBase extends Task {
   _mapCoordinateSystemToDisplayText(coordinateSystem) {
     const mappings = {
       WGS84: 'WGS84 (World Geodetic System 1984) Latitude and longitude',
-      OSGB36: 'OSGB36 (National Grid) Eastings and Northings'
+      OSGB36: 'British National Grid (OSGB36) Eastings and Northings'
     }
     return mappings[coordinateSystem] || coordinateSystem
   }
 
   async _validateCoordinates(browseTheWeb, siteDetails) {
-    if (siteDetails.circleData) {
+    const firstSite = siteDetails.sites?.[0]
+    const circleData = siteDetails.circleData || firstSite?.circleData
+    const coordinateSystem =
+      siteDetails.coordinateSystem || firstSite?.coordinateSystem
+
+    if (circleData) {
       const pageLocators = this._getPageLocators()
-      const { circleData, coordinateSystem } = siteDetails
 
       const expectedCoordinates = this._formatCoordinatesForDisplay(
         circleData,
@@ -238,9 +243,12 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateCircularSiteWidth(browseTheWeb, siteDetails) {
-    if (siteDetails.circleData?.width) {
+    const firstSite = siteDetails.sites?.[0]
+    const circleData = siteDetails.circleData || firstSite?.circleData
+
+    if (circleData?.width) {
       const pageLocators = this._getPageLocators()
-      const expectedWidth = `${siteDetails.circleData.width} metres`
+      const expectedWidth = `${circleData.width} metres`
       await browseTheWeb.expectElementToContainText(
         pageLocators.siteDetails.widthOfCircularSiteValue,
         expectedWidth
@@ -328,13 +336,20 @@ export default class NotificationSummaryBase extends Task {
   }
 
   getCoordinatesFromSiteDetails(siteDetails) {
+    const firstSite = siteDetails.sites?.[0]
     const allCoordinates =
-      siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
+      siteDetails?.polygonData?.coordinates ||
+      firstSite?.polygonData?.coordinates ||
+      siteDetails?.coordinates ||
+      []
     return this._limitTriangleCoordinates(siteDetails, allCoordinates)
   }
 
   _limitTriangleCoordinates(siteDetails, coordinates) {
-    if (siteDetails?.siteType === 'triangle' && coordinates.length > 3) {
+    const firstSite = siteDetails.sites?.[0]
+    const siteType = siteDetails?.siteType || firstSite?.siteType
+
+    if (siteType === 'triangle' && coordinates.length > 3) {
       return coordinates.slice(0, 3)
     }
     return coordinates
