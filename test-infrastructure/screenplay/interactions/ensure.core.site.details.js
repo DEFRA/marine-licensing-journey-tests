@@ -57,7 +57,35 @@ export default class EnsureCoreSiteDetails extends Task {
     const siteDetails = exemption?.siteDetails
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.coordinateSystemValue)
+    await this.verifyCoordinateSystem(browseTheWeb, siteDetails)
     await this.verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails)
+  }
+
+  async verifyCoordinateSystem(browseTheWeb, siteDetails) {
+    const coordinateSystem = siteDetails.sites?.[0]?.coordinateSystem
+    if (!coordinateSystem) {
+      return
+    }
+
+    const expectedDisplayText = this._mapCoordinateSystemToDisplayText(coordinateSystem)
+    const actualText = await browseTheWeb.getText(
+      ReviewSiteDetailsPage.coordinateSystemValue
+    )
+
+    const normalizedActual = actualText.trim().replaceAll('\n', ' ')
+    if (normalizedActual !== expectedDisplayText) {
+      expect.fail(
+        `Coordinate system mismatch on Review Site Details page. Expected: "${expectedDisplayText}", but found: "${actualText}"`
+      )
+    }
+  }
+
+  _mapCoordinateSystemToDisplayText(coordinateSystem) {
+    const mappings = {
+      WGS84: 'WGS84 (World Geodetic System 1984) Latitude and longitude',
+      OSGB36: 'British National Grid (OSGB36) Eastings and Northings'
+    }
+    return mappings[coordinateSystem] || coordinateSystem
   }
 
   async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
