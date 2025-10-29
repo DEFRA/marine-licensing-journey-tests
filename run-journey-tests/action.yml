@@ -284,21 +284,21 @@ runs:
         echo "=== Gathering all allure results ==="
         # Find all allure-results directories
         ALLURE_DIRS=$(find . -maxdepth 1 -type d -name "allure-results*" | tr '\n' ' ')
-        
+
         if [ -z "$ALLURE_DIRS" ]; then
           echo "⚠️ No allure-results directories found"
           exit 0
         fi
-        
+
         echo "Found allure result directories: $ALLURE_DIRS"
-        
+
         # Count total result files
         TOTAL_RESULTS=$(find $ALLURE_DIRS -name "*-result.json" 2>/dev/null | wc -l)
         echo "Total test result files found: $TOTAL_RESULTS"
-        
+
         # Generate report from all result directories
         npx allure-commandline@latest generate $ALLURE_DIRS --clean --single-file --output allure-report
-        
+
         echo "✅ Allure report generated successfully"
 
     - name: Parse test results
