@@ -67,7 +67,8 @@ export default class EnsureCoreSiteDetails extends Task {
       return
     }
 
-    const expectedDisplayText = this._mapCoordinateSystemToDisplayText(coordinateSystem)
+    const expectedDisplayText =
+      this._mapCoordinateSystemToDisplayText(coordinateSystem)
     const actualText = await browseTheWeb.getText(
       ReviewSiteDetailsPage.coordinateSystemValue
     )
