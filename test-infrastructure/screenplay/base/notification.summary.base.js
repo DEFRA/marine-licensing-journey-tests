@@ -336,23 +336,47 @@ export default class NotificationSummaryBase extends Task {
   }
 
   getCoordinatesFromSiteDetails(siteDetails) {
-    const firstSite = siteDetails.sites?.[0]
-    const allCoordinates =
-      siteDetails?.polygonData?.coordinates ||
-      firstSite?.polygonData?.coordinates ||
-      siteDetails?.coordinates ||
-      []
+    const allCoordinates = this._extractCoordinates(siteDetails)
     return this._limitTriangleCoordinates(siteDetails, allCoordinates)
   }
 
-  _limitTriangleCoordinates(siteDetails, coordinates) {
+  _extractCoordinates(siteDetails) {
+    const topLevelCoordinates = this._getTopLevelCoordinates(siteDetails)
+    if (topLevelCoordinates.length > 0) {
+      return topLevelCoordinates
+    }
+
+    const siteSpecificCoordinates =
+      this._getSiteSpecificCoordinates(siteDetails)
+    return siteSpecificCoordinates
+  }
+
+  _getTopLevelCoordinates(siteDetails) {
+    return (
+      siteDetails?.polygonData?.coordinates || siteDetails?.coordinates || []
+    )
+  }
+
+  _getSiteSpecificCoordinates(siteDetails) {
     const firstSite = siteDetails.sites?.[0]
-    const siteType = siteDetails?.siteType || firstSite?.siteType
+    return firstSite?.polygonData?.coordinates || []
+  }
+
+  _limitTriangleCoordinates(siteDetails, coordinates) {
+    const siteType = this._getSiteType(siteDetails)
 
     if (siteType === 'triangle' && coordinates.length > 3) {
       return coordinates.slice(0, 3)
     }
     return coordinates
+  }
+
+  _getSiteType(siteDetails) {
+    if (siteDetails?.siteType) {
+      return siteDetails.siteType
+    }
+    const firstSite = siteDetails.sites?.[0]
+    return firstSite?.siteType
   }
 
   async verifyStartAndEndPointsContent(browseTheWeb, coordinates) {
