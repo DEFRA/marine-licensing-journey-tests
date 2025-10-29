@@ -61,6 +61,7 @@ services:
       PORT: 3000
       NODE_ENV: development
       USE_SINGLE_INSTANCE_CACHE: true
+      SESSION_CACHE_ENGINE: redis
       MARINE_LICENSING_BACKEND_API_URL: http://marine-licensing-backend:3001
       CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
       APP_BASE_URL: http://marine-licensing-frontend:3000
