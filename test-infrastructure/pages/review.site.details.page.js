@@ -43,6 +43,15 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static activityDescriptionValue =
     '//dt[contains(text(), "Activity description")]/following-sibling::dd'
 
+  static activityDatesChangeLink =
+    '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static activityDescriptionChangeLink =
+    '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static sameActivityDatesChangeLink =
+    '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Are the activity dates the same for every site?")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static sameActivityDescriptionChangeLink =
+    '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Is the activity description the same for every site?")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+
   static getSiteName(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd[1]`
   }
