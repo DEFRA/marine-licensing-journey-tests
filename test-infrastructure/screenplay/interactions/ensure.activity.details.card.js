@@ -1,3 +1,4 @@
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
@@ -55,11 +56,11 @@ export default class EnsureActivityDetailsCard extends Task {
   async assertActivityDates(browseTheWeb, activityDates) {
     const locator = ReviewSiteDetailsPage.activityDatesValue
 
-    if (activityDates.start && activityDates.end) {
-      const expectedDateRange = `${activityDates.start} to ${activityDates.end}`
+    if (activityDates.startDate && activityDates.endDate) {
+      const formattedStart = formatDateObjectToDisplay(activityDates.startDate)
+      const formattedEnd = formatDateObjectToDisplay(activityDates.endDate)
+      const expectedDateRange = `${formattedStart} to ${formattedEnd}`
       await browseTheWeb.expectElementToContainText(locator, expectedDateRange)
-    } else if (activityDates.startDate && activityDates.endDate) {
-      await browseTheWeb.expectElementToBePresent(locator)
     }
   }
 

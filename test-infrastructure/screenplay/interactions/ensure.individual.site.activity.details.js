@@ -1,5 +1,6 @@
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 
 export default class EnsureIndividualSiteActivityDetails extends Task {
   static areCorrect() {
@@ -64,22 +65,16 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
     const activityDates = site?.activityDates
     if (!activityDates) return
 
-    let expectedDateRange
-    if (activityDates.start && activityDates.end) {
-      expectedDateRange = `${activityDates.start} to ${activityDates.end}`
-    } else if (activityDates.startDate && activityDates.endDate) {
-      await browseTheWeb.expectElementToBePresent(
-        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
-      )
-      return
-    } else {
-      return
-    }
+    if (activityDates.startDate && activityDates.endDate) {
+      const formattedStart = formatDateObjectToDisplay(activityDates.startDate)
+      const formattedEnd = formatDateObjectToDisplay(activityDates.endDate)
+      const expectedDateRange = `${formattedStart} to ${formattedEnd}`
 
-    await browseTheWeb.expectElementToContainText(
-      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
-      expectedDateRange
-    )
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
+        expectedDateRange
+      )
+    }
   }
 
   async verifySiteActivityDescription(browseTheWeb, siteNumber, site) {

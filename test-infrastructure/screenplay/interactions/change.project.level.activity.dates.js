@@ -19,7 +19,6 @@ export default class ChangeProjectLevelActivityDates extends Task {
         site.activityDates = newActivityDates
       })
     }
-    actor.remembers('exemption', exemption)
 
     await actor.attemptsTo(
       Click.on(ReviewSiteDetailsPage.activityDatesChangeLink)
