@@ -14,7 +14,8 @@ import {
   ChangeSiteLevelActivityDates,
   EnsureActivityDetailsCard,
   EnsureIndividualSiteActivityDetails,
-  EnsurePageHeading
+  EnsurePageHeading,
+  SwitchToProjectLevelActivityDates
 } from '~/test-infrastructure/screenplay/interactions'
 
 Given(
@@ -79,3 +80,12 @@ Then(
     )
   }
 )
+
+When('the user changes to project level activity dates', async function () {
+  await this.actor.attemptsTo(SwitchToProjectLevelActivityDates.now())
+})
+
+Then('the new activity dates are set at project level', async function () {
+  await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  await this.actor.attemptsTo(EnsureActivityDetailsCard.isCorrect())
+})

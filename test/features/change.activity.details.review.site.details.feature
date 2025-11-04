@@ -14,8 +14,10 @@ SO THAT I can ensure that my sites are correct
     When the user changes the activity dates for site 1
     Then the activity dates are updated on the review site details page for site 1
 
-  @wip
   Scenario: The user can switch from project to site level activity dates
+    Given a user has reached the review site details page with site level activity dates
+    When the user changes to project level activity dates
+    Then the new activity dates are set at project level
 
   @wip
   Scenario: The user can switch from site level to project level activity dates

@@ -4,6 +4,7 @@ export { default as AddMissingActivityDescription } from './add.missing.activity
 export { default as AddMissingSiteName } from './add.missing.site.name'
 export { default as ChangeProjectLevelActivityDates } from './change.project.level.activity.dates'
 export { default as ChangeSiteLevelActivityDates } from './change.site.level.activity.dates'
+export { default as SwitchToProjectLevelActivityDates } from './switch.to.project.level.activity.dates'
 export { default as ClickAddAnotherPoint } from './button-interactions/click.add.another.point'
 export { default as ClickButton } from './button-interactions/click.button'
 export { default as ClickCancel } from './button-interactions/click.cancel'
