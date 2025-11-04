@@ -19,11 +19,15 @@ SO THAT I can ensure that my sites are correct
     When the user changes to project level activity dates
     Then the new activity dates are set at project level
 
-  @wip
   Scenario: The user can switch from project level to site level activity dates
+    Given a user has reached the review site details page with project level activity dates
+    When the user changes to site level activity dates
+    Then the new activity dates are applied to all sites at site level
 
-  @wip
   Scenario: The user can change their project level activity description
+    Given a user has reached the review site details page with project level activity descriptions
+    When the user changes the project level activity description
+    Then the new activity description is set at project level
 
   @wip
   Scenario: The user can change their site level activity descriptions

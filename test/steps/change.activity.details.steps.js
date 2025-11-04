@@ -11,11 +11,13 @@ import {
 } from '~/test-infrastructure/screenplay'
 import {
   ChangeProjectLevelActivityDates,
+  ChangeProjectLevelActivityDescription,
   ChangeSiteLevelActivityDates,
   EnsureActivityDetailsCard,
   EnsureIndividualSiteActivityDetails,
   EnsurePageHeading,
-  SwitchToProjectLevelActivityDates
+  SwitchToProjectLevelActivityDates,
+  SwitchToSiteLevelActivityDates
 } from '~/test-infrastructure/screenplay/interactions'
 
 Given(
@@ -86,6 +88,48 @@ When('the user changes to project level activity dates', async function () {
 })
 
 Then('the new activity dates are set at project level', async function () {
+  await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  await this.actor.attemptsTo(EnsureActivityDetailsCard.isCorrect())
+})
+
+When('the user changes to site level activity dates', async function () {
+  await this.actor.attemptsTo(SwitchToSiteLevelActivityDates.now())
+})
+
+Then(
+  'the new activity dates are applied to all sites at site level',
+  async function () {
+    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+    await this.actor.attemptsTo(
+      EnsureIndividualSiteActivityDetails.areCorrect()
+    )
+  }
+)
+
+Given(
+  'a user has reached the review site details page with project level activity descriptions',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(CompleteSiteDetails.now())
+    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  }
+)
+
+When(
+  'the user changes the project level activity description',
+  async function () {
+    await this.actor.attemptsTo(ChangeProjectLevelActivityDescription.now())
+  }
+)
+
+Then('the new activity description is set at project level', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureActivityDetailsCard.isCorrect())
 })
