@@ -1,10 +1,19 @@
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
-import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 
 export default class EnsureIndividualSiteActivityDetails extends Task {
+  constructor(siteNumber = null) {
+    super()
+    this.siteNumber = siteNumber
+  }
+
   static areCorrect() {
     return new EnsureIndividualSiteActivityDetails()
+  }
+
+  static forSite(siteNumber) {
+    return new EnsureIndividualSiteActivityDetails(siteNumber)
   }
 
   async performAs(actor) {
@@ -21,6 +30,18 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
 
     const sites = siteDetails?.sites || []
 
+    if (this.siteNumber) {
+      const siteIndex = this.siteNumber - 1
+      const site = sites[siteIndex]
+      await this.verifySiteActivityDetails(
+        browseTheWeb,
+        this.siteNumber,
+        site,
+        validationConfig
+      )
+      return
+    }
+
     for (let i = 0; i < sites.length; i++) {
       const siteNumber = i + 1
       const site = sites[i]
@@ -36,7 +57,6 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
 
   shouldValidateIndividualSites(siteDetails) {
     if (!siteDetails) return false
-    if (siteDetails.coordinatesEntryMethod === 'file-upload') return false
     if (!siteDetails.multipleSitesEnabled) return false
 
     const hasIndividualDates = siteDetails?.sameActivityDates === false

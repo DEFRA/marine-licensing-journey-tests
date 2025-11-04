@@ -76,6 +76,10 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
   }
 
+  static getSiteActivityDatesChangeLink(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]`
+  }
+
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
   static backLink = 'a.govuk-back-link'
