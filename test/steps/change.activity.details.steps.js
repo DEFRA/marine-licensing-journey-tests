@@ -29,7 +29,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDescriptions()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
@@ -57,7 +57,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithDifferentActivityDatesAndSameDescriptions()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
@@ -115,7 +115,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDescriptions()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
@@ -143,7 +143,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDifferentDescriptions()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())

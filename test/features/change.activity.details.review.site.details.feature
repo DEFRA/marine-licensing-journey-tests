@@ -1,8 +1,10 @@
-@issue=ML-695
+@issue=ML-695 @issue=ML-696
 Feature: The user can make changes to their activity details from the site details review page
 AS an applicant
 I WANT to be able to change answers from the “Review site details” page
 SO THAT I can ensure that my sites are correct
+
+NOTE: These scenarios randomly generate multi-site details either manually or using file upload to provide coverage over time without test duplication.
 
   Scenario: The user can change their project level activity dates
     Given a user has reached the review site details page with project level activity dates
