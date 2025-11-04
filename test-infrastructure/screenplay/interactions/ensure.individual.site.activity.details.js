@@ -23,29 +23,38 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
 
     if (!this.shouldValidateIndividualSites(siteDetails)) return
 
-    const validationConfig = {
-      hasIndividualDates: siteDetails?.sameActivityDates === false,
-      hasIndividualDescriptions: siteDetails?.sameActivityDescription === false
-    }
-
+    const validationConfig = this.buildValidationConfig(siteDetails)
     const sites = siteDetails?.sites || []
 
     if (this.siteNumber) {
-      const siteIndex = this.siteNumber - 1
-      const site = sites[siteIndex]
-      await this.verifySiteActivityDetails(
-        browseTheWeb,
-        this.siteNumber,
-        site,
-        validationConfig
-      )
-      return
+      await this.validateSingleSite(browseTheWeb, sites, validationConfig)
+    } else {
+      await this.validateAllSites(browseTheWeb, sites, validationConfig)
     }
+  }
 
+  buildValidationConfig(siteDetails) {
+    return {
+      hasIndividualDates: siteDetails?.sameActivityDates === false,
+      hasIndividualDescriptions: siteDetails?.sameActivityDescription === false
+    }
+  }
+
+  async validateSingleSite(browseTheWeb, sites, validationConfig) {
+    const siteIndex = this.siteNumber - 1
+    const site = sites[siteIndex]
+    await this.verifySiteActivityDetails(
+      browseTheWeb,
+      this.siteNumber,
+      site,
+      validationConfig
+    )
+  }
+
+  async validateAllSites(browseTheWeb, sites, validationConfig) {
     for (let i = 0; i < sites.length; i++) {
       const siteNumber = i + 1
       const site = sites[i]
-
       await this.verifySiteActivityDetails(
         browseTheWeb,
         siteNumber,
