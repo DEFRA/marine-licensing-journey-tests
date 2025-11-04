@@ -1,6 +1,5 @@
 @issue=ML-695
 Feature: The user can make changes to their activity details from the site details review page
-
 AS an applicant
 I WANT to be able to change answers from the “Review site details” page
 SO THAT I can ensure that my sites are correct
@@ -11,9 +10,9 @@ SO THAT I can ensure that my sites are correct
     Then the activity dates are updated on the review site details page
 
   Scenario: The user can change their site level activity dates
-  Given a user has reached the review site details page with site level activity dates
-  When the user changes the activity dates for site 1
-  Then the activity dates are updated on the review site details page for site 1
+    Given a user has reached the review site details page with site level activity dates
+    When the user changes the activity dates for site 1
+    Then the activity dates are updated on the review site details page for site 1
 
   @wip
   Scenario: The user can switch from project to site level activity dates
