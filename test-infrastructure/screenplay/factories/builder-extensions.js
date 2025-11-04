@@ -1,4 +1,5 @@
 import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
+import ActivityDescriptionModel from '../models/activity.description.model.js'
 import ActivityDatesFactory from './activity-dates.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
@@ -13,7 +14,7 @@ function setExemptionLevelProperties(builder, siteDetails) {
   if (siteDetails.sameActivityDescription) {
     builder.setProperty(
       'activityDescription',
-      'Installation of temporary mooring equipment for marine research vessel operations. All works will be conducted in accordance with marine licensing conditions and environmental guidelines.'
+      ActivityDescriptionModel.generateActivityDescription()
     )
   }
 }
