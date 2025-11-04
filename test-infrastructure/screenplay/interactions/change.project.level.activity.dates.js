@@ -14,11 +14,6 @@ export default class ChangeProjectLevelActivityDates extends Task {
     const newActivityDates = ActivityDatesModel.generateValidActivityDates()
 
     exemption.activityDates = newActivityDates
-    if (exemption.siteDetails?.sites) {
-      exemption.siteDetails.sites.forEach((site) => {
-        site.activityDates = newActivityDates
-      })
-    }
 
     await actor.attemptsTo(
       Click.on(ReviewSiteDetailsPage.activityDatesChangeLink)

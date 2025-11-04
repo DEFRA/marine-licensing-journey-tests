@@ -18,7 +18,7 @@ export default class SwitchToProjectLevelActivityDates extends Task {
     exemption.siteDetails.sameActivityDates = true
     if (exemption.siteDetails?.sites) {
       exemption.siteDetails.sites.forEach((site) => {
-        site.activityDates = newActivityDates
+        delete site.activityDates
       })
     }
 

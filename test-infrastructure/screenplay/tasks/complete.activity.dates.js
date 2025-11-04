@@ -26,8 +26,11 @@ export default class CompleteActivityDates extends Task {
     }
 
     const siteIndex = this.siteNumber - 1
-    const activityDates =
-      exemption.siteDetails?.sites?.[siteIndex]?.activityDates
+    const isProjectLevel = exemption.siteDetails?.sameActivityDates === true
+
+    const activityDates = isProjectLevel
+      ? exemption.activityDates
+      : exemption.siteDetails?.sites?.[siteIndex]?.activityDates
 
     if (!activityDates) {
       expect.fail(ERROR_MESSAGES.MISSING_ACTIVITY_DATES)

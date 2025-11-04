@@ -19,6 +19,7 @@ export default class ChangeSiteLevelActivityDates extends Task {
     const siteIndex = this.siteNumber - 1
     const newActivityDates = ActivityDatesModel.generateValidActivityDates()
 
+    delete exemption.activityDates
     if (exemption.siteDetails?.sites?.[siteIndex]) {
       exemption.siteDetails.sites[siteIndex].activityDates = newActivityDates
     }

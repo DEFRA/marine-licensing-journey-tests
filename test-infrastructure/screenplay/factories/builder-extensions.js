@@ -3,14 +3,18 @@ import ActivityDatesFactory from './activity-dates.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
 function setExemptionLevelProperties(builder, siteDetails) {
-  const firstSite = siteDetails.sites?.[0]
-
-  if (siteDetails.sameActivityDates && firstSite?.activityDates) {
-    builder.setProperty('activityDates', firstSite.activityDates)
+  if (siteDetails.sameActivityDates) {
+    builder.setProperty(
+      'activityDates',
+      ActivityDatesFactory.createValidDates()
+    )
   }
 
-  if (siteDetails.sameActivityDescription && firstSite?.activityDescription) {
-    builder.setProperty('activityDescription', firstSite.activityDescription)
+  if (siteDetails.sameActivityDescription) {
+    builder.setProperty(
+      'activityDescription',
+      'Installation of temporary mooring equipment for marine research vessel operations. All works will be conducted in accordance with marine licensing conditions and environmental guidelines.'
+    )
   }
 }
 
