@@ -10,6 +10,7 @@ import {
   ClickConfirmAndSend,
   ClickReviewAndSend,
   CompleteAllTasks,
+  CompleteProjectName,
   EnsureConfirmationPage,
   Navigate
 } from '~/test-infrastructure/screenplay'
@@ -42,11 +43,12 @@ Then(
   }
 )
 
-Given('the user is on any page within the service', async function () {
+Given('the user is on any page within the service apart from the project name page', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(CompleteProjectName.now())
 })
 
 When('the user clicks the Defra account link in the header', async function () {
