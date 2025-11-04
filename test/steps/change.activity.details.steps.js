@@ -13,11 +13,14 @@ import {
   ChangeProjectLevelActivityDates,
   ChangeProjectLevelActivityDescription,
   ChangeSiteLevelActivityDates,
+  ChangeSiteLevelActivityDescription,
   EnsureActivityDetailsCard,
   EnsureIndividualSiteActivityDetails,
   EnsurePageHeading,
   SwitchToProjectLevelActivityDates,
-  SwitchToSiteLevelActivityDates
+  SwitchToProjectLevelActivityDescriptions,
+  SwitchToSiteLevelActivityDates,
+  SwitchToSiteLevelActivityDescriptions
 } from '~/test-infrastructure/screenplay/interactions'
 
 Given(
@@ -133,3 +136,59 @@ Then('the new activity description is set at project level', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureActivityDetailsCard.isCorrect())
 })
+
+Given(
+  'a user has reached the review site details page with site level activity descriptions',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+    await this.actor.attemptsTo(CompleteSiteDetails.now())
+    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  }
+)
+
+When(
+  'the user changes the site level activity description for site {int}',
+  async function (siteNumber) {
+    await this.actor.attemptsTo(
+      ChangeSiteLevelActivityDescription.forSite(siteNumber)
+    )
+  }
+)
+
+Then(
+  'the new activity description is set at site level for site {int}',
+  async function (siteNumber) {
+    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+    await this.actor.attemptsTo(
+      EnsureIndividualSiteActivityDetails.forSite(siteNumber)
+    )
+  }
+)
+
+When('the user changes to site level activity descriptions', async function () {
+  await this.actor.attemptsTo(SwitchToSiteLevelActivityDescriptions.now())
+})
+
+Then(
+  'the new activity description is applied to all sites at site level',
+  async function () {
+    await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+    await this.actor.attemptsTo(
+      EnsureIndividualSiteActivityDetails.areCorrect()
+    )
+  }
+)
+
+When(
+  'the user changes to project level activity descriptions',
+  async function () {
+    await this.actor.attemptsTo(SwitchToProjectLevelActivityDescriptions.now())
+  }
+)

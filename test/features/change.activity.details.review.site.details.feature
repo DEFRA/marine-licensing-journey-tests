@@ -29,11 +29,17 @@ SO THAT I can ensure that my sites are correct
     When the user changes the project level activity description
     Then the new activity description is set at project level
 
-  @wip
   Scenario: The user can change their site level activity descriptions
+    Given a user has reached the review site details page with site level activity descriptions
+    When the user changes the site level activity description for site 1
+    Then the new activity description is set at site level for site 1
 
-  @wip
   Scenario: The user can switch from project to site level activity description
+    Given a user has reached the review site details page with project level activity descriptions
+    When the user changes to site level activity descriptions
+    Then the new activity description is applied to all sites at site level
 
-  @wip
   Scenario: The user can switch from site level to project level activity descriptions
+    Given a user has reached the review site details page with site level activity descriptions
+    When the user changes to project level activity descriptions
+    Then the new activity description is set at project level
