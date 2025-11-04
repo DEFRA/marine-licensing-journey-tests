@@ -8,7 +8,7 @@ Feature: Submits a full exemption notification in environments integrated with r
 
   @issue=ML-277
   Scenario: User can access their Defra account from the service header
-    Given the user is on any page within the service
+    Given the user is on any page within the service apart from the project name page
     When the user clicks the Defra account link in the header
     Then the user is taken to the Defra account management page
 
