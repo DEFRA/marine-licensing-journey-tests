@@ -1,4 +1,5 @@
-@issue=ML-379 @d365
+@issue=ML-379 @wip
+# changing tag to wip until ticket ML-556 is resolved
 Feature: A new case is created in D365 when an exemption notification is submitted
 
 This feature logs into the Dynamics 365 UI and checks the new case has been created in D365.

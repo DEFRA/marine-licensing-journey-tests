@@ -12,7 +12,7 @@ export default class AuthenticateWithAPermanentUser extends Task {
   async performAs(actor) {
     const browseTheWeb = actor.ability
     const testUser = {
-      id: '38 51 93 67 55 42',
+      id: process.env.DEFRA_ID_USER_ID,
       password: process.env.DEFRA_ID_USER_PASSWORD
     }
 
