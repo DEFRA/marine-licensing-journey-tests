@@ -12,8 +12,10 @@ export class CoordinateEntryStrategy {
   }
 
   async enterCoordinates(siteDetails, config = {}) {
-    await this.selectSiteType(siteDetails.siteType)
-    await this.selectCoordinateSystem(siteDetails.coordinateSystem)
+    if (!config.skipSiteTypeAndCoordinateSystem) {
+      await this.selectSiteType(siteDetails.siteType)
+      await this.selectCoordinateSystem(siteDetails.coordinateSystem)
+    }
     await this.performCoordinateEntry(siteDetails, config)
   }
 

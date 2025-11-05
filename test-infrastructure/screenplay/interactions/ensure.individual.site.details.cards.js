@@ -72,10 +72,10 @@ export default class EnsureIndividualSiteDetailsCards extends Task {
     const siteType = site?.siteType
 
     if (siteType === 'circle') {
-      return 'Manually enter one set of coordinates and a width to create a circular site'
+      return 'Enter one set of coordinates and a width to create a circular site'
     }
 
-    return 'Manually enter multiple sets of coordinates to mark the boundary of the site'
+    return 'Enter multiple sets of coordinates to mark the boundary of the site'
   }
 
   _mapCoordinateSystemToDisplayText(coordinateSystem) {
