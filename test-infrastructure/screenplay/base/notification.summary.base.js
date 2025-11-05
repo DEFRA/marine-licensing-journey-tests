@@ -73,8 +73,12 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateActivityDates(browseTheWeb, exemptionData) {
-    // Use top-level activityDates (what check your answers displays)
-    // not site-specific dates
+    const isMultiSite = this._isMultiSite(exemptionData.siteDetails)
+
+    if (isMultiSite) {
+      return
+    }
+
     const activityDates = exemptionData.activityDates
     if (activityDates) {
       await this._validateDateField(browseTheWeb, activityDates, 'startDate')
@@ -92,8 +96,13 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateActivityDetails(browseTheWeb, exemptionData) {
-    const pageLocators = this._getPageLocators()
+    const isMultiSite = this._isMultiSite(exemptionData.siteDetails)
 
+    if (isMultiSite) {
+      return
+    }
+
+    const pageLocators = this._getPageLocators()
     const activityDescription =
       exemptionData.siteDetails.sites[0].activityDescription
     if (activityDescription) {
@@ -105,7 +114,26 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateSiteDetails(browseTheWeb, exemptionData) {
-    if (exemptionData.siteDetails) {
+    if (!exemptionData.siteDetails) {
+      return
+    }
+
+    const isMultiSite = this._isMultiSite(exemptionData.siteDetails)
+
+    if (isMultiSite) {
+      await this._validateProvidingSiteLocationCard(
+        browseTheWeb,
+        exemptionData.siteDetails
+      )
+      await this._validateActivityDetailsCardMultiSite(
+        browseTheWeb,
+        exemptionData
+      )
+      await this._validateMultipleSiteDetailsCards(
+        browseTheWeb,
+        exemptionData.siteDetails
+      )
+    } else {
       await this._validateMethodOfProvidingSiteLocation(
         browseTheWeb,
         exemptionData.siteDetails
@@ -127,6 +155,10 @@ export default class NotificationSummaryBase extends Task {
         )
       }
     }
+  }
+
+  _isMultiSite(siteDetails) {
+    return siteDetails.sites && siteDetails.sites.length > 1
   }
 
   async verifyCoordinateDisplayBySiteType(browseTheWeb, siteDetails) {
@@ -403,5 +435,213 @@ export default class NotificationSummaryBase extends Task {
       return `${coordinate.eastings}, ${coordinate.northings}`
     }
     throw new Error(`Invalid coordinate format: ${JSON.stringify(coordinate)}`)
+  }
+
+  async _validateProvidingSiteLocationCard(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
+
+    await browseTheWeb.isDisplayed(pageLocators.providingSiteLocation.heading)
+
+    await this._validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails)
+
+    await browseTheWeb.expectElementToContainText(
+      pageLocators.providingSiteLocation.moreThanOneSiteValue,
+      'Yes'
+    )
+
+    if (this._isFileUpload(siteDetails)) {
+      await this._validateFileUploadDetails(browseTheWeb, siteDetails)
+    }
+  }
+
+  async _validateActivityDetailsCardMultiSite(browseTheWeb, exemptionData) {
+    const pageLocators = this._getPageLocators()
+    const siteDetails = exemptionData.siteDetails
+
+    await browseTheWeb.isDisplayed(pageLocators.activityDetails.heading)
+
+    await this._validateSameActivityDatesQuestion(browseTheWeb, siteDetails)
+    await this._validateSameActivityDescriptionQuestion(
+      browseTheWeb,
+      siteDetails
+    )
+
+    if (siteDetails.sameActivityDates && exemptionData.activityDates) {
+      await this._validateDateField(
+        browseTheWeb,
+        exemptionData.activityDates,
+        'startDate'
+      )
+      await this._validateDateField(
+        browseTheWeb,
+        exemptionData.activityDates,
+        'endDate'
+      )
+    }
+
+    if (
+      siteDetails.sameActivityDescription &&
+      siteDetails.sites[0].activityDescription
+    ) {
+      await browseTheWeb.expectElementToContainText(
+        pageLocators.activityDetails.activityDescriptionValue,
+        siteDetails.sites[0].activityDescription
+      )
+    }
+  }
+
+  async _validateSameActivityDatesQuestion(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
+    const sameActivityDates = siteDetails.sameActivityDates ? 'Yes' : 'No'
+    await browseTheWeb.expectElementToHaveExactText(
+      pageLocators.activityDetails.sameActivityDatesValue,
+      sameActivityDates
+    )
+  }
+
+  async _validateSameActivityDescriptionQuestion(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
+    const sameActivityDescription = siteDetails.sameActivityDescription
+      ? 'Yes'
+      : 'No'
+    await browseTheWeb.expectElementToHaveExactText(
+      pageLocators.activityDetails.sameActivityDescriptionValue,
+      sameActivityDescription
+    )
+  }
+
+  async _validateMultipleSiteDetailsCards(browseTheWeb, siteDetails) {
+    const pageLocators = this._getPageLocators()
+
+    for (let i = 0; i < siteDetails.sites.length; i++) {
+      const siteNumber = i + 1
+      const site = siteDetails.sites[i]
+
+      await browseTheWeb.isDisplayed(
+        pageLocators.constructor.getSiteDetailsCard(siteNumber)
+      )
+
+      await this._validateSiteCard(browseTheWeb, siteNumber, site, siteDetails)
+    }
+  }
+
+  async _validateSiteCard(browseTheWeb, siteNumber, site, siteDetails) {
+    await this._validateSiteName(browseTheWeb, siteNumber, site)
+    await this._validateSiteActivityDates(
+      browseTheWeb,
+      siteNumber,
+      site,
+      siteDetails
+    )
+    await this._validateSiteActivityDescription(
+      browseTheWeb,
+      siteNumber,
+      site,
+      siteDetails
+    )
+
+    if (!this._isFileUpload(siteDetails)) {
+      await this._validateSiteCoordinateSystem(browseTheWeb, siteNumber, site)
+      await this._validateSiteCoordinates(browseTheWeb, siteNumber, site)
+    }
+  }
+
+  async _validateSiteName(browseTheWeb, siteNumber, site) {
+    if (!site.siteName) return
+
+    const pageLocators = this._getPageLocators()
+    const siteNameValue = pageLocators.constructor.getSiteDetailsCardField(
+      siteNumber,
+      'Site name'
+    )
+    await browseTheWeb.expectElementToHaveExactText(
+      siteNameValue,
+      site.siteName
+    )
+  }
+
+  async _validateSiteActivityDates(
+    browseTheWeb,
+    siteNumber,
+    site,
+    siteDetails
+  ) {
+    if (siteDetails.sameActivityDates || !site.activityDates) return
+
+    const pageLocators = this._getPageLocators()
+    const datesValue = pageLocators.constructor.getSiteDetailsCardField(
+      siteNumber,
+      'Activity dates'
+    )
+    const expectedDates = `${formatDateObjectToDisplay(site.activityDates.startDate)} to ${formatDateObjectToDisplay(site.activityDates.endDate)}`
+    await browseTheWeb.expectElementToContainText(datesValue, expectedDates)
+  }
+
+  async _validateSiteActivityDescription(
+    browseTheWeb,
+    siteNumber,
+    site,
+    siteDetails
+  ) {
+    if (siteDetails.sameActivityDescription || !site.activityDescription) return
+
+    const pageLocators = this._getPageLocators()
+    const descriptionValue = pageLocators.constructor.getSiteDetailsCardField(
+      siteNumber,
+      'Activity description'
+    )
+    await browseTheWeb.expectElementToContainText(
+      descriptionValue,
+      site.activityDescription
+    )
+  }
+
+  async _validateSiteCoordinateSystem(browseTheWeb, siteNumber, site) {
+    if (!site.coordinateSystem) return
+
+    const pageLocators = this._getPageLocators()
+    const coordinateSystemValue =
+      pageLocators.constructor.getSiteDetailsCardField(
+        siteNumber,
+        'Coordinate system'
+      )
+    const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
+      site.coordinateSystem
+    )
+    await browseTheWeb.expectElementToContainText(
+      coordinateSystemValue,
+      expectedDisplayText
+    )
+  }
+
+  async _validateSiteCoordinates(browseTheWeb, siteNumber, site) {
+    if (site.siteType !== 'circle' || !site.circleData) return
+
+    const pageLocators = this._getPageLocators()
+    const coordinatesValue = pageLocators.constructor.getSiteDetailsCardField(
+      siteNumber,
+      'Coordinates at centre of site'
+    )
+    const expectedCoordinates = this._formatCoordinatesForDisplay(
+      site.circleData,
+      site.coordinateSystem
+    )
+    if (expectedCoordinates) {
+      await browseTheWeb.expectElementToContainText(
+        coordinatesValue,
+        expectedCoordinates
+      )
+    }
+
+    if (site.circleData.width) {
+      const widthValue = pageLocators.constructor.getSiteDetailsCardField(
+        siteNumber,
+        'Width of circular site'
+      )
+      await browseTheWeb.expectElementToContainText(
+        widthValue,
+        `${site.circleData.width} metres`
+      )
+    }
   }
 }

@@ -83,6 +83,42 @@ Given(
   }
 )
 
+Given(
+  'the user has completed all the tasks on the task list using a multi site KML upload',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
+Given(
+  'the user has completed all the tasks on the task list using a multi site Shapefile upload',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
+Given(
+  'the user has completed all the tasks on the task list using a multi site manual entry',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forMixedMultipleSitesWithSameActivityDatesAndDescriptions()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+  }
+)
+
 When('the user clicks Review and send', async function () {
   await this.actor.attemptsTo(ClickReviewAndSend.now())
 })

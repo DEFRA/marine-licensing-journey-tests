@@ -54,7 +54,33 @@ export default class NotificationSummaryBasePage {
         '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]',
       activityDescriptionTerm: '//dt[contains(text(), "Activity description")]',
       activityDescriptionValue:
-        '//dt[contains(text(), "Activity description")]/following-sibling::dd[1]'
+        '//dt[contains(text(), "Activity description")]/following-sibling::dd[1]',
+      sameActivityDatesTerm:
+        '//dt[contains(text(), "Are the activity dates the same for every site?")]',
+      sameActivityDatesValue:
+        '//dt[contains(text(), "Are the activity dates the same for every site?")]/following-sibling::dd[1]',
+      sameActivityDescriptionTerm:
+        '//dt[contains(text(), "Is the activity description the same for every site?")]',
+      sameActivityDescriptionValue:
+        '//dt[contains(text(), "Is the activity description the same for every site?")]/following-sibling::dd[1]'
+    },
+
+    providingSiteLocation: {
+      heading:
+        '//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Providing the site location")]',
+      methodOfProvidingSiteLocationTerm:
+        '//dt[contains(text(), "Method of providing site location")]',
+      methodOfProvidingSiteLocationValue:
+        '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd[1]',
+      moreThanOneSiteTerm: '//dt[contains(text(), "More than one site?")]',
+      moreThanOneSiteValue:
+        '//dt[contains(text(), "More than one site?")]/following-sibling::dd[1]',
+      fileTypeTerm: '//dt[contains(text(), "File type")]',
+      fileTypeValue:
+        '//dt[contains(text(), "File type")]/following-sibling::dd[1]',
+      fileUploadedTerm: '//dt[contains(text(), "File uploaded")]',
+      fileUploadedValue:
+        '//dt[contains(text(), "File uploaded")]/following-sibling::dd[1]'
     },
 
     siteDetails: {
@@ -109,5 +135,13 @@ export default class NotificationSummaryBasePage {
       '//dt[contains(text(), "Reference")]/following-sibling::dd[1] | //*[contains(@class, "govuk-panel__body")]//strong | //*[contains(@class, "govuk-body")]//strong',
     submissionDate:
       '//dt[contains(text(), "Date submitted")]/following-sibling::dd[1] | //p[contains(text(), "submitted on")]'
+  }
+
+  static getSiteDetailsCard(siteNumber) {
+    return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Site ${siteNumber} details")]`
+  }
+
+  static getSiteDetailsCardField(siteNumber, fieldName) {
+    return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(text(), "${fieldName}")]/following-sibling::dd[1]`
   }
 }
