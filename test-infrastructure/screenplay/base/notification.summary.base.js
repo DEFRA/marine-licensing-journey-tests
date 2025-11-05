@@ -178,12 +178,8 @@ export default class NotificationSummaryBase extends Task {
 
     if (this._isFileUpload(siteDetails)) {
       expectedText = 'Upload a file with the coordinates of the site'
-    } else if (siteDetails.sites[0].siteType === 'triangle') {
-      expectedText =
-        'Manually enter multiple sets of coordinates to mark the boundary of the site'
     } else {
-      expectedText =
-        'Manually enter one set of coordinates and a width to create a circular site'
+      expectedText = 'Enter the coordinates of the site manually'
     }
 
     await browseTheWeb.expectElementToContainText(
