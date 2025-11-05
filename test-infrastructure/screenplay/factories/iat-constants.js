@@ -150,7 +150,7 @@ export const ACTIVITY_PURPOSE_DISPLAY = {
   REMOVAL: {
     13: 'Shellfish propagation or cultivation',
     17: 'Scientific instruments and associated equipment',
-    '17A': 'Samples for testing and analysis',
+    '17A': 'Samples for testing or analysis',
     '17B': 'Accidental deposits',
     20: 'Flood or flood risk',
     21: 'Dead animals',
