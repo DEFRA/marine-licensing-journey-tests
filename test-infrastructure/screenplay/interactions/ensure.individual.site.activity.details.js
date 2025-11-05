@@ -1,9 +1,19 @@
+import { formatDateObjectToDisplay } from '../../helpers/date-formatter.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 
 export default class EnsureIndividualSiteActivityDetails extends Task {
+  constructor(siteNumber = null) {
+    super()
+    this.siteNumber = siteNumber
+  }
+
   static areCorrect() {
     return new EnsureIndividualSiteActivityDetails()
+  }
+
+  static forSite(siteNumber) {
+    return new EnsureIndividualSiteActivityDetails(siteNumber)
   }
 
   async performAs(actor) {
@@ -13,17 +23,38 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
 
     if (!this.shouldValidateIndividualSites(siteDetails)) return
 
-    const validationConfig = {
+    const validationConfig = this.buildValidationConfig(siteDetails)
+    const sites = siteDetails?.sites || []
+
+    if (this.siteNumber) {
+      await this.validateSingleSite(browseTheWeb, sites, validationConfig)
+    } else {
+      await this.validateAllSites(browseTheWeb, sites, validationConfig)
+    }
+  }
+
+  buildValidationConfig(siteDetails) {
+    return {
       hasIndividualDates: siteDetails?.sameActivityDates === false,
       hasIndividualDescriptions: siteDetails?.sameActivityDescription === false
     }
+  }
 
-    const sites = siteDetails?.sites || []
+  async validateSingleSite(browseTheWeb, sites, validationConfig) {
+    const siteIndex = this.siteNumber - 1
+    const site = sites[siteIndex]
+    await this.verifySiteActivityDetails(
+      browseTheWeb,
+      this.siteNumber,
+      site,
+      validationConfig
+    )
+  }
 
+  async validateAllSites(browseTheWeb, sites, validationConfig) {
     for (let i = 0; i < sites.length; i++) {
       const siteNumber = i + 1
       const site = sites[i]
-
       await this.verifySiteActivityDetails(
         browseTheWeb,
         siteNumber,
@@ -35,7 +66,6 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
 
   shouldValidateIndividualSites(siteDetails) {
     if (!siteDetails) return false
-    if (siteDetails.coordinatesEntryMethod === 'file-upload') return false
     if (!siteDetails.multipleSitesEnabled) return false
 
     const hasIndividualDates = siteDetails?.sameActivityDates === false
@@ -64,22 +94,16 @@ export default class EnsureIndividualSiteActivityDetails extends Task {
     const activityDates = site?.activityDates
     if (!activityDates) return
 
-    let expectedDateRange
-    if (activityDates.start && activityDates.end) {
-      expectedDateRange = `${activityDates.start} to ${activityDates.end}`
-    } else if (activityDates.startDate && activityDates.endDate) {
-      await browseTheWeb.expectElementToBePresent(
-        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber)
-      )
-      return
-    } else {
-      return
-    }
+    if (activityDates.startDate && activityDates.endDate) {
+      const formattedStart = formatDateObjectToDisplay(activityDates.startDate)
+      const formattedEnd = formatDateObjectToDisplay(activityDates.endDate)
+      const expectedDateRange = `${formattedStart} to ${formattedEnd}`
 
-    await browseTheWeb.expectElementToContainText(
-      ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
-      expectedDateRange
-    )
+      await browseTheWeb.expectElementToContainText(
+        ReviewSiteDetailsPage.getSiteActivityDates(siteNumber),
+        expectedDateRange
+      )
+    }
   }
 
   async verifySiteActivityDescription(browseTheWeb, siteNumber, site) {

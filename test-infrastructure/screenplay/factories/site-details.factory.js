@@ -319,10 +319,6 @@ export default class SiteDetailsFactory {
     filePath,
     { sameActivityDates, sameActivityDescription }
   ) {
-    const sharedActivityDates = ActivityDatesModel.generateValidActivityDates()
-    const sharedActivityDescription =
-      ActivityDescriptionModel.generateActivityDescription()
-
     const expectedJsonPath = filePath.replace(/\.(kml|zip)$/, '.expected.json')
     let numberOfSites = 2 // Default to 2 sites
 
@@ -352,21 +348,25 @@ export default class SiteDetailsFactory {
       const siteName = siteNamePatterns[index] || `Marine Site ${index + 1}`
 
       const activityDates = sameActivityDates
-        ? sharedActivityDates
+        ? undefined
         : ActivityDatesModel.generateValidActivityDates()
+
       const activityDescription = sameActivityDescription
-        ? sharedActivityDescription
+        ? undefined
         : ActivityDescriptionModel.generateActivityDescription()
 
-      return {
+      const site = {
         siteName,
         siteNumber: index + 1,
         coordinatesEntryMethod: this.ENTRY_METHODS.FILE_UPLOAD,
         fileType,
-        filePath,
-        activityDates,
-        activityDescription
+        filePath
       }
+
+      if (activityDates) site.activityDates = activityDates
+      if (activityDescription) site.activityDescription = activityDescription
+
+      return site
     })
 
     return {

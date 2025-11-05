@@ -1,16 +1,22 @@
+import { faker } from '@faker-js/faker'
 import CoordinateFiles from '~/test-infrastructure/helpers/coordinate-files.js'
+import ActivityDescriptionModel from '../models/activity.description.model.js'
 import ActivityDatesFactory from './activity-dates.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
 function setExemptionLevelProperties(builder, siteDetails) {
-  const firstSite = siteDetails.sites?.[0]
-
-  if (siteDetails.sameActivityDates && firstSite?.activityDates) {
-    builder.setProperty('activityDates', firstSite.activityDates)
+  if (siteDetails.sameActivityDates) {
+    builder.setProperty(
+      'activityDates',
+      ActivityDatesFactory.createValidDates()
+    )
   }
 
-  if (siteDetails.sameActivityDescription && firstSite?.activityDescription) {
-    builder.setProperty('activityDescription', firstSite.activityDescription)
+  if (siteDetails.sameActivityDescription) {
+    builder.setProperty(
+      'activityDescription',
+      ActivityDescriptionModel.generateActivityDescription()
+    )
   }
 }
 
@@ -208,7 +214,38 @@ export const siteDetailsExtension = {
           sameActivityDescription: false
         }),
         builder
-      )
+      ),
+
+  forRandomMultiSiteWithSameActivityDatesAndDescriptions: (builder) => {
+    const methods = [
+      'forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions',
+      'forMixedMultipleSitesWithSameActivityDatesAndDescriptions'
+    ]
+    const chosenMethod = faker.helpers.arrayElement(methods)
+    return siteDetailsExtension[chosenMethod](builder)
+  },
+
+  forRandomMultiSiteWithDifferentActivityDatesAndSameDescriptions: (
+    builder
+  ) => {
+    const methods = [
+      'forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions',
+      'forMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions'
+    ]
+    const chosenMethod = faker.helpers.arrayElement(methods)
+    return siteDetailsExtension[chosenMethod](builder)
+  },
+
+  forRandomMultiSiteWithSameActivityDatesAndDifferentDescriptions: (
+    builder
+  ) => {
+    const methods = [
+      'forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions',
+      'forMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions'
+    ]
+    const chosenMethod = faker.helpers.arrayElement(methods)
+    return siteDetailsExtension[chosenMethod](builder)
+  }
 }
 
 export const activityDatesExtension = {

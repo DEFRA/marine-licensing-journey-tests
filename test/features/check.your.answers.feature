@@ -22,6 +22,7 @@ THESE TEST ARE CURRENTLY IGNORED AS CYA HAS NOT BEEN UPDATED TO HANDLE THE SITE 
   - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
   - ML-142: Check your answers page displays project summary with IAT context
+  - ML-810: Check your answers page displays multiple sites details
 
   @smoke @circle @wgs84
   Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates, the user is able to access the "Check your answers" page

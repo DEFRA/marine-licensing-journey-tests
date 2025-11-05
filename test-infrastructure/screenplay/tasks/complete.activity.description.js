@@ -27,8 +27,12 @@ export default class CompleteActivityDescription extends Task {
     const browseTheWeb = actor.ability
 
     const siteIndex = this.siteNumber - 1
-    const activityDescription =
-      exemption.siteDetails?.sites?.[siteIndex]?.activityDescription
+    const isProjectLevel =
+      exemption.siteDetails?.sameActivityDescription === true
+
+    const activityDescription = isProjectLevel
+      ? exemption.activityDescription
+      : exemption.siteDetails?.sites?.[siteIndex]?.activityDescription
 
     if (!activityDescription) {
       expect.fail(
