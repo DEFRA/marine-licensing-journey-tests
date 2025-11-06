@@ -60,20 +60,20 @@ THESE TEST ARE CURRENTLY IGNORED AS CYA HAS NOT BEEN UPDATED TO HANDLE THE SITE 
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @broken
+  @kml @multi-site
   Scenario: After successfully uploading a KML file with multiple sites, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a multi site KML upload
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @broken
+  @shapefile @multi-site
   Scenario: After successfully uploading a Shapefile file with multiple sites, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a multi site Shapefile upload
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @broken
-  Scenario: AFter successfully manually entering multiple sites, the user is able to access the "Check your answers" page
+  @manual @multi-site
+  Scenario: After successfully manually entering multiple sites, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list using a multi site manual entry
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format

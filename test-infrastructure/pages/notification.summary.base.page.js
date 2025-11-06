@@ -72,7 +72,8 @@ export default class NotificationSummaryBasePage {
         '//dt[contains(text(), "Method of providing site location")]',
       methodOfProvidingSiteLocationValue:
         '//dt[contains(text(), "Method of providing site location")]/following-sibling::dd[1]',
-      moreThanOneSiteTerm: '//dt[contains(text(), "More than one site") or contains(text(), "Adding multiple sites")]',
+      moreThanOneSiteTerm:
+        '//dt[contains(text(), "More than one site") or contains(text(), "Adding multiple sites")]',
       moreThanOneSiteValue:
         '//dt[contains(text(), "More than one site") or contains(text(), "Adding multiple sites")]/following-sibling::dd[1]',
       fileTypeTerm: '//dt[contains(text(), "File type")]',
