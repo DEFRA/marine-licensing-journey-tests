@@ -606,26 +606,13 @@ export default class NotificationSummaryBase extends Task {
         siteNumber,
         'Coordinate system'
       )
+    const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
+      site.coordinateSystem
+    )
+    const actualText = await browseTheWeb.getText(coordinateSystemValue)
+    const normalizedText = actualText.trim().replaceAll('\n', ' ')
 
-    if (site.coordinateSystem === 'WGS84') {
-      await browseTheWeb.expectElementToContainText(
-        coordinateSystemValue,
-        'WGS84 (World Geodetic System 1984)'
-      )
-      await browseTheWeb.expectElementToContainText(
-        coordinateSystemValue,
-        'Latitude and longitude'
-      )
-    } else {
-      await browseTheWeb.expectElementToContainText(
-        coordinateSystemValue,
-        'British National Grid (OSGB36)'
-      )
-      await browseTheWeb.expectElementToContainText(
-        coordinateSystemValue,
-        'Eastings and Northings'
-      )
-    }
+    expect(normalizedText).to.equal(expectedDisplayText)
   }
 
   async _validateSiteCoordinates(browseTheWeb, siteNumber, site) {
