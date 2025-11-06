@@ -467,15 +467,9 @@ export default class NotificationSummaryBase extends Task {
     )
 
     if (siteDetails.sameActivityDates && exemptionData.activityDates) {
-      await this._validateDateField(
+      await this._validateActivityDatesMultiSite(
         browseTheWeb,
-        exemptionData.activityDates,
-        'startDate'
-      )
-      await this._validateDateField(
-        browseTheWeb,
-        exemptionData.activityDates,
-        'endDate'
+        exemptionData.activityDates
       )
     }
 
@@ -488,6 +482,17 @@ export default class NotificationSummaryBase extends Task {
         siteDetails.sites[0].activityDescription
       )
     }
+  }
+
+  async _validateActivityDatesMultiSite(browseTheWeb, activityDates) {
+    const pageLocators = this._getPageLocators()
+    const startDate = formatDateObjectToDisplay(activityDates.startDate)
+    const endDate = formatDateObjectToDisplay(activityDates.endDate)
+    const expectedText = `${startDate} to ${endDate}`
+    await browseTheWeb.expectElementToHaveExactText(
+      pageLocators.activityDetails.activityDatesValue,
+      expectedText
+    )
   }
 
   async _validateSameActivityDatesQuestion(browseTheWeb, siteDetails) {

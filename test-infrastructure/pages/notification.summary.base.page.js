@@ -55,6 +55,9 @@ export default class NotificationSummaryBasePage {
       activityDescriptionTerm: '//dt[contains(text(), "Activity description")]',
       activityDescriptionValue:
         '//dt[contains(text(), "Activity description")]/following-sibling::dd[1]',
+      activityDatesTerm: '//dt[contains(text(), "Activity dates")]',
+      activityDatesValue:
+        '//dt[contains(text(), "Activity dates")]/following-sibling::dd[1]',
       sameActivityDatesTerm:
         '//dt[contains(text(), "Are the activity dates the same for every site?")]',
       sameActivityDatesValue:
