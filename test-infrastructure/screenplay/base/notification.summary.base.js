@@ -444,13 +444,13 @@ export default class NotificationSummaryBase extends Task {
 
     await this._validateMethodOfProvidingSiteLocation(browseTheWeb, siteDetails)
 
-    await browseTheWeb.expectElementToContainText(
-      pageLocators.providingSiteLocation.moreThanOneSiteValue,
-      'Yes'
-    )
-
     if (this._isFileUpload(siteDetails)) {
       await this._validateFileUploadDetails(browseTheWeb, siteDetails)
+    } else {
+      await browseTheWeb.expectElementToContainText(
+        pageLocators.providingSiteLocation.moreThanOneSiteValue,
+        'Yes'
+      )
     }
   }
 

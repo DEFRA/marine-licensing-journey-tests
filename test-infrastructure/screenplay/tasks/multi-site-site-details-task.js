@@ -57,10 +57,7 @@ export default class MultiSiteSiteDetailsTask extends BaseSiteDetailsTask {
       }
 
       const strategy = new CoordinateEntryStrategy(this.browseTheWeb)
-      await strategy.enterCoordinates(currentSite, {
-        ...this.config,
-        skipSiteTypeAndCoordinateSystem: !isFirstSite
-      })
+      await strategy.enterCoordinates(currentSite, this.config)
 
       if (!isLastSite) {
         await SiteDetailsReviewPageInteractions.addAnotherSite(
