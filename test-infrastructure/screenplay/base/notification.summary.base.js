@@ -4,8 +4,8 @@ import {
   formatSubmissionDateForDisplay
 } from '~/test-infrastructure/helpers/date-formatter.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
-import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
 import NotificationSummaryBasePage from '~/test-infrastructure/pages/notification.summary.base.page.js'
+import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
 import { getActivityPurposeDisplay } from '~/test-infrastructure/screenplay/factories/iat-constants.js'
 import Task from './task.js'
 
@@ -606,13 +606,26 @@ export default class NotificationSummaryBase extends Task {
         siteNumber,
         'Coordinate system'
       )
-    const expectedDisplayText = this._mapCoordinateSystemToDisplayText(
-      site.coordinateSystem
-    )
-    await browseTheWeb.expectElementToContainText(
-      coordinateSystemValue,
-      expectedDisplayText
-    )
+
+    if (site.coordinateSystem === 'WGS84') {
+      await browseTheWeb.expectElementToContainText(
+        coordinateSystemValue,
+        'WGS84 (World Geodetic System 1984)'
+      )
+      await browseTheWeb.expectElementToContainText(
+        coordinateSystemValue,
+        'Latitude and longitude'
+      )
+    } else {
+      await browseTheWeb.expectElementToContainText(
+        coordinateSystemValue,
+        'British National Grid (OSGB36)'
+      )
+      await browseTheWeb.expectElementToContainText(
+        coordinateSystemValue,
+        'Eastings and Northings'
+      )
+    }
   }
 
   async _validateSiteCoordinates(browseTheWeb, siteNumber, site) {
