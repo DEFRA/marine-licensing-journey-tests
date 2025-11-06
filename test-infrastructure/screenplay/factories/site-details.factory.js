@@ -176,10 +176,6 @@ export default class SiteDetailsFactory {
     sameActivityDates,
     sameActivityDescription
   }) {
-    const sharedActivityDates = ActivityDatesModel.generateValidActivityDates()
-    const sharedActivityDescription =
-      ActivityDescriptionModel.generateActivityDescription()
-
     const siteDefinitions = [
       {
         name: 'Circular Research Area Alpha',
@@ -213,10 +209,10 @@ export default class SiteDetailsFactory {
         def.system
       )
       const activityDates = sameActivityDates
-        ? sharedActivityDates
+        ? undefined
         : ActivityDatesModel.generateValidActivityDates()
       const activityDescription = sameActivityDescription
-        ? sharedActivityDescription
+        ? undefined
         : ActivityDescriptionModel.generateActivityDescription()
 
       return this._createSingleSite({
@@ -268,19 +264,33 @@ export default class SiteDetailsFactory {
       activityDates,
       activityDescription
     } = options
-    return {
+    const site = {
       siteName,
       siteNumber,
       coordinatesEntryMethod: this.ENTRY_METHODS.MANUAL,
       siteType,
       coordinateSystem,
-      activityDates:
-        activityDates || ActivityDatesModel.generateValidActivityDates(),
-      activityDescription:
-        activityDescription ||
-        ActivityDescriptionModel.generateActivityDescription(),
       ...coordinateData
     }
+
+    if ('activityDates' in options) {
+      if (activityDates !== undefined) {
+        site.activityDates = activityDates
+      }
+    } else {
+      site.activityDates = ActivityDatesModel.generateValidActivityDates()
+    }
+
+    if ('activityDescription' in options) {
+      if (activityDescription !== undefined) {
+        site.activityDescription = activityDescription
+      }
+    } else {
+      site.activityDescription =
+        ActivityDescriptionModel.generateActivityDescription()
+    }
+
+    return site
   }
 
   static _getCoordinateData(shape, coordinateSystem) {

@@ -5,6 +5,7 @@ import {
 } from '~/test-infrastructure/helpers/date-formatter.js'
 import CheckYourAnswersPage from '~/test-infrastructure/pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '~/test-infrastructure/pages/review.site.details.page.js'
+import NotificationSummaryBasePage from '~/test-infrastructure/pages/notification.summary.base.page.js'
 import { getActivityPurposeDisplay } from '~/test-infrastructure/screenplay/factories/iat-constants.js'
 import Task from './task.js'
 
@@ -475,11 +476,11 @@ export default class NotificationSummaryBase extends Task {
 
     if (
       siteDetails.sameActivityDescription &&
-      siteDetails.sites[0].activityDescription
+      exemptionData.activityDescription
     ) {
       await browseTheWeb.expectElementToContainText(
         pageLocators.activityDetails.activityDescriptionValue,
-        siteDetails.sites[0].activityDescription
+        exemptionData.activityDescription
       )
     }
   }
@@ -516,14 +517,12 @@ export default class NotificationSummaryBase extends Task {
   }
 
   async _validateMultipleSiteDetailsCards(browseTheWeb, siteDetails) {
-    const pageLocators = this._getPageLocators()
-
     for (let i = 0; i < siteDetails.sites.length; i++) {
       const siteNumber = i + 1
       const site = siteDetails.sites[i]
 
       await browseTheWeb.isDisplayed(
-        pageLocators.constructor.getSiteDetailsCard(siteNumber)
+        NotificationSummaryBasePage.getSiteDetailsCard(siteNumber)
       )
 
       await this._validateSiteCard(browseTheWeb, siteNumber, site, siteDetails)
@@ -554,8 +553,7 @@ export default class NotificationSummaryBase extends Task {
   async _validateSiteName(browseTheWeb, siteNumber, site) {
     if (!site.siteName) return
 
-    const pageLocators = this._getPageLocators()
-    const siteNameValue = pageLocators.constructor.getSiteDetailsCardField(
+    const siteNameValue = NotificationSummaryBasePage.getSiteDetailsCardField(
       siteNumber,
       'Site name'
     )
@@ -573,8 +571,7 @@ export default class NotificationSummaryBase extends Task {
   ) {
     if (siteDetails.sameActivityDates || !site.activityDates) return
 
-    const pageLocators = this._getPageLocators()
-    const datesValue = pageLocators.constructor.getSiteDetailsCardField(
+    const datesValue = NotificationSummaryBasePage.getSiteDetailsCardField(
       siteNumber,
       'Activity dates'
     )
@@ -590,11 +587,11 @@ export default class NotificationSummaryBase extends Task {
   ) {
     if (siteDetails.sameActivityDescription || !site.activityDescription) return
 
-    const pageLocators = this._getPageLocators()
-    const descriptionValue = pageLocators.constructor.getSiteDetailsCardField(
-      siteNumber,
-      'Activity description'
-    )
+    const descriptionValue =
+      NotificationSummaryBasePage.getSiteDetailsCardField(
+        siteNumber,
+        'Activity description'
+      )
     await browseTheWeb.expectElementToContainText(
       descriptionValue,
       site.activityDescription
@@ -604,9 +601,8 @@ export default class NotificationSummaryBase extends Task {
   async _validateSiteCoordinateSystem(browseTheWeb, siteNumber, site) {
     if (!site.coordinateSystem) return
 
-    const pageLocators = this._getPageLocators()
     const coordinateSystemValue =
-      pageLocators.constructor.getSiteDetailsCardField(
+      NotificationSummaryBasePage.getSiteDetailsCardField(
         siteNumber,
         'Coordinate system'
       )
@@ -622,11 +618,11 @@ export default class NotificationSummaryBase extends Task {
   async _validateSiteCoordinates(browseTheWeb, siteNumber, site) {
     if (site.siteType !== 'circle' || !site.circleData) return
 
-    const pageLocators = this._getPageLocators()
-    const coordinatesValue = pageLocators.constructor.getSiteDetailsCardField(
-      siteNumber,
-      'Coordinates at centre of site'
-    )
+    const coordinatesValue =
+      NotificationSummaryBasePage.getSiteDetailsCardField(
+        siteNumber,
+        'Coordinates at centre of site'
+      )
     const expectedCoordinates = this._formatCoordinatesForDisplay(
       site.circleData,
       site.coordinateSystem
@@ -639,7 +635,7 @@ export default class NotificationSummaryBase extends Task {
     }
 
     if (site.circleData.width) {
-      const widthValue = pageLocators.constructor.getSiteDetailsCardField(
+      const widthValue = NotificationSummaryBasePage.getSiteDetailsCardField(
         siteNumber,
         'Width of circular site'
       )
