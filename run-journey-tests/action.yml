@@ -264,7 +264,7 @@ runs:
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
         echo "=== Running tests ==="
-        npm run test:github
+        MAX_INSTANCES-10 npm run test:github
 
     - name: debug
       if: always()
