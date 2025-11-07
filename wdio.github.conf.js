@@ -37,6 +37,11 @@ export const config = {
 
   capabilities: [
     {
+      // Allow this capability to run multiple instances in parallel
+      // This should match or be less than the global maxInstances
+      maxInstances: process.env.MAX_INSTANCES
+        ? parseInt(process.env.MAX_INSTANCES)
+        : 4,
       browserName: 'chrome',
       'goog:chromeOptions': {
         args: [
