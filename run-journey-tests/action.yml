@@ -270,7 +270,7 @@ runs:
       if: always()
       working-directory: ./marine-licensing-journey-tests
       run: |
-        docker compose -f $(pwd)/compose.common.yml logs > logs.txt
+        docker compose -f $(pwd)/compose.common.yml logs marine-licensing-frontend marine-licensing-backend > logs.txt
         docker ps
       shell: bash
 
