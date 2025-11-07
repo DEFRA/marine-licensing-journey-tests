@@ -18,6 +18,7 @@ export const config = {
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   specs: ['test/features/*.feature'],
+  
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: getTags(),
@@ -96,8 +97,10 @@ export const config = {
     ]
   ],
   beforeScenario: async function (world, context) {
-    console.log(`[WDIO] Starting scenario: "${world.pickle.name}"`)
-    await browser.reloadSession()
+    const workerInfo = `[Worker ${process.pid}]`
+    console.log(`${workerInfo} [WDIO] Starting scenario: "${world.pickle.name}"`)
+    // REMOVED: browser.reloadSession() - was causing sequential execution bottleneck
+    // Browser session is already isolated per worker, no need to reload
     attachRichFeatureContext(world)
   },
 
