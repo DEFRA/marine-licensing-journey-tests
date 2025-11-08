@@ -260,9 +260,7 @@ export default class SiteDetailsFactory {
       siteNumber,
       siteType,
       coordinateSystem,
-      coordinateData,
-      activityDates,
-      activityDescription
+      coordinateData
     } = options
     const site = {
       siteName,
@@ -273,24 +271,29 @@ export default class SiteDetailsFactory {
       ...coordinateData
     }
 
-    if ('activityDates' in options) {
-      if (activityDates !== undefined) {
-        site.activityDates = activityDates
-      }
-    } else {
-      site.activityDates = ActivityDatesModel.generateValidActivityDates()
-    }
+    this._addOptionalProperty(
+      site,
+      'activityDates',
+      options,
+      () => ActivityDatesModel.generateValidActivityDates()
+    )
 
-    if ('activityDescription' in options) {
-      if (activityDescription !== undefined) {
-        site.activityDescription = activityDescription
-      }
-    } else {
-      site.activityDescription =
-        ActivityDescriptionModel.generateActivityDescription()
-    }
+    this._addOptionalProperty(
+      site,
+      'activityDescription',
+      options,
+      () => ActivityDescriptionModel.generateActivityDescription()
+    )
 
     return site
+  }
+
+  static _addOptionalProperty(target, key, options, defaultGenerator) {
+    if (key in options && options[key] !== undefined) {
+      target[key] = options[key]
+    } else if (!(key in options)) {
+      target[key] = defaultGenerator()
+    }
   }
 
   static _getCoordinateData(shape, coordinateSystem) {
@@ -300,8 +303,8 @@ export default class SiteDetailsFactory {
     return shape === this.SITE_TYPES.CIRCLE
       ? { circleData: coordinates }
       : {
-          polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
-        }
+        polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
+      }
   }
 
   static _createFileUpload(fileType = null, filePath = null) {
