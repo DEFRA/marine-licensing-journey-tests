@@ -35,17 +35,16 @@ export default class EnterCoordinatesCentrePointPageInteractions {
     await this.enterCoordinatePair(browseTheWeb, coordinateInputs)
   }
 
-  static async updateCircleCoordinates(browseTheWeb, site) {
+  static async updateCircleCoordinates(browseTheWeb, site, coordinateSystem) {
+    const systemToUse = coordinateSystem || site.coordinateSystem
     const newCoords =
-      site.coordinateSystem === 'WGS84'
+      systemToUse === 'WGS84'
         ? { latitude: '51.507412', longitude: '-0.127812' }
         : { eastings: '432675', northings: '181310' }
 
     site.coordinates = [newCoords]
 
-    const coordinateMapping = this.getCoordinateFieldMapping(
-      site.coordinateSystem
-    )
+    const coordinateMapping = this.getCoordinateFieldMapping(systemToUse)
 
     const coordinateInputs = [
       {

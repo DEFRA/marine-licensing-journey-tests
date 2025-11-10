@@ -86,6 +86,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
 
   static coordinatesAtCentreChangeLink =
     '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static coordinateSystemChangeLink =
+    '//dt[contains(text(), "Coordinate system")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
 
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
