@@ -1,6 +1,7 @@
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
-import WidthOfCircularSitePage from '../../pages/width.of.circular.site.page.js'
 import Task from '../base/task.js'
+import WidthOfCircularSitePageInteractions from '../page-interactions/width.of.circular.site.page.interactions.js'
+import { Click } from './index.js'
 
 export default class ChangeCircleWidth extends Task {
   static now() {
@@ -10,20 +11,16 @@ export default class ChangeCircleWidth extends Task {
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
     const browseTheWeb = actor.ability
-    const newWidth = Math.floor(Math.random() * 50) + 10
+    const newWidth = '25'
 
     if (exemption.siteDetails?.sites?.[0]) {
-      exemption.siteDetails.sites[0].circleWidth = newWidth
+      exemption.siteDetails.sites[0].circleData.width = newWidth
     }
 
-    await browseTheWeb.click(
-      ReviewSiteDetailsPage.widthValue +
-        '/following-sibling::dd//a[text()="Change"]'
+    await actor.attemptsTo(Click.on(ReviewSiteDetailsPage.widthChangeLink))
+    await WidthOfCircularSitePageInteractions.enterWidthOfCircleAndContinue(
+      browseTheWeb,
+      newWidth
     )
-    await browseTheWeb.sendKeys(
-      WidthOfCircularSitePage.widthInput,
-      newWidth.toString()
-    )
-    await browseTheWeb.click(WidthOfCircularSitePage.saveAndContinueButton)
   }
 }
