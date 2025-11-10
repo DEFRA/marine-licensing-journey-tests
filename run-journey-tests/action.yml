@@ -263,7 +263,16 @@ runs:
       run: |
         echo "=== Cleaning previous results ==="
         rm -rf allure-results allure-report
-        echo "=== Running tests ==="
+
+        # Analyze feature distribution
+        echo "=== Analyzing feature distribution for optimal parallelization ==="
+        node bin/split-features-for-parallel.js
+
+        echo ""
+        echo "=== Running tests with MAX_INSTANCES=10 (parallel execution) ==="
+        echo "🚀 Each worker will pick up features dynamically as they complete..."
+
+        # Run with maxInstances - WebDriverIO will distribute work dynamically
         MAX_INSTANCES=10 npm run test:github
 
     - name: debug

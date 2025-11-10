@@ -18,7 +18,7 @@ export const config = {
   port: process.env.CHROMEDRIVER_PORT || 4444,
 
   specs: ['test/features/*.feature'],
-  
+
   cucumberOpts: {
     require: ['test/steps/*.js'],
     tags: getTags(),
@@ -29,12 +29,15 @@ export const config = {
   // ============================================================================
   // PARALLEL EXECUTION CONFIGURATION
   // ============================================================================
-  // Number of instances to run in parallel
-  // Start with 3-5 for local development, can go higher for CI
-  // Each feature file will run in a separate worker process
+  // Number of instances to run in parallel - dynamically distributes features
+  // Workers pick up new features as they complete previous ones
+  // With 19 features and 10 workers: initially 10 run, then remaining 9 are distributed
   maxInstances: process.env.MAX_INSTANCES
     ? parseInt(process.env.MAX_INSTANCES)
     : 4,
+
+  // Ensure features are distributed as soon as workers are available
+  specFileRetries: 0,
 
   capabilities: [
     {
@@ -96,11 +99,25 @@ export const config = {
       }
     ]
   ],
+  onWorkerStart: function (cid, caps, specs, args, execArgv) {
+    console.log(
+      `✨ [Worker ${cid}] Started - will process: ${specs.map((s) => s.split('/').pop()).join(', ')}`
+    )
+  },
+
+  onWorkerEnd: function (cid, exitCode, specs, retries) {
+    const status = exitCode === 0 ? '✅' : '❌'
+    console.log(
+      `${status} [Worker ${cid}] Finished - ${specs.map((s) => s.split('/').pop()).join(', ')}`
+    )
+  },
+
   beforeScenario: async function (world, context) {
     const workerInfo = `[Worker ${process.pid}]`
-    console.log(`${workerInfo} [WDIO] Starting scenario: "${world.pickle.name}"`)
-    // REMOVED: browser.reloadSession() - was causing sequential execution bottleneck
-    // Browser session is already isolated per worker, no need to reload
+    console.log(
+      `${workerInfo} [WDIO] Starting scenario: "${world.pickle.name}"`
+    )
+    await browser.reloadSession()
     attachRichFeatureContext(world)
   },
 
