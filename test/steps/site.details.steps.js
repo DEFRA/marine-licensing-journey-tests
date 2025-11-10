@@ -154,7 +154,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.forATriangleWithWGS84Coordinates()
+        .andSiteDetails.forABoundaryWithWGS84Coordinates()
         .withCoordinatePoints([
           { latitude: lat1, longitude: lng1 },
           { latitude: lat2, longitude: lng2 },
@@ -171,7 +171,7 @@ Given(
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName()
-        .andSiteDetails.forATriangleWithOSGB36Coordinates()
+        .andSiteDetails.forABoundaryWithOSGB36Coordinates()
         .withCoordinatePoints([
           { eastings: east1, northings: north1 },
           { eastings: east2, northings: north2 },
@@ -350,7 +350,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forATriangleWithOSGB36Coordinates()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())
@@ -368,7 +368,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withValidProjectName().andSiteDetails.forATriangleWithWGS84Coordinates()
+      ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithWGS84Coordinates()
     )
     await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
     await this.actor.attemptsTo(CompleteProjectName.now())

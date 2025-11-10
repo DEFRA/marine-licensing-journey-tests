@@ -53,17 +53,17 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forATriangleWithWGS84Coordinates: (builder) => {
+  forABoundaryWithWGS84Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.create('triangle', 'WGS84')
+      SiteDetailsFactory.create('boundary', 'WGS84')
     )
     return builder
   },
-  forATriangleWithOSGB36Coordinates: (builder) => {
+  forABoundaryWithOSGB36Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.create('triangle', 'OSGB36')
+      SiteDetailsFactory.create('boundary', 'OSGB36')
     )
     return builder
   },

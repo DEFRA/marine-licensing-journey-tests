@@ -89,13 +89,13 @@ export default class NavigateToSiteDetailsPage extends Task {
         )
       },
       'enter-polygon-osgb36-coordinates-page-only': async (browseTheWeb) => {
-        await this.navigateToTriangleCoordinateSystem(browseTheWeb)
+        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectOSGB36AndContinue(
           browseTheWeb
         )
       },
       'enter-polygon-wgs84-coordinates-page-only': async (browseTheWeb) => {
-        await this.navigateToTriangleCoordinateSystem(browseTheWeb)
+        await this.navigateToBoundaryCoordinateSystem(browseTheWeb)
         await WhatCoordinateSystemPageInteractions.selectWGS84AndContinue(
           browseTheWeb
         )
@@ -124,11 +124,11 @@ export default class NavigateToSiteDetailsPage extends Task {
     )
   }
 
-  async navigateToTriangleCoordinateSystem(browseTheWeb) {
+  async navigateToBoundaryCoordinateSystem(browseTheWeb) {
     await this.navigateToSiteTypeSelection(browseTheWeb)
     await HowDoYouWantToEnterTheCoordinatesPageInteractions.selectSiteTypeAndContinue(
       browseTheWeb,
-      'triangle'
+      'boundary'
     )
   }
 

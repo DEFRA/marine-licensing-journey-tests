@@ -97,8 +97,8 @@ export default class EnsureCoreSiteDetails extends Task {
       return
     }
 
-    if (firstSiteType === 'triangle') {
-      await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
+    if (firstSiteType === 'boundary') {
+      await this.verifyBoundarySiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
@@ -112,7 +112,7 @@ export default class EnsureCoreSiteDetails extends Task {
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.widthValue)
   }
 
-  async verifyTriangleSiteDisplay(browseTheWeb, siteDetails) {
+  async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
     const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
