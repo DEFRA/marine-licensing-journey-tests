@@ -34,6 +34,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
 
   static providingTheSiteLocationCard =
     '//h2[contains(text(), "Providing the site location")]'
+  static deleteAllSiteDetailsLink =
+    '//h2[contains(text(), "Providing the site location")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Delete all site details")]'
   static moreThanOneSiteValue =
     '//dt[contains(text(), "More than one site")]/following-sibling::dd'
 
