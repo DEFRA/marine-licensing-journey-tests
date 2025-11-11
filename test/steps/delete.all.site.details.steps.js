@@ -72,3 +72,35 @@ Then('the user can successfully upload a new file', async function () {
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
   await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
 })
+
+Then('the user can successfully enter manual coordinates', async function () {
+  this.actor.updates((exemption) => {
+    exemption.siteDetails = {
+      coordinatesEntryMethod: 'enter-manually',
+      multipleActivities: false,
+      multipleSites: false,
+      sites: [
+        {
+          siteName: 'Test Circle Site',
+          siteType: 'circle',
+          coordinateSystem: 'WGS84',
+          coordinates: [{ latitude: '51.507412', longitude: '-0.127812' }],
+          circleData: {
+            latitude: '51.507412',
+            longitude: '-0.127812',
+            width: '20'
+          },
+          activityDates: {
+            startDate: '2026-01-01',
+            endDate: '2026-12-31'
+          },
+          activityDescription: 'Manual entry test after deletion'
+        }
+      ]
+    }
+  })
+  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
+  await this.actor.attemptsTo(CompleteSiteDetails.now())
+  await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
+  await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())
+})
