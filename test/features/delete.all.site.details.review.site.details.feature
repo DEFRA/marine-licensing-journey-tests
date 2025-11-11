@@ -15,3 +15,8 @@ NOTE: This scenario randomly generates sites either manually or using file uploa
     Given a user has reached the review site details page
     When the user cancels deletion of all site details
     Then the user is returned to the review site details page with unchanged site details
+
+  Scenario: The user can delete file upload site details and upload a new file
+    Given a user has uploaded sites via file upload
+    When the user confirms deletion of all site details
+    Then the user can successfully upload a new file
