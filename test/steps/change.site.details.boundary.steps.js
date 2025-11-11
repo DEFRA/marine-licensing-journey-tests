@@ -10,9 +10,9 @@ import {
   SelectTheTask
 } from '~/test-infrastructure/screenplay'
 import {
-  ChangeFromBoundaryToCircularSite,
-  ChangeBoundarySiteCoordinateSystem,
   ChangeBoundaryCoordinates,
+  ChangeBoundarySiteCoordinateSystem,
+  ChangeFromBoundaryToCircularSite,
   EnsurePageHeading,
   EnsureSiteDetails
 } from '~/test-infrastructure/screenplay/interactions'
