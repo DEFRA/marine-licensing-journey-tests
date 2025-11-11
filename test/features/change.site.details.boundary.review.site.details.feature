@@ -16,7 +16,6 @@ NOTE: This feature file focuses only on boundary site-specific changes.
     When the user changes the coordinate system for the boundary site to OSGB36
     Then the coordinate system is updated on the review site details page
 
-  @wip @fixed-in-ML-83
   Scenario: The user can change the boundary coordinates
     Given a user has reached the review site details page with a boundary site using WGS84 coordinates
     When the user changes the boundary coordinates
