@@ -7,16 +7,16 @@ SO THAT I can ensure that my sites are correct
 NOTE: This feature file focuses only on boundary site-specific changes.
 
   Scenario: The user can change from boundary site to circular site
-    Given a user has reached the review site details page with a boundary site
+    Given a user has reached the review site details page with a boundary site using WGS84 coordinates
     When the user changes from boundary to circular site
     Then the site is converted to a circular site on the review site details page
 
   Scenario: The user can change the coordinate system for a boundary site
-    Given a user has reached the review site details page with a boundary site
-    When the user changes the coordinate system for the boundary site
+    Given a user has reached the review site details page with a boundary site using WGS84 coordinates
+    When the user changes the coordinate system for the boundary site to OSGB35
     Then the coordinate system is updated on the review site details page
 
   Scenario: The user can change the boundary coordinates
-    Given a user has reached the review site details page with a boundary site
+    Given a user has reached the review site details page with a boundary site using WGS84 coordinates
     When the user changes the boundary coordinates
     Then the boundary coordinates are updated on the review site details page

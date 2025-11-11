@@ -18,7 +18,7 @@ import {
 } from '~/test-infrastructure/screenplay/interactions'
 
 Given(
-  'a user has reached the review site details page with a boundary site',
+  'a user has reached the review site details page with a boundary site using WGS84 coordinates',
   async function () {
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
@@ -46,7 +46,7 @@ Then(
 )
 
 When(
-  'the user changes the coordinate system for the boundary site',
+  'the user changes the coordinate system for the boundary site to OSGB35',
   async function () {
     await this.actor.attemptsTo(ChangeBoundarySiteCoordinateSystem.now())
   }
