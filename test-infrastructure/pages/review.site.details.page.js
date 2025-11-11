@@ -92,6 +92,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
     '//dt[contains(text(), "Single or multiple sets of coordinates")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
   static widthChangeLink =
     '//dt[contains(text(), "Width")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static startAndEndPointsChangeLink =
+    '//dt[contains(text(), "Start and end points")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
 
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
