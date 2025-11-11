@@ -54,7 +54,7 @@ When(
 )
 
 Then(
-  'the coordinate system is updated on the review site details page',
+  'the coordinate system is updated on the review site details page for the circular site',
   async function () {
     await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
     await this.actor.attemptsTo(EnsureSiteDetails.areCorrect())

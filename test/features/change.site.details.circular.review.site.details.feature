@@ -14,7 +14,7 @@ NOTE: This feature file focuses only on circular site-specific changes.
   Scenario: The user can change the coordinate system for a circular site
     Given a user has reached the review site details page with a circular site
     When the user changes the coordinate system for the circular site
-    Then the coordinate system is updated on the review site details page
+    Then the coordinate system is updated on the review site details page for the circular site
 
   Scenario: The user can change the centre point coordinates for a circular site
     Given a user has reached the review site details page with a circular site
