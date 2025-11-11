@@ -46,7 +46,7 @@ Then(
 )
 
 When(
-  'the user changes the coordinate system for the boundary site to OSGB35',
+  'the user changes the coordinate system for the boundary site to OSGB36',
   async function () {
     await this.actor.attemptsTo(ChangeBoundarySiteCoordinateSystem.now())
   }

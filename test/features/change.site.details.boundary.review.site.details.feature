@@ -13,7 +13,7 @@ NOTE: This feature file focuses only on boundary site-specific changes.
 
   Scenario: The user can change the coordinate system for a boundary site
     Given a user has reached the review site details page with a boundary site using WGS84 coordinates
-    When the user changes the coordinate system for the boundary site to OSGB35
+    When the user changes the coordinate system for the boundary site to OSGB36
     Then the coordinate system is updated on the review site details page
 
   Scenario: The user can change the boundary coordinates
