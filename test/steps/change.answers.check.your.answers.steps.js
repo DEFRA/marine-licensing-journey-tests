@@ -52,7 +52,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.withKMLUpload()
+      ApplyForExemption.withCompleteData().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
     )
     await this.actor.attemptsTo(CompleteAllTasks.now())
     await this.actor.attemptsTo(ClickReviewAndSend.now())
