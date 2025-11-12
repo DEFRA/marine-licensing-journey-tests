@@ -4,6 +4,8 @@ Feature: Validate for missing files when uploading Shapefile
   I want to see meaningful content and error messages when I provide an invalid shapefile
   So that I can understand how to provide a valid shapefile
 
+  NOTE: The .prj file greater than 50KB is not covered as it is difficult to recreate - may implement later.
+
   @shapefile
   Scenario Outline: Uploading shapefile with <file_description> fails with appropriate error
     Given the user has a shapefile with "<file_description>"
