@@ -219,7 +219,7 @@ Given(
       'missing .shp .shx and .dbf files':
         ApplyForExemption.withShapefileMissingAllCoreFiles(),
       'missing .prj file': ApplyForExemption.withShapefileMissingPrj(),
-      'with .prj file greater than 50KB':
+      '.prj file greater than 50KB':
         ApplyForExemption.withShapefileLargePrj()
     }
 
