@@ -316,8 +316,8 @@ export default class SiteDetailsFactory {
     return shape === this.SITE_TYPES.CIRCLE
       ? { circleData: coordinates }
       : {
-        polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
-      }
+          polygonData: this._createCoordinateSet(coordinates, coordinateSystem)
+        }
   }
 
   static _createFileUpload(fileType = null, filePath = null) {
