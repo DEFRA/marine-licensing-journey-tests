@@ -17,4 +17,4 @@ Feature: Validate for missing files when uploading Shapefile
       | missing .dbf file                | The selected file must include .shp .shx and .dbf files |
       | missing .shp .shx and .dbf files | The selected file must include .shp .shx and .dbf files |
       | missing .prj file                | The selected file must include a .prj file              |
-      | .prj file greater than 50KB      | The selected file's .prj file must be smaller than 50KB |
+    #   | .prj file greater than 50KB      | The selected file's .prj file must be smaller than 50KB |

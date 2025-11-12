@@ -179,35 +179,35 @@ export default class ExemptionFactory {
 
   static createShapefileMissingShp() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/shapefile-missing-shp.zip',
+      filePath: 'test/resources/missing_shp_file.zip',
       expectValidationError: true
     })
   }
 
   static createShapefileMissingShx() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/shapefile-missing-shx.zip',
+      filePath: 'test/resources/missing_shx_file.zip',
       expectValidationError: true
     })
   }
 
   static createShapefileMissingDbf() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/shapefile-missing-dbf.zip',
+      filePath: 'test/resources/missing_dbf_file.zip',
       expectValidationError: true
     })
   }
 
   static createShapefileMissingAllCoreFiles() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/shapefile-missing-all-core.zip',
+      filePath: 'test/resources/missing_shp_shx_dbf_files.zip',
       expectValidationError: true
     })
   }
 
   static createShapefileMissingPrj() {
     return this.createFileUploadBase('shapefile', {
-      filePath: 'test/resources/shapefile-missing-prj.zip',
+      filePath: 'test/resources/missing_prj_file.zip',
       expectValidationError: true
     })
   }
