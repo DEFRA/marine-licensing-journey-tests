@@ -1,3 +1,4 @@
+import CheckYourAnswersPage from '../../pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 import ActivityDatesModel from '../models/activity.dates.model.js'
@@ -15,9 +16,9 @@ export default class ChangeActivityDetails extends Task {
 
     exemption.activityDates = newActivityDates
 
-    const activityDetailsChangeLink = `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
-
-    await actor.attemptsTo(Click.on(activityDetailsChangeLink))
+    await actor.attemptsTo(
+      Click.on(CheckYourAnswersPage.getActivityDetailsCardChangeLink())
+    )
     await actor.attemptsTo(
       Click.on(ReviewSiteDetailsPage.activityDatesChangeLink)
     )

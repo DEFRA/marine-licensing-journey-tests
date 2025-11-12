@@ -69,4 +69,8 @@ export default class CheckYourAnswersPage extends NotificationSummaryBasePage {
       : `Site ${siteNumber} details`
     return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "${cardHeading}")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
   }
+
+  static getActivityDetailsCardChangeLink() {
+    return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
+  }
 }
