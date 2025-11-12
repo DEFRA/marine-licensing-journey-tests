@@ -206,7 +206,7 @@ Then(
   }
 )
 
-Given('the user has a shapefile {string}', async function (fileDescription) {
+Given('the user has a shapefile with {string}', async function (fileDescription) {
   this.actor = new Actor('Frank')
   this.actor.can(BrowseTheWeb.using(browser))
 

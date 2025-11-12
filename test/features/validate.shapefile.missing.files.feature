@@ -8,8 +8,8 @@ Feature: Validate for missing files when uploading Shapefile
     Given an exemption notification for Shapefile upload
 
   @shapefile
-  Scenario Outline: Uploading shapefile with "<file_description>" fails with appropriate error
-    Given the user has a shapefile "<file_description>"
+  Scenario Outline: Uploading shapefile with <file_description> fails with appropriate error
+    Given the user has a shapefile with "<file_description>"
     When completing the site details task
     Then the file upload error "<error_message>" is displayed
 
