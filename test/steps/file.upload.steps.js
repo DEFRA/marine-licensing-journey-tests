@@ -219,8 +219,7 @@ Given(
       'missing .shp .shx and .dbf files':
         ApplyForExemption.withShapefileMissingAllCoreFiles(),
       'missing .prj file': ApplyForExemption.withShapefileMissingPrj(),
-      '.prj file greater than 50KB':
-        ApplyForExemption.withShapefileLargePrj()
+      '.prj file greater than 50KB': ApplyForExemption.withShapefileLargePrj()
     }
 
     const exemption = fileMap[fileDescription]
