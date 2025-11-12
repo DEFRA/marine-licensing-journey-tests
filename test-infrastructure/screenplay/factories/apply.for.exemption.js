@@ -81,6 +81,32 @@ export default class ApplyForExemption extends BaseBuilder {
     )
   }
 
+  static withShapefileMissingShp() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileMissingShp())
+  }
+
+  static withShapefileMissingShx() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileMissingShx())
+  }
+
+  static withShapefileMissingDbf() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileMissingDbf())
+  }
+
+  static withShapefileMissingAllCoreFiles() {
+    return new ApplyForExemption(
+      ExemptionFactory.createShapefileMissingAllCoreFiles()
+    )
+  }
+
+  static withShapefileMissingPrj() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileMissingPrj())
+  }
+
+  static withShapefileLargePrj() {
+    return new ApplyForExemption(ExemptionFactory.createShapefileLargePrj())
+  }
+
   static withNoPreviousCookieDecision() {
     const exemption = ExemptionFactory.createValidProjectName()
     exemption.cookiePreferences = 'none'
