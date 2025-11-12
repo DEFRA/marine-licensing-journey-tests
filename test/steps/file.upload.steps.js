@@ -206,28 +206,31 @@ Then(
   }
 )
 
-Given('the user has a shapefile with {string}', async function (fileDescription) {
-  this.actor = new Actor('Frank')
-  this.actor.can(BrowseTheWeb.using(browser))
+Given(
+  'the user has a shapefile with {string}',
+  async function (fileDescription) {
+    this.actor = new Actor('Frank')
+    this.actor.can(BrowseTheWeb.using(browser))
 
-  const fileMap = {
-    'missing .shp file': ApplyForExemption.withShapefileMissingShp(),
-    'missing .shx file': ApplyForExemption.withShapefileMissingShx(),
-    'missing .dbf file': ApplyForExemption.withShapefileMissingDbf(),
-    'missing .shp .shx and .dbf files':
-      ApplyForExemption.withShapefileMissingAllCoreFiles(),
-    'missing .prj file': ApplyForExemption.withShapefileMissingPrj(),
-    'with .prj file greater than 50KB':
-      ApplyForExemption.withShapefileLargePrj()
+    const fileMap = {
+      'missing .shp file': ApplyForExemption.withShapefileMissingShp(),
+      'missing .shx file': ApplyForExemption.withShapefileMissingShx(),
+      'missing .dbf file': ApplyForExemption.withShapefileMissingDbf(),
+      'missing .shp .shx and .dbf files':
+        ApplyForExemption.withShapefileMissingAllCoreFiles(),
+      'missing .prj file': ApplyForExemption.withShapefileMissingPrj(),
+      'with .prj file greater than 50KB':
+        ApplyForExemption.withShapefileLargePrj()
+    }
+
+    const exemption = fileMap[fileDescription]
+    if (!exemption) {
+      throw new Error(`Unknown file description: ${fileDescription}`)
+    }
+
+    this.actor.intendsTo(exemption)
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(CompleteProjectName.now())
+    await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }
-
-  const exemption = fileMap[fileDescription]
-  if (!exemption) {
-    throw new Error(`Unknown file description: ${fileDescription}`)
-  }
-
-  this.actor.intendsTo(exemption)
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
-})
+)

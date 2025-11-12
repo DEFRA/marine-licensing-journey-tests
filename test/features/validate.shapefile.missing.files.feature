@@ -4,9 +4,6 @@ Feature: Validate for missing files when uploading Shapefile
   I want to see meaningful content and error messages when I provide an invalid shapefile
   So that I can understand how to provide a valid shapefile
 
-  Background:
-    Given an exemption notification for Shapefile upload
-
   @shapefile
   Scenario Outline: Uploading shapefile with <file_description> fails with appropriate error
     Given the user has a shapefile with "<file_description>"
