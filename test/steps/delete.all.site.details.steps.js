@@ -7,7 +7,8 @@ import {
   CompleteProjectName,
   CompleteSiteDetails,
   Navigate,
-  SelectTheTask
+  SelectTheTask,
+  SiteDetailsFactory
 } from '~/test-infrastructure/screenplay'
 import {
   CancelDeletionOfAllSiteDetails,
@@ -67,6 +68,10 @@ Given('a user has uploaded sites via file upload', async function () {
 })
 
 Then('the user can successfully upload a new file', async function () {
+  const kmlExemption = ApplyForExemption.withKMLUpload().getData()
+  this.actor.updates((exemption) => {
+    exemption.siteDetails = kmlExemption.siteDetails
+  })
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   await this.actor.attemptsTo(CompleteSiteDetails.now())
   await this.actor.attemptsTo(EnsurePageHeading.is('Review site details'))
@@ -75,29 +80,7 @@ Then('the user can successfully upload a new file', async function () {
 
 Then('the user can successfully enter manual coordinates', async function () {
   this.actor.updates((exemption) => {
-    exemption.siteDetails = {
-      coordinatesEntryMethod: 'enter-manually',
-      multipleActivities: false,
-      multipleSites: false,
-      sites: [
-        {
-          siteName: 'Test Circle Site',
-          siteType: 'circle',
-          coordinateSystem: 'WGS84',
-          coordinates: [{ latitude: '51.507412', longitude: '-0.127812' }],
-          circleData: {
-            latitude: '51.507412',
-            longitude: '-0.127812',
-            width: '20'
-          },
-          activityDates: {
-            startDate: '2026-01-01',
-            endDate: '2026-12-31'
-          },
-          activityDescription: 'Manual entry test after deletion'
-        }
-      ]
-    }
+    exemption.siteDetails = SiteDetailsFactory.create('circle', 'WGS84')
   })
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   await this.actor.attemptsTo(CompleteSiteDetails.now())
