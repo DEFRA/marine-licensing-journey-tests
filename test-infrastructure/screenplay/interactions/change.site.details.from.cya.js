@@ -1,4 +1,4 @@
-import NotificationSummaryBasePage from '../../pages/notification.summary.base.page.js'
+import CheckYourAnswersPage from '../../pages/check.your.answers.page.js'
 import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 import CompleteSiteName from '../tasks/complete.site.name.js'
@@ -22,12 +22,16 @@ export default class ChangeSiteDetails extends Task {
 
     exemption.siteDetails.sites[siteIndex].siteName = newSiteName
 
-    const siteDetailsCard = NotificationSummaryBasePage.getSiteDetailsCard(
-      this.siteNumber
-    )
-    const siteDetailsChangeLink = `${siteDetailsCard}/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
+    const totalSites = exemption.siteDetails.sites?.length || 1
 
-    await actor.attemptsTo(Click.on(siteDetailsChangeLink))
+    await actor.attemptsTo(
+      Click.on(
+        CheckYourAnswersPage.getSiteDetailsCardChangeLink(
+          this.siteNumber,
+          totalSites
+        )
+      )
+    )
     await actor.attemptsTo(
       Click.on(ReviewSiteDetailsPage.getSiteNameChangeLink(this.siteNumber))
     )

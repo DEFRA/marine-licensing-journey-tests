@@ -46,6 +46,22 @@ Given(
   }
 )
 
+Given(
+  'a user has reached the check your answers page with file uploaded sites',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.withKMLUpload()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+    await this.actor.attemptsTo(ClickReviewAndSend.now())
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Check your answers before sending your information')
+    )
+  }
+)
+
 When(
   'the user changes the project name from check your answers',
   async function () {
@@ -85,6 +101,10 @@ When(
   }
 )
 
+When('the user changes a site name from check your answers', async function () {
+  await this.actor.attemptsTo(ChangeSiteDetails.fromCheckYourAnswers(1))
+})
+
 Then(
   'the project name is updated on the check your answers page',
   async function () {
@@ -121,6 +141,16 @@ Then(
 
 Then(
   'the data sharing consent is updated on the check your answers page',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Check your answers before sending your information')
+    )
+    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
+  }
+)
+
+Then(
+  'the site name is updated on the check your answers page',
   async function () {
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Check your answers before sending your information')

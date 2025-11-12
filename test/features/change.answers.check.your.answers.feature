@@ -30,3 +30,8 @@ NOTE: These scenarios test that change links navigate to the correct pages and r
     Given a user has reached the check your answers page
     When the user changes the data sharing consent from check your answers
     Then the data sharing consent is updated on the check your answers page
+
+  Scenario: The user can change site name for file uploaded sites from check your answers
+    Given a user has reached the check your answers page with file uploaded sites
+    When the user changes a site name from check your answers
+    Then the site name is updated on the check your answers page
