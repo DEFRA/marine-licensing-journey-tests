@@ -58,6 +58,16 @@ export const siteDetailsExtension = {
     )
     return builder
   },
+  forACircleWithCustomOSGB36Coordinates: (builder, eastings, northings) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.createCircleWithCustomOSGB36Coordinates(
+        eastings,
+        northings
+      )
+    )
+    return builder
+  },
   forABoundaryWithWGS84Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
@@ -256,7 +266,7 @@ export function createExtensionGetter(builder, extensionProvider) {
   for (const [methodName, methodFunction] of Object.entries(
     extensionProvider
   )) {
-    extensionObject[methodName] = () => methodFunction(builder)
+    extensionObject[methodName] = (...args) => methodFunction(builder, ...args)
   }
 
   return extensionObject

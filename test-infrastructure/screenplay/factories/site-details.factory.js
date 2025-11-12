@@ -100,6 +100,30 @@ export default class SiteDetailsFactory {
     ])
   }
 
+  static createCircleWithCustomOSGB36Coordinates(
+    eastings,
+    northings,
+    width = '50'
+  ) {
+    const coordinateData = {
+      circleData: {
+        eastings,
+        northings,
+        width
+      }
+    }
+
+    return this._createSiteDetailsStructure([
+      this._createSingleSite({
+        siteName: 'Test Site with Custom Coordinates',
+        siteNumber: 1,
+        siteType: this.SITE_TYPES.CIRCLE,
+        coordinateSystem: this.COORDINATE_SYSTEMS.OSGB36,
+        coordinateData
+      })
+    ])
+  }
+
   static createFileUpload() {
     return this._createFileUpload()
   }
