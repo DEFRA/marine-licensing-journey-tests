@@ -4,9 +4,6 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
   I want to see a list of all my applications
   So that I can keep track of my applications and manage them
 
-NOTE: THE WIP SCENARIO IS IGNORED DUE TO THE TRANSITION TOWARDS SITE DETAILS ACTIVITY DATES AND DESCRIPTIONS
-
-  @wip
   Scenario: After submitting a notification, view it via the dashboard
     Given a user has submitted an exemption notification
     When the user clicks view details for the submitted notification on the dashboard
