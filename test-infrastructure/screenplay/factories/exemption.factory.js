@@ -1,15 +1,10 @@
-import { faker } from '@faker-js/faker'
 import CoordinateFiles from '../../helpers/coordinate-files.js'
 import {
   FileTypeModel,
   MarineProjectModel,
   PublicRegisterModel
 } from '../models/index.js'
-import {
-  ACTIVITY_PURPOSES,
-  ACTIVITY_TYPES,
-  ARTICLE_CODES
-} from './iat-constants.js'
+import IatContextFactory from './iat-context.factory.js'
 import SiteDetailsFactory from './site-details.factory.js'
 
 export default class ExemptionFactory {
@@ -21,18 +16,7 @@ export default class ExemptionFactory {
       cookiePreferences: 'accept',
       projectNameTaskCompleted: false,
       publicRegisterTaskCompleted: false,
-      iatContext: (() => {
-        const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
-
-        return {
-          activityType,
-          articleCode: faker.helpers.arrayElement(ARTICLE_CODES),
-          activityPurpose: activityType.supportsPurpose
-            ? faker.helpers.arrayElement(ACTIVITY_PURPOSES)
-            : null,
-          pdfUrl: `https://marinelicensing.marinemanagement.org.uk/path/journey/self-service/outcome-document/${faker.string.uuid()}`
-        }
-      })(),
+      iatContext: IatContextFactory.generateIatContext(),
       ...overrides
     }
   }
