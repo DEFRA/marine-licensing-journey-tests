@@ -16,7 +16,7 @@ export default class ExemptionFactory {
       cookiePreferences: 'accept',
       projectNameTaskCompleted: false,
       publicRegisterTaskCompleted: false,
-      iatContext: IatContextFactory.generateIatContext(),
+      iatContext: IatContextFactory.generate(),
       ...overrides
     }
   }
