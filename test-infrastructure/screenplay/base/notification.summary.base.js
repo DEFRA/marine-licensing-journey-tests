@@ -170,8 +170,8 @@ export default class NotificationSummaryBase extends Task {
       return
     }
 
-    if (firstSiteType === 'triangle') {
-      await this.verifyTriangleSiteDisplay(browseTheWeb, siteDetails)
+    if (firstSiteType === 'boundary') {
+      await this.verifyBoundarySiteDisplay(browseTheWeb, siteDetails)
       return
     }
 
@@ -183,7 +183,7 @@ export default class NotificationSummaryBase extends Task {
     await this._validateCircularSiteWidth(browseTheWeb, siteDetails)
   }
 
-  async verifyTriangleSiteDisplay(browseTheWeb, siteDetails) {
+  async verifyBoundarySiteDisplay(browseTheWeb, siteDetails) {
     const coordinates = this.getCoordinatesFromSiteDetails(siteDetails)
 
     await browseTheWeb.isDisplayed(ReviewSiteDetailsPage.startAndEndPointsValue)
@@ -366,7 +366,7 @@ export default class NotificationSummaryBase extends Task {
 
   getCoordinatesFromSiteDetails(siteDetails) {
     const allCoordinates = this._extractCoordinates(siteDetails)
-    return this._limitTriangleCoordinates(siteDetails, allCoordinates)
+    return this._limitBoundaryCoordinates(siteDetails, allCoordinates)
   }
 
   _extractCoordinates(siteDetails) {
@@ -391,10 +391,10 @@ export default class NotificationSummaryBase extends Task {
     return firstSite?.polygonData?.coordinates || []
   }
 
-  _limitTriangleCoordinates(siteDetails, coordinates) {
+  _limitBoundaryCoordinates(siteDetails, coordinates) {
     const siteType = this._getSiteType(siteDetails)
 
-    if (siteType === 'triangle' && coordinates.length > 3) {
+    if (siteType === 'boundary' && coordinates.length > 3) {
       return coordinates.slice(0, 3)
     }
     return coordinates

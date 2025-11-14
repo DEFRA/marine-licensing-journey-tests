@@ -6,11 +6,11 @@ export default class ConfirmationPage {
       applicationReference: '.govuk-panel__body strong',
       confirmationEmail: 'p.govuk-body',
       whatHappensNextHeading: 'h2.govuk-heading-m',
-      feedbackLink: '.govuk-grid-row a[href*="jfe/form/SV_"]'
+      feedbackLink: '.govuk-grid-row a[href*="forms.office.com"]'
     }
   }
 
   static get expectedFeedbackUrl() {
-    return 'https://defragroup.eu.qualtrics.com/jfe/form/SV_9GjBVwAH3a9ED6C'
+    return 'https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAjXEiYXnHG1DvkWr_VjRfzZURFMxRkhCSzQyVlRKQzdZNDEyVDhSMFdSNy4u&route=shorturl'
   }
 }

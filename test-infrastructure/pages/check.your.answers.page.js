@@ -11,29 +11,40 @@ export default class CheckYourAnswersPage extends NotificationSummaryBasePage {
     mainHeading: 'h2#check-your-answers-heading',
 
     // Override inherited locators to add change links
-    projectDetails: {
-      ...NotificationSummaryBasePage.sharedLocators.projectDetails,
-      changeLink: '//a[contains(@href, "project-name")]'
+    projectSummary: {
+      ...NotificationSummaryBasePage.sharedLocators.projectSummary,
+      changeLink:
+        '//h2[contains(text(), "Project summary")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(text(), "Project name")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
     },
 
     activityDates: {
       ...NotificationSummaryBasePage.sharedLocators.activityDates,
-      changeLink: '//a[contains(@href, "activity-dates")]'
+      changeLink:
+        '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(text(), "Activity dates")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
     },
 
     activityDetails: {
       ...NotificationSummaryBasePage.sharedLocators.activityDetails,
-      changeLink: '//a[contains(@href, "activity-description")]'
+      changeLink:
+        '//h2[contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(text(), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+    },
+
+    providingSiteLocation: {
+      ...NotificationSummaryBasePage.sharedLocators.providingSiteLocation,
+      changeLink:
+        '//h2[contains(text(), "Providing the site location")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[text()="Change"]'
     },
 
     siteDetails: {
       ...NotificationSummaryBasePage.sharedLocators.siteDetails,
-      changeLink: '//a[contains(@href, "coordinates")]'
+      changeLink:
+        '//h2[contains(text(), "Site details")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[text()="Change"]'
     },
 
     publicRegister: {
       ...NotificationSummaryBasePage.sharedLocators.publicRegister,
-      changeLink: '//a[contains(@href, "public-register")]'
+      changeLink:
+        '//h2[contains(text(), "Sharing your project information publicly") or contains(text(), "Sharing your information publicly")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[text()="Change"]'
     },
 
     submission: {
@@ -49,5 +60,17 @@ export default class CheckYourAnswersPage extends NotificationSummaryBasePage {
       allTerms: 'dt',
       allValues: 'dd'
     }
+  }
+
+  static getSiteDetailsCardChangeLink(siteNumber, totalSites = 1) {
+    const isSingleSite = totalSites === 1
+    const cardHeading = isSingleSite
+      ? 'Site details'
+      : `Site ${siteNumber} details`
+    return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "${cardHeading}")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
+  }
+
+  static getActivityDetailsCardChangeLink() {
+    return `//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Activity details")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
   }
 }

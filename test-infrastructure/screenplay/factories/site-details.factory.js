@@ -22,7 +22,7 @@ export default class SiteDetailsFactory {
 
   static SITE_TYPES = {
     CIRCLE: 'circle',
-    TRIANGLE: 'triangle'
+    BOUNDARY: 'boundary'
   }
 
   static RESPONSES = {
@@ -38,7 +38,7 @@ export default class SiteDetailsFactory {
       WGS84: { latitude: 51.507412, longitude: -0.127812, width: 20 },
       OSGB36: { eastings: 432675, northings: 181310, width: 20 }
     },
-    triangle: {
+    boundary: {
       WGS84: [
         ['50.000000', '-1.000000'],
         ['50.001000', '-0.999000'],
@@ -86,7 +86,7 @@ export default class SiteDetailsFactory {
     const siteType =
       shape === this.SITE_TYPES.CIRCLE
         ? this.SITE_TYPES.CIRCLE
-        : this.SITE_TYPES.TRIANGLE
+        : this.SITE_TYPES.BOUNDARY
     const coordinateData = this._getCoordinateData(shape, coordinateSystem)
 
     return this._createSiteDetailsStructure([
@@ -186,7 +186,7 @@ export default class SiteDetailsFactory {
       {
         name: 'Triangular Survey Zone Beta',
         number: 2,
-        type: this.SITE_TYPES.TRIANGLE,
+        type: this.SITE_TYPES.BOUNDARY,
         system: this.COORDINATE_SYSTEMS.WGS84
       },
       {
@@ -198,7 +198,7 @@ export default class SiteDetailsFactory {
       {
         name: 'Quadrilateral Study Area Delta',
         number: 4,
-        type: this.SITE_TYPES.TRIANGLE,
+        type: this.SITE_TYPES.BOUNDARY,
         system: this.COORDINATE_SYSTEMS.OSGB36
       }
     ]
@@ -255,15 +255,8 @@ export default class SiteDetailsFactory {
   }
 
   static _createSingleSite(options) {
-    const {
-      siteName,
-      siteNumber,
-      siteType,
-      coordinateSystem,
-      coordinateData,
-      activityDates,
-      activityDescription
-    } = options
+    const { siteName, siteNumber, siteType, coordinateSystem, coordinateData } =
+      options
     const site = {
       siteName,
       siteNumber,
@@ -273,24 +266,23 @@ export default class SiteDetailsFactory {
       ...coordinateData
     }
 
-    if ('activityDates' in options) {
-      if (activityDates !== undefined) {
-        site.activityDates = activityDates
-      }
-    } else {
-      site.activityDates = ActivityDatesModel.generateValidActivityDates()
-    }
+    this._addOptionalProperty(site, 'activityDates', options, () =>
+      ActivityDatesModel.generateValidActivityDates()
+    )
 
-    if ('activityDescription' in options) {
-      if (activityDescription !== undefined) {
-        site.activityDescription = activityDescription
-      }
-    } else {
-      site.activityDescription =
-        ActivityDescriptionModel.generateActivityDescription()
-    }
+    this._addOptionalProperty(site, 'activityDescription', options, () =>
+      ActivityDescriptionModel.generateActivityDescription()
+    )
 
     return site
+  }
+
+  static _addOptionalProperty(target, key, options, defaultGenerator) {
+    if (key in options && options[key] !== undefined) {
+      target[key] = options[key]
+    } else if (!(key in options)) {
+      target[key] = defaultGenerator()
+    }
   }
 
   static _getCoordinateData(shape, coordinateSystem) {

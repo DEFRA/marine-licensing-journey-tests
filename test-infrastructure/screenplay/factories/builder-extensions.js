@@ -38,6 +38,11 @@ function createMultiSiteBuilder(siteDetails, builder) {
   return builder
 }
 
+function selectRandomMultiSiteMethod(builder, methodNames) {
+  const chosenMethod = faker.helpers.arrayElement(methodNames)
+  return siteDetailsExtension[chosenMethod](builder)
+}
+
 export const siteDetailsExtension = {
   forACircleWithWGS84Coordinates: (builder) => {
     builder.setProperty(
@@ -53,17 +58,17 @@ export const siteDetailsExtension = {
     )
     return builder
   },
-  forATriangleWithWGS84Coordinates: (builder) => {
+  forABoundaryWithWGS84Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.create('triangle', 'WGS84')
+      SiteDetailsFactory.create('boundary', 'WGS84')
     )
     return builder
   },
-  forATriangleWithOSGB36Coordinates: (builder) => {
+  forABoundaryWithOSGB36Coordinates: (builder) => {
     builder.setProperty(
       'siteDetails',
-      SiteDetailsFactory.create('triangle', 'OSGB36')
+      SiteDetailsFactory.create('boundary', 'OSGB36')
     )
     return builder
   },
@@ -216,36 +221,23 @@ export const siteDetailsExtension = {
         builder
       ),
 
-  forRandomMultiSiteWithSameActivityDatesAndDescriptions: (builder) => {
-    const methods = [
+  forRandomMultiSiteWithSameActivityDatesAndDescriptions: (builder) =>
+    selectRandomMultiSiteMethod(builder, [
       'forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions',
       'forMixedMultipleSitesWithSameActivityDatesAndDescriptions'
-    ]
-    const chosenMethod = faker.helpers.arrayElement(methods)
-    return siteDetailsExtension[chosenMethod](builder)
-  },
+    ]),
 
-  forRandomMultiSiteWithDifferentActivityDatesAndSameDescriptions: (
-    builder
-  ) => {
-    const methods = [
+  forRandomMultiSiteWithDifferentActivityDatesAndSameDescriptions: (builder) =>
+    selectRandomMultiSiteMethod(builder, [
       'forMultiSiteKMLUploadWithDifferentActivityDatesAndSameDescriptions',
       'forMixedMultipleSitesWithDifferentActivityDatesAndSameDescriptions'
-    ]
-    const chosenMethod = faker.helpers.arrayElement(methods)
-    return siteDetailsExtension[chosenMethod](builder)
-  },
+    ]),
 
-  forRandomMultiSiteWithSameActivityDatesAndDifferentDescriptions: (
-    builder
-  ) => {
-    const methods = [
+  forRandomMultiSiteWithSameActivityDatesAndDifferentDescriptions: (builder) =>
+    selectRandomMultiSiteMethod(builder, [
       'forMultiSiteKMLUploadWithSameActivityDatesAndDifferentDescriptions',
       'forMixedMultipleSitesWithSameActivityDatesAndDifferentDescriptions'
-    ]
-    const chosenMethod = faker.helpers.arrayElement(methods)
-    return siteDetailsExtension[chosenMethod](builder)
-  }
+    ])
 }
 
 export const activityDatesExtension = {

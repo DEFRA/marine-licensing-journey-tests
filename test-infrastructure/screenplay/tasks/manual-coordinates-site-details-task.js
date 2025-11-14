@@ -65,7 +65,7 @@ export default class ManualCoordinatesSiteDetailsTask extends BaseSiteDetailsTas
   }
 
   validateSiteType(siteType) {
-    const validTypes = ['circle', 'triangle']
+    const validTypes = ['circle', 'boundary']
     if (!validTypes.includes(siteType)) {
       expect.fail(ERROR_MESSAGES.INVALID_COORDINATES_METHOD)
     }

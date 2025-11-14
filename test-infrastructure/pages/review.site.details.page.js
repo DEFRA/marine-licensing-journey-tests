@@ -34,6 +34,8 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
 
   static providingTheSiteLocationCard =
     '//h2[contains(text(), "Providing the site location")]'
+  static deleteAllSiteDetailsLink =
+    '//h2[contains(text(), "Providing the site location")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Delete all site details")]'
   static moreThanOneSiteValue =
     '//dt[contains(text(), "More than one site")]/following-sibling::dd'
 
@@ -83,6 +85,21 @@ export default class ReviewSiteDetailsPage extends CommonElementsPage {
   static getSiteActivityDescriptionChangeLink(siteNumber) {
     return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]`
   }
+
+  static getSiteNameChangeLink(siteNumber) {
+    return `//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]`
+  }
+
+  static coordinatesAtCentreChangeLink =
+    '//dt[contains(text(), "Coordinates at centre of site")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static coordinateSystemChangeLink =
+    '//dt[contains(text(), "Coordinate system")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static singleOrMultipleCoordinatesChangeLink =
+    '//dt[contains(text(), "Single or multiple sets of coordinates")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static widthChangeLink =
+    '//dt[contains(text(), "Width")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
+  static startAndEndPointsChangeLink =
+    '//dt[contains(text(), "Start and end points")]/following-sibling::dd/following-sibling::dd//a[text()="Change"]'
 
   static saveAndContinueButton = 'button*=Save and continue'
   static cancelLink = 'a*=Cancel'
