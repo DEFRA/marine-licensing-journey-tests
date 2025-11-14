@@ -174,19 +174,8 @@ export function getActivityPurposeDisplay(activityTypeCode, articleCode) {
 
   const purposeMap = ACTIVITY_PURPOSE_DISPLAY[activityTypeCode]
   if (!purposeMap) {
-    console.warn(
-      `Activity purpose lookup failed: no purpose map found for activity type '${activityTypeCode}'`
-    )
     return null
   }
 
-  const display = purposeMap[articleCode]
-  if (!display) {
-    console.warn(
-      `Activity purpose lookup failed: no display text found for activity type '${activityTypeCode}' and article code '${articleCode}'`
-    )
-    return null
-  }
-
-  return display
+  return purposeMap[articleCode] || null
 }
