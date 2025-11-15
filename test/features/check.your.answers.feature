@@ -1,23 +1,9 @@
-@issue=ML-1 @issue=ML-9 @issue=ML-10 @issue=ML-11 @issue=ML-12 @issue=ML-16 @issue=ML-17 @issue=ML-18 @issue=ML-35 @issue=ML-36 @issue=ML-37 @issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-82 @issue=ML-139 @issue=ML-140 @issue=ML-142 @issue=ML-810
+@issue=ML-82 @issue=ML-139 @issue=ML-140 @issue=ML-142 @issue=ML-810
 Feature: Check your answers: Once the user has completed all the tasks on the task list, they will be able to access the "Check your answers" page,
 which will play back all their answers and allow them to verify that the answers are OK, ready for submission of their notification.
 
 THESE TEST ARE CURRENTLY IGNORED AS CYA HAS NOT BEEN UPDATED TO HANDLE THE SITE DETAILS ACTIVITY DATES AND DESCRIPTIONS
 
-  - ML-1: Provide project name
-  - ML-9: View the task list
-  - ML-10: Provide activity dates
-  - ML-11: Provide activity description
-  - ML-12: Consent or withhold from public register
-  - ML-16: Choose to manually provide coordinates
-  - ML-17: Selecting circular site entry method (single coordinate point + width)
-  - ML-18: Choosing the coordinate system for latitude/longitude (WGS84) or eastings/northings (OSGB36)
-  - ML-35: Entering a single set of coordinates representing the centre point of the site
-  - ML-36: Entering the width of the circular site in metres
-  - ML-37: Reviewing the circular site details before saving
-  - ML-69: Choose to upload a file with coordinates
-  - ML-70: Upload coordinate file (KML or Shapefile)
-  - ML-74: Review uploaded site details
   - ML-82: The user is able to access the "Check your answers" page after completing all the tasks on the task list
   - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
