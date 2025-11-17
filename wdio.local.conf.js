@@ -55,7 +55,7 @@ export const config = {
   execArgv,
   logLevel: debug ? 'debug' : 'info',
   bail: 0,
-  baseUrl: `http://localhost:3000/`,
+  baseUrl: `http://marine-licensing-frontend.local:3000/`,
   defraIdUrl: 'http://localhost:3200',
   waitforTimeout: 10000,
   waitforInterval: 200,

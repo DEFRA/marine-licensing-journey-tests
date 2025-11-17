@@ -26,13 +26,21 @@ export default class Navigate extends Task {
 
   async performAs(actor) {
     const exemption = actor.recalls('exemption')
-    if (!exemption?.iatContext) {
+    let finalUrl
+
+    if (Object.prototype.hasOwnProperty.call(exemption, 'rawIatQueryString')) {
+      const baseUrlFromPage = ProjectNamePage.url
+      finalUrl = exemption.rawIatQueryString
+        ? `${baseUrlFromPage}?${exemption.rawIatQueryString}`
+        : baseUrlFromPage
+    } else if (exemption?.iatContext) {
+      finalUrl = constructIatUrl(this.url, exemption.iatContext)
+    } else {
       expect.fail(
         'Navigate task requires exemption with iatContext to be present in actor memory'
       )
     }
 
-    const finalUrl = constructIatUrl(this.url, exemption.iatContext)
     actor.remembers('navigationUrl', finalUrl)
 
     // Handle authentication based on environment

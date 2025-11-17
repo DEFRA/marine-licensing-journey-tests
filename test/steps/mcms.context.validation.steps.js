@@ -1,0 +1,86 @@
+import { Given, Then, When } from '@cucumber/cucumber'
+import { browser } from '@wdio/globals'
+import {
+  Actor,
+  ApplyForExemption,
+  BrowseTheWeb,
+  ClickReviewAndSend,
+  CompleteAllTasks,
+  EnsureCheckYourAnswersPage,
+  EnsurePageHeading,
+  EnsureProjectSummaryCard,
+  Navigate
+} from '~/test-infrastructure/screenplay'
+import EnsureMcmsContextCardNotDisplayed from '~/test-infrastructure/screenplay/interactions/ensure.mcms.context.card.not.displayed.js'
+
+Given(
+  'a second notification is started with valid MCMS context after completing a first notification',
+  async function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+    await this.actor.attemptsTo(ClickReviewAndSend.now())
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Check your answers before sending your information')
+    )
+
+    this.actor.intendsTo(
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+    )
+    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  }
+)
+
+Given(
+  'a notification is started with MCMS context {string}',
+  async function (iatQueryString) {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+
+    const exemption =
+      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
+        .data
+
+    exemption.iatContext = null
+    exemption.rawIatQueryString = iatQueryString
+
+    this.actor.remembers('exemption', exemption)
+    await this.actor.attemptsTo(Navigate.now())
+  }
+)
+
+When(
+  'all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked',
+  async function () {
+    await this.actor.attemptsTo(CompleteAllTasks.now())
+    await this.actor.attemptsTo(ClickReviewAndSend.now())
+  }
+)
+
+Then(
+  'the check your answers page displays the MCMS context',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Check your answers before sending your information')
+    )
+    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
+    await this.actor.attemptsTo(
+      EnsureProjectSummaryCard.isDisplayedWithIatInformation()
+    )
+  }
+)
+
+Then(
+  'the check your answers page is displayed without the MCMS context card',
+  async function () {
+    await this.actor.attemptsTo(
+      EnsurePageHeading.is('Check your answers before sending your information')
+    )
+    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
+    await this.actor.attemptsTo(EnsureMcmsContextCardNotDisplayed.now())
+  }
+)

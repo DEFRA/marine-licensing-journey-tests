@@ -127,6 +127,20 @@ nvm use
 npm install
 ```
 
+### **Local Development Setup**
+
+When running journey tests with Docker locally, configure the hosts file to map the frontend domain:
+
+```bash
+# Edit hosts file (requires sudo)
+sudo nano /etc/hosts
+
+# Add this line:
+127.0.0.1       marine-licensing-frontend.local
+```
+
+This domain mapping ensures proper routing when testing against the containerised frontend service.
+
 ### **Development Commands**
 
 ```bash
