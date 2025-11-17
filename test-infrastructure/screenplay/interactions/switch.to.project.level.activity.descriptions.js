@@ -36,9 +36,7 @@ export default class SwitchToProjectLevelActivityDescriptions extends Task {
       true
     )
 
-    await actor.attemptsTo(
-      EnsureThatActivityDescriptionIsNotPrepopulated.now()
-    )
+    await actor.attemptsTo(EnsureThatActivityDescriptionIsNotPrepopulated.now())
     await actor.attemptsTo(CompleteActivityDescription.now())
   }
 }
