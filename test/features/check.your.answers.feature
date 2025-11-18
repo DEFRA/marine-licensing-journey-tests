@@ -2,8 +2,6 @@
 Feature: Check your answers: Once the user has completed all the tasks on the task list, they will be able to access the "Check your answers" page,
 which will play back all their answers and allow them to verify that the answers are OK, ready for submission of their notification.
 
-THESE TEST ARE CURRENTLY IGNORED AS CYA HAS NOT BEEN UPDATED TO HANDLE THE SITE DETAILS ACTIVITY DATES AND DESCRIPTIONS
-
   - ML-82: The user is able to access the "Check your answers" page after completing all the tasks on the task list
   - ML-139: Check your answers page displays the correct site details for a polygon site
   - ML-140: Check your answers page displays uploaded file details
