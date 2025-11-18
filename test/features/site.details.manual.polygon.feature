@@ -75,6 +75,14 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
       | east1  | north1 | east2  | north2 | east3  | north3 | east4  | north4 | east5  | north5 |
       | 432675 | 181310 | 433000 | 181310 | 433200 | 181400 | 433000 | 181500 | 432675 | 181500 |
 
+  @wgs84 @complex-polygon
+  Scenario: Successfully entering a complex 20-point polygon site using WGS84 coordinates
+    Given an exemption for a 20 point polygon site using WGS84 coordinates
+    And the site details task is reached
+    When the 20 point random polygon coordinates are entered using add another point
+    Then the polygon site details review page shows the correct site details
+    And the "Site details" task status is "Completed"
+
   @stress-test @local-only @wip
   Scenario Outline: Successfully adding <coordinateCount> random points to test add another point functionality and system capacity
     Given an exemption for a <coordinateCount> point random polygon site using WGS84 coordinates

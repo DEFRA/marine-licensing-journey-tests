@@ -266,6 +266,43 @@ Given(
   }
 )
 
+Given(
+  'an exemption for a 20 point polygon site using WGS84 coordinates',
+  function () {
+    this.actor = new Actor('Alice')
+    this.actor.can(BrowseTheWeb.using(browser))
+
+    const coordinates = [
+      { latitude: '50.000000', longitude: '-1.000000' },
+      { latitude: '50.001000', longitude: '-1.000000' },
+      { latitude: '50.001500', longitude: '-0.999800' },
+      { latitude: '50.002000', longitude: '-0.999600' },
+      { latitude: '50.002500', longitude: '-0.999400' },
+      { latitude: '50.003000', longitude: '-0.999200' },
+      { latitude: '50.003500', longitude: '-0.999000' },
+      { latitude: '50.004000', longitude: '-0.998800' },
+      { latitude: '50.004500', longitude: '-0.998600' },
+      { latitude: '50.005000', longitude: '-0.998400' },
+      { latitude: '50.005000', longitude: '-0.998200' },
+      { latitude: '50.004500', longitude: '-0.998000' },
+      { latitude: '50.004000', longitude: '-0.997800' },
+      { latitude: '50.003500', longitude: '-0.997600' },
+      { latitude: '50.003000', longitude: '-0.997400' },
+      { latitude: '50.002500', longitude: '-0.997200' },
+      { latitude: '50.002000', longitude: '-0.997000' },
+      { latitude: '50.001500', longitude: '-0.997200' },
+      { latitude: '50.001000', longitude: '-0.997400' },
+      { latitude: '50.000500', longitude: '-0.998000' }
+    ]
+
+    this.actor.intendsTo(
+      ApplyForExemption.withValidProjectName()
+        .andSiteDetails.forAPentagonWithWGS84Coordinates()
+        .withCoordinatePoints(coordinates)
+    )
+  }
+)
+
 Given('the site details task is reached', async function () {
   await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
   await this.actor.attemptsTo(CompleteProjectName.now())
