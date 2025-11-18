@@ -69,6 +69,8 @@ export { default as EnsureMcmsContextCardDisplaysOnlyProjectName } from './ensur
 export { default as EnsureServiceName } from './ensure.service.name'
 export { default as EnsureSiteDetails } from './ensure.site.details'
 export { default as EnsureTaskStatus } from './ensure.task.is'
+export { default as EnsureThatActivityDatesAreNotPrepopulated } from './ensure.that.activity.dates.are.not.prepopulated'
+export { default as EnsureThatActivityDescriptionIsNotPrepopulated } from './ensure.that.activity.description.is.not.prepopulated'
 export { default as EnsureThatIatIsDisplayed } from './ensure.that.iat.is.displayed'
 export { default as EnsureThatTheExemptionDetailsAreCorrect } from './ensure.that.the.exemption.details.are.correct'
 export { default as EnsureViewDetailsPage } from './ensure.view.details.page'

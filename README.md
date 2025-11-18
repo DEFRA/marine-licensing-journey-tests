@@ -4,6 +4,12 @@ End-to-end testing suite for the Marine Licensing service using **BDD (Behaviour
 
 This project follows a user-centric approach to test automation, focusing on **who** does **what** and **why**, with clear separation between business logic and technical implementation.
 
+## Releases
+
+### [2.0.0](https://eaflood.atlassian.net/projects/ML/versions/23737/tab/release-report-all-issues)
+
+Release of the marine licensing journey tests docker version which contains tests associated with the November 18th 2025 release
+
 ## System Under Test
 
 These journey tests cover:

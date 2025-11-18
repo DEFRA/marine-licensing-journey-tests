@@ -1,4 +1,4 @@
-@issue=ML-695 @issue=ML-696
+@issue=ML-695 @issue=ML-696 @issue=ML-910
 Feature: The user can make changes to their activity details from the site details review page
 AS an applicant
 I WANT to be able to change answers from the “Review site details” page

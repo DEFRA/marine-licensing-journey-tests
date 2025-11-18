@@ -2,7 +2,10 @@ import ReviewSiteDetailsPage from '../../pages/review.site.details.page.js'
 import Task from '../base/task.js'
 import ActivityDescriptionModel from '../models/activity.description.model.js'
 import CompleteActivityDescription from '../tasks/complete.activity.description.js'
-import { Click } from './index.js'
+import {
+  Click,
+  EnsureThatActivityDescriptionIsNotPrepopulated
+} from './index.js'
 import SameActivityDescriptionPageInteractions from '../page-interactions/same.activity.description.page.interactions.js'
 
 export default class SwitchToProjectLevelActivityDescriptions extends Task {
@@ -33,6 +36,7 @@ export default class SwitchToProjectLevelActivityDescriptions extends Task {
       true
     )
 
+    await actor.attemptsTo(EnsureThatActivityDescriptionIsNotPrepopulated.now())
     await actor.attemptsTo(CompleteActivityDescription.now())
   }
 }
