@@ -55,9 +55,9 @@
     "undici": "7.16.0"
   },
   "devDependencies": {
-    "@axe-core/webdriverio": "4.10.2",
+    "@axe-core/webdriverio": "4.11.0",
     "@faker-js/faker": "9.7.0",
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.55.1",
     "@types/node": "24.1.0",
     "@wdio/cli": "9.20.0",
     "@wdio/cucumber-framework": "9.20.0",
@@ -69,13 +69,25 @@
     "husky": "9.1.7",
     "knip": "5.62.0",
     "neostandard": "0.12.1",
-    "playwright": "1.54.1",
+    "playwright": "1.55.1",
     "prettier": "3.6.2",
     "typescript": "5.8.3",
     "uuid": "11.1.0",
     "wdio-wait-for": "3.1.0"
   },
   "overrides": {
-    "tmp": "0.2.4"
+    "tmp": "0.2.4",
+    "@cucumber/cucumber": {
+      "glob": "11.1.0"
+    },
+    "@wdio/config": {
+      "glob": "11.1.0"
+    },
+    "@wdio/cucumber-framework": {
+      "glob": "11.1.0"
+    },
+    "archiver-utils": {
+      "glob": "11.1.0"
+    }
   }
 }
