@@ -65,7 +65,7 @@ export { default as EnsureProjectSummaryCard } from './ensure.project.summary.ca
 export { default as EnsurePublicRegisterTask } from './ensure.public.register'
 export { default as EnsurePublicRegisterNewTab } from './ensure.public.register.new.tab'
 export { default as EnsureReasonTextBox } from './ensure.reason.text.box'
-export { default as EnsureMcmsContextCardNotDisplayed } from './ensure.mcms.context.card.not.displayed'
+export { default as EnsureMcmsContextCardDisplaysOnlyProjectName } from './ensure.mcms.context.card.displays.only.project.name'
 export { default as EnsureServiceName } from './ensure.service.name'
 export { default as EnsureSiteDetails } from './ensure.site.details'
 export { default as EnsureTaskStatus } from './ensure.task.is'

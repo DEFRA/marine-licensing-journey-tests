@@ -4,17 +4,17 @@ Feature: MCMS context validation: MCMS context is validated and handled correctl
   I WANT the system to handle MCMS context validation gracefully
   SO THAT I can complete my notification even when context validation fails
 
-  @issue=ML-919 @circle @wgs84 @bug
+  @issue=ML-919 @bug
   Scenario: Valid MCMS context is displayed on check your answers page when 2 journeys are completed in the same session
     Given a second notification is started with valid MCMS context after completing a first notification
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
-    Then the check your answers page displays the MCMS context
+    Then the project summary card is displayed in full on the check your answers page
 
-  @issue=ML-918 @circle @wgs84
-  Scenario Outline: <iatQueryString> MCMS context allows notification completion but context is not displayed
+  @issue=ML-918 
+  Scenario Outline: <iatQueryString> MCMS context allows notification completion but only project name is displayed
     Given a notification is started with MCMS context "<iatQueryString>"
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
-    Then the check your answers page is displayed without the MCMS context card
+    Then the project summary card only contains the project name
 
     Examples:
       | iatQueryString                                                    |

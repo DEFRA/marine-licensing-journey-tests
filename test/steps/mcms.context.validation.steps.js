@@ -11,7 +11,7 @@ import {
   EnsureProjectSummaryCard,
   Navigate
 } from '~/test-infrastructure/screenplay'
-import EnsureMcmsContextCardNotDisplayed from '~/test-infrastructure/screenplay/interactions/ensure.mcms.context.card.not.displayed.js'
+import EnsureMcmsContextCardDisplaysOnlyProjectName from '~/test-infrastructure/screenplay/interactions/ensure.mcms.context.card.displays.only.project.name.js'
 
 Given(
   'a second notification is started with valid MCMS context after completing a first notification',
@@ -62,7 +62,7 @@ When(
 )
 
 Then(
-  'the check your answers page displays the MCMS context',
+  'the project summary card is displayed in full on the check your answers page',
   async function () {
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Check your answers before sending your information')
@@ -75,12 +75,14 @@ Then(
 )
 
 Then(
-  'the check your answers page is displayed without the MCMS context card',
+  'the project summary card only contains the project name',
   async function () {
     await this.actor.attemptsTo(
       EnsurePageHeading.is('Check your answers before sending your information')
     )
     await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
-    await this.actor.attemptsTo(EnsureMcmsContextCardNotDisplayed.now())
+    await this.actor.attemptsTo(
+      EnsureMcmsContextCardDisplaysOnlyProjectName.now()
+    )
   }
 )
