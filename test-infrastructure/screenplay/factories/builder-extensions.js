@@ -110,6 +110,13 @@ export const siteDetailsExtension = {
     )
     return builder
   },
+  forAComplex20PointPolygonWithWGS84Coordinates: (builder) => {
+    builder.setProperty(
+      'siteDetails',
+      SiteDetailsFactory.create('complex20PointPolygon', 'WGS84')
+    )
+    return builder
+  },
   forMixedMultipleSites: (builder) => {
     builder.setProperty(
       'siteDetails',
