@@ -48,11 +48,18 @@ export class CoordinateEntryStrategy {
   }
 
   async enterPolygonCoordinates(siteDetails, config) {
+    const useAddAnotherPoint =
+      config.useAddAnotherPoint || this.shouldUseAddAnotherPoint(siteDetails)
     await EnterMultipleCoordinatesPageInteractions.enterPolygonCoordinatesAndContinue(
       this.browseTheWeb,
       siteDetails,
-      config.useAddAnotherPoint || false
+      useAddAnotherPoint
     )
+  }
+
+  shouldUseAddAnotherPoint(siteDetails) {
+    const coordinateCount = siteDetails.polygonData?.coordinates?.length || 0
+    return coordinateCount > 3
   }
 
   async enterCircleWidthIfRequired(siteDetails) {
