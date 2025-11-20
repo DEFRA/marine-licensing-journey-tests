@@ -284,7 +284,7 @@ Given('the site details task is reached', async function () {
 })
 
 When('the site details task is completed', async function () {
-  await this.actor.attemptsTo(CompleteSiteDetails.now())
+  await this.actor.attemptsTo(CompleteSiteDetails.andSave())
 })
 
 Then('the polygon coordinate entry page is displayed', async function () {
