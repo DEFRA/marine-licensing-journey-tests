@@ -12,7 +12,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully entering triangular site coordinates using WGS84 coordinates with <lat1>, <lng1>, <lat2>, <lng2>, <lat3>, <lng3>
     Given an exemption for a triangular site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>" and point 3 "<lat3>", "<lng3>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: WGS84 coordinate testing: boundary values and realistic marine scenarios
@@ -22,7 +22,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully entering triangular site coordinates using OSGB36 coordinates with <east1>, <north1>, <east2>, <north2>, <east3>, <north3>
     Given an exemption for a triangular site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>" and point 3 "<east3>", "<north3>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: OSGB36 coordinate testing: UK Grid coverage and decimal precision
@@ -32,7 +32,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully adding a fourth point to create a quadrilateral site using WGS84 coordinates
     Given an exemption for a quadrilateral site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>", point 3 "<lat3>", "<lng3>" and point 4 "<lat4>", "<lng4>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: WGS84 quadrilateral testing: rectangular and complex boundary shapes
@@ -42,7 +42,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully adding a fourth point to create a quadrilateral site using OSGB36 coordinates
     Given an exemption for a quadrilateral site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>", point 3 "<east3>", "<north3>" and point 4 "<east4>", "<north4>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: OSGB36 quadrilateral testing: rectangular and complex boundary shapes
@@ -52,7 +52,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully adding multiple additional points to create a complex polygon site using WGS84 coordinates
     Given an exemption for a pentagon site using WGS84 coordinates with point 1 "<lat1>", "<lng1>", point 2 "<lat2>", "<lng2>", point 3 "<lat3>", "<lng3>", point 4 "<lat4>", "<lng4>" and point 5 "<lat5>", "<lng5>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: WGS84 pentagon testing: complex boundary shapes with multiple additional points
@@ -62,7 +62,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario Outline: Successfully adding multiple additional points to create a complex polygon site using OSGB36 coordinates
     Given an exemption for a pentagon site using OSGB36 coordinates with point 1 "<east1>", "<north1>", point 2 "<east2>", "<north2>", point 3 "<east3>", "<north3>", point 4 "<east4>", "<north4>" and point 5 "<east5>", "<north5>"
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
     Examples: OSGB36 pentagon testing: complex boundary shapes with multiple additional points
@@ -73,7 +73,7 @@ Feature: Site details: The user marks the boundary of a polygon site manually us
   Scenario: Successfully entering a complex 20-point polygon site using WGS84 coordinates
     Given an exemption for a 20 point polygon site using WGS84 coordinates
     And the site details task is reached
-    When the site details task is completed
+    When the site details task is completed and saved
     Then the "Site details" task status is "Completed"
 
   @stress-test @local-only @wip
