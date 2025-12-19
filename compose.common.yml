@@ -165,7 +165,7 @@ services:
     image: defradigital/marine-licensing-backend:${MARINE_LICENSING_BACKEND_VERSION:-latest}
     restart: unless-stopped
     env_file:
-      - ./docker/config/defaults.env
+      - './docker/config/defaults.env'
     environment:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
