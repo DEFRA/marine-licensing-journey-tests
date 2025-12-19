@@ -1,4 +1,5 @@
 // Reuses locators from test-infrastructure/pages/task.list.page.js
+import { expect } from '@playwright/test'
 export class TaskListPage {
   static selectors = {
     taskLink: (taskName) => `//a[normalize-space(text()) = "${taskName}"]`,

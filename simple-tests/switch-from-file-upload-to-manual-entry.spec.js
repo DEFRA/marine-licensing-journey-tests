@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 import { ProjectNamePage } from './pages/project-name.page.js'
 import { TaskListPage } from './pages/task-list.page.js'

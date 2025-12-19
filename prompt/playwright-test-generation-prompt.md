@@ -25,11 +25,7 @@ You are converting a Gherkin scenario from the Marine Licensing Journey Tests re
 
 ## Task
 
-Convert the following Gherkin scenario into a Playwright test:
-
-### Scenario to Convert
-
-[Paste the Gherkin scenario here, including the Feature description and Scenario steps]
+Convert the provided Gherkin scenario into a Playwright test:
 
 ### Important: Authentication Steps
 
