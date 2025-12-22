@@ -10,7 +10,7 @@ export default class EnsureDashboardPage extends Task {
     const browseTheWeb = actor.ability
     await browseTheWeb.expectElementToContainText(
       DashboardPage.locators.pageHeading,
-      'Your projects'
+      'Projects'
     )
     const currentUrl = await browseTheWeb.browser.getUrl()
     if (!currentUrl.includes(DashboardPage.url)) {

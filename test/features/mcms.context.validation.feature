@@ -10,13 +10,17 @@ Feature: MCMS context validation: MCMS context is validated and handled correctl
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
     Then the project summary card is displayed in full on the check your answers page
 
-  @issue=ML-918 
-  Scenario Outline: <iatQueryString> MCMS context allows notification completion but only project name is displayed
+  @issue=ML-948
+  Scenario: Missing MCMS context prevents notification creation and redirects user to projects dashboard
+    Given a notification is started with MCMS context ""
+    Then the user is redirected to the dashboard
+
+  @issue=ML-918
+  Scenario Outline: <iatQueryString> invalid MCMS context allows notification completion but only project name is displayed
     Given a notification is started with MCMS context "<iatQueryString>"
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
     Then the project summary card only contains the project name
 
     Examples:
       | iatQueryString                                                    |
-      |                                                                   |
-      | INVALID_IAT=123&BAD_PARAM=xyz&EXE_ACTIVITY_SUBTYPE_DEPOSIT=ignore |
+      | INVALID_IAT=123&BAD_PARAM=xyz&ACTIVITY_TYPE=CON |
