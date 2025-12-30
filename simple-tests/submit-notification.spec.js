@@ -26,7 +26,8 @@ const DEFAULT_COORDINATES = {
   width: 20
 }
 
-const BASE_URL = process.env.BASE_URL || 'http://marine-licensing-frontend.local:3000'
+const BASE_URL =
+  process.env.BASE_URL || 'http://marine-licensing-frontend.local:3000'
 const DEFRA_ID_URL = process.env.DEFRA_ID_URL || 'http://localhost:3200'
 const ENVIRONMENT = process.env.ENVIRONMENT || 'local'
 
@@ -138,7 +139,11 @@ test.describe('Submit exemption notification', () => {
     await authenticate(page)
 
     // Complete project name
-    await ProjectNamePage.navigateTo(page, BASE_URL + '/?ACTIVITY_TYPE=SCUTTLING&ARTICLE=13&pdfDownloadUrl=https%3A%2F%2Fmarinelicensing.marinemanagement.org.uk%2Fpath%2Fjourney%2Fself-service%2Foutcome-document%2F97c39c8d-5c21-4288-9332-8731d868dc88')
+    await ProjectNamePage.navigateTo(
+      page,
+      BASE_URL +
+        '/?ACTIVITY_TYPE=SCUTTLING&ARTICLE=13&pdfDownloadUrl=https%3A%2F%2Fmarinelicensing.marinemanagement.org.uk%2Fpath%2Fjourney%2Fself-service%2Foutcome-document%2F97c39c8d-5c21-4288-9332-8731d868dc88'
+    )
     await ProjectNamePage.enterProjectName(page, 'Test Project')
     await ProjectNamePage.clickSaveAndContinue(page)
 

@@ -18,4 +18,3 @@ export class DoYouNeedToTellUsAboutMoreThanOneSitePage {
     await page.click(this.selectors.saveAndContinue)
   }
 }
-

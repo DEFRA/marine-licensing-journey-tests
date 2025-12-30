@@ -11,7 +11,9 @@ export default defineConfig({
     '**/test-infrastructure/**'
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'http://http://marine-licensing-frontend.local:3000'
+    baseURL:
+      process.env.BASE_URL ||
+      'http://http://marine-licensing-frontend.local:3000'
   },
   projects: [
     {
@@ -20,4 +22,3 @@ export default defineConfig({
     }
   ]
 })
-
