@@ -4,6 +4,7 @@ import { ProjectNamePage } from './pages/project-name.page.js'
 import { TaskListPage } from './pages/task-list.page.js'
 import { BeforeYouStartSiteDetailsPage } from './pages/before-you-start-site-details.page.js'
 import { HowDoYouWantToProvideCoordinatesPage } from './pages/how-do-you-want-to-provide-coordinates.page.js'
+import { DoYouNeedToTellUsAboutMoreThanOneSitePage } from './pages/do-you-need-to-tell-us-about-more-than-one-site.page.js'
 import { HowDoYouWantToEnterCoordinatesPage } from './pages/how-do-you-want-to-enter-coordinates.page.js'
 import { WhatCoordinateSystemPage } from './pages/what-coordinate-system.page.js'
 import { EnterCentrePointPage } from './pages/enter-centre-point.page.js'
@@ -25,7 +26,7 @@ const DEFAULT_COORDINATES = {
   width: 20
 }
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
+const BASE_URL = process.env.BASE_URL || 'http://marine-licensing-frontend.local:3000'
 const DEFRA_ID_URL = process.env.DEFRA_ID_URL || 'http://localhost:3200'
 const ENVIRONMENT = process.env.ENVIRONMENT || 'local'
 
@@ -98,10 +99,27 @@ async function authenticate(page) {
     const testUser = await registerTestUser('submit-notification')
 
     // Wait for DEFRA ID stub page to load and click login link
-    await page.waitForSelector(
-      DefraIdLoginPage.loginLinkForUser(testUser.email),
-      { timeout: 10000 }
+    // Refresh page every second until login link appears
+    const loginLinkLocator = page.locator(
+      DefraIdLoginPage.loginLinkForUser(testUser.email)
     )
+    const startTime = Date.now()
+    const timeout = 30000
+
+    while (Date.now() - startTime < timeout) {
+      try {
+        await loginLinkLocator.waitFor({ timeout: 1000, state: 'visible' })
+        break // Found the locator, exit loop
+      } catch (error) {
+        // Locator not found yet, refresh and try again
+        await page.reload()
+        // Wait 1 second before next check
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+
+    // Final check - if still not found, this will throw with a clear error
+    await loginLinkLocator.waitFor({ timeout: 1000 })
     await DefraIdLoginPage.clickLoginLinkForUser(page, testUser.email)
   }
 
@@ -109,7 +127,7 @@ async function authenticate(page) {
   await CookieBannerPage.acceptAnalytics(page)
 
   // Wait for navigation back to app
-  await page.waitForURL(/.*\/$/, { timeout: 10000 })
+  await page.waitForURL(BASE_URL + '/home', { timeout: 10000 })
 }
 
 test.describe('Submit exemption notification', () => {
@@ -120,6 +138,7 @@ test.describe('Submit exemption notification', () => {
     await authenticate(page)
 
     // Complete project name
+    await ProjectNamePage.navigateTo(page, BASE_URL + '/?ACTIVITY_TYPE=SCUTTLING&ARTICLE=13&pdfDownloadUrl=https%3A%2F%2Fmarinelicensing.marinemanagement.org.uk%2Fpath%2Fjourney%2Fself-service%2Foutcome-document%2F97c39c8d-5c21-4288-9332-8731d868dc88')
     await ProjectNamePage.enterProjectName(page, 'Test Project')
     await ProjectNamePage.clickSaveAndContinue(page)
 
@@ -133,28 +152,9 @@ test.describe('Submit exemption notification', () => {
     await HowDoYouWantToProvideCoordinatesPage.selectEnterCoordinates(page)
     await HowDoYouWantToProvideCoordinatesPage.clickSaveAndContinue(page)
 
-    // Select circle
-    await HowDoYouWantToEnterCoordinatesPage.selectCircle(page)
-    await HowDoYouWantToEnterCoordinatesPage.clickSaveAndContinue(page)
-
-    // Select WGS84 coordinate system
-    await WhatCoordinateSystemPage.selectWGS84(page)
-    await WhatCoordinateSystemPage.clickSaveAndContinue(page)
-
-    // Enter centre point coordinates
-    await EnterCentrePointPage.enterCoordinates(
-      page,
-      DEFAULT_COORDINATES.latitude,
-      DEFAULT_COORDINATES.longitude
-    )
-    await EnterCentrePointPage.clickSaveAndContinue(page)
-
-    // Enter width
-    await WidthOfCircularSitePage.enterWidth(page, DEFAULT_COORDINATES.width)
-    await WidthOfCircularSitePage.clickSaveAndContinue(page)
-
-    // Review and save site details
-    await ReviewSiteDetailsPage.clickSaveAndContinue(page)
+    // Select "No" for multiple sites
+    await DoYouNeedToTellUsAboutMoreThanOneSitePage.selectNo(page)
+    await DoYouNeedToTellUsAboutMoreThanOneSitePage.clickSaveAndContinue(page)
 
     // Enter activity dates
     const today = new Date()
@@ -185,6 +185,29 @@ test.describe('Submit exemption notification', () => {
     )
     await ActivityDescriptionPage.clickSaveAndContinue(page)
 
+    // Select circle
+    await HowDoYouWantToEnterCoordinatesPage.selectCircle(page)
+    await HowDoYouWantToEnterCoordinatesPage.clickSaveAndContinue(page)
+
+    // Select WGS84 coordinate system
+    await WhatCoordinateSystemPage.selectWGS84(page)
+    await WhatCoordinateSystemPage.clickSaveAndContinue(page)
+
+    // Enter centre point coordinates
+    await EnterCentrePointPage.enterCoordinates(
+      page,
+      DEFAULT_COORDINATES.latitude,
+      DEFAULT_COORDINATES.longitude
+    )
+    await EnterCentrePointPage.clickSaveAndContinue(page)
+
+    // Enter width
+    await WidthOfCircularSitePage.enterWidth(page, DEFAULT_COORDINATES.width)
+    await WidthOfCircularSitePage.clickSaveAndContinue(page)
+
+    // Review and save site details
+    await ReviewSiteDetailsPage.clickSaveAndContinue(page)
+
     // Complete public register task
     await TaskListPage.clickTask(
       page,
@@ -200,7 +223,6 @@ test.describe('Submit exemption notification', () => {
     await expect(page).toHaveURL(/.*\/exemption\/check-your-answers/)
 
     // Check declaration and submit
-    await CheckYourAnswersPage.checkDeclaration(page)
     await CheckYourAnswersPage.clickConfirmAndSend(page)
 
     // Verify confirmation page

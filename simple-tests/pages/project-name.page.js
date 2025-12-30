@@ -10,10 +10,12 @@ export class ProjectNamePage {
   }
 
   static async enterProjectName(page, projectName) {
+    await page.waitForSelector(this.selectors.projectNameInput)
     await page.fill(this.selectors.projectNameInput, projectName)
   }
 
   static async clickSaveAndContinue(page) {
+    await page.waitForSelector(this.selectors.saveAndContinue)
     await page.click(this.selectors.saveAndContinue)
   }
 }
