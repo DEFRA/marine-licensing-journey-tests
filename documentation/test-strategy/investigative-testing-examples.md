@@ -20,21 +20,18 @@ This investigation connects directly with [Sarah's persona](../personas/sarah-di
 ### **Investigation script**
 
 1. **Initial approach** (15 minutes)
-
    - Start from the service homepage without reading guidance materials
    - Attempt to determine if your project requires a licence or exemption
    - Note any confusing terminology or unclear decision points
    - _Look for:_ Initial clarity, guidance visibility, terminology explanations
 
 2. **Project setup** (15 minutes)
-
    - Create a new exemption for a simple project (e.g., pontoon repair)
    - Provide a project name without overthinking it
    - Navigate through initial task list pages
    - _Look for:_ Confirmation messages, progress indicators, contextual help
 
 3. **Location specification** (20 minutes)
-
    - Attempt to provide site coordinates without prior knowledge
    - Try different coordinate entry methods
    - Use any help features when genuinely confused
@@ -67,21 +64,18 @@ This investigation connects directly with [Marcus's persona](../personas/marcus-
 ### **Investigation script**
 
 1. **Rapid navigation** (10 minutes)
-
    - Use keyboard shortcuts exclusively (Tab, Enter, Space)
    - Complete the project name page and navigate to task list
    - Attempt to access different sections directly
    - _Look for:_ Keyboard accessibility, navigation efficiency, shortcut support
 
 2. **Data entry optimization** (15 minutes)
-
    - Complete forms with minimal clicks/keystrokes
    - Test copy-paste functionality for complex data
    - Attempt to reuse previously entered information
    - _Look for:_ Field constraints, validation timing, data persistence
 
 3. **Multi-tasking simulation** (20 minutes)
-
    - Open multiple browser tabs for different sections
    - Switch between sections in random order
    - Save partial information and return later
@@ -114,21 +108,18 @@ This investigation spans multiple personas, especially [Rachel](../personas/rach
 ### **Investigation script**
 
 1. **Interrupted workflows** (15 minutes)
-
    - Begin a notification process
    - Deliberately interrupt with simulated phone calls/emails
    - Return to the service after 5+ minute interruptions
    - _Look for:_ Session timeout behavior, state preservation, recovery options
 
 2. **Device switching** (20 minutes)
-
    - Start a process on desktop
    - Continue on mobile device mid-task
    - Return to desktop for completion
    - _Look for:_ Responsive design issues, context preservation, usability differences
 
 3. **Connection resilience** (15 minutes)
-
    - Throttle connection using browser dev tools
    - Simulate connection drops during form submission
    - Test offline capability if available
@@ -161,21 +152,18 @@ This investigation connects with [David's persona](../personas/david-compliance-
 ### **Investigation script**
 
 1. **Application visibility** (15 minutes)
-
    - Review how submitted applications appear to staff
    - Look for search and filtering capabilities
    - Test case reference and identification features
    - _Look for:_ Data organization, search effectiveness, information accessibility
 
 2. **Support scenarios** (15 minutes)
-
    - Simulate responding to applicant queries
    - Locate specific application details quickly
    - Identify history and status information
    - _Look for:_ Context availability, history tracking, status clarity
 
 3. **Administrative workflows** (20 minutes)
-
    - Test any case assignment features
    - Explore notification mechanisms
    - Evaluate reporting capabilities

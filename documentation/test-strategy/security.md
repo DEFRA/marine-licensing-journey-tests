@@ -75,19 +75,16 @@ This section covers **security testing**, **threat-based testing**, and **securi
 #### **Testing Phases**
 
 1. **Reconnaissance & Information Gathering**
-
    - Public information discovery (OSINT)
    - Technology stack identification
    - Attack surface mapping
 
 2. **Vulnerability Assessment**
-
    - Automated scanning with manual validation
    - False positive verification
    - Risk assessment and prioritisation
 
 3. **Manual Penetration Testing**
-
    - Business logic testing
    - Complex attack chain development
    - Custom payload development

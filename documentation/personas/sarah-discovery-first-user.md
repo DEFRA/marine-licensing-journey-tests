@@ -31,19 +31,16 @@ Sarah represents individuals who need marine permissions but don't work in the m
 ## Core Needs
 
 1. **Discovery Support**:
-
    - Clear pathways from Google search to correct service
    - Distinction from local authority websites that appear in search
    - Understanding whether permission is needed at all
 
 2. **Guidance Clarity**:
-
    - "Said she would need to read the guidance first to see if it was applicable"
    - Simple language that non-professionals can understand
    - Clear indication of what applies to their specific situation
 
 3. **Digital Accessibility**:
-
    - Single-screen workflows where possible
    - Simple location input methods
    - Clear error prevention and recovery

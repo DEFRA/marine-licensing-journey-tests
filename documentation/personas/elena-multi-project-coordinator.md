@@ -31,19 +31,16 @@ Elena specialises in navigating the marine licensing system for organisations th
 ## Core Needs
 
 1. **Project Linking**:
-
    - Connect multiple exemptions and applications under one umbrella project
    - Retrospectively group applications as projects evolve
    - Track dependencies between related submissions
 
 2. **Collaboration Infrastructure**:
-
    - "Often a large project will have multiple exemptions and applications they need to see linked together"
    - Organsational dashboard for team oversight
    - Client access and review capabilities
 
 3. **Efficiency Tools**:
-
    - Minimise duplicate data entry across related applications
    - Template and copying functionality for similar projects
    - Bulk operations for multi-site submissions
