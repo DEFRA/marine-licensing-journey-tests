@@ -7,6 +7,7 @@ import {
   ClickReviewAndSend,
   CompleteAllTasks,
   EnsureCheckYourAnswersPage,
+  EnsureEmptyStateMessage,
   EnsurePageHeading,
   EnsureProjectSummaryCard,
   Navigate
@@ -86,3 +87,9 @@ Then(
     )
   }
 )
+
+Then('the user is redirected to the dashboard', async function () {
+  await this.actor.attemptsTo(
+    EnsureEmptyStateMessage.shows('You currently have no projects.')
+  )
+})
