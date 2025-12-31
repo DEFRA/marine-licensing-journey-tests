@@ -3,8 +3,8 @@
  * Analyzes step definitions against feature file usage
  */
 
-import { readdirSync } from 'fs'
-import { join } from 'path'
+import { readdirSync } from 'node:fs'
+import { basename, join } from 'node:path'
 import {
   extractStepUsage,
   isStepPatternUsed
@@ -12,31 +12,30 @@ import {
 import { extractAllStepDefinitions } from '../parsers/step-parser.js'
 
 /**
+ * Find files with a specific extension in a directory
+ */
+function findFilesByExtension(dir, extension, dirType) {
+  try {
+    return readdirSync(dir)
+      .filter((f) => f.endsWith(extension))
+      .map((f) => join(dir, f))
+  } catch (error) {
+    throw new Error(`Cannot read ${dirType} directory ${dir}: ${error.message}`)
+  }
+}
+
+/**
  * Find all step definition files
  */
 export function findStepFiles(stepsDir) {
-  try {
-    const files = readdirSync(stepsDir)
-    return files.filter((f) => f.endsWith('.js')).map((f) => join(stepsDir, f))
-  } catch (error) {
-    throw new Error(`Cannot read steps directory ${stepsDir}: ${error.message}`)
-  }
+  return findFilesByExtension(stepsDir, '.js', 'steps')
 }
 
 /**
  * Find all feature files
  */
 export function findFeatureFiles(featuresDir) {
-  try {
-    const files = readdirSync(featuresDir)
-    return files
-      .filter((f) => f.endsWith('.feature'))
-      .map((f) => join(featuresDir, f))
-  } catch (error) {
-    throw new Error(
-      `Cannot read features directory ${featuresDir}: ${error.message}`
-    )
-  }
+  return findFilesByExtension(featuresDir, '.feature', 'features')
 }
 
 /**
@@ -46,19 +45,13 @@ export function analyzeStepUsage(stepFiles, featureFiles) {
   const stepDefinitions = extractAllStepDefinitions(stepFiles)
   const featureContent = extractStepUsage(featureFiles)
 
-  const unusedSteps = []
-
-  stepDefinitions.forEach((stepDef) => {
-    if (!isStepPatternUsed(stepDef.pattern, featureContent)) {
-      unusedSteps.push({
-        type: stepDef.type,
-        pattern: stepDef.pattern,
-        file: getFileNameFromPath(stepDef.file)
-      })
-    }
-  })
-
-  return unusedSteps
+  return stepDefinitions
+    .filter((stepDef) => !isStepPatternUsed(stepDef.pattern, featureContent))
+    .map((stepDef) => ({
+      type: stepDef.type,
+      pattern: stepDef.pattern,
+      file: basename(stepDef.file)
+    }))
 }
 
 /**
@@ -66,43 +59,25 @@ export function analyzeStepUsage(stepFiles, featureFiles) {
  */
 export function analyzeDuplicateSteps(stepFiles) {
   const stepDefinitions = extractAllStepDefinitions(stepFiles)
-  const duplicateSteps = []
 
   // Group steps by their pattern and type
-  const stepMap = new Map()
-
-  stepDefinitions.forEach((stepDef) => {
+  const stepsByKey = stepDefinitions.reduce((map, stepDef) => {
     const key = `${stepDef.type}:${stepDef.pattern}`
-    if (!stepMap.has(key)) {
-      stepMap.set(key, [])
+    if (!map.has(key)) {
+      map.set(key, [])
     }
-    stepMap.get(key).push({
-      type: stepDef.type,
-      pattern: stepDef.pattern,
-      file: getFileNameFromPath(stepDef.file),
-      fullPath: stepDef.file
-    })
-  })
+    map.get(key).push(stepDef)
+    return map
+  }, new Map())
 
-  // Find duplicates (patterns that appear more than once)
-  stepMap.forEach((steps, key) => {
-    if (steps.length > 1) {
-      duplicateSteps.push({
-        type: steps[0].type,
-        pattern: steps[0].pattern,
-        count: steps.length,
-        files: steps.map((s) => s.file),
-        fullPaths: steps.map((s) => s.fullPath)
-      })
-    }
-  })
-
-  return duplicateSteps
-}
-
-/**
- * Extract filename from full path
- */
-function getFileNameFromPath(filePath) {
-  return filePath.split('/').pop()
+  // Find and format duplicates (patterns that appear more than once)
+  return Array.from(stepsByKey.values())
+    .filter((steps) => steps.length > 1)
+    .map((steps) => ({
+      type: steps[0].type,
+      pattern: steps[0].pattern,
+      count: steps.length,
+      files: steps.map((s) => basename(s.file)),
+      fullPaths: steps.map((s) => s.file)
+    }))
 }
