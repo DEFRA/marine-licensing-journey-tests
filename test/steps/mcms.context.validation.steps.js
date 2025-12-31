@@ -54,6 +54,10 @@ Given(
   }
 )
 
+When('the project name page is visited', async function () {
+  await this.actor.attemptsTo(Navigate.now())
+})
+
 When(
   'all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked',
   async function () {

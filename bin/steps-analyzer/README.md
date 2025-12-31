@@ -1,26 +1,31 @@
-# Unused Steps Analyzer
+# Steps Analyzer
 
-A modular tool for identifying Cucumber step definitions that are not used in any feature files.
+A modular tool for identifying issues in Cucumber step definitions:
+
+- **Unused steps**: Step definitions not used in any feature files
+- **Duplicate steps**: Step definitions that appear in multiple files
 
 ## Quick Start
 
 1. **Run the analyzer**:
 
    ```bash
-   npm run lint:unused-steps
+   npm run lint:steps
    # or directly:
-   node bin/unused-steps-analyzer/index.js
+   node bin/steps-analyzer/index.js
    ```
 
 2. **Exit codes**:
-   - `0`: No unused steps found ✅
-   - `1`: Unused steps detected ❌ (fails CI/precommit)
+   - `0`: No issues found ✅
+   - `1`: Unused or duplicate steps detected ❌ (fails CI/precommit)
 
 ## Features
 
+- **Unused Step Detection**: Identifies step definitions not referenced in any feature files
+- **Duplicate Step Detection**: Finds step definitions that appear in multiple files
 - **Accurate Pattern Matching**: Handles Cucumber parameters (`{string}`, `{int}`, etc.)
 - **Multi-file Analysis**: Processes all step files and feature files
-- **Clear Reporting**: Groups results by file with detailed breakdown
+- **Clear Reporting**: Separate reports for unused and duplicate steps
 - **CI Integration**: Exits with error code for automated processes
 - **Error Handling**: Graceful handling of missing files or parse errors
 
@@ -32,7 +37,7 @@ src/
 │   ├── step-parser.js       # Extracts step definitions from .js files
 │   └── feature-parser.js    # Extracts step usage from .feature files
 ├── analyzers/
-│   └── usage-analyzer.js    # Compares definitions vs usage
+│   └── usage-analyzer.js    # Analyzes unused and duplicate steps
 └── reporters/
     └── usage-reporter.js    # Formats and displays results
 
@@ -52,10 +57,10 @@ tests/
 
 ```bash
 # Run from project root
-node bin/unused-steps-analyzer/index.js
+node bin/steps-analyzer/index.js
 
 # Via npm script (recommended)
-npm run lint:unused-steps
+npm run lint:steps
 ```
 
 ### Integration with Git Hooks
@@ -64,13 +69,15 @@ The analyzer is integrated into the precommit hook:
 
 ```bash
 npm run git:pre-commit-hook
-# Runs: format → lint → lint:gherkin → lint:unused-steps
+# Runs: format → lint → lint:gherkin → lint:steps
 ```
 
 ### Example Output
 
+**When issues are found:**
+
 ```
-🔍 Analysing step usage...
+🔍 Analysing step definitions...
 
 ❌ Found 5 potentially unused step definitions:
 
@@ -85,7 +92,32 @@ npm run git:pre-commit-hook
 
 💡 Total: 5 step definitions can potentially be removed
 
-🔧 Run 'npm run lint:unused-steps' to see this report again
+❌ Found 2 duplicate step definitions:
+
+  Given: "user is logged in"
+    Found in 2 files:
+      - login.steps.js
+      - auth.steps.js
+
+  When: "user clicks {string}"
+    Found in 3 files:
+      - login.steps.js
+      - navigation.steps.js
+      - common.steps.js
+
+💡 Total: 2 duplicate step definitions should be consolidated
+
+🔧 Run 'npm run lint:steps' to see this report again
+```
+
+**When no issues are found:**
+
+```
+🔍 Analysing step definitions...
+
+✅ No unused step definitions found!
+
+✅ No duplicate step definitions found!
 ```
 
 ## Parameter Handling
@@ -116,7 +148,7 @@ Then the "Activity dates" task status is "Incomplete"
 ### Running Tests
 
 ```bash
-cd bin/unused-steps-analyzer
+cd bin/steps-analyzer
 npm test                # Run all tests
 npm run test:watch      # Run tests in watch mode
 npm run test:coverage   # Run tests with coverage

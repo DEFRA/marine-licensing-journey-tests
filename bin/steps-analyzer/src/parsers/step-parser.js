@@ -12,13 +12,18 @@ export function extractStepDefinitions(filePath) {
   const content = readFileSync(filePath, 'utf8')
   const stepDefinitions = []
 
-  const stepRegex = /(Given|When|Then)\s*\(\s*['"`]([^'"`]+)['"`]/g
+  // Match Given/When/Then with single quotes, double quotes, or backticks
+  // Handles quotes inside the pattern string correctly
+  const stepRegex =
+    /(Given|When|Then)\s*\(\s*(?:'([^']*)'|"([^"]*)"|`([^`]*)`)/g
   let match
 
   while ((match = stepRegex.exec(content)) !== null) {
+    // Pattern is in capture group 2 (single quote), 3 (double quote), or 4 (backtick)
+    const pattern = match[2] || match[3] || match[4]
     stepDefinitions.push({
       type: match[1],
-      pattern: match[2],
+      pattern,
       file: filePath
     })
   }

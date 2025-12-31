@@ -161,18 +161,6 @@ Given(
 )
 
 Given(
-  'the "Enter the width of the circular site in metres" is displayed',
-  async function () {
-    await this.actor.attemptsTo(
-      NavigateToSiteDetailsPage.enterWGS84Coordinates()
-    )
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Enter the width of the circular site in metres')
-    )
-  }
-)
-
-Given(
   'errors have been generated for the first {int} coordinate points',
   async function (numberOfPoints) {
     this.actor = new Actor('Alice')

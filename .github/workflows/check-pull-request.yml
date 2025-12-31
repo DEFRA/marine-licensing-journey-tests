@@ -31,6 +31,8 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
+      - run: npm run lint:gherkin
+      - run: npm run lint:steps
   vulnerability-scan:
     name: Vulnerability Scan
     runs-on: ubuntu-latest
