@@ -203,7 +203,8 @@ export default class EnsureCoreSiteDetails extends Task {
 
       const actualCoordinates =
         this.extractCoordinatesFromGeoJSON(actualGeoJSON)
-      expect(actualCoordinates).to.deep.equal(
+      this.assertCoordinatesWithinTolerance(
+        actualCoordinates,
         expectedSite.extractedCoordinates,
         `Coordinates mismatch for site "${expectedSite.siteName}" (${geoJSONVarName})`
       )
@@ -394,6 +395,39 @@ export default class EnsureCoreSiteDetails extends Task {
     }
     if (!Array.isArray(geoJSON.features)) {
       expect.fail('Invalid GeoJSON structure: features is not an array')
+    }
+  }
+
+  assertCoordinatesWithinTolerance(actual, expected, message) {
+    if (actual.length !== expected.length) {
+      expect.fail(
+        `${message}: coordinate count mismatch (actual: ${actual.length}, expected: ${expected.length})`
+      )
+    }
+
+    for (let i = 0; i < actual.length; i++) {
+      const actualCoord = actual[i]
+      const expectedCoord = expected[i]
+
+      if (actualCoord.length !== expectedCoord.length) {
+        expect.fail(
+          `${message}: coordinate ${i} dimension mismatch (actual: ${actualCoord.length}, expected: ${expectedCoord.length})`
+        )
+      }
+
+      for (let j = 0; j < actualCoord.length; j++) {
+        const diff = Math.abs(actualCoord[j] - expectedCoord[j])
+        // Use relative tolerance for floating point comparison
+        const tolerance =
+          Math.max(Math.abs(actualCoord[j]), Math.abs(expectedCoord[j])) *
+          Number.EPSILON *
+          10
+        if (diff > tolerance) {
+          expect.fail(
+            `${message}: coordinate[${i}][${j}] differs by ${diff} (actual: ${actualCoord[j]}, expected: ${expectedCoord[j]})`
+          )
+        }
+      }
     }
   }
 }

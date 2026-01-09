@@ -33,4 +33,8 @@ aws --endpoint-url=http://localhost:4566 s3api put-bucket-notification-configura
                                            "Events": ["s3:ObjectCreated:*"]
                                          }
                                        ]
-	                                }'  
+	                                }'
+
+# Fix multiple errors per second - this is probably the cdp-uploader test harness leakage.
+# We can add this in here - as compose is only used for local dev.
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name cdp-uploader-download-requests
