@@ -53,8 +53,8 @@ describe('Usage Reporter', () => {
   })
 
   describe('reportResults', () => {
-    it('should return success code when no unused steps found', () => {
-      const exitCode = reportResults([])
+    it('should return success code when no unused or duplicate steps found', () => {
+      const exitCode = reportResults({ unusedSteps: [], duplicateSteps: [] })
       expect(exitCode).toBe(0)
     })
 
@@ -64,7 +64,38 @@ describe('Usage Reporter', () => {
         { type: 'When', pattern: 'unused step 2', file: 'test2.steps.js' }
       ]
 
-      const exitCode = reportResults(unusedSteps)
+      const exitCode = reportResults({ unusedSteps, duplicateSteps: [] })
+      expect(exitCode).toBe(1)
+    })
+
+    it('should return failure code when duplicate steps found', () => {
+      const duplicateSteps = [
+        {
+          type: 'Given',
+          pattern: 'duplicate step',
+          count: 2,
+          files: ['test1.steps.js', 'test2.steps.js']
+        }
+      ]
+
+      const exitCode = reportResults({ unusedSteps: [], duplicateSteps })
+      expect(exitCode).toBe(1)
+    })
+
+    it('should return failure code when both unused and duplicate steps found', () => {
+      const unusedSteps = [
+        { type: 'Given', pattern: 'unused step', file: 'test1.steps.js' }
+      ]
+      const duplicateSteps = [
+        {
+          type: 'When',
+          pattern: 'duplicate step',
+          count: 2,
+          files: ['test2.steps.js', 'test3.steps.js']
+        }
+      ]
+
+      const exitCode = reportResults({ unusedSteps, duplicateSteps })
       expect(exitCode).toBe(1)
     })
   })

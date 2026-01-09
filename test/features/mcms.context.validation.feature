@@ -13,6 +13,7 @@ Feature: MCMS context validation: MCMS context is validated and handled correctl
   @issue=ML-948
   Scenario: Missing MCMS context prevents notification creation and redirects user to projects dashboard
     Given a notification is started with MCMS context ""
+    When the project name page is visited
     Then the user is redirected to the dashboard
 
   @issue=ML-918

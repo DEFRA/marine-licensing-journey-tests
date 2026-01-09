@@ -1,11 +1,11 @@
 {
-  "name": "unused-steps-analyzer",
+  "name": "steps-analyzer",
   "version": "1.0.0",
-  "description": "Identifies Cucumber step definitions that are not used in any feature files",
+  "description": "Identifies unused and duplicate Cucumber step definitions",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "unused-steps-analyzer": "./index.js"
+    "steps-analyzer": "./index.js"
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
@@ -19,13 +19,14 @@
     "testing",
     "step-definitions",
     "unused-code",
+    "duplicates",
     "quality",
     "cleanup"
   ],
   "author": "DEFRA",
   "license": "ISC",
   "dependencies": {
-    "glob": "^10.3.0"
+    "glob": "^10.5.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",

@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import {
   analyzeStepUsage,
+  analyzeDuplicateSteps,
   findFeatureFiles,
   findStepFiles
 } from '../../src/analyzers/usage-analyzer.js'
@@ -152,6 +153,133 @@ describe('Usage Analyzer', () => {
       const featureFiles = [path.join(featuresDir, 'all-used.feature')]
 
       const result = analyzeStepUsage(stepFiles, featureFiles)
+
+      expect(result).toEqual([])
+    })
+  })
+
+  describe('analyzeDuplicateSteps', () => {
+    it('should identify duplicate steps across files', () => {
+      const stepsDir = path.join(tempDir, 'steps')
+      fs.mkdirSync(stepsDir, { recursive: true })
+
+      // Create first step file
+      fs.writeFileSync(
+        path.join(stepsDir, 'login.steps.js'),
+        `
+        Given('user is logged in', async function() {})
+        When('user clicks {string}', async function(button) {})
+      `
+      )
+
+      // Create second step file with duplicates
+      fs.writeFileSync(
+        path.join(stepsDir, 'auth.steps.js'),
+        `
+        Given('user is logged in', async function() {})
+        Then('user sees dashboard', async function() {})
+      `
+      )
+
+      const stepFiles = [
+        path.join(stepsDir, 'login.steps.js'),
+        path.join(stepsDir, 'auth.steps.js')
+      ]
+
+      const result = analyzeDuplicateSteps(stepFiles)
+
+      expect(result).toHaveLength(1)
+      expect(result[0].pattern).toBe('user is logged in')
+      expect(result[0].type).toBe('Given')
+      expect(result[0].count).toBe(2)
+      expect(result[0].files).toContain('login.steps.js')
+      expect(result[0].files).toContain('auth.steps.js')
+    })
+
+    it('should return empty array when no duplicates exist', () => {
+      const stepsDir = path.join(tempDir, 'steps')
+      fs.mkdirSync(stepsDir, { recursive: true })
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'unique1.steps.js'),
+        `
+        Given('unique step one', async function() {})
+      `
+      )
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'unique2.steps.js'),
+        `
+        Given('unique step two', async function() {})
+      `
+      )
+
+      const stepFiles = [
+        path.join(stepsDir, 'unique1.steps.js'),
+        path.join(stepsDir, 'unique2.steps.js')
+      ]
+
+      const result = analyzeDuplicateSteps(stepFiles)
+
+      expect(result).toEqual([])
+    })
+
+    it('should handle multiple duplicates', () => {
+      const stepsDir = path.join(tempDir, 'steps')
+      fs.mkdirSync(stepsDir, { recursive: true })
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'file1.steps.js'),
+        `
+        Given('step A', async function() {})
+        When('step B', async function() {})
+      `
+      )
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'file2.steps.js'),
+        `
+        Given('step A', async function() {})
+        When('step B', async function() {})
+      `
+      )
+
+      const stepFiles = [
+        path.join(stepsDir, 'file1.steps.js'),
+        path.join(stepsDir, 'file2.steps.js')
+      ]
+
+      const result = analyzeDuplicateSteps(stepFiles)
+
+      expect(result).toHaveLength(2)
+      expect(result.map((r) => r.pattern)).toContain('step A')
+      expect(result.map((r) => r.pattern)).toContain('step B')
+    })
+
+    it('should treat different step types as different steps', () => {
+      const stepsDir = path.join(tempDir, 'steps')
+      fs.mkdirSync(stepsDir, { recursive: true })
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'file1.steps.js'),
+        `
+        Given('user clicks button', async function() {})
+      `
+      )
+
+      fs.writeFileSync(
+        path.join(stepsDir, 'file2.steps.js'),
+        `
+        When('user clicks button', async function() {})
+      `
+      )
+
+      const stepFiles = [
+        path.join(stepsDir, 'file1.steps.js'),
+        path.join(stepsDir, 'file2.steps.js')
+      ]
+
+      const result = analyzeDuplicateSteps(stepFiles)
 
       expect(result).toEqual([])
     })

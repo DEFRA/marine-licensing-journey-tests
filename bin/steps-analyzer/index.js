@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Unused Steps Analyzer CLI
- * Identifies Cucumber step definitions that are not used in any feature files
+ * Steps Analyzer CLI
+ * Identifies unused and duplicate Cucumber step definitions
  */
 
 import {
   analyzeStepUsage,
+  analyzeDuplicateSteps,
   findFeatureFiles,
   findStepFiles
 } from './src/analyzers/usage-analyzer.js'
@@ -19,7 +20,7 @@ const STEPS_DIR = 'test/steps'
  * Main execution
  */
 export async function main() {
-  console.log('🔍 Analysing step usage...\n')
+  console.log('🔍 Analysing step definitions...\n')
 
   try {
     const stepFiles = await findStepFiles(STEPS_DIR)
@@ -36,8 +37,9 @@ export async function main() {
     }
 
     const unusedSteps = analyzeStepUsage(stepFiles, featureFiles)
+    const duplicateSteps = analyzeDuplicateSteps(stepFiles)
 
-    const exitCode = reportResults(unusedSteps)
+    const exitCode = reportResults({ unusedSteps, duplicateSteps })
     process.exit(exitCode)
   } catch (error) {
     console.error(`❌ Error: ${error.message}`)

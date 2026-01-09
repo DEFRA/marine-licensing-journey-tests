@@ -112,17 +112,17 @@ const testUser = this.actor.recalls('testUser')
 
 ### **Core Principles**
 
-✅ **Self-documenting code** - No comments or JSDoc required  
-✅ **Explicit naming** - Functions and variables express intent clearly  
-✅ **Single responsibility** - Each component has one clear purpose  
-✅ **Framework flexibility** - WebDriverIO encapsulated for easy switching  
+✅ **Self-documenting code** - No comments or JSDoc required
+✅ **Explicit naming** - Functions and variables express intent clearly
+✅ **Single responsibility** - Each component has one clear purpose
+✅ **Framework flexibility** - WebDriverIO encapsulated for easy switching
 ✅ **Secure testing** - Automated user lifecycle with proper cleanup
 
 ## 🚀 Getting Started
 
 ### **Requirements**
 
-- **Node.js** `>= v22.13.1` ([use nvm](https://github.com/creationix/nvm))
+- **Node.js** `>= v22.21.0` ([use nvm](https://github.com/creationix/nvm))
 - **npm** `>= v9`
 
 ```bash
