@@ -23,8 +23,6 @@ export function reportResults(analysisResults) {
     hasErrors = true
   }
 
-  console.log()
-
   // Report duplicate steps
   if (duplicateSteps.length === 0) {
     console.log('✅ No duplicate step definitions found!')
