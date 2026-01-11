@@ -49,7 +49,7 @@
     "@wdio/mocha-framework": "9.21.0",
     "@wdio/spec-reporter": "9.20.0",
     "allure-commandline": "2.34.1",
-    "chai": "6.2.0",
+    "chai": "6.2.1",
     "date-fns": "4.1.0",
     "esm-module-alias": "2.2.1",
     "global-agent": "3.0.0",
