@@ -10,11 +10,11 @@ Feature: MCMS context validation: MCMS context is validated and handled correctl
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
     Then the project summary card is displayed in full on the check your answers page
 
-  @issue=ML-948
+  @issue=ML-948 @issue=ML-882
   Scenario: Missing MCMS context prevents notification creation and redirects user to projects dashboard
     Given a notification is started with MCMS context ""
     When the project name page is visited
-    Then the user is redirected to the dashboard
+    Then the user is redirected to the homepage
 
   @issue=ML-918
   Scenario Outline: <iatQueryString> invalid MCMS context allows notification completion but only project name is displayed

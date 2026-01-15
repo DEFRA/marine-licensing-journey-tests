@@ -5,14 +5,15 @@ import Task from '../base/task.js'
 import AuthenticateWithAPermanentUser from '../interactions/authenticate.with.a.permanent.user.js'
 import AuthenticateWith from '../interactions/authenticate.with.js'
 import HandleCookieBanner from '../interactions/handle.cookie.banner.js'
+import Homepage from '~/test-infrastructure/pages/homepage.js'
 
 export default class Navigate extends Task {
   static now() {
-    return new Navigate(ProjectNamePage.url)
+    return new Navigate(Homepage.url)
   }
 
   static toTheMarineLicensingApp() {
-    return new Navigate(ProjectNamePage.url)
+    return new Navigate(Homepage.url)
   }
 
   static toProjectNamePage() {
