@@ -8,3 +8,8 @@ ignore:
         reason: 'No upgrade or patch available for inflight@1.0.6 in transitive deps (glob@7/8). CI unblock.'
         expires: '2026-04-01T00:00:00.000Z'
 
+  SNYK-JS-UNDICI-14943963:
+    - '*':
+        reason: 'Transitive undici vulnerability via @wdio/browserstack-service; CI unblock while upstream upgrade is scheduled.'
+        expires: '2026-04-01T00:00:00.000Z'
+
