@@ -27,7 +27,7 @@ Given('the Public register page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(new BrowseTheWeb(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(
     SelectTheTask.withName('Sharing your project information publicly')
@@ -43,7 +43,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     this.actor.intendsTo(ApplyForExemption.withConsentToPublicRegister())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(
       SelectTheTask.withName('Sharing your project information publicly')
@@ -58,7 +58,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(new BrowseTheWeb(browser))
     this.actor.intendsTo(ApplyForExemption.withWithholdFromPublicRegister())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(
       SelectTheTask.withName('Sharing your project information publicly')

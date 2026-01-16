@@ -29,7 +29,7 @@ Given('an exemption notification with a valid KML file', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withKMLUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -40,7 +40,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withKMLVirusUpload())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }
@@ -50,7 +50,7 @@ Given('an exemption notification for KML file upload', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withKMLFileUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -61,7 +61,7 @@ Given(
     this.actor = new Actor('Charlie')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withKMLWrongFileType())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }
@@ -73,7 +73,7 @@ Given('an exemption notification with KML file too large', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withKMLLargeFile(CoordinateFiles.LARGE_KML)
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -84,7 +84,7 @@ Given('an exemption notification with empty KML file', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withKMLEmptyFile(CoordinateFiles.EMPTY_KML)
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -111,7 +111,7 @@ Given('an exemption notification with a valid Shapefile', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withShapefileUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -122,7 +122,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withShapefileVirusUpload())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }
@@ -132,7 +132,7 @@ Given('an exemption notification for Shapefile upload', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withShapefileFileUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -143,7 +143,7 @@ Given(
     this.actor = new Actor('Charlie')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withShapefileWrongFileType())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }
@@ -155,7 +155,7 @@ Given('an exemption notification with Shapefile too large', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withShapefileLargeFile(CoordinateFiles.LARGE_SHAPEFILE)
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -166,7 +166,7 @@ Given('an exemption notification with empty Shapefile', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withShapefileEmptyFile(CoordinateFiles.EMPTY_SHAPEFILE)
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -228,7 +228,7 @@ Given(
     }
 
     this.actor.intendsTo(exemption)
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   }

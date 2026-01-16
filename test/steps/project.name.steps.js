@@ -18,7 +18,7 @@ Given('the project name page is displayed', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
 })
 
 Given(
@@ -29,7 +29,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andActivityDates.withValidDates()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )

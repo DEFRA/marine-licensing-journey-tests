@@ -30,7 +30,7 @@ Given('a user is providing site details', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withValidProjectName().andSiteDetails.forACircleWithWGS84Coordinates()
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
@@ -168,7 +168,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())

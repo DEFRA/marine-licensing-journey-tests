@@ -24,7 +24,7 @@ Given('a user has reached the review site details page', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDescriptions()
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   await this.actor.attemptsTo(CompleteSiteDetails.now())
@@ -60,7 +60,7 @@ Given('a user has uploaded sites via file upload', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withKMLUpload())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
   await this.actor.attemptsTo(CompleteSiteDetails.now())

@@ -31,7 +31,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDescriptions()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(CompleteSiteDetails.now())
@@ -59,7 +59,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithDifferentActivityDatesAndSameDescriptions()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(CompleteSiteDetails.now())
@@ -117,7 +117,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDescriptions()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(CompleteSiteDetails.now())
@@ -145,7 +145,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forRandomMultiSiteWithSameActivityDatesAndDifferentDescriptions()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(CompleteSiteDetails.now())

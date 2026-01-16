@@ -278,7 +278,7 @@ Given(
 )
 
 Given('the site details task is reached', async function () {
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
 })
@@ -329,7 +329,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithOSGB36Coordinates()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())
@@ -347,7 +347,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withValidProjectName().andSiteDetails.forABoundaryWithWGS84Coordinates()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
     await this.actor.attemptsTo(SelectTheTask.withName('Site details'))
     await this.actor.attemptsTo(ContinueFromBeforeYouStartSiteDetailsPage.now())

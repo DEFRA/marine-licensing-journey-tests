@@ -1,3 +1,3 @@
 export default class Homepage {
-  static url = '/'
+  static url = '/home'
 }
