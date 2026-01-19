@@ -78,6 +78,9 @@
   },
   "overrides": {
     "tmp": "0.2.4",
+    "@wdio/browserstack-service": {
+      "undici": "6.23.0"
+    },
     "@cucumber/cucumber": {
       "glob": "11.1.0"
     },
