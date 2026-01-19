@@ -81,6 +81,9 @@
     "@wdio/browserstack-service": {
       "undici": "6.23.0"
     },
+    "webdriver": {
+      "undici": "6.23.0"
+    },
     "@cucumber/cucumber": {
       "glob": "11.1.0"
     },
