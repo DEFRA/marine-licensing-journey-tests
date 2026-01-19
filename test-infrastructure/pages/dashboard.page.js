@@ -1,5 +1,5 @@
 export default class DashboardPage {
-  static url = '/home'
+  static url = '/projects'
 
   static locators = {
     pageHeading: 'h1',

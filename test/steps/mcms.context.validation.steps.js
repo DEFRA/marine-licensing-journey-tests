@@ -7,12 +7,12 @@ import {
   ClickReviewAndSend,
   CompleteAllTasks,
   EnsureCheckYourAnswersPage,
-  EnsureEmptyStateMessage,
   EnsurePageHeading,
   EnsureProjectSummaryCard,
   Navigate
 } from '~/test-infrastructure/screenplay'
 import EnsureMcmsContextCardDisplaysOnlyProjectName from '~/test-infrastructure/screenplay/interactions/ensure.mcms.context.card.displays.only.project.name.js'
+import Homepage from '~/test-infrastructure/pages/homepage.js'
 
 Given(
   'a second notification is started with valid MCMS context after completing a first notification',
@@ -92,8 +92,7 @@ Then(
   }
 )
 
-Then('the user is redirected to the dashboard', async function () {
-  await this.actor.attemptsTo(
-    EnsureEmptyStateMessage.shows('You currently have no projects.')
-  )
+Then('the user is redirected to the homepage', async function () {
+  const currentUrl = await browser.getUrl()
+  expect(currentUrl).toContain(Homepage.url)
 })

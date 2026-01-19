@@ -52,7 +52,7 @@ Given(
     this.actor.intendsTo(
       ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
     )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(SignIn.now())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
@@ -64,7 +64,7 @@ Given('the user has a draft exemption notification', async function () {
   this.actor.intendsTo(
     ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
   )
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(SignOut.now())
 })
@@ -126,7 +126,7 @@ When(
 
 When('the user starts a new notification', async function () {
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(SignIn.now())
 })
 
