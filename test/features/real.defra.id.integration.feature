@@ -12,8 +12,8 @@ Feature: Submits a full exemption notification in environments integrated with r
     When the user clicks the Defra account link in the header
     Then the user is taken to the Defra account management page
 
-  @issue=ML-277
+  @issue=ML-882
   Scenario: User can return to marine licensing service from Defra account page
     Given the user is on the Defra account management page
     When the user clicks "Get Permission For Marine Work" in the "Your services" section
-    Then the user is returned to the marine licensing service dashboard
+    Then the user is returned to the marine licensing service homepage

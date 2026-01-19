@@ -19,6 +19,7 @@
     "test": "npm run clean && wdio run wdio.conf.js",
     "test:browserstack": "npm run clean && wdio run wdio.browserstack.conf.js",
     "test:local": "npm run clean && wdio run wdio.local.conf.js",
+    "test:local:defraid": "npm run clean && wdio run wdio.local.defraid.conf.js",
     "test:local:headless": "npm run clean && HEADLESS=true wdio run wdio.local.conf.js",
     "test:local:debug": "npm run clean && DEBUG=true wdio run wdio.local.conf.js",
     "test:github": "npm run clean && wdio run wdio.github.conf.js",

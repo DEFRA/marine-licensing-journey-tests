@@ -14,8 +14,8 @@ import {
   EnsureConfirmationPage,
   Navigate
 } from '~/test-infrastructure/screenplay'
-import EnsureDashboardPage from '~/test-infrastructure/screenplay/interactions/ensure.dashboard.page'
 import EnsureDefraAccountPage from '~/test-infrastructure/screenplay/interactions/ensure.defra.account.page'
+import Homepage from '~/test-infrastructure/pages/homepage.js'
 
 Given(
   'the user has completed all the tasks on the task list and is on the Check your answers page',
@@ -89,9 +89,8 @@ When(
   }
 )
 
-Then(
-  'the user is returned to the marine licensing service dashboard',
-  async function () {
-    await this.actor.attemptsTo(EnsureDashboardPage.isDisplayed())
+Then('the user is returned to the marine licensing service homepage', async function () {
+    const currentUrl = await browser.getUrl()
+    expect(currentUrl).toContain(Homepage.url)
   }
 )
