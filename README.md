@@ -170,13 +170,13 @@ npm run report
 
 ### **Environment Configurations**
 
-| Configuration               | Purpose                           | Base URL           |
-| --------------------------- | --------------------------------- | ------------------ |
-| `wdio.local.conf.js`        | Local development                 | Configurable       |
-| `wdio.local.defraid.conf.js`| Local development with Defra ID   | Configurable       |
-| `wdio.conf.js`              | Default environment               | CDP environment    |
-| `wdio.github.conf.js`       | GitHub Actions                    | Docker compose     |
-| `wdio.browserstack.conf.js` | BrowserStack testing              | CDP + BrowserStack |
+| Configuration                | Purpose                         | Base URL           |
+| ---------------------------- | ------------------------------- | ------------------ |
+| `wdio.local.conf.js`         | Local development               | Configurable       |
+| `wdio.local.defraid.conf.js` | Local development with Defra ID | Configurable       |
+| `wdio.conf.js`               | Default environment             | CDP environment    |
+| `wdio.github.conf.js`        | GitHub Actions                  | Docker compose     |
+| `wdio.browserstack.conf.js`  | BrowserStack testing            | CDP + BrowserStack |
 
 ### **🚀 Smoke Testing - Fast Core Journey Validation**
 
@@ -326,16 +326,19 @@ IAT_URL=https://marinelicensingtest.marinemanagement.org.uk/mmofox5uat/journey/s
 ```
 
 Start Chromedriver
+
 ```bash
 docker compose -f compose.yml up -d selenium-chrome
 ```
 
 After that run (includes IAT related tests)
+
 ```bash
 npm run test:local:defraid
 ```
 
 After that run (only Defra ID tests)
+
 ```bash
 npm run test:local:defraid -- --cucumberOpts.tags "@real-defra-id"
 ```

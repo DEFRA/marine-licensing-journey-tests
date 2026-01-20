@@ -89,7 +89,9 @@ When(
   }
 )
 
-Then('the user is returned to the marine licensing service homepage', async function () {
+Then(
+  'the user is returned to the marine licensing service homepage',
+  async function () {
     const currentUrl = await browser.getUrl()
     expect(currentUrl).toContain(Homepage.url)
   }
