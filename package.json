@@ -78,6 +78,8 @@
   },
   "overrides": {
     "tmp": "0.2.4",
+    "diff": "8.0.3",
+    "lodash": "4.17.23",
     "@wdio/browserstack-service": {
       "undici": "6.23.0"
     },
