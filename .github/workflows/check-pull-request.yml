@@ -21,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Test code and Create Test Coverage Reports
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -35,7 +35,6 @@ jobs:
       - run: npm run lint:steps
       - name: Run npm audit and fail on high/critical vulnerabilities
         run: |
-          npm ci
           npm audit --audit-level=high --production || (echo 'Vulnerabilities found!' && exit 1)
   security:
     name: Snyk Security Scan
@@ -48,7 +47,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -62,5 +61,5 @@ jobs:
     name: Run Journey Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./run-journey-tests
