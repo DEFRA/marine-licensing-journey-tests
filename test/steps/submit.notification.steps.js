@@ -14,8 +14,8 @@ import {
   EnsureConfirmationPage,
   Navigate
 } from '~/test-infrastructure/screenplay'
-import EnsureDashboardPage from '~/test-infrastructure/screenplay/interactions/ensure.dashboard.page'
 import EnsureDefraAccountPage from '~/test-infrastructure/screenplay/interactions/ensure.defra.account.page'
+import Homepage from '~/test-infrastructure/pages/homepage.js'
 
 Given(
   'the user has completed all the tasks on the task list and is on the Check your answers page',
@@ -49,7 +49,7 @@ Given(
     this.actor = new Actor('Alice')
     this.actor.can(BrowseTheWeb.using(browser))
     this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    await this.actor.attemptsTo(Navigate.toProjectNamePage())
     await this.actor.attemptsTo(CompleteProjectName.now())
   }
 )
@@ -69,7 +69,7 @@ Given('the user is on the Defra account management page', async function () {
   this.actor = new Actor('Alice')
   this.actor.can(BrowseTheWeb.using(browser))
   this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+  await this.actor.attemptsTo(Navigate.toProjectNamePage())
   await this.actor.attemptsTo(CompleteProjectName.now())
   await this.actor.attemptsTo(Click.on(HeaderPage.locators.defraAccountLink))
   await this.actor.attemptsTo(EnsureDefraAccountPage.isDisplayed())
@@ -90,8 +90,9 @@ When(
 )
 
 Then(
-  'the user is returned to the marine licensing service dashboard',
+  'the user is returned to the marine licensing service homepage',
   async function () {
-    await this.actor.attemptsTo(EnsureDashboardPage.isDisplayed())
+    const currentUrl = await browser.getUrl()
+    expect(currentUrl).toContain(Homepage.url)
   }
 )

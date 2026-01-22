@@ -154,6 +154,7 @@ This domain mapping ensures proper routing when testing against the containerise
 npm run test:local
 npm run test:local:debug
 npm run test:local:headless
+npm run test:local:defraid
 
 # Smoke testing - Run core user journey tests quickly
 npm run test:local -- --cucumberOpts.tags "@smoke"
@@ -169,12 +170,13 @@ npm run report
 
 ### **Environment Configurations**
 
-| Configuration               | Purpose              | Base URL           |
-| --------------------------- | -------------------- | ------------------ |
-| `wdio.local.conf.js`        | Local development    | Configurable       |
-| `wdio.conf.js`              | Default environment  | CDP environment    |
-| `wdio.github.conf.js`       | GitHub Actions       | Docker compose     |
-| `wdio.browserstack.conf.js` | BrowserStack testing | CDP + BrowserStack |
+| Configuration                | Purpose                         | Base URL           |
+| ---------------------------- | ------------------------------- | ------------------ |
+| `wdio.local.conf.js`         | Local development               | Configurable       |
+| `wdio.local.defraid.conf.js` | Local development with Defra ID | Configurable       |
+| `wdio.conf.js`               | Default environment             | CDP environment    |
+| `wdio.github.conf.js`        | GitHub Actions                  | Docker compose     |
+| `wdio.browserstack.conf.js`  | BrowserStack testing            | CDP + BrowserStack |
 
 ### **🚀 Smoke Testing - Fast Core Journey Validation**
 
@@ -310,6 +312,35 @@ Tests run automatically via CDP Portal with:
 ```bash
 DEFRA_ID_OIDC_CONFIGURATION_URL=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
 DEFRA_ID_CLIENT_ID=cdp-defra-id-stub
+```
+
+For testing locally with Defra ID you will need to set the following environment variables:
+
+```bash
+DEFRA_ID_USER_ID="59 79 42 46 25 50"
+DEFRA_ID_USER_PASSWORD="ask a dev"
+ENVIRONMENT=test
+
+# If you want to run IAT tests
+IAT_URL=https://marinelicensingtest.marinemanagement.org.uk/mmofox5uat/journey/self-service/start
+```
+
+Start Chromedriver
+
+```bash
+docker compose -f compose.yml up -d selenium-chrome
+```
+
+After that run (includes IAT related tests)
+
+```bash
+npm run test:local:defraid
+```
+
+After that run (only Defra ID tests)
+
+```bash
+npm run test:local:defraid -- --cucumberOpts.tags "@real-defra-id"
 ```
 
 **Production:**
