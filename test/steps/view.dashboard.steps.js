@@ -141,7 +141,7 @@ Then('the notification is removed from the dashboard', async function () {
     )
   )
   await this.actor.attemptsTo(
-    EnsureEmptyStateMessage.shows('You currently have no projects.')
+    EnsureEmptyStateMessage.shows('There are no projects to display.')
   )
 })
 

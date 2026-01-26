@@ -5,7 +5,7 @@ export default class DashboardPage {
     pageHeading: 'h1',
     projectsHomeLink: '//a[normalize-space(text())="Projects"]',
     emptyStateMessage:
-      '//p[contains(text(), "You currently have no projects.")]',
+      '//p[contains(text(), "There are no projects to display.")]',
     projectsTable: 'table.govuk-table',
     tableHeaders: {
       name: '//th[contains(text(), "Name")]',
