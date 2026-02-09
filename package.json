@@ -91,10 +91,16 @@
     "diff": "8.0.3",
     "lodash": "4.17.23",
     "@wdio/browserstack-service": {
-      "undici": "6.23.0"
+      "undici": "6.23.0",
+      "cheerio": {
+        "undici": "^7.19.0"
+      }
     },
     "webdriver": {
       "undici": "6.23.0"
+    },
+    "cheerio": {
+      "undici": "^7.19.0"
     },
     "@cucumber/cucumber": {
       "glob": "11.1.0"
