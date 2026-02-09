@@ -9,6 +9,21 @@ export default class DashboardPage {
     this.emptyStateMessage = page.locator('.govuk-body')
     this.projectsTable = page.locator('table.govuk-table')
     this.projectsLink = page.locator('//a[normalize-space(text())="Projects"]')
+
+    // Filter component
+    this.myProjectsRadio = page.locator(
+      'input[name="filter"][value="my-projects"]'
+    )
+    this.allProjectsRadio = page.locator(
+      'input[name="filter"][value="all-projects"]'
+    )
+    this.allProjectsLabel = page.locator('label[for="filter-2"]')
+    this.updateResultsButton = page.locator(
+      'button[type="submit"]:has-text("Update results")'
+    )
+    this.ownerColumnHeader = page.locator(
+      'table.govuk-table thead th:has-text("Owner")'
+    )
   }
 
   async expectIsDisplayed() {
@@ -78,6 +93,42 @@ export default class DashboardPage {
         expect(match.status).toBe('Draft')
       }
     }
+  }
+
+  async expectFilterDisplayed() {
+    await expect(this.myProjectsRadio).toBeVisible({ timeout: 30_000 })
+    await expect(this.allProjectsRadio).toBeVisible({ timeout: 30_000 })
+  }
+
+  async expectMyProjectsSelected() {
+    await expect(this.myProjectsRadio).toBeChecked({ timeout: 30_000 })
+  }
+
+  async expectAllProjectsLabelContainsOrg(orgName) {
+    await expect(this.allProjectsLabel).toContainText(orgName, {
+      timeout: 30_000
+    })
+  }
+
+  async expectUpdateResultsButtonHidden() {
+    await expect(this.updateResultsButton).toBeHidden({ timeout: 30_000 })
+  }
+
+  async expectOwnerColumnPresent() {
+    await expect(this.ownerColumnHeader).toBeVisible({ timeout: 30_000 })
+  }
+
+  async selectFilter(filterOption) {
+    if (filterOption === 'All projects') {
+      await this.allProjectsRadio.click()
+    } else {
+      await this.myProjectsRadio.click()
+    }
+  }
+
+  async waitForResultsUpdate() {
+    await this.page.waitForLoadState('networkidle')
+    await expect(this.projectsTable).toBeVisible({ timeout: 30_000 })
   }
 
   async expectSortOrder() {

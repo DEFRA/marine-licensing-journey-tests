@@ -1,5 +1,10 @@
 import { getConfig } from './config.js'
-import { registerTestUser, loginAsTestUser, acceptCookies } from './auth.js'
+import {
+  registerTestUser,
+  loginAsTestUser,
+  loginWithRealDefraId,
+  acceptCookies
+} from './auth.js'
 import { buildNavigationUrl } from '../test-data/exemption.js'
 
 export async function navigateAndAuthenticate(world, targetPath, options = {}) {
@@ -12,14 +17,20 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
     )
   }
 
-  if (!world.testUser) {
-    world.testUser = await registerTestUser(config.defraIdUrl)
-  }
-
   const url = buildNavigationUrl(targetPath, world.data.iatContext)
   await world.page.goto(new URL(url, config.baseURL).toString())
 
-  await loginAsTestUser(world.page, world.testUser)
+  if (config.isRealDefraId) {
+    if (!world.isAuthenticated) {
+      await loginWithRealDefraId(world.page)
+      world.isAuthenticated = true
+    }
+  } else {
+    if (!world.testUser) {
+      world.testUser = await registerTestUser(config.defraIdUrl)
+    }
+    await loginAsTestUser(world.page, world.testUser)
+  }
 
   if (!options.skipCookies) {
     await acceptCookies(world.page)
@@ -35,7 +46,16 @@ export async function navigateAndReAuthenticate(world, targetPath) {
   const config = getConfig()
   const url = new URL(targetPath, config.baseURL).toString()
   await world.page.goto(url)
-  await loginAsTestUser(world.page, world.testUser)
+
+  if (config.isRealDefraId) {
+    if (!world.isAuthenticated) {
+      await loginWithRealDefraId(world.page)
+      world.isAuthenticated = true
+    }
+  } else {
+    await loginAsTestUser(world.page, world.testUser)
+  }
+
   await acceptCookies(world.page)
 }
 
@@ -46,16 +66,24 @@ export async function navigateWithRawQueryString(
 ) {
   const config = getConfig()
 
-  if (!world.testUser) {
-    world.testUser = await registerTestUser(config.defraIdUrl)
-  }
-
   const separator = rawQueryString ? '?' : ''
   const url = new URL(
     `${targetPath}${separator}${rawQueryString}`,
     config.baseURL
   ).toString()
   await world.page.goto(url)
-  await loginAsTestUser(world.page, world.testUser)
+
+  if (config.isRealDefraId) {
+    if (!world.isAuthenticated) {
+      await loginWithRealDefraId(world.page)
+      world.isAuthenticated = true
+    }
+  } else {
+    if (!world.testUser) {
+      world.testUser = await registerTestUser(config.defraIdUrl)
+    }
+    await loginAsTestUser(world.page, world.testUser)
+  }
+
   await acceptCookies(world.page)
 }

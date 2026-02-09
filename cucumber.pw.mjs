@@ -1,6 +1,6 @@
 const common = {
   import: ['test-pw/steps/**/*.js', 'test-pw/support/**/*.js'],
-  format: ['progress', 'html:cucumber-report.html'],
+  format: ['progress', 'html:cucumber-report.html', 'allure-cucumberjs/reporter'],
   formatOptions: { snippetInterface: 'async-await' },
   publishQuiet: true
 }
@@ -36,7 +36,9 @@ export default {
     'test/features/submit.notification.feature',
     'test/features/dashboard.feature',
     'test/features/redirect.to.login.when.logged.out.feature',
-    'test/features/mcms.context.validation.feature'
+    'test/features/mcms.context.validation.feature',
+    'test-pw/features/dashboard.filter.feature',
+    'test/features/real.defra.id.integration.feature'
   ]
 }
 

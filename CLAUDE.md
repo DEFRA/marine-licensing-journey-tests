@@ -4,7 +4,7 @@
 
 End-to-end journey tests for the DEFRA Marine Licensing service, using Cucumber BDD with feature files in `test/features/`.
 
-**Active migration**: Screenplay Pattern (WebDriverIO) → Playwright + BDD + Page Object Model.
+**Migration complete**: Screenplay Pattern (WebDriverIO) → Playwright + BDD + Page Object Model (143/143 scenarios, 100%).
 
 ## Architecture
 
@@ -115,6 +115,61 @@ cucumber.pw.mjs           # Cucumber runner config with profiles
 | `@d365`          | Requires Dynamics 365 integration             | Excluded from migration                    |
 | `@fivium`        | Requires Fivium IAT launcher                  | Excluded from migration                    |
 | `@real-defra-id` | Requires real DEFRA ID (not stub)             | Excluded from migration                    |
+
+## Migration Effort & Performance
+
+### What was migrated
+
+The entire end-to-end test suite was migrated from the Screenplay Pattern (WebDriverIO + Selenium) to Playwright + Cucumber (standalone) + Page Object Model. The migration was done in 6 batches (Phase 0 + 5 batches) using Claude Code with structured prompts.
+
+### Code reduction
+
+| Metric          | Legacy (Screenplay + WDIO) | New (Playwright + POM) | Reduction |
+| --------------- | -------------------------: | ---------------------: | --------: |
+| **Files**       |                        231 |                     48 |      -79% |
+| **Lines of code** |                    12,520 |                  4,679 |      -63% |
+| **Layers**      |                        5-6 |                      3 |      -50% |
+
+Legacy breakdown: 37 pages, 91 interactions, 26 tasks, 16 page-interactions, 8 models, 9 factories, 24 step files, plus supporting infrastructure.
+
+New breakdown: 17 pages, 20 step files, 7 support modules, 4 test-data factories.
+
+### Test suite runtime
+
+| Profile     | Scenarios | Runtime  |
+| ----------- | --------: | -------: |
+| **Full suite** |    145 | ~12 min  |
+| **Smoke**      |     19 | ~2 min   |
+
+### Estimated migration effort per batch
+
+Each batch was completed in a single Claude Code session using the prompts in the "Migration Prompts" section below.
+
+| Batch                            | Scenarios | New files | Estimated effort |
+| -------------------------------- | --------: | --------: | ---------------: |
+| Phase 0: Foundation              |         4 |         8 |         ~2 hours |
+| Batch 1: Core pages              |        28 |         8 |         ~2 hours |
+| Batch 2: Site details (manual)   |        41 |         4 |         ~3 hours |
+| Batch 3: Site details (file)     |        23 |         2 |         ~2 hours |
+| Batch 4: CYA + change flows      |        34 |        11 |         ~3 hours |
+| Batch 5: Submit + dashboard      |        13 |         8 |         ~2 hours |
+| **Total**                        |   **143** |    **41** |    **~14 hours** |
+
+### Time saved using Claude Code
+
+| Metric                        | Estimate              |
+| ----------------------------- | --------------------: |
+| **Manual migration estimate** |          ~10–12 weeks |
+| **With Claude Code**          |            ~14 hours  |
+| **Time saved**                |       ~95% reduction  |
+
+Manual estimate based on: 143 scenarios across 29 feature files, rewriting 231 files (12,520 LOC) of Screenplay/WDIO infrastructure into Playwright/POM (48 files, 4,679 LOC), including learning Playwright APIs, debugging auth flows, file upload handling, and multi-site coordinate entry logic.
+
+### Key dependencies
+
+- Docker Compose services running locally (frontend, backend, defra-id-stub, cdp-uploader, redis, mongodb, localstack)
+- Chromium `--host-resolver-rules` to resolve Docker hostnames from the host browser
+- DEFRA ID stub for OIDC authentication (not real DEFRA ID)
 
 ## Migration Plan & Progress
 

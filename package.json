@@ -43,7 +43,10 @@
     "test:pw": "cucumber-js --config cucumber.pw.mjs",
     "test:pw:smoke": "cucumber-js --config cucumber.pw.mjs --profile smoke",
     "test:pw:headless": "HEADLESS=true cucumber-js --config cucumber.pw.mjs",
-    "test:pw:github": "cucumber-js --config cucumber.pw.mjs --profile github"
+    "test:pw:github": "cucumber-js --config cucumber.pw.mjs --profile github",
+    "clean:pw": "rm -rf allure-results && rm -rf allure-report",
+    "report:pw": "allure generate allure-results --clean",
+    "report:pw:open": "allure generate allure-results --clean && allure open allure-report"
   },
   "dependencies": {
     "@wdio/allure-reporter": "9.21.0",
@@ -68,6 +71,7 @@
     "@types/node": "24.1.0",
     "@wdio/cli": "9.20.0",
     "@wdio/cucumber-framework": "9.20.0",
+    "allure-cucumberjs": "3.4.5",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.3",
@@ -99,7 +103,8 @@
       "glob": "11.1.0"
     },
     "@wdio/cucumber-framework": {
-      "glob": "11.1.0"
+      "glob": "11.1.0",
+      "@cucumber/cucumber": "$@cucumber/cucumber"
     },
     "archiver-utils": {
       "glob": "11.1.0"
