@@ -39,7 +39,11 @@
     "report": "allure generate allure-results --clean",
     "report:github": "allure generate allure-results --clean --single-file --output allure-report",
     "report:publish": "npm run report; ./bin/publish-tests.sh",
-    "knip": "knip"
+    "knip": "knip",
+    "test:pw": "cucumber-js --config cucumber.pw.mjs",
+    "test:pw:smoke": "cucumber-js --config cucumber.pw.mjs --profile smoke",
+    "test:pw:headless": "HEADLESS=true cucumber-js --config cucumber.pw.mjs",
+    "test:pw:github": "cucumber-js --config cucumber.pw.mjs --profile github"
   },
   "dependencies": {
     "@wdio/allure-reporter": "9.21.0",
@@ -58,6 +62,7 @@
   },
   "devDependencies": {
     "@axe-core/webdriverio": "4.11.0",
+    "@cucumber/cucumber": "12.6.0",
     "@faker-js/faker": "9.7.0",
     "@playwright/test": "1.55.1",
     "@types/node": "24.1.0",
