@@ -56,7 +56,7 @@ export async function loginAsTestUser(page, testUser) {
     await loginLink.waitFor({ state: 'visible', timeout: 15_000 })
     await loginLink.click()
   } catch {
-    // Not on login page — user is already authenticated
+    // Already authenticated or not on login page — skip
   }
 }
 

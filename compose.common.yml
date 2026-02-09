@@ -32,7 +32,7 @@ services:
     environment:
       PORT: 3200
       REDIS_HOST: redis-frontend
-      REDIS_PORT: 6380
+      REDIS_PORT: 6379
       USE_SINGLE_INSTANCE_CACHE: true
       NODE_ENV: development
       APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
@@ -68,7 +68,7 @@ services:
       DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
-      REDIS_PORT: 6380
+      REDIS_PORT: 6379
     command: 'node .'
     depends_on:
       marine-licensing-backend:

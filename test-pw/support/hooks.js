@@ -18,7 +18,8 @@ let browser
 BeforeAll(async function () {
   const config = getConfig()
   browser = await chromium.launch({
-    headless: config.headless
+    headless: config.headless,
+    args: config.chromiumArgs
   })
 })
 

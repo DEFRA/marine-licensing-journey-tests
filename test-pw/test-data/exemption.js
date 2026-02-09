@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker'
 import {
   ACTIVITY_TYPES,
-  ARTICLE_CODES
+  ARTICLE_CODES,
+  ACTIVITY_PURPOSES,
+  ACTIVITY_PURPOSE_DISPLAY
 } from '../../test-infrastructure/screenplay/factories/iat-constants.js'
 
 const ACTIVITIES = [
@@ -48,12 +50,28 @@ export function generateProjectName() {
 }
 
 export function generateIatContext() {
-  const nonPurposeTypes = ACTIVITY_TYPES.filter((at) => !at.supportsPurpose)
-  const activityType = faker.helpers.arrayElement(nonPurposeTypes)
+  const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
   const articleCode = faker.helpers.arrayElement(ARTICLE_CODES)
   const pdfUrl = `https://marinelicensing.marinemanagement.org.uk/path/journey/self-service/outcome-document/${faker.string.uuid()}`
 
-  return { activityType, articleCode, activityPurpose: null, pdfUrl }
+  let activityPurpose = null
+  if (activityType.supportsPurpose) {
+    const purposeMap = ACTIVITY_PURPOSE_DISPLAY[activityType.code]
+    if (purposeMap && purposeMap[articleCode.code]) {
+      activityPurpose = purposeMap[articleCode.code]
+    } else {
+      activityPurpose = faker.helpers.arrayElement(ACTIVITY_PURPOSES)
+    }
+  }
+
+  return { activityType, articleCode, activityPurpose, pdfUrl }
+}
+
+const ACTIVITY_SUBTYPE_KEYS = {
+  CON: 'EXE_ACTIVITY_SUBTYPE_CONSTRUCTION',
+  DEPOSIT: 'EXE_ACTIVITY_SUBTYPE_DEPOSIT',
+  REMOVAL: 'EXE_ACTIVITY_SUBTYPE_REMOVAL',
+  DREDGE: 'EXE_ACTIVITY_SUBTYPE_DREDGING'
 }
 
 export function buildNavigationUrl(basePath, iatContext) {
@@ -64,6 +82,13 @@ export function buildNavigationUrl(basePath, iatContext) {
     ARTICLE: iatContext.articleCode.code,
     pdfDownloadUrl: iatContext.pdfUrl
   })
+
+  if (iatContext.activityType.supportsPurpose && iatContext.activityPurpose) {
+    const subtypeKey = ACTIVITY_SUBTYPE_KEYS[iatContext.activityType.code]
+    if (subtypeKey) {
+      params.set(subtypeKey, iatContext.activityPurpose)
+    }
+  }
 
   return `${basePath}?${params.toString()}`
 }
