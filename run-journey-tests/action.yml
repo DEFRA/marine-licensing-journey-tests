@@ -216,6 +216,8 @@ runs:
 
         MARINE_LICENSING_FRONTEND_VERSION=${FRONTEND_VERSION:-latest} \
         MARINE_LICENSING_BACKEND_VERSION=${BACKEND_VERSION:-latest} \
+        FRONTEND_APP_BASE_URL=http://127.0.0.1:3000 \
+        DEFRA_ID_APP_BASE_URL=http://127.0.0.1:3200 \
         docker compose -f $(pwd)/compose.common.yml up --wait-timeout 300 -d --quiet-pull
 
     - name: Check initial service status

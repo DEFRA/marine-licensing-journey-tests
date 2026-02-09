@@ -35,7 +35,7 @@ services:
       REDIS_PORT: 6380
       USE_SINGLE_INSTANCE_CACHE: true
       NODE_ENV: development
-      APP_BASE_URL: http://defra-id-stub:3200
+      APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
     depends_on:
       redis-frontend:
         condition: service_healthy
@@ -64,7 +64,7 @@ services:
       SESSION_CACHE_ENGINE: redis
       MARINE_LICENSING_BACKEND_API_URL: http://marine-licensing-backend:3001
       CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
-      APP_BASE_URL: http://marine-licensing-frontend:3000
+      APP_BASE_URL: ${FRONTEND_APP_BASE_URL:-http://marine-licensing-frontend:3000}
       DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
