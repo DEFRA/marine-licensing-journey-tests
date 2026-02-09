@@ -1,8 +1,8 @@
 const environment = process.env.ENVIRONMENT || 'local'
 
 function getBaseURL() {
-  if (process.env.CI) {
-    return 'http://marine-licensing-frontend:3000'
+  if (process.env.BASE_URL) {
+    return process.env.BASE_URL
   }
   if (environment === 'local') {
     return 'http://marine-licensing-frontend.local:3000'
@@ -11,7 +11,10 @@ function getBaseURL() {
 }
 
 function getDefraIdUrl() {
-  if (process.env.CI || environment === 'local') {
+  if (process.env.DEFRA_ID_URL) {
+    return process.env.DEFRA_ID_URL
+  }
+  if (environment === 'local') {
     return 'http://localhost:3200'
   }
   return `https://cdp-defra-id-stub.${environment}.cdp-int.defra.cloud`

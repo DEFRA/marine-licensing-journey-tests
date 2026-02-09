@@ -65,7 +65,11 @@ export const all = {
 
 export const github = {
   ...common,
-  format: ['progress', 'html:cucumber-report.html', 'json:cucumber-results.json'],
+  format: [
+    'progress',
+    'html:cucumber-report.html',
+    'json:cucumber-results.json'
+  ],
   paths: ['test/features/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
