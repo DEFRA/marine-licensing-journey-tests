@@ -258,8 +258,8 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       env:
-        BASE_URL: http://localhost:3000
-        DEFRA_ID_URL: http://localhost:3200
+        BASE_URL: http://127.0.0.1:3000
+        DEFRA_ID_URL: http://127.0.0.1:3200
       run: |
         echo "=== Running Playwright tests ==="
         npm run test:pw:github || true
