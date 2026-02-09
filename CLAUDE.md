@@ -124,11 +124,11 @@ The entire end-to-end test suite was migrated from the Screenplay Pattern (WebDr
 
 ### Code reduction
 
-| Metric          | Legacy (Screenplay + WDIO) | New (Playwright + POM) | Reduction |
-| --------------- | -------------------------: | ---------------------: | --------: |
-| **Files**       |                        231 |                     48 |      -79% |
-| **Lines of code** |                    12,520 |                  4,679 |      -63% |
-| **Layers**      |                        5-6 |                      3 |      -50% |
+| Metric            | Legacy (Screenplay + WDIO) | New (Playwright + POM) | Reduction |
+| ----------------- | -------------------------: | ---------------------: | --------: |
+| **Files**         |                        231 |                     48 |      -79% |
+| **Lines of code** |                     12,520 |                  4,679 |      -63% |
+| **Layers**        |                        5-6 |                      3 |      -50% |
 
 Legacy breakdown: 37 pages, 91 interactions, 26 tasks, 16 page-interactions, 8 models, 9 factories, 24 step files, plus supporting infrastructure.
 
@@ -136,32 +136,32 @@ New breakdown: 17 pages, 20 step files, 7 support modules, 4 test-data factories
 
 ### Test suite runtime
 
-| Profile     | Scenarios | Runtime  |
-| ----------- | --------: | -------: |
-| **Full suite** |    145 | ~12 min  |
-| **Smoke**      |     19 | ~2 min   |
+| Profile        | Scenarios | Runtime |
+| -------------- | --------: | ------: |
+| **Full suite** |       145 | ~12 min |
+| **Smoke**      |        19 |  ~2 min |
 
 ### Estimated migration effort per batch
 
 Each batch was completed in a single Claude Code session using the prompts in the "Migration Prompts" section below.
 
-| Batch                            | Scenarios | New files | Estimated effort |
-| -------------------------------- | --------: | --------: | ---------------: |
-| Phase 0: Foundation              |         4 |         8 |         ~2 hours |
-| Batch 1: Core pages              |        28 |         8 |         ~2 hours |
-| Batch 2: Site details (manual)   |        41 |         4 |         ~3 hours |
-| Batch 3: Site details (file)     |        23 |         2 |         ~2 hours |
-| Batch 4: CYA + change flows      |        34 |        11 |         ~3 hours |
-| Batch 5: Submit + dashboard      |        13 |         8 |         ~2 hours |
-| **Total**                        |   **143** |    **41** |    **~14 hours** |
+| Batch                          | Scenarios | New files | Estimated effort |
+| ------------------------------ | --------: | --------: | ---------------: |
+| Phase 0: Foundation            |         4 |         8 |         ~2 hours |
+| Batch 1: Core pages            |        28 |         8 |         ~2 hours |
+| Batch 2: Site details (manual) |        41 |         4 |         ~3 hours |
+| Batch 3: Site details (file)   |        23 |         2 |         ~2 hours |
+| Batch 4: CYA + change flows    |        34 |        11 |         ~3 hours |
+| Batch 5: Submit + dashboard    |        13 |         8 |         ~2 hours |
+| **Total**                      |   **143** |    **41** |    **~14 hours** |
 
 ### Time saved using Claude Code
 
-| Metric                        | Estimate              |
-| ----------------------------- | --------------------: |
-| **Manual migration estimate** |          ~10–12 weeks |
-| **With Claude Code**          |            ~14 hours  |
-| **Time saved**                |       ~95% reduction  |
+| Metric                        |       Estimate |
+| ----------------------------- | -------------: |
+| **Manual migration estimate** |   ~10–12 weeks |
+| **With Claude Code**          |      ~14 hours |
+| **Time saved**                | ~95% reduction |
 
 Manual estimate based on: 143 scenarios across 29 feature files, rewriting 231 files (12,520 LOC) of Screenplay/WDIO infrastructure into Playwright/POM (48 files, 4,679 LOC), including learning Playwright APIs, debugging auth flows, file upload handling, and multi-site coordinate entry logic.
 

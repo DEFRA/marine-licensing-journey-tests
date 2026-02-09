@@ -1,7 +1,10 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { createCYACircleWGS84Data } from '../test-data/check-your-answers.js'
-import { generateIatContext, generateProjectName } from '../test-data/exemption.js'
+import {
+  generateIatContext,
+  generateProjectName
+} from '../test-data/exemption.js'
 import {
   completeAllTasks,
   clickReviewAndSend,
@@ -53,15 +56,12 @@ Given(
   }
 )
 
-When(
-  'the user clicks the Defra account link in the header',
-  async function () {
-    await this.page
-      .locator('//a[normalize-space(text())="Defra account"]')
-      .click()
-    await this.page.waitForLoadState('load')
-  }
-)
+When('the user clicks the Defra account link in the header', async function () {
+  await this.page
+    .locator('//a[normalize-space(text())="Defra account"]')
+    .click()
+  await this.page.waitForLoadState('load')
+})
 
 Then(
   'the user is taken to the Defra account management page',
@@ -95,9 +95,7 @@ When(
   'the user clicks {string} in the {string} section',
   async function (linkText, _sectionText) {
     if (linkText === 'Get Permission For Marine Work') {
-      await this.page
-        .locator('#link-get-permission-for-marine-work')
-        .click()
+      await this.page.locator('#link-get-permission-for-marine-work').click()
       await this.page.waitForLoadState('load')
     }
   }

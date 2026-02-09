@@ -1,6 +1,10 @@
 const common = {
   import: ['test-pw/steps/**/*.js', 'test-pw/support/**/*.js'],
-  format: ['progress', 'html:cucumber-report.html', 'allure-cucumberjs/reporter'],
+  format: [
+    'progress',
+    'html:cucumber-report.html',
+    'allure-cucumberjs/reporter'
+  ],
   formatOptions: { snippetInterface: 'async-await' },
   publishQuiet: true
 }
