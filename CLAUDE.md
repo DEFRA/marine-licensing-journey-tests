@@ -325,6 +325,7 @@ Modified files:
 - Delete confirmation button: `xpath=//button[normalize-space(text())="Yes, delete all site details"]`
 - `completeAllTasks` flow: navigate → auth → project name → site details → Continue → public register → save
 - `clickReviewAndSend`: needs `waitForLoadState('load')` after click to avoid heading assertion race
+- User registration must happen BEFORE `page.goto()` in `navigateAndAuthenticate` and `navigateWithRawQueryString`. The DEFRA ID stub renders the authorize page with registered users at render time. If you navigate first then register, the login link won't appear on the already-rendered page. Register-first-then-navigate matches the WDIO legacy code and ensures the login link is present.
 
 ## Commands
 

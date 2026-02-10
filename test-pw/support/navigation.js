@@ -17,6 +17,11 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
     )
   }
 
+  // Register user BEFORE navigating so the authorize page includes their login link
+  if (!config.isRealDefraId && !world.testUser) {
+    world.testUser = await registerTestUser(config.defraIdUrl)
+  }
+
   const url = buildNavigationUrl(targetPath, world.data.iatContext)
   await world.page.goto(new URL(url, config.baseURL).toString())
 
@@ -26,9 +31,6 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
       world.isAuthenticated = true
     }
   } else {
-    if (!world.testUser) {
-      world.testUser = await registerTestUser(config.defraIdUrl)
-    }
     await loginAsTestUser(world.page, world.testUser)
   }
 
@@ -66,6 +68,11 @@ export async function navigateWithRawQueryString(
 ) {
   const config = getConfig()
 
+  // Register user BEFORE navigating so the authorize page includes their login link
+  if (!config.isRealDefraId && !world.testUser) {
+    world.testUser = await registerTestUser(config.defraIdUrl)
+  }
+
   const separator = rawQueryString ? '?' : ''
   const url = new URL(
     `${targetPath}${separator}${rawQueryString}`,
@@ -79,9 +86,6 @@ export async function navigateWithRawQueryString(
       world.isAuthenticated = true
     }
   } else {
-    if (!world.testUser) {
-      world.testUser = await registerTestUser(config.defraIdUrl)
-    }
     await loginAsTestUser(world.page, world.testUser)
   }
 
