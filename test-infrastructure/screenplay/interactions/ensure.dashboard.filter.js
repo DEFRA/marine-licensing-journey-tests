@@ -38,8 +38,12 @@ export default class EnsureDashboardFilter extends Task {
 
     switch (this.#check.type) {
       case 'radioOptions':
-        await browseTheWeb.expectElementToBePresent(DashboardPage.locators.myProjectsRadio)
-        await browseTheWeb.expectElementToBePresent(DashboardPage.locators.allProjectsRadio)
+        await browseTheWeb.expectElementToBePresent(
+          DashboardPage.locators.myProjectsRadio
+        )
+        await browseTheWeb.expectElementToBePresent(
+          DashboardPage.locators.allProjectsRadio
+        )
         break
 
       case 'defaultSelected':

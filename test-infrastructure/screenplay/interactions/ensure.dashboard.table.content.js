@@ -21,10 +21,7 @@ export default class EnsureDashboardTableContent extends Task {
       DashboardPage.locators.tableRows
     )
 
-    expect(rowCount).to.be.greaterThan(
-      0,
-      'No rows found in dashboard table'
-    )
+    expect(rowCount).to.be.greaterThan(0, 'No rows found in dashboard table')
 
     const completedExemptions = actor.recalls('completedExemptions') || []
     expect(completedExemptions.length).to.be.greaterThan(
@@ -32,8 +29,7 @@ export default class EnsureDashboardTableContent extends Task {
       'No completed exemptions in actor memory'
     )
 
-    const latestExemption =
-      completedExemptions[completedExemptions.length - 1]
+    const latestExemption = completedExemptions[completedExemptions.length - 1]
 
     for (let i = 0; i < rowCount; i++) {
       const rowNumber = i + 1
@@ -71,9 +67,7 @@ export default class EnsureDashboardTableContent extends Task {
         expect(type.trim()).to.equal(this.#expectedDetails['Type'])
 
         // Reference
-        expect(reference.trim()).to.equal(
-          latestExemption.applicationReference
-        )
+        expect(reference.trim()).to.equal(latestExemption.applicationReference)
 
         // Status
         expect(status.trim()).to.equal(this.#expectedDetails['Status'])
