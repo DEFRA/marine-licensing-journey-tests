@@ -15,6 +15,11 @@ export default class DashboardPage {
       dateSubmitted: '//th[contains(text(), "Date submitted")]',
       actions: '//th[contains(text(), "Actions")]'
     },
+    myProjectsRadio: 'input[name="filter"][value="my-projects"]',
+    allProjectsRadio: 'input[name="filter"][value="all-projects"]',
+    allProjectsLabel: 'label[for="filter-2"]',
+    updateResultsButton: 'button[type="submit"]',
+    ownerColumnHeader: '//th[contains(., "Owner")]',
     tableRows: 'tbody tr',
     firstRowCells: {
       name: 'tbody tr:nth-child(1) td:nth-child(1)',
