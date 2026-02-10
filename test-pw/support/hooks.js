@@ -25,6 +25,8 @@ BeforeAll(async function () {
 
 Before(async function (scenario) {
   this.scenarioName = scenario.pickle.name
+  this.scenarioStart = Date.now()
+  console.log(`▶ START: ${scenario.pickle.name}`)
   this.browserContext = await browser.newContext({
     viewport: { width: 1920, height: 1080 }
   })
@@ -44,6 +46,12 @@ AfterStep(async function () {
 })
 
 After(async function (scenario) {
+  const status = scenario.result?.status === Status.FAILED ? 'FAIL' : 'PASS'
+  const duration = ((Date.now() - this.scenarioStart) / 1000).toFixed(1)
+  console.log(
+    `${status === 'FAIL' ? '✗' : '✓'} ${status}: ${scenario.pickle.name} (${duration}s)`
+  )
+
   if (
     scenario.result?.status === Status.FAILED &&
     this.page &&

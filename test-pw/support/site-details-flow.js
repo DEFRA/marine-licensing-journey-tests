@@ -16,7 +16,7 @@ export async function selectProvideMethod(page, method) {
   } else {
     await page.locator('#coordinatesType').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function selectMoreThanOneSite(page, yes) {
@@ -25,7 +25,7 @@ export async function selectMoreThanOneSite(page, yes) {
   } else {
     await page.locator('#multipleSitesEnabled-2').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterActivityDates(page, dates) {
@@ -35,12 +35,12 @@ export async function enterActivityDates(page, dates) {
   await page.locator('#activity-end-date-day').fill(dates.endDate.day)
   await page.locator('#activity-end-date-month').fill(dates.endDate.month)
   await page.locator('#activity-end-date-year').fill(dates.endDate.year)
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterActivityDescription(page, description) {
   await page.locator('#activityDescription').fill(description)
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function selectCoordinatesEntryMethod(page, siteType) {
@@ -51,7 +51,7 @@ export async function selectCoordinatesEntryMethod(page, siteType) {
       .locator('input[name="coordinatesEntry"][value="multiple"]')
       .click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function selectCoordinateSystem(page, system) {
@@ -60,24 +60,24 @@ export async function selectCoordinateSystem(page, system) {
   } else {
     await page.locator('#coordinateSystem-2').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterCentrePointWGS84(page, lat, lng) {
   await page.locator('#latitude').fill(String(lat))
   await page.locator('#longitude').fill(String(lng))
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterCentrePointOSGB36(page, eastings, northings) {
   await page.locator('#eastings').fill(String(eastings))
   await page.locator('#northings').fill(String(northings))
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterWidth(page, width) {
   await page.locator('#width').fill(String(width))
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function enterPolygonCoordinatesWGS84(page, coordinates) {
@@ -92,7 +92,7 @@ export async function enterPolygonCoordinatesWGS84(page, coordinates) {
       .locator(`#coordinates-${i}-longitude`)
       .fill(String(coordinates[i].longitude))
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('#continue').click()
 }
 
 export async function enterPolygonCoordinatesOSGB36(page, coordinates) {
@@ -107,12 +107,12 @@ export async function enterPolygonCoordinatesOSGB36(page, coordinates) {
       .locator(`#coordinates-${i}-northings`)
       .fill(String(coordinates[i].northings))
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('#continue').click()
 }
 
 export async function enterSiteName(page, name) {
   await page.locator('#siteName').fill(name)
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function selectSameActivityDates(page, same) {
@@ -121,7 +121,7 @@ export async function selectSameActivityDates(page, same) {
   } else {
     await page.locator('#sameActivityDates-2').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function selectSameActivityDescription(page, same) {
@@ -130,7 +130,7 @@ export async function selectSameActivityDescription(page, same) {
   } else {
     await page.locator('#sameActivityDescription-2').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 // --- File upload page actions ---
@@ -141,13 +141,15 @@ export async function selectFileType(page, fileType) {
   } else {
     await page.locator('#fileUploadType-2').click()
   }
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
 }
 
 export async function uploadFile(page, filePath) {
   const absolutePath = path.resolve(process.cwd(), filePath)
   await page.locator('input[type="file"]').setInputFiles(absolutePath)
-  await page.locator('button[type="submit"]').click()
+  await page
+    .locator('button[type="submit"]:not([name="analytics"])')
+    .click({ timeout: 60_000 })
 }
 
 // --- Coordinate entry for a single site ---

@@ -7,7 +7,9 @@ export default class ProjectNamePage {
     this.page = page
     this.projectNameInput = page.locator('#projectName')
     this.projectNameError = page.locator('#projectName-error')
-    this.saveAndContinue = page.locator('button[type="submit"]')
+    this.saveAndContinue = page.locator(
+      'button[type="submit"]:not([name="analytics"])'
+    )
     this.caption = page.locator('.govuk-caption-l, .govuk-caption-xl')
   }
 

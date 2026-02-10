@@ -220,7 +220,9 @@ When(
     await continueFromBeforeYouStart(this.page)
     await selectProvideMethod(this.page, 'file-upload')
     await selectFileType(this.page, 'KML')
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 
@@ -230,7 +232,9 @@ When(
     await continueFromBeforeYouStart(this.page)
     await selectProvideMethod(this.page, 'file-upload')
     await selectFileType(this.page, 'Shapefile')
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 

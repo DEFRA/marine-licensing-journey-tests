@@ -213,28 +213,36 @@ Given(
 When(
   'the Continue button is clicked without selecting a site location option',
   async function () {
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 
 When(
   'the Continue button is clicked without selecting a coordinate entry method',
   async function () {
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 
 When(
   'the Continue button is clicked without selecting a coordinate system',
   async function () {
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 
 When(
   'the Continue button is clicked with providing any coordinates',
   async function () {
-    await this.page.locator('button[type="submit"]').click()
+    await this.page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
   }
 )
 

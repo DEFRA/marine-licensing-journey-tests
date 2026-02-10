@@ -6,7 +6,9 @@ export default class CommonElementsPage {
     this.mainHeading = page.locator('h1, h2').first()
     this.backLink = page.locator('a:text("Back")')
     this.cancelLink = page.locator('a:text("Cancel")')
-    this.submitButton = page.locator('button[type="submit"]')
+    this.submitButton = page.locator(
+      'button[type="submit"]:not([name="analytics"])'
+    )
     this.serviceName = page.locator('.govuk-service-navigation__service-name')
     this.organisationName = page.locator('.app-border-bottom .govuk-body-s')
   }

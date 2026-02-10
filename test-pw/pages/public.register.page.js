@@ -6,7 +6,9 @@ export default class PublicRegisterPage {
     this.consentYes = page.locator('#consent')
     this.consentNo = page.locator('#consent-2')
     this.reasonTextarea = page.locator('#reason')
-    this.saveAndContinue = page.locator('button[type="submit"]')
+    this.saveAndContinue = page.locator(
+      'button[type="submit"]:not([name="analytics"])'
+    )
     this.consentError = page.locator('#consent-error')
     this.reasonError = page.locator('#reason-error')
     this.projectNameCaption = page.locator('span.govuk-caption-l')

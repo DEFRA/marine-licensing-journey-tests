@@ -1,49 +1,34 @@
+const debug = process.env.DEBUG === 'true'
+
 const common = {
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '1', 10),
   import: ['test-pw/steps/**/*.js', 'test-pw/support/**/*.js'],
   format: [
     'progress',
     'html:cucumber-report.html',
     'allure-cucumberjs/reporter'
   ],
-  formatOptions: { snippetInterface: 'async-await' },
+  formatOptions: {
+    snippetInterface: 'async-await',
+    resultsDir: 'allure-results',
+    links: {
+      issue: {
+        pattern: [/@issue=(.*)/],
+        urlTemplate: 'https://eaflood.atlassian.net/browse/%s'
+      }
+    },
+    environmentInfo: {
+      Browser: 'Chromium',
+      Framework: 'Playwright + Cucumber'
+    }
+  },
   publishQuiet: true
 }
 
 export default {
   ...common,
-  paths: [
-    'test/features/task.list.feature',
-    'test/features/validation.project.name.feature',
-    'test/features/cookies.feature',
-    'test/features/header.and.footer.feature',
-    'test/features/privacy.policy.feature',
-    'test/features/public.register.feature',
-    'test/features/validation.public.register.feature',
-    'test/features/site.details.manual.polygon.feature',
-    'test/features/validation.site.details.feature',
-    'test/features/validation.centre.point.coordinates.feature',
-    'test/features/validation.coordinates.leading.zeroes.feature',
-    'test/features/validation.polygon.osgb36.coordinates.feature',
-    'test/features/validation.polygon.wgs84.coordinates.feature',
-    'test/features/validation.width.circular.site.feature',
-    'test/features/manual.site.details.multi.site.feature',
-    'test/features/upload.coordinate.file.feature',
-    'test/features/kml.file.site.details.multi.site.feature',
-    'test/features/shapefile.site.details.multi.site.feature',
-    'test/features/validate.shapefile.missing.files.feature',
-    'test/features/check.your.answers.feature',
-    'test/features/change.answers.check.your.answers.feature',
-    'test/features/change.activity.details.review.site.details.feature',
-    'test/features/change.site.details.boundary.review.site.details.feature',
-    'test/features/change.site.details.circular.review.site.details.feature',
-    'test/features/delete.all.site.details.review.site.details.feature',
-    'test/features/submit.notification.feature',
-    'test/features/dashboard.feature',
-    'test/features/redirect.to.login.when.logged.out.feature',
-    'test/features/mcms.context.validation.feature',
-    'test-pw/features/dashboard.filter.feature',
-    'test/features/real.defra.id.integration.feature'
-  ]
+  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const smoke = {
@@ -74,8 +59,25 @@ export const github = {
   format: [
     'progress',
     'html:cucumber-report.html',
-    'json:cucumber-results.json'
+    'json:cucumber-results.json',
+    'allure-cucumberjs/reporter'
   ],
   paths: ['test/features/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+}
+
+export const cdp = {
+  ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '4', 10),
+  format: [
+    'progress',
+    'html:cucumber-report.html',
+    'json:cucumber-results.json',
+    'allure-cucumberjs/reporter'
+  ],
+  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
+  tags:
+    process.env.ENVIRONMENT === 'test'
+      ? '@real-defra-id or @d365 or @fivium'
+      : 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }

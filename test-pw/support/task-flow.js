@@ -64,7 +64,7 @@ export async function clickReviewAndSend(page) {
 }
 
 export async function clickConfirmAndSend(page) {
-  await page.locator('button[type="submit"]').click()
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
   await page.waitForLoadState('load')
 }
 
