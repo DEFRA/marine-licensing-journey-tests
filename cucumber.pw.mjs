@@ -56,19 +56,20 @@ export const all = {
 
 export const github = {
   ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '10', 10),
   format: [
     'progress',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: ['test/features/*.feature'],
+  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const cdp = {
   ...common,
-  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '4', 10),
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '10', 10),
   format: [
     'progress',
     'html:cucumber-report.html',

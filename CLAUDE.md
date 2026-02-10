@@ -136,11 +136,11 @@ New breakdown: 17 pages, 20 step files, 7 support modules, 4 test-data factories
 
 ### Test suite runtime
 
-| Profile                          | Scenarios | Runtime |
-| -------------------------------- | --------: | ------: |
-| **Full suite** (sequential)      |       148 | ~12 min |
-| **Full suite** (4 workers)       |       148 |  ~5 min |
-| **Smoke**                        |        19 |  ~2 min |
+| Profile                     | Scenarios | Runtime |
+| --------------------------- | --------: | ------: |
+| **Full suite** (sequential) |       148 | ~12 min |
+| **Full suite** (4 workers)  |       148 |  ~5 min |
+| **Smoke**                   |        19 |  ~2 min |
 
 ### Estimated migration effort per batch
 
@@ -392,17 +392,18 @@ npm run report:publish     # Generate + upload to S3 (requires RESULTS_OUTPUT_S3
 ### Screenshots & Attachments
 
 Handled automatically by `test-pw/support/hooks.js`:
+
 - `AfterStep`: screenshot after every step (allure-cucumberjs picks up via `this.attach()`)
 - `After` (on failure): full-page screenshot, failure URL, JSON data, test user info
 
 ### WDIO vs Playwright Allure Comparison
 
-| WDIO Option | Playwright Equivalent | Notes |
-|---|---|---|
-| `outputDir: 'allure-results'` | `resultsDir: 'allure-results'` | Same directory |
+| WDIO Option                                                    | Playwright Equivalent               | Notes                                       |
+| -------------------------------------------------------------- | ----------------------------------- | ------------------------------------------- |
+| `outputDir: 'allure-results'`                                  | `resultsDir: 'allure-results'`      | Same directory                              |
 | `issueLinkTemplate: 'https://eaflood.atlassian.net/browse/{}'` | `links.issue.urlTemplate: '.../%s'` | Same Jira URL, different placeholder syntax |
-| `useCucumberStepReporter: true` | N/A | allure-cucumberjs is Cucumber-native |
-| `disableWebdriverStepsReporting` | N/A | No WebDriver steps in Playwright |
+| `useCucumberStepReporter: true`                                | N/A                                 | allure-cucumberjs is Cucumber-native        |
+| `disableWebdriverStepsReporting`                               | N/A                                 | No WebDriver steps in Playwright            |
 
 ## CI/CD Pipeline
 
@@ -439,36 +440,36 @@ cucumber-js → allure-results/ → allure generate → allure-report/ → publi
 
 ### Supported Environments
 
-| Environment | How to Select | Base URL |
-|---|---|---|
-| **Local Docker** | `ENVIRONMENT=local` (default) | `http://marine-licensing-frontend:3000` |
-| **CDP dev** | `ENVIRONMENT=dev` | `https://marine-licensing-frontend.dev.cdp-int.defra.cloud` |
-| **CDP pre-test** | `ENVIRONMENT=pre-test` | `https://marine-licensing-frontend.pre-test.cdp-int.defra.cloud` |
-| **CDP test** | `ENVIRONMENT=test` | `https://marine-licensing-frontend.test.cdp-int.defra.cloud` |
-| **CDP prod** | `ENVIRONMENT=prod` | `https://marine-licensing-frontend.prod.cdp-int.defra.cloud` |
+| Environment      | How to Select                 | Base URL                                                         |
+| ---------------- | ----------------------------- | ---------------------------------------------------------------- |
+| **Local Docker** | `ENVIRONMENT=local` (default) | `http://marine-licensing-frontend:3000`                          |
+| **CDP dev**      | `ENVIRONMENT=dev`             | `https://marine-licensing-frontend.dev.cdp-int.defra.cloud`      |
+| **CDP pre-test** | `ENVIRONMENT=pre-test`        | `https://marine-licensing-frontend.pre-test.cdp-int.defra.cloud` |
+| **CDP test**     | `ENVIRONMENT=test`            | `https://marine-licensing-frontend.test.cdp-int.defra.cloud`     |
+| **CDP prod**     | `ENVIRONMENT=prod`            | `https://marine-licensing-frontend.prod.cdp-int.defra.cloud`     |
 
 Environment is selected via `ENVIRONMENT` env var in `test-pw/support/config.js`. Can also override with `BASE_URL` and `DEFRA_ID_URL` directly.
 
 ### Cucumber Profiles
 
-| Profile | Command | Scenarios | Tags |
-|---|---|---|---|
-| **default** | `npx cucumber-js --config cucumber.pw.mjs` | All in paths list | None (includes @wip/@bug/@real-defra-id) |
-| **smoke** | `--profile smoke` | 19 | `@smoke` |
-| **all** | `--profile all` | ~143 | Excludes @wip/@bug/@d365/@real-defra-id/@fivium |
-| **github** | `--profile github` | ~143 | Excludes @wip/@bug/@d365/@real-defra-id/@fivium/@local-only |
-| **cdp** | `--profile cdp` | Varies by `ENVIRONMENT` | `ENVIRONMENT=test`: @real-defra-id/@d365/@fivium only; otherwise: excludes @wip/@bug/@d365/@real-defra-id/@fivium/@local-only |
+| Profile     | Command                                    | Scenarios               | Tags                                                                                                                          |
+| ----------- | ------------------------------------------ | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **default** | `npx cucumber-js --config cucumber.pw.mjs` | All in paths list       | None (includes @wip/@bug/@real-defra-id)                                                                                      |
+| **smoke**   | `--profile smoke`                          | 19                      | `@smoke`                                                                                                                      |
+| **all**     | `--profile all`                            | ~143                    | Excludes @wip/@bug/@d365/@real-defra-id/@fivium                                                                               |
+| **github**  | `--profile github`                         | ~143                    | Excludes @wip/@bug/@d365/@real-defra-id/@fivium/@local-only                                                                   |
+| **cdp**     | `--profile cdp`                            | Varies by `ENVIRONMENT` | `ENVIRONMENT=test`: @real-defra-id/@d365/@fivium only; otherwise: excludes @wip/@bug/@d365/@real-defra-id/@fivium/@local-only |
 
 ### WDIO vs Playwright Environment Comparison
 
-| Aspect | WDIO (Legacy) | Playwright |
-|---|---|---|
-| **Config approach** | 7 separate config files | 1 file + env vars |
-| **CDP environments** | `ENVIRONMENT` var | Same `ENVIRONMENT` var |
-| **BrowserStack** | 2 dedicated configs | Not implemented |
-| **Proxy support** | `HTTP_PROXY` + global-agent | Not implemented |
-| **Debug mode** | `DEBUG=true` (1 instance + --inspect) | `DEBUG=true` (forces parallel=1) |
-| **Parallel execution** | `MAX_INSTANCES` env var | Same `MAX_INSTANCES` env var |
+| Aspect                 | WDIO (Legacy)                         | Playwright                       |
+| ---------------------- | ------------------------------------- | -------------------------------- |
+| **Config approach**    | 7 separate config files               | 1 file + env vars                |
+| **CDP environments**   | `ENVIRONMENT` var                     | Same `ENVIRONMENT` var           |
+| **BrowserStack**       | 2 dedicated configs                   | Not implemented                  |
+| **Proxy support**      | `HTTP_PROXY` + global-agent           | Not implemented                  |
+| **Debug mode**         | `DEBUG=true` (1 instance + --inspect) | `DEBUG=true` (forces parallel=1) |
+| **Parallel execution** | `MAX_INSTANCES` env var               | Same `MAX_INSTANCES` env var     |
 
 ### Environment Variables
 
