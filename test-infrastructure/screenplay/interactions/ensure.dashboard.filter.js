@@ -25,14 +25,6 @@ export default class EnsureDashboardFilter extends Task {
     return new EnsureDashboardFilter({ type: 'buttonNotVisible', buttonText })
   }
 
-  static tableIncludesColumn(columnName) {
-    return new EnsureDashboardFilter({ type: 'columnPresent', columnName })
-  }
-
-  static tableIsDisplayed() {
-    return new EnsureDashboardFilter({ type: 'tableDisplayed' })
-  }
-
   async performAs(actor) {
     const browseTheWeb = actor.ability
 
@@ -68,18 +60,6 @@ export default class EnsureDashboardFilter extends Task {
       case 'buttonNotVisible':
         await browseTheWeb.isNotDisplayed(
           DashboardPage.locators.updateResultsButton
-        )
-        break
-
-      case 'columnPresent':
-        await browseTheWeb.expectElementToBePresent(
-          DashboardPage.locators.ownerColumnHeader
-        )
-        break
-
-      case 'tableDisplayed':
-        await browseTheWeb.expectElementToBePresent(
-          DashboardPage.locators.projectsTable
         )
         break
     }

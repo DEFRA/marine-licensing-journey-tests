@@ -17,7 +17,7 @@ export default class DashboardPage {
     },
     myProjectsRadio: 'input[name="filter"][value="my-projects"]',
     allProjectsRadio: 'input[name="filter"][value="all-projects"]',
-    allProjectsLabel: 'label[for="filter-2"]',
+    allProjectsLabel: 'label[for="all-projects"]',
     updateResultsButton: 'button[type="submit"]',
     ownerColumnHeader: '//th[contains(., "Owner")]',
     tableRows: 'tbody tr',
