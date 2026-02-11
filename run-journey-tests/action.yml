@@ -255,6 +255,7 @@ runs:
         echo "All connectivity checks passed!"
 
     - name: Run the tests
+      id: run-tests
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       env:
@@ -262,7 +263,8 @@ runs:
         DEFRA_ID_URL: http://127.0.0.1:3200
       run: |
         echo "=== Running Playwright tests ==="
-        npm run test:pw:github || true
+        npm run test:pw:github
+      continue-on-error: true
 
     - name: debug
       if: always()
@@ -271,6 +273,14 @@ runs:
         docker compose -f $(pwd)/compose.common.yml logs > logs.txt
         docker ps
       shell: bash
+
+    - name: Generate Allure report
+      if: always()
+      shell: bash
+      working-directory: ./marine-licensing-journey-tests
+      run: |
+        echo "=== Generating Allure Report ==="
+        npm run report:pw
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
@@ -356,12 +366,31 @@ runs:
 
           **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
+    - name: Upload Allure Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results
+        path: ./marine-licensing-journey-tests/allure-results/
+        retention-days: 30
+
+    - name: Upload Allure Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: ./marine-licensing-journey-tests/allure-report/
+        retention-days: 30
+
     - name: Upload Cucumber report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: cucumber-report
-        path: ./marine-licensing-journey-tests/cucumber-report.html
+        path: |
+          ./marine-licensing-journey-tests/cucumber-report.html
+          ./marine-licensing-journey-tests/cucumber-results.json
+        retention-days: 30
 
     - name: Upload docker compose logs
       if: always()
@@ -369,3 +398,13 @@ runs:
       with:
         name: docker-compose-logs
         path: ./marine-licensing-journey-tests/logs.txt
+        retention-days: 30
+
+    - name: Check test results
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.run-tests.outcome }}" == "failure" ]; then
+          echo "Tests failed"
+          exit 1
+        fi
