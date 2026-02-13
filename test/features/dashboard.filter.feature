@@ -33,3 +33,19 @@ Feature: Dashboard filter: Filter projects by ownership
       | Submitted on  | today's date                       |
       | Owner         | Test MMOUser                       |
       | Actions       | View details, Withdraw             |
+
+  Scenario: Withdrawn notification shows correct status on dashboard and in D365
+    Given a user has submitted an exemption notification
+    And the user navigates to the dashboard
+    When the user withdraws the submitted notification
+    Then the submitted notification row contains the correct details
+      | Project name  | matches submitted project name     |
+      | Type          | Exempt activity notification       |
+      | Reference     | matches submitted reference number |
+      | Status        | Withdrawn                          |
+      | Submitted on  | today's date                       |
+      | Owner         | Test MMOUser                       |
+      | Actions       | View details                       |
+    And the case status in D365 matches
+      | Reference number   | matches submitted reference number |
+      | Application Status | Withdrawn                          |

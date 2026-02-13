@@ -17,7 +17,8 @@ export default class DashboardPage {
     },
     myProjectsRadio: 'input[name="filter"][value="my-projects"]',
     allProjectsRadio: 'input[name="filter"][value="all-projects"]',
-    allProjectsLabel: 'label[for="all-projects"]',
+    allProjectsLabel:
+      '//input[@name="filter"][@value="all-projects"]/ancestor::div[contains(@class,"govuk-radios__item")]/label',
     updateResultsButton: 'button[type="submit"]',
     ownerColumnHeader: '//th[contains(., "Owner")]',
     tableRows: 'tbody tr',
@@ -41,6 +42,10 @@ export default class DashboardPage {
 
   static viewDetailsLink(projectName) {
     return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="View details"]`
+  }
+
+  static withdrawLink(projectName) {
+    return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="Withdraw"]`
   }
 
   static projectRow(projectName) {
