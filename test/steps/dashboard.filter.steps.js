@@ -77,6 +77,8 @@ Then(
 )
 
 When('the user withdraws the submitted notification', async function () {
+  // Wait for D365 to finish processing the submission before withdrawing
+  await browser.pause(30000)
   await this.actor.attemptsTo(ClickWithdrawLink.forLastCompletedExemption())
   await this.actor.attemptsTo(
     EnsureWithdrawPage.hasCorrectHeading(
