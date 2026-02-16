@@ -8,7 +8,6 @@
 # Both mongo and localstack have init scripts included for setting up resources
 # on startup. These scripts are in docker/scripts.
 #
-# It also includes a selenium-chrome container for running the browser headless.
 #
 # The services being tested can either be started up here using the latest
 # builds from dockerhub.
@@ -18,14 +17,6 @@
 #
 ################################################################################
 services:
-  ################################################################################
-  # Headless browser, used by the test suite to actually run the tests against the
-  # containers.
-  selenium-chrome:
-    image: selenium/standalone-chrome:123.0
-    ports:
-      - 4444:4444
-
   ################################################################################
   mongodb:
     image: mongo:7.0.24

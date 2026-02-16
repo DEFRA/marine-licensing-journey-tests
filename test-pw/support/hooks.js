@@ -3,7 +3,6 @@ import {
   After,
   BeforeAll,
   AfterAll,
-  AfterStep,
   Status,
   setDefaultTimeout
 } from '@cucumber/cucumber'
@@ -32,17 +31,6 @@ Before(async function (scenario) {
   })
   this.page = await this.browserContext.newPage()
   this.page.setDefaultTimeout(30_000)
-})
-
-AfterStep(async function () {
-  if (this.page && !this.page.isClosed()) {
-    try {
-      const screenshot = await this.page.screenshot({ timeout: 10_000 })
-      this.attach(screenshot, 'image/png')
-    } catch {
-      // Screenshot can timeout if page is mid-navigation; skip silently
-    }
-  }
 })
 
 After(async function (scenario) {

@@ -103,11 +103,23 @@ export function createValidProjectNameData() {
 }
 
 export function createValidProjectNameWithDatesData() {
+  const now = new Date()
+  const startDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 7, 28)
+
   return {
     ...createValidProjectNameData(),
     activityDates: {
-      startDate: { day: '01', month: '06', year: '2026' },
-      endDate: { day: '30', month: '12', year: '2026' }
+      startDate: {
+        day: String(startDate.getDate()).padStart(2, '0'),
+        month: String(startDate.getMonth() + 1).padStart(2, '0'),
+        year: String(startDate.getFullYear())
+      },
+      endDate: {
+        day: String(endDate.getDate()).padStart(2, '0'),
+        month: String(endDate.getMonth() + 1).padStart(2, '0'),
+        year: String(endDate.getFullYear())
+      }
     }
   }
 }

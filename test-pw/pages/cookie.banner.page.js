@@ -23,10 +23,6 @@ export default class CookieBannerPage {
   }
 
   async isVisible() {
-    try {
-      return await this.acceptButton.isVisible({ timeout: 2000 })
-    } catch {
-      return false
-    }
+    return await this.acceptButton.isVisible()
   }
 }

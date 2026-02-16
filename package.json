@@ -81,7 +81,6 @@
     "husky": "9.1.7",
     "knip": "5.62.0",
     "neostandard": "0.12.1",
-    "playwright": "1.55.1",
     "prettier": "3.6.2",
     "typescript": "5.8.3",
     "uuid": "11.1.0",
