@@ -23,16 +23,16 @@ npm run test:pw:headless
 
 ## NPM Scripts
 
-| Script | Description |
-|---|---|
-| `test:pw` | Run all tests (default profile) |
-| `test:pw:smoke` | Run smoke-tagged scenarios only |
-| `test:pw:headless` | Run all tests headless |
-| `test:pw:github` | Run with GitHub CI settings (10 parallel workers) |
-| `test:pw:cdp` | Run with CDP environment settings (10 parallel workers) |
-| `clean:pw` | Remove `allure-results/` and `allure-report/` |
-| `report:pw` | Generate single-file Allure HTML report |
-| `report:pw:open` | Generate and open Allure report in browser |
+| Script             | Description                                             |
+| ------------------ | ------------------------------------------------------- |
+| `test:pw`          | Run all tests (default profile)                         |
+| `test:pw:smoke`    | Run smoke-tagged scenarios only                         |
+| `test:pw:headless` | Run all tests headless                                  |
+| `test:pw:github`   | Run with GitHub CI settings (10 parallel workers)       |
+| `test:pw:cdp`      | Run with CDP environment settings (10 parallel workers) |
+| `clean:pw`         | Remove `allure-results/` and `allure-report/`           |
+| `report:pw`        | Generate single-file Allure HTML report                 |
+| `report:pw:open`   | Generate and open Allure report in browser              |
 
 ## Running Multiple Instances Locally
 
@@ -58,17 +58,17 @@ Each worker runs scenarios in its own isolated browser context, so there are no 
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `ENVIRONMENT` | `local` | Target environment (`local`, `dev`, `test`, etc.) |
-| `BASE_URL` | Auto-resolved from `ENVIRONMENT` | Frontend URL to test against |
-| `DEFRA_ID_URL` | Auto-resolved from `ENVIRONMENT` | DEFRA ID stub URL |
-| `HEADLESS` | `true` | Set to `false` to run headed |
-| `MAX_INSTANCES` | `1` (local) / `10` (CI) | Parallel Cucumber workers |
-| `DEBUG` | `false` | Forces `parallel: 1` for debugging |
-| `DEFRA_ID_USER_ID` | - | Real DEFRA ID username (when `ENVIRONMENT=test`) |
-| `DEFRA_ID_USER_PASSWORD` | - | Real DEFRA ID password (when `ENVIRONMENT=test`) |
-| `DEFRA_ID_ORG_NAME` | `Windfarm Co` | Organisation name for real DEFRA ID |
+| Variable                 | Default                          | Description                                       |
+| ------------------------ | -------------------------------- | ------------------------------------------------- |
+| `ENVIRONMENT`            | `local`                          | Target environment (`local`, `dev`, `test`, etc.) |
+| `BASE_URL`               | Auto-resolved from `ENVIRONMENT` | Frontend URL to test against                      |
+| `DEFRA_ID_URL`           | Auto-resolved from `ENVIRONMENT` | DEFRA ID stub URL                                 |
+| `HEADLESS`               | `true`                           | Set to `false` to run headed                      |
+| `MAX_INSTANCES`          | `1` (local) / `10` (CI)          | Parallel Cucumber workers                         |
+| `DEBUG`                  | `false`                          | Forces `parallel: 1` for debugging                |
+| `DEFRA_ID_USER_ID`       | -                                | Real DEFRA ID username (when `ENVIRONMENT=test`)  |
+| `DEFRA_ID_USER_PASSWORD` | -                                | Real DEFRA ID password (when `ENVIRONMENT=test`)  |
+| `DEFRA_ID_ORG_NAME`      | `Windfarm Co`                    | Organisation name for real DEFRA ID               |
 
 ## Running Real DEFRA ID Tests
 
@@ -161,60 +161,60 @@ cucumber.pw.mjs        # Cucumber runner configuration (entrypoint)
 
 Page objects define locators and actions for each page of the application:
 
-| Page | Description |
-|---|---|
-| `task.list.page.js` | Task list with task selection and review button |
-| `project.name.page.js` | Project name entry |
-| `dashboard.page.js` | Projects table with CRUD actions and sort assertions |
-| `cookie.banner.page.js` | Cookie consent banner |
-| `cookies.policy.page.js` | Cookies policy page |
-| `confirmation.page.js` | Submission confirmation with reference extraction |
-| `check.your.answers.page.js` | Check your answers summary |
-| `review.site.details.page.js` | Review site details page |
-| `public.register.page.js` | Public register consent and reason |
-| `view.details.page.js` | View submitted notification details |
-| `delete.project.page.js` | Delete project confirmation |
-| `delete.site.details.page.js` | Delete site details page |
-| `header.page.js` | Header component |
-| `footer.page.js` | Footer component |
-| `privacy.policy.page.js` | Privacy policy page |
-| `defra.id.login.page.js` | DEFRA ID login stub |
-| `common.elements.page.js` | Shared GOV.UK elements |
+| Page                          | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `task.list.page.js`           | Task list with task selection and review button      |
+| `project.name.page.js`        | Project name entry                                   |
+| `dashboard.page.js`           | Projects table with CRUD actions and sort assertions |
+| `cookie.banner.page.js`       | Cookie consent banner                                |
+| `cookies.policy.page.js`      | Cookies policy page                                  |
+| `confirmation.page.js`        | Submission confirmation with reference extraction    |
+| `check.your.answers.page.js`  | Check your answers summary                           |
+| `review.site.details.page.js` | Review site details page                             |
+| `public.register.page.js`     | Public register consent and reason                   |
+| `view.details.page.js`        | View submitted notification details                  |
+| `delete.project.page.js`      | Delete project confirmation                          |
+| `delete.site.details.page.js` | Delete site details page                             |
+| `header.page.js`              | Header component                                     |
+| `footer.page.js`              | Footer component                                     |
+| `privacy.policy.page.js`      | Privacy policy page                                  |
+| `defra.id.login.page.js`      | DEFRA ID login stub                                  |
+| `common.elements.page.js`     | Shared GOV.UK elements                               |
 
 ### Support Modules
 
-| Module | Description |
-|---|---|
-| `hooks.js` | Lifecycle hooks: shared browser, per-scenario context/page, failure attachments |
-| `config.js` | Environment config resolution (URLs, headless, chromium args) |
-| `world.js` | Custom Cucumber World with `page`, `browserContext`, `data`, `testUser` |
-| `auth.js` | User registration/login (stub and real DEFRA ID), cookie acceptance |
-| `navigation.js` | Navigate, authenticate, sign out, re-authenticate helpers |
-| `task-flow.js` | Complete tasks, submit notification, store references |
-| `site-details-flow.js` | Site detail page interactions dispatched by entry method |
-| `progress-formatter.js` | Custom ASCII progress bar formatter for terminal output |
+| Module                  | Description                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `hooks.js`              | Lifecycle hooks: shared browser, per-scenario context/page, failure attachments |
+| `config.js`             | Environment config resolution (URLs, headless, chromium args)                   |
+| `world.js`              | Custom Cucumber World with `page`, `browserContext`, `data`, `testUser`         |
+| `auth.js`               | User registration/login (stub and real DEFRA ID), cookie acceptance             |
+| `navigation.js`         | Navigate, authenticate, sign out, re-authenticate helpers                       |
+| `task-flow.js`          | Complete tasks, submit notification, store references                           |
+| `site-details-flow.js`  | Site detail page interactions dispatched by entry method                        |
+| `progress-formatter.js` | Custom ASCII progress bar formatter for terminal output                         |
 
 ### Test Data Factories
 
 Simple factory functions (no builder pattern) in `test-pw/test-data/`:
 
-| Factory | Description |
-|---|---|
-| `exemption.js` | Project names, IAT context, activity dates, public register data |
-| `site-details.js` | Coordinates (WGS84/OSGB36), circle/boundary data, multi-site data |
-| `file-upload.js` | KML and Shapefile upload data (valid, virus, wrong type, large, empty) |
-| `check-your-answers.js` | Pre-built CYA scenarios combining site details + public register |
+| Factory                 | Description                                                            |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `exemption.js`          | Project names, IAT context, activity dates, public register data       |
+| `site-details.js`       | Coordinates (WGS84/OSGB36), circle/boundary data, multi-site data      |
+| `file-upload.js`        | KML and Shapefile upload data (valid, virus, wrong type, large, empty) |
+| `check-your-answers.js` | Pre-built CYA scenarios combining site details + public register       |
 
 ## Cucumber Profiles
 
 Defined in `cucumber.pw.mjs`:
 
-| Profile | Use Case | Parallelism | Tags |
-|---|---|---|---|
-| `default` | Local development | 1 worker | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`, `@local-only` |
-| `smoke` | Quick validation | 1 worker | `@smoke` only (10 feature files) |
-| `github` | PR checks | 10 workers | Same as default |
-| `cdp` | CDP environment | 10 workers | Real DEFRA ID / D365 when `ENVIRONMENT=test` |
+| Profile   | Use Case          | Parallelism | Tags                                                                         |
+| --------- | ----------------- | ----------- | ---------------------------------------------------------------------------- |
+| `default` | Local development | 1 worker    | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`, `@local-only` |
+| `smoke`   | Quick validation  | 1 worker    | `@smoke` only (10 feature files)                                             |
+| `github`  | PR checks         | 10 workers  | Same as default                                                              |
+| `cdp`     | CDP environment   | 10 workers  | Real DEFRA ID / D365 when `ENVIRONMENT=test`                                 |
 
 ## Architecture
 

@@ -67,6 +67,7 @@ List every file under test-infrastructure/ and categorise them:
 ```
 
 This revealed:
+
 - **37 page objects** contained the selectors — these mapped directly to the new `test-pw/pages/` files
 - **91 interactions + 16 page interactions** were mostly thin wrappers — collapsed into step definitions
 - **26 tasks** orchestrated multi-step flows — replaced by support functions in `task-flow.js` and `site-details-flow.js`
@@ -75,11 +76,13 @@ This revealed:
 ### Identifying Shared vs Duplicated Logic
 
 The analysis exposed significant duplication in the legacy code. For example:
+
 - Multiple interactions doing `browseTheWeb.click(locator)` with different class names
 - Similar page interactions for WGS84 and OSGB36 coordinates with only field names differing
 - Tasks that were nearly identical but for different site types
 
 In the new code, these were consolidated:
+
 - One `completeSiteDetailsFlow()` dispatcher that routes by coordinate method and site count
 - Factory functions that parameterise the differences (WGS84 vs OSGB36, circle vs boundary)
 - Direct Playwright calls in steps instead of wrapper classes
@@ -146,6 +149,7 @@ The migration was done in **6 batches** (Phase 0 + 5 batches), each completed in
 Each batch used a structured prompt with these key sections:
 
 **1. Context setting** — Tell the AI exactly what exists already:
+
 ```
 The test-pw/ directory already has: world.js, hooks.js, config.js, auth.js,
 navigation.js. There are 32 scenarios passing. The feature files are shared
@@ -153,6 +157,7 @@ with the legacy suite in test/features/.
 ```
 
 **2. Explicit scope** — List exactly which feature files and scenarios to migrate:
+
 ```
 Migrate these feature files:
 - site.details.manual.polygon.feature (7 scenarios, 1 @wip)
@@ -161,6 +166,7 @@ Migrate these feature files:
 ```
 
 **3. Reference the legacy code** — Point to the existing Screenplay implementation:
+
 ```
 The legacy implementation is in:
 - test/steps/site.details.steps.js (step definitions)
@@ -170,6 +176,7 @@ The legacy implementation is in:
 ```
 
 **4. Architectural constraints** — Enforce the patterns you want:
+
 ```
 Rules:
 - Use Page Object Model (not Screenplay)
@@ -180,6 +187,7 @@ Rules:
 ```
 
 **5. Run and verify** — Ask the AI to run tests and fix failures:
+
 ```
 After creating the files, run: npx cucumber-js --config cucumber.pw.mjs
 Fix any failures before finishing.
@@ -188,34 +196,41 @@ Fix any failures before finishing.
 ### What Made Prompts Effective
 
 **Be specific about what NOT to do:**
+
 - "Do NOT modify feature files" prevented the AI from changing shared test specifications
 - "No builder pattern" prevented over-engineering of test data factories
 - "No ~/ alias in test-pw/" kept the new code independent of the legacy module system
 
 **Reference existing patterns:**
+
 - Once Batch 1 established the auth flow and navigation pattern, subsequent prompts could say "follow the same pattern as navigation.js" and the AI would be consistent
 
 **Include the gotchas upfront:**
+
 - After discovering a gotcha in one batch (e.g., "cookie banner buttons use `button[name='analytics']` not `input[name='analytics']`"), including it in the next prompt prevented the same mistake
 - The CLAUDE.md "Known Gotchas" section grew with each batch
 
 **Let the AI run tests:**
+
 - Instead of reviewing every line manually, having the AI run `cucumber-js` and fix failures was far more efficient
 - The AI could iterate through failures, understand Playwright error messages, and fix selectors/waits
 
 ### Prompt Evolution Across Batches
 
 **Batch 1 (verbose, exploratory):**
+
 - Long prompts explaining the project structure, ESM setup, auth flow in detail
 - Had to explain Cucumber-js v12 config format (default export vs named exports)
 - Lots of back-and-forth on selector strategies
 
 **Batch 2-3 (established patterns):**
+
 - Shorter prompts referencing "follow the pattern in site-details-flow.js"
 - Could say "create factory functions like exemption.js" without explaining the pattern
 - Focus shifted to the specific page interactions unique to each batch
 
 **Batch 4-5 (refined and efficient):**
+
 - Minimal prompts — just the feature file list and "migrate these using established patterns"
 - AI independently created new page objects, steps, and support modules following conventions
 - Most time spent on edge cases (e.g., multi-step CYA edit flows) rather than boilerplate
@@ -250,25 +265,25 @@ When a new Claude Code session starts, CLAUDE.md is loaded automatically. This m
 
 ## Estimated Effort
 
-| Batch | Scenarios | Estimated Effort |
-|---|---|---|
-| Phase 0: Foundation | 4 | ~2 hours |
-| Batch 1: Core pages | 28 | ~2 hours |
-| Batch 2: Site details (manual) | 41 | ~3 hours |
-| Batch 3: Site details (file upload) | 23 | ~2 hours |
-| Batch 4: CYA + change flows | 34 | ~3 hours |
-| Batch 5: Submit + dashboard | 13 | ~2 hours |
-| **Total** | **143** | **~14 hours** |
+| Batch                               | Scenarios | Estimated Effort |
+| ----------------------------------- | --------- | ---------------- |
+| Phase 0: Foundation                 | 4         | ~2 hours         |
+| Batch 1: Core pages                 | 28        | ~2 hours         |
+| Batch 2: Site details (manual)      | 41        | ~3 hours         |
+| Batch 3: Site details (file upload) | 23        | ~2 hours         |
+| Batch 4: CYA + change flows         | 34        | ~3 hours         |
+| Batch 5: Submit + dashboard         | 13        | ~2 hours         |
+| **Total**                           | **143**   | **~14 hours**    |
 
 Manual estimate for the same migration: **10-12 weeks**. The AI-assisted approach achieved a **~95% time reduction**.
 
 ## Code Reduction
 
-| Metric | Legacy (Screenplay + WDIO) | New (Playwright + POM) | Reduction |
-|---|---:|---:|---:|
-| Files | 231 | 48 | -79% |
-| Lines of code | 12,520 | 4,679 | -63% |
-| Abstraction layers | 5-6 | 3 | -50% |
+| Metric             | Legacy (Screenplay + WDIO) | New (Playwright + POM) | Reduction |
+| ------------------ | -------------------------: | ---------------------: | --------: |
+| Files              |                        231 |                     48 |      -79% |
+| Lines of code      |                     12,520 |                  4,679 |      -63% |
+| Abstraction layers |                        5-6 |                      3 |      -50% |
 
 ## Tips for New Starters
 
