@@ -53,7 +53,7 @@ export const config = {
           args: [
             '--no-sandbox',
             '--disable-infobars',
-            '--headless',
+            ...(process.env.HEADLESS !== 'false' ? ['--headless'] : []),
             '--disable-gpu',
             '--window-size=1920,1080',
             '--enable-features=NetworkService,NetworkServiceInProcess',
