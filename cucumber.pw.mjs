@@ -4,7 +4,7 @@ const common = {
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '1', 10),
   import: ['test-pw/steps/**/*.js', 'test-pw/support/**/*.js'],
   format: [
-    'progress',
+    './test-pw/support/progress-formatter.js',
     'html:cucumber-report.html',
     'allure-cucumberjs/reporter'
   ],
@@ -58,7 +58,7 @@ export const github = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '10', 10),
   format: [
-    'progress',
+    './test-pw/support/progress-formatter.js',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
@@ -71,7 +71,7 @@ export const cdp = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '10', 10),
   format: [
-    'progress',
+    './test-pw/support/progress-formatter.js',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'

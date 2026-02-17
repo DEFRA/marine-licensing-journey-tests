@@ -264,7 +264,6 @@ runs:
       run: |
         echo "=== Running Playwright tests ==="
         npm run test:pw:github
-      continue-on-error: true
 
     - name: debug
       if: always()
@@ -379,7 +378,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: ./marine-licensing-journey-tests/allure-report/
+        path: ./marine-licensing-journey-tests/allure-report/index.html
         retention-days: 30
 
     - name: Upload Cucumber report
