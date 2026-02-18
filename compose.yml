@@ -1,96 +1,186 @@
 ################################################################################
-# Docker Compose file for starting up the service for testing in GitHub workflow
-# This template provides comparable infrastructure to the real environment.
-#   - mongodb
-#   - redis
-#   - localstack (s3, sqs, sns)
+# Docker Compose file for local development
+# Uses local build for marine-licensing-backend from ../marine-licensing-backend
 #
-# Both mongo and localstack have init scripts included for setting up resources
-# on startup. These scripts are in docker/scripts.
-#
-#
-# The services being tested can either be started up here using the latest
-# builds from dockerhub.
-# In the example each service has a .env config file in docker/config/
-# Services can reference each other by their container names.
-# e.g. http://cdp-example-node-backend:3001/
-#
+# For pipeline use, see compose.common.yml (uses pre-built Docker images)
 ################################################################################
 services:
-  ################################################################################
-  mongodb:
-    image: mongo:7.0.24
-    volumes:
-      - ./docker/scripts/mongodb:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ['CMD', 'mongosh', '--eval', 'db.hello().ok']
-      interval: 5s
-      start_period: 5s
-      retries: 3
-  ################################################################################
-  localstack:
-    image: localstack/localstack:3.2.0
-    environment:
-      - LOCALSTACK_HOST=127.0.0.1
-      - SERVICES=s3,sqs,sns,dynamodb
-      - LS_LOG=WARN
-    env_file:
-      - ./docker/config/defaults.env
-    volumes:
-      - ./docker/scripts/localstack:/etc/localstack/init/ready.d
-    healthcheck:
-      test: ['CMD', 'curl', 'localhost:4566']
-      interval: 5s
-      start_period: 5s
-      retries: 3
-
-  ################################################################################
-  redis:
-    image: redis:7
+  redis-frontend:
+    image: redis:7.2.3-alpine3.18
+    ports:
+      - '6380:6379'
     restart: always
+    networks:
+      cdp-tenant:
     healthcheck:
       test: ['CMD', 'redis-cli', 'PING']
       interval: 5s
       start_period: 2s
       retries: 5
-################################################################################
-#
-# Add the services you want to test below.
-#
-################################################################################
-#  cdp-example-node-frontend:
-#    image: defradigital/cdp-example-node-frontend:${CDP_EXAMPLE_NODE_FRONTEND:-latest}
-#    env_file:
-#      - ./docker/config/defaults.env
-#      - ./docker/config/example-frontend.env
-#    environment:
-#      - PORT=3000
-#    depends_on:
-#      cdp-example-node-backend:
-#        condition: service_started
-#      redis:
-#        condition: service_healthy
-#    ports:
-#      - 3000:3000
-#    healthcheck:
-#      test: ["CMD", "curl", "http://localhost:3000/health"]
-#      interval: 3s
-#      start_period: 2s
-#      retries: 3
 
-################################################################################
-# cdp-example-node-backend:
-#   image: defradigital/cdp-example-node-backend:${CDP_EXAMPLE_NODE_BACKEND:-latest}
-#   env_file:
-#     - ./docker/config/defaults.env
-#     - ./docker/config/example-backend.env
-#   environment:
-#     - PORT=3001
-#   depends_on:
-#     mongodb:
-#       condition: service_healthy
-#   healthcheck:
-#     test: ["CMD", "curl", "http://localhost:3001/health"]
-#     interval: 3s
-#     start_period: 2s
-#     retries: 3
+  defra-id-stub:
+    image: defradigital/cdp-defra-id-stub:latest
+    ports:
+      - '3200:3200'
+    restart: unless-stopped
+    environment:
+      PORT: 3200
+      REDIS_HOST: redis-frontend
+      REDIS_PORT: 6379
+      USE_SINGLE_INSTANCE_CACHE: true
+      NODE_ENV: development
+      APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
+    depends_on:
+      redis-frontend:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
+      interval: 5s
+      start_period: 5s
+      retries: 3
+    networks:
+      cdp-tenant:
+        aliases:
+          - localhost
+
+  marine-licensing-frontend:
+    build: ../marine-licensing-frontend
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    env_file:
+      - 'compose/aws.env'
+      - './docker/config/defaults.env'
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      USE_SINGLE_INSTANCE_CACHE: true
+      SESSION_CACHE_ENGINE: redis
+      MARINE_LICENSING_BACKEND_API_URL: http://marine-licensing-backend:3001
+      CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
+      APP_BASE_URL: ${FRONTEND_APP_BASE_URL:-http://marine-licensing-frontend:3000}
+      DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
+      ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
+      REDIS_HOST: redis-frontend
+      REDIS_PORT: 6379
+    command: 'node .'
+    depends_on:
+      marine-licensing-backend:
+        condition: service_healthy
+      redis-frontend:
+        condition: service_healthy
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
+  localstack:
+    image: localstack/localstack:3.0.2
+    ports:
+      - '4566:4566' # LocalStack Gateway
+      - '4510-4559:4510-4559' # external services port range
+    restart: unless-stopped
+    env_file:
+      - 'compose/aws.env'
+    environment:
+      DEBUG: ${DEBUG:-1}
+      LS_LOG: WARN # Localstack DEBUG Level
+      SERVICES: s3,sqs,sns,firehose
+      LOCALSTACK_HOST: 127.0.0.1
+    volumes:
+      - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
+      - ./compose/start-localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
+    healthcheck:
+      test: ['CMD', 'curl', 'localhost:4566']
+      interval: 5s
+      start_period: 5s
+      retries: 3
+    networks:
+      - cdp-tenant
+
+  redis:
+    image: redis:7
+    restart: always
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'PING']
+      interval: 5s
+      start_period: 2s
+      retries: 5
+
+  mongodb:
+    image: mongo:7.0.24
+    volumes:
+      - ./docker/scripts/mongodb:/docker-entrypoint-initdb.d
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', 'db.hello().ok']
+      interval: 5s
+      start_period: 5s
+      retries: 3
+
+  cdp-uploader:
+    image: defradigital/cdp-uploader:${CDP_UPLOADER_VERSION:-latest}
+    ports:
+      - '7337:7337'
+    restart: unless-stopped
+    links:
+      - 'localstack:localstack'
+      - 'redis:redis'
+    depends_on:
+      localstack:
+        condition: service_healthy
+    env_file:
+      - 'compose/aws.env'
+    environment:
+      VIRTUAL_HOST: ~^uploader\..*\.sslip\.io
+      VIRTUAL_PATH: /
+      VIRTUAL_PORT: 7337
+      PORT: 7337
+      NODE_ENV: development
+      REDIS_HOST: redis
+      APP_BASE_URL: http://cdp-uploader:7337
+      USE_SINGLE_INSTANCE_CACHE: true
+      MOCK_VIRUS_SCAN_ENABLED: true
+      MOCK_VIRUS_RESULT_DELAY: 3
+      MOCK_VIRUS_REGEX: '.*virus.*'
+      CONSUMER_BUCKETS: '${CDP_UPLOAD_BUCKET:-mmo-uploads},cdp-uploader-quarantine'
+      SQS_ENDPOINT: http://localstack:4566
+      S3_ENDPOINT: http://localstack:4566
+    networks:
+      - cdp-tenant
+
+  marine-licensing-backend:
+    build: ../marine-licensing-backend
+    restart: unless-stopped
+    env_file:
+      - './docker/config/defaults.env'
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
+      - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - 3001:3001
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3001/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
+networks:
+  cdp-tenant:
+    driver: bridge
+volumes:
+  mongodb-data:

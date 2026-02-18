@@ -30,7 +30,7 @@ HEADLESS=false npm run test:pw
 
 ### Services
 
-Tests run against Docker containers defined in `compose.common.yml`. All services communicate over the `cdp-tenant` bridge network.
+Tests run against Docker containers defined in `compose.yml`. All services communicate over the `cdp-tenant` bridge network.
 
 | Service                     | Image                                    | Port  | Purpose                 |
 | --------------------------- | ---------------------------------------- | ----- | ----------------------- |
@@ -46,16 +46,7 @@ Tests run against Docker containers defined in `compose.common.yml`. All service
 
 ```bash
 # Start all services
-docker compose -f compose.common.yml up -d
-
-# Verify services are healthy
-docker compose -f compose.common.yml ps
-
-# Check individual health endpoints
-curl -f http://localhost:3000/health   # frontend
-curl -f http://localhost:3001/health   # backend
-curl -f http://localhost:3200/health   # defra-id-stub
-curl    http://localhost:4566          # localstack
+docker compose up -d
 ```
 
 ### Chromium host-resolver-rules
@@ -70,15 +61,15 @@ This is configured automatically in `test-pw/support/config.js` — no manual `/
 
 ## NPM Scripts
 
-| Script           | Description                                             |
-| ---------------- | ------------------------------------------------------- |
-| `test:pw`        | Run all tests (default profile, headless)               |
-| `test:pw:smoke`  | Run smoke-tagged scenarios only                         |
-| `test:pw:github` | Run with GitHub CI settings (10 parallel workers)       |
-| `test:pw:cdp`    | Run with CDP environment settings (10 parallel workers) |
-| `clean:pw`       | Remove `allure-results/` and `allure-report/`           |
-| `report:pw`      | Generate single-file Allure HTML report                 |
-| `report:pw:open` | Generate and open Allure report in browser              |
+| Script           | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| `test:pw`        | Run all tests (default profile, headless, summary formatter) |
+| `test:pw:smoke`  | Run smoke-tagged scenarios only (summary formatter)          |
+| `test:pw:github` | Run with GitHub CI settings (10 parallel workers)            |
+| `test:pw:cdp`    | Run with CDP environment settings (10 parallel workers)      |
+| `clean:pw`       | Remove `allure-results/` and `allure-report/`                |
+| `report:pw`      | Generate single-file Allure HTML report                      |
+| `report:pw:open` | Generate and open Allure report in browser                   |
 
 ## Running Multiple Instances Locally
 
@@ -237,15 +228,15 @@ The configuration file `cucumber.pw.mjs` at the project root is the single entry
 - **Formatters**: Progress output, HTML report, JSON results, and Allure reporting
 - **Parallelism**: Controlled by `MAX_INSTANCES` env var, overridden by `DEBUG=true`
 
-The npm scripts are convenience wrappers that select a profile and add the progress formatter:
+The npm scripts are convenience wrappers that select a profile and formatter:
 
 ```bash
 # These are equivalent:
 npm run test:pw
-cucumber-js --config cucumber.pw.mjs --format ./test-pw/support/progress-formatter.js
+cucumber-js --config cucumber.pw.mjs --format summary
 
 # Selecting a profile:
-npm run test:pw:smoke    # uses --profile smoke
+npm run test:pw:smoke    # uses --profile smoke --format summary
 npm run test:pw:github   # uses --profile github (10 workers, JSON output)
 npm run test:pw:cdp      # uses --profile cdp (10 workers, real DEFRA ID when ENVIRONMENT=test)
 ```
