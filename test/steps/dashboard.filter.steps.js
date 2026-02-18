@@ -119,21 +119,20 @@ Then(
     const completedExemptions = this.actor.recalls('completedExemptions') || []
     const latestExemption = completedExemptions[completedExemptions.length - 1]
 
-    // Get the View details link href from the dashboard
+    
     const viewDetailsSelector = DashboardPage.viewDetailsLink(
       latestExemption.projectName
     )
     const viewDetailsElement = await browser.$(viewDetailsSelector)
     const href = await viewDetailsElement.getAttribute('href')
 
-    // Extract ID from href (last path segment, e.g. /exemption/view-details/69948c... → 69948c...)
+   
     const id = href.split('/').pop()
 
-    // Navigate to the public details page
+   
     await browser.url(`/exemption/view-public-details/${id}`)
 
-    // Assert "Who the exemption is for" field contains expected name
-    // GOV.UK summary list pattern: <dt>key</dt><dd>value</dd>
+    
     const valueElement = await browser.$(
       '//dt[contains(text(), "Who the exemption is for")]/following-sibling::dd'
     )
