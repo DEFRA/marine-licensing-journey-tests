@@ -11,28 +11,74 @@ npm ci
 # Install Playwright browsers
 npx playwright install chromium --with-deps
 
-# Run all tests (headed)
+# Run all tests (headless by default)
 npm run test:pw
 
 # Run smoke tests only
 npm run test:pw:smoke
 
-# Run headless
-npm run test:pw:headless
+# Run headed (watch the browser)
+HEADLESS=false npm run test:pw
 ```
+
+## Local Docker Setup
+
+### Prerequisites
+
+- Node.js >= 22.21.0
+- Docker & Docker Compose
+
+### Services
+
+Tests run against Docker containers defined in `compose.common.yml`. All services communicate over the `cdp-tenant` bridge network.
+
+| Service                     | Image                                    | Port  | Purpose                 |
+| --------------------------- | ---------------------------------------- | ----- | ----------------------- |
+| `marine-licensing-frontend` | `defradigital/marine-licensing-frontend` | 3000  | Frontend under test     |
+| `marine-licensing-backend`  | `defradigital/marine-licensing-backend`  | 3001  | Backend API             |
+| `defra-id-stub`             | `defradigital/cdp-defra-id-stub`         | 3200  | OIDC authentication     |
+| `cdp-uploader`              | `defradigital/cdp-uploader`              | 7337  | File upload service     |
+| `mongodb`                   | `mongo:7.0.24`                           | 27017 | Database                |
+| `redis` / `redis-frontend`  | `redis:7`                                | 6379  | Session cache           |
+| `localstack`                | `localstack/localstack:3.0.2`            | 4566  | S3, SQS, SNS (AWS mock) |
+
+### Starting services
+
+```bash
+# Start all services
+docker compose -f compose.common.yml up -d
+
+# Verify services are healthy
+docker compose -f compose.common.yml ps
+
+# Check individual health endpoints
+curl -f http://localhost:3000/health   # frontend
+curl -f http://localhost:3001/health   # backend
+curl -f http://localhost:3200/health   # defra-id-stub
+curl    http://localhost:4566          # localstack
+```
+
+### Chromium host-resolver-rules
+
+When `ENVIRONMENT=local` (the default), Chromium is launched with `--host-resolver-rules` that map Docker hostnames to `127.0.0.1`:
+
+- `marine-licensing-frontend` → `127.0.0.1` (frontend on port 3000)
+- `defra-id-stub` → `127.0.0.1` (OIDC stub on port 3200)
+- `cdp-uploader` → `127.0.0.1` (file upload on port 7337)
+
+This is configured automatically in `test-pw/support/config.js` — no manual `/etc/hosts` changes are needed.
 
 ## NPM Scripts
 
-| Script             | Description                                             |
-| ------------------ | ------------------------------------------------------- |
-| `test:pw`          | Run all tests (default profile)                         |
-| `test:pw:smoke`    | Run smoke-tagged scenarios only                         |
-| `test:pw:headless` | Run all tests headless                                  |
-| `test:pw:github`   | Run with GitHub CI settings (10 parallel workers)       |
-| `test:pw:cdp`      | Run with CDP environment settings (10 parallel workers) |
-| `clean:pw`         | Remove `allure-results/` and `allure-report/`           |
-| `report:pw`        | Generate single-file Allure HTML report                 |
-| `report:pw:open`   | Generate and open Allure report in browser              |
+| Script           | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| `test:pw`        | Run all tests (default profile, headless)               |
+| `test:pw:smoke`  | Run smoke-tagged scenarios only                         |
+| `test:pw:github` | Run with GitHub CI settings (10 parallel workers)       |
+| `test:pw:cdp`    | Run with CDP environment settings (10 parallel workers) |
+| `clean:pw`       | Remove `allure-results/` and `allure-report/`           |
+| `report:pw`      | Generate single-file Allure HTML report                 |
+| `report:pw:open` | Generate and open Allure report in browser              |
 
 ## Running Multiple Instances Locally
 
@@ -42,8 +88,8 @@ By default, tests run with 1 worker locally. To run scenarios in parallel, set t
 # Run with 3 parallel workers
 MAX_INSTANCES=3 npm run test:pw
 
-# Run with 5 parallel workers (headless recommended for multiple instances)
-MAX_INSTANCES=5 npm run test:pw:headless
+# Run with 5 parallel workers
+MAX_INSTANCES=5 npm run test:pw
 
 # Run smoke tests with 2 parallel workers
 MAX_INSTANCES=2 npm run test:pw:smoke
@@ -55,6 +101,67 @@ Each worker runs scenarios in its own isolated browser context, so there are no 
 - **DEFRA ID stub**: Each scenario registers and expires its own test user, so parallel scenarios won't conflict.
 - **Start conservatively**: 3-5 workers is a good starting point for local development. Increase if your machine handles it comfortably.
 - **Debugging**: Set `DEBUG=true` to force single-worker mode regardless of `MAX_INSTANCES`.
+
+## Verbose Output and Debugging
+
+### Cucumber formatters
+
+The default formatter is a custom progress bar. Override it with `--format` for more detail:
+
+```bash
+# Step-by-step dots (. for pass, F for fail)
+npx cucumber-js --config cucumber.pw.mjs --format progress
+
+# Scenario names with step results
+npx cucumber-js --config cucumber.pw.mjs --format summary
+```
+
+### Built-in console logs
+
+The hooks in `test-pw/support/hooks.js` log scenario lifecycle automatically:
+
+```
+▶ START: A user can view the task list
+✓ PASS: A user can view the task list (4.2s)
+✗ FAIL: A user can submit a notification (12.1s)
+```
+
+### Serial execution
+
+When running in parallel, output from multiple workers is interleaved. Force single-worker mode for readable output:
+
+```bash
+DEBUG=true npm run test:pw
+```
+
+This sets `parallel: 1` in the Cucumber config regardless of `MAX_INSTANCES`.
+
+### Headed mode
+
+Watch the browser while tests run:
+
+```bash
+HEADLESS=false npm run test:pw
+```
+
+### Playwright debug logs
+
+For low-level browser and network tracing, use Playwright's built-in debug logging:
+
+```bash
+# API-level trace (page.goto, page.click, etc.)
+DEBUG=pw:api npx cucumber-js --config cucumber.pw.mjs
+
+# All Playwright debug output
+DEBUG=pw:* npx cucumber-js --config cucumber.pw.mjs
+```
+
+### Combining options
+
+```bash
+# Headed, single worker, with Playwright API trace
+DEBUG=pw:api MAX_INSTANCES=1 HEADLESS=false npx cucumber-js --config cucumber.pw.mjs
+```
 
 ## Environment Variables
 
@@ -213,6 +320,7 @@ Defined in `cucumber.pw.mjs`:
 | --------- | ----------------- | ----------- | ---------------------------------------------------------------------------- |
 | `default` | Local development | 1 worker    | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`, `@local-only` |
 | `smoke`   | Quick validation  | 1 worker    | `@smoke` only (10 feature files)                                             |
+| `all`     | All scenarios     | 1 worker    | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`                |
 | `github`  | PR checks         | 10 workers  | Same as default                                                              |
 | `cdp`     | CDP environment   | 10 workers  | Real DEFRA ID / D365 when `ENVIRONMENT=test`                                 |
 

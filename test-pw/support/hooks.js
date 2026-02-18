@@ -1,6 +1,7 @@
 import {
   Before,
   After,
+  AfterStep,
   BeforeAll,
   AfterAll,
   Status,
@@ -31,6 +32,17 @@ Before(async function (scenario) {
   })
   this.page = await this.browserContext.newPage()
   this.page.setDefaultTimeout(30_000)
+})
+
+// Capture screenshot on step failure — attaches to the test case body in Allure.
+// Attachments in the After hook go to the fixture/tear-down scope instead, which
+// is collapsed by default and effectively invisible in the Allure report.
+AfterStep(async function ({ result }) {
+  if (result.status === Status.FAILED && this.page && !this.page.isClosed()) {
+    const screenshot = await this.page.screenshot({ fullPage: true })
+    this.attach(screenshot, 'image/png')
+    this.attach(`Failure URL: ${this.page.url()}`, 'text/plain')
+  }
 })
 
 After(async function (scenario) {

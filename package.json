@@ -42,7 +42,6 @@
     "knip": "knip",
     "test:pw": "cucumber-js --config cucumber.pw.mjs",
     "test:pw:smoke": "cucumber-js --config cucumber.pw.mjs --profile smoke",
-    "test:pw:headless": "HEADLESS=true cucumber-js --config cucumber.pw.mjs",
     "test:pw:github": "cucumber-js --config cucumber.pw.mjs --profile github",
     "test:pw:cdp": "cucumber-js --config cucumber.pw.mjs --profile cdp",
     "clean:pw": "rm -rf allure-results && rm -rf allure-report",
