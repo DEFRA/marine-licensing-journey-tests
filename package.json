@@ -83,7 +83,7 @@
     "lodash": "4.17.23",
     "axios": "1.13.5",
     "browserstack-local": "1.5.9",
-    "fast-xml-parser": "5.3.4",
+    "fast-xml-parser": "5.3.6",
     "@isaacs/brace-expansion": "5.0.1",
     "@wdio/browserstack-service": {
       "undici": "6.23.0"
