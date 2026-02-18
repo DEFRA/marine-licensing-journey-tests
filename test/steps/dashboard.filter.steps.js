@@ -119,20 +119,16 @@ Then(
     const completedExemptions = this.actor.recalls('completedExemptions') || []
     const latestExemption = completedExemptions[completedExemptions.length - 1]
 
-    
     const viewDetailsSelector = DashboardPage.viewDetailsLink(
       latestExemption.projectName
     )
     const viewDetailsElement = await browser.$(viewDetailsSelector)
     const href = await viewDetailsElement.getAttribute('href')
 
-   
     const id = href.split('/').pop()
 
-   
     await browser.url(`/exemption/view-public-details/${id}`)
 
-    
     const valueElement = await browser.$(
       '//dt[contains(text(), "Who the exemption is for")]/following-sibling::dd'
     )
