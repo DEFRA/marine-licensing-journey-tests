@@ -28,6 +28,7 @@ services:
       REDIS_HOST: redis-frontend
       REDIS_PORT: 6379
       USE_SINGLE_INSTANCE_CACHE: true
+      SESSION_CACHE_NAME: defraIdStubSession
       NODE_ENV: development
       APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
     depends_on:
