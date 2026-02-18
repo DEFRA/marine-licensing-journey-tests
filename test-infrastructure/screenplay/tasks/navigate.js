@@ -59,6 +59,34 @@ export default class Navigate extends Task {
       actor.remembers('isAuthenticated', true)
       await actor.attemptsTo(HandleCookieBanner.now())
     }
+
+    // Handle confirm employee page if it appears after any navigation
+    await this.handleConfirmEmployeePage(actor)
+  }
+
+  async handleConfirmEmployeePage(actor) {
+    try {
+      const currentUrl = await actor.ability.browser.getUrl()
+      if (currentUrl.includes('/confirm-employee')) {
+        const yesRadio = await actor.ability.browser.$(
+          'input[type="radio"][value="yes"]'
+        )
+        await yesRadio.waitForExist({ timeout: 5000 })
+        // Click via JS to bypass GOV.UK hidden input styling
+        await actor.ability.browser.execute(() => {
+          const radio = document.querySelector(
+            'input[type="radio"][value="yes"]'
+          )
+          if (radio) radio.click()
+        })
+        const continueButton = await actor.ability.browser.$(
+          'button.govuk-button'
+        )
+        await continueButton.click()
+      }
+    } catch {
+      // Confirm employee page not shown or already handled
+    }
   }
 
   async authenticateWithDefraIdStub(actor, finalUrl) {
