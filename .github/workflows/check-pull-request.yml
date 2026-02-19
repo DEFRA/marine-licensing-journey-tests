@@ -63,3 +63,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./run-journey-tests
+
+  # TEMPORARY: Verify Dockerfile builds and runs on GitHub Actions (remove when done)
+  dockerfile-check:
+    name: Dockerfile Build & Run Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build Docker image
+        run: docker build -t marine-licensing-journey-tests:test .
+
+      - name: Verify container runs (Playwright + Node)
+        run: |
+          docker run --rm marine-licensing-journey-tests:test node --version
+          docker run --rm marine-licensing-journey-tests:test npx playwright --version
