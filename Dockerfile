@@ -1,33 +1,22 @@
-FROM node:22.21.0-alpine
+FROM node:22.21.0-bookworm
 
 ENV TZ="Europe/London"
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
 ENV HEADLESS=true
 
 USER root
 
 RUN apk add --no-cache \
-    openjdk17-jre-headless \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-17-jre-headless \
     curl \
-    aws-cli \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
+    awscli \
     ca-certificates \
-    ca-certificates-bundle \
-    openssl \
-    openssl-dev \
-    libssl3 \
-    ttf-freefont
-
-# Update certificate store
-RUN update-ca-certificates
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY . .
-RUN npm install
+RUN npm install \
+    && npx playwright install chromium --with-deps
 
 ENTRYPOINT [ "./entrypoint.sh" ]

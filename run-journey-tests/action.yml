@@ -254,6 +254,20 @@ runs:
         curl -v --connect-timeout 5 http://localhost:3200/cdp-defra-id-stub/API/register -X POST -H "Content-Type: application/json" -d '{"email":"test@example.com","password":"TestPassword123!","firstName":"Test","lastName":"User"}' || echo "Defra ID stub API test completed (may show expected errors)"
         echo "All connectivity checks passed!"
 
+    - name: Dockerfile build & run check (CDP pipeline image)
+      shell: bash
+      working-directory: ./marine-licensing-journey-tests
+      env:
+        BASE_URL: http://marine-licensing-frontend:3000
+        DEFRA_ID_URL: http://localhost:3200
+      run: |
+        echo "=== Building journey-tests Docker image (CDP pipeline) ==="
+        docker build -t marine-licensing-journey-tests:cdp-check .
+        echo "=== Verifying container runs ==="
+        docker run --rm marine-licensing-journey-tests:cdp-check node --version
+        docker run --rm marine-licensing-journey-tests:cdp-check npx playwright --version
+        echo "✅ Dockerfile build and run check passed"
+
     - name: Run the tests
       id: run-tests
       shell: bash
