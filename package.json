@@ -86,6 +86,7 @@
     "wdio-wait-for": "3.1.0"
   },
   "overrides": {
+    "minimatch": "10.2.1",
     "tmp": "0.2.4",
     "diff": "8.0.3",
     "lodash": "4.17.23",
