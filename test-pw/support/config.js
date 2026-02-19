@@ -20,21 +20,31 @@ function getDefraIdUrl() {
   return `https://cdp-defra-id-stub.${environment}.cdp-int.defra.cloud`
 }
 
+function getProxy() {
+  if (process.env.CDP_HTTP_PROXY) {
+    return { server: 'http://localhost:3128' }
+  }
+  return undefined
+}
+
 function getChromiumArgs() {
-  if (environment !== 'local' && !process.env.BASE_URL) {
-    return []
+  const args = []
+
+  if (process.env.CDP_HTTP_PROXY) {
+    args.push('--ignore-certificate-errors', '--disable-dev-shm-usage')
   }
 
-  // Docker hostnames the browser will encounter during OIDC redirect chain
-  // and file upload flow: frontend → defra-id-stub (auth), frontend → cdp-uploader (file upload)
-  const dockerHostnames = [
-    'marine-licensing-frontend',
-    'defra-id-stub',
-    'cdp-uploader'
-  ]
+  if (environment === 'local' || process.env.BASE_URL) {
+    const dockerHostnames = [
+      'marine-licensing-frontend',
+      'defra-id-stub',
+      'cdp-uploader'
+    ]
+    const rules = dockerHostnames.map((h) => `MAP ${h} 127.0.0.1`).join(',')
+    args.push(`--host-resolver-rules=${rules}`)
+  }
 
-  const rules = dockerHostnames.map((h) => `MAP ${h} 127.0.0.1`).join(',')
-  return [`--host-resolver-rules=${rules}`]
+  return args
 }
 
 export function getConfig() {
@@ -44,6 +54,7 @@ export function getConfig() {
     headless: process.env.HEADLESS !== 'false',
     environment,
     isRealDefraId: environment === 'test',
-    chromiumArgs: getChromiumArgs()
+    chromiumArgs: getChromiumArgs(),
+    proxy: getProxy()
   }
 }

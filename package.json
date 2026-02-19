@@ -38,7 +38,7 @@
     "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
     "report": "allure generate allure-results --clean",
     "report:github": "allure generate allure-results --clean --single-file --output allure-report",
-    "report:publish": "npm run report; ./bin/publish-tests.sh",
+    "report:publish": "npm run report:pw; ./bin/publish-tests.sh",
     "knip": "knip",
     "test:pw": "cucumber-js --config cucumber.pw.mjs --format summary",
     "test:pw:smoke": "cucumber-js --config cucumber.pw.mjs --profile smoke --format summary",
