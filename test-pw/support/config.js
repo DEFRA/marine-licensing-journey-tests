@@ -20,8 +20,12 @@ function getDefraIdUrl() {
   return `https://cdp-defra-id-stub.${environment}.cdp-int.defra.cloud`
 }
 
+function isCdpEnvironment() {
+  return environment !== 'local' && !process.env.BASE_URL
+}
+
 function getProxy() {
-  if (process.env.CDP_HTTP_PROXY) {
+  if (isCdpEnvironment()) {
     return { server: 'http://localhost:3128' }
   }
   return undefined
@@ -30,7 +34,7 @@ function getProxy() {
 function getChromiumArgs() {
   const args = []
 
-  if (process.env.CDP_HTTP_PROXY) {
+  if (isCdpEnvironment()) {
     args.push('--ignore-certificate-errors', '--disable-dev-shm-usage')
   }
 
