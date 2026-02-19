@@ -24,18 +24,19 @@ function isCdpEnvironment() {
   return environment !== 'local' && !process.env.BASE_URL
 }
 
-function getProxy() {
-  if (isCdpEnvironment()) {
-    return { server: 'http://localhost:3128' }
-  }
-  return undefined
-}
-
+/**
+ * Chromium-level proxy (matches wdio.conf.js chromeProxyConfig).
+ * Uses --proxy-server so Chromium handles proxy directly, not Playwright.
+ */
 function getChromiumArgs() {
   const args = []
 
   if (isCdpEnvironment()) {
-    args.push('--ignore-certificate-errors', '--disable-dev-shm-usage')
+    args.push(
+      '--proxy-server=http://localhost:3128',
+      '--ignore-certificate-errors',
+      '--disable-dev-shm-usage'
+    )
   }
 
   if (environment === 'local' || process.env.BASE_URL) {
@@ -58,7 +59,6 @@ export function getConfig() {
     headless: process.env.HEADLESS !== 'false',
     environment,
     isRealDefraId: environment === 'test',
-    chromiumArgs: getChromiumArgs(),
-    proxy: getProxy()
+    chromiumArgs: getChromiumArgs()
   }
 }
