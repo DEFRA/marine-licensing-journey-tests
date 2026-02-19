@@ -7,10 +7,7 @@ Feature: Dashboard filter: Filter projects by ownership
   Scenario: Dashboard displays filter radio buttons and Owner column with JS enabled
     Given a user has submitted an exemption notification
     When the user navigates to the dashboard
-    Then the dashboard filter is displayed with "My projects" and "All projects" radio options
-    And the "My projects" radio option is selected by default
-    And the "All projects" radio option label includes the user's organisation name
-    And the "Update results" button is not visible
+    Then the dashboard filter is correctly configured with "My projects" selected by default
     And the submitted notification row contains the correct details
       | Project name  | matches submitted project name     |
       | Type          | Exempt activity notification       |
@@ -19,6 +16,7 @@ Feature: Dashboard filter: Filter projects by ownership
       | Submitted on  | today's date                       |
       | Owner         | Test MMOUser                       |
       | Actions       | View details, Withdraw             |
+    And the public details page for the submitted notification shows the exemption is for "Windfarm Co"
 
   Scenario: Changing the filter radio auto-updates results without clicking Update results
     Given a user has submitted an exemption notification

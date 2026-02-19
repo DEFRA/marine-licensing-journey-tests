@@ -1,4 +1,5 @@
 import { Then, When } from '@cucumber/cucumber'
+import { expect } from 'chai'
 import { browser } from '@wdio/globals'
 import DashboardPage from '~/test-infrastructure/pages/dashboard.page'
 import {
@@ -18,37 +19,25 @@ import {
 } from '~/test-infrastructure/screenplay'
 
 Then(
-  'the dashboard filter is displayed with {string} and {string} radio options',
-  async function (option1, option2) {
+  'the dashboard filter is correctly configured with {string} selected by default',
+  async function (defaultOption) {
     await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioOptionsAreDisplayed(option1, option2)
+      EnsureDashboardFilter.radioOptionsAreDisplayed(
+        'My projects',
+        'All projects'
+      )
+    )
+    await this.actor.attemptsTo(
+      EnsureDashboardFilter.radioIsSelectedByDefault(defaultOption)
+    )
+    await this.actor.attemptsTo(
+      EnsureDashboardFilter.radioLabelIncludesOrganisationName('All projects')
+    )
+    await this.actor.attemptsTo(
+      EnsureDashboardFilter.buttonIsNotVisible('Update results')
     )
   }
 )
-
-Then(
-  'the {string} radio option is selected by default',
-  async function (option) {
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioIsSelectedByDefault(option)
-    )
-  }
-)
-
-Then(
-  "the {string} radio option label includes the user's organisation name",
-  async function (option) {
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioLabelIncludesOrganisationName(option)
-    )
-  }
-)
-
-Then('the {string} button is not visible', async function (buttonText) {
-  await this.actor.attemptsTo(
-    EnsureDashboardFilter.buttonIsNotVisible(buttonText)
-  )
-})
 
 When(
   'the user selects the {string} filter radio option',
@@ -123,3 +112,27 @@ Then('the case status in D365 matches', async function (dataTable) {
   // Verify case details
   await this.mmoUser.attemptsTo(EnsureD365CaseDetails.match(expectedDetails))
 })
+
+Then(
+  'the public details page for the submitted notification shows the exemption is for {string}',
+  async function (expectedName) {
+    const completedExemptions = this.actor.recalls('completedExemptions') || []
+    const latestExemption = completedExemptions[completedExemptions.length - 1]
+
+    const viewDetailsSelector = DashboardPage.viewDetailsLink(
+      latestExemption.projectName
+    )
+    const viewDetailsElement = await browser.$(viewDetailsSelector)
+    const href = await viewDetailsElement.getAttribute('href')
+
+    const id = href.split('/').pop()
+
+    await browser.url(`/exemption/view-public-details/${id}`)
+
+    const valueElement = await browser.$(
+      '//dt[contains(text(), "Who the exemption is for")]/following-sibling::dd'
+    )
+    const actualText = await valueElement.getText()
+    expect(actualText.trim()).to.include(expectedName)
+  }
+)
