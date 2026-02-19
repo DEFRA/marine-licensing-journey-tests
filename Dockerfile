@@ -5,7 +5,6 @@ ENV HEADLESS=true
 
 USER root
 
-RUN apk add --no-cache \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openjdk-17-jre-headless \
     curl \
