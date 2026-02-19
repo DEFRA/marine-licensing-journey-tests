@@ -43,7 +43,7 @@
     "test:pw": "cucumber-js --config cucumber.pw.mjs --format summary",
     "test:pw:smoke": "cucumber-js --config cucumber.pw.mjs --profile smoke --format summary",
     "test:pw:github": "cucumber-js --config cucumber.pw.mjs --profile github",
-    "test:pw:cdp": "cucumber-js --config cucumber.pw.mjs --profile cdp",
+    "test:pw:cdp": "cucumber-js --config cucumber.pw.mjs --profile cdp --format summary",
     "clean:pw": "rm -rf allure-results && rm -rf allure-report",
     "report:pw": "allure generate allure-results --clean --single-file --output allure-report",
     "report:pw:open": "allure generate allure-results --clean && allure open allure-report"
