@@ -18,7 +18,10 @@ let browser
 BeforeAll(async function () {
   const config = getConfig()
   console.log('[DEBUG] ENVIRONMENT:', config.environment)
-  console.log('[DEBUG] Chromium args (proxy via --proxy-server):', config.chromiumArgs)
+  console.log(
+    '[DEBUG] Chromium args (proxy via --proxy-server):',
+    config.chromiumArgs
+  )
   browser = await chromium.launch({
     headless: config.headless,
     args: config.chromiumArgs
