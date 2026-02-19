@@ -17,10 +17,14 @@ let browser
 
 BeforeAll(async function () {
   const config = getConfig()
-  browser = await chromium.launch({
+  const launchOptions = {
     headless: config.headless,
     args: config.chromiumArgs
-  })
+  }
+  if (config.chromiumExecutablePath) {
+    launchOptions.executablePath = config.chromiumExecutablePath
+  }
+  browser = await chromium.launch(launchOptions)
 })
 
 Before(async function (scenario) {

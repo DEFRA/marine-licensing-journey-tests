@@ -44,6 +44,7 @@ export function getConfig() {
     headless: process.env.HEADLESS !== 'false',
     environment,
     isRealDefraId: environment === 'test',
-    chromiumArgs: getChromiumArgs()
+    chromiumArgs: getChromiumArgs(),
+    chromiumExecutablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || null
   }
 }
