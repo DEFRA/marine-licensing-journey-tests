@@ -69,7 +69,7 @@ export const github = {
 
 export const cdp = {
   ...common,
-  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '10', 10),
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '5', 10),
   format: [
     './test-pw/support/progress-formatter.js',
     'html:cucumber-report.html',

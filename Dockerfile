@@ -29,6 +29,6 @@ WORKDIR /app
 
 COPY . .
 RUN npm install \
-    && npx playwright install
+    && npx playwright install chromium --with-deps
 
 ENTRYPOINT [ "./entrypoint.sh" ]
