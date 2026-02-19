@@ -1,8 +1,8 @@
 FROM node:22.21.0-alpine
 
 ENV TZ="Europe/London"
-ENV PLAYWRIGHT_BROWSERS_PATH=/usr
-ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/lib/chromium/chromium
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
 ENV HEADLESS=true
 
 USER root
@@ -28,7 +28,6 @@ RUN update-ca-certificates
 WORKDIR /app
 
 COPY . .
-RUN npm install \
-    && npx playwright install chromium --with-deps
+RUN npm install
 
 ENTRYPOINT [ "./entrypoint.sh" ]
