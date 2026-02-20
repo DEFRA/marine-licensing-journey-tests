@@ -1,5 +1,6 @@
 import { chromium } from 'playwright'
 import { expect } from '@playwright/test'
+import { getConfig } from './config.js'
 
 const COLUMN_MAP = {
   'Reference number': { colId: 'ticketnumber', type: 'label' },
@@ -19,50 +20,21 @@ function gridCellSelector(colId, type) {
 }
 
 export async function launchD365Browser() {
-  const args = [
-    '--no-sandbox',
-    '--disable-infobars',
-    '--disable-gpu',
-    '--window-size=1920,1080',
-    '--ignore-certificate-errors',
-    '--disable-dev-shm-usage',
-    '--disable-blink-features=AutomationControlled',
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--disable-extensions'
-  ]
+  const config = getConfig()
 
-  const launchOptions = {
-    headless: process.env.HEADLESS !== 'false',
-    args
-  }
+  const browser = await chromium.launch({
+    headless: config.headless,
+    args: config.chromiumArgs
+  })
 
-  if (process.env.ENVIRONMENT === 'test' && process.platform === 'linux') {
-    launchOptions.executablePath = '/usr/lib/chromium/chromium'
-  }
-
-  const browser = await chromium.launch(launchOptions)
-
-  const contextOptions = {
+  const context = await browser.newContext({
     ignoreHTTPSErrors: true,
-    viewport: { width: 1920, height: 1080 },
-    userAgent:
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-  }
-
-  const proxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY
-  if (proxy) {
-    contextOptions.proxy = { server: proxy }
-  }
-
-  const context = await browser.newContext(contextOptions)
+    viewport: { width: 1920, height: 1080 }
+  })
   context.setDefaultTimeout(60_000)
   context.setDefaultNavigationTimeout(60_000)
 
   const page = await context.newPage()
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'webdriver', { get: () => undefined })
-  })
 
   return { browser, context, page }
 }
