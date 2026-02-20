@@ -1,9 +1,6 @@
 const environment = process.env.ENVIRONMENT || 'local'
 
 function getBaseURL() {
-  if (process.env.BASE_URL) {
-    return process.env.BASE_URL
-  }
   if (environment === 'local') {
     return 'http://marine-licensing-frontend:3000'
   }

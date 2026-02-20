@@ -259,7 +259,6 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       env:
-        BASE_URL: http://marine-licensing-frontend:3000
         DEFRA_ID_URL: http://localhost:3200
       run: |
         echo "=== Running Playwright tests ==="
