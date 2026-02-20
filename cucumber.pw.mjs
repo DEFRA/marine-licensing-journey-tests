@@ -76,10 +76,7 @@ export const cdp = {
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths:
-    process.env.ENVIRONMENT === 'test'
-      ? ['test-pw/features/*.feature']
-      : ['test/features/*.feature', 'test-pw/features/*.feature'],
+  paths: ['test/features/*.feature'],
   tags:
     process.env.ENVIRONMENT === 'test'
       ? '@real-defra-id or @d365 or @fivium'
