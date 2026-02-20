@@ -119,9 +119,7 @@ Then(
     }
 
     const dashboard = new DashboardPage(this.page)
-    const row = await dashboard.getNotificationRow(
-      latestExemption.projectName
-    )
+    const row = await dashboard.getNotificationRow(latestExemption.projectName)
 
     // Map column names from the feature table to row property names
     const columnToProperty = {
@@ -134,9 +132,7 @@ Then(
       Actions: 'actions'
     }
 
-    for (const [columnName, expectedValue] of Object.entries(
-      resolvedDetails
-    )) {
+    for (const [columnName, expectedValue] of Object.entries(resolvedDetails)) {
       const prop = columnToProperty[columnName]
       if (!prop) {
         throw new Error(`Unknown dashboard column: ${columnName}`)
@@ -144,9 +140,7 @@ Then(
 
       if (columnName === 'Actions') {
         // Actions may contain multiple comma-separated values
-        const expectedActions = expectedValue
-          .split(',')
-          .map((a) => a.trim())
+        const expectedActions = expectedValue.split(',').map((a) => a.trim())
         for (const action of expectedActions) {
           expect(row[prop]).toContain(action)
         }
@@ -203,12 +197,12 @@ When('the user withdraws the submitted notification', async function () {
   )
 
   // Verify Cancel and Back links are visible
-  await expect(
-    this.page.locator('a:has-text("Cancel")')
-  ).toBeVisible({ timeout: 30_000 })
-  await expect(
-    this.page.locator('a.govuk-back-link')
-  ).toBeVisible({ timeout: 30_000 })
+  await expect(this.page.locator('a:has-text("Cancel")')).toBeVisible({
+    timeout: 30_000
+  })
+  await expect(this.page.locator('a.govuk-back-link')).toBeVisible({
+    timeout: 30_000
+  })
 
   // Confirm withdrawal
   await this.page
@@ -218,9 +212,7 @@ When('the user withdraws the submitted notification', async function () {
 
   // Navigate back to dashboard
   const config = getConfig()
-  await this.page.goto(
-    new URL(DashboardPage.path, config.baseURL).toString()
-  )
+  await this.page.goto(new URL(DashboardPage.path, config.baseURL).toString())
   await this.page.waitForLoadState('load')
 })
 

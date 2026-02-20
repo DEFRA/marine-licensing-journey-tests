@@ -116,7 +116,9 @@ export async function loginWithRealDefraId(page) {
  * that appears after real DEFRA ID login when the user has an organisation.
  */
 export async function selectOrganisationRole(page) {
-  const heading = page.locator('h1:has-text("Are you notifying us as an employee")')
+  const heading = page.locator(
+    'h1:has-text("Are you notifying us as an employee")'
+  )
   try {
     await heading.waitFor({ state: 'visible', timeout: 5_000 })
     // Select "Yes, the exempt activity notification is for ..."
