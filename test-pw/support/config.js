@@ -20,8 +20,10 @@ function getDefraIdUrl() {
   return `https://cdp-defra-id-stub.${environment}.cdp-int.defra.cloud`
 }
 
+const cdpEnvironments = ['dev', 'test']
+
 function isCdpEnvironment() {
-  return environment !== 'local' && !process.env.BASE_URL
+  return cdpEnvironments.includes(environment)
 }
 
 /**
