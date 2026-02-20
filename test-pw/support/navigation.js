@@ -3,6 +3,7 @@ import {
   registerTestUser,
   loginAsTestUser,
   loginWithRealDefraId,
+  selectOrganisationRole,
   acceptCookies
 } from './auth.js'
 import { buildNavigationUrl } from '../test-data/exemption.js'
@@ -30,6 +31,7 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
       await loginWithRealDefraId(world.page)
       world.isAuthenticated = true
     }
+    await selectOrganisationRole(world.page)
   } else {
     await loginAsTestUser(world.page, world.testUser)
   }
@@ -54,6 +56,7 @@ export async function navigateAndReAuthenticate(world, targetPath) {
       await loginWithRealDefraId(world.page)
       world.isAuthenticated = true
     }
+    await selectOrganisationRole(world.page)
   } else {
     await loginAsTestUser(world.page, world.testUser)
   }
@@ -85,6 +88,7 @@ export async function navigateWithRawQueryString(
       await loginWithRealDefraId(world.page)
       world.isAuthenticated = true
     }
+    await selectOrganisationRole(world.page)
   } else {
     await loginAsTestUser(world.page, world.testUser)
   }

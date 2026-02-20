@@ -59,6 +59,29 @@ export default class DashboardPage {
     )
   }
 
+  withdrawLink(projectName) {
+    return this.page.locator(
+      `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="Withdraw"]`
+    )
+  }
+
+  async getNotificationRow(projectName) {
+    const row = this.page.locator(
+      `//tr[td[1][normalize-space(text())="${projectName}"]]`
+    )
+    await expect(row).toBeVisible({ timeout: 30_000 })
+    const cells = row.locator('td')
+    return {
+      name: (await cells.nth(0).textContent()).trim(),
+      type: (await cells.nth(1).textContent()).trim(),
+      reference: (await cells.nth(2).textContent()).trim(),
+      status: (await cells.nth(3).textContent()).trim(),
+      submittedOn: (await cells.nth(4).textContent()).trim(),
+      owner: (await cells.nth(5).textContent()).trim(),
+      actions: (await cells.nth(6).textContent()).trim()
+    }
+  }
+
   async getNotifications() {
     const rows = this.page.locator('table.govuk-table tbody tr')
     const count = await rows.count()
