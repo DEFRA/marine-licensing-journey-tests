@@ -26,7 +26,7 @@ Then('the welcome page is displayed', async function () {
     'Use this tool to find out:',
     { timeout: 30_000 }
   )
-  await expect(
-    this.page.locator('button:has-text("Start now")')
-  ).toBeVisible({ timeout: 30_000 })
+  await expect(this.page.locator('button:has-text("Start now")')).toBeVisible({
+    timeout: 30_000
+  })
 })
