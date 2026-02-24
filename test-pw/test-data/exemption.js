@@ -78,8 +78,10 @@ export function buildNavigationUrl(basePath, iatContext) {
   if (!iatContext) return basePath
 
   const params = new URLSearchParams({
+    ADV_TYPE: 'EXE',
     ACTIVITY_TYPE: iatContext.activityType.code,
     ARTICLE: iatContext.articleCode.code,
+    outcomeType: `WO_EXE_AVAILABLE_ARTICLE_${iatContext.articleCode.code}`,
     pdfDownloadUrl: iatContext.pdfUrl
   })
 

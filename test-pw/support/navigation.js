@@ -8,6 +8,34 @@ import {
 } from './auth.js'
 import { buildNavigationUrl } from '../test-data/exemption.js'
 
+const GUIDANCE_PATH = '/guidance/who-is-the-exemption-for'
+
+async function selectGuidanceOptionAndContinueIfPresent(
+  page,
+  timeout = 10_000
+) {
+  const radio = page.locator('#whoIsExemptionFor')
+  try {
+    await radio.waitFor({ state: 'visible', timeout })
+    await radio.click()
+    await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  } catch {
+    // Not on guidance page — already authenticated and redirected
+  }
+}
+
+async function handleConfirmEmployeePageIfPresent(page) {
+  try {
+    const radio = page.locator('input[type="radio"][value="yes"]')
+    await radio.waitFor({ state: 'visible', timeout: 5_000 })
+    await radio.click()
+    await page.locator('button:has-text("Continue")').click()
+    await page.waitForLoadState('load')
+  } catch {
+    // Confirm employee page not shown — skip
+  }
+}
+
 export async function navigateAndAuthenticate(world, targetPath, options = {}) {
   const config = getConfig()
 
@@ -23,8 +51,9 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
     world.testUser = await registerTestUser(config.defraIdUrl)
   }
 
-  const url = buildNavigationUrl(targetPath, world.data.iatContext)
+  const url = buildNavigationUrl(GUIDANCE_PATH, world.data.iatContext)
   await world.page.goto(new URL(url, config.baseURL).toString())
+  await selectGuidanceOptionAndContinueIfPresent(world.page)
 
   if (config.isRealDefraId) {
     if (!world.isAuthenticated) {
@@ -35,6 +64,8 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
   } else {
     await loginAsTestUser(world.page, world.testUser)
   }
+
+  await handleConfirmEmployeePageIfPresent(world.page)
 
   if (!options.skipCookies) {
     await acceptCookies(world.page)
@@ -61,6 +92,8 @@ export async function navigateAndReAuthenticate(world, targetPath) {
     await loginAsTestUser(world.page, world.testUser)
   }
 
+  await handleConfirmEmployeePageIfPresent(world.page)
+
   await acceptCookies(world.page)
 }
 
@@ -78,10 +111,11 @@ export async function navigateWithRawQueryString(
 
   const separator = rawQueryString ? '?' : ''
   const url = new URL(
-    `${targetPath}${separator}${rawQueryString}`,
+    `${GUIDANCE_PATH}${separator}${rawQueryString}`,
     config.baseURL
   ).toString()
   await world.page.goto(url)
+  await selectGuidanceOptionAndContinueIfPresent(world.page)
 
   if (config.isRealDefraId) {
     if (!world.isAuthenticated) {
@@ -92,6 +126,8 @@ export async function navigateWithRawQueryString(
   } else {
     await loginAsTestUser(world.page, world.testUser)
   }
+
+  await handleConfirmEmployeePageIfPresent(world.page)
 
   await acceptCookies(world.page)
 }
