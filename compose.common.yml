@@ -57,6 +57,7 @@ services:
       ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
       REDIS_PORT: 6379
+      DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
     command: 'node .'
     depends_on:
       marine-licensing-backend:
