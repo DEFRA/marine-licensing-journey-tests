@@ -5,7 +5,7 @@ export default class DashboardPage {
     pageHeading: 'h1',
     projectsHomeLink: '//a[normalize-space(text())="Projects"]',
     emptyStateMessage:
-      '//p[contains(text(), "You currently have no projects.")]',
+      '//p[contains(text(), "There are no projects to display.")]',
     projectsTable: 'table.govuk-table',
     tableHeaders: {
       name: '//th[contains(text(), "Name")]',
@@ -15,6 +15,12 @@ export default class DashboardPage {
       dateSubmitted: '//th[contains(text(), "Date submitted")]',
       actions: '//th[contains(text(), "Actions")]'
     },
+    myProjectsRadio: 'input[name="filter"][value="my-projects"]',
+    allProjectsRadio: 'input[name="filter"][value="all-projects"]',
+    allProjectsLabel:
+      '//input[@name="filter"][@value="all-projects"]/ancestor::div[contains(@class,"govuk-radios__item")]/label',
+    updateResultsButton: 'button[type="submit"]',
+    ownerColumnHeader: '//th[contains(., "Owner")]',
     tableRows: 'tbody tr',
     firstRowCells: {
       name: 'tbody tr:nth-child(1) td:nth-child(1)',
@@ -36,6 +42,10 @@ export default class DashboardPage {
 
   static viewDetailsLink(projectName) {
     return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="View details"]`
+  }
+
+  static withdrawLink(projectName) {
+    return `//tr[td[1][normalize-space(text())="${projectName}"]]//a[normalize-space(text())="Withdraw"]`
   }
 
   static projectRow(projectName) {

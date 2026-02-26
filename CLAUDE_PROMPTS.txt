@@ -1,0 +1,98 @@
+# Migration Prompts Used with Claude Code
+
+The prompts below were used during the Screenplay → Playwright migration. Each batch was completed in a single Claude Code session.
+
+## Analysis Prompts
+
+### Tracing Legacy Call Chains
+
+```
+Read these files and trace the full call chain from step definition
+to browser interaction:
+- test/steps/site.details.steps.js
+- test-infrastructure/screenplay/tasks/complete.site.details.js
+- test-infrastructure/screenplay/page-interactions/site.name.page.interactions.js
+- test-infrastructure/pages/site.name.page.js
+
+For each step, show me: step text → task → interaction → page interaction → page object → selector/action
+```
+
+### Categorising Legacy Files
+
+```
+List every file under test-infrastructure/ and categorise them:
+- Which files contain actual page selectors?
+- Which files contain business logic (form filling, navigation)?
+- Which files are pure abstraction (just forwarding calls)?
+- Which files are shared infrastructure (auth, config)?
+```
+
+### Extracting Selectors
+
+```
+From all files in test-infrastructure/pages/, extract every selector
+(CSS and XPath). Group them by page and list what each selector targets.
+```
+
+### Understanding Auth Flow
+
+```
+Trace the full authentication flow from scenario start to authenticated state.
+Include: hooks (beforeScenario), user registration API calls, OIDC redirects,
+cookie handling. Show every HTTP request and page navigation.
+```
+
+## Migration Batch Prompt Structure
+
+Each batch used a structured prompt with these sections:
+
+### 1. Context Setting
+
+```
+The test-pw/ directory already has: world.js, hooks.js, config.js, auth.js,
+navigation.js. There are 32 scenarios passing. The feature files are shared
+with the legacy suite in test/features/.
+```
+
+### 2. Explicit Scope
+
+```
+Migrate these feature files:
+- site.details.manual.polygon.feature (7 scenarios, 1 @wip)
+- validation.site.details.feature (3 scenarios)
+- manual.site.details.multi.site.feature (4 scenarios, 2 @smoke)
+```
+
+### 3. Reference Legacy Code
+
+```
+The legacy implementation is in:
+- test/steps/site.details.steps.js (step definitions)
+- test-infrastructure/screenplay/tasks/complete.site.details.js (task)
+- test-infrastructure/screenplay/page-interactions/ (page interactions)
+- test-infrastructure/pages/ (page objects)
+```
+
+### 4. Architectural Constraints
+
+```
+Rules:
+- Use Page Object Model (not Screenplay)
+- Steps call page objects directly (no task/interaction layer)
+- Factory functions for test data (no builder pattern)
+- Relative imports in test-pw/ (no ~/ alias)
+- Do NOT modify feature files (shared with legacy)
+```
+
+### 5. Run and Verify
+
+```
+After creating the files, run: npx cucumber-js --config cucumber.pw.mjs
+Fix any failures before finishing.
+```
+
+## Prompt Evolution
+
+- **Batch 1 (verbose)**: Long prompts explaining project structure, ESM setup, auth flow, Cucumber-js v12 config format
+- **Batch 2-3 (established patterns)**: Shorter prompts referencing "follow the pattern in site-details-flow.js" and "create factory functions like exemption.js"
+- **Batch 4-5 (refined)**: Minimal prompts — just the feature file list and "migrate these using established patterns"

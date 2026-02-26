@@ -12,18 +12,6 @@ services:
       start_period: 2s
       retries: 5
 
-  selenium-chrome:
-    image: selenium/standalone-chrome:123.0
-    ports:
-      - 4444:4444
-    shm_size: '2gb'
-    environment:
-      - SE_NODE_MAX_SESSIONS=15
-      - SE_NODE_SESSION_TIMEOUT=300
-      - SE_VNC_NO_PASSWORD=1
-    networks:
-      - cdp-tenant
-
   defra-id-stub:
     image: defradigital/cdp-defra-id-stub:latest
     ports:
@@ -32,10 +20,10 @@ services:
     environment:
       PORT: 3200
       REDIS_HOST: redis-frontend
-      REDIS_PORT: 6380
+      REDIS_PORT: 6379
       USE_SINGLE_INSTANCE_CACHE: true
       NODE_ENV: development
-      APP_BASE_URL: http://defra-id-stub:3200
+      APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
     depends_on:
       redis-frontend:
         condition: service_healthy
@@ -64,11 +52,12 @@ services:
       SESSION_CACHE_ENGINE: redis
       MARINE_LICENSING_BACKEND_API_URL: http://marine-licensing-backend:3001
       CDP_UPLOADER_BASE_URL: http://cdp-uploader:7337
-      APP_BASE_URL: http://marine-licensing-frontend:3000
+      APP_BASE_URL: ${FRONTEND_APP_BASE_URL:-http://marine-licensing-frontend:3000}
       DEFRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       ENTRA_ID_OIDC_CONFIGURATION_URL: http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
       REDIS_HOST: redis-frontend
-      REDIS_PORT: 6380
+      REDIS_PORT: 6379
+      DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
     command: 'node .'
     depends_on:
       marine-licensing-backend:

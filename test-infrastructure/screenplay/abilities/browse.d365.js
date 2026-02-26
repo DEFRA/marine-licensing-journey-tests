@@ -36,7 +36,7 @@ export default class BrowseD365 {
 
   getBrowserLaunchOptions() {
     const options = {
-      headless: process.env.HEADLESS === 'true',
+      headless: process.env.HEADLESS !== 'false',
       devtools: false,
       args: [
         '--no-sandbox',
@@ -65,7 +65,7 @@ export default class BrowseD365 {
       ]
     }
 
-    if (process.env.ENVIRONMENT === 'test') {
+    if (process.env.ENVIRONMENT === 'test' && process.platform === 'linux') {
       options.executablePath = '/usr/lib/chromium/chromium'
     }
 

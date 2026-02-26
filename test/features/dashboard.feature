@@ -12,7 +12,7 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
   Scenario: View empty dashboard when no notifications exist
     Given the user has not submitted any notifications
     When the user navigates to the dashboard
-    Then the message "You currently have no projects." is shown
+    Then the message "There are no projects to display." is shown
 
   Scenario: Continue a draft notification from the dashboard
     Given the user has a draft exemption notification

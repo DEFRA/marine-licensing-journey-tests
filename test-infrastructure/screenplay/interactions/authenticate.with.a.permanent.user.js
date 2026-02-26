@@ -31,6 +31,19 @@ export default class AuthenticateWithAPermanentUser extends Task {
     await browseTheWeb.waitForEnabled(DefraIdLoginPage.signInButton)
 
     await browseTheWeb.click(DefraIdLoginPage.signInButton)
+
+    // Select organisation relationship if the page appears
+    try {
+      const orgRadio = await browseTheWeb.browser.$(
+        DefraIdLoginPage.organisationRadio
+      )
+      await orgRadio.waitForExist({ timeout: 5000 })
+      await orgRadio.click()
+      await browseTheWeb.click(DefraIdLoginPage.continueButton)
+    } catch {
+      // Organisation selection page not shown - continue
+    }
+
     logOperation(
       'Authentication',
       `Successfully authenticated as: ${testUser.id}`

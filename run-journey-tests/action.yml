@@ -182,7 +182,9 @@ runs:
         cache-dependency-path: ./marine-licensing-journey-tests/package-lock.json
 
     - name: Setup the tests
-      run: npm i
+      run: |
+        npm ci
+        npx playwright install chromium --with-deps
       shell: bash
       working-directory: ./marine-licensing-journey-tests
 
@@ -229,8 +231,6 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        echo "Waiting for selenium-chrome to be ready..."
-        timeout 120 bash -c 'until curl -f http://localhost:4444/wd/hub/status; do sleep 5; done'
         echo "Waiting for backend to be ready..."
         timeout 180 bash -c 'until curl -f http://localhost:3001/health; do sleep 5; done'
         echo "Waiting for Defra ID stub to be ready..."
@@ -252,19 +252,17 @@ runs:
         curl --fail --silent --connect-timeout 5 http://localhost:3200/health || (echo "❌ Cannot reach defra-id-stub from runner!" && exit 1)
         echo "Testing defra-id-stub API endpoint..."
         curl -v --connect-timeout 5 http://localhost:3200/cdp-defra-id-stub/API/register -X POST -H "Content-Type: application/json" -d '{"email":"test@example.com","password":"TestPassword123!","firstName":"Test","lastName":"User"}' || echo "Defra ID stub API test completed (may show expected errors)"
-        echo "Testing from selenium container to frontend..."
-        docker compose -f $(pwd)/compose.common.yml exec -T selenium-chrome curl --fail --silent --connect-timeout 5 http://marine-licensing-frontend:3000/health || (echo "❌ Cannot reach frontend from selenium container!" && exit 1)
+        echo "All connectivity checks passed!"
 
     - name: Run the tests
+      id: run-tests
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       env:
-        CHROMEDRIVER_URL: localhost
+        DEFRA_ID_URL: http://localhost:3200
       run: |
-        echo "=== Cleaning previous results ==="
-        rm -rf allure-results allure-report
-        echo "=== Running tests ==="
-        npm run test:github
+        echo "=== Running Playwright tests ==="
+        npm run test:pw:github
 
     - name: debug
       if: always()
@@ -279,7 +277,8 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        npx allure-commandline@latest generate allure-results --clean --single-file --output allure-report
+        echo "=== Generating Allure Report ==="
+        npm run report:pw
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'
@@ -287,68 +286,29 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
       run: |
-        echo "=== Checking WebDriverIO Results First ==="
-
-        # Check if WDIO created a FAILED file (more reliable than Allure for failures)
-        if [ -f "FAILED" ]; then
-          echo "Found FAILED file - reading WebDriverIO results"
-          WDIO_RESULTS=$(cat FAILED)
-          echo "WDIO Results: $WDIO_RESULTS"
+        if [ ! -f "cucumber-results.json" ]; then
+          echo "total=0" >> $GITHUB_OUTPUT
+          echo "passed=0" >> $GITHUB_OUTPUT
+          echo "failed=0" >> $GITHUB_OUTPUT
+          echo "pending=0" >> $GITHUB_OUTPUT
+          echo "status_emoji=⚠️" >> $GITHUB_OUTPUT
+          echo "status_text=No test results found" >> $GITHUB_OUTPUT
+          echo "pass_rate=0" >> $GITHUB_OUTPUT
+          exit 0
         fi
 
-        # Initialize counters
-        PASSED=0
-        FAILED=0
-        BROKEN=0
-        SKIPPED=0
+        TOTAL=$(jq '[.[].elements[]] | length' cucumber-results.json)
+        PASSED=$(jq '[.[].elements[] | select(.steps | all(.result.status == "passed"))] | length' cucumber-results.json)
+        FAILED=$(jq '[.[].elements[] | select(.steps | any(.result.status == "failed"))] | length' cucumber-results.json)
+        PENDING=$(jq '[.[].elements[] | select(.steps | any(.result.status == "undefined" or .result.status == "pending"))] | length' cucumber-results.json)
 
-        # Count test results from Allure (scenarios/steps level)
-        if [ -d "allure-results" ]; then
-          echo "=== Processing Allure result files ==="
-          for file in allure-results/*-result.json; do
-            if [ -f "$file" ]; then
-              # Extract the status field more reliably using sed
-              STATUS=$(sed -n 's/.*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$file" | head -1)
-              case "$STATUS" in
-                "passed")
-                  PASSED=$((PASSED + 1))
-                  ;;
-                "failed")
-                  FAILED=$((FAILED + 1))
-                  ;;
-                "broken")
-                  BROKEN=$((BROKEN + 1))
-                  ;;
-                "skipped")
-                  SKIPPED=$((SKIPPED + 1))
-                  ;;
-              esac
-            fi
-          done
+        if [ $TOTAL -gt 0 ]; then
+          PASS_RATE=$((PASSED * 100 / TOTAL))
+        else
+          PASS_RATE=0
         fi
 
-        # If we have FAILED file but no failed tests in Allure, there's a discrepancy
-        if [ -f "FAILED" ] && [ $FAILED -eq 0 ]; then
-          echo "⚠️ DISCREPANCY DETECTED: WDIO shows failures but Allure shows none"
-          echo "This indicates failed tests weren't captured by Allure reporter"
-          
-          # Extract failure count from WDIO results if possible
-          if echo "$WDIO_RESULTS" | grep -q '"failed"'; then
-            WDIO_FAILED=$(echo "$WDIO_RESULTS" | sed -n 's/.*"failed":\s*\([0-9]\+\).*/\1/p')
-            if [ ! -z "$WDIO_FAILED" ] && [ "$WDIO_FAILED" -gt 0 ]; then
-              echo "Using WDIO failed count: $WDIO_FAILED"
-              FAILED=$WDIO_FAILED
-              # Adjust total to account for failed tests not in Allure
-              PASSED=$((PASSED - FAILED))
-              if [ $PASSED -lt 0 ]; then PASSED=0; fi
-            fi
-          fi
-        fi
-
-        TOTAL=$((PASSED + FAILED + BROKEN + SKIPPED))
-
-        # Determine status
-        if [ $FAILED -eq 0 ] && [ $BROKEN -eq 0 ] && [ $TOTAL -gt 0 ]; then
+        if [ $FAILED -eq 0 ] && [ $TOTAL -gt 0 ]; then
           STATUS_EMOJI="✅"
           STATUS_TEXT="All tests passed"
         elif [ $TOTAL -eq 0 ]; then
@@ -359,26 +319,14 @@ runs:
           STATUS_TEXT="Test failures detected"
         fi
 
-        # Calculate pass rate
-        if [ $TOTAL -gt 0 ]; then
-          PASS_RATE=$((PASSED * 100 / TOTAL))
-        else
-          PASS_RATE=0
-        fi
-
-        # Debug output
         echo "=== Test Results Summary ==="
-        echo "Allure files processed: $(ls -1 allure-results/*-result.json 2>/dev/null | wc -l)"
-        echo "TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, BROKEN=$BROKEN, SKIPPED=$SKIPPED"
-        echo "PASS_RATE=$PASS_RATE%, STATUS_EMOJI=$STATUS_EMOJI, STATUS_TEXT=$STATUS_TEXT"
-        echo "WDIO FAILED file exists: $([ -f 'FAILED' ] && echo 'YES' || echo 'NO')"
+        echo "TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, PENDING=$PENDING"
+        echo "PASS_RATE=$PASS_RATE%, STATUS=$STATUS_TEXT"
 
-        # Set outputs
         echo "total=$TOTAL" >> $GITHUB_OUTPUT
         echo "passed=$PASSED" >> $GITHUB_OUTPUT
         echo "failed=$FAILED" >> $GITHUB_OUTPUT
-        echo "broken=$BROKEN" >> $GITHUB_OUTPUT
-        echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+        echo "pending=$PENDING" >> $GITHUB_OUTPUT
         echo "pass_rate=$PASS_RATE" >> $GITHUB_OUTPUT
         echo "status_emoji=$STATUS_EMOJI" >> $GITHUB_OUTPUT
         echo "status_text=$STATUS_TEXT" >> $GITHUB_OUTPUT
@@ -406,23 +354,41 @@ runs:
 
           | Metric | Count |
           |:-------|------:|
-          | **Total Tests** | ${{ steps.test-results.outputs.total || '0' }} |
+          | **Total Scenarios** | ${{ steps.test-results.outputs.total || '0' }} |
           | **Passed** | ${{ steps.test-results.outputs.passed || '0' }} |
           | **Failed** | ${{ steps.test-results.outputs.failed || '0' }} |
-          | **Broken** | ${{ steps.test-results.outputs.broken || '0' }} |
-          | **Skipped** | ${{ steps.test-results.outputs.skipped || '0' }} |
+          | **Pending** | ${{ steps.test-results.outputs.pending || '0' }} |
           | **Pass Rate** | ${{ steps.test-results.outputs.pass_rate || '0' }}% |
 
           ---
 
           **[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})**
 
-    - name: Upload Allure report
+    - name: Upload Allure Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results
+        path: ./marine-licensing-journey-tests/allure-results/
+        retention-days: 30
+
+    - name: Upload Allure Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
         path: ./marine-licensing-journey-tests/allure-report/index.html
+        retention-days: 30
+
+    - name: Upload Cucumber report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cucumber-report
+        path: |
+          ./marine-licensing-journey-tests/cucumber-report.html
+          ./marine-licensing-journey-tests/cucumber-results.json
+        retention-days: 30
 
     - name: Upload docker compose logs
       if: always()
@@ -430,3 +396,13 @@ runs:
       with:
         name: docker-compose-logs
         path: ./marine-licensing-journey-tests/logs.txt
+        retention-days: 30
+
+    - name: Check test results
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.run-tests.outcome }}" == "failure" ]; then
+          echo "Tests failed"
+          exit 1
+        fi
