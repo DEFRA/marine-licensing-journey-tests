@@ -2,12 +2,15 @@ import neostandard from 'neostandard'
 
 export default [
   ...neostandard({
-    env: ['node', 'mocha'],
+    env: ['node'],
     ignores: [
       ...neostandard.resolveIgnoresFromGitignore(),
       'allure-results/**',
       'allure-report/**',
-      'docker/**'
+      'docker/**',
+      'wdio*.js',
+      'test-infrastructure/**',
+      'test/steps/**'
     ],
     noJsx: true,
     noStyle: true
@@ -26,20 +29,6 @@ export default [
         beforeAll: 'readonly',
         afterAll: 'readonly',
         jest: 'readonly'
-      }
-    }
-  },
-
-  // WebDriverIO environment
-  {
-    files: ['wdio*.js', 'test/**/*.js', 'test-infrastructure/**/*.js'],
-    languageOptions: {
-      globals: {
-        browser: 'readonly',
-        $: 'readonly',
-        $$: 'readonly',
-        expect: 'readonly',
-        driver: 'readonly'
       }
     }
   },
