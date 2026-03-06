@@ -169,3 +169,28 @@ export async function verifyD365CaseDetails(page, expectedDetails) {
 
   throw lastError
 }
+
+export async function openD365CaseRecord(page, expectedOrgName) {
+  // Double-click the first grid row cell to open the case record
+  const firstRowCell = page
+    .locator('div[role="row"][row-index="0"] div[role="gridcell"]')
+    .first()
+  await firstRowCell.dblclick()
+  await page.waitForLoadState('load')
+  await page.waitForTimeout(5_000)
+
+  // Validate Applicant Organisation field
+  const orgField = page.locator(
+    '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
+  )
+  await orgField.waitFor({ state: 'visible', timeout: 30_000 })
+  const orgText = await orgField.innerText()
+  expect(orgText.trim()).toBe(expectedOrgName)
+
+  // Get the Application URL
+  const appUrlInput = page.locator(
+    '[data-id="ml_applicationurl.fieldControl-url-text-input"]'
+  )
+  await appUrlInput.waitFor({ state: 'visible', timeout: 30_000 })
+  return await appUrlInput.getAttribute('value')
+}

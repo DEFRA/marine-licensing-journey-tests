@@ -8,7 +8,8 @@ import {
   loginToD365,
   verifyD365Login,
   searchD365Case,
-  verifyD365CaseDetails
+  verifyD365CaseDetails,
+  openD365CaseRecord
 } from '../support/d365.js'
 
 Then(
@@ -236,6 +237,30 @@ Then('the case status in D365 matches', async function (dataTable) {
     await verifyD365Login(d365Page)
     await searchD365Case(d365Page, latestExemption.applicationReference)
     await verifyD365CaseDetails(d365Page, expectedDetails)
+
+    // Open case record, validate organisation, get Application URL
+    const applicationUrl = await openD365CaseRecord(
+      d365Page,
+      expectedDetails['Applicant Organisation']
+    )
+
+    // Open Application URL in a new tab within the D365 browser context
+    const appPage = await d365Page.context().newPage()
+    await appPage.goto(applicationUrl, { waitUntil: 'load' })
+
+    const expectedStatus = expectedDetails['Application Status']
+    const statusValue = appPage.locator(
+      '//dt[contains(text(), "Status")]/following-sibling::dd'
+    )
+    await expect(statusValue).toContainText(expectedStatus, { timeout: 30_000 })
+
+    const withdrawnDate = appPage.locator(
+      '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
+    )
+    await expect(withdrawnDate).toContainText(
+      format(new Date(), 'd MMMM yyyy'),
+      { timeout: 30_000 }
+    )
   } finally {
     await d365Browser.close()
   }

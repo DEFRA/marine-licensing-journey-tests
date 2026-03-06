@@ -45,5 +45,6 @@ Feature: Dashboard filter: Filter projects by ownership
       | Owner         | Test MMOUser                       |
       | Actions       | View details                       |
     And the case status in D365 matches
-      | Reference number   | matches submitted reference number |
-      | Application Status | Withdrawn                          |
+      | Reference number       | matches submitted reference number |
+      | Application Status     | Withdrawn                          |
+      | Applicant Organisation | Windfarm Co                        |
