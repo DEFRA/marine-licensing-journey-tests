@@ -352,3 +352,5 @@ The GitHub Actions workflow (`check-pull-request.yml`) runs:
 3. `npm run test:pw:github` with 10 parallel workers
 4. Allure report generation and artifact upload
 5. PR comment with pass/fail summary
+
+Test update
