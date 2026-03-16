@@ -58,6 +58,7 @@
   "overrides": {
     "@cucumber/cucumber": {
       "glob": "11.1.0"
-    }
+    },
+    "flatted": "^3.4.0"
   }
 }
