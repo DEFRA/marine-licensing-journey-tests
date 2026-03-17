@@ -1,90 +1,102 @@
-import { Given, Then, When } from '@cucumber/cucumber'
-import { browser } from '@wdio/globals'
-import DefraAccountPage from '~/test-infrastructure/pages/defra.account.page'
-import HeaderPage from '~/test-infrastructure/pages/header.page'
+import { Given, When, Then } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
+import { createCYACircleWGS84Data } from '../test-data/check-your-answers.js'
 import {
-  Actor,
-  ApplyForExemption,
-  BrowseTheWeb,
-  Click,
-  ClickConfirmAndSend,
-  ClickReviewAndSend,
-  CompleteAllTasks,
-  CompleteProjectName,
-  EnsureConfirmationPage,
-  Navigate
-} from '~/test-infrastructure/screenplay'
-import EnsureDefraAccountPage from '~/test-infrastructure/screenplay/interactions/ensure.defra.account.page'
-import Homepage from '~/test-infrastructure/pages/homepage.js'
+  generateIatContext,
+  generateProjectName
+} from '../test-data/exemption.js'
+import {
+  completeAllTasks,
+  clickReviewAndSend,
+  clickConfirmAndSend
+} from '../support/task-flow.js'
+import { navigateAndAuthenticate } from '../support/navigation.js'
+import { getConfig } from '../support/config.js'
+import CheckYourAnswersPage from '../pages/check.your.answers.page.js'
+import ConfirmationPage from '../pages/confirmation.page.js'
+import ProjectNamePage from '../pages/project.name.page.js'
 
 Given(
   'the user has completed all the tasks on the task list and is on the Check your answers page',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
-    await this.actor.attemptsTo(ClickReviewAndSend.now())
+    this.data = createCYACircleWGS84Data()
+    await completeAllTasks(this)
+    await clickReviewAndSend(this.page)
+
+    const cya = new CheckYourAnswersPage(this.page)
+    await cya.expectHeading()
   }
 )
 
 When('the user clicks Confirm and send', async function () {
-  await this.actor.attemptsTo(ClickConfirmAndSend.now())
+  await clickConfirmAndSend(this.page)
 })
 
 Then(
   'the confirmation page is displayed with an application reference and survey link',
   async function () {
-    await this.actor.attemptsTo(
-      EnsureConfirmationPage.isDisplayedWithApplicationReference()
-    )
+    const confirmation = new ConfirmationPage(this.page)
+    await confirmation.expectIsDisplayed()
+    await confirmation.expectValidReference()
+    await confirmation.expectFeedbackLink()
   }
 )
 
 Given(
   'the user is on any page within the service apart from the project name page',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-    await this.actor.attemptsTo(Navigate.toProjectNamePage())
-    await this.actor.attemptsTo(CompleteProjectName.now())
+    this.data = {
+      iatContext: generateIatContext(),
+      projectName: generateProjectName()
+    }
+    await navigateAndAuthenticate(this, '/')
+
+    const projectPage = new ProjectNamePage(this.page)
+    await projectPage.enterProjectName(this.data.projectName)
   }
 )
 
 When('the user clicks the Defra account link in the header', async function () {
-  await this.actor.attemptsTo(Click.on(HeaderPage.locators.defraAccountLink))
+  await this.page
+    .locator('//a[normalize-space(text())="Defra account"]')
+    .click()
+  await this.page.waitForLoadState('load')
 })
 
 Then(
   'the user is taken to the Defra account management page',
   async function () {
-    await this.actor.attemptsTo(EnsureDefraAccountPage.isDisplayed())
+    await expect(
+      this.page.locator('h1:has-text("Your Defra account")')
+    ).toBeVisible({ timeout: 30_000 })
   }
 )
 
 Given('the user is on the Defra account management page', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(ApplyForExemption.withValidProjectName())
-  await this.actor.attemptsTo(Navigate.toProjectNamePage())
-  await this.actor.attemptsTo(CompleteProjectName.now())
-  await this.actor.attemptsTo(Click.on(HeaderPage.locators.defraAccountLink))
-  await this.actor.attemptsTo(EnsureDefraAccountPage.isDisplayed())
+  this.data = {
+    iatContext: generateIatContext(),
+    projectName: generateProjectName()
+  }
+  await navigateAndAuthenticate(this, '/')
+
+  const projectPage = new ProjectNamePage(this.page)
+  await projectPage.enterProjectName(this.data.projectName)
+
+  await this.page
+    .locator('//a[normalize-space(text())="Defra account"]')
+    .click()
+  await this.page.waitForLoadState('load')
+  await expect(
+    this.page.locator('h1:has-text("Your Defra account")')
+  ).toBeVisible({ timeout: 30_000 })
 })
 
 When(
   'the user clicks {string} in the {string} section',
-  async function (linkText, sectionText) {
-    if (
-      linkText === 'Get Permission For Marine Work' &&
-      sectionText === 'Your services'
-    ) {
-      await this.actor.attemptsTo(
-        Click.on(DefraAccountPage.locators.marineLicensingServiceLink)
-      )
+  async function (linkText, _sectionText) {
+    if (linkText === 'Get Permission For Marine Work') {
+      await this.page.locator('#link-get-permission-for-marine-work').click()
+      await this.page.waitForLoadState('load')
     }
   }
 )
@@ -92,7 +104,9 @@ When(
 Then(
   'the user is returned to the marine licensing service homepage',
   async function () {
-    const currentUrl = await browser.getUrl()
-    expect(currentUrl).toContain(Homepage.url)
+    const config = getConfig()
+    await expect(this.page).toHaveURL(new RegExp(config.baseURL), {
+      timeout: 30_000
+    })
   }
 )

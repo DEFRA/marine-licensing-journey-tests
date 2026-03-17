@@ -7,10 +7,7 @@ export default [
       ...neostandard.resolveIgnoresFromGitignore(),
       'allure-results/**',
       'allure-report/**',
-      'docker/**',
-      'wdio*.js',
-      'test-infrastructure/**',
-      'test/steps/**'
+      'docker/**'
     ],
     noJsx: true,
     noStyle: true

@@ -1,16 +1,13 @@
-import { Then, When } from '@cucumber/cucumber'
-import FooterPage from '~/test-infrastructure/pages/footer.page'
-import {
-  Click,
-  EnsurePrivacyPolicyPage
-} from '~/test-infrastructure/screenplay'
+import { When, Then } from '@cucumber/cucumber'
+import FooterPage from '../pages/footer.page.js'
+import PrivacyPolicyPage from '../pages/privacy.policy.page.js'
 
 When('the privacy policy link is clicked', async function () {
-  await this.actor.attemptsTo(
-    Click.onAfterCheckingDisplay(FooterPage.locators.privacyLink)
-  )
+  const footer = new FooterPage(this.page)
+  await footer.clickPrivacyLink()
 })
 
 Then('the privacy policy page is displayed', async function () {
-  await this.actor.attemptsTo(EnsurePrivacyPolicyPage.isDisplayed())
+  const privacyPage = new PrivacyPolicyPage(this.page)
+  await privacyPage.expectIsDisplayed()
 })

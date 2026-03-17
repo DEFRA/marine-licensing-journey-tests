@@ -1,25 +1,32 @@
-import { Given, Then, When } from '@wdio/cucumber-framework'
-import { browser } from '@wdio/globals'
-import {
-  Actor,
-  ApplyForExemption,
-  BrowseTheWeb,
-  EnsureThatIatIsDisplayed,
-  LaunchIat
-} from '~/test-infrastructure/screenplay'
+import { Given, When, Then } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
+import { createCYACircleWGS84Data } from '../test-data/check-your-answers.js'
 
 Given('an applicant is unsure of what to do next', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(BrowseTheWeb.using(browser))
-  this.actor.intendsTo(
-    ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-  )
+  this.data = createCYACircleWGS84Data()
 })
 
 When('they launch the interactive assistance tool', async function () {
-  await this.actor.attemptsTo(LaunchIat.now())
+  const iatUrl = process.env.IAT_URL
+
+  if (!iatUrl) {
+    throw new Error('IAT_URL environment variable is not set')
+  }
+
+  await this.page.goto(iatUrl)
+  await this.page.waitForLoadState('load')
 })
 
 Then('the welcome page is displayed', async function () {
-  await this.actor.attemptsTo(EnsureThatIatIsDisplayed.now())
+  const heading = this.page.locator('h1')
+  await expect(heading).toContainText('Check if you need a marine licence', {
+    timeout: 30_000
+  })
+  await expect(this.page.locator('main')).toContainText(
+    'Use this tool to find out:',
+    { timeout: 30_000 }
+  )
+  await expect(this.page.locator('button:has-text("Start now")')).toBeVisible({
+    timeout: 30_000
+  })
 })
