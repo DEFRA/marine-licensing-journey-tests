@@ -262,7 +262,7 @@ runs:
         DEFRA_ID_URL: http://localhost:3200
       run: |
         echo "=== Running Playwright tests ==="
-        npm run test:pw:github
+        npm run test:github
 
     - name: debug
       if: always()
@@ -278,7 +278,7 @@ runs:
       working-directory: ./marine-licensing-journey-tests
       run: |
         echo "=== Generating Allure Report ==="
-        npm run report:pw
+        npm run report
 
     - name: Parse test results
       if: always() && github.event_name == 'pull_request'

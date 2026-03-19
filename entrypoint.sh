@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "run_id: $RUN_ID"
-npm run test:pw:cdp
+npm run test:cdp
 test_exit_code=$?
 
 npm run report:publish

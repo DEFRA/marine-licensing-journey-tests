@@ -12,13 +12,13 @@ npm ci
 npx playwright install chromium --with-deps
 
 # Run all tests (headless by default)
-npm run test:pw
+npm run test
 
 # Run smoke tests only
-npm run test:pw:smoke
+npm run test:smoke
 
 # Run headed (watch the browser)
-HEADLESS=false npm run test:pw
+HEADLESS=false npm run test
 ```
 
 ## Local Docker Setup
@@ -61,15 +61,15 @@ This is configured automatically in `test/support/config.js` — no manual `/etc
 
 ## NPM Scripts
 
-| Script           | Description                                                  |
-| ---------------- | ------------------------------------------------------------ |
-| `test:pw`        | Run all tests (default profile, headless, summary formatter) |
-| `test:pw:smoke`  | Run smoke-tagged scenarios only (summary formatter)          |
-| `test:pw:github` | Run with GitHub CI settings (10 parallel workers)            |
-| `test:pw:cdp`    | Run with CDP environment settings (10 parallel workers)      |
-| `clean:pw`       | Remove `allure-results/` and `allure-report/`                |
-| `report:pw`      | Generate single-file Allure HTML report                      |
-| `report:pw:open` | Generate and open Allure report in browser                   |
+| Script        | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| `test`        | Run all tests (default profile, headless, summary formatter) |
+| `test:smoke`  | Run smoke-tagged scenarios only (summary formatter)          |
+| `test:github` | Run with GitHub CI settings (10 parallel workers)            |
+| `test:cdp`    | Run with CDP environment settings (10 parallel workers)      |
+| `clean`       | Remove `allure-results/` and `allure-report/`                |
+| `report`      | Generate single-file Allure HTML report                      |
+| `report:open` | Generate and open Allure report in browser                   |
 
 ## Running Multiple Instances Locally
 
@@ -77,13 +77,13 @@ By default, tests run with 1 worker locally. To run scenarios in parallel, set t
 
 ```bash
 # Run with 3 parallel workers
-MAX_INSTANCES=3 npm run test:pw
+MAX_INSTANCES=3 npm run test
 
 # Run with 5 parallel workers
-MAX_INSTANCES=5 npm run test:pw
+MAX_INSTANCES=5 npm run test
 
 # Run smoke tests with 2 parallel workers
-MAX_INSTANCES=2 npm run test:pw:smoke
+MAX_INSTANCES=2 npm run test:smoke
 ```
 
 Each worker runs scenarios in its own isolated browser context, so there are no shared state conflicts. However, keep in mind:
@@ -101,10 +101,10 @@ The default formatter is a custom progress bar. Override it with `--format` for 
 
 ```bash
 # Step-by-step dots (. for pass, F for fail)
-npx cucumber-js --config cucumber.pw.mjs --format progress
+npx cucumber-js --config cucumber.mjs --format progress
 
 # Scenario names with step results
-npx cucumber-js --config cucumber.pw.mjs --format summary
+npx cucumber-js --config cucumber.mjs --format summary
 ```
 
 ### Built-in console logs
@@ -122,7 +122,7 @@ The hooks in `test/support/hooks.js` log scenario lifecycle automatically:
 When running in parallel, output from multiple workers is interleaved. Force single-worker mode for readable output:
 
 ```bash
-DEBUG=true npm run test:pw
+DEBUG=true npm run test
 ```
 
 This sets `parallel: 1` in the Cucumber config regardless of `MAX_INSTANCES`.
@@ -132,7 +132,7 @@ This sets `parallel: 1` in the Cucumber config regardless of `MAX_INSTANCES`.
 Watch the browser while tests run:
 
 ```bash
-HEADLESS=false npm run test:pw
+HEADLESS=false npm run test
 ```
 
 ### Playwright debug logs
@@ -141,17 +141,17 @@ For low-level browser and network tracing, use Playwright's built-in debug loggi
 
 ```bash
 # API-level trace (page.goto, page.click, etc.)
-DEBUG=pw:api npx cucumber-js --config cucumber.pw.mjs
+DEBUG=pw:api npx cucumber-js --config cucumber.mjs
 
 # All Playwright debug output
-DEBUG=pw:* npx cucumber-js --config cucumber.pw.mjs
+DEBUG=pw:* npx cucumber-js --config cucumber.mjs
 ```
 
 ### Combining options
 
 ```bash
 # Headed, single worker, with Playwright API trace
-DEBUG=pw:api MAX_INSTANCES=1 HEADLESS=false npx cucumber-js --config cucumber.pw.mjs
+DEBUG=pw:api MAX_INSTANCES=1 HEADLESS=false npx cucumber-js --config cucumber.mjs
 ```
 
 ## Environment Variables
@@ -187,7 +187,7 @@ DEFRA_ID_USER_PASSWORD=<Government Gateway password>
 ENVIRONMENT=test \
   DEFRA_ID_USER_ID=94849150XX \
   DEFRA_ID_USER_PASSWORD=YourPassword \
-  npm run test:pw:cdp
+  npm run test:cdp
 ```
 
 When `ENVIRONMENT=test`, the `cdp` profile switches tags to `@real-defra-id or @d365 or @fivium`, running only the tests that require real integrations. The base URL resolves to `https://marine-licensing-frontend.test.cdp-int.defra.cloud`.
@@ -206,7 +206,7 @@ The credentials are for the **test environment only** — never commit them to s
 
 When tests run on the CDP platform, `entrypoint.sh` at the project root is the entry point. It:
 
-1. Runs the test suite using the `cdp` profile (`npm run test:pw:cdp`)
+1. Runs the test suite using the `cdp` profile (`npm run test:cdp`)
 2. Publishes the Allure report (`npm run report:publish`)
 3. Exits with a failure code if either step fails — report publishing failures are surfaced before test failures
 
@@ -217,10 +217,10 @@ The `RUN_ID` environment variable is passed in by the CDP pipeline for tracking.
 The test runner is **Cucumber.js** (not WebDriverIO). All tests are launched via:
 
 ```bash
-cucumber-js --config cucumber.pw.mjs
+cucumber-js --config cucumber.mjs
 ```
 
-The configuration file `cucumber.pw.mjs` at the project root is the single entrypoint that controls:
+The configuration file `cucumber.mjs` at the project root is the single entrypoint that controls:
 
 - **Feature file paths**: Where Cucumber looks for `.feature` files (`test/features/`)
 - **Step and support imports**: `test/steps/**/*.js` and `test/support/**/*.js`
@@ -232,13 +232,13 @@ The npm scripts are convenience wrappers that select a profile and formatter:
 
 ```bash
 # These are equivalent:
-npm run test:pw
-cucumber-js --config cucumber.pw.mjs --format summary
+npm run test
+cucumber-js --config cucumber.mjs --format summary
 
 # Selecting a profile:
-npm run test:pw:smoke    # uses --profile smoke --format summary
-npm run test:pw:github   # uses --profile github (10 workers, JSON output)
-npm run test:pw:cdp      # uses --profile cdp (10 workers, real DEFRA ID when ENVIRONMENT=test)
+npm run test:smoke    # uses --profile smoke --format summary
+npm run test:github   # uses --profile github (10 workers, JSON output)
+npm run test:cdp      # uses --profile cdp (10 workers, real DEFRA ID when ENVIRONMENT=test)
 ```
 
 ## Project Structure
@@ -252,7 +252,7 @@ test/
   support/            # Framework support (hooks, config, auth, helpers)
   test-data/          # Test data factory functions
 
-cucumber.pw.mjs        # Cucumber runner configuration (entrypoint)
+cucumber.mjs        # Cucumber runner configuration (entrypoint)
 ```
 
 ### Pages (Page Object Model)
@@ -305,7 +305,7 @@ Simple factory functions (no builder pattern) in `test/test-data/`:
 
 ## Cucumber Profiles
 
-Defined in `cucumber.pw.mjs`:
+Defined in `cucumber.mjs`:
 
 | Profile   | Use Case          | Parallelism | Tags                                                                         |
 | --------- | ----------------- | ----------- | ---------------------------------------------------------------------------- |
@@ -349,7 +349,7 @@ The GitHub Actions workflow (`check-pull-request.yml`) runs:
 
 1. Lint checks (prettier, eslint, gherkin standards, step analysis)
 2. Docker Compose up (MongoDB, Redis, LocalStack, frontend, backend, DEFRA ID stub)
-3. `npm run test:pw:github` with 10 parallel workers
+3. `npm run test:github` with 10 parallel workers
 4. Allure report generation and artifact upload
 5. PR comment with pass/fail summary
 

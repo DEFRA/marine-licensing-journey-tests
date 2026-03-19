@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["cucumber.pw.mjs", "test/steps/*.js"],
+  "entry": ["cucumber.mjs", "test/steps/*.js"],
   "project": ["test/**/*.js", "bin/**/*.js"],
   "ignore": ["bin/gherkin-standards-validation/**/*"],
   "ignoreDependencies": ["husky"]
