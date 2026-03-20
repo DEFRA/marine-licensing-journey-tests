@@ -1,98 +1,140 @@
-import { Given, Then, When } from '@cucumber/cucumber'
-import { browser } from '@wdio/globals'
+import { Given, When, Then } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
+import { createCYACircleWGS84Data } from '../test-data/check-your-answers.js'
+import { generateIatContext } from '../test-data/exemption.js'
 import {
-  Actor,
-  ApplyForExemption,
-  BrowseTheWeb,
-  ClickReviewAndSend,
-  CompleteAllTasks,
-  EnsureCheckYourAnswersPage,
-  EnsurePageHeading,
-  EnsureProjectSummaryCard,
-  Navigate
-} from '~/test-infrastructure/screenplay'
-import EnsureMcmsContextCardDisplaysOnlyProjectName from '~/test-infrastructure/screenplay/interactions/ensure.mcms.context.card.displays.only.project.name.js'
-import Homepage from '~/test-infrastructure/pages/homepage.js'
+  completeAllTasks,
+  clickReviewAndSend,
+  completeTasksFromCurrentPage
+} from '../support/task-flow.js'
+import {
+  navigateAndAuthenticate,
+  navigateWithRawQueryString
+} from '../support/navigation.js'
+import { getConfig } from '../support/config.js'
+import CheckYourAnswersPage from '../pages/check.your.answers.page.js'
 
 Given(
   'a second notification is started with valid MCMS context after completing a first notification',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
+    this.data = createCYACircleWGS84Data()
+    await completeAllTasks(this)
+    await clickReviewAndSend(this.page)
 
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
-    await this.actor.attemptsTo(ClickReviewAndSend.now())
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Check your answers before sending your information')
-    )
+    const cya = new CheckYourAnswersPage(this.page)
+    await cya.expectHeading()
 
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-    )
-    await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
+    // Start a second notification with fresh data + new IAT context
+    const secondData = createCYACircleWGS84Data()
+    this.data.projectName = secondData.projectName
+    this.data.siteDetails = secondData.siteDetails
+    this.data.publicRegister = secondData.publicRegister
+    this.data.iatContext = generateIatContext()
+
+    await navigateAndAuthenticate(this, '/')
   }
 )
 
 Given(
   'a notification is started with MCMS context {string}',
   async function (iatQueryString) {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
+    this.data = createCYACircleWGS84Data()
+    this.data.rawIatQueryString = iatQueryString
 
-    const exemption =
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-        .data
-
-    exemption.iatContext = null
-    exemption.rawIatQueryString = iatQueryString
-
-    this.actor.remembers('exemption', exemption)
-    await this.actor.attemptsTo(Navigate.now())
+    await navigateWithRawQueryString(this, '/', iatQueryString)
   }
 )
-
-When('the project name page is visited', async function () {
-  await this.actor.attemptsTo(Navigate.now())
-})
 
 When(
   'all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked',
   async function () {
-    await this.actor.attemptsTo(CompleteAllTasks.now())
-    await this.actor.attemptsTo(ClickReviewAndSend.now())
+    await completeTasksFromCurrentPage(this)
+    await clickReviewAndSend(this.page)
   }
 )
 
 Then(
   'the project summary card is displayed in full on the check your answers page',
   async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Check your answers before sending your information')
+    const cya = new CheckYourAnswersPage(this.page)
+    await cya.expectHeading()
+
+    const { page } = this
+    const card = page.locator(
+      'xpath=//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project summary")]/ancestor::div[contains(@class, "govuk-summary-card")]'
     )
-    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
-    await this.actor.attemptsTo(
-      EnsureProjectSummaryCard.isDisplayedWithIatInformation()
-    )
+
+    // Project name term displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Project name")]')
+    ).toBeVisible({ timeout: 30_000 })
+
+    // Activity type displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Type of activity")]')
+    ).toBeVisible()
+
+    // Exemption reason displayed
+    await expect(
+      card.locator(
+        'xpath=.//dt[contains(text(), "Why this activity is exempt")]'
+      )
+    ).toBeVisible()
+
+    // PDF download displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Your answers from")]')
+    ).toBeVisible()
   }
 )
 
 Then(
   'the project summary card only contains the project name',
   async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Check your answers before sending your information')
+    const cya = new CheckYourAnswersPage(this.page)
+    await cya.expectHeading()
+
+    const { page } = this
+    const card = page.locator(
+      'xpath=//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "Project summary")]/ancestor::div[contains(@class, "govuk-summary-card")]'
     )
-    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
-    await this.actor.attemptsTo(
-      EnsureMcmsContextCardDisplaysOnlyProjectName.now()
-    )
+
+    // Project name term displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Project name")]')
+    ).toBeVisible({ timeout: 30_000 })
+
+    // Activity type NOT displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Type of activity")]')
+    ).not.toBeVisible()
+
+    // Activity purpose NOT displayed
+    await expect(
+      card.locator(
+        'xpath=.//dt[contains(text(), "The purpose of the activity")]'
+      )
+    ).not.toBeVisible()
+
+    // Exemption reason NOT displayed
+    await expect(
+      card.locator(
+        'xpath=.//dt[contains(text(), "Why this activity is exempt")]'
+      )
+    ).not.toBeVisible()
+
+    // PDF download NOT displayed
+    await expect(
+      card.locator('xpath=.//dt[contains(text(), "Your answers from")]')
+    ).not.toBeVisible()
   }
 )
 
+When('the project name page is visited', async function () {
+  const config = getConfig()
+  await this.page.goto(new URL('/', config.baseURL).toString())
+})
+
 Then('the user is redirected to the homepage', async function () {
-  const currentUrl = await browser.getUrl()
-  expect(currentUrl).toContain(Homepage.url)
+  await expect(this.page).toHaveURL(/\/home/, { timeout: 30_000 })
 })

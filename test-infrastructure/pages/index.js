@@ -1,6 +1,0 @@
-export { default as ActivityDatesPage } from './activity.dates.page'
-export { default as ActivityDescriptionPage } from './activity.description.page'
-export { default as CommonElementsPage } from './common.elements.page'
-export { default as FileUploadPage } from './file.upload.page'
-export { default as ProjectNamePage } from './project.name.page'
-export { default as PublicRegisterPage } from './public.register.page'

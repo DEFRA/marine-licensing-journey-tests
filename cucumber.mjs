@@ -2,9 +2,9 @@ const debug = process.env.DEBUG === 'true'
 
 const common = {
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '1', 10),
-  import: ['test-pw/steps/**/*.js', 'test-pw/support/**/*.js'],
+  import: ['test/steps/**/*.js', 'test/support/**/*.js'],
   format: [
-    './test-pw/support/progress-formatter.js',
+    './test/support/progress-formatter.js',
     'html:cucumber-report.html',
     'allure-cucumberjs/reporter'
   ],
@@ -27,7 +27,7 @@ const common = {
 
 export default {
   ...common,
-  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
+  paths: ['test/features/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
@@ -58,12 +58,12 @@ export const github = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
   format: [
-    './test-pw/support/progress-formatter.js',
+    './test/support/progress-formatter.js',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
+  paths: ['test/features/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
@@ -71,7 +71,7 @@ export const cdp = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '5', 10),
   format: [
-    './test-pw/support/progress-formatter.js',
+    './test/support/progress-formatter.js',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'

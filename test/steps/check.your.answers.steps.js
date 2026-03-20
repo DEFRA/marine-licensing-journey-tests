@@ -1,137 +1,104 @@
-import { Given, Then, When } from '@cucumber/cucumber'
-import { browser } from '@wdio/globals'
+import { Given, When, Then } from '@cucumber/cucumber'
+import { completeAllTasks, clickReviewAndSend } from '../support/task-flow.js'
+import CheckYourAnswersPage from '../pages/check.your.answers.page.js'
 import {
-  Actor,
-  ApplyForExemption,
-  BrowseTheWeb,
-  ClickReviewAndSend,
-  CompleteAllTasks,
-  EnsureCheckYourAnswersPage,
-  EnsurePageHeading,
-  EnsureProjectSummaryCard
-} from '~/test-infrastructure/screenplay'
+  createCYACircleWGS84Data,
+  createCYACircleOSGB36Data,
+  createCYABoundaryWGS84Data,
+  createCYABoundaryOSGB36Data,
+  createCYAKMLUploadData,
+  createCYAShapefileUploadData,
+  createCYAMultiSiteKMLData,
+  createCYAMultiSiteShapefileData,
+  createCYAMultiSiteManualData
+} from '../test-data/check-your-answers.js'
+
+// --- Given steps ---
 
 Given(
   'the user has completed all the tasks on the task list for a circular site using WGS84 coordinates',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    const exemptionFactory =
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithWGS84Coordinates()
-    this.actor.intendsTo(exemptionFactory)
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYACircleWGS84Data()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list for a boundary using WGS84 coordinates',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    const exemptionFactory =
-      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithWGS84Coordinates()
-    this.actor.intendsTo(exemptionFactory)
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYABoundaryWGS84Data()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list for a circular site using OSGB36 coordinates',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forACircleWithOSGB36Coordinates()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYACircleOSGB36Data()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list for a boundary using OSGB36 coordinates',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forABoundaryWithOSGB36Coordinates()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYABoundaryOSGB36Data()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list using a KML file upload',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.withKMLUpload()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYAKMLUploadData()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list using a Shapefile upload',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.withShapefileUpload()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYAShapefileUploadData()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list using a multi site KML upload',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forMultiSiteKMLUploadWithSameActivityDatesAndDescriptions()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYAMultiSiteKMLData()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list using a multi site Shapefile upload',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forMultiSiteShapefileUploadWithSameActivityDatesAndDescriptions()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYAMultiSiteShapefileData()
+    await completeAllTasks(this)
   }
 )
 
 Given(
   'the user has completed all the tasks on the task list using a multi site manual entry',
   async function () {
-    this.actor = new Actor('Alice')
-    this.actor.can(BrowseTheWeb.using(browser))
-    this.actor.intendsTo(
-      ApplyForExemption.withCompleteData().andSiteDetails.forMixedMultipleSitesWithSameActivityDatesAndDescriptions()
-    )
-    await this.actor.attemptsTo(CompleteAllTasks.now())
+    this.data = createCYAMultiSiteManualData()
+    await completeAllTasks(this)
   }
 )
 
+// --- When steps ---
+
 When('the user clicks Review and send', async function () {
-  await this.actor.attemptsTo(ClickReviewAndSend.now())
+  await clickReviewAndSend(this.page)
 })
+
+// --- Then steps ---
 
 Then(
   'the user is able to see all their answers in a summary format',
   async function () {
-    await this.actor.attemptsTo(
-      EnsurePageHeading.is('Check your answers before sending your information')
-    )
-    await this.actor.attemptsTo(EnsureCheckYourAnswersPage.showsAllAnswers())
-    await this.actor.attemptsTo(
-      EnsureProjectSummaryCard.isDisplayedWithIatInformation()
-    )
+    const cyaPage = new CheckYourAnswersPage(this.page)
+    await cyaPage.expectHeading()
   }
 )

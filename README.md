@@ -1,438 +1,359 @@
-# Marine Licensing Journey Tests
+# Playwright + Cucumber BDD Journey Tests
 
-End-to-end testing suite for the Marine Licensing service using **BDD (Behaviour Driven Development)** with **Cucumber**, **WebDriverIO**, and the **Screenplay Pattern**.
+End-to-end journey tests for the Marine Licensing service using **Playwright** and **Cucumber.js (v12)** with a Page Object Model architecture.
 
-This project follows a user-centric approach to test automation, focusing on **who** does **what** and **why**, with clear separation between business logic and technical implementation.
-
-## Releases
-
-### [2.0.0](https://eaflood.atlassian.net/projects/ML/versions/23737/tab/release-report-all-issues)
-
-Release of the marine licensing journey tests docker version which contains tests associated with the November 18th 2025 release
-
-## System Under Test
-
-These journey tests cover:
-
-- [marine-licensing-frontend](https://github.com/DEFRA/marine-licensing-frontend) - Hapi.js frontend with GOV.UK Design System
-- [marine-licensing-backend](https://github.com/DEFRA/marine-licensing-backend) - Hapi.js REST API with MongoDB
-
-### **Authentication & Security**
-
-- **DEFRA ID Integration** - Complete OIDC authentication using CDP stub for development/testing
-- **Session Management** - Secure cookie-based sessions with automatic user lifecycle management
-- **Test User Management** - Automated user registration and cleanup via `DefraIdStubUserManager`
-- **Production Ready** - Seamless transition from CDP stub to production DEFRA ID
-
-### **Supporting Infrastructure**
-
-**Dependencies:**
-
-- **MongoDB** - Data persistence
-- **Redis** - Session and caching
-- **LocalStack** - AWS services simulation (S3, SQS, SNS, DynamoDB)
-- **DEFRA ID Stub** - CDP authentication stub for testing
-
-**Test Environments:**
-
-- **Local Development** - Against locally running services
-- **CDP Environments** - Live development/test environments
-- **Docker Compose** - Containerised stack for CI/CD
-
-## 🎯 Current Focus: Private Beta Exemption Notifications
-
-We are delivering a **private beta** that enables **members of the public to submit exemption notifications to the Marine Management Organisation (MMO)**.
-
-### **Key User Journey**
-
-1. **Authenticate** - User signs in via DEFRA ID
-2. **Start exemption notification** - User initiates a new exemption notification
-3. **Provide project details** - Essential information about the marine activity
-4. **Define site details** - Single or multiple sites with coordinates, activity dates, and descriptions
-5. **Submit notification** - Complete submission to the MMO
-6. **Receive confirmation** - User gets acknowledgement of successful submission
-
-#### **Multi-Site Support**
-
-The service supports **efficient multi-site workflows** with intelligent conditional routing:
-
-- **Streamlined data entry** - Reuse activity dates and descriptions across sites when appropriate
-- **Mixed site types** - Combine circular and polygon sites within the same notification
-- **Flexible coordination systems** - Support for both WGS84 and OSGB36 coordinate systems
-- **Add another site** - Efficient workflow to add multiple sites from the review page
-
-**Current Test Coverage:** 380+ scenarios across 20+ feature files validating complete end-to-end workflows including comprehensive multi-site functionality.
-
-## 📋 User Stories & Documentation
-
-- **[📖 User Stories & Test Coverage →](documentation/user-stories/README.md)** - Requirements and acceptance criteria
-- **[🧠 Complete Test Strategy →](documentation/test-strategy/README.md)** - Modern quality engineering approach
-- **[🎯 Test Charters →](documentation/test-charters/README.md)** - Investigative testing plans
-- **[📚 Complete Documentation →](documentation/README.md)** - Comprehensive documentation hub
-
-## 🏗️ Architecture Overview
-
-### **BDD + Screenplay Pattern**
-
-- **📋 Feature Files** (`test/features/`) - Gherkin scenarios describing business behaviours
-- **🎬 Step Definitions** (`test/steps/`) - Bridge between Gherkin and Screenplay
-- **🎭 Screenplay Pattern** (`test-infrastructure/screenplay/`) - User-centric test automation
-  - **Actor** - Represents the user performing actions
-  - **Abilities** - What the actor can do (browse web, authenticate with DEFRA ID, browse D365)
-  - **Tasks** - High-level user goals (complete project name, apply for exemption, login to D365)
-  - **Interactions** - Low-level actions (click, verify, ensure, launch D365)
-- **📍 Page Objects** (`test-infrastructure/pages/`) - Locators and selectors only
-
-### **Browser Automation Architecture**
-
-**WebDriverIO** - Main application testing
-
-- **Core user journeys** - Marine licensing application workflows
-- **Cross-browser compatibility** - Chrome, Firefox, Safari support
-- **Fast execution** - Optimised for rapid feedback loops
-
-**Playwright** - External system integration
-
-- **D365 testing** - Microsoft Dynamics 365 case verification with automatic authentication
-- **Smart authentication handling** - Automatic dialog detection and popup management
-- **Modern browser handling** - Superior OAuth and SPA support
-- **Independent contexts** - Isolated from main application tests
-
-### **Authentication Integration**
-
-```javascript
-// User creation happens automatically on first navigation
-await this.actor.attemptsTo(Navigate.toTheMarineLicensingApp())
-// ↳ This creates test user + authenticates transparently
-
-// Test user is now available in actor memory
-const testUser = this.actor.recalls('testUser')
-// ↳ { userId, email, firstName, lastName, ... }
-```
-
-### **Core Principles**
-
-✅ **Self-documenting code** - No comments or JSDoc required
-✅ **Explicit naming** - Functions and variables express intent clearly
-✅ **Single responsibility** - Each component has one clear purpose
-✅ **Framework flexibility** - WebDriverIO encapsulated for easy switching
-✅ **Secure testing** - Automated user lifecycle with proper cleanup
-
-## 🚀 Getting Started
-
-### **Requirements**
-
-- **Node.js** `>= v22.21.0` ([use nvm](https://github.com/creationix/nvm))
-- **npm** `>= v9`
+## Quick Start
 
 ```bash
-# Use correct Node version
-nvm use
-
 # Install dependencies
-npm install
+npm ci
+
+# Install Playwright browsers
+npx playwright install chromium --with-deps
+
+# Run all tests (headless by default)
+npm run test
+
+# Run smoke tests only
+npm run test:smoke
+
+# Run headed (watch the browser)
+HEADLESS=false npm run test
 ```
 
-### **Local Development Setup**
+## Local Docker Setup
 
-When running journey tests with Docker locally, configure the hosts file to map the frontend domain:
+### Prerequisites
+
+- Node.js >= 22.21.0
+- Docker & Docker Compose
+
+### Services
+
+Tests run against Docker containers defined in `compose.yml`. All services communicate over the `cdp-tenant` bridge network.
+
+| Service                     | Image                                    | Port  | Purpose                 |
+| --------------------------- | ---------------------------------------- | ----- | ----------------------- |
+| `marine-licensing-frontend` | `defradigital/marine-licensing-frontend` | 3000  | Frontend under test     |
+| `marine-licensing-backend`  | `defradigital/marine-licensing-backend`  | 3001  | Backend API             |
+| `defra-id-stub`             | `defradigital/cdp-defra-id-stub`         | 3200  | OIDC authentication     |
+| `cdp-uploader`              | `defradigital/cdp-uploader`              | 7337  | File upload service     |
+| `mongodb`                   | `mongo:7.0.24`                           | 27017 | Database                |
+| `redis` / `redis-frontend`  | `redis:7`                                | 6379  | Session cache           |
+| `localstack`                | `localstack/localstack:3.0.2`            | 4566  | S3, SQS, SNS (AWS mock) |
+
+### Starting services
 
 ```bash
-# Edit hosts file (requires sudo)
-sudo nano /etc/hosts
-
-# Add this line:
-127.0.0.1       marine-licensing-frontend.local
+# Start all services
+docker compose up -d
 ```
 
-This domain mapping ensures proper routing when testing against the containerised frontend service.
+### Chromium host-resolver-rules
 
-### **Development Commands**
+When `ENVIRONMENT=local` (the default), Chromium is launched with `--host-resolver-rules` that map Docker hostnames to `127.0.0.1`:
+
+- `marine-licensing-frontend` → `127.0.0.1` (frontend on port 3000)
+- `defra-id-stub` → `127.0.0.1` (OIDC stub on port 3200)
+- `cdp-uploader` → `127.0.0.1` (file upload on port 7337)
+
+This is configured automatically in `test/support/config.js` — no manual `/etc/hosts` changes are needed.
+
+## NPM Scripts
+
+| Script        | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| `test`        | Run all tests (default profile, headless, summary formatter) |
+| `test:smoke`  | Run smoke-tagged scenarios only (summary formatter)          |
+| `test:github` | Run with GitHub CI settings (10 parallel workers)            |
+| `test:cdp`    | Run with CDP environment settings (10 parallel workers)      |
+| `clean`       | Remove `allure-results/` and `allure-report/`                |
+| `report`      | Generate single-file Allure HTML report                      |
+| `report:open` | Generate and open Allure report in browser                   |
+
+## Running Multiple Instances Locally
+
+By default, tests run with 1 worker locally. To run scenarios in parallel, set the `MAX_INSTANCES` environment variable:
 
 ```bash
-# Local development (requires locally running services)
-npm run test:local
-npm run test:local:debug
-npm run test:local:headless
-npm run test:local:defraid
+# Run with 3 parallel workers
+MAX_INSTANCES=3 npm run test
 
-# Smoke testing - Run core user journey tests quickly
-npm run test:local -- --cucumberOpts.tags "@smoke"
+# Run with 5 parallel workers
+MAX_INSTANCES=5 npm run test
 
-# Linting and formatting
-npm run lint
-npm run lint:fix
-npm run format
-
-# Generate test reports
-npm run report
+# Run smoke tests with 2 parallel workers
+MAX_INSTANCES=2 npm run test:smoke
 ```
 
-### **Environment Configurations**
+Each worker runs scenarios in its own isolated browser context, so there are no shared state conflicts. However, keep in mind:
 
-| Configuration                | Purpose                         | Base URL           |
-| ---------------------------- | ------------------------------- | ------------------ |
-| `wdio.local.conf.js`         | Local development               | Configurable       |
-| `wdio.local.defraid.conf.js` | Local development with Defra ID | Configurable       |
-| `wdio.conf.js`               | Default environment             | CDP environment    |
-| `wdio.github.conf.js`        | GitHub Actions                  | Docker compose     |
-| `wdio.browserstack.conf.js`  | BrowserStack testing            | CDP + BrowserStack |
+- **Resource usage**: Each worker uses its own browser context within the shared Chromium instance. More workers = more memory and CPU.
+- **DEFRA ID stub**: Each scenario registers and expires its own test user, so parallel scenarios won't conflict.
+- **Start conservatively**: 3-5 workers is a good starting point for local development. Increase if your machine handles it comfortably.
+- **Debugging**: Set `DEBUG=true` to force single-worker mode regardless of `MAX_INSTANCES`.
 
-### **🚀 Smoke Testing - Fast Core Journey Validation**
+## Verbose Output and Debugging
 
-Run only the core user journey scenarios tagged with `@smoke` for rapid feedback:
+### Cucumber formatters
+
+The default formatter is a custom progress bar. Override it with `--format` for more detail:
 
 ```bash
-# Run smoke tests locally (≈2-3 minutes vs full suite ≈15+ minutes)
-npm run test:local -- --cucumberOpts.tags "@smoke"
+# Step-by-step dots (. for pass, F for fail)
+npx cucumber-js --config cucumber.mjs --format progress
+
+# Scenario names with step results
+npx cucumber-js --config cucumber.mjs --format summary
 ```
 
-**Smoke test coverage:**
+### Built-in console logs
 
-- ✅ Automatic test user creation and DEFRA ID authentication
-- ✅ Project name creation and task list navigation
-- ✅ Activity description and public register decisions
-- ✅ Site details coordinate entry (WGS84 and OSGB36)
-- ✅ Multi-site workflows with mixed site types
-- ✅ Complete exemption notification submission
+The hooks in `test/support/hooks.js` log scenario lifecycle automatically:
 
-## 🎯 Writing Tests
-
-### **BDD Guidelines**
-
-- **Golden Rule**: Write Gherkin for clarity - others should understand without knowing the feature
-- **Structure**: Always Given → When → Then (in that order)
-- **Focus**: Customer needs and real user workflows
-
-### **Example with Authentication**
-
-```gherkin
-Feature: Starting a new exemption notification
-
-  Scenario: Provide a valid project name
-    Given the project name page is displayed
-    When entering and saving a project with a valid name
-    Then the task list page is displayed
+```
+▶ START: A user can view the task list
+✓ PASS: A user can view the task list (4.2s)
+✗ FAIL: A user can submit a notification (12.1s)
 ```
 
-### **Step Implementation**
+### Serial execution
 
-```javascript
-Given('the project name page is displayed', async function () {
-  this.actor = new Actor('Alice')
-  this.actor.can(new BrowseTheWeb(browser))
-  // Authentication happens automatically here ↓
-  await this.actor.attemptsTo(Navigate.toProjectNamePage())
-})
-
-When('entering and saving a project with a valid name', async function () {
-  await this.actor.attemptsTo(CompleteProjectName.with(faker.lorem.words(5)))
-})
-
-Then('the task list page is displayed', async function () {
-  await this.actor.attemptsTo(EnsurePageHeading.is('Task List'))
-})
-```
-
-## 📏 Coding Standards
-
-### **JavaScript Standards**
-
-- ❌ **No TypeScript** - JavaScript only
-- ❌ **No JSDoc** - Self-documenting code
-- ❌ **No Comments** - Expressive naming preferred
-- ❌ **No `console.log()`** - Use Allure capture functions
-- ❌ **No `throw Error`** - Use Chai assertions (`expect.fail()`) for proper test failures
-
-### **Architecture Rules**
-
-- **Tasks** → High-level user goals (`CompleteProjectName`, `AuthenticateWith`)
-- **Interactions** → Single actions (`ClickSaveAndContinue`, `EnsureHeading`)
-- **Page Objects** → Locators and dynamic selectors only
-- **Abilities** → Framework encapsulation (WebDriverIO, DEFRA ID authentication)
-
-### **File Naming**
-
-- **JavaScript files**: `dot.case.js`
-- **Features**: `descriptive.name.feature`
-
-## 🎭 Screenplay Pattern Usage
-
-### **Actor with Authentication**
-
-```javascript
-// In step definitions - standard actor setup
-this.actor = new Actor('Alice')
-this.actor.can(new BrowseTheWeb(browser))
-// ↳ BrowseTheWeb automatically includes DEFRA ID capabilities
-
-// Navigate triggers automatic user creation + authentication
-await this.actor.attemptsTo(Navigate.toProjectNamePage())
-
-// Remember data for later use
-this.actor.remembers('projectName', 'My Project')
-const name = this.actor.recalls('projectName')
-const testUser = this.actor.recalls('testUser') // Available after navigation
-```
-
-### **Task Implementation**
-
-```javascript
-// High-level user workflow (authentication handled by Navigate)
-export default class CompleteProjectName extends Task {
-  static with(projectName) {
-    return new CompleteProjectName(projectName)
-  }
-
-  async performAs(actor) {
-    const browseTheWeb = actor.ability
-    await browseTheWeb.sendKeys(
-      ProjectNamePage.projectNameInput,
-      this.projectName
-    )
-    await browseTheWeb.click(ProjectNamePage.saveAndContinue)
-  }
-}
-```
-
-## 🏭 Production & Deployment
-
-### **CDP Portal Integration**
-
-Tests run automatically via CDP Portal with:
-
-- **Docker builds** on `main` branch merge
-- **Allure reports** with comprehensive test results
-- **BrowserStack integration** for cross-browser testing
-
-### **DEFRA ID Configuration**
-
-**Development/Testing:**
+When running in parallel, output from multiple workers is interleaved. Force single-worker mode for readable output:
 
 ```bash
-DEFRA_ID_OIDC_CONFIGURATION_URL=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/openid-configuration
-DEFRA_ID_CLIENT_ID=cdp-defra-id-stub
+DEBUG=true npm run test
 ```
 
-For testing locally with Defra ID you will need to set the following environment variables:
+This sets `parallel: 1` in the Cucumber config regardless of `MAX_INSTANCES`.
+
+### Headed mode
+
+Watch the browser while tests run:
 
 ```bash
-DEFRA_ID_USER_ID="59 79 42 46 25 50"
-DEFRA_ID_USER_PASSWORD="ask a dev"
+HEADLESS=false npm run test
+```
+
+### Playwright debug logs
+
+For low-level browser and network tracing, use Playwright's built-in debug logging:
+
+```bash
+# API-level trace (page.goto, page.click, etc.)
+DEBUG=pw:api npx cucumber-js --config cucumber.mjs
+
+# All Playwright debug output
+DEBUG=pw:* npx cucumber-js --config cucumber.mjs
+```
+
+### Combining options
+
+```bash
+# Headed, single worker, with Playwright API trace
+DEBUG=pw:api MAX_INSTANCES=1 HEADLESS=false npx cucumber-js --config cucumber.mjs
+```
+
+## Environment Variables
+
+| Variable                 | Default                          | Description                                       |
+| ------------------------ | -------------------------------- | ------------------------------------------------- |
+| `ENVIRONMENT`            | `local`                          | Target environment (`local`, `dev`, `test`, etc.) |
+| `BASE_URL`               | Auto-resolved from `ENVIRONMENT` | Frontend URL to test against                      |
+| `DEFRA_ID_URL`           | Auto-resolved from `ENVIRONMENT` | DEFRA ID stub URL                                 |
+| `HEADLESS`               | `true`                           | Set to `false` to run headed                      |
+| `MAX_INSTANCES`          | `1` (local) / `10` (CI)          | Parallel Cucumber workers                         |
+| `DEBUG`                  | `false`                          | Forces `parallel: 1` for debugging                |
+| `DEFRA_ID_USER_ID`       | -                                | Real DEFRA ID username (when `ENVIRONMENT=test`)  |
+| `DEFRA_ID_USER_PASSWORD` | -                                | Real DEFRA ID password (when `ENVIRONMENT=test`)  |
+| `DEFRA_ID_ORG_NAME`      | `Windfarm Co`                    | Organisation name for real DEFRA ID               |
+
+## Running Real DEFRA ID Tests
+
+Tests tagged `@real-defra-id` run against the actual Government Gateway login (not the stub). These only execute when `ENVIRONMENT=test` via the `cdp` profile.
+
+### Required Environment Variables
+
+```bash
 ENVIRONMENT=test
-
-# If you want to run IAT tests
-IAT_URL=https://marinelicensingtest.marinemanagement.org.uk/mmofox5uat/journey/self-service/start
+DEFRA_ID_USER_ID=<Government Gateway user ID>
+DEFRA_ID_USER_PASSWORD=<Government Gateway password>
 ```
 
-Start Chromedriver
+### How to Run
 
 ```bash
-docker compose -f compose.yml up -d selenium-chrome
+# Run real DEFRA ID tests on the test environment
+ENVIRONMENT=test \
+  DEFRA_ID_USER_ID=94849150XX \
+  DEFRA_ID_USER_PASSWORD=YourPassword \
+  npm run test:cdp
 ```
 
-After that run (includes IAT related tests)
+When `ENVIRONMENT=test`, the `cdp` profile switches tags to `@real-defra-id or @d365 or @fivium`, running only the tests that require real integrations. The base URL resolves to `https://marine-licensing-frontend.test.cdp-int.defra.cloud`.
+
+### Authentication Flow (Real DEFRA ID)
+
+1. Navigate to the app — OIDC redirects to the Government Gateway login
+2. Select **Government Gateway** radio option and continue
+3. Enter `DEFRA_ID_USER_ID` and `DEFRA_ID_USER_PASSWORD` credentials
+4. Select the organisation if prompted (defaults to `Windfarm Co`)
+5. Redirect back to the Marine Licensing app
+
+The credentials are for the **test environment only** — never commit them to source control. Pass them as environment variables or CI secrets.
+
+## Entrypoint (CDP Pipeline)
+
+When tests run on the CDP platform, `entrypoint.sh` at the project root is the entry point. It:
+
+1. Runs the test suite using the `cdp` profile (`npm run test:cdp`)
+2. Publishes the Allure report (`npm run report:publish`)
+3. Exits with a failure code if either step fails — report publishing failures are surfaced before test failures
+
+The `RUN_ID` environment variable is passed in by the CDP pipeline for tracking.
+
+## Cucumber Configuration
+
+The test runner is **Cucumber.js** (not WebDriverIO). All tests are launched via:
 
 ```bash
-npm run test:local:defraid
+cucumber-js --config cucumber.mjs
 ```
 
-After that run (only Defra ID tests)
+The configuration file `cucumber.mjs` at the project root is the single entrypoint that controls:
+
+- **Feature file paths**: Where Cucumber looks for `.feature` files (`test/features/`)
+- **Step and support imports**: `test/steps/**/*.js` and `test/support/**/*.js`
+- **Profiles**: Named exports define different run configurations (see [Cucumber Profiles](#cucumber-profiles))
+- **Formatters**: Progress output, HTML report, JSON results, and Allure reporting
+- **Parallelism**: Controlled by `MAX_INSTANCES` env var, overridden by `DEBUG=true`
+
+The npm scripts are convenience wrappers that select a profile and formatter:
 
 ```bash
-npm run test:local:defraid -- --cucumberOpts.tags "@real-defra-id"
+# These are equivalent:
+npm run test
+cucumber-js --config cucumber.mjs --format summary
+
+# Selecting a profile:
+npm run test:smoke    # uses --profile smoke --format summary
+npm run test:github   # uses --profile github (10 workers, JSON output)
+npm run test:cdp      # uses --profile cdp (10 workers, real DEFRA ID when ENVIRONMENT=test)
 ```
 
-**Production:**
-
-```bash
-DEFRA_ID_OIDC_CONFIGURATION_URL=https://login.defra.gov.uk/...
-DEFRA_ID_CLIENT_ID=<production-client-id>
-```
-
-### **D365 Configuration**
-
-For testing submission verification in Microsoft Dynamics 365:
-
-```bash
-D365_URL=<dynamics-365-instance-url>
-D365_USER_ID=<user-email-for-d365-login>
-D365_USER_PASSWORD=<user-password-for-d365-login>
-```
-
-#### **Authentication Approaches**
-
-**Browser Automation (Default):** Uses the `LaunchD365` interaction with automatic authentication dialog handling:
-
-- **Automatic dialog handling** - Detects and clicks "Please sign in again" dialogs
-- **Popup window management** - Automatically closes authentication popup windows
-- **Session persistence** - Maintains D365 session throughout test execution
-- **Resilient authentication** - Works with D365's dynamic authentication challenges
-
-```javascript
-// D365 tests automatically handle authentication dialogs
-await this.actor.attemptsTo(LoginToD365.now())
-// ↳ Uses LaunchD365 interaction with dialog/popup handling
-```
-
-**OAuth2 Programmatic:** Alternative approach using access tokens (see `test-infrastructure/auth/README.md`):
-
-- **Token-based authentication** - No browser login automation required
-- **Environment variables** - Direct credential configuration
-- **Resource Owner Password Credentials** - Standard OAuth2 flow
-
-#### **Automatic Authentication Features**
-
-The `BrowseD365` ability and `LaunchD365` interaction automatically handle:
-
-- ✅ **"Please sign in again" dialogs** - Detected and clicked automatically
-- ✅ **Authentication popup windows** - Closed automatically without user intervention
-- ✅ **Session refresh prompts** - Handled transparently during test execution
-- ✅ **Secondary authentication dialogs** - Multiple dialog handling supported
-
-**Note:** D365 integration tests only run in integrated environments. They do not run locally or in development environments where D365 connectivity is not available.
-
-## 🔧 Quick Debugging
-
-```bash
-# Run with debug output
-npm run test:local:debug
-
-# Check DEFRA ID stub is running
-curl http://localhost:3200/health
-
-# Verify Docker services
-docker ps
-```
-
-**Common Issues:**
-
-- **Authentication failures**: Check DEFRA ID stub is running and accessible
-- **D365 authentication dialogs**: Tests automatically handle "Please sign in again" and popup windows
-- **Service not running**: Ensure target application is accessible at configured `baseUrl`
-- **Element not found**: Check page objects for correct selectors
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 test/
-├── features/                          # Gherkin feature files
-└── steps/                             # Cucumber step definitions
+  features/           # Gherkin feature files
+  resources/          # Test resource files (KML, shapefiles, etc.)
+  pages/              # Page Object Model classes
+  steps/              # Cucumber step definitions
+  support/            # Framework support (hooks, config, auth, helpers)
+  test-data/          # Test data factory functions
 
-test-infrastructure/
-├── screenplay/
-│   ├── actor.js                       # Main actor with memory and abilities
-│   ├── abilities/                     # What actors can do
-│   ├── tasks/                         # High-level user workflows
-│   ├── interactions/                  # Single-purpose actions
-│   └── models/                        # Test data models
-├── pages/                             # Page objects (locators only)
-├── helpers/
-│   └── defra-id-stub-user-manager.js  # DEFRA ID test user management
-└── capture/                           # Allure reporting utilities
+cucumber.mjs        # Cucumber runner configuration (entrypoint)
 ```
 
-## 📜 Licence
+### Pages (Page Object Model)
+
+Page objects define locators and actions for each page of the application:
+
+| Page                          | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `task.list.page.js`           | Task list with task selection and review button      |
+| `project.name.page.js`        | Project name entry                                   |
+| `dashboard.page.js`           | Projects table with CRUD actions and sort assertions |
+| `cookie.banner.page.js`       | Cookie consent banner                                |
+| `cookies.policy.page.js`      | Cookies policy page                                  |
+| `confirmation.page.js`        | Submission confirmation with reference extraction    |
+| `check.your.answers.page.js`  | Check your answers summary                           |
+| `review.site.details.page.js` | Review site details page                             |
+| `public.register.page.js`     | Public register consent and reason                   |
+| `view.details.page.js`        | View submitted notification details                  |
+| `delete.project.page.js`      | Delete project confirmation                          |
+| `delete.site.details.page.js` | Delete site details page                             |
+| `header.page.js`              | Header component                                     |
+| `footer.page.js`              | Footer component                                     |
+| `privacy.policy.page.js`      | Privacy policy page                                  |
+| `defra.id.login.page.js`      | DEFRA ID login stub                                  |
+| `common.elements.page.js`     | Shared GOV.UK elements                               |
+
+### Support Modules
+
+| Module                  | Description                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `hooks.js`              | Lifecycle hooks: shared browser, per-scenario context/page, failure attachments |
+| `config.js`             | Environment config resolution (URLs, headless, chromium args)                   |
+| `world.js`              | Custom Cucumber World with `page`, `browserContext`, `data`, `testUser`         |
+| `auth.js`               | User registration/login (stub and real DEFRA ID), cookie acceptance             |
+| `navigation.js`         | Navigate, authenticate, sign out, re-authenticate helpers                       |
+| `task-flow.js`          | Complete tasks, submit notification, store references                           |
+| `site-details-flow.js`  | Site detail page interactions dispatched by entry method                        |
+| `progress-formatter.js` | Custom ASCII progress bar formatter for terminal output                         |
+
+### Test Data Factories
+
+Simple factory functions (no builder pattern) in `test/test-data/`:
+
+| Factory                 | Description                                                            |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `exemption.js`          | Project names, IAT context, activity dates, public register data       |
+| `site-details.js`       | Coordinates (WGS84/OSGB36), circle/boundary data, multi-site data      |
+| `file-upload.js`        | KML and Shapefile upload data (valid, virus, wrong type, large, empty) |
+| `check-your-answers.js` | Pre-built CYA scenarios combining site details + public register       |
+
+## Cucumber Profiles
+
+Defined in `cucumber.mjs`:
+
+| Profile   | Use Case          | Parallelism | Tags                                                                         |
+| --------- | ----------------- | ----------- | ---------------------------------------------------------------------------- |
+| `default` | Local development | 1 worker    | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`, `@local-only` |
+| `smoke`   | Quick validation  | 1 worker    | `@smoke` only (10 feature files)                                             |
+| `all`     | All scenarios     | 1 worker    | Excludes `@wip`, `@bug`, `@d365`, `@real-defra-id`, `@fivium`                |
+| `github`  | PR checks         | 10 workers  | Same as default                                                              |
+| `cdp`     | CDP environment   | 10 workers  | Real DEFRA ID / D365 when `ENVIRONMENT=test`                                 |
+
+## Architecture
+
+### Browser Lifecycle
+
+- **One Chromium instance** shared across all scenarios (launched in `BeforeAll`)
+- **New browser context + page** per scenario (created in `Before`, closed in `After`)
+- Default step timeout: **120 seconds**
+- Page action timeout: **30 seconds**
+
+### Authentication Flow
+
+1. Navigate to the service with IAT query parameters
+2. DEFRA ID stub: register test user via API, click login link, redirect back
+3. Accept cookie banner
+4. After scenario: expire test user via API (cleanup)
+
+When `ENVIRONMENT=test`, real DEFRA ID is used instead of the stub (Government Gateway login flow).
+
+### IAT Context
+
+Every test requires an IAT (Integrated Assessment Tool) context passed as URL query parameters. Test data factories generate this context with randomised activity types, article codes, and PDF download URLs.
+
+### Reporting
+
+- **Allure**: Single-file HTML report via `allure-cucumberjs` formatter. Failure attachments (screenshots, URLs, test data) use Cucumber's native `this.attach()` API.
+- **Cucumber HTML**: `cucumber-report.html` generated alongside test run.
+- **Cucumber JSON**: `cucumber-results.json` for CI parsing.
+
+### CI/CD
+
+The GitHub Actions workflow (`check-pull-request.yml`) runs:
+
+1. Lint checks (prettier, eslint, gherkin standards, step analysis)
+2. Docker Compose up (MongoDB, Redis, LocalStack, frontend, backend, DEFRA ID stub)
+3. `npm run test:github` with 10 parallel workers
+4. Allure report generation and artifact upload
+5. PR comment with pass/fail summary
+
+## Licence
 
 THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
 

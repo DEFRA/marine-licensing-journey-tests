@@ -1,57 +1,50 @@
-import { Then, When } from '@cucumber/cucumber'
-import { expect } from 'chai'
-import { browser } from '@wdio/globals'
-import DashboardPage from '~/test-infrastructure/pages/dashboard.page'
+import { When, Then } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
+import { format } from 'date-fns'
+import DashboardPage from '../pages/dashboard.page.js'
+import { getConfig } from '../support/config.js'
 import {
-  Actor,
-  BrowseD365,
-  ClickButton,
-  ClickWithdrawLink,
-  EnsureD365CaseDetails,
-  EnsureDashboardFilter,
-  EnsureDashboardTableContent,
-  EnsureWithdrawPage,
-  LoginToD365Browser,
-  NavigateToLink,
-  SearchD365Case,
-  SelectDashboardFilter,
-  VerifyThatTheUserIsLoggedInToD365
-} from '~/test-infrastructure/screenplay'
-
-Then(
-  'the dashboard filter is correctly configured with {string} selected by default',
-  async function (defaultOption) {
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioOptionsAreDisplayed(
-        'My projects',
-        'All projects'
-      )
-    )
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioIsSelectedByDefault(defaultOption)
-    )
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.radioLabelIncludesOrganisationName('All projects')
-    )
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.buttonIsNotVisible('Update results')
-    )
-  }
-)
+  launchD365Browser,
+  loginToD365,
+  verifyD365Login,
+  searchD365Case,
+  verifyD365CaseDetails,
+  openD365CaseRecord
+} from '../support/d365.js'
 
 When(
   'the user selects the {string} filter radio option',
   async function (option) {
-    await this.actor.attemptsTo(SelectDashboardFilter.option(option))
+    const dashboard = new DashboardPage(this.page)
+    await dashboard.selectFilter(option)
   }
 )
 
 Then(
   'the dashboard results are updated without clicking a button',
   async function () {
-    await this.actor.attemptsTo(
-      EnsureDashboardFilter.buttonIsNotVisible('Update results')
-    )
+    const dashboard = new DashboardPage(this.page)
+    await dashboard.waitForResultsUpdate()
+  }
+)
+
+Then(
+  'the dashboard filter is correctly configured with {string} selected by default',
+  async function (defaultOption) {
+    const dashboard = new DashboardPage(this.page)
+    await dashboard.expectFilterDisplayed()
+
+    if (defaultOption === 'My projects') {
+      await dashboard.expectMyProjectsSelected()
+    }
+
+    const config = getConfig()
+    const orgName = config.isRealDefraId
+      ? process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+      : this.testUser.relationships[0].organisationName
+    await dashboard.expectAllProjectsLabelContainsOrg(orgName)
+    await dashboard.expectUpdateResultsButtonHidden()
+    await dashboard.expectOwnerColumnPresent()
   }
 )
 
@@ -59,80 +52,166 @@ Then(
   'the submitted notification row contains the correct details',
   async function (dataTable) {
     const expectedDetails = Object.fromEntries(dataTable.raw())
-    await this.actor.attemptsTo(
-      EnsureDashboardTableContent.withExpectedDetails(expectedDetails)
-    )
-  }
-)
+    const latestExemption =
+      this.data.completedExemptions[this.data.completedExemptions.length - 1]
 
-When('the user withdraws the submitted notification', async function () {
-  // Wait for D365 to finish processing the submission before withdrawing
-  await browser.pause(30000)
-  await this.actor.attemptsTo(ClickWithdrawLink.forLastCompletedExemption())
-  await this.actor.attemptsTo(
-    EnsureWithdrawPage.hasCorrectHeading(
-      'Are you sure you want to withdraw this project?'
-    )
-  )
-  await this.actor.attemptsTo(EnsureWithdrawPage.hasLink('Cancel'))
-  await this.actor.attemptsTo(EnsureWithdrawPage.hasLink('Back'))
-  await this.actor.attemptsTo(ClickButton.withText('Yes, withdraw project'))
-  await this.actor.attemptsTo(NavigateToLink.to(DashboardPage.url))
-})
-
-Then('the case status in D365 matches', async function (dataTable) {
-  const expectedDetails = Object.fromEntries(dataTable.raw())
-
-  // Resolve dynamic values from submitted exemption
-  const completedExemptions = this.actor.recalls('completedExemptions') || []
-  const latestExemption = completedExemptions[completedExemptions.length - 1]
-
-  if (latestExemption) {
+    // Resolve dynamic values
+    const resolvedDetails = {}
     for (const [key, value] of Object.entries(expectedDetails)) {
-      if (value === 'matches submitted reference number') {
-        expectedDetails[key] = latestExemption.applicationReference
+      if (value === 'matches submitted project name') {
+        resolvedDetails[key] = latestExemption.projectName
+      } else if (value === 'matches submitted reference number') {
+        resolvedDetails[key] = latestExemption.applicationReference
+      } else if (value === "today's date") {
+        resolvedDetails[key] = format(new Date(), 'd MMM yyyy')
+      } else {
+        resolvedDetails[key] = value
+      }
+    }
+
+    const dashboard = new DashboardPage(this.page)
+    const row = await dashboard.getNotificationRow(latestExemption.projectName)
+
+    // Map column names from the feature table to row property names
+    const columnToProperty = {
+      'Project name': 'name',
+      Type: 'type',
+      Reference: 'reference',
+      Status: 'status',
+      'Submitted on': 'submittedOn',
+      Owner: 'owner',
+      Actions: 'actions'
+    }
+
+    for (const [columnName, expectedValue] of Object.entries(resolvedDetails)) {
+      const prop = columnToProperty[columnName]
+      if (!prop) {
+        throw new Error(`Unknown dashboard column: ${columnName}`)
+      }
+
+      if (columnName === 'Actions') {
+        // Actions may contain multiple comma-separated values
+        const expectedActions = expectedValue.split(',').map((a) => a.trim())
+        for (const action of expectedActions) {
+          expect(row[prop]).toContain(action)
+        }
+      } else {
+        expect(row[prop]).toBe(expectedValue)
       }
     }
   }
-
-  // Set up D365 user
-  await browser.minimizeWindow()
-  this.mmoUser = new Actor('Marcus')
-  this.mmoUser.can(BrowseD365.withPlaywright())
-
-  // Login to D365
-  await this.mmoUser.attemptsTo(LoginToD365Browser.now())
-  await this.mmoUser.attemptsTo(VerifyThatTheUserIsLoggedInToD365.now())
-
-  // Search for the submitted reference
-  await this.mmoUser.attemptsTo(
-    SearchD365Case.withReference(latestExemption.applicationReference)
-  )
-
-  // Verify case details
-  await this.mmoUser.attemptsTo(EnsureD365CaseDetails.match(expectedDetails))
-})
+)
 
 Then(
   'the public details page for the submitted notification shows the exemption is for {string}',
   async function (expectedName) {
-    const completedExemptions = this.actor.recalls('completedExemptions') || []
-    const latestExemption = completedExemptions[completedExemptions.length - 1]
+    const latestExemption =
+      this.data.completedExemptions[this.data.completedExemptions.length - 1]
 
-    const viewDetailsSelector = DashboardPage.viewDetailsLink(
-      latestExemption.projectName
-    )
-    const viewDetailsElement = await browser.$(viewDetailsSelector)
-    const href = await viewDetailsElement.getAttribute('href')
-
+    const dashboard = new DashboardPage(this.page)
+    const href = await dashboard
+      .viewDetailsLink(latestExemption.projectName)
+      .getAttribute('href')
     const id = href.split('/').pop()
 
-    await browser.url(`/exemption/view-public-details/${id}`)
+    const config = getConfig()
+    await this.page.goto(
+      new URL(`/exemption/view-public-details/${id}`, config.baseURL).toString()
+    )
+    await this.page.waitForLoadState('load')
 
-    const valueElement = await browser.$(
+    const valueElement = this.page.locator(
       '//dt[contains(text(), "Who the exemption is for")]/following-sibling::dd'
     )
-    const actualText = await valueElement.getText()
-    expect(actualText.trim()).to.include(expectedName)
+    await expect(valueElement).toContainText(expectedName, {
+      timeout: 30_000
+    })
   }
 )
+
+When('the user withdraws the submitted notification', async function () {
+  const latestExemption =
+    this.data.completedExemptions[this.data.completedExemptions.length - 1]
+
+  // Wait for D365 to finish processing the submission before withdrawing
+  await this.page.waitForTimeout(30_000)
+
+  const dashboard = new DashboardPage(this.page)
+  await dashboard.withdrawLink(latestExemption.projectName).click()
+  await this.page.waitForLoadState('load')
+
+  // Verify withdraw confirmation page
+  const heading = this.page.locator('h1, h2, .govuk-heading-l').first()
+  await expect(heading).toContainText(
+    'Are you sure you want to withdraw this project?',
+    { timeout: 30_000 }
+  )
+
+  // Verify Cancel and Back links are visible
+  await expect(this.page.locator('a:has-text("Cancel")')).toBeVisible({
+    timeout: 30_000
+  })
+  await expect(this.page.locator('a.govuk-back-link')).toBeVisible({
+    timeout: 30_000
+  })
+
+  // Confirm withdrawal
+  await this.page
+    .locator('xpath=//button[normalize-space(text())="Yes, withdraw project"]')
+    .click()
+  await this.page.waitForLoadState('load')
+
+  // Navigate back to dashboard
+  const config = getConfig()
+  await this.page.goto(new URL(DashboardPage.path, config.baseURL).toString())
+  await this.page.waitForLoadState('load')
+})
+
+Then('the case status in D365 matches', async function (dataTable) {
+  const expectedDetails = Object.fromEntries(dataTable.raw())
+  const latestExemption =
+    this.data.completedExemptions[this.data.completedExemptions.length - 1]
+
+  // Resolve dynamic values
+  for (const [key, value] of Object.entries(expectedDetails)) {
+    if (value === 'matches submitted reference number') {
+      expectedDetails[key] = latestExemption.applicationReference
+    }
+  }
+
+  // Launch a separate browser for D365
+  const { browser: d365Browser, page: d365Page } = await launchD365Browser()
+
+  try {
+    await loginToD365(d365Page)
+    await verifyD365Login(d365Page)
+    await searchD365Case(d365Page, latestExemption.applicationReference)
+    await verifyD365CaseDetails(d365Page, expectedDetails)
+
+    // Open case record, validate organisation, get Application URL
+    const applicationUrl = await openD365CaseRecord(
+      d365Page,
+      expectedDetails['Applicant Organisation']
+    )
+
+    // Open Application URL in a new tab within the D365 browser context
+    const appPage = await d365Page.context().newPage()
+    await appPage.goto(applicationUrl, { waitUntil: 'load' })
+
+    const expectedStatus = expectedDetails['Application Status']
+    const statusValue = appPage.locator(
+      '//dt[contains(text(), "Status")]/following-sibling::dd'
+    )
+    await expect(statusValue).toContainText(expectedStatus, { timeout: 30_000 })
+
+    const withdrawnDate = appPage.locator(
+      '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
+    )
+    await expect(withdrawnDate).toContainText(
+      format(new Date(), 'd MMMM yyyy'),
+      { timeout: 30_000 }
+    )
+  } finally {
+    await d365Browser.close()
+  }
+})
