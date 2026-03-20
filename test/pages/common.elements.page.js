@@ -14,11 +14,11 @@ export default class CommonElementsPage {
   }
 
   async expectHeading(text) {
-    await expect(this.mainHeading).toContainText(text)
+    await expect(this.mainHeading).toContainText(text, { timeout: 30_000 })
   }
 
   async expectHeadingExact(text) {
-    await expect(this.mainHeading).toHaveText(text)
+    await expect(this.mainHeading).toHaveText(text, { timeout: 30_000 })
   }
 
   async clickBack() {

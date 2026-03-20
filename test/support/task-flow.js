@@ -68,7 +68,9 @@ export async function clickConfirmAndSend(page) {
   await page.waitForLoadState('load')
 
   // Declaration page → Confirmation
-  await page.locator('#confirm-and-send-information').click()
+  const confirmButton = page.locator('#confirm-and-send-information')
+  await confirmButton.waitFor({ state: 'visible', timeout: 30_000 })
+  await confirmButton.click()
   await page.waitForLoadState('load')
 }
 

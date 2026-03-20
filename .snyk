@@ -1,9 +1,0 @@
-version: v1.25.0
-
-# Temporary policy to unblock CI.
-# Upstream package has no fix/patch available per Snyk report.
-ignore:
-  SNYK-JS-INFLIGHT-6095116:
-    - '*':
-        reason: 'No upgrade or patch available for inflight@1.0.6 in transitive deps (glob@7/8). CI unblock.'
-        expires: '2026-04-01T00:00:00.000Z'
