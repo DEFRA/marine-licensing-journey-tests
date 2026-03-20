@@ -29,10 +29,10 @@ Given(
     await selectFileType(this.page, 'KML')
 
     // Cancel / go back to task list
-    await this.page.goBack()
-    await this.page.goBack()
-    await this.page.goBack()
-    await this.page.goBack()
+    await this.page.goBack({ waitUntil: 'load' })
+    await this.page.goBack({ waitUntil: 'load' })
+    await this.page.goBack({ waitUntil: 'load' })
+    await this.page.goBack({ waitUntil: 'load' })
   }
 )
 
