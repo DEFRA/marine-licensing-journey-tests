@@ -67,6 +67,17 @@ export const github = {
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
+export const exemption = {
+  ...common,
+  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
+  tags: 'not @lcml and not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+}
+
+export const lcml = {
+  ...common,
+  paths: ['test/features/lcml.*.feature']
+}
+
 export const cdp = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '5', 10),
