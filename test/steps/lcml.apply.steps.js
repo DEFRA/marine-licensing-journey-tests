@@ -28,9 +28,7 @@ async function confirmUserType(page, confirmRadioId) {
   try {
     await radio.waitFor({ state: 'visible', timeout: 10_000 })
     await radio.click()
-    await page
-      .locator('button[type="submit"]:not([name="analytics"])')
-      .click()
+    await page.locator('button[type="submit"]:not([name="analytics"])').click()
     await page.waitForLoadState('load')
   } catch {
     // Not on confirm page — skip
@@ -72,9 +70,9 @@ async function loginAndStartApplication(world, role) {
 }
 
 async function completeSpecialLegalPowers(page, answer) {
-  await expect(
-    page.locator('h2:has-text("Other permissions")')
-  ).toBeVisible({ timeout: 30_000 })
+  await expect(page.locator('h2:has-text("Other permissions")')).toBeVisible({
+    timeout: 30_000
+  })
 
   await page.locator('a:has-text("Special legal powers")').click()
   await page.waitForLoadState('load')
