@@ -75,7 +75,8 @@ export const exemption = {
 
 export const lcml = {
   ...common,
-  paths: ['test/features/lcml.*.feature']
+  paths: ['test/features/lcml.*.feature'],
+  tags: 'not @wip'
 }
 
 export const cdp = {
