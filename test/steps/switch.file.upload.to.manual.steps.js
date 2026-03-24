@@ -28,7 +28,7 @@ Given(
     await selectProvideMethod(this.page, 'file-upload')
     await selectFileType(this.page, 'KML')
 
-    // Go back through the 4 pages to return to the task list
+    // Cancel / go back to task list
     await this.page.goBack({ waitUntil: 'load' })
     await this.page.goBack({ waitUntil: 'load' })
     await this.page.goBack({ waitUntil: 'load' })

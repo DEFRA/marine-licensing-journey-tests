@@ -17,6 +17,10 @@ export default class ConfirmationPage {
   }
 
   async getApplicationReference() {
+    await this.applicationReference.waitFor({
+      state: 'visible',
+      timeout: 30_000
+    })
     return (await this.applicationReference.textContent()).trim()
   }
 
