@@ -28,7 +28,9 @@ async function confirmUserType(page, confirmRadioId) {
   try {
     await radio.waitFor({ state: 'visible', timeout: 10_000 })
     await radio.click()
-    await page.locator('button[type="submit"]:not([name="analytics"])').click()
+    await page
+      .locator('button[type="submit"]:not([name="analytics"])')
+      .click()
     await page.waitForLoadState('load')
   } catch {
     // Not on confirm page — skip
@@ -57,27 +59,56 @@ async function loginAndStartApplication(world, role) {
   await acceptCookies(world.page)
   await confirmUserType(world.page, userConfig.confirmRadioId)
 
+  // Click "Apply for a marine licence" on home page
   await world.page
     .getByRole('link', { name: 'Apply for a marine licence' })
     .click()
   await world.page.waitForLoadState('load')
 
+  // Enter project name
   await world.page.locator('#projectName').fill(projectName)
   await world.page.locator('button:has-text("Save and continue")').click()
   await world.page.waitForLoadState('load')
 }
 
+async function completeSpecialLegalPowers(page, answer) {
+  await expect(
+    page.locator('h2:has-text("Other permissions")')
+  ).toBeVisible({ timeout: 30_000 })
+
+  await page.locator('a:has-text("Special legal powers")').click()
+  await page.waitForLoadState('load')
+
+  if (answer === 'Yes') {
+    await page.locator('#agree').click()
+    await page
+      .locator('#details')
+      .fill('Harbour authority powers under the Harbours Act 1964')
+  } else {
+    await page.locator('#agree-2').click()
+  }
+
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+
+  await expect(
+    page.locator('#other-permissions-task-list-1-status')
+  ).toContainText('Completed', { timeout: 30_000 })
+}
+
 Given(
-  'an organisation user has started a marine licence application',
-  async function () {
+  'an organisation user has started a marine licence application and completed special legal powers with {string}',
+  async function (answer) {
     await loginAndStartApplication(this, 'organisation')
+    await completeSpecialLegalPowers(this.page, answer)
   }
 )
 
 Given(
-  'an intermediary user has started a marine licence application',
-  async function () {
+  'an intermediary user has started a marine licence application and completed special legal powers with {string}',
+  async function (answer) {
     await loginAndStartApplication(this, 'intermediary')
+    await completeSpecialLegalPowers(this.page, answer)
   }
 )
 
@@ -85,21 +116,28 @@ Given(
   'an individual user has started a marine licence application',
   async function () {
     await loginAndStartApplication(this, 'individual')
+
+    await expect(
+      this.page.locator('h2:has-text("Other permissions")')
+    ).not.toBeVisible()
   }
 )
 
-When('the user submits the marine licence application', async function () {
-  await this.page.locator('#review-and-send').click()
-  await this.page.waitForLoadState('load')
+When(
+  'the user submits the marine licence application from the task list',
+  async function () {
+    await this.page.locator('#review-and-send').click()
+    await this.page.waitForLoadState('load')
 
-  await this.page.locator('button:has-text("Continue")').click()
-  await this.page.waitForLoadState('load')
+    await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
 
-  await this.page
-    .locator('button:has-text("Confirm and send information")')
-    .click()
-  await this.page.waitForLoadState('load')
-})
+    await this.page
+      .locator('button:has-text("Confirm and send information")')
+      .click()
+    await this.page.waitForLoadState('load')
+  }
+)
 
 Then(
   'the confirmation page is displayed with a marine licence reference',
