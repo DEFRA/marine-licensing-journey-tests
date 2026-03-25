@@ -16,7 +16,6 @@ Feature: LCML: Apply for a marine licence
     Then the confirmation page is displayed with a marine licence reference
     And the submitted marine licence application is displayed on the projects page
 
-  @wip
   Scenario: Individual user can submit a marine licence application without special legal powers
     Given an individual user has started a marine licence application
     When the user submits the marine licence application from the task list
