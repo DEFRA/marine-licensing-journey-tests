@@ -281,15 +281,17 @@ runs:
         echo ""
 
         jq -r '
-          [.[].elements[] |
+          [.[] | .name as $feature | .elements[] |
             select(.steps | any(.result.status == "failed")) |
             {
-              name: .name,
-              error: [.steps[] | select(.result.status == "failed") | .result.error_message] | first
+              feature: $feature,
+              scenario: .name,
+              step: ([.steps[] | select(.result.status == "failed") | .keyword + .name] | first),
+              error: ([.steps[] | select(.result.status == "failed") | .result.error_message] | first | split("\n")[0:3] | join("\n"))
             }
           ] |
           to_entries[] |
-          "  \(.key + 1)) \(.value.name)\n     \(.value.error | split("\n") | first)\n"
+          "  \(.key + 1)) Feature: \(.value.feature)\n     Scenario: \(.value.scenario)\n     Step: \(.value.step)\n     \(.value.error)\n"
         ' cucumber-results.json 2>/dev/null || echo "  Could not parse failure details"
 
         echo ""
