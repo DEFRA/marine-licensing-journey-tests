@@ -23,18 +23,6 @@ const USER_TYPE_CONFIG = {
   }
 }
 
-async function confirmUserType(page, confirmRadioId) {
-  const radio = page.locator(confirmRadioId)
-  try {
-    await radio.waitFor({ state: 'visible', timeout: 10_000 })
-    await radio.click()
-    await page.locator('button[type="submit"]:not([name="analytics"])').click()
-    await page.waitForLoadState('load')
-  } catch {
-    // Not on confirm page — skip
-  }
-}
-
 async function loginAndStartApplication(world, role) {
   const config = getConfig()
   const userConfig = USER_TYPE_CONFIG[role]
@@ -55,7 +43,13 @@ async function loginAndStartApplication(world, role) {
   }
 
   await acceptCookies(world.page)
-  await confirmUserType(world.page, userConfig.confirmRadioId)
+
+  // Confirm user type if on confirm page
+  if (world.page.url().includes('/confirm-')) {
+    await world.page.locator(userConfig.confirmRadioId).click()
+    await world.page.locator('button[type="submit"]').click()
+    await world.page.waitForLoadState('load')
+  }
 
   // Click "Apply for a marine licence" on home page
   await world.page

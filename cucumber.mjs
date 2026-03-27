@@ -59,7 +59,6 @@ export const github = {
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
   format: [
     './test/support/progress-formatter.js',
-    'summary',
     'html:cucumber-report.html',
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'

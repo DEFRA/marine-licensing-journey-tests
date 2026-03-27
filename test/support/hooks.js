@@ -57,6 +57,16 @@ After(async function (scenario) {
     `${status === 'FAIL' ? '✗' : '✓'} ${status}: ${scenario.pickle.name} (${duration}s)`
   )
 
+  if (scenario.result?.status === Status.FAILED && scenario.result?.message) {
+    const lines = scenario.result.message.split('\n')
+    const errorMessage = lines[0] || 'Unknown error'
+    const location = lines.find((l) => l.trim().startsWith('at ')) || ''
+    console.log(`    Error: ${errorMessage}`)
+    if (location) {
+      console.log(`    ${location.trim()}`)
+    }
+  }
+
   if (
     scenario.result?.status === Status.FAILED &&
     this.page &&
