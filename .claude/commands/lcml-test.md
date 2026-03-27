@@ -47,26 +47,30 @@ Task list → "Site details" link
 
 ## User Types
 
-| Role           | `userType`  | Confirm page radio   | Has SLP task |
-|----------------|-------------|----------------------|--------------|
-| Organisation   | `employee`  | `#confirmEmployee`   | Yes          |
-| Intermediary   | `agent`     | `#confirmAgent`      | Yes          |
-| Individual     | `individual`| `#confirmIndividual` | No           |
+| Role         | `userType`   | Confirm page radio   | Has SLP task |
+| ------------ | ------------ | -------------------- | ------------ |
+| Organisation | `employee`   | `#confirmEmployee`   | Yes          |
+| Intermediary | `agent`      | `#confirmAgent`      | Yes          |
+| Individual   | `individual` | `#confirmIndividual` | No           |
 
 ## Existing Helper Functions
 
 ### `loginAndStartApplication(world, role)` — in lcml.apply.steps.js
+
 Registers user → login → accept cookies → confirm user type (if on confirm page) → click "Apply for a marine licence" → enter project name → lands on task list.
 
 ### `loginAndReachTaskList(world)` — in lcml.site.details.steps.js
+
 Same as above but hardcoded to `employee` user type. Also completes special legal powers if present.
 
 ### `completeSpecialLegalPowers(page, answer)` — in lcml.apply.steps.js
+
 Clicks "Special legal powers" → selects Yes/No → saves → verifies "Completed" status.
 
 ## Existing Step Definitions
 
 ### lcml.apply.steps.js
+
 - `Given an organisation user has started a marine licence application and completed special legal powers with {string}`
 - `Given an intermediary user has started a marine licence application and completed special legal powers with {string}`
 - `Given an individual user has started a marine licence application`
@@ -75,6 +79,7 @@ Clicks "Special legal powers" → selects Yes/No → saves → verifies "Complet
 - `Then the submitted marine licence application is displayed on the projects page`
 
 ### lcml.site.details.steps.js
+
 - `Given an organisation user is on the site details page`
 - `Given an organisation user is on the provide coordinates page`
 - `Given an organisation user is on the choose file type page`
@@ -91,18 +96,18 @@ Clicks "Special legal powers" → selects Yes/No → saves → verifies "Complet
 
 ## Common Page Selectors
 
-| Element | Selector |
-|---------|----------|
-| Page heading | `h1` (use `.first()`) |
-| Project name caption | `.govuk-caption-l, .govuk-caption-m` |
-| Continue button | `button:has-text("Continue")` |
-| Continue link | `a.govuk-button:has-text("Continue")` |
-| Cancel link | `a:has-text("Cancel")` |
-| Back link | `a.govuk-back-link` |
-| Error summary | `.govuk-error-summary` |
-| Submit button | `button[type="submit"]` |
-| Review and send | `#review-and-send` |
-| Details/accordion | `details summary` |
+| Element              | Selector                              |
+| -------------------- | ------------------------------------- |
+| Page heading         | `h1` (use `.first()`)                 |
+| Project name caption | `.govuk-caption-l, .govuk-caption-m`  |
+| Continue button      | `button:has-text("Continue")`         |
+| Continue link        | `a.govuk-button:has-text("Continue")` |
+| Cancel link          | `a:has-text("Cancel")`                |
+| Back link            | `a.govuk-back-link`                   |
+| Error summary        | `.govuk-error-summary`                |
+| Submit button        | `button[type="submit"]`               |
+| Review and send      | `#review-and-send`                    |
+| Details/accordion    | `details summary`                     |
 
 ## Gherkin Rules (enforced by linter)
 
@@ -161,8 +166,9 @@ When('the user clicks Continue', async function () {
 
 // Then — asserts the outcome
 Then('the error {string} is displayed', async function (msg) {
-  await expect(this.page.locator('.govuk-error-summary'))
-    .toContainText(msg, { timeout: 30_000 })
+  await expect(this.page.locator('.govuk-error-summary')).toContainText(msg, {
+    timeout: 30_000
+  })
 })
 ```
 

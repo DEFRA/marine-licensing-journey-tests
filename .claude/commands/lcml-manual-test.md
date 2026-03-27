@@ -75,23 +75,24 @@ Use **Playwright MCP** tools to interact with the browser. This is your primary 
 
 ## LCML Page Flow Reference
 
-| Page | URL | Key Elements |
-|------|-----|-------------|
-| Home | `/home` | "Apply for a marine licence" link |
-| Project name | `/marine-licence/project-name` | `#projectName` input, "Save and continue" button |
-| Task list | `/marine-licence/task-list` | Task links, "Review and send" button (`#review-and-send`) |
-| Site details intro | `/marine-licence/site-details` | Continue link, Cancel, Back, project name caption |
-| Provide coordinates | `/marine-licence/how-do-you-want-to-provide-the-coordinates` | Radio: `#coordinatesType` (file upload), `#coordinatesType-2` (manual) |
-| Choose file type | `/marine-licence/choose-file-type-to-upload` | Radio: `#fileUploadType` (Shapefile), `#fileUploadType-2` (KML), "Help with file types" details |
-| Special legal powers | `/marine-licence/special-legal-powers` | Radio: `#agree` (Yes), `#agree-2` (No), `#details` textarea (conditional) |
-| Check your answers | `/marine-licence/check-your-answers` | Summary cards, "Continue" button |
-| Declaration | `/declaration` | "Confirm and send information" button (`#confirm-and-send-information`) |
-| Confirmation | `/marine-licence/confirmation` | `.govuk-panel__title`, `.govuk-panel__body strong` (reference) |
-| Projects | `/projects` | Projects table with name, type, reference, status columns |
+| Page                 | URL                                                          | Key Elements                                                                                    |
+| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Home                 | `/home`                                                      | "Apply for a marine licence" link                                                               |
+| Project name         | `/marine-licence/project-name`                               | `#projectName` input, "Save and continue" button                                                |
+| Task list            | `/marine-licence/task-list`                                  | Task links, "Review and send" button (`#review-and-send`)                                       |
+| Site details intro   | `/marine-licence/site-details`                               | Continue link, Cancel, Back, project name caption                                               |
+| Provide coordinates  | `/marine-licence/how-do-you-want-to-provide-the-coordinates` | Radio: `#coordinatesType` (file upload), `#coordinatesType-2` (manual)                          |
+| Choose file type     | `/marine-licence/choose-file-type-to-upload`                 | Radio: `#fileUploadType` (Shapefile), `#fileUploadType-2` (KML), "Help with file types" details |
+| Special legal powers | `/marine-licence/special-legal-powers`                       | Radio: `#agree` (Yes), `#agree-2` (No), `#details` textarea (conditional)                       |
+| Check your answers   | `/marine-licence/check-your-answers`                         | Summary cards, "Continue" button                                                                |
+| Declaration          | `/declaration`                                               | "Confirm and send information" button (`#confirm-and-send-information`)                         |
+| Confirmation         | `/marine-licence/confirmation`                               | `.govuk-panel__title`, `.govuk-panel__body strong` (reference)                                  |
+| Projects             | `/projects`                                                  | Projects table with name, type, reference, status columns                                       |
 
 ## Common Validations to Check
 
 ### For every page:
+
 - Page heading (`h1`) matches expected text
 - Project name caption is displayed (`.govuk-caption-l` or `.govuk-caption-m`)
 - Back link is present and navigates correctly
@@ -99,12 +100,14 @@ Use **Playwright MCP** tools to interact with the browser. This is your primary 
 - Continue/Submit button is present
 
 ### For radio/form pages:
+
 - Submitting without selection shows error in `.govuk-error-summary`
 - Error message links to the correct field
 - Selected option is retained after validation error
 - Conditional content appears/hides based on selection
 
 ### For text inputs:
+
 - Empty submission shows required field error
 - Max length validation
 - Special characters handling
@@ -138,6 +141,7 @@ npm install --no-save docx
 ### Step 2: Create a generator script at `manual-test-evidence/generate-report.mjs`
 
 The script must:
+
 - Import from `docx`: `Document, Packer, Paragraph, TextRun, ImageRun, Table, TableRow, TableCell, HeadingLevel, AlignmentType, WidthType, BorderStyle, ShadingType`
 - Import `readFileSync, writeFileSync` from `fs` and `resolve, dirname` from `path`
 - For each AC, include:
@@ -163,8 +167,19 @@ npm uninstall docx
 
 ```javascript
 import {
-  Document, Packer, Paragraph, TextRun, ImageRun, Table, TableRow, TableCell,
-  HeadingLevel, AlignmentType, WidthType, BorderStyle, ShadingType
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  ImageRun,
+  Table,
+  TableRow,
+  TableCell,
+  HeadingLevel,
+  AlignmentType,
+  WidthType,
+  BorderStyle,
+  ShadingType
 } from 'docx'
 import { readFileSync, writeFileSync } from 'fs'
 import { resolve, dirname } from 'path'
@@ -175,32 +190,54 @@ const img = (name) => readFileSync(resolve(__dirname, name))
 
 // Helper functions
 function heading(text, level = HeadingLevel.HEADING_1) {
-  return new Paragraph({ heading: level, children: [new TextRun({ text, bold: true })] })
+  return new Paragraph({
+    heading: level,
+    children: [new TextRun({ text, bold: true })]
+  })
 }
 function para(text, opts = {}) {
-  return new Paragraph({ children: [new TextRun({ text, ...opts })], spacing: { after: 120 } })
+  return new Paragraph({
+    children: [new TextRun({ text, ...opts })],
+    spacing: { after: 120 }
+  })
 }
 function boldPara(label, value) {
   return new Paragraph({
-    children: [new TextRun({ text: label, bold: true }), new TextRun({ text: value })],
+    children: [
+      new TextRun({ text: label, bold: true }),
+      new TextRun({ text: value })
+    ],
     spacing: { after: 80 }
   })
 }
 function statusPara(status) {
   const color = status === 'PASS' ? '008000' : 'CC0000'
   return new Paragraph({
-    children: [new TextRun({ text: 'Status: ', bold: true }), new TextRun({ text: status, bold: true, color })],
+    children: [
+      new TextRun({ text: 'Status: ', bold: true }),
+      new TextRun({ text: status, bold: true, color })
+    ],
     spacing: { after: 120 }
   })
 }
 function screenshot(filename) {
   return new Paragraph({
-    children: [new ImageRun({ data: img(filename), transformation: { width: 580, height: 420 }, type: 'png' })],
+    children: [
+      new ImageRun({
+        data: img(filename),
+        transformation: { width: 580, height: 420 },
+        type: 'png'
+      })
+    ],
     spacing: { after: 200 }
   })
 }
 function bullet(text) {
-  return new Paragraph({ children: [new TextRun({ text })], bullet: { level: 0 }, spacing: { after: 60 } })
+  return new Paragraph({
+    children: [new TextRun({ text })],
+    bullet: { level: 0 },
+    spacing: { after: 60 }
+  })
 }
 function separator() {
   return new Paragraph({
@@ -211,7 +248,15 @@ function separator() {
 }
 
 // Build document sections dynamically based on AC results, then:
-const doc = new Document({ sections: [{ children: [/* ... all paragraphs ... */] }] })
+const doc = new Document({
+  sections: [
+    {
+      children: [
+        /* ... all paragraphs ... */
+      ]
+    }
+  ]
+})
 const buffer = await Packer.toBuffer(doc)
 writeFileSync(resolve(__dirname, 'test-report.docx'), buffer)
 ```
