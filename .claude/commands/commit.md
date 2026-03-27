@@ -44,17 +44,20 @@ Create a well-formatted git commit for the marine licensing journey tests projec
    - Do NOT add `Co-Authored-By` lines
    - Use active voice ("Add", "Fix", "Update", "Remove")
 
-6. **Create the commit** using a HEREDOC:
+6. **Stage, commit and push** in a single chained command:
 
    ```bash
-   git commit -m "$(cat <<'EOF'
+   git add <specific files> && git commit -m "$(cat <<'EOF'
    ML-XXXX Short summary
 
    - Description of change 1
    - Description of change 2
    EOF
-   )"
+   )" && git push
    ```
+
+   - If the branch has no upstream, use `git push -u origin <branch-name>` instead
+   - If push is rejected (remote has new commits), run `git pull --rebase && git push`
 
 7. **Verify** with `git log --oneline -1`
 

@@ -13,7 +13,7 @@ Feature: LCML: Site details journey
   Scenario: Provide coordinates page validates selection and displays error
     Given an organisation user is on the provide coordinates page
     When the user clicks Continue without selecting an option
-    Then the error "INTENTIONAL FAILURE 1" is displayed
+    Then the error "Select how you want to provide the site location" is displayed
 
   Scenario: User selects file upload and navigates to choose file type page
     Given an organisation user is on the provide coordinates page
@@ -26,4 +26,4 @@ Feature: LCML: Site details journey
   Scenario: Choose file type page validates selection and displays error
     Given an organisation user is on the choose file type page
     When the user clicks Continue without selecting an option
-    Then the error "INTENTIONAL FAILURE 2" is displayed
+    Then the error "Select which type of file you want to upload" is displayed
