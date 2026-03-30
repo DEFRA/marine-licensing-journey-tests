@@ -2,33 +2,33 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   loginAndStartApplication,
-  completeSpecialLegalPowers
+  completeSpecialLegalPowers,
+  completeOtherAuthorities
 } from '../support/lcml-helpers.js'
 
 Given(
-  'an organisation user has started a marine licence application and completed special legal powers with {string}',
-  async function (answer) {
+  'an organisation user has completed other permissions with special legal powers {string} and other authorities {string}',
+  async function (slpAnswer, oaAnswer) {
     await loginAndStartApplication(this, 'organisation')
-    await completeSpecialLegalPowers(this.page, answer)
+    await completeSpecialLegalPowers(this.page, slpAnswer)
+    await completeOtherAuthorities(this.page, oaAnswer)
   }
 )
 
 Given(
-  'an intermediary user has started a marine licence application and completed special legal powers with {string}',
-  async function (answer) {
+  'an intermediary user has completed other permissions with special legal powers {string} and other authorities {string}',
+  async function (slpAnswer, oaAnswer) {
     await loginAndStartApplication(this, 'intermediary')
-    await completeSpecialLegalPowers(this.page, answer)
+    await completeSpecialLegalPowers(this.page, slpAnswer)
+    await completeOtherAuthorities(this.page, oaAnswer)
   }
 )
 
 Given(
-  'an individual user has started a marine licence application',
-  async function () {
+  'an individual user has completed other permissions with other authorities {string}',
+  async function (oaAnswer) {
     await loginAndStartApplication(this, 'individual')
-
-    await expect(
-      this.page.locator('h2:has-text("Other permissions")')
-    ).not.toBeVisible()
+    await completeOtherAuthorities(this.page, oaAnswer)
   }
 )
 
