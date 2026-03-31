@@ -68,9 +68,7 @@ export async function completeSpecialLegalPowers(page, answer) {
 
   if (answer === 'Yes') {
     await page.locator('#agree').click()
-    await page
-      .locator('#details')
-      .fill(faker.lorem.sentence())
+    await page.locator('#details').fill(faker.lorem.sentence())
   } else {
     await page.locator('#agree-2').click()
   }
