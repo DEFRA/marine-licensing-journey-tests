@@ -15,3 +15,4 @@ FAILED
 .cursor/mcp.json
 .cursor/rules/*.mdc
 .claude/settings.local.json
+manual-test-evidence/

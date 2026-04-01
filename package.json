@@ -25,6 +25,8 @@
     "report:publish": "npm run report; ./bin/publish-tests.sh",
     "knip": "knip",
     "test": "cucumber-js --config cucumber.mjs --format summary",
+    "test:exemption": "cucumber-js --config cucumber.mjs --profile exemption --format summary",
+    "test:lcml": "cucumber-js --config cucumber.mjs --profile lcml --format summary",
     "test:smoke": "cucumber-js --config cucumber.mjs --profile smoke --format summary",
     "test:github": "cucumber-js --config cucumber.mjs --profile github",
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp"

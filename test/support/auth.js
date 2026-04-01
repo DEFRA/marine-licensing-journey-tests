@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { v4 as uuidv4 } from 'uuid'
 
-export async function registerTestUser(stubUrl) {
-  const userData = createUserData()
+export async function registerTestUser(stubUrl, options = {}) {
+  const userData = createUserData(options)
   let lastError
 
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -139,8 +139,31 @@ export async function acceptCookies(page) {
   }
 }
 
-function createUserData() {
+const USER_TYPES = {
+  individual: () => [],
+  employee: (orgName) => [
+    {
+      organisationName: orgName || faker.company.name(),
+      relationshipRole: 'Employee',
+      roleName: 'Some role',
+      roleStatus: '1'
+    }
+  ],
+  agent: (orgName) => [
+    {
+      organisationName: orgName || faker.company.name(),
+      relationshipRole: 'Agent',
+      roleName: 'Some Agentic Role',
+      roleStatus: '1'
+    }
+  ]
+}
+
+function createUserData(options = {}) {
   const userId = uuidv4()
+  const userType = options.userType || 'employee'
+  const createRelationships = USER_TYPES[userType]
+
   return {
     userId,
     email: `${userId}@example.com`,
@@ -150,13 +173,6 @@ function createUserData() {
     aal: '1',
     enrolmentCount: 1,
     enrolmentRequestCount: 1,
-    relationships: [
-      {
-        organisationName: faker.company.name(),
-        relationshipRole: 'Employee',
-        roleName: 'Some role',
-        roleStatus: '1'
-      }
-    ]
+    relationships: createRelationships(options.organisationName)
   }
 }

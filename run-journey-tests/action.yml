@@ -264,6 +264,38 @@ runs:
         echo "=== Running Playwright tests ==="
         npm run test:github
 
+    - name: Print failure summary
+      if: always() && steps.run-tests.outcome == 'failure'
+      shell: bash
+      working-directory: ./marine-licensing-journey-tests
+      run: |
+        if [ ! -f "cucumber-results.json" ]; then
+          echo "No cucumber-results.json found"
+          exit 0
+        fi
+
+        echo ""
+        echo "================================================================================"
+        echo "FAILURE SUMMARY"
+        echo "================================================================================"
+        echo ""
+
+        jq -r '
+          [.[] | .name as $feature | .elements[] |
+            select(.steps | any(.result.status == "failed")) |
+            {
+              feature: $feature,
+              scenario: .name,
+              step: ([.steps[] | select(.result.status == "failed") | .keyword + .name] | first),
+              error: ([.steps[] | select(.result.status == "failed") | .result.error_message] | first | split("\n")[0:3] | join("\n"))
+            }
+          ] |
+          to_entries[] |
+          "  \(.key + 1)) Feature: \(.value.feature)\n     Scenario: \(.value.scenario)\n     Step: \(.value.step)\n     \(.value.error)\n"
+        ' cucumber-results.json 2>/dev/null || echo "  Could not parse failure details"
+
+        echo ""
+
     - name: debug
       if: always()
       working-directory: ./marine-licensing-journey-tests
