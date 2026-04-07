@@ -80,3 +80,20 @@ export async function completeSpecialLegalPowers(page, answer) {
     page.locator('#other-permissions-task-list-1-status')
   ).toContainText('Completed', { timeout: 30_000 })
 }
+
+export async function completeOtherAuthorities(page, answer) {
+  await page.locator('a:has-text("Other authorities")').click()
+  await page.waitForLoadState('load')
+
+  if (answer === 'Yes') {
+    await page.getByRole('radio', { name: 'Yes' }).click()
+    await page
+      .getByRole('textbox', { name: 'Provide details' })
+      .fill(faker.lorem.sentence())
+  } else {
+    await page.getByRole('radio', { name: 'No' }).click()
+  }
+
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
