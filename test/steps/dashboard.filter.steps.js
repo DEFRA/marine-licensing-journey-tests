@@ -181,6 +181,7 @@ Then('the case status in D365 matches', async function (dataTable) {
 
   // Launch a separate browser for D365
   const { browser: d365Browser, page: d365Page } = await launchD365Browser()
+  let appPage
 
   try {
     await loginToD365(d365Page)
@@ -195,7 +196,7 @@ Then('the case status in D365 matches', async function (dataTable) {
     )
 
     // Open Application URL in a new tab within the D365 browser context
-    const appPage = await d365Page.context().newPage()
+    appPage = await d365Page.context().newPage()
     await appPage.goto(applicationUrl, { waitUntil: 'load' })
 
     const expectedStatus = expectedDetails['Application Status']
@@ -211,6 +212,19 @@ Then('the case status in D365 matches', async function (dataTable) {
       format(new Date(), 'd MMMM yyyy'),
       { timeout: 30_000 }
     )
+  } catch (err) {
+  
+    if (d365Page && !d365Page.isClosed()) {
+      const screenshot = await d365Page.screenshot({ fullPage: true })
+      this.attach(screenshot, 'image/png')
+      this.attach(`D365 failure URL: ${d365Page.url()}`, 'text/plain')
+    }
+    if (appPage && !appPage.isClosed()) {
+      const appScreenshot = await appPage.screenshot({ fullPage: true })
+      this.attach(appScreenshot, 'image/png')
+      this.attach(`D365 application page URL: ${appPage.url()}`, 'text/plain')
+    }
+    throw err
   } finally {
     await d365Browser.close()
   }

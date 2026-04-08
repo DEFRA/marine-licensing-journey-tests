@@ -3,31 +3,35 @@ import { expect } from '@playwright/test'
 import {
   loginAndStartApplication,
   completeSpecialLegalPowers,
-  completeOtherAuthorities
+  completeOtherAuthorities,
+  completeSiteDetailsViaFileUpload
 } from '../support/lcml-helpers.js'
 
 Given(
-  'an organisation user has completed other permissions with special legal powers {string} and other authorities {string}',
+  'an organisation user has completed all tasks with special legal powers {string} and other authorities {string}',
   async function (slpAnswer, oaAnswer) {
     await loginAndStartApplication(this, 'organisation')
+    await completeSiteDetailsViaFileUpload(this, 'KML')
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
   }
 )
 
 Given(
-  'an intermediary user has completed other permissions with special legal powers {string} and other authorities {string}',
+  'an intermediary user has completed all tasks with special legal powers {string} and other authorities {string}',
   async function (slpAnswer, oaAnswer) {
     await loginAndStartApplication(this, 'intermediary')
+    await completeSiteDetailsViaFileUpload(this, 'Shapefile')
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
   }
 )
 
 Given(
-  'an individual user has completed other permissions with other authorities {string}',
+  'an individual user has completed all tasks with other authorities {string}',
   async function (oaAnswer) {
     await loginAndStartApplication(this, 'individual')
+    await completeSiteDetailsViaFileUpload(this, 'KML')
     await completeOtherAuthorities(this.page, oaAnswer)
   }
 )

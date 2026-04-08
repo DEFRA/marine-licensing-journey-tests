@@ -2,6 +2,17 @@ import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import { getConfig } from './config.js'
 import { registerTestUser, loginAsTestUser, acceptCookies } from './auth.js'
+import {
+  continueFromBeforeYouStart,
+  selectProvideMethod,
+  selectFileType,
+  uploadFile
+} from './site-details-flow.js'
+
+const SAMPLE_FILES = {
+  KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
+  Shapefile: 'test/resources/valid-shapefile.zip'
+}
 
 const USER_TYPE_CONFIG = {
   organisation: {
@@ -96,4 +107,44 @@ export async function completeOtherAuthorities(page, answer) {
 
   await page.locator('button:has-text("Save and continue")').click()
   await page.waitForLoadState('load')
+}
+
+export async function loginAndReachTaskList(world, role = 'organisation') {
+  await loginAndStartApplication(world, role)
+  await completeSpecialLegalPowers(world.page, 'No')
+}
+
+export async function loginAndNavigateToUploadPage(world, fileType) {
+  await loginAndReachTaskList(world)
+  await navigateToUploadPage(world, fileType)
+}
+
+export async function navigateToUploadPage(world, fileType) {
+  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.waitForLoadState('load')
+  await continueFromBeforeYouStart(world.page)
+  await world.page.waitForLoadState('load')
+  await selectProvideMethod(world.page, 'file-upload')
+  await world.page.waitForLoadState('load')
+  await selectFileType(world.page, fileType)
+  await world.page.waitForLoadState('load')
+}
+
+export async function uploadFileAndWaitForReviewPage(world, fileType) {
+  await uploadFile(world.page, SAMPLE_FILES[fileType])
+  await world.page.waitForLoadState('load')
+  // Spinner page redirects to review site details once upload completes
+  await world.page.waitForURL(
+    (url) => !url.toString().includes('upload-and-wait'),
+    { timeout: 60_000 }
+  )
+  await world.page.waitForLoadState('load')
+}
+
+export async function completeSiteDetailsViaFileUpload(world, fileType = 'KML') {
+  await navigateToUploadPage(world, fileType)
+  await uploadFileAndWaitForReviewPage(world, fileType)
+  // Continue from review page → back to task list
+  await world.page.locator('button:has-text("Continue")').click()
+  await world.page.waitForLoadState('load')
 }

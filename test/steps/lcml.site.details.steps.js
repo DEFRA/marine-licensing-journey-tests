@@ -1,20 +1,37 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
-  loginAndStartApplication,
-  completeSpecialLegalPowers
+  loginAndReachTaskList,
+  loginAndNavigateToUploadPage,
+  uploadFileAndWaitForReviewPage
 } from '../support/lcml-helpers.js'
-
-async function loginAndReachTaskList(world) {
-  await loginAndStartApplication(world, 'organisation')
-  await completeSpecialLegalPowers(world.page, 'No')
-}
+import {
+  continueFromBeforeYouStart,
+  selectProvideMethod
+} from '../support/site-details-flow.js'
+import TaskListPage from '../pages/task.list.page.js'
 
 Given('an organisation user is on the site details page', async function () {
   await loginAndReachTaskList(this)
   await this.page.locator('a:has-text("Site details")').click()
   await this.page.waitForLoadState('load')
 })
+
+Given(
+  'an organisation user is on the upload file page for {string}',
+  async function (fileType) {
+    await loginAndNavigateToUploadPage(this, fileType)
+  }
+)
+
+Given(
+  'an organisation user has uploaded a valid {string} file and is on the review site details page',
+  async function (fileType) {
+    await loginAndNavigateToUploadPage(this, fileType)
+    await uploadFileAndWaitForReviewPage(this, fileType)
+  }
+)
+
 
 When(
   'the user navigates through site details to the choose file type page',
@@ -26,12 +43,33 @@ When(
         timeout: 30_000
       }
     )
-    // Navigate to provide coordinates page
-    await this.page.locator('a.govuk-button:has-text("Continue")').click()
+    await continueFromBeforeYouStart(this.page)
     await this.page.waitForLoadState('load')
-    // Select file upload and continue
-    await this.page.locator('#coordinatesType').click()
+    await selectProvideMethod(this.page, 'file-upload')
+    await this.page.waitForLoadState('load')
+  }
+)
+
+When(
+  'the user uploads a valid {string} file and saves',
+  async function (fileType) {
+    await uploadFileAndWaitForReviewPage(this, fileType)
+  }
+)
+
+When(
+  'the user continues to the task list and re-enters the site details task',
+  async function () {
+    // Continue from review page → task list
     await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
+
+    // Verify task is shown as In Progress on the task list (AC5)
+    const taskList = new TaskListPage(this.page)
+    await taskList.expectTaskStatus('Site details', 'In Progress')
+
+    // Re-enter the site details task (AC6)
+    await taskList.selectTask('Site details')
     await this.page.waitForLoadState('load')
   }
 )
@@ -48,3 +86,26 @@ Then(
     ).toContainText(this.data.projectName, { timeout: 30_000 })
   }
 )
+
+Then(
+  'the review site details page is displayed for the uploaded site',
+  async function () {
+    await expect(this.page.locator('h1').first()).toContainText(
+      'Review site details',
+      { timeout: 30_000 }
+    )
+    await expect(
+      this.page.locator('.govuk-caption-l, .govuk-caption-m').first()
+    ).toContainText(this.data.projectName, { timeout: 30_000 })
+    // Providing the site location card
+    await expect(this.page.locator('#site-location-card')).toContainText(
+      'File uploaded',
+      { timeout: 30_000 }
+    )
+    // Site 1 card with Incomplete site name tag
+    const site1Card = this.page.locator('#site-details-1')
+    await expect(site1Card).toBeVisible({ timeout: 30_000 })
+    await expect(site1Card).toContainText('Incomplete')
+  }
+)
+
