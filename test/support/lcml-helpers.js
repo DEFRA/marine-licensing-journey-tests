@@ -141,7 +141,10 @@ export async function uploadFileAndWaitForReviewPage(world, fileType) {
   await world.page.waitForLoadState('load')
 }
 
-export async function completeSiteDetailsViaFileUpload(world, fileType = 'KML') {
+export async function completeSiteDetailsViaFileUpload(
+  world,
+  fileType = 'KML'
+) {
   await navigateToUploadPage(world, fileType)
   await uploadFileAndWaitForReviewPage(world, fileType)
   // Continue from review page → back to task list

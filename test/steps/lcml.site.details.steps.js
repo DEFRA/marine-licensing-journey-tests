@@ -32,7 +32,6 @@ Given(
   }
 )
 
-
 When(
   'the user navigates through site details to the choose file type page',
   async function () {
@@ -108,4 +107,3 @@ Then(
     await expect(site1Card).toContainText('Incomplete')
   }
 )
-

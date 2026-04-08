@@ -213,7 +213,6 @@ Then('the case status in D365 matches', async function (dataTable) {
       { timeout: 30_000 }
     )
   } catch (err) {
-  
     if (d365Page && !d365Page.isClosed()) {
       const screenshot = await d365Page.screenshot({ fullPage: true })
       this.attach(screenshot, 'image/png')

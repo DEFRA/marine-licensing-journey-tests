@@ -76,6 +76,7 @@ Task list → "Site details" link
 These work for **both** exemption and LCML journeys because the pages share the same selectors. Reuse them instead of writing your own:
 
 **Generic page actions:**
+
 - `continueFromBeforeYouStart(page)` — clicks `a.govuk-button` (Continue link on intro page)
 - `selectProvideMethod(page, 'enter-manually' | 'file-upload')` — clicks `#coordinatesType` or `#coordinatesType-2`
 - `selectMoreThanOneSite(page, true | false)` — clicks `#multipleSitesEnabled` or `#multipleSitesEnabled-2`
@@ -84,10 +85,12 @@ These work for **both** exemption and LCML journeys because the pages share the 
 - `enterSiteName(page, name)` — fills `#siteName`
 
 **File upload page actions:**
+
 - `selectFileType(page, 'KML' | 'Shapefile')` — clicks `#fileUploadType` or `#fileUploadType-2`
 - `uploadFile(page, relativePath)` — sets file on `input[type="file"]` (works on hidden `#file-id-input` too)
 
 **Coordinate entry actions:**
+
 - `selectCoordinatesEntryMethod(page, 'circle' | 'polygon')`
 - `selectCoordinateSystem(page, 'WGS84' | 'OSGB36')`
 - `enterCentrePointWGS84(page, lat, lng)` / `enterCentrePointOSGB36(page, eastings, northings)`
@@ -95,6 +98,7 @@ These work for **both** exemption and LCML journeys because the pages share the 
 - `enterWidth(page, width)`
 
 **Full flow orchestrators (for exemption tests, can be referenced for LCML patterns):**
+
 - `completeSiteDetailsFlow(page, siteDetails)` — dispatcher that routes to single/multi-site, manual/file-upload flows based on `siteDetails.coordinatesEntryMethod` and `siteDetails.multipleSitesEnabled`
 
 ## Existing Step Definitions
@@ -163,14 +167,11 @@ import {
 } from '../support/site-details-flow.js'
 
 // LCML step that uses shared page actions
-When(
-  'the user uploads a valid {string} file',
-  async function (fileType) {
-    await selectFileType(this.page, fileType)
-    await uploadFile(this.page, SAMPLE_FILES[fileType])
-    await this.page.waitForLoadState('load')
-  }
-)
+When('the user uploads a valid {string} file', async function (fileType) {
+  await selectFileType(this.page, fileType)
+  await uploadFile(this.page, SAMPLE_FILES[fileType])
+  await this.page.waitForLoadState('load')
+})
 ```
 
 The only LCML-specific code should be the navigation TO the page (via `loginAndStartApplication` + LCML task list links). Once on a shared page, use the exemption helpers.
