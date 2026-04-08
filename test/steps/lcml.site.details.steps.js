@@ -59,15 +59,15 @@ When(
 When(
   'the user continues to the task list and re-enters the site details task',
   async function () {
-    // Continue from review page → task list
+   
     await this.page.locator('button:has-text("Continue")').click()
     await this.page.waitForLoadState('load')
 
-    // Verify task is shown as In Progress on the task list (AC5)
+    
     const taskList = new TaskListPage(this.page)
     await taskList.expectTaskStatus('Site details', 'In Progress')
 
-    // Re-enter the site details task (AC6)
+    
     await taskList.selectTask('Site details')
     await this.page.waitForLoadState('load')
   }
@@ -96,12 +96,12 @@ Then(
     await expect(
       this.page.locator('.govuk-caption-l, .govuk-caption-m').first()
     ).toContainText(this.data.projectName, { timeout: 30_000 })
-    // Providing the site location card
+    
     await expect(this.page.locator('#site-location-card')).toContainText(
       'File uploaded',
       { timeout: 30_000 }
     )
-    // Site 1 card with Incomplete site name tag
+   
     const site1Card = this.page.locator('#site-details-1')
     await expect(site1Card).toBeVisible({ timeout: 30_000 })
     await expect(site1Card).toContainText('Incomplete')
