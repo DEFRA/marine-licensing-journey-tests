@@ -191,11 +191,11 @@ Then('the case status in D365 matches', async function (dataTable) {
     await searchD365Case(d365Page, latestExemption.applicationReference)
     await verifyD365CaseDetails(d365Page, expectedDetails)
 
-    // Open case record, validate organisation and application status on form, get Application URL
-    const applicationUrl = await openD365CaseRecord(d365Page, {
-      applicantOrganisation: expectedDetails['Applicant Organisation'],
-      applicationStatus: expectedDetails['Application Status']
-    })
+    // Open case record, validate organisation, get Application URL
+    const applicationUrl = await openD365CaseRecord(
+      d365Page,
+      expectedDetails['Applicant Organisation']
+    )
 
     // Open Application URL in a new tab within the D365 browser context
     appPage = await d365Page.context().newPage()

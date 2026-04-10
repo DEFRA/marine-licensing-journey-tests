@@ -170,10 +170,7 @@ export async function verifyD365CaseDetails(page, expectedDetails) {
   throw lastError
 }
 
-export async function openD365CaseRecord(
-  page,
-  { applicantOrganisation, applicationStatus }
-) {
+export async function openD365CaseRecord(page, applicantOrganisation) {
   // Double-click the first grid row cell to open the case record
   const firstRowCell = page
     .locator('div[role="row"][row-index="0"] div[role="gridcell"]')
@@ -189,7 +186,6 @@ export async function openD365CaseRecord(
   await orgField.waitFor({ state: 'visible', timeout: 30_000 })
   const orgText = await orgField.innerText()
   expect(orgText.trim()).toBe(applicantOrganisation)
-
 
   // Get the Application URL
   const appUrlInput = page.locator(
