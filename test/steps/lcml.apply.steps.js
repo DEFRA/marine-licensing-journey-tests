@@ -4,35 +4,39 @@ import {
   loginAndStartApplication,
   completeSpecialLegalPowers,
   completeOtherAuthorities,
+  completeSharingConsent,
   completeSiteDetailsViaFileUpload
 } from '../support/lcml-helpers.js'
 
 Given(
-  'an organisation user has completed all tasks with special legal powers {string} and other authorities {string}',
-  async function (slpAnswer, oaAnswer) {
+  'an organisation user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
+  async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'organisation')
     await completeSiteDetailsViaFileUpload(this, 'KML')
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 
 Given(
-  'an intermediary user has completed all tasks with special legal powers {string} and other authorities {string}',
-  async function (slpAnswer, oaAnswer) {
+  'an intermediary user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
+  async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'intermediary')
     await completeSiteDetailsViaFileUpload(this, 'Shapefile')
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 
 Given(
-  'an individual user has completed all tasks with other authorities {string}',
-  async function (oaAnswer) {
+  'an individual user has completed all tasks with other authorities {string} and sharing consent {string}',
+  async function (oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'individual')
     await completeSiteDetailsViaFileUpload(this, 'KML')
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 

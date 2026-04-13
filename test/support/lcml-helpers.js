@@ -8,6 +8,7 @@ import {
   selectFileType,
   uploadFile
 } from './site-details-flow.js'
+import PublicRegisterPage from '../pages/public.register.page.js'
 
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
@@ -106,6 +107,20 @@ export async function completeOtherAuthorities(page, answer) {
   }
 
   await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeSharingConsent(page, answer) {
+  await page
+    .locator('a:has-text("Sharing your project information publicly")')
+    .first()
+    .click()
+  await page.waitForLoadState('load')
+
+  const publicRegister = new PublicRegisterPage(page)
+  const consent = answer === 'Yes'
+  const reason = consent ? undefined : faker.lorem.sentence()
+  await publicRegister.completeAndSave(consent, reason)
   await page.waitForLoadState('load')
 }
 
