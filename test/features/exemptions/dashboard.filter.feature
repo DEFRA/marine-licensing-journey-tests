@@ -34,6 +34,11 @@ Feature: Dashboard filter: Filter projects by ownership
 
   Scenario: Withdrawn notification shows correct status on dashboard and in D365
     Given a user has submitted an exemption notification
+    And the case status in D365 matches
+      | Reference number       | matches submitted reference number |
+      | D365 Status            | Completed                         |
+      | Application Status     | Active                             |
+      | Applicant Organisation | Windfarm Co                        |
     And the user navigates to the dashboard
     When the user withdraws the submitted notification
     Then the submitted notification row contains the correct details

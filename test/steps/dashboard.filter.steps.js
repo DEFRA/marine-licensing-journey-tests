@@ -134,7 +134,7 @@ When('the user withdraws the submitted notification', async function () {
     this.data.completedExemptions[this.data.completedExemptions.length - 1]
 
   // Wait for D365 to finish processing the submission before withdrawing
-  await this.page.waitForTimeout(30_000)
+  await this.page.waitForTimeout(10_000)
 
   const dashboard = new DashboardPage(this.page)
   await dashboard.withdrawLink(latestExemption.projectName).click()
@@ -186,6 +186,8 @@ Then('the case status in D365 matches', async function (dataTable) {
   try {
     await loginToD365(d365Page)
     await verifyD365Login(d365Page)
+    // Give D365 time to index the case before global search
+    await d365Page.waitForTimeout(10_000)
     await searchD365Case(d365Page, latestExemption.applicationReference)
     await verifyD365CaseDetails(d365Page, expectedDetails)
 
@@ -205,13 +207,15 @@ Then('the case status in D365 matches', async function (dataTable) {
     )
     await expect(statusValue).toContainText(expectedStatus, { timeout: 30_000 })
 
-    const withdrawnDate = appPage.locator(
-      '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
-    )
-    await expect(withdrawnDate).toContainText(
-      format(new Date(), 'd MMMM yyyy'),
-      { timeout: 30_000 }
-    )
+    if (expectedStatus === 'Withdrawn') {
+      const withdrawnDate = appPage.locator(
+        '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
+      )
+      await expect(withdrawnDate).toContainText(
+        format(new Date(), 'd MMMM yyyy'),
+        { timeout: 30_000 }
+      )
+    }
   } catch (err) {
     if (d365Page && !d365Page.isClosed()) {
       const screenshot = await d365Page.screenshot({ fullPage: true })
