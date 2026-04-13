@@ -6,7 +6,8 @@ import {
   continueFromBeforeYouStart,
   selectProvideMethod,
   selectFileType,
-  uploadFile
+  uploadFile,
+  addSiteNameFromReview
 } from './site-details-flow.js'
 import PublicRegisterPage from '../pages/public.register.page.js'
 
@@ -162,6 +163,8 @@ export async function completeSiteDetailsViaFileUpload(
 ) {
   await navigateToUploadPage(world, fileType)
   await uploadFileAndWaitForReviewPage(world, fileType)
+  // Add site name for site 1
+  await addSiteNameFromReview(world.page, 1)
   // Continue from review page → back to task list
   await world.page.locator('button:has-text("Continue")').click()
   await world.page.waitForLoadState('load')

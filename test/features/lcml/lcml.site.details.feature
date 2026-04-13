@@ -9,17 +9,23 @@ Feature: LCML: Site details journey
     When the user navigates through site details to the choose file type page
     Then the choose file type page heading and project name are displayed
 
-  Scenario Outline: Uploading a file lands on the review site details page
+  Scenario Outline: Uploading a file lands on the review site details page with correct link styling
     Given an organisation user is on the upload file page for "<fileType>"
     When the user uploads a valid "<fileType>" file and saves
     Then the review site details page is displayed for the uploaded site
+    And all action links on the review site details page have the govuk-link--no-visited-state class
 
     Examples:
       | fileType  |
       | KML       |
       | Shapefile |
 
-  Scenario: Continue from review saves site details as In Progress and re-enters via task list
-    Given an organisation user has uploaded a valid "KML" file and is on the review site details page
+  Scenario Outline: Adding a site name and continuing to the task list
+    Given an organisation user has uploaded a valid "<fileType>" file and added a site name
     When the user continues to the task list and re-enters the site details task
-    Then the review site details page is displayed for the uploaded site
+    Then the review site details page is displayed with the site name for site 1
+
+    Examples:
+      | fileType  |
+      | KML       |
+      | Shapefile |
