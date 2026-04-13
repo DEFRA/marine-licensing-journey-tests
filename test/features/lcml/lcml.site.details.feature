@@ -9,11 +9,11 @@ Feature: LCML: Site details journey
     When the user navigates through site details to the choose file type page
     Then the choose file type page heading and project name are displayed
 
-  Scenario Outline: Uploading a file lands on the review site details page with correct link styling
+  Scenario Outline: Uploading a file lands on the review site details page
     Given an organisation user is on the upload file page for "<fileType>"
     When the user uploads a valid "<fileType>" file and saves
     Then the review site details page is displayed for the uploaded site
-    And all action links on the review site details page have the govuk-link--no-visited-state class
+    And all action links retain their default blue styling after being visited
 
     Examples:
       | fileType  |

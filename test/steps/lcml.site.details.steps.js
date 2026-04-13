@@ -101,7 +101,7 @@ Then(
 )
 
 Then(
-  'all action links on the review site details page have the govuk-link--no-visited-state class',
+  'all action links retain their default blue styling after being visited',
   async function () {
     const actionLinks = this.page.locator(
       '.govuk-summary-card a.govuk-link:is(:text("Change"), :text("Add"), :text("Delete site"), :text("Delete all site details"))'
