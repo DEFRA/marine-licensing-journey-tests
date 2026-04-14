@@ -58,7 +58,7 @@ When(
     await this.page.waitForLoadState('load')
 
     const taskList = new TaskListPage(this.page)
-    
+
     //we are not asserting on the status until the site details work is complete
     // await taskList.expectTaskStatus('Site details', 'Completed')
 
