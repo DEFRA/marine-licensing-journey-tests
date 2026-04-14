@@ -311,6 +311,9 @@ export function createPublicRegisterWithholdData() {
 }
 
 export function generateLongReason() {
-  const longText = faker.lorem.paragraphs(30, ' ')
-  return longText.substring(0, 1001)
+  let longText = faker.lorem.paragraphs(30, ' ')
+  while (longText.length < 1010) {
+    longText += ' ' + faker.lorem.paragraphs(10, ' ')
+  }
+  return longText.substring(0, 1010)
 }

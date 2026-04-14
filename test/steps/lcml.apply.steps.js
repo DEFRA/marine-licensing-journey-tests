@@ -1,11 +1,13 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import {
   loginAndStartApplication,
   completeSpecialLegalPowers,
   completeOtherAuthorities,
   completeSharingConsent,
-  completeSiteDetailsViaFileUpload
+  completeSiteDetailsViaFileUpload,
+  completeProjectBackground
 } from '../support/lcml-helpers.js'
 
 Given(
@@ -13,6 +15,7 @@ Given(
   async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'organisation')
     await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
     await completeSharingConsent(this.page, consentAnswer)
@@ -24,6 +27,7 @@ Given(
   async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'intermediary')
     await completeSiteDetailsViaFileUpload(this, 'Shapefile')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
     await completeSharingConsent(this.page, consentAnswer)
@@ -35,6 +39,7 @@ Given(
   async function (oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'individual')
     await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeOtherAuthorities(this.page, oaAnswer)
     await completeSharingConsent(this.page, consentAnswer)
   }
