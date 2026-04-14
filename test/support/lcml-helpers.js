@@ -125,6 +125,15 @@ export async function completeSharingConsent(page, answer) {
   await page.waitForLoadState('load')
 }
 
+export async function completeProjectBackground(page, text) {
+  await page.locator('a:has-text("Project background")').click()
+  await page.waitForLoadState('load')
+
+  await page.locator('#projectBackground').fill(text)
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
 export async function loginAndReachTaskList(world, role = 'organisation') {
   await loginAndStartApplication(world, role)
   await completeSpecialLegalPowers(world.page, 'No')
