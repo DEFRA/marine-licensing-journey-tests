@@ -58,12 +58,9 @@ Then(
   }
 )
 
-Then(
-  'the previously saved project background is displayed',
-  async function () {
-    await expect(this.page.locator('#projectBackground')).toHaveValue(
-      this.data.projectBackground,
-      { timeout: 30_000 }
-    )
-  }
-)
+Then('the previously saved project background is displayed', async function () {
+  await expect(this.page.locator('#projectBackground')).toHaveValue(
+    this.data.projectBackground,
+    { timeout: 30_000 }
+  )
+})
