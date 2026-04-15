@@ -1,8 +1,12 @@
 import path from 'path'
+import { expect } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import {
   generateActivityDates,
   generateActivityDescription
 } from '../test-data/site-details.js'
+import ReviewSiteDetailsPage from '../pages/review.site.details.page.js'
+import CommonElementsPage from '../pages/common.elements.page.js'
 
 // --- Individual page actions ---
 
@@ -417,4 +421,75 @@ export async function navigateToPolygonWGS84Page(page, siteDetails) {
   await navigateToCoordinatesEntryMethodPage(page, siteDetails)
   await selectCoordinatesEntryMethod(page, 'boundary')
   await selectCoordinateSystem(page, 'WGS84')
+}
+
+// --- Site name review page helpers ---
+
+async function expectSiteNamePage(page, expectedValue) {
+  const common = new CommonElementsPage(page)
+  await common.expectHeading('Site name')
+  await expect(page.locator('#siteName')).toHaveValue(expectedValue, {
+    timeout: 30_000
+  })
+}
+
+async function expectReviewPageAtSiteAnchor(page, siteNumber) {
+  await expect(page.locator('h1').first()).toContainText(
+    'Review site details',
+    { timeout: 30_000 }
+  )
+  expect(page.url()).toContain(`#site-details-${siteNumber}`)
+}
+
+export async function addSiteNameFromReview(page, siteNumber) {
+  const reviewPage = new ReviewSiteDetailsPage(page)
+  await reviewPage.siteNameAddLink(siteNumber).click()
+  await page.waitForLoadState('load')
+
+  await expectSiteNamePage(page, '')
+
+  const siteName = `Test Site ${faker.location.city()}`
+  await enterSiteName(page, siteName)
+  await page.waitForLoadState('load')
+
+  return siteName
+}
+
+export async function expectSiteNameOnReview(page, siteNumber, siteName) {
+  await expectReviewPageAtSiteAnchor(page, siteNumber)
+
+  const reviewPage = new ReviewSiteDetailsPage(page)
+  await expect(reviewPage.siteNameValue(siteNumber)).toContainText(siteName, {
+    timeout: 30_000
+  })
+  await expect(reviewPage.siteNameChangeLink(siteNumber)).toBeVisible({
+    timeout: 30_000
+  })
+}
+
+export async function changeSiteNameFromReview(page, siteNumber, currentName) {
+  const reviewPage = new ReviewSiteDetailsPage(page)
+  await reviewPage.siteNameChangeLink(siteNumber).click()
+  await page.waitForLoadState('load')
+
+  await expectSiteNamePage(page, currentName)
+
+  const updatedName = `Updated Site ${faker.location.city()}`
+  await page.locator('#siteName').clear()
+  await enterSiteName(page, updatedName)
+  await page.waitForLoadState('load')
+
+  return updatedName
+}
+
+export async function editSiteNameAndClickBack(page, siteNumber) {
+  const reviewPage = new ReviewSiteDetailsPage(page)
+  await reviewPage.siteNameChangeLink(siteNumber).click()
+  await page.waitForLoadState('load')
+
+  await page.locator('#siteName').clear()
+  await page.locator('#siteName').fill(`Unsaved ${faker.location.city()}`)
+
+  await page.locator('.govuk-back-link').click()
+  await page.waitForLoadState('load')
 }

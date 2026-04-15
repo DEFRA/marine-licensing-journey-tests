@@ -15,9 +15,10 @@ You are an automation engineer writing Playwright + Cucumber BDD journey tests f
 ## Key Principles
 
 1. **Reuse over duplication**: Always check existing steps first. Generic steps like `the user clicks Continue`, `the user selects {string}` work across all pages.
-2. **Journey flow focus**: Test that the user can navigate through pages and complete tasks. Do NOT test error validations, field-level validation, or error messages.
-3. **Consolidate scenarios**: If multiple ACs describe a sequential flow through pages, consolidate them into a single scenario rather than one-per-page.
-4. **No page furniture assertions**: Do not assert on standard GOV.UK elements (Continue/Cancel/Back links, error summaries) — these are consistent across all pages and tested elsewhere.
+2. **Reuse exemption helpers**: LCML and exemption journeys share many pages (site details, file upload, choose file type). Import existing page action helpers from `test/support/site-details-flow.js` instead of duplicating selectors. Examples: `selectFileType`, `uploadFile`, `selectProvideMethod`, `selectMoreThanOneSite`, `enterActivityDates`, `enterActivityDescription`. Only the navigation TO the page differs between LCML and exemptions; the page actions themselves are identical.
+3. **Journey flow focus**: Test that the user can navigate through pages and complete tasks. Do NOT test error validations, field-level validation, or error messages.
+4. **Consolidate scenarios**: If multiple ACs describe a sequential flow through pages, consolidate them into a single scenario rather than one-per-page.
+5. **No page furniture assertions**: Do not assert on standard GOV.UK elements (Continue/Cancel/Back links, error summaries) — these are consistent across all pages and tested elsewhere.
 
 ## Project Structure
 
@@ -64,17 +65,41 @@ Task list → "Site details" link
 
 ## Existing Helper Functions
 
-### `loginAndStartApplication(world, role)` — in lcml.apply.steps.js
+### LCML helpers — `test/support/lcml-helpers.js`
 
-Registers user → login → accept cookies → confirm user type (if on confirm page) → click "Apply for a marine licence" → enter project name → lands on task list.
+- `loginAndStartApplication(world, role)` — registers user → login → accept cookies → confirm user type → click "Apply for a marine licence" → enter project name → lands on task list. `role` = `'organisation' | 'intermediary' | 'individual'`
+- `completeSpecialLegalPowers(page, answer)` — clicks "Special legal powers" → selects Yes/No → fills details if Yes → saves → verifies "Completed" status. `answer` = `'Yes' | 'No'`
+- `completeOtherAuthorities(page, answer)` — clicks "Other authorities" → selects Yes/No → fills details if Yes → saves. `answer` = `'Yes' | 'No'`
 
-### `loginAndReachTaskList(world)` — in lcml.site.details.steps.js
+### Exemption page actions — `test/support/site-details-flow.js`
 
-Same as above but hardcoded to `employee` user type. Also completes special legal powers if present.
+These work for **both** exemption and LCML journeys because the pages share the same selectors. Reuse them instead of writing your own:
 
-### `completeSpecialLegalPowers(page, answer)` — in lcml.apply.steps.js
+**Generic page actions:**
 
-Clicks "Special legal powers" → selects Yes/No → saves → verifies "Completed" status.
+- `continueFromBeforeYouStart(page)` — clicks `a.govuk-button` (Continue link on intro page)
+- `selectProvideMethod(page, 'enter-manually' | 'file-upload')` — clicks `#coordinatesType` or `#coordinatesType-2`
+- `selectMoreThanOneSite(page, true | false)` — clicks `#multipleSitesEnabled` or `#multipleSitesEnabled-2`
+- `enterActivityDates(page, dates)` — fills date inputs
+- `enterActivityDescription(page, description)` — fills `#activityDescription`
+- `enterSiteName(page, name)` — fills `#siteName`
+
+**File upload page actions:**
+
+- `selectFileType(page, 'KML' | 'Shapefile')` — clicks `#fileUploadType` or `#fileUploadType-2`
+- `uploadFile(page, relativePath)` — sets file on `input[type="file"]` (works on hidden `#file-id-input` too)
+
+**Coordinate entry actions:**
+
+- `selectCoordinatesEntryMethod(page, 'circle' | 'polygon')`
+- `selectCoordinateSystem(page, 'WGS84' | 'OSGB36')`
+- `enterCentrePointWGS84(page, lat, lng)` / `enterCentrePointOSGB36(page, eastings, northings)`
+- `enterPolygonCoordinatesWGS84(page, coordinates[])` / `enterPolygonCoordinatesOSGB36(page, coordinates[])`
+- `enterWidth(page, width)`
+
+**Full flow orchestrators (for exemption tests, can be referenced for LCML patterns):**
+
+- `completeSiteDetailsFlow(page, siteDetails)` — dispatcher that routes to single/multi-site, manual/file-upload flows based on `siteDetails.coordinatesEntryMethod` and `siteDetails.multipleSitesEnabled`
 
 ## Existing Step Definitions
 
@@ -118,13 +143,38 @@ Clicks "Special legal powers" → selects Yes/No → saves → verifies "Complet
 ### From acceptance criteria — focus on journey flow:
 
 1. **Read** existing LCML features and steps — check for reusable steps FIRST
-2. **Filter ACs**: Skip validation/error ACs. Focus on ACs that describe navigation, task completion, data saving, and page display
-3. **Consolidate**: If multiple ACs describe a sequential page flow, write ONE scenario that covers the whole flow rather than one scenario per AC
-4. **Reuse generic steps**: Steps like `the user clicks Continue`, `the user selects {string}` are generic — use them across pages. Only create new steps for page-specific assertions (e.g. heading + project name checks)
-5. **Discover selectors** if testing new pages: use Playwright MCP or Playwright scripts
-6. **Write** the feature file in `test/features/lcml.<name>.feature` with `@lcml` tag
-7. **Write** step definitions — add to existing step files where possible. Only create new files for distinct journey areas
-8. **Run** to verify: `npx cucumber-js --config cucumber.mjs --profile lcml --name "<scenario>" --format summary`
+2. **Check `test/support/site-details-flow.js`** for exemption page action helpers — most pages (file upload, choose file type, coordinate entry) are shared between LCML and exemptions and the helpers can be imported and reused
+3. **Filter ACs**: Skip validation/error ACs. Focus on ACs that describe navigation, task completion, data saving, and page display
+4. **Consolidate**: If multiple ACs describe a sequential page flow, write ONE scenario that covers the whole flow rather than one scenario per AC
+5. **Reuse generic steps**: Steps like `the user clicks Continue`, `the user selects {string}` are generic — use them across pages. Only create new steps for page-specific assertions (e.g. heading + project name checks)
+6. **Discover selectors** if testing new pages: use Playwright MCP or Playwright scripts
+7. **Write** the feature file in `test/features/lcml.<name>.feature` with `@lcml` tag
+8. **Write** step definitions — add to existing step files where possible. Only create new files for distinct journey areas
+9. **Run** to verify: `npx cucumber-js --config cucumber.mjs --profile lcml --name "<scenario>" --format summary`
+
+### Reusing exemption page actions in LCML steps
+
+The pages from "How do you want to provide the coordinates" onwards are shared between LCML and exemption journeys. Import the helpers from `site-details-flow.js`:
+
+```javascript
+import {
+  selectFileType,
+  uploadFile,
+  selectProvideMethod,
+  selectMoreThanOneSite,
+  enterActivityDates,
+  enterActivityDescription
+} from '../support/site-details-flow.js'
+
+// LCML step that uses shared page actions
+When('the user uploads a valid {string} file', async function (fileType) {
+  await selectFileType(this.page, fileType)
+  await uploadFile(this.page, SAMPLE_FILES[fileType])
+  await this.page.waitForLoadState('load')
+})
+```
+
+The only LCML-specific code should be the navigation TO the page (via `loginAndStartApplication` + LCML task list links). Once on a shared page, use the exemption helpers.
 
 ### Step definition patterns:
 

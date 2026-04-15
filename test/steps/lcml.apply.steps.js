@@ -1,34 +1,47 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import {
   loginAndStartApplication,
   completeSpecialLegalPowers,
-  completeOtherAuthorities
+  completeOtherAuthorities,
+  completeSharingConsent,
+  completeSiteDetailsViaFileUpload,
+  completeProjectBackground
 } from '../support/lcml-helpers.js'
 
 Given(
-  'an organisation user has completed other permissions with special legal powers {string} and other authorities {string}',
-  async function (slpAnswer, oaAnswer) {
+  'an organisation user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
+  async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'organisation')
+    await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 
 Given(
-  'an intermediary user has completed other permissions with special legal powers {string} and other authorities {string}',
-  async function (slpAnswer, oaAnswer) {
+  'an intermediary user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
+  async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'intermediary')
+    await completeSiteDetailsViaFileUpload(this, 'Shapefile')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 
 Given(
-  'an individual user has completed other permissions with other authorities {string}',
-  async function (oaAnswer) {
+  'an individual user has completed all tasks with other authorities {string} and sharing consent {string}',
+  async function (oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'individual')
+    await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completeSharingConsent(this.page, consentAnswer)
   }
 )
 

@@ -134,7 +134,7 @@ When('the user withdraws the submitted notification', async function () {
     this.data.completedExemptions[this.data.completedExemptions.length - 1]
 
   // Wait for D365 to finish processing the submission before withdrawing
-  await this.page.waitForTimeout(30_000)
+  await this.page.waitForTimeout(10_000)
 
   const dashboard = new DashboardPage(this.page)
   await dashboard.withdrawLink(latestExemption.projectName).click()
@@ -181,10 +181,13 @@ Then('the case status in D365 matches', async function (dataTable) {
 
   // Launch a separate browser for D365
   const { browser: d365Browser, page: d365Page } = await launchD365Browser()
+  let appPage
 
   try {
     await loginToD365(d365Page)
     await verifyD365Login(d365Page)
+    // Give D365 time to index the case before global search
+    await d365Page.waitForTimeout(10_000)
     await searchD365Case(d365Page, latestExemption.applicationReference)
     await verifyD365CaseDetails(d365Page, expectedDetails)
 
@@ -195,7 +198,7 @@ Then('the case status in D365 matches', async function (dataTable) {
     )
 
     // Open Application URL in a new tab within the D365 browser context
-    const appPage = await d365Page.context().newPage()
+    appPage = await d365Page.context().newPage()
     await appPage.goto(applicationUrl, { waitUntil: 'load' })
 
     const expectedStatus = expectedDetails['Application Status']
@@ -204,13 +207,27 @@ Then('the case status in D365 matches', async function (dataTable) {
     )
     await expect(statusValue).toContainText(expectedStatus, { timeout: 30_000 })
 
-    const withdrawnDate = appPage.locator(
-      '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
-    )
-    await expect(withdrawnDate).toContainText(
-      format(new Date(), 'd MMMM yyyy'),
-      { timeout: 30_000 }
-    )
+    if (expectedStatus === 'Withdrawn') {
+      const withdrawnDate = appPage.locator(
+        '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
+      )
+      await expect(withdrawnDate).toContainText(
+        format(new Date(), 'd MMMM yyyy'),
+        { timeout: 30_000 }
+      )
+    }
+  } catch (err) {
+    if (d365Page && !d365Page.isClosed()) {
+      const screenshot = await d365Page.screenshot({ fullPage: true })
+      this.attach(screenshot, 'image/png')
+      this.attach(`D365 failure URL: ${d365Page.url()}`, 'text/plain')
+    }
+    if (appPage && !appPage.isClosed()) {
+      const appScreenshot = await appPage.screenshot({ fullPage: true })
+      this.attach(appScreenshot, 'image/png')
+      this.attach(`D365 application page URL: ${appPage.url()}`, 'text/plain')
+    }
+    throw err
   } finally {
     await d365Browser.close()
   }

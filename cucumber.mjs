@@ -27,30 +27,30 @@ const common = {
 
 export default {
   ...common,
-  paths: ['test/features/*.feature'],
+  paths: ['test/features/**/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const smoke = {
   ...common,
   paths: [
-    'test/features/task.list.feature',
-    'test/features/cookies.feature',
-    'test/features/header.and.footer.feature',
-    'test/features/public.register.feature',
-    'test/features/manual.site.details.multi.site.feature',
-    'test/features/kml.file.site.details.multi.site.feature',
-    'test/features/shapefile.site.details.multi.site.feature',
-    'test/features/check.your.answers.feature',
-    'test/features/submit.notification.feature',
-    'test/features/dashboard.feature'
+    'test/features/exemptions/task.list.feature',
+    'test/features/exemptions/cookies.feature',
+    'test/features/exemptions/header.and.footer.feature',
+    'test/features/exemptions/public.register.feature',
+    'test/features/exemptions/manual.site.details.multi.site.feature',
+    'test/features/exemptions/kml.file.site.details.multi.site.feature',
+    'test/features/exemptions/shapefile.site.details.multi.site.feature',
+    'test/features/exemptions/check.your.answers.feature',
+    'test/features/exemptions/submit.notification.feature',
+    'test/features/exemptions/dashboard.feature'
   ],
   tags: '@smoke'
 }
 
 export const all = {
   ...common,
-  paths: ['test/features/*.feature'],
+  paths: ['test/features/**/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium'
 }
 
@@ -63,19 +63,19 @@ export const github = {
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: ['test/features/*.feature'],
+  paths: ['test/features/**/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const exemption = {
   ...common,
-  paths: ['test/features/*.feature', 'test-pw/features/*.feature'],
-  tags: 'not @lcml and not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+  paths: ['test/features/exemptions/**/*.feature'],
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const lcml = {
   ...common,
-  paths: ['test/features/lcml.*.feature'],
+  paths: ['test/features/lcml/**/*.feature'],
   tags: 'not @wip'
 }
 
@@ -88,7 +88,7 @@ export const cdp = {
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: ['test/features/*.feature'],
+  paths: ['test/features/**/*.feature'],
   tags:
     process.env.ENVIRONMENT === 'test'
       ? '@real-defra-id or @d365 or @fivium'
