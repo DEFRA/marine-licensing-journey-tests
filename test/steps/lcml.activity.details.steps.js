@@ -46,19 +46,13 @@ Then(
   }
 )
 
-Then(
-  'an {string} button is displayed',
-  async function (buttonText) {
-    await expect(
-      this.page.locator(`button:has-text("${buttonText}")`)
-    ).toBeVisible({ timeout: 30_000 })
-  }
-)
+Then('an {string} button is displayed', async function (buttonText) {
+  await expect(
+    this.page.locator(`button:has-text("${buttonText}")`)
+  ).toBeVisible({ timeout: 30_000 })
+})
 
-When(
-  'the user clicks the {string} button',
-  async function (buttonText) {
-    await this.page.locator(`button:has-text("${buttonText}")`).click()
-    await this.page.waitForLoadState('load')
-  }
-)
+When('the user clicks the {string} button', async function (buttonText) {
+  await this.page.locator(`button:has-text("${buttonText}")`).click()
+  await this.page.waitForLoadState('load')
+})
