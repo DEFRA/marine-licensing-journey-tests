@@ -79,6 +79,12 @@ export const lcml = {
   tags: 'not @wip'
 }
 
+export const iat = {
+  ...common,
+  paths: ['test/features/iat/**/*.feature'],
+  tags: 'not @wip'
+}
+
 export const cdp = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '5', 10),
