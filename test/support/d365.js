@@ -12,15 +12,23 @@ const APP_URL_SELECTOR =
 async function readRecordField(page, columnName) {
   switch (columnName) {
     case 'Reference number':
-      return (await page.getByLabel('Reference', { exact: true }).inputValue()).trim()
+      return (
+        await page.getByLabel('Reference', { exact: true }).inputValue()
+      ).trim()
     case 'Project Name':
-      return (await page.getByLabel('Project Name', { exact: true }).inputValue()).trim()
+      return (
+        await page.getByLabel('Project Name', { exact: true }).inputValue()
+      ).trim()
     case 'Submitted Date':
-      return (await page.getByLabel('Submitted Date', { exact: true }).inputValue()).trim()
+      return (
+        await page.getByLabel('Submitted Date', { exact: true }).inputValue()
+      ).trim()
     case 'Applicant':
       return (await page.locator(APPLICANT_SELECTOR).first().innerText()).trim()
     case 'Applicant Organisation':
-      return (await page.locator(APPLICANT_ORG_SELECTOR).first().innerText()).trim()
+      return (
+        await page.locator(APPLICANT_ORG_SELECTOR).first().innerText()
+      ).trim()
     case 'D365 Status': {
       // Header "Application Status" field has no data-id on the value; find
       // the label text and read its preceding sibling.
@@ -97,7 +105,10 @@ export async function loginToD365(page) {
   await page.waitForURL(/.*crm11\.dynamics\.com.*/, { timeout: 60_000 })
 }
 
-async function dismissSignInPrompt(page, { timeout = 15_000, attempts = 5 } = {}) {
+async function dismissSignInPrompt(
+  page,
+  { timeout = 15_000, attempts = 5 } = {}
+) {
   // D365 shows a "Please sign in again" modal with a blue "Sign In" button;
   // depending on the variant the button is either data-id="okButton" or a
   // plain button/text element. Try both and loop in case it reappears.
