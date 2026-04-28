@@ -1,5 +1,4 @@
-// Source-of-truth map for the LCML Type of activity (ML-1227) and
-// "What activity are you doing?" (ML-1228) pages.
+import { faker } from '@faker-js/faker'
 
 export const TYPE_OF_ACTIVITY_NO_TOP_LEVEL_ERROR = 'Select the type of activity'
 
@@ -164,5 +163,11 @@ export function pickDifferentTopLevel(currentTopLevel) {
 }
 
 export function generateOtherTextOver1000() {
-  return 'a'.repeat(1001)
+  // Lorem text padded until it exceeds 1000 chars; the validation rule rejects
+  // anything strictly greater than 1000.
+  let text = ''
+  while (text.length <= 1000) {
+    text += `${faker.lorem.paragraph()} `
+  }
+  return text.trim()
 }
