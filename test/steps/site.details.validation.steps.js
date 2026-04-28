@@ -84,7 +84,7 @@ Given(
 )
 
 Given(
-  'the "How do you want to enter the coordinates?" page has been reached',
+  'the "How do you want to enter the site coordinates?" page has been reached',
   async function () {
     const site = this.data.siteDetails.sites[0]
     await selectProvideMethod(this.page, 'enter-manually')
@@ -92,7 +92,7 @@ Given(
     await enterActivityDates(this.page, site.activityDates)
     await enterActivityDescription(this.page, site.activityDescription)
     await expect(this.page.locator('h1')).toContainText(
-      'How do you want to enter the coordinates?'
+      'How do you want to enter the site coordinates?'
     )
   }
 )

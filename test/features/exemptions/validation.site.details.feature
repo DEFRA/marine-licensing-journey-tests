@@ -12,9 +12,9 @@ Feature: Validation of Site details: the user is prevented from proceeding with 
 
   Scenario: User is prevented from proceeding without selecting a coordinate entry method
     Given a user is providing site details
-    And the "How do you want to enter the coordinates?" page has been reached
+    And the "How do you want to enter the site coordinates?" page has been reached
     When the Continue button is clicked without selecting a coordinate entry method
-    Then the coordinates entry method error: "Select how you want to enter the coordinates" is displayed
+    Then the coordinates entry method error: "Select how you want to enter the site coordinates" is displayed
 
   Scenario: User is prevented from proceeding without selecting a coordinate system
     Given a user is providing site details
