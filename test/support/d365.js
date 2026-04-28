@@ -2,21 +2,47 @@ import { chromium } from 'playwright'
 import { expect } from '@playwright/test'
 import { getConfig } from './config.js'
 
-const COLUMN_MAP = {
-  'Reference number': { colId: 'ticketnumber', type: 'label' },
-  'Project Name': { colId: 'title', type: 'link' },
-  'Applicant Organisation': {
-    colId: 'mmo_applicantorganisationid',
-    type: 'link'
-  },
-  Applicant: { colId: 'customerid', type: 'link' },
-  'D365 Status': { colId: 'statuscode', type: 'label' },
-  'Submitted Date': { colId: 'createdon', type: 'label' }
-}
+const APPLICANT_ORG_SELECTOR =
+  '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
+const APPLICANT_SELECTOR =
+  '[data-id="customerid.fieldControl-LookupResultsDropdown_customerid_selected_tag_text"]'
+const APP_URL_SELECTOR =
+  '[data-id="ml_applicationurl.fieldControl-url-text-input"]'
 
-function gridCellSelector(colId, type) {
-  const suffix = type === 'label' ? ' label' : ' a'
-  return `div[role="gridcell"][col-id="${colId}"]${suffix}`
+async function readRecordField(page, columnName) {
+  switch (columnName) {
+    case 'Reference number':
+      return (
+        await page.getByLabel('Reference', { exact: true }).inputValue()
+      ).trim()
+    case 'Project Name':
+      return (
+        await page.getByLabel('Project Name', { exact: true }).inputValue()
+      ).trim()
+    case 'Submitted Date':
+      return (
+        await page.getByLabel('Submitted Date', { exact: true }).inputValue()
+      ).trim()
+    case 'Applicant':
+      return (await page.locator(APPLICANT_SELECTOR).first().innerText()).trim()
+    case 'Applicant Organisation':
+      return (
+        await page.locator(APPLICANT_ORG_SELECTOR).first().innerText()
+      ).trim()
+    case 'D365 Status': {
+      // Header "Application Status" field has no data-id on the value; find
+      // the label text and read its preceding sibling.
+      const value = page
+        .locator(
+          'xpath=//div[normalize-space(text())="Application Status"]/preceding-sibling::div[1]'
+        )
+        .first()
+      await value.waitFor({ state: 'visible', timeout: 30_000 })
+      return (await value.innerText()).trim()
+    }
+    default:
+      return null
+  }
 }
 
 export async function launchD365Browser() {
@@ -79,18 +105,31 @@ export async function loginToD365(page) {
   await page.waitForURL(/.*crm11\.dynamics\.com.*/, { timeout: 60_000 })
 }
 
-export async function verifyD365Login(page) {
-  // Dismiss repeated "Please sign in again" modal dialogs
-  for (let attempt = 0; attempt < 5; attempt++) {
+async function dismissSignInPrompt(
+  page,
+  { timeout = 15_000, attempts = 5 } = {}
+) {
+  // D365 shows a "Please sign in again" modal with a blue "Sign In" button;
+  // depending on the variant the button is either data-id="okButton" or a
+  // plain button/text element. Try both and loop in case it reappears.
+  for (let attempt = 0; attempt < attempts; attempt++) {
     try {
-      const signInBtn = page.locator('button[data-id="okButton"]')
-      await signInBtn.waitFor({ state: 'visible', timeout: 15_000 })
+      const signInBtn = page
+        .locator(
+          'button[data-id="okButton"], button:has-text("Sign In"), [role="button"]:has-text("Sign In")'
+        )
+        .first()
+      await signInBtn.waitFor({ state: 'visible', timeout })
       await signInBtn.click()
       await page.waitForTimeout(2_000)
     } catch {
-      break
+      return
     }
   }
+}
+
+export async function verifyD365Login(page) {
+  await dismissSignInPrompt(page)
 
   // Verify we're on D365
   const currentUrl = page.url()
@@ -106,63 +145,65 @@ export async function verifyD365Login(page) {
 }
 
 export async function searchD365Case(page, reference) {
+  // The "Please sign in again" modal can reappear between login and grid
+  // interaction — dismiss it defensively before searching.
+  await dismissSignInPrompt(page, { timeout: 3_000, attempts: 3 })
+
+  // Filter the Completed Cases grid by reference number using the in-grid
+  // search box (#SearchBoxWithTypeAhead-input). This element filters the
+  // already-loaded grid cache — it's the same DOM element whether D365
+  // Copilot is enabled (placeholder "Ask about data in this table.") or
+  // disabled (placeholder "Filter by keyword"), and pressing Enter performs
+  // a plain keyword match either way. Then double-click the first result
+  // row to open the case record form.
   const searchInput = page.locator('#SearchBoxWithTypeAhead-input')
   await searchInput.waitFor({ state: 'visible', timeout: 30_000 })
   await searchInput.fill(reference)
   await searchInput.press('Enter')
 
-  // Wait for grid to update
   await page
     .locator('div[role="treegrid"][aria-label="Completed Cases"]')
+    .waitFor({ state: 'visible', timeout: 30_000 })
+
+  // Wait for the grid to reduce to a single matching row.
+  await page
+    .locator('div[role="row"][row-index="0"]')
+    .waitFor({ state: 'visible', timeout: 30_000 })
+
+  // Double-click the first cell of the matched row to open the record.
+  await page
+    .locator('div[role="row"][row-index="0"] div[role="gridcell"]')
+    .first()
+    .dblclick()
+
+  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
+    timeout: 30_000
+  })
+  await page.waitForLoadState('load')
+  await page
+    .locator(APPLICANT_ORG_SELECTOR)
+    .first()
     .waitFor({ state: 'visible', timeout: 30_000 })
 }
 
 export async function verifyD365CaseDetails(page, expectedDetails) {
-  const maxRetries = 8
-
+  const maxRetries = 3
   let lastError = null
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    // Dismiss any D365 modal overlay
-    await page.evaluate(() => {
-      const portal = document.getElementById('__fluentPortalMountNode')
-      if (portal) portal.remove()
-    })
-    await page.waitForTimeout(1_000)
-
-    // Refresh the grid
-    const refreshBtn = page.locator('button[aria-label="Refresh"]').first()
-    await refreshBtn.waitFor({ state: 'visible', timeout: 15_000 })
-    await refreshBtn.click({ force: true })
-
-    await page.waitForTimeout(5_000)
-    await page
-      .locator('div[role="row"][row-index="0"]')
-      .waitFor({ state: 'visible', timeout: 30_000 })
-
     try {
       for (const [columnName, expectedValue] of Object.entries(
         expectedDetails
       )) {
-        const mapping = COLUMN_MAP[columnName]
-        if (!mapping) {
-          continue
-        }
-
-        const selector = gridCellSelector(mapping.colId, mapping.type)
-        const element = page.locator(selector).first()
-        await element.waitFor({ state: 'visible', timeout: 15_000 })
-        const actualText = await element.innerText()
-
-        expect(actualText.trim()).toBe(expectedValue)
+        const actual = await readRecordField(page, columnName)
+        if (actual === null) continue
+        expect(actual).toBe(expectedValue)
       }
-
-      // All assertions passed
       return
     } catch (error) {
       lastError = error
       if (attempt < maxRetries) {
-        await page.waitForTimeout(15_000)
+        await page.waitForTimeout(5_000)
       }
     }
   }
@@ -171,26 +212,13 @@ export async function verifyD365CaseDetails(page, expectedDetails) {
 }
 
 export async function openD365CaseRecord(page, applicantOrganisation) {
-  // Double-click the first grid row cell to open the case record
-  const firstRowCell = page
-    .locator('div[role="row"][row-index="0"] div[role="gridcell"]')
-    .first()
-  await firstRowCell.dblclick()
-  await page.waitForLoadState('load')
-  await page.waitForTimeout(5_000)
-
-  // Validate Applicant Organisation field
-  const orgField = page.locator(
-    '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
-  )
+  // Record is already open after searchD365Case — just validate org and return URL.
+  const orgField = page.locator(APPLICANT_ORG_SELECTOR)
   await orgField.waitFor({ state: 'visible', timeout: 30_000 })
   const orgText = await orgField.innerText()
   expect(orgText.trim()).toBe(applicantOrganisation)
 
-  // Get the Application URL
-  const appUrlInput = page.locator(
-    '[data-id="ml_applicationurl.fieldControl-url-text-input"]'
-  )
+  const appUrlInput = page.locator(APP_URL_SELECTOR)
   await appUrlInput.waitFor({ state: 'visible', timeout: 30_000 })
   return await appUrlInput.getAttribute('value')
 }
