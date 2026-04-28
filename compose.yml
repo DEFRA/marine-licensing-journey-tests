@@ -66,6 +66,7 @@ services:
       REDIS_PORT: 6379
       DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
       ENABLE_MARINE_LICENCE: true
+      ENABLE_SELF_SERVICE: true
     command: 'node .'
     depends_on:
       marine-licensing-backend:

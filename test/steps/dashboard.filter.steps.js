@@ -167,68 +167,74 @@ When('the user withdraws the submitted notification', async function () {
   await this.page.waitForLoadState('load')
 })
 
-Then('the case status in D365 matches', async function (dataTable) {
-  const expectedDetails = Object.fromEntries(dataTable.raw())
-  const latestExemption =
-    this.data.completedExemptions[this.data.completedExemptions.length - 1]
+Then(
+  'the case status in D365 matches',
+  { timeout: 180_000 },
+  async function (dataTable) {
+    const expectedDetails = Object.fromEntries(dataTable.raw())
+    const latestExemption =
+      this.data.completedExemptions[this.data.completedExemptions.length - 1]
 
-  // Resolve dynamic values
-  for (const [key, value] of Object.entries(expectedDetails)) {
-    if (value === 'matches submitted reference number') {
-      expectedDetails[key] = latestExemption.applicationReference
+    // Resolve dynamic values
+    for (const [key, value] of Object.entries(expectedDetails)) {
+      if (value === 'matches submitted reference number') {
+        expectedDetails[key] = latestExemption.applicationReference
+      }
+    }
+
+    // Launch a separate browser for D365
+    const { browser: d365Browser, page: d365Page } = await launchD365Browser()
+    let appPage
+
+    try {
+      await loginToD365(d365Page)
+      await verifyD365Login(d365Page)
+      // Give D365 time to index the case before global search
+      await d365Page.waitForTimeout(20_000)
+      await searchD365Case(d365Page, latestExemption.applicationReference)
+      await verifyD365CaseDetails(d365Page, expectedDetails)
+
+      // Open case record, validate organisation, get Application URL
+      const applicationUrl = await openD365CaseRecord(
+        d365Page,
+        expectedDetails['Applicant Organisation']
+      )
+
+      // Open Application URL in a new tab within the D365 browser context
+      appPage = await d365Page.context().newPage()
+      await appPage.goto(applicationUrl, { waitUntil: 'load' })
+
+      const expectedStatus = expectedDetails['Application Status']
+      const statusValue = appPage.locator(
+        '//dt[contains(text(), "Status")]/following-sibling::dd'
+      )
+      await expect(statusValue).toContainText(expectedStatus, {
+        timeout: 30_000
+      })
+
+      if (expectedStatus === 'Withdrawn') {
+        const withdrawnDate = appPage.locator(
+          '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
+        )
+        await expect(withdrawnDate).toContainText(
+          format(new Date(), 'd MMMM yyyy'),
+          { timeout: 30_000 }
+        )
+      }
+    } catch (err) {
+      if (d365Page && !d365Page.isClosed()) {
+        const screenshot = await d365Page.screenshot({ fullPage: true })
+        this.attach(screenshot, 'image/png')
+        this.attach(`D365 failure URL: ${d365Page.url()}`, 'text/plain')
+      }
+      if (appPage && !appPage.isClosed()) {
+        const appScreenshot = await appPage.screenshot({ fullPage: true })
+        this.attach(appScreenshot, 'image/png')
+        this.attach(`D365 application page URL: ${appPage.url()}`, 'text/plain')
+      }
+      throw err
+    } finally {
+      await d365Browser.close()
     }
   }
-
-  // Launch a separate browser for D365
-  const { browser: d365Browser, page: d365Page } = await launchD365Browser()
-  let appPage
-
-  try {
-    await loginToD365(d365Page)
-    await verifyD365Login(d365Page)
-    // Give D365 time to index the case before global search
-    await d365Page.waitForTimeout(20_000)
-    await searchD365Case(d365Page, latestExemption.applicationReference)
-    await verifyD365CaseDetails(d365Page, expectedDetails)
-
-    // Open case record, validate organisation, get Application URL
-    const applicationUrl = await openD365CaseRecord(
-      d365Page,
-      expectedDetails['Applicant Organisation']
-    )
-
-    // Open Application URL in a new tab within the D365 browser context
-    appPage = await d365Page.context().newPage()
-    await appPage.goto(applicationUrl, { waitUntil: 'load' })
-
-    const expectedStatus = expectedDetails['Application Status']
-    const statusValue = appPage.locator(
-      '//dt[contains(text(), "Status")]/following-sibling::dd'
-    )
-    await expect(statusValue).toContainText(expectedStatus, { timeout: 30_000 })
-
-    if (expectedStatus === 'Withdrawn') {
-      const withdrawnDate = appPage.locator(
-        '//dt[contains(text(), "Date withdrawn")]/following-sibling::dd'
-      )
-      await expect(withdrawnDate).toContainText(
-        format(new Date(), 'd MMMM yyyy'),
-        { timeout: 30_000 }
-      )
-    }
-  } catch (err) {
-    if (d365Page && !d365Page.isClosed()) {
-      const screenshot = await d365Page.screenshot({ fullPage: true })
-      this.attach(screenshot, 'image/png')
-      this.attach(`D365 failure URL: ${d365Page.url()}`, 'text/plain')
-    }
-    if (appPage && !appPage.isClosed()) {
-      const appScreenshot = await appPage.screenshot({ fullPage: true })
-      this.attach(appScreenshot, 'image/png')
-      this.attach(`D365 application page URL: ${appPage.url()}`, 'text/plain')
-    }
-    throw err
-  } finally {
-    await d365Browser.close()
-  }
-})
+)
