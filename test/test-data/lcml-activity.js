@@ -163,10 +163,10 @@ export function pickDifferentTopLevel(currentTopLevel) {
 }
 
 export function generateOtherTextOver1000() {
-  // Lorem text padded until it exceeds 1000 chars; the validation rule rejects
-  // anything strictly greater than 1000.
+  // Lorem text padded until it exceeds 1010 chars; the validation rule rejects
+  // anything strictly greater than 1000 so 1010 is just past the boundary.
   let text = ''
-  while (text.length <= 1000) {
+  while (text.length <= 1010) {
     text += `${faker.lorem.paragraph()} `
   }
   return text.trim()
