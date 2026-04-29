@@ -87,8 +87,6 @@ export const ACTIVITY_TYPES = {
     otherConditionalId: 'conditional-activities-27',
     errors: {
       noSelection: 'Select at least one type of substance or object',
-      // App message uses "deposits" — the ML-1228 AC table had a copy-paste typo
-      // ("structures") that doesn't match what the implementation renders.
       otherEmpty: 'Enter details of the other deposits',
       otherTooLong: 'Details of other deposits must be 1000 characters or less'
     },
