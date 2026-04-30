@@ -7,14 +7,15 @@ import {
   completeOtherAuthorities,
   completeSharingConsent,
   completeSiteDetailsViaFileUpload,
-  completeProjectBackground
+  completeProjectBackground,
+  pickRandomFileType
 } from '../support/lcml-helpers.js'
 
 Given(
   'an organisation user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
   async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'organisation')
-    await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
@@ -26,7 +27,7 @@ Given(
   'an intermediary user has completed all tasks with special legal powers {string}, other authorities {string} and sharing consent {string}',
   async function (slpAnswer, oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'intermediary')
-    await completeSiteDetailsViaFileUpload(this, 'Shapefile')
+    await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
@@ -38,7 +39,7 @@ Given(
   'an individual user has completed all tasks with other authorities {string} and sharing consent {string}',
   async function (oaAnswer, consentAnswer) {
     await loginAndStartApplication(this, 'individual')
-    await completeSiteDetailsViaFileUpload(this, 'KML')
+    await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeOtherAuthorities(this.page, oaAnswer)
     await completeSharingConsent(this.page, consentAnswer)
