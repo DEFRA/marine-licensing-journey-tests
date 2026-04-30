@@ -174,6 +174,12 @@ export async function completeSiteDetailsViaFileUpload(
   await uploadFileAndWaitForReviewPage(world, fileType)
   // Add site name for site 1
   await addSiteNameFromReview(world.page, 1)
+  // Complete a random Type of activity + What activity selection for Site 1
+  // before leaving the review page (the Add link only exists here).
+  const { completeRandomActivityFromReviewPage } = await import(
+    './lcml-activity-flow.js'
+  )
+  await completeRandomActivityFromReviewPage(world)
   // Continue from review page → back to task list
   await world.page.locator('button:has-text("Continue")').click()
   await world.page.waitForLoadState('load')
