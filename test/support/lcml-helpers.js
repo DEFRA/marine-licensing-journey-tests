@@ -16,6 +16,10 @@ const SAMPLE_FILES = {
   Shapefile: 'test/resources/valid-shapefile.zip'
 }
 
+export function pickRandomFileType() {
+  return faker.helpers.arrayElement(['KML', 'Shapefile'])
+}
+
 const USER_TYPE_CONFIG = {
   organisation: {
     userType: 'employee',
@@ -166,6 +170,80 @@ export async function uploadFileAndWaitForReviewPage(world, fileType) {
   await world.page.waitForLoadState('load')
 }
 
+function activityCardLocator(page, cardTitle) {
+  return page.locator(
+    `.govuk-summary-card:has(.govuk-summary-card__title:text("${cardTitle}"))`
+  )
+}
+
+async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
+  await activityCardLocator(page, cardTitle)
+    .locator(`.govuk-summary-list__row:has(dt:text-is("${rowName}"))`)
+    .locator('a:text-is("Add")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeActivityDescriptionForActivity(
+  page,
+  cardTitle,
+  description = faker.lorem.sentence(8)
+) {
+  await clickAddLinkInActivityCard(page, cardTitle, 'Activity description')
+  await page.locator('#activityDescription').fill(description)
+  await page
+    .locator('button[type="submit"]:has-text("Save and continue")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeMaximumDurationForActivity(
+  page,
+  cardTitle,
+  years = '1',
+  months = '0'
+) {
+  await clickAddLinkInActivityCard(
+    page,
+    cardTitle,
+    'Maximum duration of activity'
+  )
+  await page.locator('#activity-duration-years').fill(years)
+  await page.locator('#activity-duration-months').fill(months)
+  await page
+    .locator('button[type="submit"]:has-text("Save and continue")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeCompletionDateForActivity(
+  page,
+  cardTitle,
+  answer = 'No',
+  reason
+) {
+  await clickAddLinkInActivityCard(page, cardTitle, 'Completion date')
+  if (answer === 'Yes') {
+    await page.locator('#date').check()
+    await page.locator('#reason').fill(reason || faker.lorem.sentence(8))
+  } else {
+    await page.locator('#date-2').check()
+  }
+  await page
+    .locator('button[type="submit"]:has-text("Save and continue")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeActivityDetailsFromReview(
+  page,
+  cardTitle = 'Site 1 - Activity 1'
+) {
+  await completeActivityDescriptionForActivity(page, cardTitle)
+  await completeMaximumDurationForActivity(page, cardTitle)
+  await completeCompletionDateForActivity(page, cardTitle, 'No')
+}
+
 export async function completeSiteDetailsViaFileUpload(
   world,
   fileType = 'KML'
@@ -180,6 +258,8 @@ export async function completeSiteDetailsViaFileUpload(
     './lcml-activity-flow.js'
   )
   await completeRandomActivityFromReviewPage(world)
+  // Fill the activity sub-tasks for Site 1 - Activity 1 from the Review page
+  await completeActivityDetailsFromReview(world.page, 'Site 1 - Activity 1')
   // Continue from review page → back to task list
   await world.page.locator('button:has-text("Continue")').click()
   await world.page.waitForLoadState('load')
