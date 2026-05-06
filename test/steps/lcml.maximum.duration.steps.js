@@ -1,20 +1,15 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
-  loginAndNavigateToUploadPage,
-  uploadFileAndWaitForReviewPage
+  activityCardLocator,
+  expectOnReviewSiteDetailsPage,
+  uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
 
 const YEARS_FIELD = '#activity-duration-years'
 const MONTHS_FIELD = '#activity-duration-months'
 const SAVE_AND_CONTINUE_BUTTON =
   'button[type="submit"]:has-text("Save and continue")'
-
-function activityCardLocator(page, cardTitle) {
-  return page.locator(
-    `.govuk-summary-card:has(.govuk-summary-card__title:text("${cardTitle}"))`
-  )
-}
 
 function durationRow(page, cardTitle) {
   return activityCardLocator(page, cardTitle).locator(
@@ -39,10 +34,6 @@ async function expectOnDurationPage(page) {
     'What is the maximum duration of the activity?',
     { timeout: 30_000 }
   )
-}
-
-async function expectOnReviewSiteDetailsPage(page) {
-  await expect(page).toHaveURL(/review-site-details/, { timeout: 30_000 })
 }
 
 Then(
@@ -79,8 +70,7 @@ Then('the years and months textboxes are empty', async function () {
 Given(
   'the user is on the duration page for {string} after uploading a {string} file',
   async function (cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     await clickDurationAddLink(this.page, cardTitle)
     await expectOnDurationPage(this.page)
   }
@@ -96,8 +86,7 @@ When(
 Given(
   'an organisation user has saved {string} years and {string} months as the duration for {string} after uploading a {string} file',
   async function (years, months, cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     await clickDurationAddLink(this.page, cardTitle)
     await expectOnDurationPage(this.page)
     await fillDurationAndSave(this.page, years, months)

@@ -2,8 +2,9 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import {
-  loginAndNavigateToUploadPage,
-  uploadFileAndWaitForReviewPage
+  activityCardLocator,
+  expectOnReviewSiteDetailsPage,
+  uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
 
 const YES_RADIO = '#date'
@@ -12,12 +13,6 @@ const REASON_TEXTAREA = '#reason'
 const REASON_ERROR = '#reason-error'
 const SAVE_AND_CONTINUE_BUTTON =
   'button[type="submit"]:has-text("Save and continue")'
-
-function activityCardLocator(page, cardTitle) {
-  return page.locator(
-    `.govuk-summary-card:has(.govuk-summary-card__title:text("${cardTitle}"))`
-  )
-}
 
 function completionDateRow(page, cardTitle) {
   return activityCardLocator(page, cardTitle).locator(
@@ -35,10 +30,6 @@ async function expectOnCompletionDatePage(page) {
     'Does any part of the activity need to be completed by a certain date?',
     { timeout: 30_000 }
   )
-}
-
-async function expectOnReviewSiteDetailsPage(page) {
-  await expect(page).toHaveURL(/review-site-details/, { timeout: 30_000 })
 }
 
 function radioByLabel(label) {
@@ -79,8 +70,7 @@ Then(
 Given(
   'the user is on the completion date page for {string} after uploading a {string} file',
   async function (cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     await clickCompletionDateAddLink(this.page, cardTitle)
     await expectOnCompletionDatePage(this.page)
   }
@@ -148,8 +138,7 @@ Then(
 Given(
   'an organisation user has saved {string} with reason {string} for the completion date for {string} after uploading a {string} file',
   async function (label, reason, cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     await clickCompletionDateAddLink(this.page, cardTitle)
     await expectOnCompletionDatePage(this.page)
     await this.page.locator(radioByLabel(label)).check()
