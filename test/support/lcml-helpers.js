@@ -170,10 +170,27 @@ export async function uploadFileAndWaitForReviewPage(world, fileType) {
   await world.page.waitForLoadState('load')
 }
 
-function activityCardLocator(page, cardTitle) {
+export function activityCardLocator(page, cardTitle) {
   return page.locator(
     `.govuk-summary-card:has(.govuk-summary-card__title:text("${cardTitle}"))`
   )
+}
+
+export async function expectOnReviewSiteDetailsPage(page) {
+  await expect(page).toHaveURL(/review-site-details/, { timeout: 30_000 })
+}
+
+export async function uploadCoordinatesFile(world, fileType) {
+  world.data.fileType = fileType
+  if (world.attach) {
+    world.attach(`file type -> ${fileType}`, 'text/plain')
+  }
+  await loginAndNavigateToUploadPage(world, fileType)
+  await uploadFileAndWaitForReviewPage(world, fileType)
+}
+
+export async function uploadRandomCoordinatesFile(world) {
+  await uploadCoordinatesFile(world, pickRandomFileType())
 }
 
 async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
@@ -235,13 +252,102 @@ export async function completeCompletionDateForActivity(
   await page.waitForLoadState('load')
 }
 
+export async function completeSpecificMonthsForActivity(
+  page,
+  cardTitle,
+  answer = 'No',
+  details
+) {
+  await clickAddLinkInActivityCard(
+    page,
+    cardTitle,
+    'Activity limited to specific months'
+  )
+  if (answer === 'Yes') {
+    await page.locator('#months').check()
+    await page.locator('#details').fill(details || faker.lorem.sentence(8))
+  } else {
+    await page.locator('#months-2').check()
+  }
+  await page
+    .locator('button[type="submit"]:has-text("Save and continue")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeWorkingHoursForActivity(
+  page,
+  cardTitle,
+  workingHours = faker.lorem.sentence(8)
+) {
+  await clickAddLinkInActivityCard(page, cardTitle, 'Proposed working hours')
+  await page.locator('#workingHours').fill(workingHours)
+  await page
+    .locator('button[type="submit"]:has-text("Save and continue")')
+    .click()
+  await page.waitForLoadState('load')
+}
+
 export async function completeActivityDetailsFromReview(
+  worldOrPage,
+  cardTitle = 'Site 1 - Activity 1'
+) {
+  const page = worldOrPage.page || worldOrPage
+  const world = worldOrPage.page ? worldOrPage : null
+
+  const description = faker.lorem.sentence(8)
+  const years = '1'
+  const months = '0'
+  const completionDateAnswer = 'No'
+  const specificMonthsAnswer = 'No'
+  const workingHoursText = faker.lorem.sentence(8)
+
+  await completeActivityDescriptionForActivity(page, cardTitle, description)
+  await completeMaximumDurationForActivity(page, cardTitle, years, months)
+  await completeCompletionDateForActivity(page, cardTitle, completionDateAnswer)
+  await completeSpecificMonthsForActivity(page, cardTitle, specificMonthsAnswer)
+  await completeWorkingHoursForActivity(page, cardTitle, workingHoursText)
+
+  if (world) {
+    world.data.activityDetails = world.data.activityDetails || {}
+    world.data.activityDetails[cardTitle] = {
+      activityDescription: description,
+      maxDuration: { years, months },
+      completionDateAnswer,
+      specificMonthsAnswer,
+      workingHours: workingHoursText
+    }
+  }
+}
+
+const ACTIVITY_CARD_ROWS = [
+  'Type of activity',
+  'Activity description',
+  'Maximum duration of activity',
+  'Completion date',
+  'Activity limited to specific months',
+  'Proposed working hours'
+]
+
+export async function verifyActivityCardCompleted(
   page,
   cardTitle = 'Site 1 - Activity 1'
 ) {
-  await completeActivityDescriptionForActivity(page, cardTitle)
-  await completeMaximumDurationForActivity(page, cardTitle)
-  await completeCompletionDateForActivity(page, cardTitle, 'No')
+  const card = activityCardLocator(page, cardTitle)
+  await expect(card).toBeVisible({ timeout: 30_000 })
+  for (const rowName of ACTIVITY_CARD_ROWS) {
+    const row = card.locator(
+      `.govuk-summary-list__row:has(dt:text-is("${rowName}"))`
+    )
+    await expect(row.locator('.govuk-summary-list__value')).not.toContainText(
+      'Incomplete',
+      { timeout: 30_000 }
+    )
+    await expect(row.locator('.govuk-summary-list__actions a')).toContainText(
+      'Change',
+      { timeout: 30_000 }
+    )
+  }
 }
 
 export async function completeSiteDetailsViaFileUpload(
@@ -259,7 +365,9 @@ export async function completeSiteDetailsViaFileUpload(
   )
   await completeRandomActivityFromReviewPage(world)
   // Fill the activity sub-tasks for Site 1 - Activity 1 from the Review page
-  await completeActivityDetailsFromReview(world.page, 'Site 1 - Activity 1')
+  await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
+  // Verify the card now shows all sub-tasks completed before leaving the page
+  await verifyActivityCardCompleted(world.page, 'Site 1 - Activity 1')
   // Continue from review page → back to task list
   await world.page.locator('button:has-text("Continue")').click()
   await world.page.waitForLoadState('load')

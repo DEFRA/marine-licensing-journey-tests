@@ -128,14 +128,12 @@ export async function completeRandomActivityFromReviewPage(world) {
   const { topLevel, subOption } = pickRandomActivity()
   world.data.activity = { topLevel, subOption }
   const line = `random activity -> "${topLevel}" / "${subOption.label}"`
-  console.log(`[lcml.activity] ${line}`)
   if (world.attach) {
     world.attach(line, 'text/plain')
   }
   await selectActivityTypeAndContinue(world.page, topLevel, subOption)
   const chosen = await pickRandomNonOtherCheckbox(world.page)
   world.data.activity.checkbox = chosen
-  console.log(`[lcml.activity] checkbox -> "${chosen.label}" (#${chosen.id})`)
   if (world.attach) {
     world.attach(`checkbox -> "${chosen.label}"`, 'text/plain')
   }
