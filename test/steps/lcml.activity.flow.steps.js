@@ -24,9 +24,17 @@ import {
 
 function logSelection(world, prefix, topLevel, subOption) {
   const line = `${prefix} -> top-level "${topLevel}" / sub-option "${subOption.label}"`
-  console.log(`\n[lcml.activity.flow] ${line}`)
   if (world?.attach) {
     world.attach(line, 'text/plain')
+  }
+}
+
+function attachCheckbox(world, chosen) {
+  if (world?.attach) {
+    world.attach(
+      `checkbox -> id=${chosen.id} label="${chosen.label}"`,
+      'text/plain'
+    )
   }
 }
 
@@ -56,9 +64,7 @@ Given(
     await selectActivityTypeAndContinue(this.page, topLevel, subOption)
     const chosen = await pickRandomNonOtherCheckbox(this.page)
     this.data.activity.checkbox = chosen
-    console.log(
-      `[lcml.activity.flow] checkbox: id=${chosen.id} label="${chosen.label}"`
-    )
+    attachCheckbox(this, chosen)
     await checkCheckboxById(this.page, chosen.id)
     await checkCheckboxById(this.page, ACTIVITY_TYPES[topLevel].otherCheckboxId)
     await fillOtherTextarea(this.page, otherText)
@@ -83,9 +89,7 @@ When(
 When('the user selects a random checkbox and saves', async function () {
   const chosen = await pickRandomNonOtherCheckbox(this.page)
   this.data.activity.checkbox = chosen
-  console.log(
-    `[lcml.activity.flow] checkbox: id=${chosen.id} label="${chosen.label}"`
-  )
+  attachCheckbox(this, chosen)
   await checkCheckboxById(this.page, chosen.id)
   await submitWhatActivityForm(this.page)
 })

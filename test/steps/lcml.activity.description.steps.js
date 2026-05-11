@@ -2,20 +2,15 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import {
-  loginAndNavigateToUploadPage,
-  uploadFileAndWaitForReviewPage
+  activityCardLocator,
+  expectOnReviewSiteDetailsPage,
+  uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
 
 const ACTIVITY_DESCRIPTION_FIELD = '#activityDescription'
 const ACTIVITY_DESCRIPTION_ERROR = '#activityDescription-error'
 const SAVE_AND_CONTINUE_BUTTON =
   'button[type="submit"]:has-text("Save and continue")'
-
-function activityCardLocator(page, cardTitle) {
-  return page.locator(
-    `.govuk-summary-card:has(.govuk-summary-card__title:text("${cardTitle}"))`
-  )
-}
 
 function activityDescriptionRow(page, cardTitle) {
   return activityCardLocator(page, cardTitle).locator(
@@ -38,10 +33,6 @@ async function expectOnActivityDescriptionPage(page) {
   await expect(page.locator('h1')).toContainText('Activity description', {
     timeout: 30_000
   })
-}
-
-async function expectOnReviewSiteDetailsPage(page) {
-  await expect(page).toHaveURL(/review-site-details/, { timeout: 30_000 })
 }
 
 When(
@@ -82,8 +73,7 @@ Then('the activity description textbox is empty', async function () {
 Given(
   'the user is on the activity description page for {string} after uploading a {string} file',
   async function (cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     await clickActivityDescriptionAddLink(this.page, cardTitle)
     await expectOnActivityDescriptionPage(this.page)
   }
@@ -149,8 +139,7 @@ Then(
 Given(
   'an organisation user has saved a random activity description for {string} after uploading a {string} file',
   async function (cardTitle, fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
     const text = faker.lorem.sentence(8)
     this.data.activityDescription = text
     await clickActivityDescriptionAddLink(this.page, cardTitle)

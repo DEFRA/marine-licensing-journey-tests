@@ -1,8 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
-  loginAndNavigateToUploadPage,
-  uploadFileAndWaitForReviewPage
+  uploadCoordinatesFile,
+  uploadRandomCoordinatesFile
 } from '../support/lcml-helpers.js'
 
 const ACTIVITY_FIELDS = [
@@ -17,8 +17,14 @@ const ACTIVITY_FIELDS = [
 Given(
   'an organisation user has uploaded a valid {string} file and is on the review site details page',
   async function (fileType) {
-    await loginAndNavigateToUploadPage(this, fileType)
-    await uploadFileAndWaitForReviewPage(this, fileType)
+    await uploadCoordinatesFile(this, fileType)
+  }
+)
+
+Given(
+  'an organisation user has uploaded a coordinates file and is on the review site details page',
+  async function () {
+    await uploadRandomCoordinatesFile(this)
   }
 )
 
