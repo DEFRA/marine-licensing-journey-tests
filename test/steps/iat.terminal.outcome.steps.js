@@ -39,14 +39,11 @@ Then('the page has a body content block', async function () {
   expect(text.length).toBeGreaterThan(0)
 })
 
-Then('the page has a placeholder {string} button', async function (buttonText) {
-  // Continue / Download a PDF on terminal pages are placeholders today —
-  // anchor buttons with href="#" (see ML-1166 / ML-1167 / ML-1165).
-  const button = this.page.locator(
-    `main a.govuk-button:has-text("${buttonText}")`
-  )
+Then('the page has a placeholder Continue button', async function () {
+  // The Continue button on terminal outcome pages is a placeholder pending
+  // ML-1166 (passing IAT context into exemption journey) and ML-1167 (passing
+  // context into MCMS journeys). It renders as an anchor with href="#".
+  const button = this.page.locator('main a.govuk-button:has-text("Continue")')
   await expect(button.first()).toBeVisible({ timeout: 30_000 })
-  await expect(button.first()).toHaveAttribute('href', '#', {
-    timeout: 30_000
-  })
+  await expect(button.first()).toHaveAttribute('href', '#', { timeout: 30_000 })
 })
