@@ -16,9 +16,9 @@ Feature: IAT: Intermediate outcome pages
       | Something else                                     |
     Then the IAT intermediate outcome page "/exemption/construction-exe-not-available-continue" is displayed
     And the IAT outcome options include:
-      | outcomeType                |
-      | WO_CON_NO_EXE_SELF_SERVICE |
-      | WO_NO_EXE_STANDARD_MLA     |
+      | option                                                                     |
+      | Check to see if the activity is suitable for self-service marine licensing |
+      | Apply for a standard marine licence                                        |
 
   Scenario: Deposit "exemption not available, continue" via the golden path
     Given the user starts the IAT
@@ -32,9 +32,9 @@ Feature: IAT: Intermediate outcome pages
       | Something else                                                |
     Then the IAT intermediate outcome page "/exemption/deposit-exe-not-available-continue" is displayed
     And the IAT outcome options include:
-      | outcomeType                    |
-      | WO_DEPOSIT_NO_EXE_SELF_SERVICE |
-      | WO_NO_EXE_STANDARD_MLA         |
+      | option                                                                     |
+      | Check to see if the activity is suitable for self-service marine licensing |
+      | Apply for a standard marine licence                                        |
 
   Scenario: Removal "exemption not available, continue" via the golden path
     Given the user starts the IAT
@@ -49,9 +49,9 @@ Feature: IAT: Intermediate outcome pages
       | Something else                                     |
     Then the IAT intermediate outcome page "/exemption/removal-exe-not-available-continue" is displayed
     And the IAT outcome options include:
-      | outcomeType                    |
-      | WO_REMOVAL_NO_EXE_SELF_SERVICE |
-      | WO_NO_EXE_STANDARD_MLA         |
+      | option                                                                     |
+      | Check to see if the activity is suitable for self-service marine licensing |
+      | Apply for a standard marine licence                                        |
 
   Scenario: Dredging "exemption not available, continue" via the golden path
     Given the user starts the IAT
@@ -63,9 +63,9 @@ Feature: IAT: Intermediate outcome pages
       | Something else                                     |
     Then the IAT intermediate outcome page "/exemption/dredging-exe-not-available-continue" is displayed
     And the IAT outcome options include:
-      | outcomeType                     |
-      | WO_DREDGING_NO_EXE_SELF_SERVICE |
-      | WO_NO_EXE_STANDARD_MLA          |
+      | option                                                                     |
+      | Check to see if the activity is suitable for self-service marine licensing |
+      | Apply for a standard marine licence                                        |
 
   Scenario Outline: <route> intermediate outcome page renders via direct URL
     Given the user navigates directly to the IAT outcome "<route>"

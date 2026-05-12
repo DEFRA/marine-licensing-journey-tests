@@ -103,25 +103,18 @@ Then(
 )
 
 Then('the IAT outcome options include:', async function (dataTable) {
-  const expected = dataTable.hashes().map((row) => row.outcomeType)
-  for (const outcomeType of expected) {
-    const option = this.page.locator(
-      `.app-iat-option:has(input[name="outcomeType"][value="${outcomeType}"]), ` +
-        `.app-iat-option:has(h2:has-text("${outcomeType}"))`
-    )
-    // Non-terminal options carry the hidden input; terminal options don't, so
-    // accept the option being present on the page (matching by hidden input or
-    // by heading id) or fall back to the rendered options count.
-    const matched = await option.count()
-    if (matched === 0) {
-      // Terminal options have no form/hidden input. Verify the page shows at
-      // least one option whose heading matches the outcomeType heading we
-      // expect (set by JSON), by ensuring we have an Option section rendered.
-      const allOptions = await this.page.locator('.app-iat-option').count()
-      expect(allOptions).toBeGreaterThan(0)
-    } else {
-      await expect(option.first()).toBeVisible({ timeout: 30_000 })
-    }
+  // Match each expected option by its visible heading. The template renders
+  // each option block as `<h2>Option N - <heading></h2>`, so locating the
+  // .app-iat-option that contains an h2 with the heading text is unambiguous
+  // within a single page (headings vary across options within a page).
+  const expected = dataTable.hashes().map((row) => row.option)
+  for (const heading of expected) {
+    const option = this.page
+      .locator('.app-iat-option', {
+        has: this.page.locator('h2', { hasText: heading })
+      })
+      .first()
+    await expect(option).toBeVisible({ timeout: 30_000 })
   }
 })
 
