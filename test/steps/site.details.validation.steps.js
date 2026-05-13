@@ -354,19 +354,19 @@ Then(
 )
 
 Then(
-  'the point {int} eastings error should not exist',
+  'the point {int} easting error should not exist',
   async function (pointNumber) {
     await expect(
-      this.page.locator(`#coordinates-${pointNumber - 1}-eastings-error`)
+      this.page.locator(`#coordinates-${pointNumber - 1}-easting-error`)
     ).not.toBeVisible()
   }
 )
 
 Then(
-  'the point {int} northings error should not exist',
+  'the point {int} northing error should not exist',
   async function (pointNumber) {
     await expect(
-      this.page.locator(`#coordinates-${pointNumber - 1}-northings-error`)
+      this.page.locator(`#coordinates-${pointNumber - 1}-northing-error`)
     ).not.toBeVisible()
   }
 )

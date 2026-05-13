@@ -105,10 +105,10 @@ export async function enterPolygonCoordinatesOSGB36(page, coordinates) {
       await page.locator('button:has-text("Add another point")').click()
     }
     await page
-      .locator(`#coordinates-${i}-eastings`)
+      .locator(`#coordinates-${i}-easting`)
       .fill(String(coordinates[i].eastings))
     await page
-      .locator(`#coordinates-${i}-northings`)
+      .locator(`#coordinates-${i}-northing`)
       .fill(String(coordinates[i].northings))
   }
   await page.locator('#continue').click()
