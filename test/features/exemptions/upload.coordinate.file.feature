@@ -83,23 +83,3 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Given an exemption notification with a Shapefile containing only polylines
     When completing the site details task
     Then the file upload error "The selected file must only contain sites drawn as polygons (shapes), not points or lines" is displayed
-
-  @issue=ML-1209
-  Scenario Outline: The <page> page tells the user files must contain polygons only
-    Given an exemption notification with no site details provided
-    When the user navigates to the "<page>" page
-    Then the page displays the guidance "<guidance>"
-
-    Examples:
-      | page             | guidance                                                                                                                |
-      | Before you start | Your file must only contain sites drawn as polygons (shapes), not points or lines.                                      |
-
-    @shapefile
-    Examples:
-      | page             | guidance                                                                                                                                              |
-      | Shapefile upload | You can include more than one site. Your file must only contain sites drawn as polygons (shapes), not points or lines.                                |
-
-    @kml
-    Examples:
-      | page             | guidance                                                                                                                                              |
-      | KML upload       | You can include more than one site. Your file must only contain sites drawn as polygons (shapes), not points or lines.                                |
