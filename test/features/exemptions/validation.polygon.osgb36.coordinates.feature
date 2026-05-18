@@ -8,22 +8,22 @@ Feature: Validation of polygon coordinates: preventing entry of invalid coordina
     Given the Enter multiple sets of coordinates to mark the boundary of the site for OSGB36 coordinates page is displayed
     When the Save and continue button is clicked without providing any coordinates
     Then the following validation errors are displayed:
-      | Field                         | Error Message                              |
-      | Start and end point eastings  | Enter the eastings of start and end point  |
-      | Start and end point northings | Enter the northings of start and end point |
-      | Point 2 eastings              | Enter the eastings of point 2              |
-      | Point 2 northings             | Enter the northings of point 2             |
-      | Point 3 eastings              | Enter the eastings of point 3              |
-      | Point 3 northings             | Enter the northings of point 3             |
+      | Field                        | Error Message                             |
+      | Start and end point easting  | Enter the easting of start and end point  |
+      | Start and end point northing | Enter the northing of start and end point |
+      | Point 2 easting              | Enter the easting of point 2              |
+      | Point 2 northing             | Enter the northing of point 2             |
+      | Point 3 easting              | Enter the easting of point 3              |
+      | Point 3 northing             | Enter the northing of point 3             |
 
   Scenario: Adding coordinate point after validation failure shows correct validation state
     Given errors have been generated for the first 3 coordinate points
     When the Add another point button is clicked
-    Then the point 4 eastings error should not exist
-    And the point 4 northings error should not exist
+    Then the point 4 easting error should not exist
+    And the point 4 northing error should not exist
 
   Scenario: Removing coordinate point with validation errors clears errors correctly
     Given errors have been generated for the first 4 coordinate points
     When the Remove button for Point 4 is clicked
-    Then the point 4 eastings error should not exist
-    And the point 4 northings error should not exist
+    Then the point 4 easting error should not exist
+    And the point 4 northing error should not exist

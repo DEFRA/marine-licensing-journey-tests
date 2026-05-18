@@ -148,15 +148,11 @@ const KML_SITE_NAMES = [
   'Thanet Offshore Wind Farm'
 ]
 
-const SHAPEFILE_SITE_NAMES = [
-  'Kentish Flats and Kentish Flats Extension',
-  'Thanet Offshore Wind Farm',
-  'Greater Gabbard Wind Farm',
-  'London Array Offshore Wind Farm',
-  'Galloper Wind Farm',
-  'Race Bank Wind Farm',
-  'Dudgeon Offshore Wind Farm'
-]
+const MULTI_SITE_SHAPEFILE_SITE_COUNT = 14
+const SHAPEFILE_SITE_NAMES = Array.from(
+  { length: MULTI_SITE_SHAPEFILE_SITE_COUNT },
+  (_, i) => `Survey Box ${i + 1}`
+)
 
 function createMultiSiteFileUploadData(
   fileType,
@@ -215,8 +211,8 @@ export function createMultiSiteKMLUploadData(options) {
 export function createMultiSiteShapefileUploadData(options) {
   return createMultiSiteFileUploadData(
     'Shapefile',
-    'test/resources/Suffolk MMO shapefiles.zip',
-    7,
+    'test/resources/MMOexemptions.zip',
+    MULTI_SITE_SHAPEFILE_SITE_COUNT,
     SHAPEFILE_SITE_NAMES,
     options
   )

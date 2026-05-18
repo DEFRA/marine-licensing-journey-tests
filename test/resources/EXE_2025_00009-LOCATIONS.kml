@@ -13,7 +13,7 @@
 <name>Bridge Pontoon</name>
 <description>Bridge Pontoon</description>
 <styleUrl>#s_advice_main_line_point</styleUrl>
-<LineString><coordinates>-1.29516666666666666666666666666666666666,50.7602,0 -1.29495,50.76038333333333333333333333333333333333,0 </coordinates></LineString>
+<Polygon><outerBoundaryIs><LinearRing><coordinates>-1.2951666666666666,50.7602,0 -1.29495,50.7602,0 -1.29495,50.76038333333333,0 -1.2951666666666666,50.76038333333333,0 -1.2951666666666666,50.7602,0 </coordinates></LinearRing></outerBoundaryIs></Polygon>
 </Placemark>
 </Document>
 </Folder>
