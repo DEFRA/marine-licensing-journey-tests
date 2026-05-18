@@ -24,7 +24,8 @@ import {
   createShapefileEmptyFileData,
   createMultiSiteKMLUploadData,
   createMultiSiteShapefileUploadData,
-  createShapefileMissingFileData
+  createShapefileMissingFileData,
+  createShapefilePolylineData
 } from '../test-data/file-upload.js'
 
 // --- Helper: navigate to task ---
@@ -113,6 +114,14 @@ Given('an exemption notification with empty Shapefile', async function () {
   this.data = createShapefileEmptyFileData()
   await setupAndNavigateToTask(this)
 })
+
+Given(
+  'an exemption notification with a Shapefile containing only polylines',
+  async function () {
+    this.data = createShapefilePolylineData()
+    await setupAndNavigateToTask(this)
+  }
+)
 
 // --- Multi-site KML Given steps ---
 
@@ -253,3 +262,48 @@ Then(
     )
   }
 )
+
+// --- AC2: polygon-only guidance content steps ---
+
+Given(
+  'an exemption notification with no site details provided',
+  async function () {
+    this.data = createShapefilePolylineData()
+    await setupAndNavigateToTask(this)
+  }
+)
+
+When('the user navigates to the {string} page', async function (page) {
+  switch (page) {
+    case 'Before you start':
+      await expect(this.page.locator('h1')).toContainText('Site details', {
+        timeout: 30_000
+      })
+      break
+    case 'Shapefile upload':
+      await continueFromBeforeYouStart(this.page)
+      await selectProvideMethod(this.page, 'file-upload')
+      await selectFileType(this.page, 'Shapefile')
+      await expect(this.page.locator('h1')).toContainText(
+        'Upload a shapefile',
+        { timeout: 30_000 }
+      )
+      break
+    case 'KML upload':
+      await continueFromBeforeYouStart(this.page)
+      await selectProvideMethod(this.page, 'file-upload')
+      await selectFileType(this.page, 'KML')
+      await expect(this.page.locator('h1')).toContainText('Upload a KML file', {
+        timeout: 30_000
+      })
+      break
+    default:
+      throw new Error(`Unknown page: ${page}`)
+  }
+})
+
+Then('the page displays the guidance {string}', async function (text) {
+  await expect(this.page.locator('main')).toContainText(text, {
+    timeout: 30_000
+  })
+})
