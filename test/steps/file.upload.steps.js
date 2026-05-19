@@ -24,7 +24,8 @@ import {
   createShapefileEmptyFileData,
   createMultiSiteKMLUploadData,
   createMultiSiteShapefileUploadData,
-  createShapefileMissingFileData
+  createShapefileMissingFileData,
+  createShapefilePolylineData
 } from '../test-data/file-upload.js'
 
 // --- Helper: navigate to task ---
@@ -113,6 +114,14 @@ Given('an exemption notification with empty Shapefile', async function () {
   this.data = createShapefileEmptyFileData()
   await setupAndNavigateToTask(this)
 })
+
+Given(
+  'an exemption notification with a Shapefile containing only polylines',
+  async function () {
+    this.data = createShapefilePolylineData()
+    await setupAndNavigateToTask(this)
+  }
+)
 
 // --- Multi-site KML Given steps ---
 

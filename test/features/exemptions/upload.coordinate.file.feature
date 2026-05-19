@@ -1,4 +1,4 @@
-@issue=ML-69 @issue=ML-70 @issue=ML-74
+@issue=ML-69 @issue=ML-70 @issue=ML-74 @issue=ML-1209
 Feature: Upload coordinate file: The user can upload a KML or Shapefile containing coordinates for their site
   As an applicant
   I want to upload a file of coordinates for my site
@@ -77,3 +77,9 @@ Feature: Upload coordinate file: The user can upload a KML or Shapefile containi
     Given an exemption notification with empty Shapefile
     When completing the site details task
     Then the file upload error "The selected file is empty" is displayed
+
+  @shapefile @issue=ML-1209
+  Scenario: Uploading a Shapefile containing only polylines fails
+    Given an exemption notification with a Shapefile containing only polylines
+    When completing the site details task
+    Then the file upload error "The selected file must only contain sites drawn as polygons (shapes), not points or lines" is displayed

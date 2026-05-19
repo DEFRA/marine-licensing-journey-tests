@@ -111,6 +111,14 @@ export function createShapefileEmptyFileData() {
   )
 }
 
+export function createShapefilePolylineData() {
+  return createFileUploadData(
+    'Shapefile',
+    'test/resources/Suffolk MMO shapefiles_error.zip',
+    { expectValidationError: true }
+  )
+}
+
 // --- Shapefile missing files factory ---
 
 export function createShapefileMissingFileData(fileDescription) {
