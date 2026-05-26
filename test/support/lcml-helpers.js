@@ -115,6 +115,21 @@ export async function completeOtherAuthorities(page, answer) {
   await page.waitForLoadState('load')
 }
 
+export async function completePublicConsultation(page, answer = 'No') {
+  await page.locator('a:has-text("Pre-application consultation")').click()
+  await page.waitForLoadState('load')
+
+  if (answer === 'Yes') {
+    await page.locator('#consulted').click()
+    await page.locator('#details').fill(faker.lorem.sentence())
+  } else {
+    await page.locator('#consulted-2').click()
+  }
+
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
 export async function completeSharingConsent(page, answer) {
   await page
     .locator('a:has-text("Sharing your project information publicly")')
