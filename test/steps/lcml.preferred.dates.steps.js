@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 
 const TASK_LINK = 'Preferred start and end dates of the licence'
 const TASK_LIST_PATH = '/marine-licence/task-list'
-const PREFERRED_DATES_ROW_LABEL = 'Preferred dates'
+const PREFERRED_DATES_ROW_LABEL = 'Preferred start and end dates of the licence'
 
 const MONTHS = [
   'January',
