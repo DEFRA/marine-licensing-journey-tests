@@ -130,6 +130,25 @@ export async function completePublicConsultation(page, answer = 'No') {
   await page.waitForLoadState('load')
 }
 
+export async function completePreferredDates(page) {
+  await page
+    .locator('a:has-text("Preferred start and end dates of the licence")')
+    .click()
+  await page.waitForLoadState('load')
+
+  const now = new Date()
+  const startDate = new Date(now.getFullYear(), now.getMonth() + 3, 1)
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 15, 1)
+
+  await page.locator('#start-date-month').fill(String(startDate.getMonth() + 1))
+  await page.locator('#start-date-year').fill(String(startDate.getFullYear()))
+  await page.locator('#end-date-month').fill(String(endDate.getMonth() + 1))
+  await page.locator('#end-date-year').fill(String(endDate.getFullYear()))
+
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
 export async function completeSharingConsent(page, answer) {
   await page
     .locator('a:has-text("Sharing your project information publicly")')
