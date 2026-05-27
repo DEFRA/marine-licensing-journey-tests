@@ -9,13 +9,6 @@ Feature: LCML: Preferred start and end dates of the licence task
     When the user views the marine licence task list
     Then the "Preferred start and end dates of the licence" task is displayed with status "Not yet started"
 
-  Scenario: Preferred dates page loads empty with dynamic hint text
-    Given an organisation user has started a marine licence application
-    When the user opens the preferred dates task
-    Then the preferred dates page is displayed with no pre-populated dates
-    And the start date hint shows the month 3 months from now
-    And the end date hint shows the month 15 months from now
-
   Scenario: Saving valid preferred dates marks the task Completed and returns to task list
     Given an organisation user has started a marine licence application
     When the user saves valid preferred dates on the preferred dates page

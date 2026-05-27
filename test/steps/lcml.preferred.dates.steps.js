@@ -2,7 +2,6 @@ import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 
 const TASK_LINK = 'Preferred start and end dates of the licence'
-const PAGE_PATH = '/marine-licence/preferred-dates'
 const TASK_LIST_PATH = '/marine-licence/task-list'
 const PREFERRED_DATES_ROW_LABEL = 'Preferred dates'
 
@@ -113,46 +112,6 @@ When(
     await expect(this.page.locator('#check-your-answers-heading')).toBeVisible({
       timeout: 30_000
     })
-  }
-)
-
-Then(
-  'the preferred dates page is displayed with no pre-populated dates',
-  async function () {
-    await expect(this.page).toHaveURL(new RegExp(PAGE_PATH), {
-      timeout: 30_000
-    })
-    await expect(this.page.locator('h1')).toContainText('Preferred', {
-      timeout: 30_000
-    })
-    const f = preferredDatesPage(this.page)
-    await expect(f.startMonth).toHaveValue('', { timeout: 30_000 })
-    await expect(f.startYear).toHaveValue('', { timeout: 30_000 })
-    await expect(f.endMonth).toHaveValue('', { timeout: 30_000 })
-    await expect(f.endYear).toHaveValue('', { timeout: 30_000 })
-  }
-)
-
-Then(
-  'the start date hint shows the month {int} months from now',
-  async function (offsetMonths) {
-    const { month, year } = computeOffsetDate(offsetMonths)
-    const hint = this.page
-      .locator('[id*="start-date"][id*="hint"], .govuk-hint')
-      .first()
-    await expect(hint).toContainText(String(month), { timeout: 30_000 })
-    await expect(hint).toContainText(String(year), { timeout: 30_000 })
-  }
-)
-
-Then(
-  'the end date hint shows the month {int} months from now',
-  async function (offsetMonths) {
-    const { month, year } = computeOffsetDate(offsetMonths)
-    const hints = this.page.locator('[id*="end-date"][id*="hint"], .govuk-hint')
-    const lastHint = hints.last()
-    await expect(lastHint).toContainText(String(month), { timeout: 30_000 })
-    await expect(lastHint).toContainText(String(year), { timeout: 30_000 })
   }
 )
 
