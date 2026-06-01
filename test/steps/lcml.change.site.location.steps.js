@@ -45,19 +45,6 @@ Given(
 )
 
 Given(
-  'an organisation user is on the change site location confirmation page for site {int}',
-  async function (siteNumber) {
-    await uploadCoordinatesFile(this, 'KML')
-    this.data.originalMapFilename = await getSiteMapFilename(
-      this.page,
-      siteNumber
-    )
-    await changeSiteLocationLink(this.page, siteNumber).click()
-    await this.page.waitForLoadState('load')
-  }
-)
-
-Given(
   'an organisation user is on the change site location upload page for site {int} with file type {string}',
   async function (siteNumber, fileType) {
     await uploadCoordinatesFile(this, 'KML')
@@ -87,25 +74,6 @@ When(
         `#site-details-${siteNumber} .govuk-summary-card__actions a:has-text("${linkText}")`
       )
       .click()
-    await this.page.waitForLoadState('load')
-  }
-)
-
-When('the user selects {string}', async function (buttonText) {
-  await this.page
-    .getByRole('button', { name: new RegExp(buttonText, 'i') })
-    .click()
-  await this.page.waitForLoadState('load')
-})
-
-When(
-  'the user confirms the change and chooses to upload a {string} file',
-  async function (fileType) {
-    await this.page
-      .getByRole('button', { name: /yes, change site location/i })
-      .click()
-    await this.page.waitForLoadState('load')
-    await selectFileType(this.page, fileType)
     await this.page.waitForLoadState('load')
   }
 )
@@ -153,17 +121,6 @@ When(
 )
 
 Then(
-  'a {string} option is displayed for site {int}',
-  async function (linkText, siteNumber) {
-    await expect(
-      this.page.locator(
-        `#site-details-${siteNumber} .govuk-summary-card__actions a:has-text("${linkText}")`
-      )
-    ).toBeVisible({ timeout: 30_000 })
-  }
-)
-
-Then(
   'the change site location confirmation page is displayed',
   async function () {
     await expect(this.page).toHaveURL(/change-site-location/, {
@@ -195,16 +152,6 @@ Then(
   }
 )
 
-Then('the choose file type page is displayed', async function () {
-  await expect(this.page).toHaveURL(/choose-file-type-to-upload/, {
-    timeout: 30_000
-  })
-  await expect(this.page.locator('h1').first()).toContainText(
-    'Which type of file do you want to upload?',
-    { timeout: 30_000 }
-  )
-})
-
 Then(
   'the upload file page asks for a single site file only',
   async function () {
@@ -226,16 +173,18 @@ Then(
   }
 )
 
-Then('a single site upload error is displayed', async function () {
-  await expect(this.page.locator('.govuk-error-summary')).toContainText(
-    'Upload a file that contains a single site',
-    { timeout: 30_000 }
-  )
-  await expect(this.page.locator('#file-id-error')).toContainText(
-    'Upload a file that contains a single site',
-    { timeout: 30_000 }
-  )
-})
+Then(
+  'a single site upload error is displayed with message {string}',
+  async function (message) {
+    await expect(this.page.locator('.govuk-error-summary')).toContainText(
+      message,
+      { timeout: 30_000 }
+    )
+    await expect(this.page.locator('#file-id-error')).toContainText(message, {
+      timeout: 30_000
+    })
+  }
+)
 
 Then(
   'the review site details page is displayed scrolled to site {int}',

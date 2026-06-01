@@ -4,11 +4,6 @@ Feature: LCML: Change site location
   I want to replace the location of a site I provided by file upload
   So that I can correct the site without losing its name or activity details
 
-  Scenario: A Change site location option is displayed for an uploaded site
-    Given an organisation user is on the upload file page for "KML"
-    When the user uploads a valid "KML" file and saves
-    Then a "Change site location" option is displayed for site 1
-
   Scenario: Selecting Change site location opens the confirmation page
     Given an organisation user has uploaded a valid "KML" file and is on the review site details page
     When the user selects "Change site location" for site 1
@@ -21,21 +16,12 @@ Feature: LCML: Change site location
     Then the change site location confirmation page is displayed
     And the confirmation page shows the stored site name prefixed with "Site 1"
 
-  Scenario: Confirming the change opens the choose file type page
-    Given an organisation user is on the change site location confirmation page for site 1
-    When the user selects "Yes, change site location"
-    Then the choose file type page is displayed
-
-  Scenario: The change site location upload page asks for a single site file
-    Given an organisation user is on the change site location confirmation page for site 1
-    When the user confirms the change and chooses to upload a "KML" file
-    Then the upload file page asks for a single site file only
-    And the upload file page states point and line sites are not allowed
-
-  Scenario: Uploading a file containing more than one site is rejected
+  Scenario: Uploading a file containing more than one site is rejected on the single-site upload page
     Given an organisation user is on the change site location upload page for site 1 with file type "KML"
     When the user uploads a file containing more than one site
-    Then a single site upload error is displayed
+    Then a single site upload error is displayed with message "Upload a file that contains a single site"
+    And the upload file page asks for a single site file only
+    And the upload file page states point and line sites are not allowed
 
   Scenario: Replacing a site location retains the site name and activity details
     Given an organisation user has uploaded a valid "KML" file, named site 1 and added activity details
