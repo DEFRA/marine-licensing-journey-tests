@@ -514,6 +514,60 @@ export async function givenManualSite(world, siteType) {
   await expectReviewSiteDetailsPage(world.page)
 }
 
+const COORDINATE_SYSTEM_RADIO = {
+  WGS84: '#coordinateSystem',
+  OSGB36: '#coordinateSystem-2'
+}
+
+export async function expectFieldPrePopulated(page, field, site) {
+  switch (field) {
+    case 'Site name':
+      await expect(page.locator('#siteName')).toHaveValue(site.siteName, {
+        timeout: 30_000
+      })
+      break
+    case 'Single or multiple sets of coordinates': {
+      const value = site.siteType === 'polygon' ? 'multiple' : 'single'
+      await expect(
+        page.locator(`input[name="coordinatesEntry"][value="${value}"]`)
+      ).toBeChecked({ timeout: 30_000 })
+      break
+    }
+    case 'Coordinate system':
+      await expect(
+        page.locator(COORDINATE_SYSTEM_RADIO[site.coordinateSystem])
+      ).toBeChecked({ timeout: 30_000 })
+      break
+    case 'Coordinates at centre of site':
+      await expect(page.locator('#latitude')).toHaveValue(site.latitude, {
+        timeout: 30_000
+      })
+      await expect(page.locator('#longitude')).toHaveValue(site.longitude, {
+        timeout: 30_000
+      })
+      break
+    case 'Width of circular site':
+      await expect(page.locator('#width')).toHaveValue(site.width, {
+        timeout: 30_000
+      })
+      break
+    case 'Start and end points':
+      await expect(page.locator('#coordinates-0-latitude')).toHaveValue(
+        site.coordinates[0].latitude,
+        { timeout: 30_000 }
+      )
+      await expect(page.locator('#coordinates-0-longitude')).toHaveValue(
+        site.coordinates[0].longitude,
+        { timeout: 30_000 }
+      )
+      break
+    default:
+      throw new Error(
+        `No pre-population assertion defined for field "${field}"`
+      )
+  }
+}
+
 export async function completeManualPolygonSite(world, options = {}) {
   const {
     siteName = `Polygon Cove ${faker.location.city()}`,
