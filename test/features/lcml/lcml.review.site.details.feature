@@ -1,4 +1,4 @@
-@lcml @issue=ML-1239  @issue=ML-1203  @issue=ML-1204 @issue=ML-1202  @issue=ML-1200
+@lcml @issue=ML-1239  @issue=ML-1203  @issue=ML-1204 @issue=ML-1202  @issue=ML-1200 @issue=ML-1201
 Feature: LCML: Review site details page (manual entry)
   As an applicant providing site details for a marine licence application
   I want to review and change the details of the site(s) I have entered manually
@@ -115,6 +115,35 @@ Feature: LCML: Review site details page (manual entry)
     And the user selects "<option>" on the delete site confirmation page
     Then the review site details page is displayed
     And site 1 is displayed on the review page
+
+    Examples:
+      | option |
+      | Cancel |
+      | Back   |
+
+  @issue=ML-1201
+  Scenario: Selecting Delete all site details opens the confirmation page
+    Given an organisation user has manually entered a circular site for a marine licence
+    When the user selects the Delete all site details option
+    Then the delete all sites confirmation page is displayed
+    And the delete all sites confirmation page does not warn that deletion cannot be undone
+
+  @issue=ML-1201
+  Scenario: Confirming deletion of all sites returns to the task list
+    Given an organisation user has manually entered two circular sites for a marine licence
+    When the user selects the Delete all site details option
+    And the user confirms deletion of all sites
+    Then the marine licence task list is displayed
+    And the "Site details" task status is "Not yet started"
+
+  @issue=ML-1201
+  Scenario Outline: Selecting <option> on the delete all sites confirmation page returns to review without deleting
+    Given an organisation user has manually entered two circular sites for a marine licence
+    When the user selects the Delete all site details option
+    And the user selects "<option>" on the delete all sites confirmation page
+    Then the review site details page is displayed
+    And site 1 is displayed on the review page
+    And site 2 is displayed on the review page
 
     Examples:
       | option |
