@@ -7,7 +7,15 @@ import {
   selectProvideMethod,
   selectFileType,
   uploadFile,
-  addSiteNameFromReview
+  addSiteNameFromReview,
+  enterSiteName,
+  selectCoordinatesEntryMethod,
+  selectCoordinateSystem,
+  enterCentrePointWGS84,
+  enterCentrePointOSGB36,
+  enterWidth,
+  enterPolygonCoordinatesWGS84,
+  enterPolygonCoordinatesOSGB36
 } from './site-details-flow.js'
 import PublicRegisterPage from '../pages/public.register.page.js'
 
@@ -382,6 +390,220 @@ export async function verifyActivityCardCompleted(
       { timeout: 30_000 }
     )
   }
+}
+
+export async function navigateToManualSiteEntry(world) {
+  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.waitForLoadState('load')
+  await continueFromBeforeYouStart(world.page)
+  await world.page.waitForLoadState('load')
+  await selectProvideMethod(world.page, 'enter-manually')
+  await world.page.waitForLoadState('load')
+}
+
+export async function enterCircleSiteDetails(world, options = {}) {
+  const {
+    siteName = `Barryshingles Bay ${faker.location.city()}`,
+    coordinateSystem = 'WGS84',
+    latitude = '50.000000',
+    longitude = '-1.000000',
+    eastings = '432675',
+    northings = '181310',
+    width = '20'
+  } = options
+
+  const page = world.page
+  await enterSiteName(page, siteName)
+  await page.waitForLoadState('load')
+  await selectCoordinatesEntryMethod(page, 'circle')
+  await page.waitForLoadState('load')
+  await selectCoordinateSystem(page, coordinateSystem)
+  await page.waitForLoadState('load')
+
+  if (coordinateSystem === 'WGS84') {
+    await enterCentrePointWGS84(page, latitude, longitude)
+  } else {
+    await enterCentrePointOSGB36(page, eastings, northings)
+  }
+  await page.waitForLoadState('load')
+  await enterWidth(page, width)
+  await page.waitForLoadState('load')
+
+  return {
+    siteType: 'circle',
+    siteName,
+    coordinateSystem,
+    latitude,
+    longitude,
+    eastings,
+    northings,
+    width
+  }
+}
+
+export async function completeManualCircleSite(world, options = {}) {
+  await loginAndReachTaskList(world)
+  await navigateToManualSiteEntry(world)
+  world.data.site = await enterCircleSiteDetails(world, options)
+  return world.data.site
+}
+
+export async function completeTwoManualCircleSites(world) {
+  const first = await completeManualCircleSite(world, {
+    siteName: `First Site ${faker.location.city()}`
+  })
+
+  await world.page
+    .locator('button[name="add"]:has-text("Add another site")')
+    .click()
+  await world.page.waitForLoadState('load')
+
+  const second = await enterCircleSiteDetails(world, {
+    siteName: `Second Site ${faker.location.city()}`,
+    latitude: '51.500000',
+    longitude: '-2.000000',
+    width: '30'
+  })
+
+  world.data.sites = [first, second]
+  return world.data.sites
+}
+
+export async function submitPrimaryAndWait(page) {
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await page.waitForLoadState('load')
+}
+
+export async function expectReviewSiteDetailsPage(page) {
+  await expect(page.locator('h1').first()).toContainText(
+    'Review site details',
+    {
+      timeout: 30_000
+    }
+  )
+}
+
+export async function expectReviewSiteDetailsAnchor(page, siteNumber) {
+  await expectReviewSiteDetailsPage(page)
+  expect(page.url()).toContain(`#site-details-${siteNumber}`)
+}
+
+export function siteCardRow(page, key) {
+  return page.locator(
+    `#site-details-1 .govuk-summary-list__row:has(dt.govuk-summary-list__key:text-is("${key}"))`
+  )
+}
+
+export function siteCardRowValue(page, key) {
+  return siteCardRow(page, key).locator('.govuk-summary-list__value')
+}
+
+export function coordinateSystemLines(coordinateSystem) {
+  if (coordinateSystem === 'OSGB36') {
+    return ['OSGB36 (National Grid)', 'Eastings and Northings']
+  }
+  return ['WGS84 (World Geodetic System 1984)', 'Latitude and longitude']
+}
+
+export async function givenManualSite(world, siteType) {
+  if (siteType === 'polygon') {
+    await completeManualPolygonSite(world)
+  } else {
+    await completeManualCircleSite(world)
+  }
+  await expectReviewSiteDetailsPage(world.page)
+}
+
+const COORDINATE_SYSTEM_RADIO = {
+  WGS84: '#coordinateSystem',
+  OSGB36: '#coordinateSystem-2'
+}
+
+export async function expectFieldPrePopulated(page, field, site) {
+  switch (field) {
+    case 'Site name':
+      await expect(page.locator('#siteName')).toHaveValue(site.siteName, {
+        timeout: 30_000
+      })
+      break
+    case 'Single or multiple sets of coordinates': {
+      const value = site.siteType === 'polygon' ? 'multiple' : 'single'
+      await expect(
+        page.locator(`input[name="coordinatesEntry"][value="${value}"]`)
+      ).toBeChecked({ timeout: 30_000 })
+      break
+    }
+    case 'Coordinate system':
+      await expect(
+        page.locator(COORDINATE_SYSTEM_RADIO[site.coordinateSystem])
+      ).toBeChecked({ timeout: 30_000 })
+      break
+    case 'Coordinates at centre of site':
+      await expect(page.locator('#latitude')).toHaveValue(site.latitude, {
+        timeout: 30_000
+      })
+      await expect(page.locator('#longitude')).toHaveValue(site.longitude, {
+        timeout: 30_000
+      })
+      break
+    case 'Width of circular site':
+      await expect(page.locator('#width')).toHaveValue(site.width, {
+        timeout: 30_000
+      })
+      break
+    case 'Start and end points':
+      await expect(page.locator('#coordinates-0-latitude')).toHaveValue(
+        site.coordinates[0].latitude,
+        { timeout: 30_000 }
+      )
+      await expect(page.locator('#coordinates-0-longitude')).toHaveValue(
+        site.coordinates[0].longitude,
+        { timeout: 30_000 }
+      )
+      break
+    default:
+      throw new Error(
+        `No pre-population assertion defined for field "${field}"`
+      )
+  }
+}
+
+export async function completeManualPolygonSite(world, options = {}) {
+  const {
+    siteName = `Polygon Cove ${faker.location.city()}`,
+    coordinateSystem = 'WGS84',
+    coordinates = [
+      { latitude: '50.000000', longitude: '-1.000000' },
+      { latitude: '50.001000', longitude: '-0.999000' },
+      { latitude: '50.000500', longitude: '-0.999500' }
+    ]
+  } = options
+
+  await loginAndReachTaskList(world)
+  await navigateToManualSiteEntry(world)
+
+  const page = world.page
+  await enterSiteName(page, siteName)
+  await page.waitForLoadState('load')
+  await selectCoordinatesEntryMethod(page, 'boundary')
+  await page.waitForLoadState('load')
+  await selectCoordinateSystem(page, coordinateSystem)
+  await page.waitForLoadState('load')
+
+  if (coordinateSystem === 'WGS84') {
+    await enterPolygonCoordinatesWGS84(page, coordinates)
+  } else {
+    await enterPolygonCoordinatesOSGB36(page, coordinates)
+  }
+  await page.waitForLoadState('load')
+
+  world.data.site = {
+    siteType: 'polygon',
+    siteName,
+    coordinateSystem,
+    coordinates
+  }
+  return world.data.site
 }
 
 export async function completeSiteDetailsViaFileUpload(

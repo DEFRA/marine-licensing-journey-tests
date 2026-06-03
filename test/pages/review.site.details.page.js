@@ -5,7 +5,6 @@ export default class ReviewSiteDetailsPage {
     this.page = page
   }
 
-  // Activity details card
   activityDatesChangeLink() {
     return this.page.locator(
       '#activity-details-card .govuk-summary-list__row:has(dt:text-is("Activity dates")) a:text("Change")'
@@ -58,6 +57,18 @@ export default class ReviewSiteDetailsPage {
   siteNameValue(siteNumber) {
     return this.page.locator(
       `#site-details-${siteNumber} .govuk-summary-list__row:has(dt:text("Site name")) .govuk-summary-list__value`
+    )
+  }
+
+  siteFieldChangeLink(siteNumber, fieldKey) {
+    return this.page.locator(
+      `#site-details-${siteNumber} .govuk-summary-list__row:has(dt.govuk-summary-list__key:text-is("${fieldKey}")) a:has-text("Change")`
+    )
+  }
+
+  siteFieldRowValue(siteNumber, fieldKey) {
+    return this.page.locator(
+      `#site-details-${siteNumber} .govuk-summary-list__row:has(dt.govuk-summary-list__key:text-is("${fieldKey}")) .govuk-summary-list__value`
     )
   }
 
