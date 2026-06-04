@@ -127,6 +127,9 @@ Then('the marine licence task list is displayed', async function () {
 // --- Add another site ---
 
 When('the user selects the Add another site button', async function () {
+  // Brief pause after the first site is saved before starting the second, to
+  // mitigate an intermittent server error on the second site's save.
+  await this.page.waitForTimeout(3_000)
   await this.page
     .locator('button[name="add"]:has-text("Add another site")')
     .click()
