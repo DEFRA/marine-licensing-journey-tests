@@ -5,6 +5,8 @@ import {
   loginAndStartApplication,
   completeSpecialLegalPowers,
   completeOtherAuthorities,
+  completePublicConsultation,
+  completePreferredDates,
   completeSharingConsent,
   completeSiteDetailsViaFileUpload,
   completeProjectBackground,
@@ -18,6 +20,8 @@ Given(
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completePublicConsultation(this.page)
+    await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
     await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
   }
@@ -31,6 +35,8 @@ Given(
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeSpecialLegalPowers(this.page, slpAnswer)
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completePublicConsultation(this.page)
+    await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
   }
 )
@@ -42,6 +48,8 @@ Given(
     await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
     await completeProjectBackground(this.page, faker.lorem.sentence(10))
     await completeOtherAuthorities(this.page, oaAnswer)
+    await completePublicConsultation(this.page)
+    await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
   }
 )
