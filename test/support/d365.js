@@ -149,14 +149,9 @@ export async function searchD365Case(page, reference) {
   // interaction — dismiss it defensively before searching.
   await dismissSignInPrompt(page, { timeout: 3_000, attempts: 3 })
 
-  // Filter the Completed Cases grid by reference number using the in-grid
-  // search box (#SearchBoxWithTypeAhead-input). This element filters the
-  // already-loaded grid cache — it's the same DOM element whether D365
-  // Copilot is enabled (placeholder "Ask about data in this table.") or
-  // disabled (placeholder "Filter by keyword"), and pressing Enter performs
-  // a plain keyword match either way. Then double-click the first result
-  // row to open the case record form.
-  const searchInput = page.locator('#SearchBoxWithTypeAhead-input')
+  const searchInput = page
+    .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
+    .first()
   await searchInput.waitFor({ state: 'visible', timeout: 30_000 })
   await searchInput.fill(reference)
   await searchInput.press('Enter')
@@ -217,8 +212,8 @@ export async function openD365CaseRecord(page, applicantOrganisation) {
   await orgField.waitFor({ state: 'visible', timeout: 30_000 })
   const orgText = await orgField.innerText()
   expect(orgText.trim()).toBe(applicantOrganisation)
-
   const appUrlInput = page.locator(APP_URL_SELECTOR)
   await appUrlInput.waitFor({ state: 'visible', timeout: 30_000 })
+  await expect(appUrlInput).toHaveValue(/^https?:\/\//, { timeout: 60_000 })
   return await appUrlInput.getAttribute('value')
 }
