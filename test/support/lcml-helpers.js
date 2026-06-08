@@ -180,6 +180,21 @@ export async function completeProjectBackground(page, text) {
   await page.waitForLoadState('load')
 }
 
+export async function completeWaterFrameworkDirective(page, answer = 'No') {
+  await page
+    .locator('a:has-text("Water Framework Directive assessment")')
+    .click()
+  await page.waitForLoadState('load')
+  // "Before you start WFD" → "One nautical mile" question page
+  await page.locator('a.govuk-button:has-text("Continue")').click()
+  await page.waitForLoadState('load')
+  await page
+    .locator(answer === 'Yes' ? '#nauticalMile' : '#nauticalMile-2')
+    .click()
+  await page.locator('main button[type="submit"]').click()
+  await page.waitForLoadState('load')
+}
+
 export async function loginAndReachTaskList(world, role = 'organisation') {
   await loginAndStartApplication(world, role)
   await completeSpecialLegalPowers(world.page, 'No')
