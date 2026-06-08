@@ -10,6 +10,7 @@ import {
   completeSharingConsent,
   completeSiteDetailsViaFileUpload,
   completeProjectBackground,
+  completeWaterFrameworkDirective,
   pickRandomFileType
 } from '../support/lcml-helpers.js'
 
@@ -24,6 +25,7 @@ Given(
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
     await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
+    await completeWaterFrameworkDirective(this.page)
   }
 )
 
@@ -51,6 +53,13 @@ Given(
     await completePublicConsultation(this.page)
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
+  }
+)
+
+Given(
+  'the Water Framework Directive assessment task is completed',
+  async function () {
+    await completeWaterFrameworkDirective(this.page)
   }
 )
 
