@@ -40,7 +40,6 @@ Given(
     await completePublicConsultation(this.page)
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
-    await completeWaterFrameworkDirective(this.page)
   }
 )
 
@@ -54,6 +53,12 @@ Given(
     await completePublicConsultation(this.page)
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
+  }
+)
+
+Given(
+  'the Water Framework Directive assessment task is completed',
+  async function () {
     await completeWaterFrameworkDirective(this.page)
   }
 )
