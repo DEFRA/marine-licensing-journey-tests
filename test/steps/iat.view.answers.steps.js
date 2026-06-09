@@ -1,9 +1,9 @@
 import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import { OUTCOME_PREFIX } from '../support/iat-outcome.js'
+import { outcomeRegex, iatPathRegex } from '../support/iat-outcome.js'
 
-const FIRST_QUESTION_PATH = '/journey/self-service/sea'
-const ANSWER_URL_PATTERN = /\/journey\/self-service\/answer\/[\w-]+$/
+const FIRST_QUESTION_REGEX = /\/journey\/self-service\/c\/[^/]+\/sea$/
+const ANSWER_URL_PATTERN = /\/journey\/self-service\/outcome-document\/[\w-]+$/
 
 Then(
   'the "View answers" link is displayed beneath the Continue button',
@@ -124,7 +124,7 @@ When(
   'the user goes back to the first IAT question and follows this answer path:',
   async function (dataTable) {
     const onFirstQuestion = () =>
-      new URL(this.page.url()).pathname === FIRST_QUESTION_PATH
+      FIRST_QUESTION_REGEX.test(new URL(this.page.url()).pathname)
     for (let i = 0; i < 10 && !onFirstQuestion(); i++) {
       const back = this.page.locator('a.govuk-back-link')
       if (!(await back.count())) break
@@ -146,12 +146,7 @@ When(
 Then(
   'the IAT licence-not-required outcome page {string} is displayed with heading {string}',
   async function (route, heading) {
-    await expect(this.page).toHaveURL(
-      new RegExp(
-        `${OUTCOME_PREFIX.replace(/\//g, '\\/')}${route.replace(/\//g, '\\/')}$`
-      ),
-      { timeout: 30_000 }
-    )
+    await expect(this.page).toHaveURL(outcomeRegex(route), { timeout: 30_000 })
     await expect(this.page.locator('h1').first()).toContainText(heading, {
       timeout: 30_000
     })
@@ -177,9 +172,9 @@ Then('the page has a Back link', async function () {
   expect(href).not.toBe('#')
 })
 
-Then('the Back link points to {string}', async function (expectedPath) {
+Then('the Back link points to the first IAT question', async function () {
   const back = this.page.locator('a.govuk-back-link', { hasText: 'Back' })
-  await expect(back.first()).toHaveAttribute('href', expectedPath, {
-    timeout: 30_000
-  })
+  const href = await back.first().getAttribute('href')
+  expect(href, 'Back link must have an href').toBeTruthy()
+  expect(href).toMatch(iatPathRegex('sea'))
 })

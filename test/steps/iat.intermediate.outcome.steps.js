@@ -3,9 +3,11 @@ import { expect } from '@playwright/test'
 import { getConfig } from '../support/config.js'
 import {
   IAT_START_PATH,
-  OUTCOME_PREFIX,
-  navigateToOutcome
+  navigateToOutcome,
+  outcomeRegex,
+  landingPathRegex
 } from '../support/iat-outcome.js'
+import { walkToRoute } from '../support/iat-walk.js'
 
 async function answerByLabel(world, label) {
   // Match radio whose label text equals the supplied label, click it, take a
@@ -52,6 +54,18 @@ Given(
   }
 )
 
+// ML-1306: reach an outcome/question by walking the journey (no deep-links).
+Given('the user walks the IAT to the outcome {string}', async function (route) {
+  await walkToRoute(this, route)
+})
+
+Given(
+  'the user walks the IAT to the question {string}',
+  async function (route) {
+    await walkToRoute(this, route)
+  }
+)
+
 When('the user follows this IAT answer path:', async function (dataTable) {
   const answers = dataTable.hashes().map((row) => row.answer)
   for (const label of answers) {
@@ -90,12 +104,7 @@ When(
 Then(
   'the IAT intermediate outcome page {string} is displayed',
   async function (route) {
-    await expect(this.page).toHaveURL(
-      new RegExp(
-        `${OUTCOME_PREFIX.replace(/\//g, '\\/')}${route.replace(/\//g, '\\/')}$`
-      ),
-      { timeout: 30_000 }
-    )
+    await expect(this.page).toHaveURL(outcomeRegex(route), { timeout: 30_000 })
     await expect(this.page.locator('h1').first()).toBeVisible({
       timeout: 30_000
     })
@@ -119,10 +128,9 @@ Then('the IAT outcome options include:', async function (dataTable) {
 })
 
 Then('the IAT lands on path {string}', async function (expectedPath) {
-  await expect(this.page).toHaveURL(
-    new RegExp(`${expectedPath.replace(/\//g, '\\/')}$`),
-    { timeout: 30_000 }
-  )
+  await expect(this.page).toHaveURL(landingPathRegex(expectedPath), {
+    timeout: 30_000
+  })
   if (this.attach) {
     this.attach(`redirected to -> ${expectedPath}`, 'text/plain')
   }
