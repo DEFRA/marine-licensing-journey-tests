@@ -29,11 +29,11 @@ export default class CheckYourAnswersPage {
     )
   }
 
-  siteDetailsChangeLink(siteNumber, totalSites = 1) {
-    const cardHeading =
-      totalSites === 1 ? 'Site details' : `Site ${siteNumber} details`
+  siteDetailsChangeLink(siteNumber) {
+    // ML-1214 renamed the CYA site card title from "Site N details" to "Site N"
+    // and links each site's Change action to a "#site-details-{n}" anchor.
     return this.page.locator(
-      `xpath=//h2[contains(@class, "govuk-summary-card__title") and contains(text(), "${cardHeading}")]/ancestor::div[contains(@class, "govuk-summary-card")]//a[contains(text(), "Change")]`
+      `a[href*="from=check-your-answers"][href$="site-details-${siteNumber}"]`
     )
   }
 
