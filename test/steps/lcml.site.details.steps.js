@@ -92,7 +92,7 @@ Then(
     ).toContainText(this.data.projectName, { timeout: 30_000 })
 
     await expect(this.page.locator('#site-location-card')).toContainText(
-      'File uploaded',
+      'File upload',
       { timeout: 30_000 }
     )
 
