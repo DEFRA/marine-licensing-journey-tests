@@ -1,6 +1,6 @@
 import { Given, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import { OUTCOME_PREFIX, navigateToOutcome } from '../support/iat-outcome.js'
+import { navigateToOutcome, outcomeRegex } from '../support/iat-outcome.js'
 
 Given(
   'an anonymous user navigates directly to the IAT outcome {string}',
@@ -18,12 +18,7 @@ Given(
 Then(
   'the IAT terminal outcome page {string} is displayed with heading {string}',
   async function (route, heading) {
-    await expect(this.page).toHaveURL(
-      new RegExp(
-        `${OUTCOME_PREFIX.replace(/\//g, '\\/')}${route.replace(/\//g, '\\/')}$`
-      ),
-      { timeout: 30_000 }
-    )
+    await expect(this.page).toHaveURL(outcomeRegex(route), { timeout: 30_000 })
     await expect(this.page.locator('h1').first()).toContainText(heading, {
       timeout: 30_000
     })

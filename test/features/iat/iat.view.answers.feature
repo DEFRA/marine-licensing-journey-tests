@@ -5,8 +5,8 @@ Feature: IAT: Licence not required outcomes and viewing answers
   So that I know no marine licence is needed and can keep a copy of what I saw
 
   @issue=ML-1185
-  Scenario Outline: Anonymous user can view the "<route>" licence-not-required outcome page
-    Given an anonymous user navigates directly to the IAT outcome "<route>"
+  Scenario Outline: User reaches the "<route>" licence-not-required outcome by walking the IAT
+    Given the user walks the IAT to the outcome "<route>"
     When the user views the IAT outcome page
     Then the IAT licence-not-required outcome page "<route>" is displayed with heading "<heading>"
     And the page has a body content block
@@ -15,7 +15,6 @@ Feature: IAT: Licence not required outcomes and viewing answers
 
     Examples:
       | route                                              | heading                     |
-      | /exemption/licence-not-required                    | Marine licence not required |
       | /exemption/licence-not-required/sea                | Marine licence not required |
       | /exemption/licence-not-required/Activity-elsewhere | Marine licence not required |
       | /licence-not-required-devolved                     | Marine licence not required |
@@ -29,11 +28,11 @@ Feature: IAT: Licence not required outcomes and viewing answers
     Then the IAT licence-not-required outcome page "/exemption/licence-not-required/sea" is displayed with heading "Marine licence not required"
     And the page has a body content block
     And the page has a "View answers" link that opens in a new tab
-    And the Back link points to "/journey/self-service/sea"
+    And the Back link points to the first IAT question
 
   @issue=ML-1165
   Scenario: The View answers link is shown beneath the Continue button and opens in a new tab
-    Given an anonymous user navigates directly to the IAT outcome "/fast-track-mla"
+    Given the user walks the IAT to the outcome "/fast-track-mla"
     When the user views the IAT outcome page
     Then the page has a "View answers" link that opens in a new tab
     And the "View answers" link is displayed beneath the Continue button

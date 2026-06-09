@@ -1,6 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { getConfig } from '../support/config.js'
+import { iatPathRegex } from '../support/iat-outcome.js'
 
 const QUESTION_PREFIX = '/journey/self-service'
 
@@ -110,13 +111,10 @@ Then(
 Then(
   'the IAT question page URL has changed from {string}',
   async function (originalRoute) {
-    // Anything but the original route is acceptable — proves navigation away.
-    await expect(this.page).not.toHaveURL(
-      new RegExp(
-        `${QUESTION_PREFIX.replace(/\//g, '\\/')}${originalRoute.replace(/\//g, '\\/')}$`
-      ),
-      { timeout: 30_000 }
-    )
+    // Anything but the original (slug-prefixed) route proves navigation away.
+    await expect(this.page).not.toHaveURL(iatPathRegex(originalRoute), {
+      timeout: 30_000
+    })
     if (this.attach) {
       this.attach(
         `navigated to -> ${new URL(this.page.url()).pathname}`,

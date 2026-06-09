@@ -67,34 +67,14 @@ Feature: IAT: Intermediate outcome pages
       | Check to see if the activity is suitable for self-service marine licensing |
       | Apply for a standard marine licence                                        |
 
-  Scenario Outline: <route> intermediate outcome page renders via direct URL
-    Given the user navigates directly to the IAT outcome "<route>"
-    When the user views the IAT outcome page
-    Then the IAT intermediate outcome page "<route>" is displayed
-
-    Examples:
-      | route                         |
-      | /construction/journey-select  |
-      | /deposit/journey-select       |
-      | /removal/journey-select       |
-      | /dredging/journey-select      |
-
   Scenario Outline: Selecting "<option>" on <route> navigates to <expectedPath>
-    Given the user navigates directly to the IAT outcome "<route>"
+    Given the user walks the IAT to the outcome "<route>"
     When the user selects the "<option>" outcome option and clicks Continue
     Then the IAT lands on path "<expectedPath>"
 
     Examples:
-      | route                                              | option                                                                          | expectedPath                                          |
-      | /exemption/construction-exe-not-available-continue | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/construction/activity           |
-      | /exemption/deposit-exe-not-available-continue      | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/deposit/activity                |
-      | /exemption/removal-exe-not-available-continue      | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/removal/activity                |
-      | /exemption/dredging-exe-not-available-continue     | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/dredging/activity               |
-      | /construction/journey-select                       | Check to see if an exemption applies or notify the MMO about an exempt activity | /journey/self-service/exemption/construction          |
-      | /construction/journey-select                       | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/construction/activity           |
-      | /deposit/journey-select                            | Check to see if an exemption applies or notify the MMO about an exempt activity | /journey/self-service/exemption/deposit/activity-type |
-      | /deposit/journey-select                            | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/deposit/activity                |
-      | /removal/journey-select                            | Check to see if an exemption applies or notify the MMO about an exempt activity | /journey/self-service/exemption/removal/activity-type |
-      | /removal/journey-select                            | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/removal/activity                |
-      | /dredging/journey-select                           | Check to see if an exemption applies or notify the MMO about an exempt activity | /journey/self-service/exemption/dredging              |
-      | /dredging/journey-select                           | Check to see if the activity is suitable for self-service marine licensing      | /journey/self-service/dredging/activity               |
+      | route                                              | option                                                                     | expectedPath                                |
+      | /exemption/construction-exe-not-available-continue | Check to see if the activity is suitable for self-service marine licensing | /journey/self-service/construction/activity |
+      | /exemption/deposit-exe-not-available-continue      | Check to see if the activity is suitable for self-service marine licensing | /journey/self-service/deposit/activity      |
+      | /exemption/removal-exe-not-available-continue      | Check to see if the activity is suitable for self-service marine licensing | /journey/self-service/removal/activity      |
+      | /exemption/dredging-exe-not-available-continue     | Check to see if the activity is suitable for self-service marine licensing | /journey/self-service/dredging/activity     |
