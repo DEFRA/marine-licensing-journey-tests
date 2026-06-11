@@ -3,7 +3,8 @@ import { expect } from '@playwright/test'
 import {
   loginAndReachTaskList,
   loginAndNavigateToUploadPage,
-  uploadFileAndWaitForReviewPage
+  uploadFileAndWaitForReviewPage,
+  completeSiteDetailsViaFileUpload
 } from '../support/lcml-helpers.js'
 import {
   continueFromBeforeYouStart,
@@ -153,3 +154,19 @@ Then(
     )
   }
 )
+
+// --- ML-1308: "Site details" task status + navigation ---
+
+Given(
+  'an organisation user has completed all site and activity details for a marine licence',
+  async function () {
+    await loginAndReachTaskList(this)
+    await completeSiteDetailsViaFileUpload(this)
+  }
+)
+
+Then('the site details start page is displayed', async function () {
+  await expect(this.page).toHaveURL(/\/marine-licence\/site-details(\?|$)/, {
+    timeout: 30_000
+  })
+})

@@ -101,7 +101,7 @@ Feature: LCML: Review site details page (manual entry)
     And only 1 site is displayed on the review page
     And the remaining site is re-numbered as site 1 with the second site name
 
-  @issue=ML-1200
+  @issue=ML-1200 @issue=ML-1236
   Scenario: Deleting the last remaining site returns to the task list
     Given an organisation user has manually entered a circular site for a marine licence
     When the user deletes site 1
@@ -128,7 +128,7 @@ Feature: LCML: Review site details page (manual entry)
     Then the delete all sites confirmation page is displayed
     And the delete all sites confirmation page does not warn that deletion cannot be undone
 
-  @issue=ML-1201
+  @issue=ML-1201 @issue=ML-1236
   Scenario: Confirming deletion of all sites returns to the task list
     Given an organisation user has manually entered two circular sites for a marine licence
     When the user selects the Delete all site details option
@@ -149,3 +149,18 @@ Feature: LCML: Review site details page (manual entry)
       | option |
       | Cancel |
       | Back   |
+
+  @issue=ML-1236
+  Scenario: Adding a manual site shows an Activity details card for the new site
+    Given an organisation user has manually entered a circular site for a marine licence
+    When the user selects the Add another site button
+    And the user manually enters another circular site
+    Then the "Site 2 - Activity 1" activity card is visible
+
+  @issue=ML-1236
+  Scenario: Editing a manual site does not affect its activity details
+    Given an organisation user has manually entered a circular site and added activity details
+    When the user selects the "Site name" change link for the circular site
+    And the user changes the site name and saves
+    Then the review site details page is displayed at the site 1 anchor
+    And the site 1 activity details are retained

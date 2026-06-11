@@ -8,10 +8,22 @@ import {
   siteCardRow,
   siteCardRowValue,
   coordinateSystemLines,
-  givenManualSite
+  givenManualSite,
+  completeManualCircleSite,
+  completeActivityDetailsFromReview
 } from '../support/lcml-helpers.js'
+import { completeRandomActivityFromReviewPage } from '../support/lcml-activity-flow.js'
 
 // --- Given ---
+
+Given(
+  'an organisation user has manually entered a circular site and added activity details',
+  async function () {
+    await completeManualCircleSite(this)
+    await completeRandomActivityFromReviewPage(this)
+    await completeActivityDetailsFromReview(this, 'Site 1 - Activity 1')
+  }
+)
 
 Given(
   'an organisation user has manually entered a circular site for a marine licence',
