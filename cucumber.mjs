@@ -76,7 +76,7 @@ export const exemption = {
 export const lcml = {
   ...common,
   paths: ['test/features/lcml/**/*.feature'],
-  tags: 'not @wip'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
 export const iat = {

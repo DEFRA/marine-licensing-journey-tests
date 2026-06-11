@@ -1,7 +1,13 @@
 import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import { getConfig } from './config.js'
-import { registerTestUser, loginAsTestUser, acceptCookies } from './auth.js'
+import {
+  registerTestUser,
+  loginAsTestUser,
+  acceptCookies,
+  loginWithRealDefraId,
+  selectOrganisationRole
+} from './auth.js'
 import {
   continueFromBeforeYouStart,
   selectProvideMethod,
@@ -58,7 +64,16 @@ export async function loginAndStartApplication(world, role = 'employee') {
 
   await world.page.goto(new URL('/home', config.baseURL).toString())
 
-  if (!config.isRealDefraId) {
+  // Real DEFRA ID (ENVIRONMENT=test): sign in via Government Gateway and select
+  // the Windfarm organisation, then confirm the org role — mirrors the exemption
+  // navigateAndAuthenticate flow. Stub environments just click the login link.
+  if (config.isRealDefraId) {
+    if (!world.isAuthenticated) {
+      await loginWithRealDefraId(world.page)
+      world.isAuthenticated = true
+    }
+    await selectOrganisationRole(world.page)
+  } else {
     await loginAsTestUser(world.page, world.testUser)
   }
 
@@ -627,19 +642,147 @@ export async function completeSiteDetailsViaFileUpload(
 ) {
   await navigateToUploadPage(world, fileType)
   await uploadFileAndWaitForReviewPage(world, fileType)
-  // Add site name for site 1
+
   await addSiteNameFromReview(world.page, 1)
-  // Complete a random Type of activity + What activity selection for Site 1
-  // before leaving the review page (the Add link only exists here).
+
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
   await completeRandomActivityFromReviewPage(world)
-  // Fill the activity sub-tasks for Site 1 - Activity 1 from the Review page
+
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
-  // Verify the card now shows all sub-tasks completed before leaving the page
+
   await verifyActivityCardCompleted(world.page, 'Site 1 - Activity 1')
-  // Continue from review page → back to task list
+
   await world.page.locator('button:has-text("Continue")').click()
   await world.page.waitForLoadState('load')
+}
+
+async function completeNonSiteTasks(world) {
+  await completeProjectBackground(world.page, faker.lorem.sentence(10))
+  await completeSpecialLegalPowers(world.page, 'No')
+  await completeOtherAuthorities(world.page, 'No')
+  await completePublicConsultation(world.page)
+  await completePreferredDates(world.page)
+  await completeSharingConsent(world.page, 'No')
+  await completeWaterFrameworkDirective(world.page)
+}
+
+async function addActivityForSite1AndContinue(world) {
+  const { completeRandomActivityFromReviewPage } = await import(
+    './lcml-activity-flow.js'
+  )
+  await completeRandomActivityFromReviewPage(world)
+  await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
+  await world.page.locator('button:has-text("Continue")').click()
+  await world.page.waitForLoadState('load')
+}
+
+const POLYGON_COORDINATES = [
+  { latitude: '50.100000', longitude: '-1.100000' },
+  { latitude: '50.110000', longitude: '-1.090000' },
+  { latitude: '50.105000', longitude: '-1.095000' },
+  { latitude: '50.102000', longitude: '-1.098000' }
+]
+
+export async function completeUploadApp(world) {
+  await loginAndStartApplication(world, 'organisation')
+  await completeNonSiteTasks(world)
+  await completeSiteDetailsViaFileUpload(world, 'KML')
+  world.data.siteType = 'upload'
+}
+
+export async function completeManualCircleApp(world) {
+  await loginAndStartApplication(world, 'organisation')
+  await completeNonSiteTasks(world)
+  await navigateToManualSiteEntry(world)
+  world.data.site = await enterCircleSiteDetails(world, {
+    siteName: `Circle Site ${faker.location.city()}`,
+    coordinateSystem: 'WGS84',
+    latitude: '50.123456',
+    longitude: '-1.234567',
+    width: '150'
+  })
+  world.data.siteType = 'circle'
+  await addActivityForSite1AndContinue(world)
+}
+
+export async function completeManualPolygonApp(world) {
+  await loginAndStartApplication(world, 'organisation')
+  await completeNonSiteTasks(world)
+  await navigateToManualSiteEntry(world)
+  const siteName = `Polygon Site ${faker.location.city()}`
+  await enterSiteName(world.page, siteName)
+  await world.page.waitForLoadState('load')
+  await selectCoordinatesEntryMethod(world.page, 'boundary')
+  await world.page.waitForLoadState('load')
+  await selectCoordinateSystem(world.page, 'WGS84')
+  await world.page.waitForLoadState('load')
+  await enterPolygonCoordinatesWGS84(world.page, POLYGON_COORDINATES)
+  await world.page.waitForLoadState('load')
+  world.data.site = {
+    siteType: 'polygon',
+    siteName,
+    coordinateSystem: 'WGS84',
+    coordinates: POLYGON_COORDINATES
+  }
+  world.data.siteType = 'polygon'
+  await addActivityForSite1AndContinue(world)
+}
+
+const SITE_TYPE_BUILDERS = {
+  upload: completeUploadApp,
+  circle: completeManualCircleApp,
+  polygon: completeManualPolygonApp
+}
+
+export async function completeRandomSiteTypeApp(world) {
+  const siteType = faker.helpers.arrayElement(Object.keys(SITE_TYPE_BUILDERS))
+  await SITE_TYPE_BUILDERS[siteType](world)
+  return siteType
+}
+
+export async function submitMarineLicence(world) {
+  const page = world.page
+  await page.locator('#review-and-send').click()
+  await page.waitForLoadState('load')
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForLoadState('load')
+  await page.locator('button:has-text("Confirm and send information")').click()
+  await page.waitForLoadState('load')
+  const reference = await page
+    .locator('.govuk-panel__body strong')
+    .textContent()
+  world.data.applicationReference = reference.trim()
+}
+
+export async function openViewDetailsFromDashboard(world) {
+  const page = world.page
+  await page.getByRole('link', { name: 'Projects' }).click()
+  await page.waitForLoadState('load')
+  await page
+    .locator(
+      `xpath=//tr[td[1][normalize-space(text())="${world.data.projectName}"]]//a[normalize-space(text())="View details"]`
+    )
+    .click()
+  await page.waitForLoadState('load')
+}
+
+export async function openPublicViewDetailsFromDashboard(world) {
+  const page = world.page
+  await page.getByRole('link', { name: 'Projects' }).click()
+  await page.waitForLoadState('load')
+  const href = await page
+    .locator(
+      `xpath=//tr[td[1][normalize-space(text())="${world.data.projectName}"]]//a[normalize-space(text())="View details"]`
+    )
+    .getAttribute('href')
+  const marineLicenceId = href.split('/').pop()
+  await page.goto(
+    new URL(
+      `/marine-licence/view-public-details/${marineLicenceId}`,
+      getConfig().baseURL
+    ).toString()
+  )
+  await page.waitForLoadState('load')
 }
