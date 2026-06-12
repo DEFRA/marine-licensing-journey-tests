@@ -38,6 +38,14 @@ Feature: LCML: Site details journey
     Then the site details start page is displayed
 
   @issue=ML-1308
+  Scenario: Site details task is "In progress" and opens the review site details page while details are incomplete
+    Given an organisation user has manually entered a circular site for a marine licence
+    And the user continues from the review site details page
+    And the "Site details" task is displayed with status "In progress"
+    When the "Site details" task is selected
+    Then the review site details page is displayed
+
+  @issue=ML-1308
   Scenario: Site details task is "Completed" and opens the review site details page once all details are done
     Given an organisation user has completed all site and activity details for a marine licence
     And the "Site details" task is displayed with status "Completed"
