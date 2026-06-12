@@ -23,6 +23,7 @@ Feature: LCML: Change site location
     And the upload file page asks for a single site file only
     And the upload file page states point and line sites are not allowed
 
+  @issue=ML-1236
   Scenario: Replacing a site location retains the site name and activity details
     Given an organisation user has uploaded a valid "KML" file, named site 1 and added activity details
     When the user changes the location of site 1 by uploading a single "Shapefile" file
