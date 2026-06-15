@@ -17,6 +17,8 @@ services:
     ports:
       - '3200:3200'
     restart: unless-stopped
+    env_file:
+      - compose/aws.env
     environment:
       PORT: 3200
       REDIS_HOST: redis-frontend
@@ -24,8 +26,15 @@ services:
       USE_SINGLE_INSTANCE_CACHE: true
       NODE_ENV: development
       APP_BASE_URL: ${DEFRA_ID_APP_BASE_URL:-http://defra-id-stub:3200}
+      REGISTRATIONS_STORE_ENGINE: dynamodb
+      REGISTRATIONS_STORE_TTL: 259200000
+      AWS_DYNAMODB_REGISTRATIONS_TABLE_NAME: cdp-defra-id-stub-registrations
+      DYNAMODB_ENDPOINT: http://localstack:4566
+      AWS_REGION: eu-west-2
     depends_on:
       redis-frontend:
+        condition: service_healthy
+      localstack:
         condition: service_healthy
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
@@ -85,7 +94,7 @@ services:
     environment:
       DEBUG: ${DEBUG:-1}
       LS_LOG: WARN # Localstack DEBUG Level
-      SERVICES: s3,sqs,sns,firehose
+      SERVICES: s3,sqs,sns,firehose,dynamodb
       LOCALSTACK_HOST: 127.0.0.1
     volumes:
       - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
