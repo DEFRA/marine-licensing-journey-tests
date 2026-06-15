@@ -8,7 +8,7 @@ import {
 } from './auth.js'
 import { buildNavigationUrl } from '../test-data/exemption.js'
 
-const GUIDANCE_PATH = '/guidance/who-is-the-exemption-for'
+export const GUIDANCE_PATH = '/guidance/who-is-the-exemption-for'
 
 async function selectGuidanceOptionAndContinueIfPresent(
   page,
@@ -36,23 +36,13 @@ async function handleConfirmEmployeePageIfPresent(page) {
   }
 }
 
-export async function navigateAndAuthenticate(world, targetPath, options = {}) {
+export async function authenticateFromGuidancePage(world, options = {}) {
   const config = getConfig()
 
-  if (!world.data?.iatContext) {
-    throw new Error(
-      'Test data must include iatContext before navigating. ' +
-        'Call a test data factory (e.g. createValidProjectNameData) first.'
-    )
-  }
-
-  // Register user BEFORE navigating so the authorize page includes their login link
   if (!config.isRealDefraId && !world.testUser) {
     world.testUser = await registerTestUser(config.defraIdUrl)
   }
 
-  const url = buildNavigationUrl(GUIDANCE_PATH, world.data.iatContext)
-  await world.page.goto(new URL(url, config.baseURL).toString())
   await selectGuidanceOptionAndContinueIfPresent(world.page)
 
   if (config.isRealDefraId) {
@@ -70,6 +60,27 @@ export async function navigateAndAuthenticate(world, targetPath, options = {}) {
   if (!options.skipCookies) {
     await acceptCookies(world.page)
   }
+}
+
+export async function navigateAndAuthenticate(world, targetPath, options = {}) {
+  const config = getConfig()
+
+  if (!world.data?.iatContext) {
+    throw new Error(
+      'Test data must include iatContext before navigating. ' +
+        'Call a test data factory (e.g. createValidProjectNameData) first.'
+    )
+  }
+
+  // Register user BEFORE navigating so the authorize page includes their login link
+  if (!config.isRealDefraId && !world.testUser) {
+    world.testUser = await registerTestUser(config.defraIdUrl)
+  }
+
+  const url = buildNavigationUrl(GUIDANCE_PATH, world.data.iatContext)
+  await world.page.goto(new URL(url, config.baseURL).toString())
+
+  await authenticateFromGuidancePage(world, options)
 }
 
 export async function signOut(page) {
