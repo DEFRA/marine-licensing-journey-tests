@@ -200,9 +200,11 @@ export async function completeWaterFrameworkDirective(page, answer = 'No') {
     .locator('a:has-text("Water Framework Directive assessment")')
     .click()
   await page.waitForLoadState('load')
-  // "Before you start WFD" → "One nautical mile" question page
-  await page.locator('a.govuk-button:has-text("Continue")').click()
-  await page.waitForLoadState('load')
+
+  if (/water-framework-directive-before-you-start/.test(page.url())) {
+    await page.locator('a.govuk-button:has-text("Continue")').click()
+    await page.waitForLoadState('load')
+  }
   await page
     .locator(answer === 'Yes' ? '#nauticalMile' : '#nauticalMile-2')
     .click()
