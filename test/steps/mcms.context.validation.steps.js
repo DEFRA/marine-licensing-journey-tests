@@ -104,10 +104,13 @@ When(
   }
 )
 
-When('the user opens the pre-canned IAT URL again in the same session', async function () {
-  this.data.iatContext = this.data.firstIatContext
-  await openIatHandoffUrlInSameSession(this, { useRootPath: true })
-})
+When(
+  'the user opens the pre-canned IAT URL again in the same session',
+  async function () {
+    this.data.iatContext = this.data.firstIatContext
+    await openIatHandoffUrlInSameSession(this, { useRootPath: true })
+  }
+)
 
 When(
   'entering and saving a project with a valid name for the second exemption',
@@ -227,12 +230,15 @@ Then('the dashboard shows both exemption project names', async function () {
   }
 })
 
-Then('the first exemption retains its original project name', async function () {
-  const dashboard = new DashboardPage(this.page)
-  const row = await dashboard.getNotificationRow(this.data.firstProjectName)
-  expect(row.name).toBe(this.data.firstProjectName)
-  expect(row.status).toBe('Draft')
-})
+Then(
+  'the first exemption retains its original project name',
+  async function () {
+    const dashboard = new DashboardPage(this.page)
+    const row = await dashboard.getNotificationRow(this.data.firstProjectName)
+    expect(row.name).toBe(this.data.firstProjectName)
+    expect(row.status).toBe('Draft')
+  }
+)
 
 When('the project name page is visited', async function () {
   const config = getConfig()
