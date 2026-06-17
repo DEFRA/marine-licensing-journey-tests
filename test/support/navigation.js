@@ -97,6 +97,21 @@ export async function navigateAndReAuthenticate(world, targetPath) {
   await acceptCookies(world.page)
 }
 
+/**
+ * Re-open the pre-canned IAT handoff URL while already logged in (same tab/session).
+ * Matches manual testing: paste the same root URL with IAT query params from an in-progress page.
+ * Does not re-register the test user or repeat the OIDC stub login flow.
+ */
+export async function openIatHandoffUrlInSameSession(world, options = {}) {
+  const config = getConfig()
+  const basePath = options.useRootPath ? '/' : GUIDANCE_PATH
+  const url = buildNavigationUrl(basePath, world.data.iatContext)
+  await world.page.goto(new URL(url, config.baseURL).toString())
+  await world.page.waitForLoadState('load')
+  await selectGuidanceOptionAndContinueIfPresent(world.page, 5_000)
+  await handleConfirmEmployeePageIfPresent(world.page)
+}
+
 export async function navigateWithRawQueryString(
   world,
   targetPath,
