@@ -46,7 +46,7 @@ Feature: IAT: passing context into the exemption journey
     When the user opens the View answers link from the View details page
     Then the IAT answers page provides print and save as PDF options
 
-  @fivium @issue=ML-1299
+  @fivium @real-defra-id @issue=ML-1299
   Scenario: A Fivium-sourced exemption offers a downloadable PDF of the answers
     Given the user walks the Fivium IAT to an exemption handoff outcome
     And the user follows the exemption Continue button
