@@ -10,6 +10,14 @@ Feature: MCMS context validation: MCMS context is validated and handled correctl
     When all tasks are completed for a circular site using WGS84 coordinates and review and send is clicked
     Then the project summary card is displayed in full on the check your answers page
 
+  @issue=ML-1288
+  Scenario: Starting a second exemption via IAT URL mid-draft creates a new notification without renaming the first
+    Given a user has a draft exemption on the review site details page with sites and public register completed
+    When the user opens the pre-canned IAT URL again in the same session
+    And entering and saving a project with a valid name for the second exemption
+    Then the dashboard shows both exemption project names
+    And the first exemption retains its original project name
+
   @issue=ML-948 @issue=ML-882
   Scenario: Missing MCMS context prevents notification creation and redirects user to projects dashboard
     Given a notification is started with MCMS context ""
