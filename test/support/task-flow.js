@@ -76,6 +76,15 @@ export async function clickConfirmAndSend(page) {
 
 export async function submitNotification(world) {
   await completeAllTasks(world)
+  await submitCompletedExemption(world)
+}
+
+export async function submitNotificationFromCurrentPage(world) {
+  await completeTasksFromCurrentPage(world)
+  await submitCompletedExemption(world)
+}
+
+export async function submitCompletedExemption(world) {
   await clickReviewAndSend(world.page)
   await clickConfirmAndSend(world.page)
 

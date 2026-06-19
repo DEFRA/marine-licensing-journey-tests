@@ -80,6 +80,45 @@ export const IAT_PATHS = {
   ]
 }
 
+export const EXEMPTION_HANDOFF_PATHS = {
+  CON: [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Construction',
+    'Build or make something new',
+    'Flood or flood risk',
+    'Yes',
+    'Yes'
+  ],
+  DEPOSIT: [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Deposit of a substance or object',
+    'From a vehicle or vessel',
+    'Emergency or safety and training',
+    'Flood or flood risk',
+    'Yes',
+    'Yes'
+  ],
+  REMOVAL: [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Removal of a substance or object',
+    'Using a vehicle or vessel',
+    'Yes',
+    'Markers, moorings or aids to navigation',
+    'Temporary markers',
+    'Removal of a marker that has been in place for 24 hours to 28 days where the Marine Management Organisation was already notified'
+  ],
+  DREDGE: [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Dredging',
+    'Shellfish propagation and cultivation',
+    'Yes'
+  ]
+}
+
 /**
  * Follow one step of an IAT path. The label is either a single-select radio
  * answer or an intermediate-outcome fork option heading.
@@ -122,9 +161,15 @@ export async function followIatStep(page, label) {
   throw new Error(`IAT path step not found on page: "${label}"`)
 }
 
-export async function startIat(world) {
+export const FIVIUM_IAT_START_URL =
+  process.env.IAT_URL ||
+  process.env.FIVIUM_IAT_START_URL ||
+  'https://marinelicensingtest.marinemanagement.org.uk/mmofox5uat/journey/self-service/start'
+
+export async function startIat(world, startUrl) {
   const config = getConfig()
-  await world.page.goto(new URL(IAT_START_PATH, config.baseURL).toString())
+  const url = startUrl || new URL(IAT_START_PATH, config.baseURL).toString()
+  await world.page.goto(url)
   await world.page.waitForLoadState('load')
   await world.page
     .locator(
@@ -134,8 +179,8 @@ export async function startIat(world) {
   await world.page.waitForLoadState('load')
 }
 
-export async function walkIatPath(world, labels) {
-  await startIat(world)
+export async function walkIatPath(world, labels, startUrl) {
+  await startIat(world, startUrl)
   for (const label of labels) {
     await followIatStep(world.page, label)
   }
