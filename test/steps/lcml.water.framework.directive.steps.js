@@ -14,6 +14,9 @@ const NAUTICAL_MILE_PATH =
 const EXCLUDED_ACTIVITIES_PATH =
   '/marine-licence/water-framework-directive-excluded-activities'
 const NAUTICAL_MILE_RADIO_IDS = { Yes: '#nauticalMile', No: '#nauticalMile-2' }
+// A non-.docx/.odt file used to trigger the WFD upload file-type error.
+const WFD_WRONG_TYPE_FILE =
+  'test/resources/uk-government-gathers-business-and-environment-leaders-in-support-of-un-nature-agreement.html'
 
 async function openWfdTask(page) {
   await page.getByRole('link', { name: TASK_LINK }).click()
@@ -88,6 +91,15 @@ When(
     const wfd = new WaterFrameworkDirectivePage(this.page)
     await wfd.answerExcludedActivities(answer)
     await wfd.uploadAssessment(WFD_ASSESSMENT_FILE)
+  }
+)
+
+When(
+  'the user selects {string} and uploads a wrong file type for the Water Framework Directive assessment',
+  async function (answer) {
+    const wfd = new WaterFrameworkDirectivePage(this.page)
+    await wfd.answerExcludedActivities(answer)
+    await wfd.uploadAssessment(WFD_WRONG_TYPE_FILE)
   }
 )
 
@@ -210,3 +222,69 @@ Then(
     await expect(wfd.card().locator('a')).toHaveCount(0)
   }
 )
+
+// --- Change links on the Review WFD answers page (ML-1348) ---
+
+Given(
+  'an organisation user is on the Review WFD answers page',
+  async function () {
+    const wfd = await reachNauticalMilePage(this)
+    await wfd.answerNauticalMile('Yes')
+    await wfd.answerExcludedActivities('Yes')
+    await wfd.expectOnReviewPage()
+  }
+)
+
+Given(
+  'an organisation user is on the Review WFD answers page with an uploaded assessment',
+  async function () {
+    const wfd = await reachNauticalMilePage(this)
+    await wfd.answerNauticalMile('Yes')
+    await wfd.answerExcludedActivities('No')
+    await wfd.uploadAssessment(WFD_ASSESSMENT_FILE)
+    await wfd.expectOnReviewPage()
+  }
+)
+
+When(
+  'the user changes the nautical mile answer to {string}',
+  async function (answer) {
+    const wfd = new WaterFrameworkDirectivePage(this.page)
+    await wfd
+      .reviewRow(WaterFrameworkDirectivePage.ROW.nauticalMile)
+      .locator('a')
+      .click()
+    await this.page.waitForLoadState('load')
+    await wfd.answerNauticalMile(answer)
+  }
+)
+
+When(
+  'the user changes the excluded activities answer to {string}',
+  async function (answer) {
+    const wfd = new WaterFrameworkDirectivePage(this.page)
+    await wfd
+      .reviewRow(WaterFrameworkDirectivePage.ROW.excludedActivities)
+      .locator('a')
+      .click()
+    await this.page.waitForLoadState('load')
+    await wfd.answerExcludedActivities(answer)
+  }
+)
+
+When('the user changes the uploaded file', async function () {
+  const wfd = new WaterFrameworkDirectivePage(this.page)
+  await wfd
+    .reviewRow(WaterFrameworkDirectivePage.ROW.upload)
+    .locator('a')
+    .click()
+  await this.page.waitForLoadState('load')
+  await wfd.uploadAssessment(WFD_ASSESSMENT_FILE)
+})
+
+Then('the WFD upload page is displayed', async function () {
+  await expect(this.page).toHaveURL(
+    new RegExp(WaterFrameworkDirectivePage.UPLOAD_PATH),
+    { timeout: 30_000 }
+  )
+})
