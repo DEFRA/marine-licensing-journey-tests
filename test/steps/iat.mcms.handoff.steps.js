@@ -14,12 +14,18 @@ When('the user follows the MCMS handoff button', async function () {
   const href = await button.getAttribute('href')
   expect(href, 'handoff button href').toMatch(/\/continue\//)
 
-  // The /continue route 302-redirects to the external MCMS service — capture the
-  // Location header without following it so we can assert the query string the
-  // frontend built. page.request shares the browser context cookies / IAT session.
-  const absolute = new URL(href, this.page.url()).toString()
-  const response = await this.page.request.get(absolute, { maxRedirects: 0 })
-  expect(response.status(), 'continue route should 302 to MCMS').toBe(302)
+  // Follow the handoff through the browser, NOT page.request: page.request uses
+  // Node's DNS and can't resolve the app host that the browser reaches via
+  // Chromium host-resolver-rules (fails in CI as EAI_AGAIN). Capture the 302 to
+  // MCMS from the browser network; the external MCMS target need not load.
+  const continueUrl = new URL(href, this.page.url()).toString()
+  const handoffResponse = this.page.waitForResponse(
+    (response) => response.url().includes('/continue/'),
+    { timeout: 30_000 }
+  )
+  await this.page.goto(continueUrl, { waitUntil: 'commit' }).catch(() => {}) // the 302 target (external MCMS) may be unreachable from CI
+  const response = await handoffResponse
+  expect(response.status(), 'continue route should redirect to MCMS').toBe(302)
 
   this.mcmsHandoffUrl = response.headers().location
   expect(this.mcmsHandoffUrl, 'MCMS handoff Location header').toBeTruthy()
@@ -75,8 +81,6 @@ Then(
 )
 
 Then('the MCMS handoff URL responds with status 200', async function () {
-  // Live contract check: the MCMS service must accept the handoff URL the
-  // frontend built from the IAT context (needs outbound access to MCMS).
   const response = await this.page.request.get(this.mcmsHandoffUrl, {
     timeout: 30_000
   })
