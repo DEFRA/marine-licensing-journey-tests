@@ -14,16 +14,12 @@ When('the user follows the MCMS handoff button', async function () {
   const href = await button.getAttribute('href')
   expect(href, 'handoff button href').toMatch(/\/continue\//)
 
-  // Follow the handoff through the browser, NOT page.request: page.request uses
-  // Node's DNS and can't resolve the app host that the browser reaches via
-  // Chromium host-resolver-rules (fails in CI as EAI_AGAIN). Capture the 302 to
-  // MCMS from the browser network; the external MCMS target need not load.
   const continueUrl = new URL(href, this.page.url()).toString()
   const handoffResponse = this.page.waitForResponse(
     (response) => response.url().includes('/continue/'),
     { timeout: 30_000 }
   )
-  await this.page.goto(continueUrl, { waitUntil: 'commit' }).catch(() => {}) // the 302 target (external MCMS) may be unreachable from CI
+  await this.page.goto(continueUrl, { waitUntil: 'commit' }).catch(() => {})
   const response = await handoffResponse
   expect(response.status(), 'continue route should redirect to MCMS').toBe(302)
 

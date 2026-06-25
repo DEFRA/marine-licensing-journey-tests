@@ -37,9 +37,6 @@ Then('the page has a body content block', async function () {
 Then(
   'the page has an MCMS handoff button labelled {string}',
   async function (label) {
-    // ML-1167: an outcome that hands off to MCMS labels its main button with
-    // the outcome heading (not "Continue") and points it at the internal
-    // /continue/{id}/{route} route, which 302-redirects to the MCMS service.
     const button = this.page.locator(`main a.govuk-button:has-text("${label}")`)
     await expect(button.first()).toBeVisible({ timeout: 30_000 })
     const href = await button.first().getAttribute('href')
