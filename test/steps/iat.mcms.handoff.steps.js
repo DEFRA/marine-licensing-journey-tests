@@ -57,11 +57,8 @@ Then(
   'the MCMS handoff URL includes mapped answers for',
   async function (dataTable) {
     const params = new URL(this.mcmsHandoffUrl).searchParams
-    for (const { mapping } of dataTable.hashes()) {
-      expect(
-        params.get(mapping),
-        `mapped answer ${mapping} should be present and non-empty`
-      ).toBeTruthy()
+    for (const { mapping, answerId } of dataTable.hashes()) {
+      expect(params.get(mapping), `mapped answer ${mapping}`).toBe(answerId)
     }
   }
 )

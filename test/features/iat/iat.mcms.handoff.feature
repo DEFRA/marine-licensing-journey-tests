@@ -11,9 +11,9 @@ Feature: IAT: passing context into the MCMS handoff
     Then the MCMS handoff URL points at the configured MCMS service
     And the MCMS handoff URL carries the journey id and the view answers link
     And the MCMS handoff URL includes mapped answers for
-      | mapping                  |
-      | ACTIVITY_TYPE            |
-      | ACTIVITY_SUBTYPE_DEPOSIT |
+      | mapping                  | answerId |
+      | ACTIVITY_TYPE            | DEPOSIT  |
+      | ACTIVITY_SUBTYPE_DEPOSIT | BAS      |
     And the MCMS handoff URL contains the outcome parameters
       | parameter  | value |
       | FAST_TRACK | true  |
