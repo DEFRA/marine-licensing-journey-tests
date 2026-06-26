@@ -6,23 +6,25 @@ const FIRST_QUESTION_REGEX = /\/journey\/self-service\/c\/[^/]+\/sea$/
 const ANSWER_URL_PATTERN = /\/journey\/self-service\/outcome-document\/[\w-]+$/
 
 Then(
-  'the "View answers" link is displayed beneath the Continue button',
+  'the "View answers" link is displayed beneath the main action button',
   async function () {
     const beneath = await this.page.evaluate(() => {
       const main = document.querySelector('main')
-      const cont = [...main.querySelectorAll('a.govuk-button, button')].find(
-        (e) => /continue/i.test(e.textContent)
-      )
+      // ML-1167: the main CTA is the handoff button (labelled with the outcome
+      // heading), no longer literally "Continue" — match the primary button.
+      const cta =
+        main.querySelector('.app-iat-actions a.govuk-button') ||
+        main.querySelector('a.govuk-button')
       const va = [...main.querySelectorAll('a')].find((a) =>
         /view answers/i.test(a.textContent)
       )
-      if (!cont || !va) return false
+      if (!cta || !va) return false
 
-      return !!(cont.compareDocumentPosition(va) & 4)
+      return !!(cta.compareDocumentPosition(va) & 4)
     })
     expect(
       beneath,
-      'View answers link should appear after the Continue button'
+      'View answers link should appear after the main action button'
     ).toBe(true)
   }
 )

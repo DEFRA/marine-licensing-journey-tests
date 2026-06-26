@@ -31,11 +31,11 @@ Feature: IAT: Licence not required outcomes and viewing answers
     And the Back link points to the first IAT question
 
   @issue=ML-1165
-  Scenario: The View answers link is shown beneath the Continue button and opens in a new tab
+  Scenario: The View answers link is shown beneath the main action button and opens in a new tab
     Given the user walks the IAT to the outcome "/fast-track-mla"
     When the user views the IAT outcome page
     Then the page has a "View answers" link that opens in a new tab
-    And the "View answers" link is displayed beneath the Continue button
+    And the "View answers" link is displayed beneath the main action button
 
   @issue=ML-1165
   Scenario: The IAT answers page shows the saved answers on a unique, print-friendly page
