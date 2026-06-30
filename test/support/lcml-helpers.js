@@ -26,7 +26,7 @@ import {
 import PublicRegisterPage from '../pages/public.register.page.js'
 import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page.js'
 
-export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.docx'
+export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
@@ -215,11 +215,6 @@ export async function completeWaterFrameworkDirective(page, answer = 'No') {
   await page.waitForLoadState('load')
 }
 
-/**
- * Completes the WFD task via the upload path:
- * nautical mile Yes -> excluded activities No -> upload assessment ->
- * Review WFD answers -> Continue (task complete).
- */
 export async function completeWaterFrameworkDirectiveUpload(
   page,
   filePath = WFD_ASSESSMENT_FILE

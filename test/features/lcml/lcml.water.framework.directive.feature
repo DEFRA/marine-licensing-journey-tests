@@ -35,7 +35,7 @@ Feature: LCML: Water Framework Directive
     Then the Review WFD answers page is displayed
     And the Review WFD answers page shows "Project located within one nautical mile (1.85km) of the coast" as "Yes"
     And the Review WFD answers page shows "Project limited to one of the excluded activities" as "No"
-    And the Review WFD answers page shows the uploaded file "WFD.docx"
+    And the Review WFD answers page shows the uploaded file "WFD.odt"
 
   @issue=ML-1340
   Scenario: Uploading a file that is not a .docx or .odt shows a file type error
@@ -68,7 +68,7 @@ Feature: LCML: Water Framework Directive
     Given an organisation user is on the Review WFD answers page with an uploaded assessment
     When the user changes the uploaded file
     Then the Review WFD answers page is displayed
-    And the Review WFD answers page shows the uploaded file "WFD.docx"
+    And the Review WFD answers page shows the uploaded file "WFD.odt"
 
   @issue=ML-1345 @issue=ML-1348
   Scenario: The WFD assessment card and its Change link are shown on Check your answers (nautical mile "Yes")
@@ -76,7 +76,7 @@ Feature: LCML: Water Framework Directive
     When the user opens the Check your answers page
     Then the Water Framework Directive assessment card shows "Project located within one nautical mile (1.85km) of the coast" as "Yes"
     And the Water Framework Directive assessment card shows "Project limited to one of the excluded activities" as "No"
-    And the Water Framework Directive assessment card shows the uploaded file "WFD.docx"
+    And the Water Framework Directive assessment card shows the uploaded file "WFD.odt"
     And the Water Framework Directive assessment card Change link points to the Review WFD answers page
 
   @issue=ML-1348
@@ -92,5 +92,5 @@ Feature: LCML: Water Framework Directive
     When the user opens View details for the submitted marine licence
     Then the Water Framework Directive assessment card shows "Project located within one nautical mile (1.85km) of the coast" as "Yes"
     And the Water Framework Directive assessment card shows "Project limited to one of the excluded activities" as "No"
-    And the Water Framework Directive assessment card shows the uploaded file "WFD.docx"
+    And the Water Framework Directive assessment card shows the uploaded file "WFD.odt"
     And the Water Framework Directive assessment card is read-only

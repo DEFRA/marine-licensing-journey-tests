@@ -1,20 +1,10 @@
 import path from 'path'
 import { expect } from '@playwright/test'
 
-/**
- * Page object for the Water Framework Directive (WFD) journey:
- * "Before you start" -> "One nautical mile" -> "Excluded activities" ->
- * ("WFD upload" -> spinner) -> "Review WFD answers".
- *
- * Also exposes helpers for the WFD summary card shown on the
- * Check your answers and View details pages (ML-1345).
- */
 export default class WaterFrameworkDirectivePage {
   constructor(page) {
     this.page = page
   }
-
-  // --- Routes / headings ---
 
   static REVIEW_PATH =
     '/marine-licence/water-framework-directive-review-your-answers'
@@ -29,8 +19,6 @@ export default class WaterFrameworkDirectivePage {
     excludedActivities: 'Project limited to one of the excluded activities',
     upload: 'Water Framework Directive assessment upload'
   }
-
-  // --- Navigation actions ---
 
   async openTaskFromList() {
     await this.page
@@ -62,12 +50,10 @@ export default class WaterFrameworkDirectivePage {
     await this.#submit()
   }
 
-  /** Upload a WFD assessment file and wait for the spinner to redirect away. */
   async uploadAssessment(relativeFilePath) {
     const absolutePath = path.resolve(process.cwd(), relativeFilePath)
     await this.page.locator('input[type="file"]').setInputFiles(absolutePath)
     await this.#submit()
-    // Spinner ("Checking your file...") meta-refreshes then redirects.
     await this.page.waitForURL(
       (url) => !/upload-and-wait/.test(url.toString()),
       {
@@ -83,8 +69,6 @@ export default class WaterFrameworkDirectivePage {
       .click()
     await this.page.waitForLoadState('load')
   }
-
-  // --- Review WFD answers page ---
 
   async expectOnReviewPage() {
     await expect(this.page).toHaveURL(
@@ -106,8 +90,6 @@ export default class WaterFrameworkDirectivePage {
   reviewRowValue(key) {
     return this.reviewRow(key).locator('.govuk-summary-list__value')
   }
-
-  // --- WFD summary card (Check your answers / View details) ---
 
   card() {
     return this.page.locator(
