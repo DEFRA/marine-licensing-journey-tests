@@ -74,8 +74,10 @@ Then(
 )
 
 Then('the MCMS handoff URL responds with status 200', async function () {
-  const response = await this.page.request.get(this.mcmsHandoffUrl, {
+  const response = await this.page.goto(this.mcmsHandoffUrl, {
+    waitUntil: 'commit',
     timeout: 30_000
   })
+  expect(response, 'MCMS handoff navigation response').toBeTruthy()
   expect(response.status(), `GET ${this.mcmsHandoffUrl}`).toBe(200)
 })
