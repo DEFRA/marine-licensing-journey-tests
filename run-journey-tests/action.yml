@@ -429,7 +429,7 @@ runs:
 
     - name: Upload Allure Results
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: allure-results
         path: ./marine-licensing-journey-tests/allure-results/
@@ -437,7 +437,7 @@ runs:
 
     - name: Upload Allure Report
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: allure-report
         path: ./marine-licensing-journey-tests/allure-report/index.html
@@ -445,7 +445,7 @@ runs:
 
     - name: Upload Cucumber report
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: cucumber-report
         path: |
@@ -455,7 +455,7 @@ runs:
 
     - name: Upload docker compose logs
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: docker-compose-logs
         path: ./marine-licensing-journey-tests/logs.txt
