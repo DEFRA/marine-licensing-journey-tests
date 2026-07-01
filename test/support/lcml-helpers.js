@@ -24,6 +24,9 @@ import {
   enterPolygonCoordinatesOSGB36
 } from './site-details-flow.js'
 import PublicRegisterPage from '../pages/public.register.page.js'
+import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page.js'
+
+export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
@@ -209,6 +212,23 @@ export async function completeWaterFrameworkDirective(page, answer = 'No') {
     .locator(answer === 'Yes' ? '#nauticalMile' : '#nauticalMile-2')
     .click()
   await page.locator('main button[type="submit"]').click()
+  await page.waitForLoadState('load')
+}
+
+export async function completeWaterFrameworkDirectiveUpload(
+  page,
+  filePath = WFD_ASSESSMENT_FILE
+) {
+  const wfd = new WaterFrameworkDirectivePage(page)
+  await wfd.openTaskFromList()
+  await wfd.continueFromBeforeYouStart()
+  await wfd.answerNauticalMile('Yes')
+  await wfd.answerExcludedActivities('No')
+  await wfd.uploadAssessment(filePath)
+  await wfd.expectOnReviewPage()
+  await page
+    .locator('main button[type="submit"]:not([name="analytics"])')
+    .click()
   await page.waitForLoadState('load')
 }
 
@@ -660,14 +680,18 @@ export async function completeSiteDetailsViaFileUpload(
   await world.page.waitForLoadState('load')
 }
 
-async function completeNonSiteTasks(world) {
+async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeProjectBackground(world.page, faker.lorem.sentence(10))
   await completeSpecialLegalPowers(world.page, 'No')
   await completeOtherAuthorities(world.page, 'No')
   await completePublicConsultation(world.page)
   await completePreferredDates(world.page)
   await completeSharingConsent(world.page, 'No')
-  await completeWaterFrameworkDirective(world.page)
+  if (wfd === 'upload') {
+    await completeWaterFrameworkDirectiveUpload(world.page)
+  } else {
+    await completeWaterFrameworkDirective(world.page)
+  }
 }
 
 async function addActivityForSite1AndContinue(world) {
@@ -694,9 +718,9 @@ export async function completeUploadApp(world) {
   world.data.siteType = 'upload'
 }
 
-export async function completeManualCircleApp(world) {
+export async function completeManualCircleApp(world, opts = {}) {
   await loginAndStartApplication(world, 'organisation')
-  await completeNonSiteTasks(world)
+  await completeNonSiteTasks(world, opts)
   await navigateToManualSiteEntry(world)
   world.data.site = await enterCircleSiteDetails(world, {
     siteName: `Circle Site ${faker.location.city()}`,
