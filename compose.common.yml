@@ -161,6 +161,22 @@ services:
     networks:
       - cdp-tenant
 
+  marine-licensing-api-stub:
+    image: defradigital/marine-licensing-api-stub:${MARINE_LICENSING_API_STUB_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      PORT: 3002
+      NODE_ENV: development
+    ports:
+      - '3002:3002'
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3002/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
   marine-licensing-backend:
     image: defradigital/marine-licensing-backend:${MARINE_LICENSING_BACKEND_VERSION:-latest}
     restart: unless-stopped
@@ -170,7 +186,10 @@ services:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
+      - ARCGIS_FEATURE_SERVER_URL=http://marine-licensing-api-stub:3002/ArcGIS/rest/services/PolicyData_MDP/FeatureServer/0
     depends_on:
+      marine-licensing-api-stub:
+        condition: service_healthy
       mongodb:
         condition: service_healthy
       redis:
