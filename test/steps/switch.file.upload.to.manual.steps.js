@@ -28,11 +28,17 @@ Given(
     await selectProvideMethod(this.page, 'file-upload')
     await selectFileType(this.page, 'KML')
 
-    // Cancel / go back to task list
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
+    for (
+      let i = 0;
+      i < 6 &&
+      !(await taskList
+        .getTaskLink('Site details')
+        .isVisible()
+        .catch(() => false));
+      i++
+    ) {
+      await this.page.goBack({ waitUntil: 'load' })
+    }
   }
 )
 
@@ -43,6 +49,7 @@ When(
     await taskList.selectTask('Site details')
     await completeSiteDetailsFlow(this.page, this.data.siteDetails)
     await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
   }
 )
 
