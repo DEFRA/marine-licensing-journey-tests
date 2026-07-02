@@ -1,4 +1,4 @@
-FROM node:22.21.0-bookworm
+FROM node:24.18.0-bookworm
 
 ENV TZ="Europe/London"
 ENV HEADLESS=true
