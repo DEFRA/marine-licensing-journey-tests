@@ -11,6 +11,7 @@ import {
   completeSiteDetailsViaFileUpload,
   completeProjectBackground,
   completeWaterFrameworkDirective,
+  completeFeeEstimate,
   pickRandomFileType
 } from '../support/lcml-helpers.js'
 
@@ -26,6 +27,7 @@ Given(
     await completeSharingConsent(this.page, consentAnswer)
     await completeSiteDetailsViaFileUpload(this, pickRandomFileType())
     await completeWaterFrameworkDirective(this.page)
+    await completeFeeEstimate(this.page, 'Yes')
   }
 )
 
@@ -40,6 +42,7 @@ Given(
     await completePublicConsultation(this.page)
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
+    await completeFeeEstimate(this.page, 'Yes')
   }
 )
 
@@ -53,6 +56,7 @@ Given(
     await completePublicConsultation(this.page)
     await completePreferredDates(this.page)
     await completeSharingConsent(this.page, consentAnswer)
+    await completeFeeEstimate(this.page, 'Yes')
   }
 )
 
