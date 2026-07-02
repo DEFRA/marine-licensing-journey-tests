@@ -172,7 +172,7 @@ services:
   marine-licensing-api-stub:
     build:
       context: ../marine-licensing-api-stub
-      target: development
+      target: production
     restart: unless-stopped
     environment:
       PORT: 3002
