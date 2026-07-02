@@ -18,7 +18,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         repository: DEFRA/marine-licensing-journey-tests
         path: ./marine-licensing-journey-tests
@@ -196,9 +196,9 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version-file: ./marine-licensing-journey-tests/.nvmrc
         cache: npm
         cache-dependency-path: ./marine-licensing-journey-tests/package-lock.json
 
@@ -396,7 +396,7 @@ runs:
 
     - name: Find existing comment
       if: always() && github.event_name == 'pull_request'
-      uses: peter-evans/find-comment@v3
+      uses: peter-evans/find-comment@v4
       id: find-comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
@@ -405,7 +405,7 @@ runs:
 
     - name: Create or update PR comment with test results
       if: always() && github.event_name == 'pull_request'
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
         issue-number: ${{ github.event.pull_request.number }}
@@ -429,7 +429,7 @@ runs:
 
     - name: Upload Allure Results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: allure-results
         path: ./marine-licensing-journey-tests/allure-results/
@@ -437,7 +437,7 @@ runs:
 
     - name: Upload Allure Report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: allure-report
         path: ./marine-licensing-journey-tests/allure-report/index.html
@@ -445,7 +445,7 @@ runs:
 
     - name: Upload Cucumber report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: cucumber-report
         path: |
@@ -455,7 +455,7 @@ runs:
 
     - name: Upload docker compose logs
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: docker-compose-logs
         path: ./marine-licensing-journey-tests/logs.txt
