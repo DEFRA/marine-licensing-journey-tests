@@ -215,6 +215,18 @@ export async function completeWaterFrameworkDirective(page, answer = 'No') {
   await page.waitForLoadState('load')
 }
 
+export async function completeFeeEstimate(page, answer = 'Yes') {
+  await page.locator('a[href="/marine-licence/fee-estimate"]').click()
+  await page.waitForLoadState('load')
+
+  const terms = page.locator('#termsAndConditions')
+  await expect(terms).toBeVisible({ timeout: 30_000 })
+  await terms.check()
+  await page.locator(answer === 'Yes' ? '#accept' : '#accept-2').check()
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
 export async function completeWaterFrameworkDirectiveUpload(
   page,
   filePath = WFD_ASSESSMENT_FILE
@@ -692,6 +704,7 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   } else {
     await completeWaterFrameworkDirective(world.page)
   }
+  await completeFeeEstimate(world.page, 'Yes')
 }
 
 async function addActivityForSite1AndContinue(world) {
