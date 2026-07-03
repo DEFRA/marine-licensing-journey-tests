@@ -49,11 +49,16 @@ When('the user confirms deletion of the activity', async function () {
 When(
   'the user clicks {string} on the delete activity confirmation page',
   async function (action) {
-    if (action === 'Back') {
-      await this.page.locator('a.govuk-back-link').click()
-    } else {
-      await this.page.locator(`a.govuk-link:text-is("${action}")`).click()
-    }
+    await expect(
+      this.page.getByRole('heading', { name: CONFIRMATION_HEADING })
+    ).toBeVisible({ timeout: 30_000 })
+
+    const link =
+      action === 'Back'
+        ? this.page.locator('a.govuk-back-link')
+        : this.page.locator(`a.govuk-link:text-is("${action}")`)
+    await expect(link).toBeVisible({ timeout: 30_000 })
+    await link.click()
     await this.page.waitForLoadState('load')
   }
 )

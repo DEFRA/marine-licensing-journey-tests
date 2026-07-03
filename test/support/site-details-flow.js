@@ -10,8 +10,14 @@ import CommonElementsPage from '../pages/common.elements.page.js'
 
 // --- Individual page actions ---
 
+async function clickSubmit(page) {
+  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await page.waitForLoadState('load')
+}
+
 export async function continueFromBeforeYouStart(page) {
   await page.locator('a.govuk-button').click()
+  await page.waitForLoadState('load')
 }
 
 export async function selectProvideMethod(page, method) {
@@ -20,7 +26,7 @@ export async function selectProvideMethod(page, method) {
   } else {
     await page.locator('#coordinatesType').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function selectMoreThanOneSite(page, yes) {
@@ -29,7 +35,7 @@ export async function selectMoreThanOneSite(page, yes) {
   } else {
     await page.locator('#multipleSitesEnabled-2').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterActivityDates(page, dates) {
@@ -39,12 +45,12 @@ export async function enterActivityDates(page, dates) {
   await page.locator('#activity-end-date-day').fill(dates.endDate.day)
   await page.locator('#activity-end-date-month').fill(dates.endDate.month)
   await page.locator('#activity-end-date-year').fill(dates.endDate.year)
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterActivityDescription(page, description) {
   await page.locator('#activityDescription').fill(description)
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function selectCoordinatesEntryMethod(page, siteType) {
@@ -55,7 +61,7 @@ export async function selectCoordinatesEntryMethod(page, siteType) {
       .locator('input[name="coordinatesEntry"][value="multiple"]')
       .click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function selectCoordinateSystem(page, system) {
@@ -64,24 +70,24 @@ export async function selectCoordinateSystem(page, system) {
   } else {
     await page.locator('#coordinateSystem-2').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterCentrePointWGS84(page, lat, lng) {
   await page.locator('#latitude').fill(String(lat))
   await page.locator('#longitude').fill(String(lng))
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterCentrePointOSGB36(page, eastings, northings) {
   await page.locator('#eastings').fill(String(eastings))
   await page.locator('#northings').fill(String(northings))
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterWidth(page, width) {
   await page.locator('#width').fill(String(width))
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function enterPolygonCoordinatesWGS84(page, coordinates) {
@@ -97,6 +103,7 @@ export async function enterPolygonCoordinatesWGS84(page, coordinates) {
       .fill(String(coordinates[i].longitude))
   }
   await page.locator('#continue').click()
+  await page.waitForLoadState('load')
 }
 
 export async function enterPolygonCoordinatesOSGB36(page, coordinates) {
@@ -112,11 +119,12 @@ export async function enterPolygonCoordinatesOSGB36(page, coordinates) {
       .fill(String(coordinates[i].northings))
   }
   await page.locator('#continue').click()
+  await page.waitForLoadState('load')
 }
 
 export async function enterSiteName(page, name) {
   await page.locator('#siteName').fill(name)
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function selectSameActivityDates(page, same) {
@@ -125,7 +133,7 @@ export async function selectSameActivityDates(page, same) {
   } else {
     await page.locator('#sameActivityDates-2').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function selectSameActivityDescription(page, same) {
@@ -134,7 +142,7 @@ export async function selectSameActivityDescription(page, same) {
   } else {
     await page.locator('#sameActivityDescription-2').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 // --- File upload page actions ---
@@ -145,7 +153,7 @@ export async function selectFileType(page, fileType) {
   } else {
     await page.locator('#fileUploadType-2').click()
   }
-  await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  await clickSubmit(page)
 }
 
 export async function uploadFile(page, filePath) {
@@ -154,6 +162,7 @@ export async function uploadFile(page, filePath) {
   await page
     .locator('button[type="submit"]:not([name="analytics"])')
     .click({ timeout: 60_000 })
+  await page.waitForLoadState('load')
 }
 
 // --- Coordinate entry for a single site ---
@@ -254,6 +263,7 @@ export async function completeMultiSiteFlow(page, siteDetails) {
 
     if (!isLast) {
       await page.locator('button[name="add"]').click()
+      await page.waitForLoadState('load')
     }
   }
 }
@@ -334,6 +344,7 @@ async function addMissingSiteName(page, siteNumber, siteName) {
     `xpath=//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Site name")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
   )
   await addLink.click()
+  await page.waitForLoadState('load')
   await enterSiteName(page, siteName)
 }
 
@@ -342,6 +353,7 @@ async function addMissingActivityDates(page, siteNumber, dates) {
     `xpath=//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity dates")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
   )
   await addLink.click()
+  await page.waitForLoadState('load')
   await enterActivityDates(page, dates)
 }
 
@@ -350,6 +362,7 @@ async function addMissingActivityDescription(page, siteNumber, description) {
     `xpath=//h2[contains(text(), "Site ${siteNumber} details")]/ancestor::div[contains(@class, "govuk-summary-card")]//dt[contains(normalize-space(text()), "Activity description")]/following-sibling::dd/following-sibling::dd//a[text()="Add"]`
   )
   await addLink.click()
+  await page.waitForLoadState('load')
   await enterActivityDescription(page, description)
 }
 

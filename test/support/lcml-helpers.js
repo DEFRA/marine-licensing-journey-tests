@@ -109,11 +109,12 @@ export async function completeSpecialLegalPowers(page, answer) {
   await page.locator('a:has-text("Special legal powers")').click()
   await page.waitForLoadState('load')
 
+  const radio =
+    answer === 'Yes' ? page.locator('#agree') : page.locator('#agree-2')
+  await expect(radio).toBeVisible({ timeout: 30_000 })
+  await radio.check()
   if (answer === 'Yes') {
-    await page.locator('#agree').click()
     await page.locator('#details').fill(faker.lorem.sentence())
-  } else {
-    await page.locator('#agree-2').click()
   }
 
   await page.locator('button:has-text("Save and continue")').click()

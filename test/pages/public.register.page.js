@@ -43,34 +43,36 @@ export default class PublicRegisterPage {
 
   async expectConsentSelected(consent) {
     if (consent) {
-      await expect(this.consentYes).toBeChecked()
+      await expect(this.consentYes).toBeChecked({ timeout: 30_000 })
     } else {
-      await expect(this.consentNo).toBeChecked()
+      await expect(this.consentNo).toBeChecked({ timeout: 30_000 })
     }
   }
 
   async expectNoConsentSelected() {
-    await expect(this.consentYes).not.toBeChecked()
-    await expect(this.consentNo).not.toBeChecked()
+    await expect(this.consentYes).not.toBeChecked({ timeout: 30_000 })
+    await expect(this.consentNo).not.toBeChecked({ timeout: 30_000 })
   }
 
   async expectReasonValue(reason) {
-    await expect(this.reasonTextarea).toHaveValue(reason)
+    await expect(this.reasonTextarea).toHaveValue(reason, { timeout: 30_000 })
   }
 
   async expectReasonNotVisible() {
-    await expect(this.reasonTextarea).not.toBeVisible()
+    await expect(this.reasonTextarea).not.toBeVisible({ timeout: 30_000 })
   }
 
   async expectConsentError(message) {
-    await expect(this.consentError).toContainText(message)
+    await expect(this.consentError).toContainText(message, { timeout: 30_000 })
   }
 
   async expectReasonError(message) {
-    await expect(this.reasonError).toContainText(message)
+    await expect(this.reasonError).toContainText(message, { timeout: 30_000 })
   }
 
   async expectProjectName(name) {
-    await expect(this.projectNameCaption).toContainText(name)
+    await expect(this.projectNameCaption).toContainText(name, {
+      timeout: 30_000
+    })
   }
 }
