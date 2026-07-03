@@ -11,6 +11,11 @@ import {
 import ProjectNamePage from '../pages/project.name.page.js'
 import TaskListPage from '../pages/task.list.page.js'
 
+// The file-upload exploration goes ~4 pages deep (before you start -> provide
+// method -> file type -> upload).the loop stops as soon as the
+//task list is shown, so this is just a safety cap.
+const MAX_BACK_STEPS_TO_TASK_LIST = 6
+
 Given(
   'the user has explored file upload options during site details entry',
   async function () {
@@ -28,11 +33,17 @@ Given(
     await selectProvideMethod(this.page, 'file-upload')
     await selectFileType(this.page, 'KML')
 
-    // Cancel / go back to task list
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
-    await this.page.goBack({ waitUntil: 'load' })
+    for (
+      let i = 0;
+      i < MAX_BACK_STEPS_TO_TASK_LIST &&
+      !(await taskList
+        .getTaskLink('Site details')
+        .isVisible()
+        .catch(() => false));
+      i++
+    ) {
+      await this.page.goBack({ waitUntil: 'load' })
+    }
   }
 )
 
@@ -43,6 +54,7 @@ When(
     await taskList.selectTask('Site details')
     await completeSiteDetailsFlow(this.page, this.data.siteDetails)
     await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
   }
 )
 
