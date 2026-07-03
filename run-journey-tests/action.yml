@@ -4,6 +4,9 @@ inputs:
   marine-licensing-backend:
     required: false
     type: string
+  marine-licensing-api-stub:
+    required: false
+    type: string
   marine-licensing-frontend:
     required: false
     type: string
@@ -15,7 +18,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         repository: DEFRA/marine-licensing-journey-tests
         path: ./marine-licensing-journey-tests
@@ -175,9 +178,27 @@ runs:
       shell: bash
       working-directory: ./marine-licensing-journey-tests
 
-    - uses: actions/setup-node@v4
+    - name: Build marine-licensing-api-stub image
+      run: |
+        echo "=== Building API Stub Image ==="
+        echo "Current directory: $(pwd)"
+
+        if [ -d "../../marine-licensing-api-stub" ]; then
+          echo "✅ Found api-stub directory - building PR image"
+          cd ../../marine-licensing-api-stub
+          echo "Branch: $(git branch --show-current) | Commit: $(git log -1 --oneline)"
+          docker build -t defradigital/marine-licensing-api-stub:pr-build .
+          echo "✅ API stub PR image built successfully"
+        else
+          echo "ℹ️  No api-stub directory found - will use latest image"
+          echo "This is normal if no api-stub dependency was specified in PR description"
+        fi
+      shell: bash
+      working-directory: ./marine-licensing-journey-tests
+
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version-file: ./marine-licensing-journey-tests/.nvmrc
         cache: npm
         cache-dependency-path: ./marine-licensing-journey-tests/package-lock.json
 
@@ -210,12 +231,22 @@ runs:
           echo "ℹ️  Using backend version: ${BACKEND_VERSION:-latest} (no PR dependency)"
         fi
 
+        if docker image inspect defradigital/marine-licensing-api-stub:pr-build >/dev/null 2>&1; then
+          echo "✅ Using PR-built api-stub image (from depends-on)"
+          API_STUB_VERSION="pr-build"
+        else
+          API_STUB_VERSION="${{ inputs.marine-licensing-api-stub }}"
+          echo "ℹ️  Using api-stub version: ${API_STUB_VERSION:-latest} (no PR dependency)"
+        fi
+
         echo "🐳 Starting containers with:"
         echo "  Frontend: ${FRONTEND_VERSION:-latest}"
         echo "  Backend: ${BACKEND_VERSION:-latest}"
+        echo "  API stub: ${API_STUB_VERSION:-latest}"
 
         MARINE_LICENSING_FRONTEND_VERSION=${FRONTEND_VERSION:-latest} \
         MARINE_LICENSING_BACKEND_VERSION=${BACKEND_VERSION:-latest} \
+        MARINE_LICENSING_API_STUB_VERSION=${API_STUB_VERSION:-latest} \
         docker compose -f $(pwd)/compose.common.yml up --wait-timeout 300 -d --quiet-pull
 
     - name: Check initial service status
@@ -365,7 +396,7 @@ runs:
 
     - name: Find existing comment
       if: always() && github.event_name == 'pull_request'
-      uses: peter-evans/find-comment@v3
+      uses: peter-evans/find-comment@v4
       id: find-comment
       with:
         issue-number: ${{ github.event.pull_request.number }}
@@ -374,7 +405,7 @@ runs:
 
     - name: Create or update PR comment with test results
       if: always() && github.event_name == 'pull_request'
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
         issue-number: ${{ github.event.pull_request.number }}
@@ -398,7 +429,7 @@ runs:
 
     - name: Upload Allure Results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: allure-results
         path: ./marine-licensing-journey-tests/allure-results/
@@ -406,7 +437,7 @@ runs:
 
     - name: Upload Allure Report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: allure-report
         path: ./marine-licensing-journey-tests/allure-report/index.html
@@ -414,7 +445,7 @@ runs:
 
     - name: Upload Cucumber report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: cucumber-report
         path: |
@@ -424,7 +455,7 @@ runs:
 
     - name: Upload docker compose logs
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: docker-compose-logs
         path: ./marine-licensing-journey-tests/logs.txt
