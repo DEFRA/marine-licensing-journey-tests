@@ -11,6 +11,11 @@ import {
 import ProjectNamePage from '../pages/project.name.page.js'
 import TaskListPage from '../pages/task.list.page.js'
 
+// The file-upload exploration goes ~4 pages deep (before you start -> provide
+// method -> file type -> upload).the loop stops as soon as the
+//task list is shown, so this is just a safety cap.
+const MAX_BACK_STEPS_TO_TASK_LIST = 6
+
 Given(
   'the user has explored file upload options during site details entry',
   async function () {
@@ -30,7 +35,7 @@ Given(
 
     for (
       let i = 0;
-      i < 6 &&
+      i < MAX_BACK_STEPS_TO_TASK_LIST &&
       !(await taskList
         .getTaskLink('Site details')
         .isVisible()
