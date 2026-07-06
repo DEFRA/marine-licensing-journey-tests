@@ -39,8 +39,8 @@ Feature: LCML: Fee estimate
     And the Fee estimate task is Not accepted back on the task list
 
   @issue=ML-1352
-  Scenario: Review and send is hidden when the fee estimate is not accepted
+  Scenario: A not accepted fee estimate can be changed to accepted and the application submitted
     Given an organisation user has completed all tasks but not accepted the fee estimate
-    When the user views the marine licence task list
-    Then the Review and send button is not displayed
-    And the Fee estimate task can be reopened to change the answer
+    When the user reopens the fee estimate and accepts it
+    And the user submits the marine licence application from the task list
+    Then the confirmation page is displayed with a marine licence reference

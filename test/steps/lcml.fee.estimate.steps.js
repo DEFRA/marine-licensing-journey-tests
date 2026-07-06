@@ -124,17 +124,10 @@ Given(
   }
 )
 
-Then('the Review and send button is not displayed', async function () {
-  await expect(this.page.locator('#review-and-send')).toHaveCount(0, {
-    timeout: 30_000
-  })
+When('the user reopens the fee estimate and accepts it', async function () {
+  await this.page.locator(FEE_ESTIMATE_LINK).click()
+  await this.page.waitForLoadState('load')
+  await this.page.locator('#termsAndConditions').check()
+  await this.page.locator('#accept').check()
+  await saveFeeEstimate(this.page)
 })
-
-Then(
-  'the Fee estimate task can be reopened to change the answer',
-  async function () {
-    await expect(this.page.locator(FEE_ESTIMATE_LINK)).toBeVisible({
-      timeout: 30_000
-    })
-  }
-)
