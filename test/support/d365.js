@@ -30,11 +30,9 @@ async function readRecordField(page, columnName) {
         await page.locator(APPLICANT_ORG_SELECTOR).first().innerText()
       ).trim()
     case 'D365 Status': {
-      // Header "Application Status" field has no data-id on the value; find
-      // the label text and read its preceding sibling.
       const value = page
         .locator(
-          'xpath=//div[normalize-space(text())="Application Status"]/preceding-sibling::div[1]'
+          'xpath=//div[@data-id="form-header"]//div[normalize-space(text())="Status"]/preceding-sibling::div[1]'
         )
         .first()
       await value.waitFor({ state: 'visible', timeout: 30_000 })
@@ -165,10 +163,8 @@ export async function searchD365Case(page, reference) {
     .locator('div[role="row"][row-index="0"]')
     .waitFor({ state: 'visible', timeout: 30_000 })
 
-  // Double-click the first cell of the matched row to open the record.
   await page
-    .locator('div[role="row"][row-index="0"] div[role="gridcell"]')
-    .first()
+    .locator('div[role="row"][row-index="0"] div[col-id="ticketnumber"]')
     .dblclick()
 
   await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
@@ -212,7 +208,12 @@ export async function openD365CaseRecord(page, applicantOrganisation) {
   await orgField.waitFor({ state: 'visible', timeout: 30_000 })
   const orgText = await orgField.innerText()
   expect(orgText.trim()).toBe(applicantOrganisation)
+  // Marine licence case forms have no Application URL field, so skip it when
+  // absent (exemption case forms still have it).
   const appUrlInput = page.locator(APP_URL_SELECTOR)
+  if ((await appUrlInput.count()) === 0) {
+    return null
+  }
   await appUrlInput.waitFor({ state: 'visible', timeout: 30_000 })
   await expect(appUrlInput).toHaveValue(/^https?:\/\//, { timeout: 60_000 })
   return await appUrlInput.getAttribute('value')

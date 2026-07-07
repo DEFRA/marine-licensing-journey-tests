@@ -1,6 +1,7 @@
 ################################################################################
 # Docker Compose file for local development
-# Uses local build for marine-licensing-backend from ../marine-licensing-backend
+# Uses local builds from ../marine-licensing-frontend, ../marine-licensing-backend,
+# and ../marine-licensing-api-stub
 #
 # For pipeline use, see compose.common.yml (uses pre-built Docker images)
 ################################################################################
@@ -168,6 +169,24 @@ services:
     networks:
       - cdp-tenant
 
+  marine-licensing-api-stub:
+    build:
+      context: ../marine-licensing-api-stub
+      target: production
+    restart: unless-stopped
+    environment:
+      PORT: 3002
+      NODE_ENV: development
+    ports:
+      - '3002:3002'
+    networks:
+      - cdp-tenant
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3002/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
   marine-licensing-backend:
     build: ../marine-licensing-backend
     restart: unless-stopped
@@ -177,7 +196,10 @@ services:
       - PORT=3001
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
+      - ARCGIS_FEATURE_SERVER_URL=http://marine-licensing-api-stub:3002/ArcGIS/rest/services/PolicyData_MDP/FeatureServer/0
     depends_on:
+      marine-licensing-api-stub:
+        condition: service_healthy
       mongodb:
         condition: service_healthy
       redis:
