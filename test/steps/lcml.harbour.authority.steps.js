@@ -56,6 +56,14 @@ When('the user opens the harbour authority task', async function () {
 })
 
 When(
+  'the user saves {string} on the harbour authority page',
+  async function (answer) {
+    await openHarbourFromTaskList(this.page)
+    await saveHarbour(this.page, { answer })
+  }
+)
+
+When(
   'the user saves {string} with details {string} on the harbour authority page',
   async function (answer, details) {
     await openHarbourFromTaskList(this.page)

@@ -19,13 +19,13 @@ Feature: LCML: Harbour authority task
 
   Scenario Outline: Saving an invalid harbour authority answer shows a validation error
     Given an organisation user has started a marine licence application
-    When the user saves "<answer>" with details "<details>" on the harbour authority page
+    When the user saves "<answer>" on the harbour authority page
     Then the harbour authority error "<error>" is shown
 
     Examples:
-      | answer | details | error                                                              |
-      |        |         | Select whether your project is located in a harbour authority area |
-      | Yes    |         | Enter details of the harbour authority                             |
+      | answer | error                                                              |
+      |        | Select whether your project is located in a harbour authority area |
+      | Yes    | Enter details of the harbour authority                             |
 
   Scenario Outline: Saving a valid harbour authority answer marks the task Completed
     Given an organisation user has started a marine licence application
