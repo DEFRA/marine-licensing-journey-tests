@@ -38,6 +38,46 @@ async function findCaseRow(page, reference) {
   return firstRow
 }
 
+// A just-submitted case can take a while to be indexed into the D365 view, so
+// retry the search until it appears.
+async function findCaseRowWithRetry(page, reference) {
+  let lastError = null
+  for (let attempt = 1; attempt <= 15; attempt++) {
+    try {
+      return await findCaseRow(page, reference)
+    } catch (err) {
+      lastError = err
+      await page.waitForTimeout(15_000)
+    }
+  }
+  throw lastError
+}
+
+async function openCaseSummary(world) {
+  const page = await openWorkbasket(world)
+  const row = await findCaseRowWithRetry(page, world.data.applicationReference)
+
+  // Open the case record. The Project name (title) column currently holds the
+  // hyperlink; reaching the record here is independent of the Reference-link AC.
+  await row.locator('div[col-id="title"] a').click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
+    timeout: 30_000
+  })
+  await page.waitForLoadState('load')
+
+  const summaryTab = page
+    .locator('[role="tab"]', { hasText: 'Case summary' })
+    .first()
+  if (await summaryTab.count()) {
+    await summaryTab.click().catch(() => {})
+  }
+  await page
+    .locator('[data-id="ticketnumber.fieldControl-pcf-container-id"]')
+    .first()
+    .waitFor({ state: 'visible', timeout: 30_000 })
+  return page
+}
+
 When(
   'the internal user opens the Marine licence cases workbasket in D365',
   { timeout: D365_STEP_TIMEOUT },
@@ -51,22 +91,18 @@ When(
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = await openWorkbasket(this)
+    this.d365CaseRow = await findCaseRowWithRetry(
+      page,
+      this.data.applicationReference
+    )
+  }
+)
 
-    let lastError = null
-    for (let attempt = 1; attempt <= 15; attempt++) {
-      try {
-        this.d365CaseRow = await findCaseRow(
-          page,
-          this.data.applicationReference
-        )
-        lastError = null
-        break
-      } catch (err) {
-        lastError = err
-        await page.waitForTimeout(15_000)
-      }
-    }
-    if (lastError) throw lastError
+When(
+  'the internal user opens the submitted case summary in D365',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    await openCaseSummary(this)
   }
 )
 
@@ -108,3 +144,53 @@ Then('the Reference column in the workbasket row is a link', async function () {
     this.d365CaseRow.locator('[col-id="ticketnumber"] a').first()
   ).toBeVisible({ timeout: 30_000 })
 })
+
+Then(
+  'the case summary displays the marine licence case details',
+  async function () {
+    const page = this.d365Page
+    const organisation = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+
+    // AC fields on the Case summary tab. Assert each field is present (Case
+    // officer is intentionally excluded — no defined way to set it yet).
+    const fieldContainers = {
+      Reference: 'ticketnumber',
+      'Application type': 'casetypecode',
+      Submitted: 'ml_submitteddate',
+      'Fee band': 'ml_feeband',
+      Organisation: 'mmo_applicantorganisationid'
+    }
+    for (const attr of Object.values(fieldContainers)) {
+      const container = page
+        .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
+        .first()
+      await container.scrollIntoViewIfNeeded().catch(() => {})
+      await expect(container).toBeVisible({ timeout: 30_000 })
+    }
+
+    // Concrete value checks for the fields that render their read-only value
+    // reliably on a freshly-opened case.
+    // Submitted date in dd/mm/yyyy.
+    await expect(
+      page
+        .locator(
+          '[data-id="ml_submitteddate.fieldControl-datetime-description_container"]'
+        )
+        .first()
+    ).toContainText(/\d{2}\/\d{2}\/\d{4}/, { timeout: 30_000 })
+
+    // Organisation the application is for.
+    await expect(
+      page
+        .locator(
+          '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
+        )
+        .first()
+    ).toContainText(organisation, { timeout: 30_000 })
+
+    // Reference and Application type ("Marine licence"/"Marine License") values,
+    // and the Fee band value (ML-1352), are not asserted here because D365
+    // renders these read-only fields inconsistently for a freshly-created case;
+    // the reference value is already verified in the workbasket-row scenario.
+  }
+)
