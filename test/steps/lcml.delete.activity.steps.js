@@ -11,6 +11,10 @@ function activityCardSelector(cardTitle) {
 async function clickAddAnotherActivity(page, siteNumber) {
   await page.locator(`#add-another-activity-site-${siteNumber}`).click()
   await page.waitForLoadState('load')
+  await page
+    .locator('a:text-is("Delete activity")')
+    .first()
+    .waitFor({ state: 'visible', timeout: 30_000 })
 }
 
 Given(
