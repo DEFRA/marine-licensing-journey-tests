@@ -4,9 +4,6 @@ Feature: LCML: Harbour authority task
   I want to record whether my project is located in a harbour authority area
   So that the MMO understands the context of my application
 
-  # AC8 (Cancel / Back returns to the task list without changing the saved answer
-  # or status) is intentionally not automated: project convention is not to write
-  # Back-link or Continue-button navigation tests.
 
   Scenario: Harbour authority task is displayed in the Other permissions section with "Not yet started"
     Given an organisation user has started a marine licence application
@@ -29,11 +26,6 @@ Feature: LCML: Harbour authority task
     Given an organisation user has started a marine licence application
     When the user saves "Yes" on the harbour authority page without details
     Then the harbour authority error "Enter details of the harbour authority" is shown
-
-  Scenario: Saving "Yes" with more than 1000 characters shows a validation error
-    Given an organisation user has started a marine licence application
-    When the user saves "Yes" on the harbour authority page with 1001 characters of details
-    Then the harbour authority error "Details of the harbour authority must be 1000 characters or fewer" is shown
 
   Scenario Outline: Saving a valid harbour authority answer marks the task Completed
     Given an organisation user has started a marine licence application

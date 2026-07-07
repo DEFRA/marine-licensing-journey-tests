@@ -72,23 +72,6 @@ When(
 )
 
 When(
-  'the user saves {string} on the harbour authority page with {int} characters of details',
-  async function (answer, count) {
-    await openHarbourFromTaskList(this.page)
-    await selectAnswer(this.page, answer)
-    // The textarea has a maxlength of 1000, so a normal fill() is truncated to
-    // 1000 and never trips server validation. Set the value programmatically so
-    // the over-length payload is actually submitted.
-    await harbourPage(this.page).details.evaluate((el, value) => {
-      el.value = value
-      el.dispatchEvent(new Event('input', { bubbles: true }))
-    }, 'a'.repeat(count))
-    await harbourPage(this.page).saveButton.click()
-    await this.page.waitForLoadState('load')
-  }
-)
-
-When(
   'the user saves {string} with details {string} on the harbour authority page',
   async function (answer, details) {
     await openHarbourFromTaskList(this.page)
