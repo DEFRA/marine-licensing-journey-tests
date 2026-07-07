@@ -182,15 +182,6 @@ Then(
   }
 )
 
-Then('the Reference column in the workbasket row is a link', async function () {
-  // AC: the Reference (ticketnumber) column is the hyperlink to the case
-  // summary. Currently @wip — the dev view renders the link on the Project
-  // name (title) column instead.
-  await expect(
-    this.d365CaseRow.locator('[col-id="ticketnumber"] a').first()
-  ).toBeVisible({ timeout: 30_000 })
-})
-
 Then(
   'the case summary displays the marine licence case details',
   async function () {

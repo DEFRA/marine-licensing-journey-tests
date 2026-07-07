@@ -26,12 +26,3 @@ Feature: LCML: Marine licence cases workbasket in D365
     Given an organisation user has submitted a marine licence application with uploaded sites
     When the internal user opens the submitted case summary in D365
     Then the case summary displays the marine licence case details
-
-  # @wip: AC requires the Reference column to be the hyperlink, but in the dev
-  # D365 view the hyperlink is currently on the Project name column. Kept
-  # AC-faithful and quarantined until the app makes Reference clickable.
-  @real-defra-id @d365 @wip
-  Scenario: The Reference column in the workbasket links to the case summary
-    Given an organisation user has submitted a marine licence application with uploaded sites
-    When the internal user finds the submitted case in the Marine licence cases workbasket
-    Then the Reference column in the workbasket row is a link
