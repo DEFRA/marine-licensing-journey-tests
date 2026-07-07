@@ -53,6 +53,24 @@ async function findCaseRowWithRetry(page, reference) {
   throw lastError
 }
 
+// Read a Case summary field's displayed value. D365 renders these read-only
+// fields as inputs (value in the `value` attribute, not textContent), so read
+// the input value first and fall back to the container text.
+async function readCaseSummaryField(page, attr) {
+  const container = page
+    .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
+    .first()
+  await container.waitFor({ state: 'visible', timeout: 30_000 })
+  const input = container.locator('input, textarea').first()
+  if (await input.count()) {
+    const value = (await input.inputValue().catch(() => '')) || ''
+    if (value.trim()) {
+      return value.trim()
+    }
+  }
+  return ((await container.innerText().catch(() => '')) || '').trim()
+}
+
 async function openCaseSummary(world) {
   const page = await openWorkbasket(world)
   const row = await findCaseRowWithRetry(page, world.data.applicationReference)
@@ -71,10 +89,14 @@ async function openCaseSummary(world) {
   if (await summaryTab.count()) {
     await summaryTab.click().catch(() => {})
   }
-  await page
-    .locator('[data-id="ticketnumber.fieldControl-pcf-container-id"]')
-    .first()
-    .waitFor({ state: 'visible', timeout: 30_000 })
+
+  // Wait for the form fields to render before reading them.
+  for (let attempt = 1; attempt <= 6; attempt++) {
+    if (await readCaseSummaryField(page, 'ml_submitteddate')) {
+      break
+    }
+    await page.waitForTimeout(5_000)
+  }
   return page
 }
 
@@ -151,33 +173,21 @@ Then(
     const page = this.d365Page
     const organisation = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
 
-    // AC fields on the Case summary tab. Assert each field is present (Case
-    // officer is intentionally excluded — no defined way to set it yet).
-    const fieldContainers = {
-      Reference: 'ticketnumber',
-      'Application type': 'casetypecode',
-      Submitted: 'ml_submitteddate',
-      'Fee band': 'ml_feeband',
-      Organisation: 'mmo_applicantorganisationid'
-    }
-    for (const attr of Object.values(fieldContainers)) {
-      const container = page
-        .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
-        .first()
-      await container.scrollIntoViewIfNeeded().catch(() => {})
-      await expect(container).toBeVisible({ timeout: 30_000 })
-    }
+    // Reference matches the submitted application reference.
+    expect(await readCaseSummaryField(page, 'ticketnumber')).toContain(
+      this.data.applicationReference
+    )
 
-    // Concrete value checks for the fields that render their read-only value
-    // reliably on a freshly-opened case.
+    // Application type reads "Marine License" (American) in D365; match either
+    // spelling rather than assert the AC's "Marine licence" exactly.
+    expect(await readCaseSummaryField(page, 'casetypecode')).toMatch(
+      /marine licen[cs]e/i
+    )
+
     // Submitted date in dd/mm/yyyy.
-    await expect(
-      page
-        .locator(
-          '[data-id="ml_submitteddate.fieldControl-datetime-description_container"]'
-        )
-        .first()
-    ).toContainText(/\d{2}\/\d{2}\/\d{4}/, { timeout: 30_000 })
+    expect(await readCaseSummaryField(page, 'ml_submitteddate')).toMatch(
+      /\d{2}\/\d{2}\/\d{4}/
+    )
 
     // Organisation the application is for.
     await expect(
@@ -188,9 +198,11 @@ Then(
         .first()
     ).toContainText(organisation, { timeout: 30_000 })
 
-    // Reference and Application type ("Marine licence"/"Marine License") values,
-    // and the Fee band value (ML-1352), are not asserted here because D365
-    // renders these read-only fields inconsistently for a freshly-created case;
-    // the reference value is already verified in the workbasket-row scenario.
+    // Fee band is present on the tab. Its value is communicated to Dynamics per
+    // ML-1352; assert the field is displayed (value assertion left out because
+    // it can be empty for a freshly submitted case).
+    await expect(
+      page.locator('[data-id="ml_feeband-FieldSectionItemContainer"]').first()
+    ).toBeVisible({ timeout: 30_000 })
   }
 )
