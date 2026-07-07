@@ -56,22 +56,6 @@ When('the user opens the harbour authority task', async function () {
 })
 
 When(
-  'the user saves the harbour authority page without selecting an answer',
-  async function () {
-    await openHarbourFromTaskList(this.page)
-    await saveHarbour(this.page)
-  }
-)
-
-When(
-  'the user saves {string} on the harbour authority page without details',
-  async function (answer) {
-    await openHarbourFromTaskList(this.page)
-    await saveHarbour(this.page, { answer })
-  }
-)
-
-When(
   'the user saves {string} with details {string} on the harbour authority page',
   async function (answer, details) {
     await openHarbourFromTaskList(this.page)

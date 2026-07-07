@@ -17,15 +17,15 @@ Feature: LCML: Harbour authority task
     And selecting "Yes" reveals the harbour authority details textbox
     And selecting "No" hides the harbour authority details textbox
 
-  Scenario: Saving with no answer selected shows a validation error
+  Scenario Outline: Saving an invalid harbour authority answer shows a validation error
     Given an organisation user has started a marine licence application
-    When the user saves the harbour authority page without selecting an answer
-    Then the harbour authority error "Select whether your project is located in a harbour authority area" is shown
+    When the user saves "<answer>" with details "<details>" on the harbour authority page
+    Then the harbour authority error "<error>" is shown
 
-  Scenario: Saving "Yes" without details shows a validation error
-    Given an organisation user has started a marine licence application
-    When the user saves "Yes" on the harbour authority page without details
-    Then the harbour authority error "Enter details of the harbour authority" is shown
+    Examples:
+      | answer | details | error                                                              |
+      |        |         | Select whether your project is located in a harbour authority area |
+      | Yes    |         | Enter details of the harbour authority                             |
 
   Scenario Outline: Saving a valid harbour authority answer marks the task Completed
     Given an organisation user has started a marine licence application
