@@ -54,19 +54,34 @@ async function findCaseRowWithRetry(page, reference) {
 }
 
 // Read a Case summary field's displayed value. D365 renders these read-only
-// fields as inputs (value in the `value` attribute, not textContent), so read
-// the input value first and fall back to the container text.
+// fields as inputs (value in the `value` attribute, not textContent) and
+// populates them after the field becomes visible — more slowly under parallel
+// load — so poll the input value (and the pcf container text for option-set
+// fields) until it populates.
 async function readCaseSummaryField(page, attr) {
   const container = page
     .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
     .first()
   await container.waitFor({ state: 'visible', timeout: 30_000 })
   const input = container.locator('input, textarea').first()
-  if (await input.count()) {
-    const value = (await input.inputValue().catch(() => '')) || ''
-    if (value.trim()) {
-      return value.trim()
+  const pcf = page
+    .locator(`[data-id="${attr}.fieldControl-pcf-container-id"]`)
+    .first()
+
+  for (let attempt = 0; attempt < 30; attempt++) {
+    if (await input.count()) {
+      const value = (await input.inputValue().catch(() => '')) || ''
+      if (value.trim()) {
+        return value.trim()
+      }
     }
+    if (await pcf.count()) {
+      const text = ((await pcf.innerText().catch(() => '')) || '').trim()
+      if (text) {
+        return text
+      }
+    }
+    await page.waitForTimeout(1_000)
   }
   return ((await container.innerText().catch(() => '')) || '').trim()
 }
