@@ -142,6 +142,25 @@ export async function completeOtherAuthorities(page, answer) {
   await page.waitForLoadState('load')
 }
 
+export async function completeHarbourAuthority(page, answer = 'No') {
+  await page.locator('a:has-text("Harbour authority")').click()
+  await page.waitForLoadState('load')
+
+  if (answer === 'Yes') {
+    await page.getByRole('radio', { name: 'Yes' }).click()
+    await page
+      .getByRole('textbox', {
+        name: 'Provide details of the harbour authority'
+      })
+      .fill(faker.lorem.sentence())
+  } else {
+    await page.getByRole('radio', { name: 'No' }).click()
+  }
+
+  await page.locator('button:has-text("Save and continue")').click()
+  await page.waitForLoadState('load')
+}
+
 export async function completePublicConsultation(page, answer = 'No') {
   await page.locator('a:has-text("Pre-application consultation")').click()
   await page.waitForLoadState('load')
@@ -697,6 +716,7 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeProjectBackground(world.page, faker.lorem.sentence(10))
   await completeSpecialLegalPowers(world.page, 'No')
   await completeOtherAuthorities(world.page, 'No')
+  await completeHarbourAuthority(world.page, 'No')
   await completePublicConsultation(world.page)
   await completePreferredDates(world.page)
   await completeSharingConsent(world.page, 'No')
