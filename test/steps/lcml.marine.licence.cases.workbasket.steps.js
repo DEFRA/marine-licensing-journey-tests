@@ -35,6 +35,15 @@ async function findCaseRow(page, reference) {
 
   const firstRow = page.locator('div[role="row"][row-index="0"]')
   await firstRow.waitFor({ state: 'visible', timeout: 30_000 })
+
+  // The grid can still show a stale row before the search filter applies (or
+  // when the just-submitted case is not yet indexed), so confirm the first row
+  // is actually our case before returning it — otherwise throw so the caller
+  // re-searches after a wait.
+  await expect(firstRow.locator('[col-id="ticketnumber"]')).toContainText(
+    reference,
+    { timeout: 5_000 }
+  )
   return firstRow
 }
 
