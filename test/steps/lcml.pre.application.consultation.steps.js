@@ -3,7 +3,6 @@ import { expect } from '@playwright/test'
 import { loginAndStartApplication } from '../support/lcml-helpers.js'
 
 const TASK_LINK = 'Pre-application consultation'
-const STATUS_ID = '#other-permissions-task-list-3-status'
 const PAGE_PATH = '/marine-licence/public-consultation'
 const TASK_LIST_PATH = '/marine-licence/task-list'
 const CONSULTATION_ROW_LABEL =
@@ -12,6 +11,12 @@ const CONSULTATION_ROW_LABEL =
 function consultationRow(page) {
   return page.locator(
     `xpath=//div[contains(@class,"govuk-summary-list__row") and .//dt[normalize-space(text())="${CONSULTATION_ROW_LABEL}"]]`
+  )
+}
+
+function consultationStatus(page) {
+  return page.locator(
+    `xpath=//a[normalize-space(text())="${TASK_LINK}"]/ancestor::li//div[contains(@class,"govuk-task-list__status")]`
   )
 }
 
@@ -59,7 +64,7 @@ Given(
   'the user has saved {string} with details {string} on pre-application consultation',
   async function (answer, details) {
     await saveConsultation(this.page, answer, details)
-    await expect(this.page.locator(STATUS_ID)).toContainText('Completed', {
+    await expect(consultationStatus(this.page)).toContainText('Completed', {
       timeout: 30_000
     })
   }
