@@ -86,17 +86,25 @@ Then(
   'the workbasket row shows the submitted case reference, project name and status {string}',
   async function (status) {
     const row = this.d365CaseRow
-    await expect(row).toContainText(this.data.applicationReference, {
+    await expect(row.locator('[col-id="ticketnumber"]')).toContainText(
+      this.data.applicationReference,
+      { timeout: 30_000 }
+    )
+    await expect(row.locator('[col-id="title"]')).toContainText(
+      this.data.projectName,
+      { timeout: 30_000 }
+    )
+    await expect(row.locator('[col-id="statuscode"]')).toContainText(status, {
       timeout: 30_000
     })
-    await expect(row).toContainText(this.data.projectName, { timeout: 30_000 })
-    await expect(row).toContainText(status, { timeout: 30_000 })
   }
 )
 
-Then('the reference in the workbasket is a link', async function () {
-  const row = this.d365CaseRow
+Then('the Reference column in the workbasket row is a link', async function () {
+  // AC: the Reference (ticketnumber) column is the hyperlink to the case
+  // summary. Currently @wip — the dev view renders the link on the Project
+  // name (title) column instead.
   await expect(
-    row.getByRole('link', { name: this.data.applicationReference }).first()
+    this.d365CaseRow.locator('[col-id="ticketnumber"] a').first()
   ).toBeVisible({ timeout: 30_000 })
 })
