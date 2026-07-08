@@ -17,19 +17,18 @@ Feature: LCML: View details page shows sites and activities
     And the View details page shows an uploaded site card with a name and a map
 
   @real-defra-id @d365 @issue=ML-1407
-  Scenario: A submitted marine licence case is shown in the D365 workbasket
+  Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary
     Given an organisation user has submitted a marine licence application with uploaded sites
     When the internal user finds the submitted case in the Marine licence cases workbasket
-    Then the Marine licence cases workbasket displays the following columns
-      | Reference       |
-      | Project name    |
-      | Assigned to     |
-      | Status          |
-      | Case age (days) |
-    And the workbasket row shows the submitted case reference, project name and status "Submitted"
-
-  @real-defra-id @d365 @issue=ML-1407
-  Scenario: The D365 Case summary tab displays the submitted marine licence case details
-    Given an organisation user has submitted a marine licence application with uploaded sites
-    When the internal user opens the submitted case summary in D365
-    Then the case summary displays the marine licence case details
+    Then the Marine licence cases workbasket shows the submitted case with the following details
+      | Reference       | the submitted reference |
+      | Project name    | the project name        |
+      | Assigned to     | blank                   |
+      | Status          | Submitted               |
+      | Case age (days) | a number                |
+    And the case summary tab shows the following details
+      | Reference        | the submitted reference |
+      | Application type | Marine License          |
+      | Submitted        | a date                  |
+      | Fee band         | present                 |
+      | Organisation     | Windfarm Co             |

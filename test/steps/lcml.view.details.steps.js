@@ -13,7 +13,6 @@ import {
   verifyD365Login
 } from '../support/d365.js'
 
-// The left-nav treeitem is spelled "Marine license cases" (American) in D365.
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
 const D365_STEP_TIMEOUT = 600_000
 
@@ -40,10 +39,6 @@ async function findCaseRow(page, reference) {
   const firstRow = page.locator('div[role="row"][row-index="0"]')
   await firstRow.waitFor({ state: 'visible', timeout: 30_000 })
 
-  // The grid can still show a stale row before the search filter applies (or
-  // when the just-submitted case is not yet indexed), so confirm the first row
-  // is actually our case before returning it — otherwise throw so the caller
-  // re-searches after a wait.
   await expect(firstRow.locator('[col-id="ticketnumber"]')).toContainText(
     reference,
     { timeout: 5_000 }
@@ -51,8 +46,6 @@ async function findCaseRow(page, reference) {
   return firstRow
 }
 
-// A just-submitted case can take a while to be indexed into the D365 view, so
-// retry the search until it appears.
 async function findCaseRowWithRetry(page, reference) {
   let lastError = null
   for (let attempt = 1; attempt <= 15; attempt++) {
@@ -66,11 +59,6 @@ async function findCaseRowWithRetry(page, reference) {
   throw lastError
 }
 
-// Read a Case summary field's displayed value. D365 renders these read-only
-// fields as inputs (value in the `value` attribute, not textContent) and
-// populates them after the field becomes visible — more slowly under parallel
-// load — so poll the input value (and the pcf container text for option-set
-// fields) until it populates.
 async function readCaseSummaryField(page, attr) {
   const container = page
     .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
@@ -99,11 +87,7 @@ async function readCaseSummaryField(page, attr) {
   return ((await container.innerText().catch(() => '')) || '').trim()
 }
 
-async function openCaseSummary(world) {
-  const page = await openWorkbasket(world)
-  const row = await findCaseRowWithRetry(page, world.data.applicationReference)
-
-  // Open the case record via the Project name (title) column hyperlink.
+async function openCaseRecordSummary(page, row) {
   await row.locator('div[col-id="title"] a').click()
   await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
     timeout: 30_000
@@ -117,14 +101,12 @@ async function openCaseSummary(world) {
     await summaryTab.click().catch(() => {})
   }
 
-  // Wait for the form fields to render before reading them.
   for (let attempt = 1; attempt <= 6; attempt++) {
     if (await readCaseSummaryField(page, 'ml_submitteddate')) {
       break
     }
     await page.waitForTimeout(5_000)
   }
-  return page
 }
 
 function card(page, title) {
@@ -294,81 +276,97 @@ When(
   }
 )
 
-When(
-  'the internal user opens the submitted case summary in D365',
-  { timeout: D365_STEP_TIMEOUT },
-  async function () {
-    await openCaseSummary(this)
-  }
-)
+const WORKBASKET_COL_BY_FIELD = {
+  Reference: 'ticketnumber',
+  'Project name': 'title',
+  'Assigned to': 'mmo_assignedtoid',
+  Status: 'statuscode',
+  'Case age (days)': 'ml_datediff'
+}
+
+const CASE_SUMMARY_ATTR_BY_FIELD = {
+  Reference: 'ticketnumber',
+  'Application type': 'casetypecode',
+  Submitted: 'ml_submitteddate',
+  'Fee band': 'ml_feeband',
+  Organisation: 'mmo_applicantorganisationid'
+}
+
+const ORG_VALUE_SELECTOR =
+  '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
 
 Then(
-  'the Marine licence cases workbasket displays the following columns',
+  'the Marine licence cases workbasket shows the submitted case with the following details',
   async function (dataTable) {
     const page = this.d365Page
-    for (const [column] of dataTable.raw()) {
+    const row = this.d365CaseRow
+
+    for (const [field, expected] of dataTable.raw()) {
+      const colId = WORKBASKET_COL_BY_FIELD[field]
+      if (!colId) {
+        throw new Error(`Unknown workbasket column: ${field}`)
+      }
+
       await expect(
-        page.getByRole('columnheader', { name: column }).first()
+        page.getByRole('columnheader', { name: field }).first()
       ).toBeVisible({ timeout: 30_000 })
+
+      const cell = row.locator(`[col-id="${colId}"]`)
+      if (expected === 'the submitted reference') {
+        await expect(cell).toContainText(this.data.applicationReference, {
+          timeout: 30_000
+        })
+      } else if (expected === 'the project name') {
+        await expect(cell).toContainText(this.data.projectName, {
+          timeout: 30_000
+        })
+      } else if (expected === 'a number') {
+        await expect(cell).toContainText(/\d+/, { timeout: 30_000 })
+      } else if (expected === 'blank') {
+        expect(((await cell.innerText()) || '').trim()).toBe('')
+      } else {
+        await expect(cell).toContainText(expected, { timeout: 30_000 })
+      }
     }
   }
 )
 
 Then(
-  'the workbasket row shows the submitted case reference, project name and status {string}',
-  async function (status) {
-    const row = this.d365CaseRow
-    await expect(row.locator('[col-id="ticketnumber"]')).toContainText(
-      this.data.applicationReference,
-      { timeout: 30_000 }
-    )
-    await expect(row.locator('[col-id="title"]')).toContainText(
-      this.data.projectName,
-      { timeout: 30_000 }
-    )
-    await expect(row.locator('[col-id="statuscode"]')).toContainText(status, {
-      timeout: 30_000
-    })
-  }
-)
-
-Then(
-  'the case summary displays the marine licence case details',
-  async function () {
+  'the case summary tab shows the following details',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (dataTable) {
     const page = this.d365Page
-    const organisation = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+    await openCaseRecordSummary(page, this.d365CaseRow)
 
-    // Reference matches the submitted application reference.
-    expect(await readCaseSummaryField(page, 'ticketnumber')).toContain(
-      this.data.applicationReference
-    )
+    for (const [field, expected] of dataTable.raw()) {
+      const attr = CASE_SUMMARY_ATTR_BY_FIELD[field]
+      if (!attr) {
+        throw new Error(`Unknown case summary field: ${field}`)
+      }
 
-    // Application type reads "Marine License" (American) in D365; match either
-    // spelling rather than assert the AC's "Marine licence" exactly.
-    expect(await readCaseSummaryField(page, 'casetypecode')).toMatch(
-      /marine licen[cs]e/i
-    )
+      await expect(
+        page.locator(`[data-id="${attr}-FieldSectionItemContainer"]`).first()
+      ).toBeVisible({ timeout: 30_000 })
 
-    // Submitted date in dd/mm/yyyy.
-    expect(await readCaseSummaryField(page, 'ml_submitteddate')).toMatch(
-      /\d{2}\/\d{2}\/\d{4}/
-    )
+      if (expected === 'present') {
+        continue
+      }
 
-    // Organisation the application is for.
-    await expect(
-      page
-        .locator(
-          '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
-        )
-        .first()
-    ).toContainText(organisation, { timeout: 30_000 })
+      const actual =
+        field === 'Organisation'
+          ? (
+              (await page.locator(ORG_VALUE_SELECTOR).first().innerText()) || ''
+            ).trim()
+          : await readCaseSummaryField(page, attr)
 
-    // Fee band is present on the tab. Its value is communicated to Dynamics per
-    // ML-1352; assert the field is displayed (value assertion left out because
-    // it can be empty for a freshly submitted case).
-    await expect(
-      page.locator('[data-id="ml_feeband-FieldSectionItemContainer"]').first()
-    ).toBeVisible({ timeout: 30_000 })
+      if (expected === 'the submitted reference') {
+        expect(actual).toContain(this.data.applicationReference)
+      } else if (expected === 'a date') {
+        expect(actual).toMatch(/\d{2}\/\d{2}\/\d{4}/)
+      } else {
+        expect(actual.toLowerCase()).toContain(expected.toLowerCase())
+      }
+    }
   }
 )
 
