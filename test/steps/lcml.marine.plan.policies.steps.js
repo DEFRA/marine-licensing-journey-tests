@@ -1,6 +1,9 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import { completeManualCircleApp } from '../support/lcml-helpers.js'
+import {
+  completeManualCircleApp,
+  openMarinePlanPolicyList
+} from '../support/lcml-helpers.js'
 
 function taskItem(page, taskName) {
   return page.locator('li.govuk-task-list__item', { hasText: taskName }).first()
@@ -61,10 +64,7 @@ Then(
 When(
   'the user opens the Marine plan policy considerations task',
   async function () {
-    await this.page
-      .locator('a[href="/marine-licence/marine-plan-policies"]')
-      .click()
-    await this.page.waitForLoadState('load')
+    await openMarinePlanPolicyList(this.page)
     await expect(this.page).toHaveURL(/marine-licence\/marine-plan-policies/, {
       timeout: 30_000
     })
