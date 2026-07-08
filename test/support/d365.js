@@ -208,10 +208,8 @@ export async function openD365CaseRecord(page, applicantOrganisation) {
   await orgField.waitFor({ state: 'visible', timeout: 30_000 })
   const orgText = await orgField.innerText()
   expect(orgText.trim()).toBe(applicantOrganisation)
-  // Marine licence case forms have no Application URL field (it can still linger
-  // in the DOM hidden, so a count() check is unreliable). Probe for a *visible*
-  // field and skip it when absent, instead of waiting the full timeout on a
-  // field that never appears. Exemption case forms show it and we read it.
+  // Marine licence case forms have no Application URL field
+  // Exemption case forms show it and we read it.
   const appUrlInput = page.locator(APP_URL_SELECTOR).first()
   const appUrlVisible = await appUrlInput
     .waitFor({ state: 'visible', timeout: 10_000 })
