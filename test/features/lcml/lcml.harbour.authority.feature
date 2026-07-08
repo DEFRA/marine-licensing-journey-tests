@@ -24,7 +24,7 @@ Feature: LCML: Harbour authority task
 
     Examples:
       | answer | error                                                              |
-      |        | Select whether your project is located in a harbour authority area |
+      |        | Select whether your project is located within a harbour authority area |
       | Yes    | Enter details of the harbour authority                             |
 
   Scenario Outline: Saving a valid harbour authority answer marks the task Completed
