@@ -10,11 +10,25 @@ import {
 import {
   launchD365Browser,
   loginToD365,
-  verifyD365Login,
-  openD365CaseRecord
+  verifyD365Login
 } from '../support/d365.js'
 
-async function searchAndOpenD365Case(page, reference) {
+const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
+const D365_STEP_TIMEOUT = 600_000
+
+async function openWorkbasket(world) {
+  const { browser, page } = await launchD365Browser()
+  world.d365Browser = browser
+  world.d365Page = page
+
+  await loginToD365(page)
+  await verifyD365Login(page)
+  await page.locator(WORKBASKET_SELECTOR).first().click()
+  await page.waitForLoadState('load')
+  return page
+}
+
+async function findCaseRow(page, reference) {
   const searchInput = page
     .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
     .first()
@@ -23,13 +37,76 @@ async function searchAndOpenD365Case(page, reference) {
   await searchInput.press('Enter')
 
   const firstRow = page.locator('div[role="row"][row-index="0"]')
-  await firstRow.waitFor({ state: 'visible', timeout: 20_000 })
-  await firstRow.locator('div[col-id="title"] a').click()
+  await firstRow.waitFor({ state: 'visible', timeout: 30_000 })
 
+  await expect(firstRow.locator('[col-id="ticketnumber"]')).toContainText(
+    reference,
+    { timeout: 5_000 }
+  )
+  return firstRow
+}
+
+async function findCaseRowWithRetry(page, reference) {
+  let lastError = null
+  for (let attempt = 1; attempt <= 15; attempt++) {
+    try {
+      return await findCaseRow(page, reference)
+    } catch (err) {
+      lastError = err
+      await page.waitForTimeout(15_000)
+    }
+  }
+  throw lastError
+}
+
+async function readCaseSummaryField(page, attr) {
+  const container = page
+    .locator(`[data-id="${attr}-FieldSectionItemContainer"]`)
+    .first()
+  await container.waitFor({ state: 'visible', timeout: 30_000 })
+  const input = container.locator('input, textarea').first()
+  const pcf = page
+    .locator(`[data-id="${attr}.fieldControl-pcf-container-id"]`)
+    .first()
+
+  for (let attempt = 0; attempt < 30; attempt++) {
+    if (await input.count()) {
+      const value = (await input.inputValue().catch(() => '')) || ''
+      if (value.trim()) {
+        return value.trim()
+      }
+    }
+    if (await pcf.count()) {
+      const text = ((await pcf.innerText().catch(() => '')) || '').trim()
+      if (text) {
+        return text
+      }
+    }
+    await page.waitForTimeout(1_000)
+  }
+  return ((await container.innerText().catch(() => '')) || '').trim()
+}
+
+async function openCaseRecordSummary(page, row) {
+  await row.locator('div[col-id="title"] a').click()
   await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
     timeout: 30_000
   })
   await page.waitForLoadState('load')
+
+  const summaryTab = page
+    .locator('[role="tab"]', { hasText: 'Case summary' })
+    .first()
+  if (await summaryTab.count()) {
+    await summaryTab.click().catch(() => {})
+  }
+
+  for (let attempt = 1; attempt <= 6; attempt++) {
+    if (await readCaseSummaryField(page, 'ml_submitteddate')) {
+      break
+    }
+    await page.waitForTimeout(5_000)
+  }
 }
 
 function card(page, title) {
@@ -188,74 +265,108 @@ Then('the View details page shows an activity details card', async function () {
 })
 
 When(
-  'the marine licence case is opened from its D365 Application URL',
-  { timeout: 600_000 },
+  'the internal user finds the submitted case in the Marine licence cases workbasket',
+  { timeout: D365_STEP_TIMEOUT },
   async function () {
-    const reference = this.data.applicationReference
-    const applicantOrganisation = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+    const page = await openWorkbasket(this)
+    this.d365CaseRow = await findCaseRowWithRetry(
+      page,
+      this.data.applicationReference
+    )
+  }
+)
 
-    const { browser, page: d365Page } = await launchD365Browser()
-    this.d365Browser = browser
-    try {
-      await loginToD365(d365Page)
-      await verifyD365Login(d365Page)
-      await d365Page
-        .locator('[role="treeitem"][title="Marine license cases"]')
-        .first()
-        .click()
-      await d365Page.waitForLoadState('load')
+const WORKBASKET_COL_BY_FIELD = {
+  Reference: 'ticketnumber',
+  'Project name': 'title',
+  'Assigned to': 'mmo_assignedtoid',
+  Status: 'statuscode',
+  'Case age (days)': 'ml_datediff'
+}
 
-      let lastError = null
-      for (let attempt = 1; attempt <= 15; attempt++) {
-        try {
-          await searchAndOpenD365Case(d365Page, reference)
-          lastError = null
-          break
-        } catch (err) {
-          lastError = err
-          await d365Page.waitForTimeout(15_000)
-        }
+const CASE_SUMMARY_ATTR_BY_FIELD = {
+  Reference: 'ticketnumber',
+  'Application type': 'casetypecode',
+  Submitted: 'ml_submitteddate',
+  'Fee band': 'ml_feeband',
+  Organisation: 'mmo_applicantorganisationid'
+}
+
+const ORG_VALUE_SELECTOR =
+  '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
+
+Then(
+  'the Marine licence cases workbasket shows the submitted case with the following details',
+  async function (dataTable) {
+    const page = this.d365Page
+    const row = this.d365CaseRow
+
+    for (const [field, expected] of dataTable.raw()) {
+      const colId = WORKBASKET_COL_BY_FIELD[field]
+      if (!colId) {
+        throw new Error(`Unknown workbasket column: ${field}`)
       }
-      if (lastError) throw lastError
 
-      const applicationUrl = await openD365CaseRecord(
-        d365Page,
-        applicantOrganisation
-      )
+      await expect(
+        page.getByRole('columnheader', { name: field }).first()
+      ).toBeVisible({ timeout: 30_000 })
 
-      if (applicationUrl) {
-        this.internalViewPage = await d365Page.context().newPage()
-        await this.internalViewPage.goto(applicationUrl, { waitUntil: 'load' })
-        expect(this.internalViewPage.url()).toContain(
-          '/view-marine-licence-details/'
-        )
+      const cell = row.locator(`[col-id="${colId}"]`)
+      if (expected === 'the submitted reference') {
+        await expect(cell).toContainText(this.data.applicationReference, {
+          timeout: 30_000
+        })
+      } else if (expected === 'the project name') {
+        await expect(cell).toContainText(this.data.projectName, {
+          timeout: 30_000
+        })
+      } else if (expected === 'a number') {
+        await expect(cell).toContainText(/\d+/, { timeout: 30_000 })
+      } else if (expected === 'blank') {
+        expect(((await cell.innerText()) || '').trim()).toBe('')
+      } else {
+        await expect(cell).toContainText(expected, { timeout: 30_000 })
       }
-    } catch (err) {
-      if (d365Page && !d365Page.isClosed()) {
-        this.attach(await d365Page.screenshot({ fullPage: true }), 'image/png')
-        this.attach(`D365 failure URL: ${d365Page.url()}`, 'text/plain')
-      }
-      throw err
     }
   }
 )
 
 Then(
-  'the internal View details page shows the submitted sites and activities',
-  async function () {
-    const page = this.internalViewPage
+  'the case summary tab shows the following details',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (dataTable) {
+    const page = this.d365Page
+    await openCaseRecordSummary(page, this.d365CaseRow)
 
-    if (!page) {
-      return
+    for (const [field, expected] of dataTable.raw()) {
+      const attr = CASE_SUMMARY_ATTR_BY_FIELD[field]
+      if (!attr) {
+        throw new Error(`Unknown case summary field: ${field}`)
+      }
+
+      await expect(
+        page.locator(`[data-id="${attr}-FieldSectionItemContainer"]`).first()
+      ).toBeVisible({ timeout: 30_000 })
+
+      if (expected === 'present') {
+        continue
+      }
+
+      const actual =
+        field === 'Organisation'
+          ? (
+              (await page.locator(ORG_VALUE_SELECTOR).first().innerText()) || ''
+            ).trim()
+          : await readCaseSummaryField(page, attr)
+
+      if (expected === 'the submitted reference') {
+        expect(actual).toContain(this.data.applicationReference)
+      } else if (expected === 'a date') {
+        expect(actual).toMatch(/\d{2}\/\d{2}\/\d{4}/)
+      } else {
+        expect(actual.toLowerCase()).toContain(expected.toLowerCase())
+      }
     }
-
-    await expect(page.locator('#site-location-card')).toBeVisible({
-      timeout: 30_000
-    })
-    await expect(card(page, 'Site 1')).toBeVisible({ timeout: 30_000 })
-    await expect(card(page, 'Site 1 - Activity 1')).toBeVisible({
-      timeout: 30_000
-    })
   }
 )
 
