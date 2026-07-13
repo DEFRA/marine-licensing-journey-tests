@@ -15,7 +15,7 @@ export default class WaterFrameworkDirectivePage {
 
   static ROW = {
     nauticalMile:
-      'Project located within one nautical mile (1.85km) of the coast',
+      'Project located within one nautical mile (1.85km) of low-water, in a tidal river or estuary',
     excludedActivities: 'Project limited to one of the excluded activities',
     upload: 'Water Framework Directive assessment upload'
   }
