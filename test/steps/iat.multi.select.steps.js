@@ -133,3 +133,12 @@ Then(
     expect(checkedCount).toBe(0)
   }
 )
+
+Then('the IAT checkbox {string} is checked', async function (label) {
+  const checkbox = this.page
+    .locator('.govuk-checkboxes__item', {
+      has: this.page.locator('label', { hasText: label })
+    })
+    .locator('input[type="checkbox"]')
+  await expect(checkbox.first()).toBeChecked({ timeout: 30_000 })
+})
