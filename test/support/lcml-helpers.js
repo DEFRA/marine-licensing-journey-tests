@@ -247,6 +247,11 @@ export async function completeFeeEstimate(page, answer = 'Yes') {
   await page.waitForLoadState('load')
 }
 
+export async function openMarinePlanPolicyList(page) {
+  await page.locator('a[href="/marine-licence/marine-plan-policies"]').click()
+  await page.waitForLoadState('load')
+}
+
 export async function completeWaterFrameworkDirectiveUpload(
   page,
   filePath = WFD_ASSESSMENT_FILE
