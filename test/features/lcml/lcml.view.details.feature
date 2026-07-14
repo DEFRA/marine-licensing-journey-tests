@@ -30,6 +30,6 @@ Feature: LCML: View details page shows sites and activities
       | Reference        | the submitted reference |
       | Application type | Marine License          |
       | Submitted        | a date                  |
-      | Fee band         | present                 |
+      | Fee band         | 2A                      |
       | Organisation     | Windfarm Co             |
     And the case summary shows the marine plan areas and coastal operations areas as read-only
