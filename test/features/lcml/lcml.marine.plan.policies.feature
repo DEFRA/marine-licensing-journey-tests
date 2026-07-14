@@ -16,7 +16,7 @@ Feature: LCML: Marine plan policies
     When the user views the marine licence task list
     Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
 
-  @issue=ML-1311 @issue=ML-1248
+  @issue=ML-1311 @issue=ML-1248 @issue=ML-1351
   Scenario: Marine plan policy considerations is "Not yet started" with a policy count once site details are completed
     Given an organisation user has completed the site details for a marine licence application
     When the user views the marine licence task list
@@ -58,3 +58,29 @@ Feature: LCML: Marine plan policies
     When the user opens a policy and saves a valid consideration
     And the user reopens the saved policy
     Then the policy consideration textarea contains the saved response
+
+  @issue=ML-1351
+  Scenario: The task is "In progress" with a completed count when some policies are completed
+    Given an organisation user has completed the site details for a marine licence application
+    When the user opens a policy and saves a valid consideration
+    And the user returns to the task list from the policy list
+    Then the "Marine plan policy considerations" task is "In progress" and shows some of the policies completed
+
+  @issue=ML-1351
+  Scenario: The task is "Completed" when all policies are completed
+    Given an organisation user has completed the site details for a marine licence application
+    When the user completes all marine plan policy considerations
+    And the user returns to the task list from the policy list
+    Then the "Marine plan policy considerations" task is "Completed" and shows all of the policies completed
+
+  @issue=ML-1342
+  Scenario Outline: The marine plan policies guidance link opens a standalone guidance page in a new tab
+    Given an organisation user has completed the site details for a marine licence application
+    When the user opens the marine plan policies guidance link from the "<page>" page
+    Then the marine plan policies guidance page opens in a new tab, without header links, a back link or a project name, and lists GOV.UK guidance links
+
+    Examples:
+      | page                 |
+      | task list            |
+      | policy list          |
+      | policy consideration |

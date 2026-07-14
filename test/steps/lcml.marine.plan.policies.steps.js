@@ -33,6 +33,32 @@ async function saveConsideration(page) {
   await page.waitForLoadState('load')
 }
 
+async function completeAllPolicyConsiderations(page) {
+  await openMarinePlanPolicyList(page)
+  const codes = await page
+    .locator('main a[href^="/marine-licence/marine-plan-policy/"]')
+    .evaluateAll((links) =>
+      links.map((a) => a.getAttribute('href').split('/').pop())
+    )
+  for (const code of codes) {
+    await page
+      .locator(`main a[href="/marine-licence/marine-plan-policy/${code}"]`)
+      .click()
+    await page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
+      timeout: 30_000
+    })
+    await page
+      .locator('#policyConsideration')
+      .fill(
+        'We have considered this policy and the proposal is compatible with it.'
+      )
+    await saveConsideration(page)
+    await page.waitForURL(/marine-licence\/marine-plan-policies/, {
+      timeout: 30_000
+    })
+  }
+}
+
 Given(
   'an organisation user has completed the site details for a marine licence application',
   { timeout: 180_000 },
@@ -238,5 +264,114 @@ Then(
       this.data.policyResponse,
       { timeout: 30_000 }
     )
+  }
+)
+
+When(
+  'the user completes all marine plan policy considerations',
+  { timeout: 180_000 },
+  async function () {
+    await completeAllPolicyConsiderations(this.page)
+  }
+)
+
+When(
+  'the user returns to the task list from the policy list',
+  async function () {
+    await this.page
+      .locator(
+        'button:has-text("Continue"), a.govuk-button:has-text("Continue")'
+      )
+      .first()
+      .click()
+    await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
+      timeout: 30_000
+    })
+  }
+)
+
+async function assertMppTaskCount(page, taskName, status, expectAllComplete) {
+  const task = taskItem(page, taskName)
+  await expect(task).toBeVisible({ timeout: 30_000 })
+  await expect(task.locator('.govuk-task-list__status')).toContainText(status, {
+    timeout: 30_000
+  })
+  await expect(task.locator('a')).toContainText(/\d+ of \d+ completed/, {
+    timeout: 30_000
+  })
+  const linkText = await task.locator('a').innerText()
+  const [, done, total] = linkText.match(/(\d+) of (\d+) completed/).map(Number)
+  expect(total).toBeGreaterThan(0)
+  if (expectAllComplete) {
+    expect(done).toBe(total)
+  } else {
+    expect(done).toBeGreaterThan(0)
+    expect(done).toBeLessThan(total)
+  }
+}
+
+Then(
+  'the {string} task is {string} and shows some of the policies completed',
+  async function (taskName, status) {
+    await assertMppTaskCount(this.page, taskName, status, false)
+  }
+)
+
+Then(
+  'the {string} task is {string} and shows all of the policies completed',
+  async function (taskName, status) {
+    await assertMppTaskCount(this.page, taskName, status, true)
+  }
+)
+
+async function openGuidancePopup(page) {
+  const popupPromise = page.waitForEvent('popup')
+  await page.locator('a[href*="marine-plan-policy-guidance"]').first().click()
+  const popup = await popupPromise
+  await popup.waitForLoadState('load')
+  return popup
+}
+
+When(
+  'the user opens the marine plan policies guidance link from the {string} page',
+  async function (page) {
+    if (page === 'task list') {
+      await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
+        timeout: 30_000
+      })
+    } else if (page === 'policy list') {
+      await openMarinePlanPolicyList(this.page)
+    } else if (page === 'policy consideration') {
+      await openFirstPolicyConsideration(this.page)
+    } else {
+      throw new Error(`Unknown guidance entry page: ${page}`)
+    }
+    this.guidancePage = await openGuidancePopup(this.page)
+  }
+)
+
+Then(
+  'the marine plan policies guidance page opens in a new tab, without header links, a back link or a project name, and lists GOV.UK guidance links',
+  async function () {
+    const guidance = this.guidancePage
+    await expect(guidance).toHaveURL(/marine-plan-policy-guidance/, {
+      timeout: 30_000
+    })
+    await expect(guidance.locator('h1')).toHaveText(
+      'Marine plan policies guidance',
+      { timeout: 30_000 }
+    )
+    expect(
+      await guidance.locator('main a[href*="gov.uk"]').count()
+    ).toBeGreaterThanOrEqual(3)
+    await expect(guidance.locator('.govuk-back-link')).toHaveCount(0)
+    await expect(
+      guidance.locator('.govuk-caption-l, .govuk-caption-m')
+    ).toHaveCount(0)
+    await expect(
+      guidance.locator(
+        '.govuk-service-navigation__item, .govuk-service-navigation__link'
+      )
+    ).toHaveCount(0)
   }
 )
