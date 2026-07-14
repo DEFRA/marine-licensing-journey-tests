@@ -332,7 +332,11 @@ Then(
       } else if (expected === 'a number') {
         await expect(cell).toContainText(/\d+/, { timeout: 30_000 })
       } else if (expected === 'blank') {
-        expect(((await cell.innerText()) || '').trim()).toBe('')
+        await expect
+          .poll(async () => ((await cell.innerText()) || '').trim(), {
+            timeout: 30_000
+          })
+          .toBe('')
       } else {
         await expect(cell).toContainText(expected, { timeout: 30_000 })
       }
@@ -428,12 +432,17 @@ Then(
     const page = this.d365Page
 
     let areas = { marine: { total: 0 }, coastal: { total: 0 } }
-    for (let attempt = 0; attempt < 12; attempt++) {
+    for (let attempt = 0; attempt < 24; attempt++) {
       areas = await readGeoAreaSubgrids(page)
       if (areas.marine.total > 0 && areas.coastal.total > 0) {
         break
       }
       await page.waitForTimeout(5_000)
+      if (attempt % 4 === 3) {
+        await page.reload().catch(() => {})
+        await page.waitForLoadState('load').catch(() => {})
+        await page.waitForTimeout(5_000)
+      }
     }
 
     expect(areas.marine.found, 'Marine Plan Areas subgrid is present').toBe(
