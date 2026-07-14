@@ -148,7 +148,6 @@ services:
       VIRTUAL_PATH: /
       VIRTUAL_PORT: 7337
       PORT: 7337
-      NODE_ENV: development
       REDIS_HOST: redis
       APP_BASE_URL: http://cdp-uploader:7337
       USE_SINGLE_INSTANCE_CACHE: true
