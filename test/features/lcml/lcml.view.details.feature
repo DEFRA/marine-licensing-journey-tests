@@ -16,9 +16,9 @@ Feature: LCML: View details page shows sites and activities
     Then the View details page shows the "File upload" site location method
     And the View details page shows an uploaded site card with a name and a map
 
-  @real-defra-id @d365 @issue=ML-1407
+  @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375
   Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary
-    Given an organisation user has submitted a marine licence application with uploaded sites
+    Given an organisation user has submitted a marine licence application with a site in a marine plan area
     When the internal user finds the submitted case in the Marine licence cases workbasket
     Then the Marine licence cases workbasket shows the submitted case with the following details
       | Reference       | the submitted reference |
@@ -32,3 +32,4 @@ Feature: LCML: View details page shows sites and activities
       | Submitted        | a date                  |
       | Fee band         | present                 |
       | Organisation     | Windfarm Co             |
+    And the case summary shows the marine plan areas and coastal operations areas as read-only
