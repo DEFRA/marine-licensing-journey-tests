@@ -13,6 +13,7 @@ import {
   completeProjectBackground,
   completeWaterFrameworkDirective,
   completeFeeEstimate,
+  completeMarinePlanPolicies,
   pickRandomFileType
 } from '../support/lcml-helpers.js'
 
@@ -97,6 +98,7 @@ When(
   'the user submits the marine licence application from the task list',
   async function () {
     // Task list → Check your answers
+    await completeMarinePlanPolicies(this.page)
     await this.page.locator('#review-and-send').click()
     await this.page.waitForLoadState('load')
     await expect(
