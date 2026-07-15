@@ -4,6 +4,7 @@ import {
   loginAndStartApplication,
   completeManualCircleApp,
   submitMarineLicence,
+  completeMarinePlanPolicies,
   WFD_ASSESSMENT_FILE
 } from '../support/lcml-helpers.js'
 import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page.js'
@@ -153,6 +154,7 @@ Given(
 )
 
 When('the user opens the Check your answers page', async function () {
+  await completeMarinePlanPolicies(this.page)
   await this.page.locator('#review-and-send').click()
   await this.page.waitForLoadState('load')
 })

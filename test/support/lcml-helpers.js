@@ -807,8 +807,54 @@ export async function completeRandomSiteTypeApp(world) {
   return siteType
 }
 
+export async function completeMarinePlanPolicies(page) {
+  if (/calculate-marine-plan-policies/.test(page.url())) {
+    await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
+  }
+  const taskLink = page.locator(
+    'a[href="/marine-licence/marine-plan-policies"]'
+  )
+  if (!(await taskLink.count())) {
+    return
+  }
+  await taskLink.first().click()
+  await page.waitForURL(/marine-licence\/marine-plan-policies/, {
+    timeout: 30_000
+  })
+
+  const codes = await page
+    .locator('main a[href^="/marine-licence/marine-plan-policy/"]')
+    .evaluateAll((links) =>
+      links.map((a) => a.getAttribute('href').split('/').pop())
+    )
+  for (const code of codes) {
+    await page
+      .locator(`main a[href="/marine-licence/marine-plan-policy/${code}"]`)
+      .click()
+    await page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
+      timeout: 30_000
+    })
+    await page
+      .locator('#policyConsideration')
+      .fill(
+        'We have considered this policy and the proposal is compatible with it.'
+      )
+    await page.locator('button:has-text("Save and continue")').click()
+    await page.waitForURL(/marine-licence\/marine-plan-policies/, {
+      timeout: 30_000
+    })
+  }
+
+  await page
+    .locator('button:has-text("Continue"), a.govuk-button:has-text("Continue")')
+    .first()
+    .click()
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
+}
+
 export async function submitMarineLicence(world) {
   const page = world.page
+  await completeMarinePlanPolicies(page)
   await page.locator('#review-and-send').click()
   await page.waitForLoadState('load')
   await page.locator('button:has-text("Continue")').click()
