@@ -1,5 +1,6 @@
 import { navigateAndAuthenticate } from './navigation.js'
 import { completeSiteDetailsFlow } from './site-details-flow.js'
+import { completeMarinePlanPolicies } from './lcml-helpers.js'
 import ProjectNamePage from '../pages/project.name.page.js'
 import TaskListPage from '../pages/task.list.page.js'
 import PublicRegisterPage from '../pages/public.register.page.js'
@@ -58,6 +59,7 @@ export async function navigateAndCompleteSiteDetailsToReview(world) {
 }
 
 export async function clickReviewAndSend(page) {
+  await completeMarinePlanPolicies(page)
   const taskList = new TaskListPage(page)
   await taskList.getReviewAndSendButton().click()
   await page.waitForLoadState('load')
