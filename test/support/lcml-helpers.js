@@ -290,8 +290,12 @@ export async function navigateToUploadPage(world, fileType) {
   await world.page.waitForLoadState('load')
 }
 
-export async function uploadFileAndWaitForReviewPage(world, fileType) {
-  await uploadFile(world.page, SAMPLE_FILES[fileType])
+export async function uploadFileAndWaitForReviewPage(
+  world,
+  fileType,
+  filePath = SAMPLE_FILES[fileType]
+) {
+  await uploadFile(world.page, filePath)
   await world.page.waitForLoadState('load')
   // Spinner page redirects to review site details once upload completes
   await world.page.waitForURL(
@@ -714,10 +718,11 @@ export async function completeManualPolygonSite(world, options = {}) {
 
 export async function completeSiteDetailsViaFileUpload(
   world,
-  fileType = 'KML'
+  fileType = 'KML',
+  filePath = SAMPLE_FILES[fileType]
 ) {
   await navigateToUploadPage(world, fileType)
-  await uploadFileAndWaitForReviewPage(world, fileType)
+  await uploadFileAndWaitForReviewPage(world, fileType, filePath)
 
   await addSiteNameFromReview(world.page, 1)
 
@@ -771,6 +776,19 @@ export async function completeUploadApp(world) {
   await loginAndStartApplication(world, 'organisation')
   await completeNonSiteTasks(world)
   await completeSiteDetailsViaFileUpload(world, 'KML')
+  world.data.siteType = 'upload'
+}
+
+const MARINE_AREA_SHAPEFILE = 'test/resources/magic_graphics1.zip'
+
+export async function completeMarineAreaShapefileApp(world) {
+  await loginAndStartApplication(world, 'organisation')
+  await completeNonSiteTasks(world)
+  await completeSiteDetailsViaFileUpload(
+    world,
+    'Shapefile',
+    MARINE_AREA_SHAPEFILE
+  )
   world.data.siteType = 'upload'
 }
 
