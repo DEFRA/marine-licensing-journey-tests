@@ -2,6 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   activityCardLocator,
+  clickCardLinkAndAwaitNavigation,
   expectOnReviewSiteDetailsPage,
   uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
@@ -18,8 +19,10 @@ function durationRow(page, cardTitle) {
 }
 
 async function clickDurationAddLink(page, cardTitle) {
-  await durationRow(page, cardTitle).locator('a:text-is("Add")').click()
-  await page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    durationRow(page, cardTitle).locator('a:text-is("Add")')
+  )
 }
 
 async function fillDurationAndSave(page, years, months) {
