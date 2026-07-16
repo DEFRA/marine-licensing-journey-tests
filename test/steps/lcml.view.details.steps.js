@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import {
   completeUploadApp,
   completeRandomSiteTypeApp,
+  completeMarineAreaShapefileApp,
   submitMarineLicence,
   openViewDetailsFromDashboard,
   openPublicViewDetailsFromDashboard
@@ -136,6 +137,14 @@ Given(
   'an organisation user has submitted a marine licence application with uploaded sites',
   async function () {
     await completeUploadApp(this)
+    await submitMarineLicence(this)
+  }
+)
+
+Given(
+  'an organisation user has submitted a marine licence application with a site in a marine plan area',
+  async function () {
+    await completeMarineAreaShapefileApp(this)
     await submitMarineLicence(this)
   }
 )
@@ -323,7 +332,11 @@ Then(
       } else if (expected === 'a number') {
         await expect(cell).toContainText(/\d+/, { timeout: 30_000 })
       } else if (expected === 'blank') {
-        expect(((await cell.innerText()) || '').trim()).toBe('')
+        await expect
+          .poll(async () => ((await cell.innerText()) || '').trim(), {
+            timeout: 30_000
+          })
+          .toBe('')
       } else {
         await expect(cell).toContainText(expected, { timeout: 30_000 })
       }
@@ -367,6 +380,90 @@ Then(
         expect(actual.toLowerCase()).toContain(expected.toLowerCase())
       }
     }
+  }
+)
+
+function readGeoAreaSubgrids(page) {
+  return page.evaluate(() => {
+    const readSubgrid = (commandLabel) => {
+      const menubar = [...document.querySelectorAll('[role="menubar"]')].find(
+        (m) => (m.getAttribute('aria-label') || '').includes(commandLabel)
+      )
+      if (!menubar) {
+        return { found: false, total: 0, canAdd: false }
+      }
+      let scope = menubar.parentElement
+      for (let i = 0; i < 8 && scope; i++) {
+        if (
+          scope.querySelector('[role="row"][row-index], [aria-label*="of"]')
+        ) {
+          break
+        }
+        scope = scope.parentElement
+      }
+      scope = scope || document
+      const pager = (scope.textContent || '').match(
+        /(\d+)\s*-\s*(\d+)\s*of\s*(\d+)/
+      )
+      const rows = [...scope.querySelectorAll('[role="row"][row-index]')].map(
+        (r) => r.innerText.replace(/\s+/g, ' ').trim()
+      )
+      const canAdd = !!menubar.querySelector(
+        '[aria-label*="Add" i], [aria-label*="New record" i]'
+      )
+      return {
+        found: true,
+        total: pager ? Number(pager[3]) : rows.length,
+        rows: rows.slice(0, 10),
+        canAdd
+      }
+    }
+    return {
+      marine: readSubgrid('Case Marine Plan Areas'),
+      coastal: readSubgrid('Case Coastal Operations Area')
+    }
+  })
+}
+
+Then(
+  'the case summary shows the marine plan areas and coastal operations areas as read-only',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+
+    let areas = { marine: { total: 0 }, coastal: { total: 0 } }
+    for (let attempt = 0; attempt < 24; attempt++) {
+      areas = await readGeoAreaSubgrids(page)
+      if (areas.marine.total > 0 && areas.coastal.total > 0) {
+        break
+      }
+      await page.waitForTimeout(5_000)
+      if (attempt % 4 === 3) {
+        await page.reload().catch(() => {})
+        await page.waitForLoadState('load').catch(() => {})
+        await page.waitForTimeout(5_000)
+      }
+    }
+
+    expect(areas.marine.found, 'Marine Plan Areas subgrid is present').toBe(
+      true
+    )
+    expect(
+      areas.coastal.found,
+      'Coastal Operations Areas subgrid is present'
+    ).toBe(true)
+    expect(
+      areas.marine.total,
+      `at least one marine plan area (saw: ${JSON.stringify(areas.marine.rows)})`
+    ).toBeGreaterThan(0)
+    expect(
+      areas.coastal.total,
+      `at least one coastal operations area (saw: ${JSON.stringify(areas.coastal.rows)})`
+    ).toBeGreaterThan(0)
+    expect(areas.marine.canAdd, 'marine plan areas are read-only').toBe(false)
+    expect(areas.coastal.canAdd, 'coastal operations areas are read-only').toBe(
+      false
+    )
   }
 )
 
