@@ -567,6 +567,51 @@ export async function submitPrimaryAndWait(page) {
   await page.waitForLoadState('load')
 }
 
+export async function openReviewSiteDetailsFromTaskList(world) {
+  // Once site details are completed the "Site details" task on the task list
+  // links straight to the review page.
+  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.waitForLoadState('load')
+  await expectReviewSiteDetailsPage(world.page)
+}
+
+export async function continueFromReviewObservingRequery(world) {
+  const page = world.page
+  const reviewUrl = page.url()
+  // A material (geometry) change synchronously clears the previously-queried
+  // policies, so the Marine plan policy task reverts to "Cannot start yet"; an
+  // immaterial change (e.g. a rename) leaves the queried policies intact. This
+  // is a deterministic signal that a re-query is required, unlike the transient
+  // "Loading" page which can be missed when the policy job completes quickly.
+  await page.goto(
+    new URL('/marine-licence/task-list', getConfig().baseURL).toString()
+  )
+  await page.waitForLoadState('load')
+  const mppTask = (
+    await page
+      .locator('li.govuk-task-list__item', { hasText: 'Marine plan policy' })
+      .first()
+      .innerText()
+  )
+    .replace(/\s+/g, ' ')
+    .trim()
+  const requeried = /cannot start yet/i.test(mppTask)
+  // Complete the flow: continue from the review page (performs the re-query).
+  await page.goto(reviewUrl)
+  await page.waitForLoadState('load')
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 60_000 })
+  await page.waitForLoadState('load')
+  if (world.attach) {
+    world.attach(
+      `MPP task after change: "${mppTask}" (requeried: ${requeried})`,
+      'text/plain'
+    )
+  }
+  world.data.requeried = requeried
+  return requeried
+}
+
 export async function expectReviewSiteDetailsPage(page) {
   await expect(page.locator('h1').first()).toContainText(
     'Review site details',

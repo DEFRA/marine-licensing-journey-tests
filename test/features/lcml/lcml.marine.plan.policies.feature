@@ -84,3 +84,24 @@ Feature: LCML: Marine plan policies
       | task list            |
       | policy list          |
       | policy consideration |
+
+  @issue=ML-1287
+  Scenario: Changing the width of a circular site re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user changes the width of the circular site and continues
+    Then the marine plan policies are re-queried
+
+  @issue=ML-1287
+  Scenario: Adding another site re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user adds another circular site and continues
+    Then the marine plan policies are re-queried
+
+  @issue=ML-1287
+  Scenario: Renaming a site does not re-query the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user changes the site name and continues
+    Then the marine plan policies are not re-queried
