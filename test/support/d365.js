@@ -158,18 +158,29 @@ export async function searchD365Case(page, reference) {
     .locator('div[role="treegrid"][aria-label="Completed Cases"]')
     .waitFor({ state: 'visible', timeout: 30_000 })
 
-  // Wait for the grid to reduce to a single matching row.
+  const ticketCell = page.locator(
+    'div[role="row"][row-index="0"] div[col-id="ticketnumber"]'
+  )
   await page
-    .locator('div[role="row"][row-index="0"]')
+    .locator(
+      `div[role="row"][row-index="0"] div[col-id="ticketnumber"] label[aria-label="${reference}"]`
+    )
     .waitFor({ state: 'visible', timeout: 30_000 })
 
-  await page
-    .locator('div[role="row"][row-index="0"] div[col-id="ticketnumber"]')
-    .dblclick()
-
-  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
-    timeout: 30_000
-  })
+  let opened = false
+  for (let attempt = 1; attempt <= 5 && !opened; attempt++) {
+    try {
+      await page.waitForTimeout(1_500)
+      await ticketCell.dblclick({ timeout: 15_000 })
+      await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
+        timeout: 15_000
+      })
+      opened = true
+    } catch (error) {
+      if (attempt === 5) throw error
+      await page.waitForTimeout(2_000)
+    }
+  }
   await page.waitForLoadState('load')
   await page
     .locator(APPLICANT_ORG_SELECTOR)
