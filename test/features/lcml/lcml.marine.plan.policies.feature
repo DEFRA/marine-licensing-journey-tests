@@ -85,23 +85,46 @@ Feature: LCML: Marine plan policies
       | policy list          |
       | policy consideration |
 
-  @issue=ML-1287
-  Scenario: Changing the width of a circular site re-queries the marine plan policies
+  @issue=ML-1261
+  Scenario: The finished-site-details question is shown once all site details are complete
     Given an organisation user has completed the site details for a marine licence application
-    And the user opens the review site details page from the task list
-    When the user changes the width of the circular site and continues
-    Then the marine plan policies are re-queried
+    When the user opens the review site details page from the task list
+    Then the review page shows the marine plan policies heading and the finished-site-details question
+    And neither finished-site-details radio is selected
 
-  @issue=ML-1287
-  Scenario: Adding another site re-queries the marine plan policies
-    Given an organisation user has completed the site details for a marine licence application
-    And the user opens the review site details page from the task list
-    When the user adds another circular site and continues
-    Then the marine plan policies are re-queried
+  @issue=ML-1261
+  Scenario: The finished-site-details question is hidden while site details are incomplete
+    Given an organisation user has manually entered a circular site for a marine licence
+    When the user views the review site details page
+    Then the review page does not show the finished-site-details question
 
-  @issue=ML-1287
-  Scenario: Renaming a site does not re-query the marine plan policies
+  @issue=ML-1261
+  Scenario: Selecting Continue without answering the finished-site-details question shows an error
     Given an organisation user has completed the site details for a marine licence application
     And the user opens the review site details page from the task list
-    When the user changes the site name and continues
-    Then the marine plan policies are not re-queried
+    When the user selects Continue without answering the finished-site-details question
+    Then the finished-site-details error "Select if you have finished entering your site details" is shown
+
+  @issue=ML-1287 @issue=ML-1261
+  Scenario: Answering Yes after changing the width re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user changes the width of the circular site
+    And the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
+
+  @issue=ML-1287 @issue=ML-1261
+  Scenario: Answering Yes after adding another site re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user adds another circular site
+    And the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
+
+  @issue=ML-1261
+  Scenario: Answering No returns to the task list without re-querying and resets the tasks
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user answers "No" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
+    And the "Site details" task has status "In progress"

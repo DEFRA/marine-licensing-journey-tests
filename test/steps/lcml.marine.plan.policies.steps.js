@@ -9,7 +9,7 @@ import {
   enterCircleSiteDetails,
   completeActivityDetailsFromReview,
   openReviewSiteDetailsFromTaskList,
-  continueFromReviewObservingRequery
+  finishSiteDetailsAndContinue
 } from '../support/lcml-helpers.js'
 import {
   clickAddTypeOfActivity,
@@ -411,19 +411,15 @@ Given(
   }
 )
 
-When(
-  'the user changes the width of the circular site and continues',
-  async function () {
-    const review = new ReviewSiteDetailsPage(this.page)
-    await review.widthChangeLink().click()
-    await this.page.waitForLoadState('load')
-    await enterWidth(this.page, Number(this.data.site.width) + 25)
-    await this.page.waitForLoadState('load')
-    await continueFromReviewObservingRequery(this)
-  }
-)
+When('the user changes the width of the circular site', async function () {
+  const review = new ReviewSiteDetailsPage(this.page)
+  await review.widthChangeLink().click()
+  await this.page.waitForLoadState('load')
+  await enterWidth(this.page, Number(this.data.site.width) + 25)
+  await this.page.waitForLoadState('load')
+})
 
-When('the user adds another circular site and continues', async function () {
+When('the user adds another circular site', async function () {
   await this.page
     .locator('button[name="add"]:has-text("Add another site")')
     .click()
@@ -435,25 +431,80 @@ When('the user adds another circular site and continues', async function () {
     width: '30'
   })
   await completeActivityForSite(this, 2)
-  await continueFromReviewObservingRequery(this)
 })
 
-When('the user changes the site name and continues', async function () {
-  const review = new ReviewSiteDetailsPage(this.page)
-  await review.siteNameChangeLink(1).click()
-  await this.page.waitForLoadState('load')
-  await this.page
-    .locator('#siteName')
-    .fill(`Renamed Site ${faker.location.city()}`)
-  await this.page.locator('button:has-text("Save and continue")').click()
-  await this.page.waitForLoadState('load')
-  await continueFromReviewObservingRequery(this)
+When(
+  'the user answers {string} and continues from the review page',
+  async function (answer) {
+    await finishSiteDetailsAndContinue(this.page, answer.toLowerCase())
+  }
+)
+
+// --- ML-1261: "Have you finished entering your site details?" question ---
+
+Then(
+  'the review page shows the marine plan policies heading and the finished-site-details question',
+  async function () {
+    await expect(
+      this.page.locator('h2', { hasText: 'Marine plan policies' }).first()
+    ).toBeVisible({ timeout: 30_000 })
+    await expect(
+      this.page.getByText('Have you finished entering your site details?')
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then('neither finished-site-details radio is selected', async function () {
+  await expect(
+    this.page.locator('#finishedEnteringSiteDetails')
+  ).not.toBeChecked()
+  await expect(
+    this.page.locator('#finishedEnteringSiteDetails-2')
+  ).not.toBeChecked()
 })
 
-Then('the marine plan policies are re-queried', async function () {
-  expect(this.data.requeried).toBe(true)
-})
+Then(
+  'the review page does not show the finished-site-details question',
+  async function () {
+    await expect(this.page.locator('#finishedEnteringSiteDetails')).toHaveCount(
+      0
+    )
+    await expect(
+      this.page.getByText('Have you finished entering your site details?')
+    ).toHaveCount(0)
+  }
+)
 
-Then('the marine plan policies are not re-queried', async function () {
-  expect(this.data.requeried).toBe(false)
-})
+When(
+  'the user selects Continue without answering the finished-site-details question',
+  async function () {
+    await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+Then(
+  'the finished-site-details error {string} is shown',
+  async function (message) {
+    await expect(this.page.locator('.govuk-error-summary')).toContainText(
+      message,
+      { timeout: 30_000 }
+    )
+    await expect(this.page).toHaveURL(/review-site-details/, {
+      timeout: 30_000
+    })
+  }
+)
+
+Then(
+  'the {string} task has status {string}',
+  async function (taskName, status) {
+    const task = this.page
+      .locator('li.govuk-task-list__item', { hasText: taskName })
+      .first()
+    await expect(task.locator('.govuk-task-list__status')).toContainText(
+      status,
+      { timeout: 30_000 }
+    )
+  }
+)

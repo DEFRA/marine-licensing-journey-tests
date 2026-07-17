@@ -592,43 +592,6 @@ export async function openReviewSiteDetailsFromTaskList(world) {
   await expectReviewSiteDetailsPage(world.page)
 }
 
-export async function continueFromReviewObservingRequery(world) {
-  const page = world.page
-  const reviewUrl = page.url()
-  // A material (geometry) change synchronously clears the previously-queried
-  // policies, so the Marine plan policy task reverts to "Cannot start yet"; an
-  // immaterial change (e.g. a rename) leaves the queried policies intact. This
-  // is a deterministic signal that a re-query is required, unlike the transient
-  // "Loading" page which can be missed when the policy job completes quickly.
-  await page.goto(
-    new URL('/marine-licence/task-list', getConfig().baseURL).toString()
-  )
-  await page.waitForLoadState('load')
-  const mppTask = (
-    await page
-      .locator('li.govuk-task-list__item', { hasText: 'Marine plan policy' })
-      .first()
-      .innerText()
-  )
-    .replace(/\s+/g, ' ')
-    .trim()
-  const requeried = /cannot start yet/i.test(mppTask)
-  // Complete the flow: continue from the review page (performs the re-query).
-  await page.goto(reviewUrl)
-  await page.waitForLoadState('load')
-  await page.locator('button:has-text("Continue")').click()
-  await page.waitForURL(/marine-licence\/task-list/, { timeout: 60_000 })
-  await page.waitForLoadState('load')
-  if (world.attach) {
-    world.attach(
-      `MPP task after change: "${mppTask}" (requeried: ${requeried})`,
-      'text/plain'
-    )
-  }
-  world.data.requeried = requeried
-  return requeried
-}
-
 export async function expectReviewSiteDetailsPage(page) {
   await expect(page.locator('h1').first()).toContainText(
     'Review site details',
@@ -780,8 +743,7 @@ export async function completeSiteDetailsViaFileUpload(
 
   await verifyActivityCardCompleted(world.page, 'Site 1 - Activity 1')
 
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
@@ -800,14 +762,27 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeFeeEstimate(world.page, 'Yes')
 }
 
+export async function finishSiteDetailsAndContinue(page, answer = 'yes') {
+  const radio = page.locator(
+    answer === 'no'
+      ? '#finishedEnteringSiteDetails-2'
+      : '#finishedEnteringSiteDetails'
+  )
+  if (await radio.count()) {
+    await radio.check()
+  }
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 60_000 })
+  await page.waitForLoadState('load')
+}
+
 async function addActivityForSite1AndContinue(world) {
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
   await completeRandomActivityFromReviewPage(world)
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 const POLYGON_COORDINATES = [
