@@ -128,3 +128,15 @@ Feature: LCML: Marine plan policies
     When the user answers "No" and continues from the review page
     Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
     And the "Site details" task has status "In progress"
+
+  @issue=ML-1377
+  Scenario: Review and send is hidden while the marine plan policy considerations are incomplete
+    Given an organisation user has completed the site details for a marine licence application
+    When the user views the marine licence task list
+    Then the Review and send your information button is not displayed
+
+  @issue=ML-1377
+  Scenario: Review and send is shown once the marine plan policy considerations are completed
+    Given an organisation user has completed the site details for a marine licence application
+    When the user completes the marine plan policy considerations and returns to the task list
+    Then the Review and send your information button is displayed
