@@ -59,6 +59,9 @@ Then('an {string} button is displayed', async function (buttonText) {
 })
 
 When('the user clicks the {string} button', async function (buttonText) {
-  await this.page.locator(`button:has-text("${buttonText}")`).click()
+  const button = this.page.locator(`button:has-text("${buttonText}")`)
+  await expect(button).toBeVisible({ timeout: 30_000 })
+  await button.scrollIntoViewIfNeeded()
+  await button.click()
   await this.page.waitForLoadState('load')
 })

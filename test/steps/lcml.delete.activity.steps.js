@@ -38,9 +38,15 @@ Given(
 When(
   'the user clicks {string} on the {string} card',
   async function (linkText, cardTitle) {
-    await this.page
-      .locator(`${activityCardSelector(cardTitle)} a:text-is("${linkText}")`)
-      .click()
+    const link = this.page.locator(
+      `${activityCardSelector(cardTitle)} a:text-is("${linkText}")`
+    )
+    await expect(link).toBeVisible({ timeout: 30_000 })
+    const fromUrl = this.page.url()
+    await link.click()
+    await this.page.waitForURL((url) => url.toString() !== fromUrl, {
+      timeout: 30_000
+    })
     await this.page.waitForLoadState('load')
   }
 )

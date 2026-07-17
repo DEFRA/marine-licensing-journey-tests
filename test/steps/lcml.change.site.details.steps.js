@@ -10,14 +10,17 @@ import {
 import {
   submitPrimaryAndWait,
   expectReviewSiteDetailsAnchor,
-  expectFieldPrePopulated
+  expectFieldPrePopulated,
+  clickCardLinkAndAwaitNavigation
 } from '../support/lcml-helpers.js'
 
 async function selectChangeLink(world, fieldKey) {
   world.data.changeField = fieldKey
   const review = new ReviewSiteDetailsPage(world.page)
-  await review.siteFieldChangeLink(1, fieldKey).click()
-  await world.page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    world.page,
+    review.siteFieldChangeLink(1, fieldKey)
+  )
 }
 
 When(

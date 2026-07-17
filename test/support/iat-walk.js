@@ -77,6 +77,104 @@ export const IAT_PATHS = {
     'Yes',
     'No',
     'No'
+  ],
+
+  // ML-1350: outcome pages whose Option 1 is a download link (terminal-multi)
+  '/scaffolding-impede-navigation': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Construction',
+    'Maintenance of existing structures and assets',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Maintenance of existing structures or assets',
+    'Scaffolding or access towers',
+    'Yes',
+    'Yes',
+    'No'
+  ],
+
+  '/scaffolding-mca-th-agreed': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Construction',
+    'Maintenance of existing structures and assets',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Maintenance of existing structures or assets',
+    'Scaffolding or access towers',
+    'Yes',
+    'No',
+    'No'
+  ],
+
+  '/markers/ha-not-agreed': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Deposit of a substance or object',
+    'From a vehicle or vessel',
+    'Fishing or shellfish propagation and cultivation',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Deposit of markers',
+    'Yes',
+    'No'
+  ],
+
+  '/markers/th-not-agreed': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Deposit of a substance or object',
+    'From a vehicle or vessel',
+    'Fishing or shellfish propagation and cultivation',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Deposit of markers',
+    'No',
+    'No'
+  ],
+
+  '/historic-england/not-agreed': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Dredging',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Non-navigational clearance dredging',
+    'Non-navigational clearance dredging (for operational purposes)',
+    'Yes',
+    'No',
+    'No',
+    'Yes',
+    'No',
+    'No',
+    'No',
+    'No',
+    'Yes',
+    'No'
+  ],
+
+  '/natural-england/not-agreed': [
+    'In or over the sea',
+    'English waters or Northern Ireland offshore waters',
+    'Dredging',
+    'Something else',
+    'Check to see if the activity is suitable for self-service marine licensing',
+    'Non-navigational clearance dredging',
+    'Non-navigational clearance dredging (for operational purposes)',
+    'Yes',
+    'No',
+    'No',
+    'Yes',
+    'No',
+    'No',
+    'No',
+    'No',
+    'Yes',
+    'Yes',
+    'Yes',
+    'Yes',
+    'No'
   ]
 }
 
