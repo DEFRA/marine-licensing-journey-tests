@@ -22,3 +22,11 @@ Feature: IAT: Multi-select (checkbox) question pages
     When the user clicks the IAT Back link
     Then the IAT question page URL has changed from "/dredging/activities"
     And no IAT checkbox is checked on the current question page
+
+  @issue=ML-1350
+  Scenario: Selected checkboxes are retained when navigating back to a multi-select page
+    Given the user walks the IAT to the question "/dredging/activities"
+    When the user selects the IAT checkbox "Non-navigational clearance dredging (for operational purposes)"
+    And the user clicks the IAT Continue button
+    And the user clicks the IAT Back link
+    Then the IAT checkbox "Non-navigational clearance dredging (for operational purposes)" is checked

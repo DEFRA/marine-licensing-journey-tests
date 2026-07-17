@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import {
   activityCardLocator,
+  clickCardLinkAndAwaitNavigation,
   expectOnReviewSiteDetailsPage,
   uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
@@ -21,8 +22,10 @@ function completionDateRow(page, cardTitle) {
 }
 
 async function clickCompletionDateAddLink(page, cardTitle) {
-  await completionDateRow(page, cardTitle).locator('a:text-is("Add")').click()
-  await page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    completionDateRow(page, cardTitle).locator('a:text-is("Add")')
+  )
 }
 
 async function expectOnCompletionDatePage(page) {

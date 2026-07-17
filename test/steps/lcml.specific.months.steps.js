@@ -2,6 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   activityCardLocator,
+  clickCardLinkAndAwaitNavigation,
   expectOnReviewSiteDetailsPage,
   uploadRandomCoordinatesFile
 } from '../support/lcml-helpers.js'
@@ -19,8 +20,10 @@ function specificMonthsRow(page, cardTitle) {
 }
 
 async function clickSpecificMonthsAddLink(page, cardTitle) {
-  await specificMonthsRow(page, cardTitle).locator('a:text-is("Add")').click()
-  await page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    specificMonthsRow(page, cardTitle).locator('a:text-is("Add")')
+  )
 }
 
 async function expectOnSpecificMonthsPage(page) {

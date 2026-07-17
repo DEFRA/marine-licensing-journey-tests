@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import {
   activityCardLocator,
+  clickCardLinkAndAwaitNavigation,
   expectOnReviewSiteDetailsPage,
   uploadRandomCoordinatesFile
 } from '../support/lcml-helpers.js'
@@ -18,8 +19,10 @@ function workingHoursRow(page, cardTitle) {
 }
 
 async function clickWorkingHoursAddLink(page, cardTitle) {
-  await workingHoursRow(page, cardTitle).locator('a:text-is("Add")').click()
-  await page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    workingHoursRow(page, cardTitle).locator('a:text-is("Add")')
+  )
 }
 
 async function fillWorkingHoursAndSave(page, text) {

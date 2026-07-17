@@ -12,6 +12,12 @@ Feature: IAT: Interactive Assistance Tool journey
     And there are no links in the page header
     And a "Start now" button is displayed
 
+  @issue=ML-1350
+  Scenario: The IAT start page does not show a Back link
+    Given a user navigates to the IAT start page
+    When the user views the start page
+    Then the start page does not have a Back link
+
   Scenario: Question page is displayed and selecting an answer navigates to the next question
     Given a user is on an IAT question page
     When the user selects an option and clicks Continue

@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 import {
   activityCardLocator,
+  clickCardLinkAndAwaitNavigation,
   expectOnReviewSiteDetailsPage,
   uploadCoordinatesFile
 } from '../support/lcml-helpers.js'
@@ -19,8 +20,10 @@ function activityDescriptionRow(page, cardTitle) {
 }
 
 async function clickActivityDescriptionAddLink(page, cardTitle) {
-  await activityDescriptionRow(page, cardTitle).locator('a:text("Add")').click()
-  await page.waitForLoadState('load')
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    activityDescriptionRow(page, cardTitle).locator('a:text("Add")')
+  )
 }
 
 async function fillActivityDescriptionAndSave(page, text) {
@@ -41,8 +44,10 @@ When(
     const row = activityCardLocator(this.page, cardTitle).locator(
       `.govuk-summary-list__row:has(dt:text-is("${taskName}"))`
     )
-    await row.locator('a:text("Add")').click()
-    await this.page.waitForLoadState('load')
+    await clickCardLinkAndAwaitNavigation(
+      this.page,
+      row.locator('a:text("Add")')
+    )
   }
 )
 

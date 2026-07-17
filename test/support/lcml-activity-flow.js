@@ -1,4 +1,5 @@
 import {
+  clickCardLinkAndAwaitNavigation,
   loginAndNavigateToUploadPage,
   uploadFileAndWaitForReviewPage
 } from './lcml-helpers.js'
@@ -6,6 +7,10 @@ import {
   ACTIVITY_TYPES,
   OTHER_TEXTAREA_ID
 } from '../test-data/lcml-activity.js'
+
+async function clickReviewRowLinkAndAwaitNavigation(page, rowSelector) {
+  await clickCardLinkAndAwaitNavigation(page, page.locator(`${rowSelector} a`))
+}
 
 /**
  * Drives the LCML flow up to the review site details page where the Activity
@@ -29,12 +34,10 @@ export async function clickAddTypeOfActivity(
   siteNumber = 1,
   activityNumber = 1
 ) {
-  await page
-    .locator(
-      `${activityCardRow('Type of activity', siteNumber, activityNumber)} a`
-    )
-    .click()
-  await page.waitForLoadState('load')
+  await clickReviewRowLinkAndAwaitNavigation(
+    page,
+    activityCardRow('Type of activity', siteNumber, activityNumber)
+  )
 }
 
 export async function clickChangeTypeOfActivity(
@@ -42,12 +45,10 @@ export async function clickChangeTypeOfActivity(
   siteNumber = 1,
   activityNumber = 1
 ) {
-  await page
-    .locator(
-      `${activityCardRow('Type of activity', siteNumber, activityNumber)} a`
-    )
-    .click()
-  await page.waitForLoadState('load')
+  await clickReviewRowLinkAndAwaitNavigation(
+    page,
+    activityCardRow('Type of activity', siteNumber, activityNumber)
+  )
 }
 
 export async function clickChangeWhatActivity(
@@ -56,10 +57,10 @@ export async function clickChangeWhatActivity(
   siteNumber = 1,
   activityNumber = 1
 ) {
-  await page
-    .locator(`${activityCardRow(reviewRowTitle, siteNumber, activityNumber)} a`)
-    .click()
-  await page.waitForLoadState('load')
+  await clickReviewRowLinkAndAwaitNavigation(
+    page,
+    activityCardRow(reviewRowTitle, siteNumber, activityNumber)
+  )
 }
 
 /**

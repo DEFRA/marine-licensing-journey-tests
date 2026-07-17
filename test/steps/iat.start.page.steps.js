@@ -70,3 +70,7 @@ Then('a {string} button is displayed', async function (buttonText) {
     )
   ).toBeVisible({ timeout: 30_000 })
 })
+
+Then('the start page does not have a Back link', async function () {
+  await expect(this.page.locator('a.govuk-back-link')).toHaveCount(0)
+})

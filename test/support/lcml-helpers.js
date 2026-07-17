@@ -328,12 +328,29 @@ export async function uploadRandomCoordinatesFile(world) {
   await uploadCoordinatesFile(world, pickRandomFileType())
 }
 
-async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
-  await activityCardLocator(page, cardTitle)
-    .locator(`.govuk-summary-list__row:has(dt:text-is("${rowName}"))`)
-    .locator('a:text-is("Add")')
-    .click()
+// Clicking a summary-card Add/Change/Delete link navigates to a new page. In the
+// slower CDP environments the review page (with its site map) can still be
+// settling when the click runs, so a bare click + waitForLoadState races the
+// navigation and times out. Assert the link, scroll it into view, then wait for
+// the URL to actually change.
+export async function clickCardLinkAndAwaitNavigation(page, link) {
+  await expect(link).toBeVisible({ timeout: 30_000 })
+  await link.scrollIntoViewIfNeeded()
+  const fromUrl = page.url()
+  await link.click()
+  await page.waitForURL((url) => url.toString() !== fromUrl, {
+    timeout: 30_000
+  })
   await page.waitForLoadState('load')
+}
+
+async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
+  await clickCardLinkAndAwaitNavigation(
+    page,
+    activityCardLocator(page, cardTitle)
+      .locator(`.govuk-summary-list__row:has(dt:text-is("${rowName}"))`)
+      .locator('a:text-is("Add")')
+  )
 }
 
 export async function completeActivityDescriptionForActivity(
