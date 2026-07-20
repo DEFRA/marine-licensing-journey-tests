@@ -594,6 +594,14 @@ export async function submitPrimaryAndWait(page) {
   await page.waitForLoadState('load')
 }
 
+export async function openReviewSiteDetailsFromTaskList(world) {
+  // Once site details are completed the "Site details" task on the task list
+  // links straight to the review page.
+  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.waitForLoadState('load')
+  await expectReviewSiteDetailsPage(world.page)
+}
+
 export async function expectReviewSiteDetailsPage(page) {
   await expect(page.locator('h1').first()).toContainText(
     'Review site details',
@@ -745,8 +753,7 @@ export async function completeSiteDetailsViaFileUpload(
 
   await verifyActivityCardCompleted(world.page, 'Site 1 - Activity 1')
 
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
@@ -765,14 +772,27 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeFeeEstimate(world.page, 'Yes')
 }
 
+export async function finishSiteDetailsAndContinue(page, answer = 'yes') {
+  const radio = page.locator(
+    answer === 'no'
+      ? '#finishedEnteringSiteDetails-2'
+      : '#finishedEnteringSiteDetails'
+  )
+  if (await radio.count()) {
+    await radio.check()
+  }
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 60_000 })
+  await page.waitForLoadState('load')
+}
+
 async function addActivityForSite1AndContinue(world) {
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
   await completeRandomActivityFromReviewPage(world)
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 const POLYGON_COORDINATES = [
