@@ -101,7 +101,13 @@ export async function loginAndStartApplication(world, role = 'employee') {
   await world.page.waitForLoadState('load')
 }
 
+export async function waitForTaskList(page) {
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
+  await page.waitForLoadState('load')
+}
+
 export async function completeSpecialLegalPowers(page, answer) {
+  await waitForTaskList(page)
   await expect(page.locator('h2:has-text("Other permissions")')).toBeVisible({
     timeout: 30_000
   })
@@ -215,7 +221,7 @@ export async function completeProjectBackground(page, text) {
 
   await page.locator('#projectBackground').fill(text)
   await page.locator('button:has-text("Save and continue")').click()
-  await page.waitForLoadState('load')
+  await waitForTaskList(page)
 }
 
 export async function completeWaterFrameworkDirective(page, answer = 'No') {
@@ -345,6 +351,10 @@ export async function clickCardLinkAndAwaitNavigation(page, link) {
 }
 
 async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
+  await page.waitForURL(/review-site-details/, { timeout: 30_000 })
+  await expect(activityCardLocator(page, cardTitle)).toBeVisible({
+    timeout: 30_000
+  })
   await clickCardLinkAndAwaitNavigation(
     page,
     activityCardLocator(page, cardTitle)

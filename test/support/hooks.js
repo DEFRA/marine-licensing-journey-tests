@@ -13,6 +13,18 @@ import { expireTestUser } from './auth.js'
 
 setDefaultTimeout(120_000)
 
+function failingStepWindowText(duration) {
+  const failedAt = new Date()
+  const durationMs =
+    Number(duration?.seconds ?? 0) * 1000 + Number(duration?.nanos ?? 0) / 1e6
+  const startedAt = new Date(failedAt.getTime() - durationMs)
+  return [
+    `Failing step started at: ${startedAt.toISOString()} (UTC)`,
+    `Failing step failed at:  ${failedAt.toISOString()} (UTC)`,
+    `Failing step duration:   ${(durationMs / 1000).toFixed(1)}s`
+  ].join('\n')
+}
+
 let browser
 
 BeforeAll(async function () {
@@ -44,6 +56,7 @@ Before(async function (scenario) {
 // is collapsed by default and effectively invisible in the Allure report.
 AfterStep(async function ({ result }) {
   if (result.status === Status.FAILED && this.page && !this.page.isClosed()) {
+    this.attach(failingStepWindowText(result.duration), 'text/plain')
     const screenshot = await this.page.screenshot({ fullPage: true })
     this.attach(screenshot, 'image/png')
     this.attach(`Failure URL: ${this.page.url()}`, 'text/plain')
@@ -72,6 +85,10 @@ After(async function (scenario) {
     this.page &&
     !this.page.isClosed()
   ) {
+    this.attach(
+      `Failure captured at: ${new Date().toISOString()} (UTC)`,
+      'text/plain'
+    )
     const screenshot = await this.page.screenshot({ fullPage: true })
     this.attach(screenshot, 'image/png')
     this.attach(`Failure URL: ${this.page.url()}`, 'text/plain')
