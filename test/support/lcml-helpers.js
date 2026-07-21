@@ -28,6 +28,9 @@ import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
+export const MARINE_PLAN_POLICY_RESPONSE =
+  'We have considered this policy and the proposal is compatible with it.'
+
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
   Shapefile: 'test/resources/valid-shapefile.zip'
@@ -101,7 +104,13 @@ export async function loginAndStartApplication(world, role = 'employee') {
   await world.page.waitForLoadState('load')
 }
 
+export async function waitForTaskList(page) {
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
+  await page.waitForLoadState('load')
+}
+
 export async function completeSpecialLegalPowers(page, answer) {
+  await waitForTaskList(page)
   await expect(page.locator('h2:has-text("Other permissions")')).toBeVisible({
     timeout: 30_000
   })
@@ -215,7 +224,7 @@ export async function completeProjectBackground(page, text) {
 
   await page.locator('#projectBackground').fill(text)
   await page.locator('button:has-text("Save and continue")').click()
-  await page.waitForLoadState('load')
+  await waitForTaskList(page)
 }
 
 export async function completeWaterFrameworkDirective(page, answer = 'No') {
@@ -345,6 +354,10 @@ export async function clickCardLinkAndAwaitNavigation(page, link) {
 }
 
 async function clickAddLinkInActivityCard(page, cardTitle, rowName) {
+  await page.waitForURL(/review-site-details/, { timeout: 30_000 })
+  await expect(activityCardLocator(page, cardTitle)).toBeVisible({
+    timeout: 30_000
+  })
   await clickCardLinkAndAwaitNavigation(
     page,
     activityCardLocator(page, cardTitle)
@@ -584,6 +597,14 @@ export async function submitPrimaryAndWait(page) {
   await page.waitForLoadState('load')
 }
 
+export async function openReviewSiteDetailsFromTaskList(world) {
+  // Once site details are completed the "Site details" task on the task list
+  // links straight to the review page.
+  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.waitForLoadState('load')
+  await expectReviewSiteDetailsPage(world.page)
+}
+
 export async function expectReviewSiteDetailsPage(page) {
   await expect(page.locator('h1').first()).toContainText(
     'Review site details',
@@ -735,8 +756,7 @@ export async function completeSiteDetailsViaFileUpload(
 
   await verifyActivityCardCompleted(world.page, 'Site 1 - Activity 1')
 
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
@@ -755,14 +775,27 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeFeeEstimate(world.page, 'Yes')
 }
 
+export async function finishSiteDetailsAndContinue(page, answer = 'yes') {
+  const radio = page.locator(
+    answer === 'no'
+      ? '#finishedEnteringSiteDetails-2'
+      : '#finishedEnteringSiteDetails'
+  )
+  if (await radio.count()) {
+    await radio.check()
+  }
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 60_000 })
+  await page.waitForLoadState('load')
+}
+
 async function addActivityForSite1AndContinue(world) {
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
   await completeRandomActivityFromReviewPage(world)
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
-  await world.page.locator('button:has-text("Continue")').click()
-  await world.page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(world.page)
 }
 
 const POLYGON_COORDINATES = [
@@ -869,11 +902,7 @@ export async function completeMarinePlanPolicies(page) {
     await page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
       timeout: 30_000
     })
-    await page
-      .locator('#policyConsideration')
-      .fill(
-        'We have considered this policy and the proposal is compatible with it.'
-      )
+    await page.locator('#policyConsideration').fill(MARINE_PLAN_POLICY_RESPONSE)
     await page.locator('button:has-text("Save and continue")').click()
     await page.waitForURL(/marine-licence\/marine-plan-policies/, {
       timeout: 30_000

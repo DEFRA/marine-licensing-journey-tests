@@ -1,9 +1,23 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { faker } from '@faker-js/faker'
+import ReviewSiteDetailsPage from '../pages/review.site.details.page.js'
+import { enterWidth } from '../support/site-details-flow.js'
 import {
   completeManualCircleApp,
-  openMarinePlanPolicyList
+  openMarinePlanPolicyList,
+  enterCircleSiteDetails,
+  completeActivityDetailsFromReview,
+  openReviewSiteDetailsFromTaskList,
+  finishSiteDetailsAndContinue
 } from '../support/lcml-helpers.js'
+import {
+  clickAddTypeOfActivity,
+  selectActivityTypeAndContinue,
+  pickRandomNonOtherCheckbox,
+  checkCheckboxById,
+  submitWhatActivityForm
+} from '../support/lcml-activity-flow.js'
 
 const POLICY_MAP_URL =
   'https://environment.data.gov.uk/marine-plans-explorer/policy'
@@ -373,5 +387,124 @@ Then(
         '.govuk-service-navigation__item, .govuk-service-navigation__link'
       )
     ).toHaveCount(0)
+  }
+)
+
+async function completeActivityForSite(world, siteNumber) {
+  const { pickRandomActivity } = await import('../test-data/lcml-activity.js')
+  await clickAddTypeOfActivity(world.page, siteNumber, 1)
+  const { topLevel, subOption } = pickRandomActivity()
+  await selectActivityTypeAndContinue(world.page, topLevel, subOption)
+  const chosen = await pickRandomNonOtherCheckbox(world.page)
+  await checkCheckboxById(world.page, chosen.id)
+  await submitWhatActivityForm(world.page)
+  await completeActivityDetailsFromReview(
+    world,
+    `Site ${siteNumber} - Activity 1`
+  )
+}
+
+Given(
+  'the user opens the review site details page from the task list',
+  async function () {
+    await openReviewSiteDetailsFromTaskList(this)
+  }
+)
+
+When('the user changes the width of the circular site', async function () {
+  const review = new ReviewSiteDetailsPage(this.page)
+  await review.widthChangeLink().click()
+  await this.page.waitForLoadState('load')
+  await enterWidth(this.page, Number(this.data.site.width) + 25)
+  await this.page.waitForLoadState('load')
+})
+
+When('the user adds another circular site', async function () {
+  await this.page
+    .locator('button[name="add"]:has-text("Add another site")')
+    .click()
+  await this.page.waitForLoadState('load')
+  await enterCircleSiteDetails(this, {
+    siteName: `Added Site ${faker.location.city()}`,
+    latitude: '51.500000',
+    longitude: '-2.000000',
+    width: '30'
+  })
+  await completeActivityForSite(this, 2)
+})
+
+When(
+  'the user answers {string} and continues from the review page',
+  async function (answer) {
+    await finishSiteDetailsAndContinue(this.page, answer.toLowerCase())
+  }
+)
+
+// --- ML-1261: "Have you finished entering your site details?" question ---
+
+Then(
+  'the review page shows the marine plan policies heading and the finished-site-details question',
+  async function () {
+    await expect(
+      this.page.locator('h2', { hasText: 'Marine plan policies' }).first()
+    ).toBeVisible({ timeout: 30_000 })
+    await expect(
+      this.page.getByText('Have you finished entering your site details?')
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then('neither finished-site-details radio is selected', async function () {
+  await expect(
+    this.page.locator('#finishedEnteringSiteDetails')
+  ).not.toBeChecked()
+  await expect(
+    this.page.locator('#finishedEnteringSiteDetails-2')
+  ).not.toBeChecked()
+})
+
+Then(
+  'the review page does not show the finished-site-details question',
+  async function () {
+    await expect(this.page.locator('#finishedEnteringSiteDetails')).toHaveCount(
+      0
+    )
+    await expect(
+      this.page.getByText('Have you finished entering your site details?')
+    ).toHaveCount(0)
+  }
+)
+
+When(
+  'the user selects Continue without answering the finished-site-details question',
+  async function () {
+    await this.page.locator('button:has-text("Continue")').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+Then(
+  'the finished-site-details error {string} is shown',
+  async function (message) {
+    await expect(this.page.locator('.govuk-error-summary')).toContainText(
+      message,
+      { timeout: 30_000 }
+    )
+    await expect(this.page).toHaveURL(/review-site-details/, {
+      timeout: 30_000
+    })
+  }
+)
+
+Then(
+  'the {string} task has status {string}',
+  async function (taskName, status) {
+    const task = this.page
+      .locator('li.govuk-task-list__item', { hasText: taskName })
+      .first()
+    await expect(task.locator('.govuk-task-list__status')).toContainText(
+      status,
+      { timeout: 30_000 }
+    )
   }
 )

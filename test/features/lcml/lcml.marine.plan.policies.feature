@@ -84,3 +84,76 @@ Feature: LCML: Marine plan policies
       | task list            |
       | policy list          |
       | policy consideration |
+
+  @issue=ML-1261
+  Scenario: The finished-site-details question is shown once all site details are complete
+    Given an organisation user has completed the site details for a marine licence application
+    When the user opens the review site details page from the task list
+    Then the review page shows the marine plan policies heading and the finished-site-details question
+    And neither finished-site-details radio is selected
+
+  @issue=ML-1261
+  Scenario: The finished-site-details question is hidden while site details are incomplete
+    Given an organisation user has manually entered a circular site for a marine licence
+    When the user views the review site details page
+    Then the review page does not show the finished-site-details question
+
+  @issue=ML-1261
+  Scenario: Selecting Continue without answering the finished-site-details question shows an error
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user selects Continue without answering the finished-site-details question
+    Then the finished-site-details error "Select if you have finished entering your site details" is shown
+
+  @issue=ML-1287 @issue=ML-1261
+  Scenario: Answering Yes after changing the width re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user changes the width of the circular site
+    And the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
+
+  @issue=ML-1287 @issue=ML-1261
+  Scenario: Answering Yes after adding another site re-queries the marine plan policies
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user adds another circular site
+    And the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
+
+  @issue=ML-1261
+  Scenario: Answering No returns to the task list without re-querying and resets the tasks
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    When the user answers "No" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
+    And the "Site details" task has status "In progress"
+
+  @issue=ML-1261
+  Scenario: The finished-site-details answer is not retained when the review page is revisited
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    And the user answers "Yes" and continues from the review page
+    When the user opens the review site details page from the task list
+    Then neither finished-site-details radio is selected
+
+  @issue=ML-1261 @issue=ML-1287
+  Scenario: Previously entered policy answers are retained after answering No then re-confirming
+    Given an organisation user has completed a marine licence ready to review
+    And the user opens the review site details page from the task list
+    And the user answers "No" and continues from the review page
+    And the user opens the review site details page from the task list
+    When the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Completed" and shows all of the policies completed
+
+  @issue=ML-1377
+  Scenario: Review and send is hidden while the marine plan policy considerations are incomplete
+    Given an organisation user has completed the site details for a marine licence application
+    When the user views the marine licence task list
+    Then the Review and send your information button is not displayed
+
+  @issue=ML-1377
+  Scenario: Review and send is shown once the marine plan policy considerations are completed
+    Given an organisation user has completed the site details for a marine licence application
+    When the user completes the marine plan policy considerations and returns to the task list
+    Then the Review and send your information button is displayed
