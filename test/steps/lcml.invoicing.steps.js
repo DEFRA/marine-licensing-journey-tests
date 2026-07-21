@@ -227,10 +227,6 @@ Then(
 )
 
 Then('the country field can be searched by name', async function () {
-  // Country is a progressively-enhanced accessible-autocomplete. Rather than
-  // read its underlying <select> (whose DOM the enhancement mutates differently
-  // across environments), verify the AC's "type ahead to find their country"
-  // behaviour: typing a prefix surfaces the matching country as an option.
   const input = this.page.locator('input#country')
   await input.fill('Aus')
   await expect(
