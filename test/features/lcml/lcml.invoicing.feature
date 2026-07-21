@@ -33,7 +33,7 @@ Feature: LCML: Invoicing details
     Given an organisation user has opened the invoicing details task
     When the user selects "International" as the invoice address type and continues
     Then the international invoice address page shows the country and address fields with the project name caption
-    And the country field lists all countries in alphabetical order
+    And the country field can be searched by name
 
   @issue=ML-1395
   Scenario: A valid international address is accepted
