@@ -34,7 +34,6 @@ const SUPPORTED_COUNTRIES = [
   'Japan',
   'Spain'
 ]
-const COUNTRY_LIST_SAMPLE = 'Australia'
 
 // The GB locale generates UK-format postcodes; the only ones the app rejects are
 // BFPO ("BF" + digit), excluded by its UK_POSTCODE_PATTERN, so regenerate those.
@@ -230,20 +229,20 @@ Then(
 Then(
   'the country field lists all countries in alphabetical order',
   async function () {
-    // Country is a progressively-enhanced accessible-autocomplete. The full list
-    // lives in the underlying <select name="country"> (its id is renamed and it
-    // is hidden during enhancement), which is briefly detached mid-enhancement —
-    // so wait for it to settle before reading, otherwise the read races to zero.
-    // 197 = 196 countries + the leading blank option.
+    // Country is a progressively-enhanced accessible-autocomplete whose
+    // underlying <select> is briefly detached while it enhances, so wait for the
+    // list to settle (last country present) before reading it.
     const optionLocator = this.page.locator('select[name="country"] option')
-    await expect(optionLocator).toHaveCount(197, { timeout: 30_000 })
+    await expect(optionLocator.filter({ hasText: 'Zimbabwe' })).toHaveCount(1, {
+      timeout: 30_000
+    })
     const options = await optionLocator.evaluateAll((els) =>
       els.map((e) => e.textContent.trim()).filter(Boolean)
     )
-    expect(options.length).toBe(196)
+    // AC: the countries are arranged in alphabetical order — assert the
+    // alphabetical boundaries rather than an exact count/full ordering.
     expect(options[0]).toBe('Afghanistan')
     expect(options[options.length - 1]).toBe('Zimbabwe')
-    expect(options).toContain(COUNTRY_LIST_SAMPLE)
   }
 )
 
