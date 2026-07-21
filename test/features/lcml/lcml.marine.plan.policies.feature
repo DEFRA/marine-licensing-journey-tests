@@ -129,6 +129,23 @@ Feature: LCML: Marine plan policies
     Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
     And the "Site details" task has status "In progress"
 
+  @issue=ML-1261
+  Scenario: The finished-site-details answer is not retained when the review page is revisited
+    Given an organisation user has completed the site details for a marine licence application
+    And the user opens the review site details page from the task list
+    And the user answers "Yes" and continues from the review page
+    When the user opens the review site details page from the task list
+    Then neither finished-site-details radio is selected
+
+  @issue=ML-1261 @issue=ML-1287
+  Scenario: Previously entered policy answers are retained after answering No then re-confirming
+    Given an organisation user has completed a marine licence ready to review
+    And the user opens the review site details page from the task list
+    And the user answers "No" and continues from the review page
+    And the user opens the review site details page from the task list
+    When the user answers "Yes" and continues from the review page
+    Then the "Marine plan policy considerations" task is "Completed" and shows all of the policies completed
+
   @issue=ML-1377
   Scenario: Review and send is hidden while the marine plan policy considerations are incomplete
     Given an organisation user has completed the site details for a marine licence application
