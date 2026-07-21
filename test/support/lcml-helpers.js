@@ -28,6 +28,9 @@ import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
+export const MARINE_PLAN_POLICY_RESPONSE =
+  'We have considered this policy and the proposal is compatible with it.'
+
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
   Shapefile: 'test/resources/valid-shapefile.zip'
@@ -899,11 +902,7 @@ export async function completeMarinePlanPolicies(page) {
     await page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
       timeout: 30_000
     })
-    await page
-      .locator('#policyConsideration')
-      .fill(
-        'We have considered this policy and the proposal is compatible with it.'
-      )
+    await page.locator('#policyConsideration').fill(MARINE_PLAN_POLICY_RESPONSE)
     await page.locator('button:has-text("Save and continue")').click()
     await page.waitForURL(/marine-licence\/marine-plan-policies/, {
       timeout: 30_000
