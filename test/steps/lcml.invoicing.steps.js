@@ -230,11 +230,16 @@ Then(
 Then(
   'the country field lists all countries in alphabetical order',
   async function () {
-    const options = await this.page
-      .locator('select[name="country"] option')
-      .evaluateAll((els) =>
-        els.map((e) => e.textContent.trim()).filter(Boolean)
-      )
+    // Country is a progressively-enhanced accessible-autocomplete. The full list
+    // lives in the underlying <select name="country"> (its id is renamed and it
+    // is hidden during enhancement), which is briefly detached mid-enhancement —
+    // so wait for it to settle before reading, otherwise the read races to zero.
+    // 197 = 196 countries + the leading blank option.
+    const optionLocator = this.page.locator('select[name="country"] option')
+    await expect(optionLocator).toHaveCount(197, { timeout: 30_000 })
+    const options = await optionLocator.evaluateAll((els) =>
+      els.map((e) => e.textContent.trim()).filter(Boolean)
+    )
     expect(options.length).toBe(196)
     expect(options[0]).toBe('Afghanistan')
     expect(options[options.length - 1]).toBe('Zimbabwe')
