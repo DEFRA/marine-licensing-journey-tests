@@ -5,6 +5,7 @@ import {
   completeManualCircleApp,
   submitMarineLicence,
   completeMarinePlanPolicies,
+  ensureReadyForReviewAndSend,
   MARINE_PLAN_POLICY_RESPONSE
 } from '../support/lcml-helpers.js'
 import { clickReviewAndSend } from '../support/task-flow.js'
@@ -62,6 +63,7 @@ Given(
 )
 
 When('the user opens the check your answers page', async function () {
+  await ensureReadyForReviewAndSend(this.page)
   await this.page.locator('#review-and-send').click()
   await this.page.waitForURL(/marine-licence\/check-your-answers/, {
     timeout: 30_000
@@ -148,6 +150,7 @@ When(
   { timeout: 120_000 },
   async function () {
     await completeMarinePlanPolicies(this.page)
+    await ensureReadyForReviewAndSend(this.page)
   }
 )
 
