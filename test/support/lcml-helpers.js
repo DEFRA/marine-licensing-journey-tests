@@ -916,10 +916,6 @@ export async function completeMarinePlanPolicies(page) {
   await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
 }
 
-// Completes the Invoicing details task from the task list. The flow gained
-// contact-details, purchase-order and check pages (ML-1396+); each page is
-// completed only if it appears, so this also works against older builds where
-// the flow stops earlier.
 export async function completeInvoicingDetails(page) {
   await page.getByRole('link', { name: 'Invoicing details' }).click()
   await page.waitForLoadState('load')
@@ -936,7 +932,6 @@ export async function completeInvoicingDetails(page) {
 
   if (await page.locator('#fullName').count()) {
     await page.locator('#fullName').fill('Invoice Contact')
-    // Organisation name is not shown for individual users.
     if (await page.locator('#organisationName').count()) {
       await page.locator('#organisationName').fill('Windfarm Co')
     }
@@ -962,10 +957,6 @@ export async function completeInvoicingDetails(page) {
   await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
 }
 
-// The Invoicing details task gates "Review and send" from ML-1396 onwards. If
-// the button is missing after the other tasks are done, complete invoicing so
-// the button appears. On builds where invoicing is not gating, the button is
-// already present and this is a no-op.
 export async function ensureReadyForReviewAndSend(page) {
   if (await page.locator('#review-and-send').count()) {
     return
