@@ -14,6 +14,7 @@ import {
   completeWaterFrameworkDirective,
   completeFeeEstimate,
   completeMarinePlanPolicies,
+  ensureReadyForReviewAndSend,
   pickRandomFileType
 } from '../support/lcml-helpers.js'
 
@@ -99,6 +100,7 @@ When(
   async function () {
     // Task list → Check your answers
     await completeMarinePlanPolicies(this.page)
+    await ensureReadyForReviewAndSend(this.page)
     await this.page.locator('#review-and-send').click()
     await this.page.waitForLoadState('load')
     await expect(

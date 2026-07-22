@@ -916,9 +916,63 @@ export async function completeMarinePlanPolicies(page) {
   await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
 }
 
+export async function completeInvoicingDetails(page) {
+  await page.getByRole('link', { name: 'Invoicing details' }).click()
+  await page.waitForLoadState('load')
+
+  await page.getByRole('radio', { name: 'UK', exact: true }).click()
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForLoadState('load')
+
+  await page.locator('#addressLine1').fill('1 Test Street')
+  await page.locator('#addressTown').fill('London')
+  await page.locator('#addressPostcode').fill('SW1A 1AA')
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForLoadState('load')
+
+  if (await page.locator('#fullName').count()) {
+    await page.locator('#fullName').fill('Invoice Contact')
+    if (await page.locator('#organisationName').count()) {
+      await page.locator('#organisationName').fill('Windfarm Co')
+    }
+    await page.locator('#phoneNumber').fill('01234567890')
+    await page.locator('#emailAddress').fill('invoice@example.com')
+    await page.locator('button:has-text("Continue")').click()
+    await page.waitForLoadState('load')
+  }
+
+  if (await page.locator('input[name="requiresPurchaseOrder"]').count()) {
+    await page
+      .locator('input[name="requiresPurchaseOrder"][value="no"]')
+      .check()
+    await page.locator('button:has-text("Continue")').click()
+    await page.waitForLoadState('load')
+  }
+
+  if (/check-invoicing-details/.test(page.url())) {
+    await page.locator('button:has-text("Continue")').click()
+    await page.waitForLoadState('load')
+  }
+
+  await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
+}
+
+export async function ensureReadyForReviewAndSend(page) {
+  if (await page.locator('#review-and-send').count()) {
+    return
+  }
+  // Only the marine licence task list has an Invoicing details task that can
+  // gate the button; skip elsewhere (e.g. the exemption flow).
+  if (!(await page.getByRole('link', { name: 'Invoicing details' }).count())) {
+    return
+  }
+  await completeInvoicingDetails(page)
+}
+
 export async function submitMarineLicence(world) {
   const page = world.page
   await completeMarinePlanPolicies(page)
+  await ensureReadyForReviewAndSend(page)
   await page.locator('#review-and-send').click()
   await page.waitForLoadState('load')
   await page.locator('button:has-text("Continue")').click()

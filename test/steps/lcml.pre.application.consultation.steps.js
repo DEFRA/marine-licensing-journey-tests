@@ -2,7 +2,8 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   loginAndStartApplication,
-  completeMarinePlanPolicies
+  completeMarinePlanPolicies,
+  ensureReadyForReviewAndSend
 } from '../support/lcml-helpers.js'
 
 const TASK_LINK = 'Pre-application consultation'
@@ -160,6 +161,7 @@ When(
   'the user opens the check your answers page from the task list',
   async function () {
     await completeMarinePlanPolicies(this.page)
+    await ensureReadyForReviewAndSend(this.page)
     await this.page.locator('#review-and-send').click()
     await this.page.waitForLoadState('load')
     await expect(this.page.locator('#check-your-answers-heading')).toBeVisible({
