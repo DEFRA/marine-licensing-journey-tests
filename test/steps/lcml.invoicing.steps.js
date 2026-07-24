@@ -22,6 +22,15 @@ const UK_FIELD_IDS = [
 
 const INTL_PATH = '/marine-licence/international-invoice-address'
 const INTL_HEADING = 'International invoice address'
+
+const CONTACT_PATH = '/marine-licence/invoice-contact-details'
+const CONTACT_HEADING = 'Invoice contact details'
+
+const PO_PATH = '/marine-licence/purchase-order-details'
+const PO_HEADING = 'Do you require a purchase order number on the invoice?'
+const CHECK_PATH = '/marine-licence/check-invoicing-details'
+const CHECK_HEADING = 'Check your invoicing details'
+const PHONE_NUMBER = '0191 376 2791'
 // Countries known to exist in the app's country list, so the type-ahead resolves
 // to a real option — a random faker.location.country() may not match the list.
 const SUPPORTED_COUNTRIES = [
@@ -89,6 +98,53 @@ async function submitValidInternationalAddress(page) {
   await page.waitForLoadState('load')
 }
 
+// Fills the contact details and records the entered values in `store` so the
+// check page can later be asserted against them. The organisation name field is
+// absent for individual users, so it is only filled (and stored) when present.
+async function fillContactDetails(page, store) {
+  const fullName = faker.person.fullName()
+  await page.locator('#fullName').fill(fullName)
+  store.fullName = fullName
+  if (await page.locator('#organisationName').count()) {
+    const organisationName = faker.company.name()
+    await page.locator('#organisationName').fill(organisationName)
+    store.organisationName = organisationName
+  }
+  await page.locator('#phoneNumber').fill(PHONE_NUMBER)
+  store.phoneNumber = PHONE_NUMBER
+  const emailAddress = faker.internet.email()
+  await page.locator('#emailAddress').fill(emailAddress)
+  store.emailAddress = emailAddress
+  // "Continue" also matches the "Save and continue" button shown to individuals.
+  await page.locator('button:has-text("Continue")').click()
+  await page.waitForLoadState('load')
+}
+
+async function submitValidContactDetails(page) {
+  await fillContactDetails(page, {})
+}
+
+// Drives an organisation user from login to the purchase order page, recording
+// the entered invoicing values in world.data.invoicing for later assertions.
+async function driveOrgToPurchaseOrder(world) {
+  await loginAndStartApplication(world, 'organisation')
+  await openInvoicingFromTaskList(world.page)
+  await chooseInvoiceType(world.page, 'UK')
+  await submitValidUkAddress(world.page)
+  world.data.invoicing = { addressType: 'UK' }
+  await fillContactDetails(world.page, world.data.invoicing)
+}
+
+// Selects "No" for the purchase order requirement, which lands on the check page.
+async function confirmNoPurchaseOrder(world) {
+  await world.page
+    .locator('input[name="requiresPurchaseOrder"][value="no"]')
+    .click()
+  await world.page.locator('button:has-text("Save and continue")').click()
+  await world.page.waitForLoadState('load')
+  world.data.invoicing.purchaseOrder = 'Not required'
+}
+
 Given(
   'an organisation user has opened the invoicing details task',
   async function () {
@@ -122,6 +178,29 @@ Given(
   }
 )
 
+Given(
+  'an individual user has opened the UK invoice address page',
+  async function () {
+    await loginAndStartApplication(this, 'individual')
+    await openInvoicingFromTaskList(this.page)
+    await chooseInvoiceType(this.page, 'UK')
+    await expect(this.page).toHaveURL(new RegExp(UK_PATH), { timeout: 30_000 })
+  }
+)
+
+Given(
+  'an organisation user has opened the invoice contact details page',
+  async function () {
+    await loginAndStartApplication(this, 'organisation')
+    await openInvoicingFromTaskList(this.page)
+    await chooseInvoiceType(this.page, 'UK')
+    await submitValidUkAddress(this.page)
+    await expect(this.page).toHaveURL(new RegExp(CONTACT_PATH), {
+      timeout: 30_000
+    })
+  }
+)
+
 When('the user opens the invoicing details task', async function () {
   await openInvoicingFromTaskList(this.page)
 })
@@ -146,6 +225,10 @@ When(
     await submitValidInternationalAddress(this.page)
   }
 )
+
+When('the user submits valid invoice contact details', async function () {
+  await submitValidContactDetails(this.page)
+})
 
 Then(
   'the invoicing details task is shown in the {string} section with status {string}',
@@ -238,5 +321,201 @@ Then(
   'no validation error is shown on the international invoice address page',
   async function () {
     await expect(this.page.locator('.govuk-error-summary')).toHaveCount(0)
+  }
+)
+
+Then(
+  'the invoice contact details page shows the contact fields with the project name caption',
+  async function () {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(CONTACT_PATH), { timeout: 30_000 })
+    await expect(page.locator('h1')).toContainText(CONTACT_HEADING, {
+      timeout: 30_000
+    })
+    await expect(page.locator('.govuk-caption-l')).toContainText(
+      this.data.projectName,
+      { timeout: 30_000 }
+    )
+    for (const id of [
+      'fullName',
+      'organisationName',
+      'phoneNumber',
+      'emailAddress'
+    ]) {
+      await expect(page.locator(`#${id}`)).toBeVisible({ timeout: 30_000 })
+    }
+    await expect(
+      page.getByRole('button', { name: 'Continue', exact: true })
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then(
+  'the invoice contact details page hides the organisation name field and labels the button {string}',
+  async function (buttonText) {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(CONTACT_PATH), { timeout: 30_000 })
+    await expect(page.locator('#fullName')).toBeVisible({ timeout: 30_000 })
+    await expect(page.locator('#organisationName')).toHaveCount(0)
+    await expect(
+      page.getByRole('button', { name: buttonText, exact: true })
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Given(
+  'an organisation user has opened the purchase order details page',
+  async function () {
+    await driveOrgToPurchaseOrder(this)
+    await expect(this.page).toHaveURL(new RegExp(PO_PATH), { timeout: 30_000 })
+  }
+)
+
+Given(
+  'an individual user has opened the invoice contact details page',
+  async function () {
+    await loginAndStartApplication(this, 'individual')
+    await openInvoicingFromTaskList(this.page)
+    await chooseInvoiceType(this.page, 'UK')
+    await submitValidUkAddress(this.page)
+    await expect(this.page).toHaveURL(new RegExp(CONTACT_PATH), {
+      timeout: 30_000
+    })
+  }
+)
+
+Given(
+  'an organisation user has opened the check invoicing details page',
+  async function () {
+    await driveOrgToPurchaseOrder(this)
+    await confirmNoPurchaseOrder(this)
+    await expect(this.page).toHaveURL(new RegExp(CHECK_PATH), {
+      timeout: 30_000
+    })
+  }
+)
+
+Given(
+  'an organisation user has completed the invoicing details task',
+  async function () {
+    await driveOrgToPurchaseOrder(this)
+    await confirmNoPurchaseOrder(this)
+    await expect(this.page).toHaveURL(new RegExp(CHECK_PATH), {
+      timeout: 30_000
+    })
+    await this.page.locator('#continue').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+When('the user confirms no purchase order is required', async function () {
+  await confirmNoPurchaseOrder(this)
+})
+
+When(
+  'the user requires a purchase order number and enters one',
+  async function () {
+    const purchaseOrder = `PO-${faker.string.numeric(6)}`
+    await this.page
+      .locator('input[name="requiresPurchaseOrder"][value="yes"]')
+      .click()
+    await this.page.locator('#purchaseOrderNumber').fill(purchaseOrder)
+    await this.page.locator('button:has-text("Save and continue")').click()
+    await this.page.waitForLoadState('load')
+    this.data.invoicing.purchaseOrder = purchaseOrder
+  }
+)
+
+When(
+  'the user selects Continue on the check invoicing details page',
+  async function () {
+    await this.page.locator('#continue').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+Then(
+  'the check invoicing details page shows the invoicing details entered',
+  async function () {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(CHECK_PATH), { timeout: 30_000 })
+    await expect(page.locator('h1')).toContainText(CHECK_HEADING, {
+      timeout: 30_000
+    })
+    await expect(page.locator('.govuk-caption-l')).toContainText(
+      this.data.projectName,
+      { timeout: 30_000 }
+    )
+    const review = page.locator('#invoicing-review')
+    const {
+      addressType,
+      fullName,
+      organisationName,
+      phoneNumber,
+      emailAddress
+    } = this.data.invoicing
+    for (const value of [
+      addressType,
+      fullName,
+      organisationName,
+      phoneNumber,
+      emailAddress,
+      'Not required'
+    ]) {
+      await expect(review).toContainText(value, { timeout: 30_000 })
+    }
+  }
+)
+
+Then(
+  'the check invoicing details page hides the organisation name and purchase order rows',
+  async function () {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(CHECK_PATH), { timeout: 30_000 })
+    const review = page.locator('#invoicing-review')
+    await expect(review).toContainText('Full name', { timeout: 30_000 })
+    await expect(review).toContainText('Email address', { timeout: 30_000 })
+    await expect(review).not.toContainText('Organisation name')
+    await expect(review).not.toContainText('Purchase order number')
+  }
+)
+
+Then('the check invoicing details page is displayed', async function () {
+  await expect(this.page).toHaveURL(new RegExp(CHECK_PATH), { timeout: 30_000 })
+  await expect(this.page.locator('h1')).toContainText(CHECK_HEADING, {
+    timeout: 30_000
+  })
+})
+
+Then(
+  'the purchase order details page shows the question with the project name caption',
+  async function () {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(PO_PATH), { timeout: 30_000 })
+    await expect(page.locator('h1')).toContainText(PO_HEADING, {
+      timeout: 30_000
+    })
+    await expect(page.locator('.govuk-caption-l')).toContainText(
+      this.data.projectName,
+      { timeout: 30_000 }
+    )
+    await expect(
+      page.getByRole('radio', { name: 'Yes', exact: true })
+    ).toBeVisible({ timeout: 30_000 })
+    await expect(
+      page.getByRole('radio', { name: 'No', exact: true })
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then(
+  'the check invoicing details page shows the purchase order number entered',
+  async function () {
+    const page = this.page
+    await expect(page).toHaveURL(new RegExp(CHECK_PATH), { timeout: 30_000 })
+    await expect(page.locator('#invoicing-review')).toContainText(
+      this.data.invoicing.purchaseOrder,
+      { timeout: 30_000 }
+    )
   }
 )
