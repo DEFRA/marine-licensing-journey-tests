@@ -6,6 +6,7 @@ import {
   submitMarineLicence,
   completeMarinePlanPolicies,
   ensureReadyForReviewAndSend,
+  cardTitlesInOrder,
   MARINE_PLAN_POLICY_RESPONSE
 } from '../support/lcml-helpers.js'
 import { clickReviewAndSend } from '../support/task-flow.js'
@@ -14,12 +15,6 @@ const MPP_CARD = '#marine-plan-policies-card'
 
 function policyRows(page) {
   return page.locator(`${MPP_CARD} .govuk-summary-list__row`)
-}
-
-async function cardTitlesInOrder(page) {
-  return page
-    .locator('.govuk-summary-card__title')
-    .evaluateAll((titles) => titles.map((t) => t.textContent.trim()))
 }
 
 async function policyCodesInCard(page) {
