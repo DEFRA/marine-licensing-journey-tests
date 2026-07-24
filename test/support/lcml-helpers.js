@@ -320,6 +320,16 @@ export function activityCardLocator(page, cardTitle) {
   )
 }
 
+// Titles of every summary card on the page, in DOM order — used to assert the
+// relative position of cards (e.g. the invoicing card beneath Other permissions).
+export function cardTitlesInOrder(page) {
+  return page
+    .locator('.govuk-summary-card__title')
+    .evaluateAll((titles) =>
+      titles.map((t) => t.textContent.replace(/\s+/g, ' ').trim())
+    )
+}
+
 export async function expectOnReviewSiteDetailsPage(page) {
   await expect(page).toHaveURL(/review-site-details/, { timeout: 30_000 })
 }
@@ -916,27 +926,46 @@ export async function completeMarinePlanPolicies(page) {
   await page.waitForURL(/marine-licence\/task-list/, { timeout: 30_000 })
 }
 
+// Fixed invoicing details entered by completeInvoicingDetails(). Exported so the
+// Check your answers / View details card assertions can be checked against the
+// same values that were entered — one source of truth for enter-and-assert.
+export const INVOICING_FIXTURE = {
+  addressType: 'UK',
+  addressLine1: '1 Test Street',
+  town: 'London',
+  postcode: 'SW1A 1AA',
+  fullName: 'Invoice Contact',
+  organisationName: 'Windfarm Co',
+  phoneNumber: '01234567890',
+  emailAddress: 'invoice@example.com',
+  purchaseOrder: 'Not required'
+}
+
 export async function completeInvoicingDetails(page) {
   await page.getByRole('link', { name: 'Invoicing details' }).click()
   await page.waitForLoadState('load')
 
-  await page.getByRole('radio', { name: 'UK', exact: true }).click()
+  await page
+    .getByRole('radio', { name: INVOICING_FIXTURE.addressType, exact: true })
+    .click()
   await page.locator('button:has-text("Continue")').click()
   await page.waitForLoadState('load')
 
-  await page.locator('#addressLine1').fill('1 Test Street')
-  await page.locator('#addressTown').fill('London')
-  await page.locator('#addressPostcode').fill('SW1A 1AA')
+  await page.locator('#addressLine1').fill(INVOICING_FIXTURE.addressLine1)
+  await page.locator('#addressTown').fill(INVOICING_FIXTURE.town)
+  await page.locator('#addressPostcode').fill(INVOICING_FIXTURE.postcode)
   await page.locator('button:has-text("Continue")').click()
   await page.waitForLoadState('load')
 
   if (await page.locator('#fullName').count()) {
-    await page.locator('#fullName').fill('Invoice Contact')
+    await page.locator('#fullName').fill(INVOICING_FIXTURE.fullName)
     if (await page.locator('#organisationName').count()) {
-      await page.locator('#organisationName').fill('Windfarm Co')
+      await page
+        .locator('#organisationName')
+        .fill(INVOICING_FIXTURE.organisationName)
     }
-    await page.locator('#phoneNumber').fill('01234567890')
-    await page.locator('#emailAddress').fill('invoice@example.com')
+    await page.locator('#phoneNumber').fill(INVOICING_FIXTURE.phoneNumber)
+    await page.locator('#emailAddress').fill(INVOICING_FIXTURE.emailAddress)
     await page.locator('button:has-text("Continue")').click()
     await page.waitForLoadState('load')
   }

@@ -9,12 +9,16 @@ Feature: LCML: View details page shows sites and activities
     When the user opens View details for the submitted marine licence
     Then the View details page shows the site location and site card for that site type
     And the View details page shows an activity details card
+    And the invoicing details card is displayed beneath the Other permissions card
+    And the invoicing details card has no Change link
 
   Scenario: Public View details shows the submitted sites
     Given an organisation user has submitted a marine licence application with uploaded sites
     When the user opens the public View details link for the submitted marine licence
     Then the View details page shows the "File upload" site location method
     And the View details page shows an uploaded site card with a name and a map
+    And the invoicing details card is displayed beneath the Other permissions card
+    And the invoicing details card has no Change link
 
   @issue=ML-1377
   Scenario: View details shows the marine plan policies summary card
