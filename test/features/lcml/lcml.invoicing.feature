@@ -89,7 +89,6 @@ Feature: LCML: Invoicing details
     Given an organisation user has opened the purchase order details page
     When the user requires a purchase order number and enters one
     Then the check invoicing details page shows the purchase order number entered
-
   @issue=ML-1397
   Scenario: The address type Change link opens the address type page pre-selected
     Given an organisation user has opened the check invoicing details page
