@@ -519,3 +519,151 @@ Then(
     )
   }
 )
+
+// --- ML-1397: Change links on the Check invoicing details page ---
+
+// Accessible names of the Change links on the check page (text + visually hidden text).
+const CHANGE_LINK_NAMES = {
+  'address type': 'Change address type',
+  address: 'Change address',
+  'contact details': 'Change contact details',
+  'purchase order': 'Change purchase order details'
+}
+
+async function clickInvoicingChangeLink(page, rowLabel) {
+  await page
+    .getByRole('link', { name: CHANGE_LINK_NAMES[rowLabel], exact: true })
+    .click()
+  await page.waitForLoadState('load')
+}
+
+Given(
+  'an organisation user has selected Change for the address type',
+  async function () {
+    await driveOrgToPurchaseOrder(this)
+    await confirmNoPurchaseOrder(this)
+    await clickInvoicingChangeLink(this.page, 'address type')
+    await expect(this.page).toHaveURL(new RegExp(IS_INVOICE_PATH), {
+      timeout: 30_000
+    })
+  }
+)
+
+When('the user selects Change for the address type', async function () {
+  await clickInvoicingChangeLink(this.page, 'address type')
+  await expect(this.page).toHaveURL(new RegExp(IS_INVOICE_PATH), {
+    timeout: 30_000
+  })
+})
+
+// Selecting the same type saves and returns to the check page; selecting a
+// different type routes to the appropriate address page. Re-selecting the
+// already-checked radio is a no-op, so this covers the "keep" case too.
+When(
+  'the user selects {string} as the address type and saves',
+  async function (type) {
+    await this.page.getByRole('radio', { name: type, exact: true }).click()
+    await this.page.locator('button:has-text("Save and continue")').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+// Opens a change link, asserts the target page is pre-populated with the value
+// entered earlier, updates it (storing the new value on world.data.invoicing),
+// then saves — one step covers the address, contact details and purchase order
+// change links.
+const UPDATE_VIA_CHANGE = {
+  address: async function (page, invoicing) {
+    await expect(page).toHaveURL(new RegExp(UK_PATH), { timeout: 30_000 })
+    await expect(page.locator('#addressLine1')).not.toHaveValue('')
+    const updatedLine1 = faker.location.streetAddress()
+    await page.locator('#addressLine1').fill(updatedLine1)
+    invoicing.addressLine1 = updatedLine1
+  },
+  'contact details': async function (page, invoicing) {
+    await expect(page).toHaveURL(new RegExp(CONTACT_PATH), { timeout: 30_000 })
+    await expect(page.locator('#fullName')).toHaveValue(invoicing.fullName, {
+      timeout: 30_000
+    })
+    const updatedFullName = faker.person.fullName()
+    await page.locator('#fullName').fill(updatedFullName)
+    invoicing.fullName = updatedFullName
+  },
+  'purchase order': async function (page, invoicing) {
+    await expect(page).toHaveURL(new RegExp(PO_PATH), { timeout: 30_000 })
+    await expect(
+      page.locator('input[name="requiresPurchaseOrder"][value="no"]')
+    ).toBeChecked({ timeout: 30_000 })
+    const purchaseOrder = `PO-${faker.string.numeric(6)}`
+    await page
+      .locator('input[name="requiresPurchaseOrder"][value="yes"]')
+      .click()
+    await page.locator('#purchaseOrderNumber').fill(purchaseOrder)
+    invoicing.purchaseOrder = purchaseOrder
+  }
+}
+
+When('the user updates the {string} via its Change link', async function (row) {
+  await clickInvoicingChangeLink(this.page, row)
+  await UPDATE_VIA_CHANGE[row](this.page, this.data.invoicing)
+  await this.page.locator('button:has-text("Save and continue")').click()
+  await this.page.waitForLoadState('load')
+})
+
+When(
+  'the user opens the address Change link and selects Back',
+  async function () {
+    await clickInvoicingChangeLink(this.page, 'address')
+    await expect(this.page).toHaveURL(new RegExp(UK_PATH), { timeout: 30_000 })
+    await this.page.locator('a.govuk-back-link:has-text("Back")').click()
+    await this.page.waitForLoadState('load')
+  }
+)
+
+Then(
+  'the UK or international invoice address page is shown with {string} selected',
+  async function (type) {
+    await expect(this.page).toHaveURL(new RegExp(IS_INVOICE_PATH), {
+      timeout: 30_000
+    })
+    await expect(
+      this.page.getByRole('radio', { name: type, exact: true })
+    ).toBeChecked({ timeout: 30_000 })
+  }
+)
+
+Then(
+  'the invoicing page has a {string} button and no Cancel link',
+  async function (buttonText) {
+    await expect(
+      this.page.getByRole('button', { name: buttonText, exact: true })
+    ).toBeVisible({ timeout: 30_000 })
+    await expect(
+      this.page.getByRole('link', { name: 'Cancel', exact: true })
+    ).toHaveCount(0)
+    await expect(
+      this.page.getByRole('button', { name: 'Cancel', exact: true })
+    ).toHaveCount(0)
+  }
+)
+
+// Maps the row label used in the feature to the world.data.invoicing key holding
+// the value the update step stored, so one Then covers all three change links.
+const UPDATED_FIELD_KEYS = {
+  address: 'addressLine1',
+  'contact details': 'fullName',
+  'purchase order': 'purchaseOrder'
+}
+
+Then(
+  'the check invoicing details page shows the updated {string}',
+  async function (label) {
+    await expect(this.page).toHaveURL(new RegExp(CHECK_PATH), {
+      timeout: 30_000
+    })
+    await expect(this.page.locator('#invoicing-review')).toContainText(
+      this.data.invoicing[UPDATED_FIELD_KEYS[label]],
+      { timeout: 30_000 }
+    )
+  }
+)

@@ -89,3 +89,38 @@ Feature: LCML: Invoicing details
     Given an organisation user has opened the purchase order details page
     When the user requires a purchase order number and enters one
     Then the check invoicing details page shows the purchase order number entered
+  @issue=ML-1397
+  Scenario: The address type Change link opens the address type page pre-selected
+    Given an organisation user has opened the check invoicing details page
+    When the user selects Change for the address type
+    Then the UK or international invoice address page is shown with "UK" selected
+    And the invoicing page has a "Save and continue" button and no Cancel link
+
+  @issue=ML-1397
+  Scenario Outline: Saving the address type change routes to the correct page
+    Given an organisation user has selected Change for the address type
+    When the user selects "<type>" as the address type and saves
+    Then the "<heading>" page is displayed
+
+    Examples:
+      | type          | heading                      |
+      | UK            | Check your invoicing details |
+      | International | International invoice address |
+
+  @issue=ML-1397
+  Scenario Outline: The <row> Change link updates the value and returns to the check page
+    Given an organisation user has opened the check invoicing details page
+    When the user updates the "<row>" via its Change link
+    Then the check invoicing details page shows the updated "<row>"
+
+    Examples:
+      | row             |
+      | address         |
+      | contact details |
+      | purchase order  |
+
+  @issue=ML-1397
+  Scenario: Navigating Back from a Change page returns to the check invoicing details page
+    Given an organisation user has opened the check invoicing details page
+    When the user opens the address Change link and selects Back
+    Then the check invoicing details page is displayed
