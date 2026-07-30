@@ -232,3 +232,224 @@ export async function openD365CaseRecord(page, applicantOrganisation) {
   await expect(appUrlInput).toHaveValue(/^https?:\/\//, { timeout: 60_000 })
   return await appUrlInput.getAttribute('value')
 }
+
+export const SITE_CHECK_FIELDS = {
+  coordinatesAndShape: 'mmo_rethecoordinatesandshapeacceptableforasses',
+  withinWfdArea: 'mmo_issiteslocatedinthewfdarea',
+  notes: 'description'
+}
+
+const siteCheckContainer = (attr) =>
+  `[data-id="${attr}-FieldSectionItemContainer"]`
+
+export function siteCheckTaskLink(page) {
+  return page.getByRole('link', { name: 'Site check' }).first()
+}
+
+export function siteCoordinatesDownloadCsvLink(page) {
+  return page
+    .frameLocator('iframe[title="Site Coordinates HTML Resource"]')
+    .getByText('Download CSV')
+}
+
+export async function openSiteCheckTask(page) {
+  const link = siteCheckTaskLink(page)
+  await link.waitFor({ state: 'visible', timeout: 30_000 })
+  await link.click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForLoadState('load')
+  await page
+    .locator(siteCheckContainer(SITE_CHECK_FIELDS.coordinatesAndShape))
+    .waitFor({ state: 'visible', timeout: 30_000 })
+}
+
+export async function readSiteCheckFieldMeta(page) {
+  return page.evaluate((attrs) => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+
+    const Xrm = findXrm(window)
+    if (!Xrm) return null
+
+    const meta = {}
+    for (const [key, attr] of Object.entries(attrs)) {
+      const attribute = Xrm.Page.getAttribute(attr)
+      meta[key] = attribute
+        ? {
+            type: attribute.getAttributeType(),
+            requiredLevel: attribute.getRequiredLevel(),
+            maxLength: attribute.getMaxLength ? attribute.getMaxLength() : null,
+            options: attribute.getOptions
+              ? attribute.getOptions().map((option) => option.text)
+              : null
+          }
+        : null
+    }
+    return meta
+  }, SITE_CHECK_FIELDS)
+}
+
+export const WFD_TASK_FIELDS = {
+  withinNauticalMile: 'mmo_isyourprojectwithinonenauticalmile',
+  limitedToExcludedActivities: 'mmo_isyourprojectlimitedtooneofthefollowing',
+  documentUrl: 'mmo_wfddocumenturl',
+  documentFilename: 'mmo_wfdfilename',
+  sectionComplete: 'mmo_isthewfdsectioncompleteandacceptable'
+}
+
+export async function completeSiteCheckTask(page) {
+  const caseUrl = page.url()
+  await openSiteCheckTask(page)
+
+  await page.evaluate(async (fields) => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    const setYes = (attr) => {
+      const attribute = Xrm.Page.getAttribute(attr)
+      const yes = attribute.getOptions().find((o) => o.text === 'Yes')
+      attribute.setValue(yes.value)
+    }
+    setYes(fields.coordinatesAndShape)
+    setYes(fields.withinWfdArea)
+    Xrm.Page.getAttribute('statecode').setValue(1) // Completed
+    await Xrm.Page.data.save()
+  }, SITE_CHECK_FIELDS)
+
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+}
+
+export function wfdTaskLink(page) {
+  return page.getByRole('link', { name: 'Water Framework Directive' }).first()
+}
+
+export async function openWfdTask(page) {
+  const link = wfdTaskLink(page)
+  await link.waitFor({ state: 'visible', timeout: 30_000 })
+  await link.click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForLoadState('load')
+  await page
+    .locator(
+      `[data-id="${WFD_TASK_FIELDS.sectionComplete}-FieldSectionItemContainer"]`
+    )
+    .waitFor({ state: 'visible', timeout: 30_000 })
+}
+
+export async function readWfdTaskFieldMeta(page) {
+  return page.evaluate((fields) => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    if (!Xrm) return null
+
+    const meta = {}
+    for (const [key, attr] of Object.entries(fields)) {
+      const attribute = Xrm.Page.getAttribute(attr)
+      const control = Xrm.Page.getControl(attr)
+      meta[key] = attribute
+        ? {
+            value: attribute.getText
+              ? attribute.getText()
+              : attribute.getValue(),
+            requiredLevel: attribute.getRequiredLevel(),
+            visible: control?.getVisible ? control.getVisible() : null,
+            readOnly: control?.getDisabled ? control.getDisabled() : null,
+            options: attribute.getOptions
+              ? attribute.getOptions().map((option) => option.text)
+              : null
+          }
+        : null
+    }
+    return meta
+  }, WFD_TASK_FIELDS)
+}
+
+export async function completeWfdReview(page) {
+  return page.evaluate(async (fields) => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    if (!Xrm) {
+      throw new Error('completeWfdReview: Xrm not found on WFD task page')
+    }
+    const review = Xrm.Page.getAttribute(fields.sectionComplete)
+    const yes = review.getOptions().find((o) => o.text === 'Yes')
+    review.setValue(yes.value)
+    try {
+      await Xrm.Page.data.save()
+    } catch (e) {
+      throw new Error(
+        `completeWfdReview: save failed: ${e?.message ?? JSON.stringify(e)}`
+      )
+    }
+    const statuscode = Xrm.Page.getAttribute('statuscode')
+    let status = statuscode.getText()
+    for (let i = 0; i < 10 && status !== 'Done'; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      status = statuscode.getText()
+    }
+    return status
+  }, WFD_TASK_FIELDS)
+}
