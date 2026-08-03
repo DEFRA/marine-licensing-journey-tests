@@ -252,6 +252,30 @@ export function siteCoordinatesDownloadCsvLink(page) {
     .getByText('Download CSV')
 }
 
+export async function readSiteCoordinatesCsvUrl(page) {
+  return page.evaluate(() => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    return Xrm?.Page.getAttribute('mmo_coordinatescsvurl')?.getValue() ?? null
+  })
+}
+
 export async function openSiteCheckTask(page) {
   const link = siteCheckTaskLink(page)
   await link.waitFor({ state: 'visible', timeout: 30_000 })

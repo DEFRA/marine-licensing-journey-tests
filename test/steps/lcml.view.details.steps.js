@@ -15,6 +15,7 @@ import {
   verifyD365Login,
   siteCheckTaskLink,
   siteCoordinatesDownloadCsvLink,
+  readSiteCoordinatesCsvUrl,
   openSiteCheckTask,
   readSiteCheckFieldMeta,
   SITE_CHECK_FIELDS,
@@ -522,15 +523,19 @@ Then(
 
     expect(meta.notes.type).toBe('memo')
     expect(meta.notes.maxLength).toBe(4000)
-    await expect(
-      page.locator(
-        `[data-id="${SITE_CHECK_FIELDS.notes}-FieldSectionItemContainer"] textarea`
-      )
-    ).toBeVisible({ timeout: 30_000 })
+    const notesTextarea = page.locator(
+      `[data-id="${SITE_CHECK_FIELDS.notes}-FieldSectionItemContainer"] textarea`
+    )
+    await expect(notesTextarea).toBeVisible({ timeout: 30_000 })
+    await expect(notesTextarea).toHaveAttribute('maxlength', '4000')
 
     await expect(siteCoordinatesDownloadCsvLink(page)).toBeVisible({
       timeout: 30_000
     })
+    const csvUrl = await readSiteCoordinatesCsvUrl(page)
+    expect(csvUrl).toMatch(
+      /\/public\/marine-licence\/[0-9a-f]{24}\/generate-coordinates-csv$/
+    )
   }
 )
 
