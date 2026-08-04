@@ -46,6 +46,10 @@ aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name cdp-uploa
 aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_policies-deadletter
 aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_policies --attributes "{\"VisibilityTimeout\":\"60\",\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:eu-west-2:000000000000:marine_licensing_policies-deadletter\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}"
 
+# MAS SQS queues (main + DLQ). DLQ first so the main queue redrive policy can reference it.
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_mas-deadletter
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_mas --attributes "{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:eu-west-2:000000000000:marine_licensing_mas-deadletter\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}"
+
 # DEFRA ID stub registrations (DynamoDB)
 table_name="${AWS_DYNAMODB_REGISTRATIONS_TABLE_NAME:-cdp-defra-id-stub-registrations}"
 
