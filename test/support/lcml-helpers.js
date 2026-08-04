@@ -278,6 +278,19 @@ export async function completeWaterFrameworkDirectiveUpload(
   await page.waitForLoadState('load')
 }
 
+export async function completeWaterFrameworkDirectiveExcluded(page) {
+  const wfd = new WaterFrameworkDirectivePage(page)
+  await wfd.openTaskFromList()
+  await wfd.continueFromBeforeYouStart()
+  await wfd.answerNauticalMile('Yes')
+  await wfd.answerExcludedActivities('Yes')
+  await wfd.expectOnReviewPage()
+  await page
+    .locator('main button[type="submit"]:not([name="analytics"])')
+    .click()
+  await page.waitForLoadState('load')
+}
+
 export async function loginAndReachTaskList(world, role = 'organisation') {
   await loginAndStartApplication(world, role)
   await completeSpecialLegalPowers(world.page, 'No')
@@ -777,6 +790,8 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeSharingConsent(world.page, 'No')
   if (wfd === 'upload') {
     await completeWaterFrameworkDirectiveUpload(world.page)
+  } else if (wfd === 'excluded') {
+    await completeWaterFrameworkDirectiveExcluded(world.page)
   } else {
     await completeWaterFrameworkDirective(world.page)
   }

@@ -4,6 +4,7 @@ import {
   completeUploadApp,
   completeRandomSiteTypeApp,
   completeMarineAreaShapefileApp,
+  completeManualCircleApp,
   submitMarineLicence,
   openViewDetailsFromDashboard,
   openPublicViewDetailsFromDashboard
@@ -11,7 +12,17 @@ import {
 import {
   launchD365Browser,
   loginToD365,
-  verifyD365Login
+  verifyD365Login,
+  siteCheckTaskLink,
+  siteCoordinatesDownloadCsvLink,
+  readSiteCoordinatesCsvUrl,
+  openSiteCheckTask,
+  readSiteCheckFieldMeta,
+  SITE_CHECK_FIELDS,
+  completeSiteCheckTask,
+  openWfdTask,
+  readWfdTaskFieldMeta,
+  completeWfdReview
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -464,6 +475,185 @@ Then(
     expect(areas.coastal.canAdd, 'coastal operations areas are read-only').toBe(
       false
     )
+  }
+)
+
+Then(
+  'the case shows the {string} task in the task list',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (taskName) {
+    expect(taskName).toBe('Site check')
+    const page = this.d365Page
+    await expect(siteCheckTaskLink(page)).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then(
+  'the Site check task page shows the mandatory site check questions, a 4000 character Notes field and a Download CSV link',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openSiteCheckTask(page)
+
+    await expect
+      .poll(
+        async () => {
+          const m = await readSiteCheckFieldMeta(page)
+          return (
+            m?.coordinatesAndShape?.requiredLevel === 'required' &&
+            m?.withinWfdArea?.requiredLevel === 'required'
+          )
+        },
+        {
+          timeout: 30_000,
+          message: 'Site check Yes/No questions become mandatory'
+        }
+      )
+      .toBe(true)
+
+    const meta = await readSiteCheckFieldMeta(page)
+
+    expect(meta.coordinatesAndShape.type).toBe('optionset')
+    expect(meta.coordinatesAndShape.options).toEqual(['Yes', 'No'])
+    expect(meta.coordinatesAndShape.requiredLevel).toBe('required')
+
+    expect(meta.withinWfdArea.type).toBe('optionset')
+    expect(meta.withinWfdArea.options).toEqual(['Yes', 'No'])
+    expect(meta.withinWfdArea.requiredLevel).toBe('required')
+
+    expect(meta.notes.type).toBe('memo')
+    expect(meta.notes.maxLength).toBe(4000)
+    const notesTextarea = page.locator(
+      `[data-id="${SITE_CHECK_FIELDS.notes}-FieldSectionItemContainer"] textarea`
+    )
+    await expect(notesTextarea).toBeVisible({ timeout: 30_000 })
+    await expect(notesTextarea).toHaveAttribute('maxlength', '4000')
+
+    const csvLink = siteCoordinatesDownloadCsvLink(page)
+    await expect(csvLink).toBeVisible({ timeout: 30_000 })
+    const csvUrl = await readSiteCoordinatesCsvUrl(page)
+    expect(csvUrl).toMatch(
+      /\/public\/marine-licence\/[0-9a-f]{24}\/generate-coordinates-csv$/
+    )
+    const downloadPromise = page.waitForEvent('download', { timeout: 60_000 })
+    await csvLink.click({ timeout: 60_000 })
+    const download = await downloadPromise
+    expect(download.suggestedFilename()).toMatch(/\.csv$/i)
+  }
+)
+
+const WFD_VARIATIONS = {
+  'one-answer': {
+    wfd: 'nautical-no',
+    nauticalMile: 'No',
+    excluded: null,
+    hasAssessment: false
+  },
+  'two-answer': {
+    wfd: 'excluded',
+    nauticalMile: 'Yes',
+    excluded: 'Yes',
+    hasAssessment: false
+  },
+  'three-answer': {
+    wfd: 'upload',
+    nauticalMile: 'Yes',
+    excluded: 'No',
+    hasAssessment: true
+  }
+}
+
+Given(
+  'an organisation user has submitted a marine licence with the {string} WFD variation',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (variation) {
+    const config = WFD_VARIATIONS[variation]
+    if (!config) throw new Error(`Unknown WFD variation: ${variation}`)
+    await completeManualCircleApp(this, { wfd: config.wfd })
+    await submitMarineLicence(this)
+    this.data.wfdVariation = config
+  }
+)
+
+When(
+  'the internal user completes the Site check and opens the WFD task',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = await openWorkbasket(this)
+    this.d365CaseRow = await findCaseRowWithRetry(
+      page,
+      this.data.applicationReference
+    )
+    await openCaseRecordSummary(page, this.d365CaseRow)
+    await completeSiteCheckTask(page)
+    await openWfdTask(page)
+  }
+)
+
+Then(
+  "the WFD task applicant's answers match the submitted variation",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    const v = this.data.wfdVariation
+    const meta = await readWfdTaskFieldMeta(page)
+    expect(meta, 'Dynamics form API (Xrm) is available').not.toBeNull()
+
+    expect(meta.withinNauticalMile.visible).toBe(true)
+    expect(meta.withinNauticalMile.readOnly).toBe(true)
+    expect(meta.withinNauticalMile.value).toBe(v.nauticalMile)
+
+    if (v.excluded) {
+      expect(meta.limitedToExcludedActivities.visible).toBe(true)
+      expect(meta.limitedToExcludedActivities.readOnly).toBe(true)
+      expect(meta.limitedToExcludedActivities.value).toBe(v.excluded)
+    } else {
+      expect(meta.limitedToExcludedActivities.visible).toBe(false)
+    }
+
+    if (v.hasAssessment) {
+      await expect
+        .poll(
+          async () => (await readWfdTaskFieldMeta(page)).documentUrl.value,
+          {
+            timeout: 60_000,
+            message: 'WFD assessment document link is populated'
+          }
+        )
+        .toBeTruthy()
+      const after = await readWfdTaskFieldMeta(page)
+      expect(after.documentFilename.value).toBeTruthy()
+    } else {
+      expect(meta.documentUrl.visible).toBe(false)
+    }
+  }
+)
+
+Then(
+  'the WFD task has the mandatory WFD review question',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await expect
+      .poll(
+        async () =>
+          (await readWfdTaskFieldMeta(page)).sectionComplete?.requiredLevel,
+        { timeout: 30_000, message: 'WFD review question becomes mandatory' }
+      )
+      .toBe('required')
+
+    const meta = await readWfdTaskFieldMeta(page)
+    expect(meta.sectionComplete.options).toEqual(['Yes', 'No'])
+    expect(meta.sectionComplete.visible).toBe(true)
+  }
+)
+
+Then(
+  'completing the WFD review marks the task as Done',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const status = await completeWfdReview(this.d365Page)
+    expect(status).toBe('Done')
   }
 )
 

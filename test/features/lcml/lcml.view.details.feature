@@ -35,7 +35,7 @@ Feature: LCML: View details page shows sites and activities
     And the invoicing details card is displayed beneath the Other permissions card
     And the invoicing details card has no Change link
 
-  @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375
+  @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
   Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary
     Given an organisation user has submitted a marine licence application with a site in a marine plan area
     When the internal user finds the submitted case in the Marine licence cases workbasket
@@ -52,3 +52,29 @@ Feature: LCML: View details page shows sites and activities
       | Fee band         | 2A                      |
       | Organisation     | Windfarm Co             |
     And the case summary shows the marine plan areas and coastal operations areas as read-only
+    And the case shows the "Site check" task in the task list
+    And the Site check task page shows the mandatory site check questions, a 4000 character Notes field and a Download CSV link
+
+  @real-defra-id @d365 @issue=ML-1440
+  Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
+    Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
+    When the internal user completes the Site check and opens the WFD task
+    Then the WFD task applicant's answers match the submitted variation
+    And the WFD task has the mandatory WFD review question
+    And completing the WFD review marks the task as Done
+
+  @real-defra-id @d365 @issue=ML-1440
+  Scenario: The WFD task shows the two-answer applicant version (nautical mile Yes, excluded activities Yes)
+    Given an organisation user has submitted a marine licence with the "two-answer" WFD variation
+    When the internal user completes the Site check and opens the WFD task
+    Then the WFD task applicant's answers match the submitted variation
+    And the WFD task has the mandatory WFD review question
+    And completing the WFD review marks the task as Done
+
+  @real-defra-id @d365 @issue=ML-1440
+  Scenario: The WFD task shows the three-answer applicant version (nautical mile Yes, excluded activities No, assessment uploaded)
+    Given an organisation user has submitted a marine licence with the "three-answer" WFD variation
+    When the internal user completes the Site check and opens the WFD task
+    Then the WFD task applicant's answers match the submitted variation
+    And the WFD task has the mandatory WFD review question
+    And completing the WFD review marks the task as Done
