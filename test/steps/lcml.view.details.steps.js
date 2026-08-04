@@ -529,13 +529,16 @@ Then(
     await expect(notesTextarea).toBeVisible({ timeout: 30_000 })
     await expect(notesTextarea).toHaveAttribute('maxlength', '4000')
 
-    await expect(siteCoordinatesDownloadCsvLink(page)).toBeVisible({
-      timeout: 30_000
-    })
+    const csvLink = siteCoordinatesDownloadCsvLink(page)
+    await expect(csvLink).toBeVisible({ timeout: 30_000 })
     const csvUrl = await readSiteCoordinatesCsvUrl(page)
     expect(csvUrl).toMatch(
       /\/public\/marine-licence\/[0-9a-f]{24}\/generate-coordinates-csv$/
     )
+    const downloadPromise = page.waitForEvent('download', { timeout: 60_000 })
+    await csvLink.click({ timeout: 60_000 })
+    const download = await downloadPromise
+    expect(download.suggestedFilename()).toMatch(/\.csv$/i)
   }
 )
 
