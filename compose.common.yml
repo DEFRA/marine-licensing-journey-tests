@@ -187,7 +187,7 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
       - ARCGIS_FEATURE_SERVER_URL=http://marine-licensing-api-stub:3002/ArcGIS/rest/services/PolicyData_MDP/FeatureServer/0
-      - GOVUK_MARINE_POLICIES_API_URL=http://marine-licensing-api-stub:3003/explore-marine-plans/api/policies
+      - GOVUK_MARINE_POLICIES_API_URL=http://marine-licensing-api-stub:3002/explore-marine-plans/api/policies
     depends_on:
       marine-licensing-api-stub:
         condition: service_healthy
