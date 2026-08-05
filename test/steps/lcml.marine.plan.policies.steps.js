@@ -440,6 +440,64 @@ When(
   }
 )
 
+async function expectPolicyCompletedCount(page, done, total) {
+  const task = taskItem(page, 'Marine plan policy considerations')
+  await expect(task.locator('a')).toContainText(
+    `${done} of ${total} completed`,
+    {
+      timeout: 30_000
+    }
+  )
+}
+
+When(
+  'the user answers considerations for 2 of the marine plan policies',
+  { timeout: 120_000 },
+  async function () {
+    await openMarinePlanPolicyList(this.page)
+    const codes = await this.page
+      .locator('main a[href^="/marine-licence/marine-plan-policy/"]')
+      .evaluateAll((links) =>
+        links.map((a) => a.getAttribute('href').split('/').pop())
+      )
+    this.data.totalPolicyCount = codes.length
+    for (const code of codes.slice(0, 2)) {
+      await this.page
+        .locator(`main a[href="/marine-licence/marine-plan-policy/${code}"]`)
+        .click()
+      await this.page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
+        timeout: 30_000
+      })
+      await this.page
+        .locator('#policyConsideration')
+        .fill(
+          'We have considered this policy and the proposal is compatible with it.'
+        )
+      await saveConsideration(this.page)
+      await this.page.waitForURL(/marine-licence\/marine-plan-policies/, {
+        timeout: 30_000
+      })
+    }
+    await this.page
+      .locator(
+        'button:has-text("Continue"), a.govuk-button:has-text("Continue")'
+      )
+      .first()
+      .click()
+    await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
+      timeout: 30_000
+    })
+    await expectPolicyCompletedCount(this.page, 2, this.data.totalPolicyCount)
+  }
+)
+
+Then(
+  'the 2 completed policy considerations are retained after the re-query',
+  async function () {
+    await expectPolicyCompletedCount(this.page, 2, this.data.totalPolicyCount)
+  }
+)
+
 // --- ML-1261: "Have you finished entering your site details?" question ---
 
 Then(
