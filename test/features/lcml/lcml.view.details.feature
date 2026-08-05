@@ -55,6 +55,12 @@ Feature: LCML: View details page shows sites and activities
     And the case shows the "Site check" task in the task list
     And the Site check task page shows the mandatory site check questions, a 4000 character Notes field and a Download CSV link
 
+  @real-defra-id @d365 @issue=ML-1433
+  Scenario: The Project details tab shows the submitted project information
+    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    When the internal user finds the submitted case in the Marine licence cases workbasket
+    Then the Project details tab shows the project name, background and preferred licence dates
+
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
     Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
