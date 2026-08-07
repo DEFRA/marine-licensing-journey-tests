@@ -146,14 +146,12 @@ Feature: LCML: Marine plan policies
     When the user answers "Yes" and continues from the review page
     Then the "Marine plan policy considerations" task is "Completed" and shows all of the policies completed
 
-  @issue=ML-1367
-  Scenario: Policy considerations are retained when a site change re-queries the same policies
-    Given an organisation user has completed the site details for a marine licence application
-    And the user answers considerations for 2 of the marine plan policies
-    And the user opens the review site details page from the task list
-    When the user changes the width of the circular site
-    And the user answers "Yes" and continues from the review page
-    Then the 2 completed policy considerations are retained after the re-query
+  @real-defra-id @issue=ML-1367
+  Scenario: Policy considerations are retained when a shapefile site change re-queries overlapping policies
+    Given an organisation user has uploaded a shapefile site that returns 39 marine plan policies
+    And the user answers considerations for the first 3 marine plan policies
+    When the user changes the site location by uploading a different shapefile
+    Then the "Marine plan policy considerations" task shows 3 of 45 completed
 
   @issue=ML-1377
   Scenario: Review and send is hidden while the marine plan policy considerations are incomplete

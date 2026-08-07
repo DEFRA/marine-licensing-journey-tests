@@ -147,10 +147,13 @@ function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export function pickRandomActivity({ topLevel } = {}) {
+export function pickRandomActivity({ topLevel, subOptionIndex } = {}) {
   const top = topLevel || pickRandom(TOP_LEVELS)
   const config = ACTIVITY_TYPES[top]
-  const subOption = pickRandom(config.subOptions)
+  const subOption =
+    subOptionIndex != null
+      ? config.subOptions[subOptionIndex]
+      : pickRandom(config.subOptions)
   return { topLevel: top, config, subOption }
 }
 

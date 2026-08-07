@@ -5,6 +5,8 @@ import ReviewSiteDetailsPage from '../pages/review.site.details.page.js'
 import { enterWidth } from '../support/site-details-flow.js'
 import {
   completeManualCircleApp,
+  completeShapefileAppToPolicies,
+  changeSiteLocationToShapefile,
   openMarinePlanPolicyList,
   enterCircleSiteDetails,
   completeActivityDetailsFromReview,
@@ -450,9 +452,29 @@ async function expectPolicyCompletedCount(page, done, total) {
   )
 }
 
+const ML1367_CIRCULAR_SHAPEFILE = 'test/resources/circular-shape.zip'
+const ML1367_RECTANGLE_SHAPEFILE = 'test/resources/rectangle-shape.zip'
+
+Given(
+  'an organisation user has uploaded a shapefile site that returns {int} marine plan policies',
+  { timeout: 300_000 },
+  async function (expectedTotal) {
+    await completeShapefileAppToPolicies(this, ML1367_CIRCULAR_SHAPEFILE)
+    await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
+      timeout: 60_000
+    })
+    const task = taskItem(this.page, 'Marine plan policy considerations')
+    await expect(task.locator('a')).toContainText(
+      `${expectedTotal} to complete`,
+      { timeout: 60_000 }
+    )
+    this.data.expectedTotal = expectedTotal
+  }
+)
+
 When(
-  'the user answers considerations for 2 of the marine plan policies',
-  { timeout: 120_000 },
+  'the user answers considerations for the first 3 marine plan policies',
+  { timeout: 180_000 },
   async function () {
     await openMarinePlanPolicyList(this.page)
     const codes = await this.page
@@ -460,8 +482,7 @@ When(
       .evaluateAll((links) =>
         links.map((a) => a.getAttribute('href').split('/').pop())
       )
-    this.data.totalPolicyCount = codes.length
-    for (const code of codes.slice(0, 2)) {
+    for (const code of codes.slice(0, 3)) {
       await this.page
         .locator(`main a[href="/marine-licence/marine-plan-policy/${code}"]`)
         .click()
@@ -487,14 +508,29 @@ When(
     await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
       timeout: 30_000
     })
-    await expectPolicyCompletedCount(this.page, 2, this.data.totalPolicyCount)
+    await expectPolicyCompletedCount(this.page, 3, this.data.expectedTotal)
+  }
+)
+
+When(
+  'the user changes the site location by uploading a different shapefile',
+  { timeout: 180_000 },
+  async function () {
+    await changeSiteLocationToShapefile(this, ML1367_RECTANGLE_SHAPEFILE)
   }
 )
 
 Then(
-  'the 2 completed policy considerations are retained after the re-query',
-  async function () {
-    await expectPolicyCompletedCount(this.page, 2, this.data.totalPolicyCount)
+  'the {string} task shows {int} of {int} completed',
+  { timeout: 60_000 },
+  async function (taskName, done, total) {
+    const task = taskItem(this.page, taskName)
+    await expect(task.locator('a')).toContainText(
+      `${done} of ${total} completed`,
+      {
+        timeout: 60_000
+      }
+    )
   }
 )
 

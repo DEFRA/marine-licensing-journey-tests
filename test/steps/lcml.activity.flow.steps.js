@@ -82,7 +82,7 @@ When(
       ACTIVITY_TYPES[this.data.activity.topLevel].otherCheckboxId
     )
     await fillOtherTextarea(this.page, generateOtherTextOver1000())
-    await submitWhatActivityForm(this.page)
+    await submitWhatActivityForm(this.page, { expectNavigation: false })
   }
 )
 

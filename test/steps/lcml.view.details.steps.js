@@ -569,7 +569,12 @@ Given(
   async function (variation) {
     const config = WFD_VARIATIONS[variation]
     if (!config) throw new Error(`Unknown WFD variation: ${variation}`)
-    await completeManualCircleApp(this, { wfd: config.wfd })
+    await completeManualCircleApp(this, {
+      wfd: config.wfd,
+      latitude: '50.152483',
+      longitude: '-4.641914',
+      activity: { topLevel: 'Deposit', subOptionIndex: 1 }
+    })
     await submitMarineLicence(this)
     this.data.wfdVariation = config
   }
@@ -596,19 +601,43 @@ Then(
   async function () {
     const page = this.d365Page
     const v = this.data.wfdVariation
-    const meta = await readWfdTaskFieldMeta(page)
-    expect(meta, 'Dynamics form API (Xrm) is available').not.toBeNull()
+    await expect
+      .poll(
+        async () =>
+          (await readWfdTaskFieldMeta(page))?.withinNauticalMile.value,
+        { timeout: 30_000, message: "WFD applicant's answers have loaded" }
+      )
+      .toBe(v.nauticalMile)
 
+    const meta = await readWfdTaskFieldMeta(page)
     expect(meta.withinNauticalMile.visible).toBe(true)
     expect(meta.withinNauticalMile.readOnly).toBe(true)
-    expect(meta.withinNauticalMile.value).toBe(v.nauticalMile)
 
     if (v.excluded) {
-      expect(meta.limitedToExcludedActivities.visible).toBe(true)
-      expect(meta.limitedToExcludedActivities.readOnly).toBe(true)
-      expect(meta.limitedToExcludedActivities.value).toBe(v.excluded)
+      await expect
+        .poll(
+          async () =>
+            (await readWfdTaskFieldMeta(page)).limitedToExcludedActivities
+              .value,
+          { timeout: 30_000, message: 'excluded-activities answer has loaded' }
+        )
+        .toBe(v.excluded)
+      const excluded = (await readWfdTaskFieldMeta(page))
+        .limitedToExcludedActivities
+      expect(excluded.visible).toBe(true)
+      expect(excluded.readOnly).toBe(true)
     } else {
-      expect(meta.limitedToExcludedActivities.visible).toBe(false)
+      await expect
+        .poll(
+          async () =>
+            (await readWfdTaskFieldMeta(page)).limitedToExcludedActivities
+              .visible,
+          {
+            timeout: 30_000,
+            message: 'excluded-activities field hides when nautical mile is No'
+          }
+        )
+        .toBe(false)
     }
 
     if (v.hasAssessment) {
@@ -624,7 +653,15 @@ Then(
       const after = await readWfdTaskFieldMeta(page)
       expect(after.documentFilename.value).toBeTruthy()
     } else {
-      expect(meta.documentUrl.visible).toBe(false)
+      await expect
+        .poll(
+          async () => (await readWfdTaskFieldMeta(page)).documentUrl.visible,
+          {
+            timeout: 30_000,
+            message: 'WFD assessment document link is hidden without an upload'
+          }
+        )
+        .toBe(false)
     }
   }
 )
