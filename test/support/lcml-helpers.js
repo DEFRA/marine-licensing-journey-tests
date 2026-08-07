@@ -781,7 +781,8 @@ export async function completeSiteDetailsViaFileUpload(
 }
 
 async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
-  await completeProjectBackground(world.page, faker.lorem.sentence(10))
+  world.data.projectBackground = faker.lorem.sentence(10)
+  await completeProjectBackground(world.page, world.data.projectBackground)
   await completeSpecialLegalPowers(world.page, 'No')
   await completeOtherAuthorities(world.page, 'No')
   await completeHarbourAuthority(world.page, 'No')

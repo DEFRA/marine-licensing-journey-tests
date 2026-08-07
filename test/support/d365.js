@@ -477,3 +477,73 @@ export async function completeWfdReview(page) {
     return status
   }, WFD_TASK_FIELDS)
 }
+
+export async function readProjectDetailsTab(page) {
+  return page.evaluate(async () => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.ui) return w.Xrm
+      } catch {
+        /* cross-origin frame */
+      }
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {
+          /* cross-origin frame */
+        }
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    try {
+      Xrm?.Page.ui.tabs.get('project_details_tab').setFocus()
+    } catch {
+      /* tab focus is best-effort */
+    }
+
+    const read = () => {
+      let result = null
+      const walk = (w) => {
+        let doc
+        try {
+          doc = w.document
+        } catch {
+          return
+        }
+        const content = doc.getElementById('mmo-content')
+        if (content && !result) {
+          result = {
+            busy: content.getAttribute('aria-busy'),
+            projectName: doc.getElementById('val-name')?.textContent?.trim(),
+            projectBackground: doc
+              .getElementById('val-background')
+              ?.textContent?.trim(),
+            preferredDates: doc.getElementById('val-dates')?.textContent?.trim()
+          }
+        }
+        for (let i = 0; i < (w.frames?.length || 0); i++) {
+          if (result) break
+          try {
+            walk(w.frames[i])
+          } catch {
+            /* cross-origin frame */
+          }
+        }
+      }
+      walk(window)
+      return result
+    }
+
+    for (let i = 0; i < 40; i++) {
+      const details = read()
+      if (details && details.busy !== 'true' && details.projectName) {
+        return details
+      }
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
+    return read()
+  })
+}
