@@ -813,11 +813,11 @@ export async function finishSiteDetailsAndContinue(page, answer = 'yes') {
   await page.waitForLoadState('load')
 }
 
-async function addActivityForSite1AndContinue(world) {
+async function addActivityForSite1AndContinue(world, activityOptions = {}) {
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
-  await completeRandomActivityFromReviewPage(world)
+  await completeRandomActivityFromReviewPage(world, activityOptions)
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
   await finishSiteDetailsAndContinue(world.page)
 }
@@ -849,6 +849,52 @@ export async function completeMarineAreaShapefileApp(world) {
   world.data.siteType = 'upload'
 }
 
+// Completes an application up to the marine plan policy query by uploading a
+// shapefile site with a Deposit activity, then finishing the site details so
+// the policies are queried and we land on the task list. A Deposit activity is
+// used because the Construction activity path requires a construction drawing
+// upload that is not yet available.
+export async function completeShapefileAppToPolicies(world, filePath) {
+  await loginAndStartApplication(world, 'organisation')
+  await completeNonSiteTasks(world)
+  await navigateToUploadPage(world, 'Shapefile')
+  await uploadFileAndWaitForReviewPage(world, 'Shapefile', filePath)
+  await addSiteNameFromReview(world.page, 1)
+  const { completeRandomActivityFromReviewPage } = await import(
+    './lcml-activity-flow.js'
+  )
+  await completeRandomActivityFromReviewPage(world, { topLevel: 'Deposit' })
+  await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
+  await finishSiteDetailsAndContinue(world.page)
+  world.data.siteType = 'upload'
+}
+
+// From the task list, changes the site location by re-uploading a different
+// shapefile, then finishes the site details to re-run the marine plan policy
+// query.
+export async function changeSiteLocationToShapefile(world, filePath) {
+  const page = world.page
+  await page.locator('a:has-text("Site details")').click()
+  await page.waitForLoadState('load')
+  await page.locator('a:has-text("Change site location")').first().click()
+  await page.waitForLoadState('load')
+  await page
+    .locator(
+      'button:has-text("Yes, change site location"), a:has-text("Yes, change site location")'
+    )
+    .first()
+    .click()
+  await page.waitForLoadState('load')
+  await selectFileType(page, 'Shapefile')
+  await page.waitForLoadState('load')
+  await uploadFile(page, filePath)
+  await page.waitForURL((url) => !url.toString().includes('upload-and-wait'), {
+    timeout: 60_000
+  })
+  await page.waitForLoadState('load')
+  await finishSiteDetailsAndContinue(page)
+}
+
 export async function completeManualCircleApp(world, opts = {}) {
   await loginAndStartApplication(world, 'organisation')
   await completeNonSiteTasks(world, opts)
@@ -856,15 +902,18 @@ export async function completeManualCircleApp(world, opts = {}) {
   world.data.site = await enterCircleSiteDetails(world, {
     siteName: `Circle Site ${faker.location.city()}`,
     coordinateSystem: 'WGS84',
-    latitude: '50.123456',
-    longitude: '-1.234567',
+    latitude: opts.latitude ?? '50.123456',
+    longitude: opts.longitude ?? '-1.234567',
     width: '150'
   })
   world.data.siteType = 'circle'
-  await addActivityForSite1AndContinue(world)
+  await addActivityForSite1AndContinue(world, opts.activity ?? {})
 }
 
-export async function completeManualPolygonApp(world) {
+export async function completeManualPolygonApp(
+  world,
+  coordinates = POLYGON_COORDINATES
+) {
   await loginAndStartApplication(world, 'organisation')
   await completeNonSiteTasks(world)
   await navigateToManualSiteEntry(world)
@@ -875,13 +924,13 @@ export async function completeManualPolygonApp(world) {
   await world.page.waitForLoadState('load')
   await selectCoordinateSystem(world.page, 'WGS84')
   await world.page.waitForLoadState('load')
-  await enterPolygonCoordinatesWGS84(world.page, POLYGON_COORDINATES)
+  await enterPolygonCoordinatesWGS84(world.page, coordinates)
   await world.page.waitForLoadState('load')
   world.data.site = {
     siteType: 'polygon',
     siteName,
     coordinateSystem: 'WGS84',
-    coordinates: POLYGON_COORDINATES
+    coordinates
   }
   world.data.siteType = 'polygon'
   await addActivityForSite1AndContinue(world)

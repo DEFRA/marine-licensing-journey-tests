@@ -109,8 +109,17 @@ export async function fillOtherTextarea(page, text) {
   await page.locator(`#${OTHER_TEXTAREA_ID}`).fill(text)
 }
 
-export async function submitWhatActivityForm(page) {
+export async function submitWhatActivityForm(
+  page,
+  { expectNavigation = true } = {}
+) {
+  const fromUrl = page.url()
   await page.locator('button[type="submit"]:not([name="analytics"])').click()
+  if (expectNavigation) {
+    await page.waitForURL((url) => url.toString() !== fromUrl, {
+      timeout: 30_000
+    })
+  }
   await page.waitForLoadState('load')
 }
 
@@ -123,10 +132,13 @@ export async function submitWhatActivityForm(page) {
  * The chosen selection is stored on `world.data.activity` so downstream steps
  * (and Allure attachments) can reference it. Lands back on the Review page.
  */
-export async function completeRandomActivityFromReviewPage(world) {
+export async function completeRandomActivityFromReviewPage(
+  world,
+  options = {}
+) {
   const { pickRandomActivity } = await import('../test-data/lcml-activity.js')
   await clickAddTypeOfActivity(world.page)
-  const { topLevel, subOption } = pickRandomActivity()
+  const { topLevel, subOption } = pickRandomActivity(options)
   world.data.activity = { topLevel, subOption }
   const line = `random activity -> "${topLevel}" / "${subOption.label}"`
   if (world.attach) {
