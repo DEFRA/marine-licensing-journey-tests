@@ -150,22 +150,31 @@ export async function searchD365Case(page, reference) {
   const searchInput = page
     .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
     .first()
-  await searchInput.waitFor({ state: 'visible', timeout: 30_000 })
-  await searchInput.fill(reference)
-  await searchInput.press('Enter')
-
-  await page
-    .locator('div[role="treegrid"][aria-label="Completed Cases"]')
-    .waitFor({ state: 'visible', timeout: 30_000 })
-
   const ticketCell = page.locator(
     'div[role="row"][row-index="0"] div[col-id="ticketnumber"]'
   )
-  await page
-    .locator(
-      `div[role="row"][row-index="0"] div[col-id="ticketnumber"] label[aria-label="${reference}"]`
-    )
-    .waitFor({ state: 'visible', timeout: 30_000 })
+  const rowLabel = page.locator(
+    `div[role="row"][row-index="0"] div[col-id="ticketnumber"] label[aria-label="${reference}"]`
+  )
+
+  // Newly submitted or updated cases can lag the search index, so re-run the
+  // search until the case appears as the first row.
+  let found = false
+  for (let attempt = 1; attempt <= 8 && !found; attempt++) {
+    await searchInput.waitFor({ state: 'visible', timeout: 30_000 })
+    await searchInput.fill(reference)
+    await searchInput.press('Enter')
+    try {
+      await page
+        .locator('div[role="treegrid"][aria-label="Completed Cases"]')
+        .waitFor({ state: 'visible', timeout: 20_000 })
+      await rowLabel.waitFor({ state: 'visible', timeout: 12_000 })
+      found = true
+    } catch (error) {
+      if (attempt === 8) throw error
+      await page.waitForTimeout(10_000)
+    }
+  }
 
   let opened = false
   for (let attempt = 1; attempt <= 5 && !opened; attempt++) {
@@ -278,7 +287,18 @@ export async function readSiteCoordinatesCsvUrl(page) {
 
 export async function openSiteCheckTask(page) {
   const link = siteCheckTaskLink(page)
-  await link.waitFor({ state: 'visible', timeout: 30_000 })
+  // The Site check task is created by an asynchronous Dynamics flow after the
+  // case is submitted, so reload the case record until the task link appears.
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    try {
+      await link.waitFor({ state: 'visible', timeout: 12_000 })
+      break
+    } catch (error) {
+      if (attempt === 10) throw error
+      await page.reload().catch(() => {})
+      await page.waitForLoadState('load').catch(() => {})
+    }
+  }
   await link.click()
   await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
   await page.waitForLoadState('load')
@@ -546,4 +566,46 @@ export async function readProjectDetailsTab(page) {
     }
     return read()
   })
+}
+
+export const PUBLIC_REGISTER_WEBRESOURCE_ID = 'WebResource_publicregister'
+
+export function caseTab(page, tabLabel) {
+  return page.locator(`[role="tab"][aria-label="${tabLabel}"]`)
+}
+
+export async function openPublicRegisterTab(page) {
+  const tab = caseTab(page, 'Public register')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readPublicRegisterMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const text = (sel) => doc.querySelector(sel)?.innerText?.trim() ?? null
+    const shown = (sel) => {
+      const el = doc.querySelector(sel)
+      return el ? !el.classList.contains('mmo-hidden') : false
+    }
+    return {
+      statusText: text('#mmo-status-text'),
+      contentVisible: shown('#mmo-content'),
+      labels: [...doc.querySelectorAll('.mmo-field-label')].map((el) =>
+        el.innerText.trim()
+      ),
+      consent: text('#val-consent'),
+      reasonRowVisible: shown('#row-reason'),
+      reason: text('#val-reason')
+    }
+  }, PUBLIC_REGISTER_WEBRESOURCE_ID)
 }
