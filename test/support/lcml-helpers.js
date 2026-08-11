@@ -28,6 +28,8 @@ import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
+export const CONSTRUCTION_DRAWING_FILE = 'test/resources/test.pdf'
+
 export const MARINE_PLAN_POLICY_RESPONSE =
   'We have considered this policy and the proposal is compatible with it.'
 
@@ -494,6 +496,7 @@ export async function completeActivityDetailsFromReview(
   await completeCompletionDateForActivity(page, cardTitle, completionDateAnswer)
   await completeSpecificMonthsForActivity(page, cardTitle, specificMonthsAnswer)
   await completeWorkingHoursForActivity(page, cardTitle, workingHoursText)
+  await completeConstructionDrawings(page)
 
   if (world) {
     world.data.activityDetails = world.data.activityDetails || {}
@@ -505,6 +508,26 @@ export async function completeActivityDetailsFromReview(
       workingHours: workingHoursText
     }
   }
+}
+
+export async function completeConstructionDrawings(
+  page,
+  filePath = CONSTRUCTION_DRAWING_FILE
+) {
+  const addLink = page
+    .locator('a[href*="upload-construction-drawing"][href*="action=add"]')
+    .first()
+  if (!(await addLink.count())) {
+    return
+  }
+  await addLink.click()
+  await page.waitForURL(/upload-construction-drawing/, { timeout: 30_000 })
+  await uploadFile(page, filePath)
+  await page.waitForURL(
+    (url) => url.toString().includes('review-site-details'),
+    { timeout: 60_000 }
+  )
+  await page.waitForLoadState('load')
 }
 
 const ACTIVITY_CARD_ROWS = [
