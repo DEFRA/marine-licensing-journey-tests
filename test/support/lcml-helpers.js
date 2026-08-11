@@ -218,6 +218,7 @@ export async function completeSharingConsent(page, answer) {
   const reason = consent ? undefined : faker.lorem.sentence()
   await publicRegister.completeAndSave(consent, reason)
   await page.waitForLoadState('load')
+  return reason
 }
 
 export async function completeProjectBackground(page, text) {
@@ -803,7 +804,10 @@ export async function completeSiteDetailsViaFileUpload(
   await finishSiteDetailsAndContinue(world.page)
 }
 
-async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
+async function completeNonSiteTasks(
+  world,
+  { wfd = 'nautical-no', consent = 'No' } = {}
+) {
   world.data.projectBackground = faker.lorem.sentence(10)
   await completeProjectBackground(world.page, world.data.projectBackground)
   await completeSpecialLegalPowers(world.page, 'No')
@@ -811,7 +815,8 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeHarbourAuthority(world.page, 'No')
   await completePublicConsultation(world.page)
   await completePreferredDates(world.page)
-  await completeSharingConsent(world.page, 'No')
+  const sharingReason = await completeSharingConsent(world.page, consent)
+  world.data.sharingConsent = { consent, reason: sharingReason }
   if (wfd === 'upload') {
     await completeWaterFrameworkDirectiveUpload(world.page)
   } else if (wfd === 'excluded') {
@@ -861,9 +866,9 @@ export async function completeUploadApp(world) {
 
 const MARINE_AREA_SHAPEFILE = 'test/resources/magic_graphics1.zip'
 
-export async function completeMarineAreaShapefileApp(world) {
+export async function completeMarineAreaShapefileApp(world, opts = {}) {
   await loginAndStartApplication(world, 'organisation')
-  await completeNonSiteTasks(world)
+  await completeNonSiteTasks(world, opts)
   await completeSiteDetailsViaFileUpload(
     world,
     'Shapefile',

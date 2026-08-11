@@ -23,7 +23,9 @@ import {
   openWfdTask,
   readWfdTaskFieldMeta,
   completeWfdReview,
-  readProjectDetailsTab
+  readProjectDetailsTab,
+  openPublicRegisterTab,
+  readPublicRegisterMeta
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -155,6 +157,7 @@ Given(
 
 Given(
   'an organisation user has submitted a marine licence application with a site in a marine plan area',
+  { timeout: D365_STEP_TIMEOUT },
   async function () {
     await completeMarineAreaShapefileApp(this)
     await submitMarineLicence(this)
@@ -712,6 +715,67 @@ Then(
   async function () {
     const status = await completeWfdReview(this.d365Page)
     expect(status).toBe('Done')
+  }
+)
+
+Given(
+  'an organisation user has submitted a marine licence application with sharing consent {string}',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (consent) {
+    await completeMarineAreaShapefileApp(this, { consent })
+    await submitMarineLicence(this)
+  }
+)
+
+When(
+  'the internal user opens the submitted case in D365',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = await openWorkbasket(this)
+    this.d365CaseRow = await findCaseRowWithRetry(
+      page,
+      this.data.applicationReference
+    )
+    await openCaseRecordSummary(page, this.d365CaseRow)
+  }
+)
+
+Then(
+  'the case shows the {string} tab in the tab strip',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (tabName) {
+    await expect(
+      this.d365Page.locator(`[role="tab"][aria-label="${tabName}"]`)
+    ).toBeVisible({ timeout: 30_000 })
+  }
+)
+
+Then(
+  'the Public register tab shows sharing consent {string}',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (consent) {
+    const page = this.d365Page
+    await openPublicRegisterTab(page)
+
+    await expect
+      .poll(async () => (await readPublicRegisterMeta(page))?.contentVisible, {
+        timeout: 60_000,
+        message: 'Public register web resource loads the application from CDP'
+      })
+      .toBe(true)
+
+    const meta = await readPublicRegisterMeta(page)
+    expect(meta.labels).toContain(
+      'Do you consent to the MMO publishing your project information publicly?'
+    )
+    expect(meta.consent).toBe(consent)
+
+    if (consent === 'No') {
+      expect(meta.reasonRowVisible).toBe(true)
+      expect(meta.reason).toBe(this.data.sharingConsent.reason)
+    } else {
+      expect(meta.reasonRowVisible).toBe(false)
+    }
   }
 )
 
