@@ -28,6 +28,8 @@ import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
 
+export const CONSTRUCTION_DRAWING_FILE = 'test/resources/test.pdf'
+
 export const MARINE_PLAN_POLICY_RESPONSE =
   'We have considered this policy and the proposal is compatible with it.'
 
@@ -216,6 +218,7 @@ export async function completeSharingConsent(page, answer) {
   const reason = consent ? undefined : faker.lorem.sentence()
   await publicRegister.completeAndSave(consent, reason)
   await page.waitForLoadState('load')
+  return reason
 }
 
 export async function completeProjectBackground(page, text) {
@@ -493,6 +496,7 @@ export async function completeActivityDetailsFromReview(
   await completeCompletionDateForActivity(page, cardTitle, completionDateAnswer)
   await completeSpecificMonthsForActivity(page, cardTitle, specificMonthsAnswer)
   await completeWorkingHoursForActivity(page, cardTitle, workingHoursText)
+  await completeConstructionDrawings(page)
 
   if (world) {
     world.data.activityDetails = world.data.activityDetails || {}
@@ -504,6 +508,26 @@ export async function completeActivityDetailsFromReview(
       workingHours: workingHoursText
     }
   }
+}
+
+export async function completeConstructionDrawings(
+  page,
+  filePath = CONSTRUCTION_DRAWING_FILE
+) {
+  const addLink = page
+    .locator('a[href*="upload-construction-drawing"][href*="action=add"]')
+    .first()
+  if (!(await addLink.count())) {
+    return
+  }
+  await addLink.click()
+  await page.waitForURL(/upload-construction-drawing/, { timeout: 30_000 })
+  await uploadFile(page, filePath)
+  await page.waitForURL(
+    (url) => url.toString().includes('review-site-details'),
+    { timeout: 60_000 }
+  )
+  await page.waitForLoadState('load')
 }
 
 const ACTIVITY_CARD_ROWS = [
@@ -780,7 +804,10 @@ export async function completeSiteDetailsViaFileUpload(
   await finishSiteDetailsAndContinue(world.page)
 }
 
-async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
+async function completeNonSiteTasks(
+  world,
+  { wfd = 'nautical-no', consent = 'No' } = {}
+) {
   world.data.projectBackground = faker.lorem.sentence(10)
   await completeProjectBackground(world.page, world.data.projectBackground)
   await completeSpecialLegalPowers(world.page, 'No')
@@ -788,7 +815,8 @@ async function completeNonSiteTasks(world, { wfd = 'nautical-no' } = {}) {
   await completeHarbourAuthority(world.page, 'No')
   await completePublicConsultation(world.page)
   await completePreferredDates(world.page)
-  await completeSharingConsent(world.page, 'No')
+  const sharingReason = await completeSharingConsent(world.page, consent)
+  world.data.sharingConsent = { consent, reason: sharingReason }
   if (wfd === 'upload') {
     await completeWaterFrameworkDirectiveUpload(world.page)
   } else if (wfd === 'excluded') {
@@ -838,9 +866,9 @@ export async function completeUploadApp(world) {
 
 const MARINE_AREA_SHAPEFILE = 'test/resources/magic_graphics1.zip'
 
-export async function completeMarineAreaShapefileApp(world) {
+export async function completeMarineAreaShapefileApp(world, opts = {}) {
   await loginAndStartApplication(world, 'organisation')
-  await completeNonSiteTasks(world)
+  await completeNonSiteTasks(world, opts)
   await completeSiteDetailsViaFileUpload(
     world,
     'Shapefile',

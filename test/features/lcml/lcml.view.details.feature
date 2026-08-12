@@ -61,6 +61,13 @@ Feature: LCML: View details page shows sites and activities
     When the internal user finds the submitted case in the Marine licence cases workbasket
     Then the Project details tab shows the project name, background and preferred licence dates
 
+  @real-defra-id @d365 @issue=ML-1438
+  Scenario: The Public register tab shows the applicant's "No" sharing consent from CDP
+    Given an organisation user has submitted a marine licence application with sharing consent "No"
+    When the internal user opens the submitted case in D365
+    Then the case shows the "Public register" tab in the tab strip
+    And the Public register tab shows sharing consent "No"
+
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
     Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
