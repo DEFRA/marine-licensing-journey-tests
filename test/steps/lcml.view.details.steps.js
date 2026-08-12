@@ -25,7 +25,13 @@ import {
   completeWfdReview,
   readProjectDetailsTab,
   openPublicRegisterTab,
-  readPublicRegisterMeta
+  readPublicRegisterMeta,
+  openOtherPermissionsTab,
+  readOtherPermissionsMeta,
+  readOtherPermissionAnswersByNav,
+  openWfdTab,
+  readWfdTabMeta,
+  readWfdTabAnswers
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -776,6 +782,71 @@ Then(
     } else {
       expect(meta.reasonRowVisible).toBe(false)
     }
+  }
+)
+
+Then(
+  "the Other permissions tab shows the applicant's {string} answers for all four permissions",
+  { timeout: D365_STEP_TIMEOUT },
+  async function (answer) {
+    const page = this.d365Page
+    await openOtherPermissionsTab(page)
+
+    await expect
+      .poll(
+        async () => (await readOtherPermissionsMeta(page))?.specialLegalPowers,
+        {
+          timeout: 60_000,
+          message:
+            'Other permissions web resource loads the application from CDP'
+        }
+      )
+      .toBeTruthy()
+
+    const meta = await readOtherPermissionsMeta(page)
+    expect(meta.navLabels).toEqual([
+      'Special legal powers',
+      'Harbour authority',
+      'Other authorities',
+      'Pre-application consultation'
+    ])
+
+    // Navigate each of the four sections and assert the answer shown for each.
+    const answers = await readOtherPermissionAnswersByNav(page)
+    expect(answers.specialLegalPowers).toBe(answer)
+    expect(answers.harbourAuthority).toBe(answer)
+    expect(answers.otherAuthorities).toBe(answer)
+    expect(answers.publicConsultation).toBe(answer)
+  }
+)
+
+Then(
+  "the Water Framework Directive tab shows the applicant's answers, guidance and the uploaded assessment",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openWfdTab(page)
+
+    await expect
+      .poll(async () => (await readWfdTabMeta(page))?.visibleBlock, {
+        timeout: 60_000,
+        message: 'WFD tab help text loads the application answers from CDP'
+      })
+      .toBe('mmo-wfd-three-answer')
+    expect((await readWfdTabMeta(page)).text).toContain(
+      'replacing or removing existing pipes'
+    )
+
+    await expect
+      .poll(async () => (await readWfdTabAnswers(page)).nauticalMile, {
+        timeout: 30_000,
+        message: "WFD applicant's answers render on the tab"
+      })
+      .toBe('Yes')
+    const answers = await readWfdTabAnswers(page)
+    expect(answers.excludedActivities).toBe('No')
+    expect(answers.downloadFile).toBe('WFD.odt')
+    expect(answers.downloadEnabled).toBe(true)
   }
 )
 
