@@ -19,6 +19,10 @@ function getDefraIdUrl() {
 
 const cdpEnvironments = ['dev', 'test']
 
+// Squid sidecar in CDP. Chromium uses this via --proxy-server; Node fetch
+// must use the same URL via undici ProxyAgent (it ignores --proxy-server).
+export const CDP_PROXY_URL = 'http://localhost:3128'
+
 function isCdpEnvironment() {
   return cdpEnvironments.includes(environment)
 }
@@ -32,7 +36,7 @@ function getChromiumArgs() {
 
   if (isCdpEnvironment()) {
     args.push(
-      '--proxy-server=http://localhost:3128',
+      `--proxy-server=${CDP_PROXY_URL}`,
       '--ignore-certificate-errors',
       '--disable-dev-shm-usage'
     )
