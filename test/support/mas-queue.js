@@ -3,6 +3,8 @@ import {
   GetQueueUrlCommand,
   SendMessageCommand
 } from '@aws-sdk/client-sqs'
+import { ProxyAgent, fetch } from 'undici'
+import { CDP_PROXY_URL } from './config.js'
 
 // Builds the message Dynamics 365 posts when an application transfer to MCMS is
 // completed. The backend's MAS worker consumes it and sets the marine licence
@@ -53,6 +55,16 @@ async function sendViaLocalStack(message) {
 const DEFAULT_GATEWAY_TOKEN_URL =
   'https://marine-licensing-backend-6bf3a.auth.eu-west-2.amazoncognito.com/oauth2/token'
 
+// Force token and /queue calls through the CDP Squid sidecar, matching
+// Chromium's --proxy-server. Native fetch does not use that flag, and
+// NODE_USE_ENV_PROXY would honour NO_PROXY (which typically includes
+// *.cdp-int.defra.cloud) and send the gateway request direct.
+let proxyAgent
+function cdpFetch(url, options) {
+  proxyAgent ??= new ProxyAgent(CDP_PROXY_URL)
+  return fetch(url, { ...options, dispatcher: proxyAgent })
+}
+
 async function getCognitoToken() {
   const tokenUrl = process.env.GATEWAY_TOKEN_URL || DEFAULT_GATEWAY_TOKEN_URL
   const clientId = process.env.GATEWAY_CLIENT_ID
@@ -70,7 +82,7 @@ async function getCognitoToken() {
     client_secret: clientSecret
   })
 
-  const response = await fetch(tokenUrl, {
+  const response = await cdpFetch(tokenUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: form
@@ -92,7 +104,7 @@ async function sendViaGateway(message) {
     'https://marine-licensing-backend.api.test.cdp-int.defra.cloud/queue'
   const token = await getCognitoToken()
 
-  const response = await fetch(queueUrl, {
+  const response = await cdpFetch(queueUrl, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
