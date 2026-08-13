@@ -36,7 +36,7 @@ function getChromiumArgs() {
 
   if (isCdpEnvironment()) {
     args.push(
-      `--proxy-server=${CDP_PROXY_URL}`,
+      '--proxy-server=' + CDP_PROXY_URL,
       '--ignore-certificate-errors',
       '--disable-dev-shm-usage'
     )
