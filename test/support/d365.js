@@ -609,3 +609,161 @@ export async function readPublicRegisterMeta(page) {
     }
   }, PUBLIC_REGISTER_WEBRESOURCE_ID)
 }
+
+export const OTHER_PERMISSIONS_WEBRESOURCE_ID = 'WebResource_otherpermissions'
+
+export async function openOtherPermissionsTab(page) {
+  const tab = caseTab(page, 'Other permissions')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readOtherPermissionsMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const text = (sel) => doc.querySelector(sel)?.innerText?.trim() ?? null
+    return {
+      statusText: text('#mmo-op-status-text'),
+      navLabels: [...doc.querySelectorAll('.mmo-op-nav .mmo-op-link')].map(
+        (link) => link.innerText.trim()
+      ),
+      specialLegalPowers: text('#val-specialLegalPowers'),
+      harbourAuthority: text('#val-harbourAuthority'),
+      otherAuthorities: text('#val-otherAuthorities'),
+      publicConsultation: text('#val-publicConsultation')
+    }
+  }, OTHER_PERMISSIONS_WEBRESOURCE_ID)
+}
+
+const OTHER_PERMISSION_SECTIONS = [
+  {
+    label: 'Special legal powers',
+    valId: 'val-specialLegalPowers',
+    key: 'specialLegalPowers'
+  },
+  {
+    label: 'Harbour authority',
+    valId: 'val-harbourAuthority',
+    key: 'harbourAuthority'
+  },
+  {
+    label: 'Other authorities',
+    valId: 'val-otherAuthorities',
+    key: 'otherAuthorities'
+  },
+  {
+    label: 'Pre-application consultation',
+    valId: 'val-publicConsultation',
+    key: 'publicConsultation'
+  }
+]
+
+export async function readOtherPermissionAnswersByNav(page) {
+  const frame = page.frameLocator(`#${OTHER_PERMISSIONS_WEBRESOURCE_ID}`)
+  const answers = {}
+  for (const section of OTHER_PERMISSION_SECTIONS) {
+    await frame
+      .locator('.mmo-op-nav .mmo-op-link', { hasText: section.label })
+      .first()
+      .click()
+    const value = frame.locator(`#${section.valId}`)
+    await value.waitFor({ state: 'visible', timeout: 10_000 })
+    answers[section.key] = (await value.innerText()).trim()
+  }
+  return answers
+}
+
+export const WFD_TAB_WEBRESOURCE_ID = 'WebResource_mmo_wfdhelptext'
+
+export async function openWfdTab(page) {
+  const tab = caseTab(page, 'Water Framework Directive')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readWfdTabMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const blockIds = [
+      'mmo-wfd-one-answer',
+      'mmo-wfd-two-answer',
+      'mmo-wfd-three-answer',
+      'mmo-wfd-unknown'
+    ]
+    const visibleBlock =
+      blockIds.find((id) =>
+        doc.getElementById(id)?.classList.contains('mmo-visible')
+      ) ?? null
+    return {
+      visibleBlock,
+      text: visibleBlock
+        ? doc.getElementById(visibleBlock)?.innerText?.trim()
+        : null
+    }
+  }, WFD_TAB_WEBRESOURCE_ID)
+}
+
+export const WFD_DOCUMENT_LINK_WEBRESOURCE_ID =
+  'WebResource_mmo_wfddocumentlink'
+
+const WFD_NAUTICAL_MILE_QUESTION =
+  'Is your project within one nautical mile (1.85km) of the low-water line, or in a tidal river or estuary?'
+const WFD_EXCLUDED_ACTIVITIES_QUESTION =
+  'Is your project limited to one of the following excluded activities?'
+
+export async function readWfdTabAnswers(page) {
+  return page.evaluate(
+    ({ docFrameId, q1Label, q2Label }) => {
+      const value = (label) =>
+        document.querySelector(`input[aria-label="${label}"]`)?.value?.trim() ??
+        null
+
+      let downloadFile = null
+      let downloadEnabled = null
+      const frame = document.getElementById(docFrameId)
+      if (frame) {
+        let doc
+        try {
+          doc = frame.contentDocument || frame.contentWindow.document
+        } catch {
+          doc = null
+        }
+        const button = doc?.querySelector('#mmo-wfd-doc-link')
+        if (button) {
+          downloadFile = button.innerText?.trim() ?? null
+          downloadEnabled = !button.disabled
+        }
+      }
+
+      return {
+        nauticalMile: value(q1Label),
+        excludedActivities: value(q2Label),
+        downloadFile,
+        downloadEnabled
+      }
+    },
+    {
+      docFrameId: WFD_DOCUMENT_LINK_WEBRESOURCE_ID,
+      q1Label: WFD_NAUTICAL_MILE_QUESTION,
+      q2Label: WFD_EXCLUDED_ACTIVITIES_QUESTION
+    }
+  )
+}
