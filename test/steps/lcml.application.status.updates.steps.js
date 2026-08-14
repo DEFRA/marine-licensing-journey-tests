@@ -2,6 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   completeManualCircleApp,
+  completeMarineAreaShapefileApp,
   submitMarineLicence
 } from '../support/lcml-helpers.js'
 import {
@@ -177,3 +178,128 @@ Then(
     ).toContainText('Marine plan policies', { timeout: 30_000 })
   }
 )
+
+const dashboardRow = (page, projectName, status) =>
+  page
+    .locator('table tr')
+    .filter({ hasText: projectName })
+    .filter({ hasText: status })
+
+Given(
+  'an organisation user has a rejected marine licence application',
+  { timeout: 240_000 },
+  async function () {
+    await completeMarineAreaShapefileApp(this)
+    await submitMarineLicence(this)
+    this.data.rejectMessage = await sendRejectedMessage(
+      this.data.applicationReference
+    )
+
+    const page = this.page
+    await page.getByRole('link', { name: 'Projects' }).click()
+    await page.waitForLoadState('load')
+    const row = projectRow(page, this.data.projectName)
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const text = (await row.innerText().catch(() => '')) || ''
+      if (text.includes('Unable to progress')) {
+        break
+      }
+      await page.waitForTimeout(5_000)
+      await page.reload()
+      await page.waitForLoadState('load')
+    }
+    await expect(row).toContainText('Unable to progress', { timeout: 10_000 })
+  }
+)
+
+async function openApplyAgainPage(page, projectName) {
+  await dashboardRow(page, projectName, 'Unable to progress')
+    .getByRole('link', { name: 'View details' })
+    .click()
+  await page.waitForLoadState('load')
+  await page.getByRole('button', { name: 'Apply again' }).click()
+  await page.waitForLoadState('load')
+}
+
+When('the user opens the Apply again page for the project', async function () {
+  await openApplyAgainPage(this.page, this.data.projectName)
+})
+
+When(
+  'the user applies again and creates a new draft for the project',
+  async function () {
+    const page = this.page
+    await openApplyAgainPage(page, this.data.projectName)
+    await page
+      .getByRole('button', { name: 'Create new draft and fix issues' })
+      .click()
+    await page.waitForLoadState('load')
+  }
+)
+
+Then(
+  'a new draft application is created pre-populated from the rejected application',
+  async function () {
+    const page = this.page
+    await expect(page.locator('h1')).toContainText(
+      'Marine licence start page',
+      {
+        timeout: 30_000
+      }
+    )
+    await expect(
+      page.locator('.govuk-caption-l, .govuk-caption-xl').first()
+    ).toContainText(this.data.projectName, { timeout: 30_000 })
+    await expect(
+      page
+        .locator('.govuk-task-list__item', { hasText: 'Site details' })
+        .locator('.govuk-task-list__status')
+    ).toContainText('Completed', { timeout: 30_000 })
+  }
+)
+
+Then(
+  'the new draft has the Fee estimate task marked incomplete',
+  async function () {
+    await expect(
+      this.page
+        .locator('.govuk-task-list__item', { hasText: 'Fee estimate' })
+        .locator('.govuk-task-list__status')
+    ).toContainText('Not yet started', { timeout: 30_000 })
+  }
+)
+
+Then(
+  'the rejected application still shows the {string} status',
+  async function (status) {
+    const page = this.page
+    await page.getByRole('link', { name: 'Projects' }).click()
+    await page.waitForLoadState('load')
+    await expect(dashboardRow(page, this.data.projectName, status)).toHaveCount(
+      1,
+      { timeout: 30_000 }
+    )
+    await expect(
+      dashboardRow(page, this.data.projectName, 'Draft')
+    ).toHaveCount(1, { timeout: 30_000 })
+  }
+)
+
+Then(
+  'the {string} page shows the original application reference',
+  async function (heading) {
+    const page = this.page
+    await expect(page.locator('h1')).toContainText(heading, { timeout: 30_000 })
+    await expect(page.locator('main')).toContainText(
+      this.data.applicationReference,
+      { timeout: 30_000 }
+    )
+  }
+)
+
+Then('cancelling returns to the {string} page', async function (heading) {
+  const page = this.page
+  await page.getByRole('link', { name: 'Cancel' }).click()
+  await page.waitForLoadState('load')
+  await expect(page.locator('h1')).toContainText(heading, { timeout: 30_000 })
+})

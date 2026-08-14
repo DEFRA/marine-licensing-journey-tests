@@ -36,3 +36,18 @@ Feature: LCML: Application status updates from Dynamics 365
     Then the application status is "Unable to progress" on the dashboard
     And opening View details shows the "We are unable to progress your application" page with the project name and reference
     And the rejected page shows the reasons, free text and links, and the "Unable to progress" application details
+
+  @lcml @issue=ML-1479
+  Scenario: Apply again creates a pre-populated new draft with the fee estimate incomplete
+    Given an organisation user has a rejected marine licence application
+    When the user applies again and creates a new draft for the project
+    Then a new draft application is created pre-populated from the rejected application
+    And the new draft has the Fee estimate task marked incomplete
+    And the rejected application still shows the "Unable to progress" status
+
+  @lcml @issue=ML-1479
+  Scenario: The Apply again page shows the original reference and Cancel returns to the rejected page
+    Given an organisation user has a rejected marine licence application
+    When the user opens the Apply again page for the project
+    Then the "Apply again for this project" page shows the original application reference
+    And cancelling returns to the "We are unable to progress your application" page
