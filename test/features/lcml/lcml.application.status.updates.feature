@@ -51,3 +51,11 @@ Feature: LCML: Application status updates from Dynamics 365
     When the user opens the Apply again page for the project
     Then the "Apply again for this project" page shows the original application reference
     And cancelling returns to the "We are unable to progress your application" page
+
+  @real-defra-id @issue=ML-1479
+  Scenario: Apply again via the API gateway creates a pre-populated new draft
+    Given an organisation user has a rejected marine licence application
+    When the user applies again and creates a new draft for the project
+    Then a new draft application is created pre-populated from the rejected application
+    And the new draft has the Fee estimate task marked incomplete
+    And the rejected application still shows the "Unable to progress" status
