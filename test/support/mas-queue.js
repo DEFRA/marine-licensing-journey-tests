@@ -122,8 +122,7 @@ async function sendViaGateway(message) {
 
 // Local runs deliver straight to LocalStack SQS; CDP environments go through the
 // cognito-protected API gateway, mirroring how D365 posts the message.
-export async function sendTransferCompletedMessage(applicationReference) {
-  const message = buildTransferMessage(applicationReference)
+async function sendToQueue(message) {
   const environment = process.env.ENVIRONMENT || 'local'
 
   if (environment === 'local') {
@@ -133,4 +132,24 @@ export async function sendTransferCompletedMessage(applicationReference) {
   }
 
   return message
+}
+
+export async function sendTransferCompletedMessage(applicationReference) {
+  return sendToQueue(buildTransferMessage(applicationReference))
+}
+
+function buildRejectedMessage(applicationReference) {
+  return {
+    applicationReference,
+    status: 'REJECTED',
+    rejectedDate: new Date().toISOString(),
+    rejectedReasons: 'Marine plan policies, Another reason',
+    rejectedInformation: 'Test free text',
+    userName: 'Jane Doe',
+    userEmail: 'reject-test@example.com'
+  }
+}
+
+export async function sendRejectedMessage(applicationReference) {
+  return sendToQueue(buildRejectedMessage(applicationReference))
 }

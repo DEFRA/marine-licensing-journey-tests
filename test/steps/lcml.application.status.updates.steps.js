@@ -4,7 +4,10 @@ import {
   completeManualCircleApp,
   submitMarineLicence
 } from '../support/lcml-helpers.js'
-import { sendTransferCompletedMessage } from '../support/mas-queue.js'
+import {
+  sendTransferCompletedMessage,
+  sendRejectedMessage
+} from '../support/mas-queue.js'
 
 const projectRow = (page, projectName) =>
   page.locator(`xpath=//tr[td[1][normalize-space(text())="${projectName}"]]`)
@@ -26,14 +29,17 @@ async function notifyTransferCompleted() {
 }
 
 When(
-  'a transfer completed message is sent to the LocalStack queue',
+  'a transfer completed message is sent for the application',
   notifyTransferCompleted
 )
 
-When(
-  'a transfer completed message is sent to the API gateway queue endpoint',
-  notifyTransferCompleted
-)
+async function notifyRejected() {
+  this.data.rejectMessage = await sendRejectedMessage(
+    this.data.applicationReference
+  )
+}
+
+When('a rejected message is sent for the application', notifyRejected)
 
 Then(
   'the application status is {string} on the dashboard',
@@ -121,5 +127,53 @@ Then(
         '.govuk-summary-list__row:has(dt:text-is("Date of transfer")) .govuk-summary-list__value'
       )
     ).toContainText(/\d/, { timeout: 30_000 })
+  }
+)
+
+Then(
+  'the rejected page shows the reasons, free text and links, and the {string} application details',
+  async function (status) {
+    const page = this.page
+
+    const reasons = page.locator('main ul.govuk-list--bullet').first()
+    await expect(reasons).toContainText('Marine plan policies', {
+      timeout: 30_000
+    })
+    await expect(reasons).toContainText('Another reason', { timeout: 30_000 })
+    await expect(page.locator('main')).toContainText('Test free text', {
+      timeout: 30_000
+    })
+
+    await expect(
+      page.getByRole('button', { name: 'Apply again' })
+    ).toHaveAttribute('href', /marine-licence\/update-and-resubmit\//, {
+      timeout: 30_000
+    })
+    await expect(
+      page.getByRole('link', { name: 'View your original application' })
+    ).toHaveAttribute('href', /marine-licence\/view-details\//, {
+      timeout: 30_000
+    })
+
+    await page
+      .getByRole('link', { name: 'View your original application' })
+      .click()
+    await page.waitForLoadState('load')
+
+    const card = page.locator('#application-details-card')
+    await expect(card).toBeVisible({ timeout: 30_000 })
+    await expect(
+      card.locator('.govuk-summary-list__row:has(dt:text-is("Status"))')
+    ).toContainText(status, { timeout: 30_000 })
+    await expect(
+      card.locator(
+        '.govuk-summary-list__row:has(dt:text-is("Date marked as unable to progress")) .govuk-summary-list__value'
+      )
+    ).toContainText(/\d/, { timeout: 30_000 })
+    await expect(
+      card.locator(
+        '.govuk-summary-list__row:has(dt:text-is("Reasons marked as unable to progress"))'
+      )
+    ).toContainText('Marine plan policies', { timeout: 30_000 })
   }
 )
