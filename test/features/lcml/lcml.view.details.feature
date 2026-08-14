@@ -68,6 +68,15 @@ Feature: LCML: View details page shows sites and activities
     Then the case shows the "Public register" tab in the tab strip
     And the Public register tab shows sharing consent "No"
 
+  @real-defra-id @d365 @issue=ML-1437 @issue=ML-1436
+  Scenario: The case tabs show the applicant's Other permissions and WFD answers from CDP
+    Given an organisation user has submitted a marine licence with the "three-answer" WFD variation
+    When the internal user opens the submitted case in D365
+    Then the case shows the "Other permissions" tab in the tab strip
+    And the Other permissions tab shows the applicant's "No" answers for all four permissions
+    And the case shows the "Water Framework Directive" tab in the tab strip
+    And the Water Framework Directive tab shows the applicant's answers, guidance and the uploaded assessment
+
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
     Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
