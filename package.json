@@ -32,8 +32,10 @@
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "3.1107.0",
     "allure-commandline": "2.34.1",
-    "date-fns": "4.1.0"
+    "date-fns": "4.1.0",
+    "undici": "8.10.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "12.6.0",
