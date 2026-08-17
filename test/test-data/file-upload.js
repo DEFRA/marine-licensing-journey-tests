@@ -204,7 +204,7 @@ function createMultiSiteFileUploadData(
 export function createMultiSiteKMLUploadData(options) {
   return createMultiSiteFileUploadData(
     'KML',
-    'test/resources/EXE_2025_00098-LOCATIONS.kml',
+    'test/resources/EXE_2025_00098-LOCATIONS-without-site-name.kml',
     2,
     KML_SITE_NAMES,
     options

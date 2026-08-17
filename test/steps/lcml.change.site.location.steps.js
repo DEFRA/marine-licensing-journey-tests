@@ -14,8 +14,8 @@ import { completeRandomActivityFromReviewPage } from '../support/lcml-activity-f
 const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS-without-site-name.kml',
   Shapefile: 'test/resources/valid-shapefile-without-site-name.zip',
-  // EXE_2025_00098-LOCATIONS.kml contains two(multiple sites)
-  'multi-site': 'test/resources/EXE_2025_00098-LOCATIONS.kml'
+  // EXE_2025_00098-LOCATIONS-without-site-name.kml contains two sites
+  'multi-site': 'test/resources/EXE_2025_00098-LOCATIONS-without-site-name.kml'
 }
 
 function changeSiteLocationLink(page, siteNumber) {
