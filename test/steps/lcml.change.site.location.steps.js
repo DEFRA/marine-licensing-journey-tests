@@ -12,8 +12,8 @@ import {
 import { completeRandomActivityFromReviewPage } from '../support/lcml-activity-flow.js'
 
 const SAMPLE_FILES = {
-  KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
-  Shapefile: 'test/resources/valid-shapefile.zip',
+  KML: 'test/resources/EXE_2025_00009-LOCATIONS-without-site-name.kml',
+  Shapefile: 'test/resources/valid-shapefile-without-site-name.zip',
   // EXE_2025_00098-LOCATIONS.kml contains two(multiple sites)
   'multi-site': 'test/resources/EXE_2025_00098-LOCATIONS.kml'
 }

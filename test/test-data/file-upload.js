@@ -35,7 +35,7 @@ function createFileUploadData(
 export function createKMLUploadData() {
   return createFileUploadData(
     'KML',
-    'test/resources/EXE_2025_00009-LOCATIONS.kml'
+    'test/resources/EXE_2025_00009-LOCATIONS-without-site-name.kml'
   )
 }
 
@@ -72,7 +72,10 @@ export function createKMLEmptyFileData() {
 // --- Shapefile single-site factories ---
 
 export function createShapefileUploadData() {
-  return createFileUploadData('Shapefile', 'test/resources/valid-shapefile.zip')
+  return createFileUploadData(
+    'Shapefile',
+    'test/resources/valid-shapefile-without-site-name.zip'
+  )
 }
 
 export function createShapefileVirusUploadData() {

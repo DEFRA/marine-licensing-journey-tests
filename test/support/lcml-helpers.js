@@ -34,8 +34,8 @@ export const MARINE_PLAN_POLICY_RESPONSE =
   'We have considered this policy and the proposal is compatible with it.'
 
 const SAMPLE_FILES = {
-  KML: 'test/resources/EXE_2025_00009-LOCATIONS.kml',
-  Shapefile: 'test/resources/valid-shapefile.zip'
+  KML: 'test/resources/EXE_2025_00009-LOCATIONS-without-site-name.kml',
+  Shapefile: 'test/resources/valid-shapefile-without-site-name.zip'
 }
 
 export function pickRandomFileType() {
