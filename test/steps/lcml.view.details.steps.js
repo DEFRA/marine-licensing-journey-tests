@@ -1,5 +1,6 @@
 import { Given, When, Then, After } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { ACTIVITY_TYPES } from '../test-data/lcml-activity.js'
 import {
   completeUploadApp,
   completeRandomSiteTypeApp,
@@ -31,7 +32,9 @@ import {
   readOtherPermissionAnswersByNav,
   openWfdTab,
   readWfdTabMeta,
-  readWfdTabAnswers
+  readWfdTabAnswers,
+  openSitesAndActivitiesTab,
+  readSitesAndActivitiesMeta
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -847,6 +850,47 @@ Then(
     expect(answers.excludedActivities).toBe('No')
     expect(answers.downloadFile).toBe('WFD.odt')
     expect(answers.downloadEnabled).toBe(true)
+  }
+)
+
+Then(
+  'the Sites and activities tab shows the uploaded site location and the site and activity details',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openSitesAndActivitiesTab(page)
+
+    await expect
+      .poll(async () => (await readSitesAndActivitiesMeta(page))?.subtitles, {
+        timeout: 60_000,
+        message:
+          'Sites and activities web resource loads the application from CDP'
+      })
+      .toContain('Site 1')
+
+    const meta = await readSitesAndActivitiesMeta(page)
+    expect(meta.labels).toEqual(
+      expect.arrayContaining([
+        'Method of providing site location',
+        'Site name',
+        'Type of activity',
+        'Sub-activities'
+      ])
+    )
+    expect(meta.bodyText).toContain('File upload')
+    expect(meta.downloadFile).toMatch(/\.zip$/i)
+    expect(meta.subtitles).toContain('Site 1')
+    expect(meta.subtitles.some((s) => /Site 1 . Activity 1/.test(s))).toBe(true)
+
+    // The tab reflects the exact values submitted by the applicant (from CDP).
+    const activity = this.data.activity
+    expect(meta.bodyText).toContain(this.data.siteName)
+    expect(meta.bodyText).toContain(
+      ACTIVITY_TYPES[activity.topLevel].radioLabel
+    )
+    expect(
+      meta.subActivities.some((s) => s.includes(activity.checkbox.label))
+    ).toBe(true)
   }
 )
 
