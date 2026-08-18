@@ -790,7 +790,7 @@ export async function completeSiteDetailsViaFileUpload(
   await navigateToUploadPage(world, fileType)
   await uploadFileAndWaitForReviewPage(world, fileType, filePath)
 
-  await addSiteNameFromReview(world.page, 1)
+  world.data.siteName = await addSiteNameFromReview(world.page, 1)
 
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'

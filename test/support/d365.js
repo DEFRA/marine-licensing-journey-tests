@@ -767,3 +767,38 @@ export async function readWfdTabAnswers(page) {
     }
   )
 }
+
+export const SITES_ACTIVITIES_WEBRESOURCE_ID = 'WebResource_sitesandactivities'
+
+export async function openSitesAndActivitiesTab(page) {
+  const tab = caseTab(page, 'Sites and activities')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readSitesAndActivitiesMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const texts = (sel) =>
+      [...doc.querySelectorAll(sel)].map((el) => el.innerText.trim())
+    const downloadButton = [...doc.querySelectorAll('button.mmo-file-download')]
+      .map((b) => b.innerText.trim())
+      .find(Boolean)
+    return {
+      labels: texts('.mmo-sa-label'),
+      subtitles: texts('h2.mmo-sa-subtitle'),
+      subActivities: texts('ul.mmo-sa-list li'),
+      downloadFile: downloadButton ?? null,
+      bodyText: doc.body?.innerText?.trim() ?? null
+    }
+  }, SITES_ACTIVITIES_WEBRESOURCE_ID)
+}
