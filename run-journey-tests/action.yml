@@ -205,9 +205,11 @@ runs:
     - name: Setup the tests
       run: |
         npm ci
-        npx playwright install chromium
-        sudo apt-get update -o Acquire::Retries=3 || true
-        npx playwright install-deps chromium
+
+        # Replace unreliable Azure mirrors with archive.ubuntu.com to avoid apt hangs
+        sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true
+
+        npx playwright install chromium --with-deps
       shell: bash
       working-directory: ./marine-licensing-journey-tests
 
