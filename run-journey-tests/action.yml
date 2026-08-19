@@ -205,7 +205,9 @@ runs:
     - name: Setup the tests
       run: |
         npm ci
-        npx playwright install chromium --with-deps
+        npx playwright install chromium
+        sudo apt-get update -o Acquire::Retries=3 || true
+        npx playwright install-deps chromium
       shell: bash
       working-directory: ./marine-licensing-journey-tests
 
