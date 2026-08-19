@@ -231,7 +231,7 @@ const drawingCard = (page, cardTitle) =>
   page.locator('.govuk-summary-card', { hasText: cardTitle })
 
 When(
-  'the user {string} deleting the second construction drawing',
+  'the user {word} deleting the second construction drawing',
   async function (action) {
     const page = this.page
     await page
