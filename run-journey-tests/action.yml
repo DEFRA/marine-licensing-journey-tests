@@ -206,8 +206,17 @@ runs:
       run: |
         npm ci
 
-        # Replace unreliable Azure mirrors with archive.ubuntu.com to avoid apt hangs
-        sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true
+        # GitHub's ubuntu-latest (24.04) prefers azure.archive.ubuntu.com via
+        # apt-mirrors.txt and ubuntu.sources. Those hosts often hang; rewrite them
+        # before Playwright's --with-deps runs apt-get update.
+        sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' \
+          /etc/apt/apt-mirrors.txt \
+          /etc/apt/sources.list \
+          /etc/apt/sources.list.d/*.list \
+          /etc/apt/sources.list.d/*.sources \
+          2>/dev/null || true
+        echo 'Acquire::http::Timeout "20"; Acquire::https::Timeout "20"; Acquire::Retries "2";' \
+          | sudo tee /etc/apt/apt.conf.d/99github-timeout >/dev/null
 
         npx playwright install chromium --with-deps
       shell: bash
