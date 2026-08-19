@@ -38,7 +38,7 @@ Feature: LCML: Construction drawing upload sub-journey
 
   Scenario: Uploading the wrong file type shows a construction drawing error
     Given an organisation user is on the Upload construction drawing page
-    When the user uploads the "EXE_2025_00009-LOCATIONS.kml" construction drawing
+    When the user uploads the "EXE_2025_00009-LOCATIONS-without-site-name.kml" construction drawing
     Then the construction drawing upload error "The selected file must be a PDF or BMP or GIF or JPG or JPEG or PNG or TIF file" is displayed
 
   Scenario: Adding and uploading a second construction drawing for a site
