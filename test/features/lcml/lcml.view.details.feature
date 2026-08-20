@@ -16,24 +16,23 @@ Feature: LCML: View details page shows sites and activities
     Then the View details page shows the "File upload" site location method
     And the View details page shows an uploaded site card with a name and a map
 
-  @issue=ML-1377 @issue=ML-1457
-  Scenario: View details shows the marine plan policies and invoicing cards
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
+  Scenario: View details shows the marine plan policies, fee estimate and invoicing cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When the user opens View details for the submitted marine licence
     Then the marine plan policies card is displayed beneath the site and activity cards
     And the marine plan policies card lists the policies sorted by code with their wording and my response
     And the marine plan policies card has no Change links
-    And the invoicing details card is displayed beneath the Other permissions card
+    And the fee estimate and invoicing details cards are displayed beneath the Other permissions card
     And the invoicing details card has no Change link
 
-  @issue=ML-1377 @issue=ML-1457
-  Scenario: Public View details shows the marine plan policies and invoicing cards
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
+  Scenario: Public View details shows the marine plan policies card but not the fee estimate and invoicing cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When the user opens the public View details link for the submitted marine licence
     Then the marine plan policies card is displayed beneath the site and activity cards
     And the marine plan policies card has no Change links
-    And the invoicing details card is displayed beneath the Other permissions card
-    And the invoicing details card has no Change link
+    And the fee estimate and invoicing details cards are not displayed
 
   @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
   Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary

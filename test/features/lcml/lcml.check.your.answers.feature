@@ -4,13 +4,13 @@ Feature: LCML: Check your answers marine plan policies
   I want to review and change my marine plan policy considerations on the Check your answers page
   So that I can confirm my answers before sending my information
 
-  @issue=ML-1377 @issue=ML-1457
-  Scenario: Check your answers shows the marine plan policies and invoicing cards
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
+  Scenario: Check your answers shows the marine plan policies, fee estimate and invoicing cards
     Given an organisation user has completed a marine licence ready to review
     When the user opens the check your answers page
     Then the marine plan policies card is displayed beneath the site and activity cards
     And the marine plan policies card has a Change link for each policy
-    And the invoicing details card is displayed beneath the Other permissions card
+    And the fee estimate and invoicing details cards are displayed beneath the Other permissions card
     And the invoicing details card shows the invoicing details entered
     And the invoicing details card has a Change link to the check invoicing details page
 
