@@ -1038,9 +1038,6 @@ export async function completeInvoicingDetails(page) {
     .click()
   await page.locator('button:has-text("Continue")').click()
   await page.waitForLoadState('load')
-  // UK selection lands on postcode search; manual entry reaches the address form.
-  await page.getByRole('link', { name: 'Enter the address manually' }).click()
-  await page.waitForLoadState('load')
 
   await page.locator('#addressLine1').fill(INVOICING_FIXTURE.addressLine1)
   await page.locator('#addressTown').fill(INVOICING_FIXTURE.town)
