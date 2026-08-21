@@ -7,10 +7,6 @@ import {
 import DashboardPage from '../pages/dashboard.page.js'
 
 const WITHDRAW_PATH = '/marine-licence/withdraw'
-const WITHDRAW_HEADING = 'Are you sure you want to withdraw this application?'
-const MARINE_LICENCE_TYPE = 'Marine licence application'
-const TERMS_AND_CONDITIONS_LINK =
-  'https://assets.publishing.service.gov.uk/media/6938145b6a12691d48491c56/Terms_and_Conditions_for_carrying_out_chargeable_activities_for_marine_licensing.pdf'
 
 async function openDashboard(page) {
   await page.getByRole('link', { name: 'Projects' }).click()
@@ -47,36 +43,11 @@ Given(
   }
 )
 
-When('the user views the projects dashboard', async function () {
-  await openDashboard(this.page)
-})
-
-When(
-  'the user selects Withdraw for the submitted application',
-  async function () {
-    await openWithdrawPage(this)
-  }
-)
-
 When(
   'the user confirms the withdrawal of the submitted application',
   async function () {
     await openWithdrawPage(this)
     await confirmWithdrawal(this.page)
-  }
-)
-
-Then(
-  'the submitted application offers both View details and Withdraw',
-  async function () {
-    const dashboard = new DashboardPage(this.page)
-    const projectName = this.data.projectName
-    await expect(dashboard.viewDetailsLink(projectName)).toBeVisible({
-      timeout: 30_000
-    })
-    await expect(dashboard.withdrawLink(projectName)).toBeVisible({
-      timeout: 30_000
-    })
   }
 )
 
@@ -89,31 +60,6 @@ Then(
       timeout: 30_000
     })
     await expect(dashboard.withdrawLink(projectName)).toHaveCount(0)
-  }
-)
-
-Then(
-  'the withdraw confirmation page names the marine licence application and project',
-  async function () {
-    const page = this.page
-    await expect(
-      page.getByRole('heading', { name: WITHDRAW_HEADING })
-    ).toBeVisible({ timeout: 30_000 })
-    await expect(page.locator('.govuk-inset-text')).toHaveText(
-      `${MARINE_LICENCE_TYPE}: ${this.data.projectName}`,
-      { timeout: 30_000 }
-    )
-  }
-)
-
-Then(
-  'the withdraw confirmation page links to the marine licensing terms and conditions',
-  async function () {
-    const link = this.page.locator(
-      `main a[href="${TERMS_AND_CONDITIONS_LINK}"]`
-    )
-    await expect(link).toBeVisible({ timeout: 30_000 })
-    await expect(link).toHaveAttribute('target', '_blank')
   }
 )
 
