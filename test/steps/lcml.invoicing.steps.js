@@ -66,9 +66,7 @@ async function openInvoicingFromTaskList(page) {
 }
 
 async function enterUkAddressManually(page) {
-  await page
-    .getByRole('link', { name: 'Enter the address manually' })
-    .click()
+  await page.getByRole('link', { name: 'Enter the address manually' }).click()
   await page.waitForLoadState('load')
 }
 
