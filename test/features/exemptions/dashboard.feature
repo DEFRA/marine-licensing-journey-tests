@@ -4,10 +4,21 @@ Feature: View dashboard: View a list of all applications to keep track of and ma
   I want to see a list of all my applications
   So that I can keep track of my applications and manage them
 
+  @issue=ML-1493
   Scenario: After submitting a notification, view it via the dashboard
     Given a user has submitted an exemption notification
     When the user clicks view details for the submitted notification on the dashboard
     Then the user is able to view the notification in a summary format
+    And the view details caption shows the reference and not the exemption type
+    And the application details card shows the exemption type, "Active" status, reference and date submitted
+    And the application details card has no date withdrawn row
+
+  @issue=ML-1493
+  Scenario: A withdrawn notification records the withdrawal in the application details card
+    Given a user has withdrawn a submitted exemption notification
+    When the user clicks view details for the submitted notification on the dashboard
+    Then the application details card shows the exemption type, "Withdrawn" status, reference and date submitted
+    And the application details card shows the date withdrawn
 
   Scenario: View empty dashboard when no notifications exist
     Given the user has not submitted any notifications
