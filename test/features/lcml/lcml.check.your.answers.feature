@@ -46,3 +46,32 @@ Feature: LCML: Check your answers marine plan policies
     When the user selects Change on the invoicing details card
     And the user selects Continue on the check invoicing details page
     Then the user is returned to the check your answers page
+
+  @issue=ML-1491
+  Scenario: The fee estimate and invoicing details cards link to their change pages
+    Given an organisation user has completed a marine licence ready to review
+    When the user opens the check your answers page
+    Then the fee estimate card has a Change link to the fee estimate page
+    And the invoicing details card lists the invoicing rows in the check invoicing details format
+
+  @issue=ML-1491
+  Scenario Outline: Answering the changed fee estimate routes the user by the answer given
+    Given an organisation user is on the check your answers page with completed marine plan policies
+    When the user selects Change on the fee estimate card
+    And the user agrees to the terms and answers "<answer>" to the fee estimate
+    Then the fee estimate change lands on the "<destination>" page
+    And selecting Finish leads to the "<after finish>" page
+
+    Examples:
+      | answer | destination                    | after finish       |
+      | Yes    | check your answers             |                    |
+      | No     | confirm fee estimate rejection | projects dashboard |
+
+  @issue=ML-1491
+  Scenario: Editing an invoicing detail from check your answers updates the invoicing details card
+    Given an organisation user is on the check your answers page with completed marine plan policies
+    When the user selects Change on the invoicing details card
+    And the user changes the invoice contact full name
+    And the user selects Continue on the check invoicing details page
+    Then the user is returned to the check your answers page
+    And the invoicing details card shows the updated full name
