@@ -26,6 +26,12 @@ Feature: LCML: View details page shows sites and activities
     And the fee estimate and invoicing details cards are displayed beneath the Other permissions card
     And the invoicing details card has no Change link
 
+  @issue=ML-1491
+  Scenario: View details does not offer a Change link on the fee estimate card
+    Given an organisation user has submitted a marine licence application with marine plan policies
+    When the user opens View details for the submitted marine licence
+    Then the fee estimate card has no Change link
+
   @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
   Scenario: Public View details shows the marine plan policies card but not the fee estimate and invoicing cards
     Given an organisation user has submitted a marine licence application with marine plan policies
