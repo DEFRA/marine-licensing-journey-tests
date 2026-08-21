@@ -151,14 +151,6 @@ Given(
 )
 
 When(
-  'the user continues without selecting a construction drawing',
-  async function () {
-    await this.page.locator('button:has-text("Save and continue")').click()
-    await this.page.waitForLoadState('load')
-  }
-)
-
-When(
   'the user uploads the {string} construction drawing',
   async function (file) {
     const page = this.page
