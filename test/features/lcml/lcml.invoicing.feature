@@ -17,7 +17,7 @@ Feature: LCML: Invoicing details
     Then the UK or international invoice address page is shown with neither option selected
 
   @issue=ML-1394
-  Scenario: The UK invoice address page is displayed after choosing UK
+  Scenario: The UK invoice address page is displayed after choosing UK and entering the address manually
     Given an organisation user has opened the invoicing details task
     When the user selects "UK" as the invoice address type and continues
     Then the UK invoice address page shows the address fields with the project name caption
