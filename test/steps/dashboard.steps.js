@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { Given, When, Then } from '@cucumber/cucumber'
 import {
   createCYACircleWGS84Data,
@@ -9,6 +10,7 @@ import {
 } from '../test-data/exemption.js'
 import { createCircleWGS84Data } from '../test-data/site-details.js'
 import { submitNotification } from '../support/task-flow.js'
+import { getConfig } from '../support/config.js'
 import {
   navigateAndAuthenticate,
   signOut,
@@ -17,13 +19,46 @@ import {
 import ProjectNamePage from '../pages/project.name.page.js'
 import TaskListPage from '../pages/task.list.page.js'
 import DashboardPage from '../pages/dashboard.page.js'
-import ViewDetailsPage from '../pages/view.details.page.js'
+import ViewDetailsPage, { EXEMPTION_TYPE } from '../pages/view.details.page.js'
 import DeleteProjectPage from '../pages/delete.project.page.js'
+
+function latestExemption(world) {
+  const submitted = world.data.completedExemptions
+  return submitted[submitted.length - 1]
+}
 
 Given('a user has submitted an exemption notification', async function () {
   this.data = createCYACircleWGS84Data()
   await submitNotification(this)
 })
+
+Given(
+  'a user has withdrawn a submitted exemption notification',
+  { timeout: 180_000 },
+  async function () {
+    this.data = createCYACircleWGS84Data()
+    await submitNotification(this)
+
+    const page = this.page
+    const dashboard = new DashboardPage(page)
+    await dashboard.clickProjectsLink()
+    await dashboard.expectIsDisplayed()
+
+    await dashboard.withdrawLink(latestExemption(this).projectName).click()
+    await page.waitForLoadState('load')
+    await page
+      .locator(
+        'xpath=//button[normalize-space(text())="Yes, withdraw project"]'
+      )
+      .click()
+    await page.waitForLoadState('load')
+
+    // Withdrawing lands on the dashboard, where the "Projects" nav link the
+    // shared When step clicks is not rendered; go home so it can navigate.
+    await page.goto(new URL('/home', getConfig().baseURL).toString())
+    await page.waitForLoadState('load')
+  }
+)
 
 Given('the user has not submitted any notifications', async function () {
   this.data = {
@@ -182,3 +217,60 @@ Then('the notification is removed from the dashboard', async function () {
   const dashboard = new DashboardPage(this.page)
   await dashboard.expectEmptyState()
 })
+
+Then(
+  'the view details caption shows the reference and not the exemption type',
+  async function () {
+    const viewDetails = new ViewDetailsPage(this.page)
+    await expect(viewDetails.caption).toHaveText(
+      latestExemption(this).applicationReference,
+      { timeout: 30_000 }
+    )
+    // ML-1493 moved the exemption type into the Application details card.
+    await expect(viewDetails.caption).not.toContainText(EXEMPTION_TYPE)
+  }
+)
+
+Then(
+  'the application details card shows the exemption type, {string} status, reference and date submitted',
+  async function (status) {
+    const viewDetails = new ViewDetailsPage(this.page)
+    await expect(viewDetails.applicationDetailsCard).toBeVisible({
+      timeout: 30_000
+    })
+    await expect(viewDetails.cardRowValue('Application type')).toHaveText(
+      EXEMPTION_TYPE,
+      { timeout: 30_000 }
+    )
+    await expect(viewDetails.cardRowValue('Status')).toContainText(status, {
+      timeout: 30_000
+    })
+    await expect(viewDetails.cardRowValue('Reference number')).toHaveText(
+      latestExemption(this).applicationReference,
+      { timeout: 30_000 }
+    )
+    await expect(viewDetails.cardRowValue('Date submitted')).toHaveText(
+      /\d{1,2} \w+ \d{4}/,
+      { timeout: 30_000 }
+    )
+  }
+)
+
+Then(
+  'the application details card has no date withdrawn row',
+  async function () {
+    const viewDetails = new ViewDetailsPage(this.page)
+    await expect(viewDetails.cardRowValue('Date withdrawn')).toHaveCount(0)
+  }
+)
+
+Then(
+  'the application details card shows the date withdrawn',
+  async function () {
+    const viewDetails = new ViewDetailsPage(this.page)
+    await expect(viewDetails.cardRowValue('Date withdrawn')).toHaveText(
+      /\d{1,2} \w+ \d{4}/,
+      { timeout: 30_000 }
+    )
+  }
+)
