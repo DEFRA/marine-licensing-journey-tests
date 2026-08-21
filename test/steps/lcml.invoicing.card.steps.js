@@ -6,8 +6,10 @@ import {
 } from '../support/lcml-helpers.js'
 
 const INVOICING_CARD = '#invoicing-card'
+const FEE_ESTIMATE_CARD = '#fee-estimate-card'
 const OTHER_PERMISSIONS_TITLE = 'Other permissions'
 const INVOICING_TITLE = 'Invoicing details'
+const FEE_ESTIMATE_TITLE = 'Fee estimate'
 const CHECK_PATH = '/marine-licence/check-invoicing-details'
 // The card on Check your answers / View details reflects the same information
 // the user entered, so assert against the shared invoicing fixture.
@@ -28,20 +30,29 @@ function cardActionLink(page) {
 }
 
 Then(
-  'the invoicing details card is displayed beneath the Other permissions card',
+  'the fee estimate and invoicing details cards are displayed beneath the Other permissions card',
   async function () {
+    await expect(this.page.locator(FEE_ESTIMATE_CARD)).toBeVisible({
+      timeout: 30_000
+    })
     await expect(this.page.locator(INVOICING_CARD)).toBeVisible({
       timeout: 30_000
     })
-    await expect(
-      this.page.locator(`${INVOICING_CARD} .govuk-summary-card__title`)
-    ).toHaveText(INVOICING_TITLE, { timeout: 30_000 })
 
+    // Fee estimate sits directly after Other permissions, invoicing directly after that.
     const titles = await cardTitlesInOrder(this.page)
     const otherPermissionsIndex = titles.indexOf(OTHER_PERMISSIONS_TITLE)
-    const invoicingIndex = titles.indexOf(INVOICING_TITLE)
     expect(otherPermissionsIndex).toBeGreaterThanOrEqual(0)
-    expect(invoicingIndex).toBe(otherPermissionsIndex + 1)
+    expect(titles[otherPermissionsIndex + 1]).toBe(FEE_ESTIMATE_TITLE)
+    expect(titles[otherPermissionsIndex + 2]).toBe(INVOICING_TITLE)
+  }
+)
+
+Then(
+  'the fee estimate and invoicing details cards are not displayed',
+  async function () {
+    await expect(this.page.locator(FEE_ESTIMATE_CARD)).toHaveCount(0)
+    await expect(this.page.locator(INVOICING_CARD)).toHaveCount(0)
   }
 )
 
