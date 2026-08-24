@@ -118,7 +118,7 @@ Then(
       .click()
     await page.waitForLoadState('load')
 
-    const card = page.locator('#application-details-card')
+    const card = page.locator('#application-overview-card')
     await expect(card).toBeVisible({ timeout: 30_000 })
     await expect(
       card.locator('.govuk-summary-list__row:has(dt:text-is("Status"))')
@@ -161,7 +161,7 @@ Then(
       .click()
     await page.waitForLoadState('load')
 
-    const card = page.locator('#application-details-card')
+    const card = page.locator('#application-overview-card')
     await expect(card).toBeVisible({ timeout: 30_000 })
     await expect(
       card.locator('.govuk-summary-list__row:has(dt:text-is("Status"))')
