@@ -65,10 +65,20 @@ async function openInvoicingFromTaskList(page) {
   await page.waitForLoadState('load')
 }
 
+async function enterUkAddressManually(page) {
+  await page.getByRole('link', { name: 'Enter the address manually' }).click()
+  await page.waitForLoadState('load')
+}
+
+// Selecting UK now lands on the postcode search page; journey tests that need
+// the manual UK address form must follow the "Enter the address manually" link.
 async function chooseInvoiceType(page, option) {
   await page.getByRole('radio', { name: option, exact: true }).click()
   await page.locator('button:has-text("Continue")').click()
   await page.waitForLoadState('load')
+  if (option === 'UK') {
+    await enterUkAddressManually(page)
+  }
 }
 
 async function submitValidUkAddress(page) {
