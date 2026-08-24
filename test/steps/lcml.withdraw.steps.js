@@ -66,7 +66,7 @@ Then(
 Then(
   'the application details card shows the Withdrawn status and the date withdrawn',
   async function () {
-    const card = this.page.locator('#application-details-card')
+    const card = this.page.locator('#application-overview-card')
     await expect(card).toBeVisible({ timeout: 30_000 })
 
     const rowValue = (key) =>
