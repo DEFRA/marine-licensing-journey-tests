@@ -1,7 +1,7 @@
 ################################################################################
 # Docker Compose file for local development
 # Uses local builds from ../marine-licensing-frontend, ../marine-licensing-backend,
-# and ../marine-licensing-api-stub
+# ../marine-licensing-api-stub, and ../marine-licensing-public-register
 #
 # For pipeline use, see compose.common.yml (uses pre-built Docker images)
 ################################################################################
@@ -206,12 +206,50 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
     ports:
       - 3001:3001
     networks:
       - cdp-tenant
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3001/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
+  marine-licensing-public-register:
+    build:
+      context: ../marine-licensing-public-register
+      target: development
+    restart: unless-stopped
+    env_file:
+      - 'compose/aws.env'
+      - './docker/config/defaults.env'
+    environment:
+      PORT: 3003
+      NODE_ENV: development
+      MONGO_URI: mongodb://mongodb:27017/
+      MONGO_DATABASE: marine-licensing-public-register
+      SQS_ENDPOINT: http://localstack:4566
+      PUBLIC_REGISTER_SQS_ENABLED: 'true'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    ports:
+      - 3003:3003
+    networks:
+      - cdp-tenant
+    volumes:
+      - ../marine-licensing-public-register/src:/home/node/src
+      - ../marine-licensing-public-register/package.json:/home/node/package.json
+      # node --watch crashes if --env-file-if-exists=.env points at a missing file
+      - ../marine-licensing-public-register/.env:/home/node/.env
+    healthcheck:
+      # development image has wget, not curl
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:3003/health']
       interval: 10s
       start_period: 30s
       retries: 5

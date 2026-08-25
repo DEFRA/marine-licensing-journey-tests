@@ -50,6 +50,16 @@ aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_li
 aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_mas-deadletter
 aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_mas --attributes "{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:eu-west-2:000000000000:marine_licensing_mas-deadletter\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}"
 
+# Public register: publisher-owned SNS topic (backend) + consumer-owned SQS
+# (marine-licensing-public-register), with DLQ maxReceiveCount 3.
+aws --endpoint-url=http://localhost:4566 sns create-topic --name marine_licensing_public_register
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_public_register-deadletter
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name marine_licensing_public_register --attributes "{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"arn:aws:sqs:eu-west-2:000000000000:marine_licensing_public_register-deadletter\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}"
+aws --endpoint-url=http://localhost:4566 sns subscribe \
+  --topic-arn arn:aws:sns:eu-west-2:000000000000:marine_licensing_public_register \
+  --protocol sqs \
+  --notification-endpoint arn:aws:sqs:eu-west-2:000000000000:marine_licensing_public_register
+
 # DEFRA ID stub registrations (DynamoDB)
 table_name="${AWS_DYNAMODB_REGISTRATIONS_TABLE_NAME:-cdp-defra-id-stub-registrations}"
 

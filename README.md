@@ -32,15 +32,16 @@ HEADLESS=false npm run test
 
 Tests run against Docker containers defined in `compose.yml`. All services communicate over the `cdp-tenant` bridge network.
 
-| Service                     | Image                                    | Port  | Purpose                 |
-| --------------------------- | ---------------------------------------- | ----- | ----------------------- |
-| `marine-licensing-frontend` | `defradigital/marine-licensing-frontend` | 3000  | Frontend under test     |
-| `marine-licensing-backend`  | `defradigital/marine-licensing-backend`  | 3001  | Backend API             |
-| `defra-id-stub`             | `defradigital/cdp-defra-id-stub`         | 3200  | OIDC authentication     |
-| `cdp-uploader`              | `defradigital/cdp-uploader`              | 7337  | File upload service     |
-| `mongodb`                   | `mongo:7.0.24`                           | 27017 | Database                |
-| `redis` / `redis-frontend`  | `redis:7`                                | 6379  | Session cache           |
-| `localstack`                | `localstack/localstack:3.0.2`            | 4566  | S3, SQS, SNS (AWS mock) |
+| Service                               | Image                                              | Port  | Purpose                          |
+| ------------------------------------- | -------------------------------------------------- | ----- | -------------------------------- |
+| `marine-licensing-frontend`           | `defradigital/marine-licensing-frontend`           | 3000  | Frontend under test              |
+| `marine-licensing-backend`            | `defradigital/marine-licensing-backend`            | 3001  | Backend API                      |
+| `marine-licensing-public-register`    | `defradigital/marine-licensing-public-register`    | 3003  | Public register SQS consumer     |
+| `defra-id-stub`                       | `defradigital/cdp-defra-id-stub`                   | 3200  | OIDC authentication              |
+| `cdp-uploader`                        | `defradigital/cdp-uploader`                        | 7337  | File upload service              |
+| `mongodb`                             | `mongo:7.0.24`                                     | 27017 | Database                         |
+| `redis` / `redis-frontend`            | `redis:7`                                          | 6379  | Session cache                    |
+| `localstack`                          | `localstack/localstack:3.0.2`                      | 4566  | S3, SQS, SNS (AWS mock)          |
 
 ### Starting services
 
