@@ -743,9 +743,8 @@ export async function readWfdTabAnswers(page) {
       nauticalMile:
         doc?.getElementById('mmo-wfd-nautical-mile')?.innerText?.trim() ?? null,
       excludedActivities:
-        doc
-          ?.getElementById('mmo-wfd-excluded-activities')
-          ?.innerText?.trim() ?? null,
+        doc?.getElementById('mmo-wfd-excluded-activities')?.innerText?.trim() ??
+        null,
       downloadFile:
         download?.getAttribute('data-filename')?.trim() ||
         download?.innerText?.trim() ||
