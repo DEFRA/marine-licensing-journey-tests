@@ -682,7 +682,7 @@ export async function readOtherPermissionAnswersByNav(page) {
   return answers
 }
 
-export const WFD_TAB_WEBRESOURCE_ID = 'WebResource_mmo_wfdhelptext'
+export const WFD_TAB_WEBRESOURCE_ID = 'WebResource_waterframeworkdirective'
 
 export async function openWfdTab(page) {
   const tab = caseTab(page, 'Water Framework Directive')
@@ -702,70 +702,56 @@ export async function readWfdTabMeta(page) {
       return { crossOrigin: true }
     }
     if (!doc) return null
-    const blockIds = [
-      'mmo-wfd-one-answer',
-      'mmo-wfd-two-answer',
-      'mmo-wfd-three-answer',
-      'mmo-wfd-unknown'
-    ]
-    const visibleBlock =
-      blockIds.find((id) =>
-        doc.getElementById(id)?.classList.contains('mmo-visible')
-      ) ?? null
+
+    const fields = doc.getElementById('mmo-wfd-fields')
+    if (!fields) return null
+
+    const hintList = doc.getElementById('mmo-wfd-hint-list')
     return {
-      visibleBlock,
-      text: visibleBlock
-        ? doc.getElementById(visibleBlock)?.innerText?.trim()
-        : null
+      fieldsLoaded: true,
+      text: hintList?.innerText?.trim() ?? fields.innerText?.trim() ?? null,
+      hasAssessmentUpload: Boolean(doc.getElementById('mmo-doc-download'))
     }
   }, WFD_TAB_WEBRESOURCE_ID)
 }
 
-export const WFD_DOCUMENT_LINK_WEBRESOURCE_ID =
-  'WebResource_mmo_wfddocumentlink'
-
-const WFD_NAUTICAL_MILE_QUESTION =
-  'Is your project within one nautical mile (1.85km) of the low-water line, or in a tidal river or estuary?'
-const WFD_EXCLUDED_ACTIVITIES_QUESTION =
-  'Is your project limited to one of the following excluded activities?'
-
 export async function readWfdTabAnswers(page) {
-  return page.evaluate(
-    ({ docFrameId, q1Label, q2Label }) => {
-      const value = (label) =>
-        document.querySelector(`input[aria-label="${label}"]`)?.value?.trim() ??
-        null
-
-      let downloadFile = null
-      let downloadEnabled = null
-      const frame = document.getElementById(docFrameId)
-      if (frame) {
-        let doc
-        try {
-          doc = frame.contentDocument || frame.contentWindow.document
-        } catch {
-          doc = null
-        }
-        const button = doc?.querySelector('#mmo-wfd-doc-link')
-        if (button) {
-          downloadFile = button.innerText?.trim() ?? null
-          downloadEnabled = !button.disabled
-        }
-      }
-
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) {
       return {
-        nauticalMile: value(q1Label),
-        excludedActivities: value(q2Label),
-        downloadFile,
-        downloadEnabled
+        nauticalMile: null,
+        excludedActivities: null,
+        downloadFile: null,
+        downloadEnabled: null
       }
-    },
-    {
-      docFrameId: WFD_DOCUMENT_LINK_WEBRESOURCE_ID,
-      q1Label: WFD_NAUTICAL_MILE_QUESTION,
-      q2Label: WFD_EXCLUDED_ACTIVITIES_QUESTION
     }
-  )
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return {
+        nauticalMile: null,
+        excludedActivities: null,
+        downloadFile: null,
+        downloadEnabled: null
+      }
+    }
+
+    const download = doc?.getElementById('mmo-doc-download')
+    return {
+      nauticalMile:
+        doc?.getElementById('mmo-wfd-nautical-mile')?.innerText?.trim() ?? null,
+      excludedActivities:
+        doc?.getElementById('mmo-wfd-excluded-activities')?.innerText?.trim() ??
+        null,
+      downloadFile:
+        download?.getAttribute('data-filename')?.trim() ||
+        download?.innerText?.trim() ||
+        null,
+      downloadEnabled: download ? !download.disabled : null
+    }
+  }, WFD_TAB_WEBRESOURCE_ID)
 }
 
 export const SITES_ACTIVITIES_WEBRESOURCE_ID = 'WebResource_sitesandactivities'
