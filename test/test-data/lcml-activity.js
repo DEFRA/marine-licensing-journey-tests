@@ -27,14 +27,16 @@ export const ACTIVITY_TYPES = {
         label: 'Construction of new works',
         urlSlug: 'what-are-you-constructing',
         pageTitle: 'What are you constructing?',
-        reviewRowTitle: "What you're constructing"
+        reviewRowTitle: "What you're constructing",
+        externalReviewRowTitle: 'What is being constructed'
       },
       {
         radioId: 'activitySubTypeConstruction-2',
         label: 'Maintenance of existing works',
         urlSlug: 'what-are-you-maintaining',
         pageTitle: 'What are you maintaining?',
-        reviewRowTitle: "What you're maintaining"
+        reviewRowTitle: "What you're maintaining",
+        externalReviewRowTitle: 'What is being maintained'
       },
       {
         radioId: 'activitySubTypeConstruction-3',
@@ -42,7 +44,8 @@ export const ACTIVITY_TYPES = {
           'Alteration or improvement, including extending, of existing marine works',
         urlSlug: 'what-are-you-altering-or-improving',
         pageTitle: 'What are you altering or improving?',
-        reviewRowTitle: "What you're altering or improving"
+        reviewRowTitle: "What you're altering or improving",
+        externalReviewRowTitle: 'What is being altered or improved'
       }
     ],
     otherCheckboxId: 'activities-34',
@@ -64,14 +67,16 @@ export const ACTIVITY_TYPES = {
         label: 'Continuation of existing deposit activity',
         urlSlug: 'what-deposit-activity-are-you-continuing',
         pageTitle: 'What deposit activity are you continuing?',
-        reviewRowTitle: "What deposit activity you're continuing"
+        reviewRowTitle: "What deposit activity you're continuing",
+        externalReviewRowTitle: 'What deposit activity is being continued'
       },
       {
         radioId: 'activitySubTypeDeposit-2',
         label: 'Deposit of something new',
         urlSlug: 'what-new-deposit-activity-are-you-doing',
         pageTitle: 'What new deposit activity are you doing?',
-        reviewRowTitle: "What new deposit activity you're doing"
+        reviewRowTitle: "What new deposit activity you're doing",
+        externalReviewRowTitle: 'What new deposit activity is being done'
       },
       {
         radioId: 'activitySubTypeDeposit-3',
@@ -80,7 +85,9 @@ export const ACTIVITY_TYPES = {
         pageTitle:
           'What deposit activity are you doing that replaces an existing object?',
         reviewRowTitle:
-          "What deposit activity you're doing that replaces an existing object"
+          "What deposit activity you're doing that replaces an existing object",
+        externalReviewRowTitle:
+          'What deposit activity is being done that replace an existing object'
       }
     ],
     otherCheckboxId: 'activities-27',
@@ -103,28 +110,33 @@ export const ACTIVITY_TYPES = {
         pageTitle:
           'What are you removing for the first time on a one off basis?',
         reviewRowTitle:
-          "What you're removing for the first time on a one off basis"
+          "What you're removing for the first time on a one off basis",
+        externalReviewRowTitle: 'What is being removed for the first time'
       },
       {
         radioId: 'activitySubTypeRemoval-2',
         label: 'Removal as part of an ongoing or routine activity',
         urlSlug: 'what-are-you-removing-on-an-ongoing-basis',
         pageTitle: 'What are you removing on an ongoing basis?',
-        reviewRowTitle: "What you're removing on an ongoing basis"
+        reviewRowTitle: "What you're removing on an ongoing basis",
+        externalReviewRowTitle: 'What is being removed on an ongoing basis'
       },
       {
         radioId: 'activitySubTypeRemoval-3',
         label: 'Removal for replacement',
         urlSlug: 'what-are-you-removing-for-replacement',
         pageTitle: 'What are you removing as part of replacement activity?',
-        reviewRowTitle: "What you're removing as part of replacement activity"
+        reviewRowTitle: "What you're removing as part of replacement activity",
+        externalReviewRowTitle:
+          'What is being removed as part of replacement activity'
       },
       {
         radioId: 'activitySubTypeRemoval-4',
         label: 'Removal for relocation',
         urlSlug: 'what-are-you-removing-for-relocation',
         pageTitle: 'What are you removing for relocation?',
-        reviewRowTitle: "What you're removing for relocation"
+        reviewRowTitle: "What you're removing for relocation",
+        externalReviewRowTitle: 'What is being removed for relocation'
       }
     ],
     otherCheckboxId: 'activities-43',
