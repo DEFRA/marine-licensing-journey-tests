@@ -30,10 +30,10 @@ async function readRecordField(page, columnName) {
         await page.locator(APPLICANT_ORG_SELECTOR).first().innerText()
       ).trim()
     case 'D365 Status': {
+      // Header status lives in an open shadow root under
+      // uci-header-control-list-item; CSS pierces it, XPath does not.
       const value = page
-        .locator(
-          'xpath=//div[@data-id="form-header"]//div[normalize-space(text())="Status"]/preceding-sibling::div[1]'
-        )
+        .locator('[data-name="header_statuscode"] .value-text')
         .first()
       await value.waitFor({ state: 'visible', timeout: 30_000 })
       return (await value.innerText()).trim()

@@ -571,7 +571,7 @@ Then(
     const downloadPromise = page.waitForEvent('download', { timeout: 60_000 })
     await csvLink.click({ timeout: 60_000 })
     const download = await downloadPromise
-    expect(download.suggestedFilename()).toMatch(/\.csv$/i)
+    expect(download.suggestedFilename()).toMatch(/\.zip$/i)
   }
 )
 
