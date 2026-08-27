@@ -571,7 +571,7 @@ Then(
     const downloadPromise = page.waitForEvent('download', { timeout: 60_000 })
     await csvLink.click({ timeout: 60_000 })
     const download = await downloadPromise
-    expect(download.suggestedFilename()).toMatch(/\.csv$/i)
+    expect(download.suggestedFilename()).toMatch(/\.zip$/i)
   }
 )
 
@@ -831,14 +831,14 @@ Then(
     await openWfdTab(page)
 
     await expect
-      .poll(async () => (await readWfdTabMeta(page))?.visibleBlock, {
+      .poll(async () => (await readWfdTabMeta(page))?.fieldsLoaded, {
         timeout: 60_000,
-        message: 'WFD tab help text loads the application answers from CDP'
+        message: 'WFD tab loads the application answers from CDP'
       })
-      .toBe('mmo-wfd-three-answer')
-    expect((await readWfdTabMeta(page)).text).toContain(
-      'replacing or removing existing pipes'
-    )
+      .toBe(true)
+    const meta = await readWfdTabMeta(page)
+    expect(meta.text).toContain('replacing or removing existing pipes')
+    expect(meta.hasAssessmentUpload).toBe(true)
 
     await expect
       .poll(async () => (await readWfdTabAnswers(page)).nauticalMile, {

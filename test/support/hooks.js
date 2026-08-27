@@ -51,16 +51,28 @@ Before(async function (scenario) {
   this.page.setDefaultTimeout(30_000)
 })
 
+async function attachPageScreenshot(world, page, label) {
+  if (!page || page.isClosed()) return
+  try {
+    const screenshot = await page.screenshot({ fullPage: true })
+    world.attach(screenshot, 'image/png')
+    world.attach(`${label} URL: ${page.url()}`, 'text/plain')
+  } catch {
+    // Page may have closed mid-capture
+  }
+}
+
 // Capture screenshot on step failure — attaches to the test case body in Allure.
 // Attachments in the After hook go to the fixture/tear-down scope instead, which
 // is collapsed by default and effectively invisible in the Allure report.
 AfterStep(async function ({ result }) {
-  if (result.status === Status.FAILED && this.page && !this.page.isClosed()) {
-    this.attach(failingStepWindowText(result.duration), 'text/plain')
-    const screenshot = await this.page.screenshot({ fullPage: true })
-    this.attach(screenshot, 'image/png')
-    this.attach(`Failure URL: ${this.page.url()}`, 'text/plain')
-  }
+  if (result.status !== Status.FAILED) return
+
+  this.attach(failingStepWindowText(result.duration), 'text/plain')
+  await attachPageScreenshot(this, this.page, 'Failure')
+  // D365 runs in a separate browser; capture it too so tab/web-resource
+  // failures are visible in Allure (app-page screenshot alone is misleading).
+  await attachPageScreenshot(this, this.d365Page, 'D365 failure')
 })
 
 After(async function (scenario) {
@@ -80,18 +92,13 @@ After(async function (scenario) {
     }
   }
 
-  if (
-    scenario.result?.status === Status.FAILED &&
-    this.page &&
-    !this.page.isClosed()
-  ) {
+  if (scenario.result?.status === Status.FAILED) {
     this.attach(
       `Failure captured at: ${new Date().toISOString()} (UTC)`,
       'text/plain'
     )
-    const screenshot = await this.page.screenshot({ fullPage: true })
-    this.attach(screenshot, 'image/png')
-    this.attach(`Failure URL: ${this.page.url()}`, 'text/plain')
+    await attachPageScreenshot(this, this.page, 'Failure')
+    await attachPageScreenshot(this, this.d365Page, 'D365 failure')
 
     if (Object.keys(this.data).length > 0) {
       this.attach(JSON.stringify(this.data, null, 2), 'application/json')
