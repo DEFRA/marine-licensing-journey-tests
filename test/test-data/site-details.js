@@ -22,19 +22,32 @@ export function generateActivityDates() {
 // Activity dates spanning today, for scenarios that need the exemption to
 // show as currently live rather than not-yet-started. Start date is today
 // (the earliest date the activity dates form accepts for most article
-// codes), end date is comfortably within the future-dates limit.
+// codes); end date is 6 months after the start date, comfortably inside
+// the form's one-year-apart limit regardless of what today is. The end
+// day is capped at 28 so adding months can never overflow into the wrong
+// month (every month has at least 28 days).
 export function generateLiveActivityDates() {
   const today = new Date()
-  const endYear = today.getFullYear() + 1
+  const startDay = today.getDate()
+  const startMonth = today.getMonth() + 1
+  const startYear = today.getFullYear()
+
+  let endMonth = startMonth + 6
+  let endYear = startYear
+  if (endMonth > 12) {
+    endMonth -= 12
+    endYear += 1
+  }
+
   return {
     startDate: {
-      day: String(today.getDate()).padStart(2, '0'),
-      month: String(today.getMonth() + 1).padStart(2, '0'),
-      year: String(today.getFullYear())
+      day: String(startDay).padStart(2, '0'),
+      month: String(startMonth).padStart(2, '0'),
+      year: String(startYear)
     },
     endDate: {
-      day: '28',
-      month: '12',
+      day: String(Math.min(startDay, 28)).padStart(2, '0'),
+      month: String(endMonth).padStart(2, '0'),
       year: String(endYear)
     }
   }
