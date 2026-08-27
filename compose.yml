@@ -249,7 +249,8 @@ services:
       - ../marine-licensing-public-register/.env:/home/node/.env
     healthcheck:
       # development image has wget, not curl
-      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:3003/health']
+      test:
+        ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:3003/health']
       interval: 10s
       start_period: 30s
       retries: 5
