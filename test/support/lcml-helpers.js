@@ -1117,7 +1117,7 @@ export async function openViewDetailsFromDashboard(world) {
   await page.waitForLoadState('load')
 }
 
-export async function openPublicViewDetailsFromDashboard(world) {
+export async function readMarineLicenceIdFromProjects(world) {
   const page = world.page
   await page.getByRole('link', { name: 'Projects' }).click()
   await page.waitForLoadState('load')
@@ -1127,11 +1127,28 @@ export async function openPublicViewDetailsFromDashboard(world) {
     )
     .getAttribute('href')
   const marineLicenceId = href.split('/').pop()
-  await page.goto(
-    new URL(
-      `/marine-licence/view-public-details/${marineLicenceId}`,
-      getConfig().baseURL
-    ).toString()
-  )
-  await page.waitForLoadState('load')
+  world.data.marineLicenceId = marineLicenceId
+  return marineLicenceId
+}
+
+export function publicViewDetailsUrl(marineLicenceId) {
+  return new URL(
+    `/marine-licence/view-public-details/${marineLicenceId}`,
+    getConfig().baseURL
+  ).toString()
+}
+
+export async function openPublicViewDetailsFromDashboard(world) {
+  const marineLicenceId = await readMarineLicenceIdFromProjects(world)
+  await world.page.goto(publicViewDetailsUrl(marineLicenceId))
+  await world.page.waitForLoadState('load')
+}
+
+// Opens the public View details URL after clearing session cookies so the page
+// is loaded as an external / unauthenticated user (Dynamics link recipient).
+export async function openPublicViewDetailsAsExternalUser(world) {
+  const marineLicenceId = await readMarineLicenceIdFromProjects(world)
+  await world.browserContext.clearCookies()
+  await world.page.goto(publicViewDetailsUrl(marineLicenceId))
+  await world.page.waitForLoadState('load')
 }

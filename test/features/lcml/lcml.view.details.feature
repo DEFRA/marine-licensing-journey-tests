@@ -32,13 +32,14 @@ Feature: LCML: View details page shows sites and activities
     When the user opens View details for the submitted marine licence
     Then the fee estimate card has no Change link
 
-  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
-  Scenario: Public View details shows the marine plan policies card but not the fee estimate and invoicing cards
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1432
+  Scenario: Public View details shows applicant-framed content and hides sensitive cards
     Given an organisation user has submitted a marine licence application with marine plan policies
-    When the user opens the public View details link for the submitted marine licence
-    Then the marine plan policies card is displayed beneath the site and activity cards
-    And the marine plan policies card has no Change links
-    And the fee estimate and invoicing details cards are not displayed
+    When an external user opens the public View details page using the Projects page mongo id
+    Then the public View details page shows the project heading, Application overview and no Project name row
+    And the activity details card uses the external-user sub-activity label
+    And the marine plan policies card shows Applicant's consideration with no Change links
+    And the fee estimate, invoicing details and sharing project information cards are not displayed
 
   @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
   Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary
