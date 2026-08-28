@@ -215,7 +215,6 @@ services:
       - './docker/config/defaults.env'
     environment:
       PORT: 3003
-      NODE_ENV: development
       MONGO_URI: mongodb://mongodb:27017/
       MONGO_DATABASE: marine-licensing-public-register
       SQS_ENDPOINT: http://localstack:4566
