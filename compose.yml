@@ -77,9 +77,12 @@ services:
       DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
       ENABLE_MARINE_LICENCE: true
       ENABLE_SELF_SERVICE: true
+      MARINE_LICENSING_PUBLIC_REGISTER_API_URL: http://marine-licensing-public-register:3003
     command: 'node .'
     depends_on:
       marine-licensing-backend:
+        condition: service_healthy
+      marine-licensing-public-register:
         condition: service_healthy
       redis-frontend:
         condition: service_healthy
