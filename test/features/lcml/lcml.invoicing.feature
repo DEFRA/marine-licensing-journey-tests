@@ -16,7 +16,7 @@ Feature: LCML: Invoicing details
     When the user opens the invoicing details task
     Then the UK or international invoice address page is shown with neither option selected
 
-  @issue=ML-1394
+  @issue=ML-1394 @issue=ML-1413
   Scenario: The UK invoice address page is displayed after choosing UK and entering the address manually
     Given an organisation user has opened the invoicing details task
     When the user selects "UK" as the invoice address type and continues
@@ -124,3 +124,44 @@ Feature: LCML: Invoicing details
     Given an organisation user has opened the check invoicing details page
     When the user opens the address Change link and selects Back
     Then the check invoicing details page is displayed
+
+  @issue=ML-1413
+  Scenario Outline: A postcode search that finds addresses moves the user on
+    Given an organisation user has opened the invoicing details task
+    When the user selects UK and continues to the postcode search page
+    And the user searches for the postcode "<postcode>"
+    Then the postcode search moves the user to the "<destination>" page
+
+    Examples:
+      | postcode | destination         |
+      | NE4 7AR  | confirm address     |
+      | NE1 1EE  | choose your address |
+
+  @issue=ML-1413
+  Scenario: A postcode search that finds no addresses keeps the user on the search page
+    Given an organisation user has opened the invoicing details task
+    When the user selects UK and continues to the postcode search page
+    And the user searches for the postcode "NE4 7ZZ"
+    Then the postcode search error "We could not find any addresses for that postcode. Enter a known postcode, or enter the address manually." is displayed
+
+  @issue=ML-1492
+  Scenario: Choosing an address from the picker leads to the confirm address page
+    Given an organisation user has opened the invoicing details task
+    When the user selects UK and continues to the postcode search page
+    And the user searches for the postcode "NE1 1EE"
+    And the user picks the first address from the address picker
+    Then the postcode search moves the user to the "confirm address" page
+
+  @issue=ML-1492
+  Scenario: Selecting None of these leads to the manual address page with the postcode prefilled
+    Given an organisation user has opened the invoicing details task
+    When the user selects UK and continues to the postcode search page
+    And the user searches for the postcode "NE1 1EE"
+    And the user selects None of these on the address picker
+    Then the UK invoice address page is prefilled with the searched postcode
+
+  @issue=ML-1501
+  Scenario: A confirmed looked up address is saved in the manual address format
+    Given an organisation user has opened the invoicing details task
+    When the user searches for a single-result postcode and confirms the address
+    Then the check invoicing details page shows the looked up address

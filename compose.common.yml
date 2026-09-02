@@ -69,6 +69,10 @@ services:
       DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
       ENABLE_MARINE_LICENCE: true
       ENABLE_SELF_SERVICE: true
+      # Without these the frontend falls back to localhost:3002, which inside the
+      # container is the frontend itself, so the invoicee address lookup fails.
+      MARINE_LICENSING_ADDRESS_LOOKUP_API_URL: http://marine-licensing-api-stub:3002/api/address-lookup/v2.1/addresses
+      MARINE_LICENSING_ADDRESS_LOOKUP_OAUTH_TOKEN_URL: http://marine-licensing-api-stub:3002/oauth2/v2.0/token
     command: 'node .'
     depends_on:
       marine-licensing-backend:
