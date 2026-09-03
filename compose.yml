@@ -1,7 +1,7 @@
 ################################################################################
 # Docker Compose file for local development
 # Uses local builds from ../marine-licensing-frontend, ../marine-licensing-backend,
-# and ../marine-licensing-api-stub
+# ../marine-licensing-api-stub, and ../marine-licensing-public-register
 #
 # For pipeline use, see compose.common.yml (uses pre-built Docker images)
 ################################################################################
@@ -77,9 +77,12 @@ services:
       DEFRA_ID_REDIRECT_HOSTS: http://defra-id-stub:3200,http://localhost:3200
       ENABLE_MARINE_LICENCE: true
       ENABLE_SELF_SERVICE: true
+      MARINE_LICENSING_PUBLIC_REGISTER_API_URL: http://marine-licensing-public-register:3003
     command: 'node .'
     depends_on:
       marine-licensing-backend:
+        condition: service_healthy
+      marine-licensing-public-register:
         condition: service_healthy
       redis-frontend:
         condition: service_healthy
@@ -199,6 +202,7 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/marine-licensing
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
       - ARCGIS_FEATURE_SERVER_URL=http://marine-licensing-api-stub:3002/ArcGIS/rest/services/PolicyData_MDP/FeatureServer/0
+      - PUBLIC_REGISTER_SNS_ENABLED=true
     depends_on:
       marine-licensing-api-stub:
         condition: service_healthy
@@ -206,12 +210,50 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
     ports:
       - 3001:3001
     networks:
       - cdp-tenant
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3001/health']
+      interval: 10s
+      start_period: 30s
+      retries: 5
+
+  marine-licensing-public-register:
+    build:
+      context: ../marine-licensing-public-register
+      target: development
+    restart: unless-stopped
+    env_file:
+      - 'compose/aws.env'
+      - './docker/config/defaults.env'
+    environment:
+      PORT: 3003
+      MONGO_URI: mongodb://mongodb:27017/
+      MONGO_DATABASE: marine-licensing-public-register
+      SQS_ENDPOINT: http://localstack:4566
+      PUBLIC_REGISTER_SQS_ENABLED: 'true'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    ports:
+      - 3003:3003
+    networks:
+      - cdp-tenant
+    volumes:
+      - ../marine-licensing-public-register/src:/home/node/src
+      - ../marine-licensing-public-register/package.json:/home/node/package.json
+      # node --watch crashes if --env-file-if-exists=.env points at a missing file
+      - ../marine-licensing-public-register/.env:/home/node/.env
+    healthcheck:
+      # development image has wget, not curl
+      test:
+        ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:3003/health']
       interval: 10s
       start_period: 30s
       retries: 5
