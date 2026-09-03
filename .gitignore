@@ -8,6 +8,7 @@ npm-debug.log
 coverage
 .cache
 .png
+cucumber-report.html
 allure-report/
 allure-results/
 FAILED
