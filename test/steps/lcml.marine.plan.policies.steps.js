@@ -602,3 +602,45 @@ Then(
     )
   }
 )
+
+const ML1400_NEAREST_NEIGHBOUR_SHAPEFILE = 'test/resources/north-east.zip'
+
+Given(
+  'an organisation user has uploaded a shapefile site outside any marine plan area',
+  { timeout: 300_000 },
+  async function () {
+    await completeShapefileAppToPolicies(
+      this,
+      ML1400_NEAREST_NEIGHBOUR_SHAPEFILE
+    )
+    await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
+      timeout: 60_000
+    })
+  }
+)
+
+Then(
+  'the policy list shows {int} policies, all for the {string} plan area and none for {string}',
+  async function (expectedTotal, areaPrefix, excludedCode) {
+    const page = this.page
+    await expect(
+      page.getByText(/\d+ policies to complete/i).first()
+    ).toHaveText(`${expectedTotal} policies to complete`, { timeout: 60_000 })
+
+    const linkTexts = await page
+      .locator('main a')
+      .evaluateAll((links) => links.map((a) => a.textContent.trim()))
+
+    const codes = linkTexts.filter((text) => /^[A-Z]+-[A-Z]+-?\d*$/.test(text))
+
+    expect(codes).toHaveLength(expectedTotal)
+
+    const foreign = codes.filter((code) => !code.startsWith(`${areaPrefix}-`))
+    expect(foreign).toEqual([])
+
+    const excluded = linkTexts.filter((text) =>
+      new RegExp(`^${excludedCode}\\b`, 'i').test(text)
+    )
+    expect(excluded).toEqual([])
+  }
+)

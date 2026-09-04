@@ -164,3 +164,9 @@ Feature: LCML: Marine plan policies
     Given an organisation user has completed the site details for a marine licence application
     When the user completes the marine plan policy considerations and returns to the task list
     Then the Review and send your information button is displayed
+
+  @real-defra-id @issue=ML-1400
+  Scenario: A site outside any marine plan area falls back to the nearest area's policies
+    Given an organisation user has uploaded a shapefile site outside any marine plan area
+    When the user opens the Marine plan policy considerations task
+    Then the policy list shows 39 policies, all for the "NE" plan area and none for "Land"
