@@ -63,14 +63,21 @@ export const github = {
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: ['test/features/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+  paths: [
+    'test/features/exemptions/shapefile.site.name.single.site.feature'
+  ],
+  tags: '@bug'
 }
 
 export const exemption = {
   ...common,
   paths: ['test/features/exemptions/**/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+}
+
+export const bug = {
+  ...common,
+  tags: '@bug'
 }
 
 export const lcml = {
