@@ -17,6 +17,7 @@ import {
   createKMLLargeFileData,
   createKMLEmptyFileData,
   createShapefileUploadData,
+  createShapefileWithSiteNameUploadData,
   createShapefileVirusUploadData,
   createShapefileFileUploadData,
   createShapefileWrongFileTypeData,
@@ -83,6 +84,14 @@ Given('an exemption notification with a valid Shapefile', async function () {
   this.data = createShapefileUploadData()
   await setupAndNavigateToTask(this)
 })
+
+Given(
+  'an exemption notification with a Shapefile that includes a site name',
+  async function () {
+    this.data = createShapefileWithSiteNameUploadData()
+    await setupAndNavigateToTask(this)
+  }
+)
 
 Given(
   'an exemption notification with a Shapefile with a virus',

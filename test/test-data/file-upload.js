@@ -78,6 +78,13 @@ export function createShapefileUploadData() {
   )
 }
 
+export function createShapefileWithSiteNameUploadData() {
+  return createFileUploadData(
+    'Shapefile',
+    'test/resources/valid-shapefile-with-site-name.zip'
+  )
+}
+
 export function createShapefileVirusUploadData() {
   return createFileUploadData(
     'Shapefile',
