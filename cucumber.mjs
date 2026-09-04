@@ -63,9 +63,7 @@ export const github = {
     'json:cucumber-results.json',
     'allure-cucumberjs/reporter'
   ],
-  paths: [
-    'test/features/exemptions/shapefile.site.name.single.site.feature'
-  ],
+  paths: ['test/features/exemptions/shapefile.site.name.single.site.feature'],
   tags: '@bug'
 }
 
