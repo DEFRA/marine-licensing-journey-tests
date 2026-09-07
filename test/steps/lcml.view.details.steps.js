@@ -8,7 +8,8 @@ import {
   completeManualCircleApp,
   submitMarineLicence,
   openViewDetailsFromDashboard,
-  openPublicViewDetailsFromDashboard
+  openPublicViewDetailsFromDashboard,
+  MARINE_PLAN_POLICY_RESPONSE
 } from '../support/lcml-helpers.js'
 import {
   launchD365Browser,
@@ -34,7 +35,9 @@ import {
   readWfdTabMeta,
   readWfdTabAnswers,
   openSitesAndActivitiesTab,
-  readSitesAndActivitiesMeta
+  readSitesAndActivitiesMeta,
+  openMarinePlanPoliciesTab,
+  readMarinePlanPoliciesMeta
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -900,3 +903,35 @@ After(async function () {
     this.d365Browser = null
   }
 })
+
+Then(
+  "the Marine plan policies tab shows the policy list, policy information and the applicant's consideration",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openMarinePlanPoliciesTab(page)
+
+    let meta = null
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      meta = await readMarinePlanPoliciesMeta(page)
+      if (meta?.policyCodes?.length) break
+      await page.waitForTimeout(5_000)
+    }
+
+    expect(meta?.policyCodes?.length ?? 0).toBeGreaterThan(0)
+    expect(meta.policyCodes).toEqual(
+      meta.policyCodes.filter((code) => /^[A-Z]+-[A-Z]+-?\d*$/.test(code))
+    )
+
+    expect(meta.selectedCode).toBeTruthy()
+    expect(meta.detailTitle).toBe(meta.selectedCode)
+    expect(meta.policyCodes).toContain(meta.selectedCode)
+
+    expect(meta.subheads).toEqual([
+      'Policy information',
+      "Applicant's consideration"
+    ])
+    expect(meta.policyInformation?.length ?? 0).toBeGreaterThan(0)
+    expect(meta.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+  }
+)
