@@ -126,16 +126,27 @@ services:
       retries: 5
 
   mongodb:
+    # Single-member replica set so the backend under test supports Mongo
+    # transactions, matching deployed environments. The healthcheck initiates
+    # the set idempotently, so healthy implies initiated and writable.
     image: mongo:7.0.24
-    volumes:
-      - ./docker/scripts/mongodb:/docker-entrypoint-initdb.d
+    command: ['--replSet', 'rs0', '--bind_ip_all']
     networks:
       - cdp-tenant
     healthcheck:
-      test: ['CMD', 'mongosh', '--eval', 'db.hello().ok']
+      test:
+        [
+          'CMD',
+          'mongosh',
+          '--quiet',
+          '--eval',
+          "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017'}]}).ok }"
+        ]
       interval: 5s
+      timeout: 30s
       start_period: 5s
-      retries: 3
+      start_interval: 1s
+      retries: 30
 
   cdp-uploader:
     image: defradigital/cdp-uploader:${CDP_UPLOADER_VERSION:-latest}
