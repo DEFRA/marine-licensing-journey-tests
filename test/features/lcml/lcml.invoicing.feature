@@ -160,8 +160,21 @@ Feature: LCML: Invoicing details
     And the user selects None of these on the address picker
     Then the UK invoice address page is prefilled with the searched postcode
 
-  @issue=ML-1501
+  @issue=ML-1501 @issue=ML-1504
   Scenario: A confirmed looked up address is saved in the manual address format
     Given an organisation user has opened the invoicing details task
     When the user searches for a single-result postcode and confirms the address
     Then the check invoicing details page shows the looked up address
+    And the check invoicing details page shows the looked up address in the confirm address format
+
+  @issue=ML-1504
+  Scenario: A looked up address is shown on the check page and its Change link opens the postcode search
+    Given an organisation user has opened the check invoicing details page with a looked up address
+    When the user selects Change for the looked up address
+    Then the postcode search page is displayed with no Cancel link
+
+  @issue=ML-1504
+  Scenario: Changing a looked up address returns to the check page without revisiting contact details
+    Given an organisation user has opened the check invoicing details page with a looked up address
+    When the user searches again and confirms an address from the picker
+    Then the user is returned to the check invoicing details page with the newly chosen address
