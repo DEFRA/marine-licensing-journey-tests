@@ -938,16 +938,18 @@ Then(
 )
 
 Then(
-  'selecting a different policy updates the policy detail',
+  'selecting the second policy updates the policy detail',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = this.d365Page
     const before = await readMarinePlanPoliciesMeta(page)
 
-    const target = before.policyCodes.find(
-      (code) => code !== before.selectedCode
-    )
+    const [target] = before.policyCodes.slice(1)
     expect(target, 'needs a second policy to select').toBeTruthy()
+    expect(
+      target,
+      'the second policy is already selected, so the detail cannot be seen to change'
+    ).not.toBe(before.selectedCode)
 
     await selectMarinePlanPolicy(page, target)
 

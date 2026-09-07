@@ -91,7 +91,7 @@ Feature: LCML: View details page shows sites and activities
     And the Sites and activities tab shows the uploaded site location and the site and activity details
     And the case shows the "Marine plan policies" tab in the tab strip
     And the Marine plan policies tab shows the policy list, policy information and the applicant's consideration
-    And selecting a different policy updates the policy detail
+    And selecting the second policy updates the policy detail
 
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
