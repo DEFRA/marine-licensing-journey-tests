@@ -37,7 +37,8 @@ import {
   openSitesAndActivitiesTab,
   readSitesAndActivitiesMeta,
   openMarinePlanPoliciesTab,
-  readMarinePlanPoliciesMeta
+  readMarinePlanPoliciesMeta,
+  selectMarinePlanPolicy
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -933,5 +934,33 @@ Then(
     ])
     expect(meta.policyInformation?.length ?? 0).toBeGreaterThan(0)
     expect(meta.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+  }
+)
+
+Then(
+  'selecting a different policy updates the policy detail',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    const before = await readMarinePlanPoliciesMeta(page)
+
+    const target = before.policyCodes.find(
+      (code) => code !== before.selectedCode
+    )
+    expect(target, 'needs a second policy to select').toBeTruthy()
+
+    await selectMarinePlanPolicy(page, target)
+
+    let after = null
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      after = await readMarinePlanPoliciesMeta(page)
+      if (after?.selectedCode === target) break
+      await page.waitForTimeout(2_000)
+    }
+
+    expect(after.selectedCode).toBe(target)
+    expect(after.detailTitle).toBe(target)
+    expect(after.policyInformation).not.toBe(before.policyInformation)
+    expect(after.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
   }
 )

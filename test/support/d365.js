@@ -826,3 +826,18 @@ export async function readMarinePlanPoliciesMeta(page) {
     }
   }, MARINE_PLAN_POLICIES_WEBRESOURCE_ID)
 }
+
+export async function selectMarinePlanPolicy(page, policyCode) {
+  await page.evaluate(
+    ({ frameId, code }) => {
+      const frame = document.getElementById(frameId)
+      const doc = frame.contentDocument || frame.contentWindow.document
+      const link = [...doc.querySelectorAll('.mmo-mpp-link')].find(
+        (el) => el.innerText.replace(/\s+/g, ' ').trim() === code
+      )
+      if (!link) throw new Error(`Policy ${code} is not in the list`)
+      link.click()
+    },
+    { frameId: MARINE_PLAN_POLICIES_WEBRESOURCE_ID, code: policyCode }
+  )
+}
