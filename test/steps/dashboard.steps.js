@@ -8,7 +8,10 @@ import {
   generateProjectName,
   generateIatContext
 } from '../test-data/exemption.js'
-import { createCircleWGS84Data } from '../test-data/site-details.js'
+import {
+  createCircleWGS84Data,
+  generateLiveActivityDates
+} from '../test-data/site-details.js'
 import { submitNotification } from '../support/task-flow.js'
 import { getConfig } from '../support/config.js'
 import {
@@ -28,7 +31,9 @@ function latestExemption(world) {
 }
 
 Given('a user has submitted an exemption notification', async function () {
-  this.data = createCYACircleWGS84Data()
+  this.data = createCYACircleWGS84Data({
+    activityDates: generateLiveActivityDates()
+  })
   await submitNotification(this)
 })
 
@@ -71,13 +76,17 @@ Given('the user has not submitted any notifications', async function () {
 Given(
   'the user has multiple notifications with different statuses and names',
   async function () {
-    this.data = createCYACircleWGS84Data()
+    this.data = createCYACircleWGS84Data({
+      activityDates: generateLiveActivityDates()
+    })
     this.data.completedExemptions = []
 
     // Submit 3 notifications
     for (let i = 0; i < 3; i++) {
       if (i > 0) {
-        const newData = withPublicRegister(createCircleWGS84Data())
+        const newData = withPublicRegister(
+          createCircleWGS84Data({ activityDates: generateLiveActivityDates() })
+        )
         this.data.projectName = newData.projectName
         this.data.siteDetails = newData.siteDetails
         this.data.publicRegister = newData.publicRegister
