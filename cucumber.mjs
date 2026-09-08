@@ -85,9 +85,16 @@ export const iat = {
   tags: 'not @wip'
 }
 
+// The test environment runs the @d365 scenarios, and each of those launches a
+// second Chromium for Dynamics on top of the one the worker already holds. Five
+// workers therefore means up to ten browsers at once, which exhausts the CDP
+// container's memory. Those scenarios are wait-bound rather than CPU-bound, so
+// fewer workers costs little wall-clock time.
+const cdpWorkers = process.env.ENVIRONMENT === 'test' ? '2' : '5'
+
 export const cdp = {
   ...common,
-  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '5', 10),
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || cdpWorkers, 10),
   format: [
     './test/support/progress-formatter.js',
     'html:cucumber-report.html',
