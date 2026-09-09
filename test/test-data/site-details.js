@@ -19,6 +19,33 @@ export function generateActivityDates() {
   }
 }
 
+export function generateLiveActivityDates() {
+  const today = new Date()
+  const startDay = today.getDate()
+  const startMonth = today.getMonth() + 1
+  const startYear = today.getFullYear()
+
+  let endMonth = startMonth + 6
+  let endYear = startYear
+  if (endMonth > 12) {
+    endMonth -= 12
+    endYear += 1
+  }
+
+  return {
+    startDate: {
+      day: String(startDay).padStart(2, '0'),
+      month: String(startMonth).padStart(2, '0'),
+      year: String(startYear)
+    },
+    endDate: {
+      day: String(Math.min(startDay, 28)).padStart(2, '0'),
+      month: String(endMonth).padStart(2, '0'),
+      year: String(endYear)
+    }
+  }
+}
+
 export function generateActivityDescription() {
   return faker.lorem.sentence(10)
 }
