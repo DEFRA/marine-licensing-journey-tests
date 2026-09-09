@@ -788,3 +788,56 @@ export async function readSitesAndActivitiesMeta(page) {
     }
   }, SITES_ACTIVITIES_WEBRESOURCE_ID)
 }
+
+export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
+  'WebResource_marineplanpolicies'
+
+export async function openMarinePlanPoliciesTab(page) {
+  const tab = caseTab(page, 'Marine plan policies')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readMarinePlanPoliciesMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const texts = (sel) =>
+      [...doc.querySelectorAll(sel)].map((el) =>
+        el.innerText.replace(/\s+/g, ' ').trim()
+      )
+    const boxes = texts('.mmo-mpp-box')
+    return {
+      policyCodes: texts('.mmo-mpp-link'),
+      selectedCode: texts('.mmo-mpp-link--active')[0] ?? null,
+      detailTitle: texts('.mmo-mpp-detail-title')[0] ?? null,
+      subheads: texts('.mmo-mpp-subhead'),
+      policyInformation: boxes[0] ?? null,
+      applicantConsideration: boxes[1] ?? null,
+      bodyText: doc.body?.innerText?.trim() ?? null
+    }
+  }, MARINE_PLAN_POLICIES_WEBRESOURCE_ID)
+}
+
+export async function selectMarinePlanPolicy(page, policyCode) {
+  await page.evaluate(
+    ({ frameId, code }) => {
+      const frame = document.getElementById(frameId)
+      const doc = frame.contentDocument || frame.contentWindow.document
+      const link = [...doc.querySelectorAll('.mmo-mpp-link')].find(
+        (el) => el.innerText.replace(/\s+/g, ' ').trim() === code
+      )
+      if (!link) throw new Error(`Policy ${code} is not in the list`)
+      link.click()
+    },
+    { frameId: MARINE_PLAN_POLICIES_WEBRESOURCE_ID, code: policyCode }
+  )
+}

@@ -8,7 +8,8 @@ import {
   completeManualCircleApp,
   submitMarineLicence,
   openViewDetailsFromDashboard,
-  openPublicViewDetailsFromDashboard
+  openPublicViewDetailsFromDashboard,
+  MARINE_PLAN_POLICY_RESPONSE
 } from '../support/lcml-helpers.js'
 import {
   launchD365Browser,
@@ -34,7 +35,10 @@ import {
   readWfdTabMeta,
   readWfdTabAnswers,
   openSitesAndActivitiesTab,
-  readSitesAndActivitiesMeta
+  readSitesAndActivitiesMeta,
+  openMarinePlanPoliciesTab,
+  readMarinePlanPoliciesMeta,
+  selectMarinePlanPolicy
 } from '../support/d365.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
@@ -900,3 +904,65 @@ After(async function () {
     this.d365Browser = null
   }
 })
+
+Then(
+  "the Marine plan policies tab shows the policy list, policy information and the applicant's consideration",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openMarinePlanPoliciesTab(page)
+
+    let meta = null
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      meta = await readMarinePlanPoliciesMeta(page)
+      if (meta?.policyCodes?.length) break
+      await page.waitForTimeout(5_000)
+    }
+
+    expect(meta?.policyCodes?.length ?? 0).toBeGreaterThan(0)
+    expect(meta.policyCodes).toEqual(
+      meta.policyCodes.filter((code) => /^[A-Z]+-[A-Z]+-?\d*$/.test(code))
+    )
+
+    expect(meta.selectedCode).toBeTruthy()
+    expect(meta.detailTitle).toBe(meta.selectedCode)
+    expect(meta.policyCodes).toContain(meta.selectedCode)
+
+    expect(meta.subheads).toEqual([
+      'Policy information',
+      "Applicant's consideration"
+    ])
+    expect(meta.policyInformation?.length ?? 0).toBeGreaterThan(0)
+    expect(meta.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+  }
+)
+
+Then(
+  'selecting the second policy updates the policy detail',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    const before = await readMarinePlanPoliciesMeta(page)
+
+    const [target] = before.policyCodes.slice(1)
+    expect(target, 'needs a second policy to select').toBeTruthy()
+    expect(
+      target,
+      'the second policy is already selected, so the detail cannot be seen to change'
+    ).not.toBe(before.selectedCode)
+
+    await selectMarinePlanPolicy(page, target)
+
+    let after = null
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      after = await readMarinePlanPoliciesMeta(page)
+      if (after?.selectedCode === target) break
+      await page.waitForTimeout(2_000)
+    }
+
+    expect(after.selectedCode).toBe(target)
+    expect(after.detailTitle).toBe(target)
+    expect(after.policyInformation).not.toBe(before.policyInformation)
+    expect(after.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+  }
+)
