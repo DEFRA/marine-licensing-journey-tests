@@ -223,12 +223,17 @@ When(
 
     const firstOption = page.locator('input[type="radio"]').first()
     await firstOption.check()
+
     // Which addresses a postcode returns differs between the stubbed and the real
     // lookup, so the chosen one is read off the picker rather than hard coded.
+    const optionId = await firstOption.getAttribute('id')
+    expect(
+      optionId,
+      'the picked address needs an id to find its label'
+    ).toBeTruthy()
+
     this.data.chosenAddress = (
-      await page
-        .locator(`label[for="${await firstOption.getAttribute('id')}"]`)
-        .innerText()
+      await page.locator(`label[for="${optionId}"]`).innerText()
     ).trim()
 
     await page.locator('button:has-text("Continue")').click()
