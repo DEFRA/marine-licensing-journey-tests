@@ -10,14 +10,19 @@ export default class DashboardPage {
     this.projectsTable = page.locator('table.govuk-table')
     this.projectsLink = page.locator('//a[normalize-space(text())="Projects"]')
 
-    // Filter component
+    // Filter component. The radio group is named "show", and the panel holding
+    // it is collapsed behind a toggle, so the radios are in the page but hidden
+    // until it is opened.
+    this.filterToggle = page.locator('button[aria-expanded]', {
+      hasText: /^(Show|Hide) filter$/
+    })
     this.myProjectsRadio = page.locator(
-      'input[name="filter"][value="my-projects"]'
+      'input[name="show"][value="my-projects"]'
     )
     this.allProjectsRadio = page.locator(
-      'input[name="filter"][value="all-projects"]'
+      'input[name="show"][value="all-projects"]'
     )
-    this.allProjectsLabel = page.locator('label[for="filter-2"]')
+    this.allProjectsLabel = page.locator('label[for="show"]')
     this.updateResultsButton = page.locator(
       'button[type="submit"]:has-text("Update results")'
     )
@@ -118,7 +123,22 @@ export default class DashboardPage {
     }
   }
 
+  // The filter panel starts collapsed, so nothing inside it can be seen or
+  // clicked until the toggle is opened. Opening is skipped when it is already
+  // expanded, so this is safe to call before any filter interaction.
+  async openFilter() {
+    const toggle = this.filterToggle.first()
+    if (!(await toggle.count())) {
+      return
+    }
+    if ((await toggle.getAttribute('aria-expanded')) === 'false') {
+      await toggle.click()
+    }
+    await expect(this.myProjectsRadio).toBeVisible({ timeout: 30_000 })
+  }
+
   async expectFilterDisplayed() {
+    await this.openFilter()
     await expect(this.myProjectsRadio).toBeVisible({ timeout: 30_000 })
     await expect(this.allProjectsRadio).toBeVisible({ timeout: 30_000 })
   }
@@ -142,6 +162,7 @@ export default class DashboardPage {
   }
 
   async selectFilter(filterOption) {
+    await this.openFilter()
     if (filterOption === 'All projects') {
       await this.allProjectsRadio.click()
     } else {
