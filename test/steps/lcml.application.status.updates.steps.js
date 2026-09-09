@@ -9,6 +9,14 @@ import {
   sendTransferCompletedMessage,
   sendRejectedMessage
 } from '../support/mas-queue.js'
+import {
+  launchD365Browser,
+  loginToD365,
+  verifyD365Login,
+  openMarineLicenceCaseInD365,
+  requestTransferToMcms,
+  completeTransferToMcms
+} from '../support/d365.js'
 
 const projectRow = (page, projectName) =>
   page.locator(`xpath=//tr[td[1][normalize-space(text())="${projectName}"]]`)
@@ -303,3 +311,28 @@ Then('cancelling returns to the {string} page', async function (heading) {
   await page.waitForLoadState('load')
   await expect(page.locator('h1')).toContainText(heading, { timeout: 30_000 })
 })
+
+const TRANSFER_REASONS = 'Journey test transfer to MCMS'
+const MCMS_REFERENCE = 'MCMS/TEST/0001'
+
+// Drives the real D365 transfer commands rather than putting a message on the
+// MAS queue, so the status the applicant sees is the one D365 actually produced.
+When(
+  'the internal user requests and completes a transfer to MCMS in D365',
+  { timeout: 600_000 },
+  async function () {
+    const { browser, page } = await launchD365Browser()
+    this.d365Browser = browser
+    this.d365Page = page
+
+    await loginToD365(page)
+    await verifyD365Login(page)
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+
+    await requestTransferToMcms(page, TRANSFER_REASONS)
+    await completeTransferToMcms(page, MCMS_REFERENCE)
+
+    this.data.transferReasons = TRANSFER_REASONS
+    this.data.mcmsReference = MCMS_REFERENCE
+  }
+)
