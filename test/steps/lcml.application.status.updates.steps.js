@@ -315,8 +315,6 @@ Then('cancelling returns to the {string} page', async function (heading) {
 const TRANSFER_REASONS = 'Journey test transfer to MCMS'
 const MCMS_REFERENCE = 'MCMS/TEST/0001'
 
-// Drives the real D365 transfer commands rather than putting a message on the
-// MAS queue, so the status the applicant sees is the one D365 actually produced.
 When(
   'the internal user requests and completes a transfer to MCMS in D365',
   { timeout: 600_000 },

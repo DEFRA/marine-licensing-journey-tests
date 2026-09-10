@@ -10,9 +10,6 @@ export default class DashboardPage {
     this.projectsTable = page.locator('table.govuk-table')
     this.projectsLink = page.locator('//a[normalize-space(text())="Projects"]')
 
-    // Filter component. The radio group is named "show", and the panel holding
-    // it is collapsed behind a toggle, so the radios are in the page but hidden
-    // until it is opened.
     this.filterToggle = page.locator('button[aria-expanded]', {
       hasText: /^(Show|Hide) filter$/
     })
@@ -123,9 +120,6 @@ export default class DashboardPage {
     }
   }
 
-  // The filter panel starts collapsed, so nothing inside it can be seen or
-  // clicked until the toggle is opened. Opening is skipped when it is already
-  // expanded, so this is safe to call before any filter interaction.
   async openFilter() {
     const toggle = this.filterToggle.first()
     if (!(await toggle.count())) {

@@ -844,10 +844,6 @@ export async function selectMarinePlanPolicy(page, policyCode) {
 const MARINE_LICENCE_WORKBASKET =
   '[role="treeitem"][title="Marine license cases"]'
 
-// The transfer commands are custom ribbon buttons, so their data-id carries a
-// generated GUID and they are matched on their aria-label instead. They cannot
-// be reached by the button role: each is a <button role="menuitem">, and the
-// explicit role replaces the implicit one.
 const REQUEST_TRANSFER_COMMAND =
   'button[aria-label*="request" i][aria-label*="transfer" i]'
 const COMPLETE_TRANSFER_COMMAND =
@@ -862,8 +858,6 @@ export async function openMarineLicenceCaseInD365(page, reference) {
     .first()
   const firstRow = page.locator('div[role="row"][row-index="0"]')
 
-  // A just-submitted case lags the D365 search index, so the search is re-run
-  // until the case appears rather than failing on the first miss.
   for (let attempt = 1; attempt <= 12; attempt++) {
     await search.waitFor({ state: 'visible', timeout: 30_000 })
     await search.fill(reference)
@@ -898,21 +892,11 @@ export async function readCaseCommandLabels(page) {
 
 async function submitTransferDialog(page, text, buttonPattern) {
   const dialog = page.locator('[role="dialog"]')
-  // The dialog is a Power Apps page loaded on demand, so it appears well after
-  // the command is clicked.
   await dialog.waitFor({ state: 'visible', timeout: 60_000 })
 
-  // The field id is generated per render, so it is scoped to the dialog.
   const field = dialog.locator('textarea, input[type="text"]').first()
   await field.waitFor({ state: 'visible', timeout: 30_000 })
 
-  // The dialog chrome renders before the Power Apps page inside it finishes
-  // binding to the control. Text entered in that window reaches the DOM but not
-  // the model, so the mandatory-field check still reads the field as empty and
-  // refuses to submit. There is no reliable signal for when binding completes,
-  // so the entry is retried: each attempt retypes from scratch and gives the
-  // page longer to settle first. Setting the value directly never works — only
-  // real keystrokes update the model.
   let lastShown = ''
   for (let attempt = 1; attempt <= 4; attempt++) {
     await page.waitForTimeout(attempt * 3_000)
@@ -941,10 +925,6 @@ async function submitTransferDialog(page, text, buttonPattern) {
   )
 }
 
-// The case form renders its command bar well after the record URL settles, and
-// reloading to hurry it along only restarts that render. Wait for a command
-// that is always present instead, so the bar is known to be built before any
-// custom command is looked for.
 async function waitForCaseCommandBar(page) {
   await dismissSignInPrompt(page, { timeout: 3_000, attempts: 2 })
   await page
@@ -953,9 +933,6 @@ async function waitForCaseCommandBar(page) {
     .waitFor({ state: 'visible', timeout: 120_000 })
 }
 
-// The transfer commands are shown or hidden according to the case status, so a
-// missing command is a meaningful result rather than a wait that should be
-// retried indefinitely. Name what was on the bar when it is not found.
 async function waitForCaseCommand(page, commandSelector) {
   await waitForCaseCommandBar(page)
 
@@ -979,8 +956,6 @@ export async function requestTransferToMcms(page, reasons) {
 }
 
 export async function completeTransferToMcms(page, mcmsReference) {
-  // This command only appears once the case reaches Transfer pending, which the
-  // request above triggers asynchronously.
   const button = await waitForCaseCommand(page, COMPLETE_TRANSFER_COMMAND)
   await button.click()
   await submitTransferDialog(page, mcmsReference, /^complete transfer$/i)
