@@ -219,7 +219,6 @@ services:
       - DEFRA_ID_JWKS_URI=http://defra-id-stub:3200/cdp-defra-id-stub/.well-known/jwks.json
       - ARCGIS_FEATURE_SERVER_URL=http://marine-licensing-api-stub:3002/ArcGIS/rest/services/PolicyData_MDP/FeatureServer/0
       - PUBLIC_REGISTER_SNS_ENABLED=true
-      - MARINE_PLAN_AREAS_API_URL=https://environment.data.gov.uk/geoservices/datasets/57623221-8afc-410f-b977-4747e680adca/ogc/features/v1/collections/Marine_Plan_Areas/items?f=application%2Fjson
     depends_on:
       marine-licensing-api-stub:
         condition: service_healthy
