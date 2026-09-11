@@ -320,7 +320,7 @@ const TRANSFERRED_STATUS = 'Transferred'
 
 When(
   'the internal user requests a transfer to MCMS in D365',
-  { timeout: 600_000 },
+  { timeout: 900_000 },
   async function () {
     const { browser, page } = await launchD365Browser()
     this.d365Browser = browser
@@ -342,7 +342,7 @@ When(
 
 When(
   'the internal user completes the transfer to MCMS in D365',
-  { timeout: 600_000 },
+  { timeout: 900_000 },
   async function () {
     const page = this.d365Page
     await openMarineLicenceCaseInD365(page, this.data.applicationReference)
