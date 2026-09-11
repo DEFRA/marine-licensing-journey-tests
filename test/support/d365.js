@@ -917,7 +917,14 @@ async function submitTransferDialog(page, text, buttonPattern) {
   await dialog.waitFor({ state: 'visible', timeout: 60_000 })
 
   const field = dialog.locator('textarea, input[type="text"]').first()
-  await field.waitFor({ state: 'visible', timeout: 30_000 })
+  try {
+    await field.waitFor({ state: 'visible', timeout: 120_000 })
+  } catch {
+    throw new Error(
+      'The transfer dialog opened but its Power Apps body never rendered a ' +
+        `field. Dialog text: "${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim()}"`
+    )
+  }
 
   let lastShown = ''
   for (let attempt = 1; attempt <= 4; attempt++) {
