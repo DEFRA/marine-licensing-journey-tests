@@ -15,7 +15,8 @@ Feature: LCML: Application status updates from Dynamics 365
   @real-defra-id @d365 @issue=ML-1456 @issue=ML-1373
   Scenario: A transfer completed in D365 shows the transferred status and page
     Given an organisation user has submitted a marine licence application with a site in a marine plan area
-    When the internal user requests and completes a transfer to MCMS in D365
+    When the internal user requests a transfer to MCMS in D365
+    And the internal user completes the transfer to MCMS in D365
     Then the application status is "Transferred" on the dashboard
     And opening View details shows the "Your application has been transferred" page with the project name and reference
     And the transferred page links to MCMS and to the submitted application details

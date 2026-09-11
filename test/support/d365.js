@@ -845,11 +845,13 @@ const MARINE_LICENCE_WORKBASKET =
   '[role="treeitem"][title="Marine license cases"]'
 
 const REQUEST_TRANSFER_COMMAND =
-  'button[aria-label*="request" i][aria-label*="transfer" i]'
+  'button[data-id^="incident|NoRelationship|Form|Requesttransferto"]'
 const COMPLETE_TRANSFER_COMMAND =
-  'button[aria-label*="complete" i][aria-label*="transfer" i]'
+  'button[data-id^="incident|NoRelationship|Form|Completetransfert"]'
 
-export async function openMarineLicenceCaseInD365(page, reference) {
+const CASE_STATUS_CELL = 'div[col-id="statuscode"]'
+
+async function findMarineLicenceCaseRow(page, reference) {
   await page.locator(MARINE_LICENCE_WORKBASKET).first().click()
   await page.waitForLoadState('load')
 
@@ -868,18 +870,38 @@ export async function openMarineLicenceCaseInD365(page, reference) {
         reference,
         { timeout: 5_000 }
       )
-      break
+      return firstRow
     } catch (error) {
       if (attempt === 12) throw error
       await page.waitForTimeout(15_000)
     }
   }
+}
 
-  await firstRow.locator('div[col-id="title"] a').click()
+export async function openMarineLicenceCaseInD365(page, reference) {
+  const row = await findMarineLicenceCaseRow(page, reference)
+  await row.locator('div[col-id="title"] a').click()
   await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
     timeout: 30_000
   })
   await page.waitForLoadState('load')
+}
+
+// The MLA case form carries no status field, so the status is read from the
+// Status column of the marine licence cases view.
+export async function expectMarineLicenceCaseStatus(page, reference, expected) {
+  let seen = null
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    const row = await findMarineLicenceCaseRow(page, reference)
+    seen = (await row.locator(CASE_STATUS_CELL).innerText()).trim()
+    if (seen === expected) {
+      return seen
+    }
+    await page.waitForTimeout(10_000)
+  }
+  throw new Error(
+    `Case ${reference} status is "${seen}" in D365, expected "${expected}"`
+  )
 }
 
 export async function readCaseCommandLabels(page) {
