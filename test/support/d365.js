@@ -788,3 +788,197 @@ export async function readSitesAndActivitiesMeta(page) {
     }
   }, SITES_ACTIVITIES_WEBRESOURCE_ID)
 }
+
+export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
+  'WebResource_marineplanpolicies'
+
+export async function openMarinePlanPoliciesTab(page) {
+  const tab = caseTab(page, 'Marine plan policies')
+  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.click()
+  await page.waitForLoadState('load')
+}
+
+export async function readMarinePlanPoliciesMeta(page) {
+  return page.evaluate((frameId) => {
+    const frame = document.getElementById(frameId)
+    if (!frame) return null
+    let doc
+    try {
+      doc = frame.contentDocument || frame.contentWindow.document
+    } catch {
+      return { crossOrigin: true }
+    }
+    if (!doc) return null
+    const texts = (sel) =>
+      [...doc.querySelectorAll(sel)].map((el) =>
+        el.innerText.replace(/\s+/g, ' ').trim()
+      )
+    const boxes = texts('.mmo-mpp-box')
+    return {
+      policyCodes: texts('.mmo-mpp-link'),
+      selectedCode: texts('.mmo-mpp-link--active')[0] ?? null,
+      detailTitle: texts('.mmo-mpp-detail-title')[0] ?? null,
+      subheads: texts('.mmo-mpp-subhead'),
+      policyInformation: boxes[0] ?? null,
+      applicantConsideration: boxes[1] ?? null,
+      bodyText: doc.body?.innerText?.trim() ?? null
+    }
+  }, MARINE_PLAN_POLICIES_WEBRESOURCE_ID)
+}
+
+export async function selectMarinePlanPolicy(page, policyCode) {
+  await page.evaluate(
+    ({ frameId, code }) => {
+      const frame = document.getElementById(frameId)
+      const doc = frame.contentDocument || frame.contentWindow.document
+      const link = [...doc.querySelectorAll('.mmo-mpp-link')].find(
+        (el) => el.innerText.replace(/\s+/g, ' ').trim() === code
+      )
+      if (!link) throw new Error(`Policy ${code} is not in the list`)
+      link.click()
+    },
+    { frameId: MARINE_PLAN_POLICIES_WEBRESOURCE_ID, code: policyCode }
+  )
+}
+const MARINE_LICENCE_WORKBASKET =
+  '[role="treeitem"][title="Marine license cases"]'
+
+const REQUEST_TRANSFER_COMMAND =
+  'button[data-id^="incident|NoRelationship|Form|Requesttransferto"]'
+const COMPLETE_TRANSFER_COMMAND =
+  'button[data-id^="incident|NoRelationship|Form|Completetransfert"]'
+
+const CASE_STATUS_CELL = 'div[col-id="statuscode"]'
+
+async function findMarineLicenceCaseRow(page, reference) {
+  await page.locator(MARINE_LICENCE_WORKBASKET).first().click()
+  await page.waitForLoadState('load')
+
+  const search = page
+    .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
+    .first()
+  const firstRow = page.locator('div[role="row"][row-index="0"]')
+
+  for (let attempt = 1; attempt <= 12; attempt++) {
+    await search.waitFor({ state: 'visible', timeout: 30_000 })
+    await search.fill(reference)
+    await search.press('Enter')
+    try {
+      await firstRow.waitFor({ state: 'visible', timeout: 15_000 })
+      await expect(firstRow.locator('[col-id="ticketnumber"]')).toContainText(
+        reference,
+        { timeout: 5_000 }
+      )
+      return firstRow
+    } catch (error) {
+      if (attempt === 12) throw error
+      await page.waitForTimeout(15_000)
+    }
+  }
+}
+
+export async function openMarineLicenceCaseInD365(page, reference) {
+  const row = await findMarineLicenceCaseRow(page, reference)
+  await row.locator('div[col-id="title"] a').click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
+    timeout: 30_000
+  })
+  await page.waitForLoadState('load')
+}
+
+// The MLA case form carries no status field, so the status is read from the
+// Status column of the marine licence cases view.
+export async function expectMarineLicenceCaseStatus(page, reference, expected) {
+  let seen = null
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    const row = await findMarineLicenceCaseRow(page, reference)
+    seen = (await row.locator(CASE_STATUS_CELL).innerText()).trim()
+    if (seen === expected) {
+      return seen
+    }
+    await page.waitForTimeout(10_000)
+  }
+  throw new Error(
+    `Case ${reference} status is "${seen}" in D365, expected "${expected}"`
+  )
+}
+
+export async function readCaseCommandLabels(page) {
+  return page.evaluate(() =>
+    Array.from(document.querySelectorAll('button[aria-label]'))
+      .map((button) => button.getAttribute('aria-label'))
+      .filter(Boolean)
+  )
+}
+
+async function submitTransferDialog(page, text, buttonPattern) {
+  const dialog = page.locator('[role="dialog"]')
+  await dialog.waitFor({ state: 'visible', timeout: 60_000 })
+
+  const field = dialog.locator('textarea, input[type="text"]').first()
+  await field.waitFor({ state: 'visible', timeout: 30_000 })
+
+  let lastShown = ''
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    await page.waitForTimeout(attempt * 3_000)
+
+    await field.click()
+    await field.press('ControlOrMeta+a')
+    await field.pressSequentially(text, { delay: 20 })
+
+    await dialog.getByRole('button', { name: buttonPattern }).first().click()
+
+    try {
+      await dialog.waitFor({ state: 'hidden', timeout: 30_000 })
+      await page.waitForLoadState('load')
+      return
+    } catch {
+      lastShown = ((await dialog.innerText().catch(() => '')) || '')
+        .replace(/\s+/g, ' ')
+        .trim()
+    }
+  }
+
+  throw new Error(
+    `Dialog stayed open after clicking ${buttonPattern}. ` +
+      `Field value: ${JSON.stringify(await field.inputValue().catch(() => null))}. ` +
+      `Dialog text: ${lastShown}`
+  )
+}
+
+async function waitForCaseCommandBar(page) {
+  await dismissSignInPrompt(page, { timeout: 3_000, attempts: 2 })
+  await page
+    .locator('button[data-id*="Mscrm.Form.incident.Save"]')
+    .first()
+    .waitFor({ state: 'visible', timeout: 120_000 })
+}
+
+async function waitForCaseCommand(page, commandSelector) {
+  await waitForCaseCommandBar(page)
+
+  const button = page.locator(commandSelector).first()
+  try {
+    await button.waitFor({ state: 'visible', timeout: 60_000 })
+    return button
+  } catch {
+    const labels = await readCaseCommandLabels(page)
+    throw new Error(
+      `No command matching ${commandSelector} on the case. ` +
+        `Commands present: ${JSON.stringify(labels)}`
+    )
+  }
+}
+
+export async function requestTransferToMcms(page, reasons) {
+  const button = await waitForCaseCommand(page, REQUEST_TRANSFER_COMMAND)
+  await button.click()
+  await submitTransferDialog(page, reasons, /^request transfer$/i)
+}
+
+export async function completeTransferToMcms(page, mcmsReference) {
+  const button = await waitForCaseCommand(page, COMPLETE_TRANSFER_COMMAND)
+  await button.click()
+  await submitTransferDialog(page, mcmsReference, /^complete transfer$/i)
+}

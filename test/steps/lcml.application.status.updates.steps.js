@@ -9,6 +9,15 @@ import {
   sendTransferCompletedMessage,
   sendRejectedMessage
 } from '../support/mas-queue.js'
+import {
+  launchD365Browser,
+  loginToD365,
+  verifyD365Login,
+  openMarineLicenceCaseInD365,
+  requestTransferToMcms,
+  completeTransferToMcms,
+  expectMarineLicenceCaseStatus
+} from '../support/d365.js'
 
 const projectRow = (page, projectName) =>
   page.locator(`xpath=//tr[td[1][normalize-space(text())="${projectName}"]]`)
@@ -303,3 +312,47 @@ Then('cancelling returns to the {string} page', async function (heading) {
   await page.waitForLoadState('load')
   await expect(page.locator('h1')).toContainText(heading, { timeout: 30_000 })
 })
+
+const TRANSFER_REASONS = 'Journey test transfer to MCMS'
+const MCMS_REFERENCE = 'MCMS/TEST/0001'
+const TRANSFER_PENDING_STATUS = 'Transfer pending'
+const TRANSFERRED_STATUS = 'Transferred'
+
+When(
+  'the internal user requests a transfer to MCMS in D365',
+  { timeout: 600_000 },
+  async function () {
+    const { browser, page } = await launchD365Browser()
+    this.d365Browser = browser
+    this.d365Page = page
+
+    await loginToD365(page)
+    await verifyD365Login(page)
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    await requestTransferToMcms(page, TRANSFER_REASONS)
+
+    this.data.transferReasons = TRANSFER_REASONS
+    await expectMarineLicenceCaseStatus(
+      page,
+      this.data.applicationReference,
+      TRANSFER_PENDING_STATUS
+    )
+  }
+)
+
+When(
+  'the internal user completes the transfer to MCMS in D365',
+  { timeout: 600_000 },
+  async function () {
+    const page = this.d365Page
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    await completeTransferToMcms(page, MCMS_REFERENCE)
+
+    this.data.mcmsReference = MCMS_REFERENCE
+    await expectMarineLicenceCaseStatus(
+      page,
+      this.data.applicationReference,
+      TRANSFERRED_STATUS
+    )
+  }
+)
