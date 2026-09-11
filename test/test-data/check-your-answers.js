@@ -32,8 +32,8 @@ const DEFAULT_OSGB36_BOUNDARY = [
   { eastings: '432675', northings: '181500' }
 ]
 
-export function createCYACircleWGS84Data() {
-  return withPublicRegister(createCircleWGS84Data())
+export function createCYACircleWGS84Data(overrides = {}) {
+  return withPublicRegister(createCircleWGS84Data(overrides))
 }
 
 export function createCYACircleOSGB36Data() {
