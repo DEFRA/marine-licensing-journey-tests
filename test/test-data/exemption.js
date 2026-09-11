@@ -212,15 +212,21 @@ export function generateProjectName() {
   return `${location} ${activity} - ${descriptor} ${num}`
 }
 
-export function generateIatContext() {
-  const activityType = faker.helpers.arrayElement(ACTIVITY_TYPES)
-  const articleCode = faker.helpers.arrayElement(ARTICLE_CODES)
+export function generateIatContext(overrides = {}) {
+  const activityType =
+    ACTIVITY_TYPES.find((type) => type.code === overrides.activityTypeCode) ??
+    faker.helpers.arrayElement(ACTIVITY_TYPES)
+  const articleCode =
+    ARTICLE_CODES.find((article) => article.code === overrides.articleCode) ??
+    faker.helpers.arrayElement(ARTICLE_CODES)
   const pdfUrl = `https://marinelicensing.marinemanagement.org.uk/path/journey/self-service/outcome-document/${faker.string.uuid()}`
 
   let activityPurpose = null
   if (activityType.supportsPurpose) {
     const purposeMap = ACTIVITY_PURPOSE_DISPLAY[activityType.code]
-    if (purposeMap && purposeMap[articleCode.code]) {
+    if (overrides.activityPurpose) {
+      activityPurpose = overrides.activityPurpose
+    } else if (purposeMap && purposeMap[articleCode.code]) {
       activityPurpose = purposeMap[articleCode.code]
     } else {
       activityPurpose = faker.helpers.arrayElement(ACTIVITY_PURPOSES)
