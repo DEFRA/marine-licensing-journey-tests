@@ -23,7 +23,7 @@ import {
   enterPolygonCoordinatesWGS84,
   enterPolygonCoordinatesOSGB36
 } from './site-details-flow.js'
-import PublicRegisterPage from '../pages/public.register.page.js'
+import LcmlPublicRegisterPage from '../pages/lcml.public.register.page.js'
 import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page.js'
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
@@ -208,15 +208,15 @@ export async function completePreferredDates(page) {
 
 export async function completeSharingConsent(page, answer) {
   await page
-    .locator('a:has-text("Sharing your project information publicly")')
+    .getByRole('link', { name: 'Public register', exact: true })
     .first()
     .click()
   await page.waitForLoadState('load')
 
-  const publicRegister = new PublicRegisterPage(page)
-  const consent = answer === 'Yes'
-  const reason = consent ? undefined : faker.lorem.sentence()
-  await publicRegister.completeAndSave(consent, reason)
+  const publicRegister = new LcmlPublicRegisterPage(page)
+  const withhold = answer !== 'Yes'
+  const reason = withhold ? faker.lorem.sentence() : undefined
+  await publicRegister.completeAndSave(withhold, reason)
   await page.waitForLoadState('load')
   return reason
 }
