@@ -989,3 +989,160 @@ export async function completeTransferToMcms(page, mcmsReference) {
   await button.click()
   await submitTransferDialog(page, mcmsReference, /^complete transfer$/i)
 }
+
+export const MPP_TASK_OUTCOMES = {
+  compliant: 'Compliant',
+  nonCompliant: 'Non compliant',
+  consultationRequired: 'Consultation required'
+}
+
+export async function readMarinePlanPolicyTasks(page) {
+  const pageUrl = new URL(page.url())
+  const caseId = pageUrl.searchParams.get('id')?.replace(/[{}]/g, '')
+  if (!caseId) {
+    throw new Error(
+      `readMarinePlanPolicyTasks: no case id in URL ${page.url()}`
+    )
+  }
+
+  return page.evaluate(
+    async ({ id, origin }) => {
+      const query =
+        `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments` +
+        `?$filter=_mmo_caseid_value eq ${id}` +
+        `&$select=mmo_policycode,mmo_policyname,statuscode` +
+        `&$orderby=mmo_policycode`
+      const response = await fetch(query, {
+        headers: {
+          Accept: 'application/json',
+          Prefer: 'odata.include-annotations="*"'
+        }
+      })
+      const body = await response.json()
+      if (body.error) {
+        throw new Error(
+          `readMarinePlanPolicyTasks: ${body.error.message ?? 'query failed'}`
+        )
+      }
+      return (body.value ?? []).map((record) => ({
+        code: record.mmo_policycode,
+        name: record.mmo_policyname,
+        status:
+          record['statuscode@OData.Community.Display.V1.FormattedValue'] ?? null
+      }))
+    },
+    { id: caseId, origin: pageUrl.origin }
+  )
+}
+
+export async function waitForMarinePlanPolicyTaskStatus(page, expected) {
+  let tasks = []
+  for (let attempt = 1; attempt <= 20; attempt++) {
+    tasks = await readMarinePlanPolicyTasks(page)
+    const statuses = [...new Set(tasks.map((task) => task.status))]
+    if (statuses.length === 1 && statuses[0] === expected) {
+      return tasks
+    }
+    await page.waitForTimeout(6_000)
+  }
+  const seen = [...new Set(tasks.map((task) => task.status))]
+  throw new Error(
+    `Marine plan policy tasks are ${JSON.stringify(seen)} after two minutes, expected all "${expected}"`
+  )
+}
+
+export async function openMarinePlanPolicyTask(page, policyCode) {
+  const link = page
+    .getByRole('link', { name: new RegExp(`^${policyCode}\\b`) })
+    .first()
+  await link.waitFor({ state: 'visible', timeout: 60_000 })
+  await link.click()
+  await page.waitForURL(/etn=mmo_marineplanpolicyassessment/, {
+    timeout: 60_000
+  })
+  await page.waitForLoadState('load')
+}
+
+export async function readMarinePlanPolicyTaskMeta(page) {
+  const pageUrl = new URL(page.url())
+  const recordId = pageUrl.searchParams.get('id')?.replace(/[{}]/g, '')
+  const entity = pageUrl.searchParams.get('etn')
+  if (!recordId || entity !== 'mmo_marineplanpolicyassessment') {
+    throw new Error(
+      `readMarinePlanPolicyTaskMeta: expected a marine plan policy assessment record, got etn="${entity}" id="${recordId}"`
+    )
+  }
+
+  return page.evaluate(
+    async ({ id, origin }) => {
+      const get = async (url) => {
+        const response = await fetch(url, {
+          headers: {
+            Accept: 'application/json',
+            Prefer: 'odata.include-annotations="*"'
+          }
+        })
+        return response.json()
+      }
+
+      const record = await get(
+        `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments(${id})`
+      )
+      if (record.error) {
+        throw new Error(
+          `readMarinePlanPolicyTaskMeta: ${record.error.message ?? 'read failed'} (id ${id})`
+        )
+      }
+
+      const outcomeMeta = await get(
+        `${origin}/api/data/v9.2/EntityDefinitions(LogicalName='mmo_marineplanpolicyassessment')` +
+          `/Attributes(LogicalName='mmo_outcome')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata` +
+          `?$select=LogicalName&$expand=OptionSet`
+      )
+
+      return {
+        policyCode: record.mmo_policycode ?? null,
+        policyName: record.mmo_policyname ?? null,
+        policyCategory: record.mmo_policycategory ?? null,
+        policyInformation: record.mmo_policyinformationtext ?? null,
+        applicantConsideration: record.mmo_applicantconsideration ?? null,
+        outcome:
+          record['mmo_outcome@OData.Community.Display.V1.FormattedValue'] ??
+          null,
+        reason: record.mmo_reasonforyourdecision ?? null,
+        status:
+          record['statuscode@OData.Community.Display.V1.FormattedValue'] ??
+          null,
+        outcomeOptions: (outcomeMeta.OptionSet?.Options ?? [])
+          .map((option) => option.Label?.UserLocalizedLabel?.Label)
+          .filter(Boolean)
+      }
+    },
+    { id: recordId, origin: pageUrl.origin }
+  )
+}
+
+const MPP_OUTCOME_COMBOBOX =
+  '[data-id="mmo_outcome.fieldControl-option-set-select"]'
+const MPP_REASON_INPUT =
+  '[data-id="mmo_reasonforyourdecision.fieldControl-text-box-text"]'
+const MPP_SAVE_AND_CLOSE = 'button[data-id*="SaveAndClose"]'
+
+export async function completeMarinePlanPolicyTask(page, outcome, reason) {
+  const combobox = page.locator(MPP_OUTCOME_COMBOBOX).first()
+  await combobox.waitFor({ state: 'visible', timeout: 60_000 })
+  await combobox.click()
+  await page.getByRole('option', { name: outcome, exact: true }).first().click()
+
+  const reasonInput = page.locator(MPP_REASON_INPUT).first()
+  await reasonInput.waitFor({ state: 'visible', timeout: 30_000 })
+  await reasonInput.click()
+  await reasonInput.fill(reason)
+
+  const save = page.locator(MPP_SAVE_AND_CLOSE).first()
+  await save.waitFor({ state: 'visible', timeout: 30_000 })
+  await save.click()
+
+  await page.waitForURL(/etn=incident/, { timeout: 120_000 })
+  await page.waitForLoadState('load')
+}

@@ -93,6 +93,14 @@ Feature: LCML: View details page shows sites and activities
     And the Marine plan policies tab shows the policy list, policy information and the applicant's consideration
     And selecting the second policy updates the policy detail
 
+  @real-defra-id @d365 @issue=ML-1441
+  Scenario: Marine plan policy tasks unlock after the Site check and can be completed
+    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    When the internal user completes the Site check and opens the marine plan policy tasks
+    Then the marine plan policy tasks are listed by policy code and were blocked until the Site check was done
+    And a marine plan policy task shows its code, policy information and the applicant consideration
+    And completing marine plan policy tasks with an outcome and reason marks them as Done
+
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
     Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
