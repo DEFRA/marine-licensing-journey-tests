@@ -912,20 +912,22 @@ export async function readCaseCommandLabels(page) {
   )
 }
 
-async function submitTransferDialog(page, text, buttonPattern) {
-  const dialog = page.locator('[role="dialog"]')
-  await dialog.waitFor({ state: 'visible', timeout: 60_000 })
+const APP_ERROR_TEXT = /Something has gone wrong/i
+const DIALOG_CLOSE = 'button[data-id="dialogCloseIconButton"]'
 
-  const field = dialog.locator('textarea, input[type="text"]').first()
-  try {
-    await field.waitFor({ state: 'visible', timeout: 120_000 })
-  } catch {
-    throw new Error(
-      'The transfer dialog opened but its Power Apps body never rendered a ' +
-        `field. Dialog text: "${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim()}"`
-    )
+async function dismissDialogError(page, dialog) {
+  const ok = dialog.getByRole('button', { name: /^ok$/i }).first()
+  if (await ok.isVisible().catch(() => false)) {
+    await ok.click().catch(() => {})
   }
+  const close = page.locator(DIALOG_CLOSE).first()
+  if (await close.isVisible().catch(() => false)) {
+    await close.click().catch(() => {})
+  }
+  await dialog.waitFor({ state: 'hidden', timeout: 30_000 }).catch(() => {})
+}
 
+async function fillAndSubmitTransferDialog(page, dialog, field, text, pattern) {
   let lastShown = ''
   for (let attempt = 1; attempt <= 4; attempt++) {
     await page.waitForTimeout(attempt * 3_000)
@@ -934,7 +936,7 @@ async function submitTransferDialog(page, text, buttonPattern) {
     await field.press('ControlOrMeta+a')
     await field.pressSequentially(text, { delay: 20 })
 
-    await dialog.getByRole('button', { name: buttonPattern }).first().click()
+    await dialog.getByRole('button', { name: pattern }).first().click()
 
     try {
       await dialog.waitFor({ state: 'hidden', timeout: 30_000 })
@@ -948,9 +950,51 @@ async function submitTransferDialog(page, text, buttonPattern) {
   }
 
   throw new Error(
-    `Dialog stayed open after clicking ${buttonPattern}. ` +
+    `Dialog stayed open after clicking ${pattern}. ` +
       `Field value: ${JSON.stringify(await field.inputValue().catch(() => null))}. ` +
       `Dialog text: ${lastShown}`
+  )
+}
+
+async function runTransferCommand(page, commandSelector, text, pattern) {
+  let lastFailure = ''
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const button = await waitForCaseCommand(page, commandSelector)
+    await button.click()
+
+    const dialog = page.locator('[role="dialog"]').first()
+    await dialog.waitFor({ state: 'visible', timeout: 60_000 })
+
+    const field = dialog.locator('textarea, input[type="text"]').first()
+    const appError = dialog.getByText(APP_ERROR_TEXT).first()
+
+    const outcome = await Promise.race([
+      field
+        .waitFor({ state: 'visible', timeout: 120_000 })
+        .then(() => 'ready')
+        .catch(() => 'timeout'),
+      appError
+        .waitFor({ state: 'visible', timeout: 120_000 })
+        .then(() => 'app-error')
+        .catch(() => 'timeout')
+    ])
+
+    if (outcome === 'ready') {
+      await fillAndSubmitTransferDialog(page, dialog, field, text, pattern)
+      return
+    }
+
+    lastFailure =
+      outcome === 'app-error'
+        ? `the dialog reported an error: "${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim()}"`
+        : 'the dialog opened but its Power Apps body never rendered a field'
+
+    await dismissDialogError(page, dialog)
+  }
+
+  throw new Error(
+    `Could not use the transfer dialog after two attempts: ${lastFailure}`
   )
 }
 
@@ -979,13 +1023,19 @@ async function waitForCaseCommand(page, commandSelector) {
 }
 
 export async function requestTransferToMcms(page, reasons) {
-  const button = await waitForCaseCommand(page, REQUEST_TRANSFER_COMMAND)
-  await button.click()
-  await submitTransferDialog(page, reasons, /^request transfer$/i)
+  await runTransferCommand(
+    page,
+    REQUEST_TRANSFER_COMMAND,
+    reasons,
+    /^request transfer$/i
+  )
 }
 
 export async function completeTransferToMcms(page, mcmsReference) {
-  const button = await waitForCaseCommand(page, COMPLETE_TRANSFER_COMMAND)
-  await button.click()
-  await submitTransferDialog(page, mcmsReference, /^complete transfer$/i)
+  await runTransferCommand(
+    page,
+    COMPLETE_TRANSFER_COMMAND,
+    mcmsReference,
+    /^complete transfer$/i
+  )
 }
