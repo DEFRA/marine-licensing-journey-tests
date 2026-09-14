@@ -915,6 +915,28 @@ export async function readCaseCommandLabels(page) {
 const APP_ERROR_TEXT = /Something has gone wrong/i
 const DIALOG_CLOSE = 'button[data-id="dialogCloseIconButton"]'
 
+// "Something has gone wrong" on its own tells a developer nothing, and the
+// detail they need sits behind the dialog's Show details control, so it is
+// expanded and read before the dialog is dismissed.
+async function readDialogErrorDetails(page, dialog) {
+  const showDetails = dialog
+    .getByRole('link', { name: /show details/i })
+    .or(dialog.getByRole('button', { name: /show details/i }))
+    .first()
+
+  if (await showDetails.isVisible().catch(() => false)) {
+    await showDetails.click().catch(() => {})
+    await page.waitForTimeout(2_000)
+  }
+
+  const texts = await page
+    .locator('[role="dialog"]')
+    .allInnerTexts()
+    .catch(() => [])
+
+  return texts.join(' | ').replace(/\s+/g, ' ').trim().slice(0, 2_000)
+}
+
 async function dismissDialogError(page, dialog) {
   const ok = dialog.getByRole('button', { name: /^ok$/i }).first()
   if (await ok.isVisible().catch(() => false)) {
@@ -987,10 +1009,14 @@ async function runTransferCommand(page, commandSelector, text, pattern) {
 
     lastFailure =
       outcome === 'app-error'
-        ? `the dialog reported an error: "${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim()}"`
+        ? `the dialog reported an error. Details: ${await readDialogErrorDetails(page, dialog)}`
         : 'the dialog opened but its Power Apps body never rendered a field'
 
-    await dismissDialogError(page, dialog)
+    // Left on screen on the final attempt so the failure screenshot shows the
+    // error rather than the case page behind it.
+    if (attempt < 2) {
+      await dismissDialogError(page, dialog)
+    }
   }
 
   throw new Error(
