@@ -29,12 +29,12 @@ services:
       REGISTRATIONS_STORE_ENGINE: dynamodb
       REGISTRATIONS_STORE_TTL: 259200000
       AWS_DYNAMODB_REGISTRATIONS_TABLE_NAME: cdp-defra-id-stub-registrations
-      DYNAMODB_ENDPOINT: http://localstack:4566
+      DYNAMODB_ENDPOINT: http://floci:4566
       AWS_REGION: eu-west-2
     depends_on:
       redis-frontend:
         condition: service_healthy
-      localstack:
+      floci:
         condition: service_healthy
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
@@ -90,22 +90,25 @@ services:
       start_period: 30s
       retries: 5
 
-  localstack:
-    image: localstack/localstack:3.0.2
+  floci:
+    image: floci/floci:latest-compat
     ports:
-      - '4566:4566' # LocalStack Gateway
-      - '4510-4559:4510-4559' # external services port range
+      - '4566:4566' # Floci AWS edge port
     restart: unless-stopped
     env_file:
       - 'compose/aws.env'
     environment:
-      DEBUG: ${DEBUG:-1}
-      LS_LOG: WARN # Localstack DEBUG Level
-      SERVICES: s3,sqs,sns,firehose,dynamodb
-      LOCALSTACK_HOST: 127.0.0.1
+      # Hostname embedded in QueueUrls / response URLs. Keep 127.0.0.1 so
+      # host-side clients (e.g. mas-queue.js) can use GetQueueUrl results.
+      FLOCI_HOSTNAME: 127.0.0.1
+      QUARKUS_LOG_LEVEL: WARN
+      # Ephemeral in-memory state. resourceexplorer2 defaults to hybrid and
+      # otherwise requires a writable /app/data (anonymous Docker volumes are
+      # often root-owned, which breaks Floci uid 1001).
+      FLOCI_STORAGE_MODE: memory
+      FLOCI_STORAGE_SERVICES_RESOURCEEXPLORER2_MODE: memory
     volumes:
-      - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
-      - ./compose/start-localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
+      - ./compose/start-floci.sh:/etc/floci/init/ready.d/start-floci.sh
     healthcheck:
       test: ['CMD', 'curl', 'localhost:4566']
       interval: 5s
@@ -154,10 +157,10 @@ services:
       - '7337:7337'
     restart: unless-stopped
     links:
-      - 'localstack:localstack'
+      - 'floci:floci'
       - 'redis:redis'
     depends_on:
-      localstack:
+      floci:
         condition: service_healthy
     env_file:
       - 'compose/aws.env'
@@ -174,8 +177,8 @@ services:
       MOCK_VIRUS_RESULT_DELAY: 3
       MOCK_VIRUS_REGEX: '.*virus.*'
       CONSUMER_BUCKETS: '${CDP_UPLOAD_BUCKET:-mmo-uploads},cdp-uploader-quarantine'
-      SQS_ENDPOINT: http://localstack:4566
-      S3_ENDPOINT: http://localstack:4566
+      SQS_ENDPOINT: http://floci:4566
+      S3_ENDPOINT: http://floci:4566
     networks:
       - cdp-tenant
 
@@ -214,7 +217,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      localstack:
+      floci:
         condition: service_healthy
     ports:
       - 3001:3001
@@ -236,12 +239,12 @@ services:
       PORT: 3003
       MONGO_URI: mongodb://mongodb:27017/
       MONGO_DATABASE: marine-licensing-public-register
-      SQS_ENDPOINT: http://localstack:4566
+      SQS_ENDPOINT: http://floci:4566
       PUBLIC_REGISTER_SQS_ENABLED: 'true'
     depends_on:
       mongodb:
         condition: service_healthy
-      localstack:
+      floci:
         condition: service_healthy
     ports:
       - 3003:3003
