@@ -46,6 +46,67 @@ export function generateLiveActivityDates() {
   }
 }
 
+function toDateParts(date) {
+  return {
+    day: String(date.getDate()).padStart(2, '0'),
+    month: String(date.getMonth() + 1).padStart(2, '0'),
+    year: String(date.getFullYear())
+  }
+}
+
+function datesFromDayOffsets(startOffset, endOffset) {
+  const start = new Date()
+  start.setDate(start.getDate() + startOffset)
+  const end = new Date()
+  end.setDate(end.getDate() + endOffset)
+  return { startDate: toDateParts(start), endDate: toDateParts(end) }
+}
+
+export function generateScheduledActivityDates() {
+  return datesFromDayOffsets(30, 60)
+}
+
+export function generateExpiredActivityDates() {
+  return datesFromDayOffsets(-60, -30)
+}
+
+export function createTwoSiteDatesData(firstDates, secondDates) {
+  return baseSiteData({
+    coordinatesEntryMethod: 'enter-manually',
+    multipleSitesEnabled: true,
+    sameActivityDates: false,
+    sameActivityDescription: false,
+    sites: [
+      {
+        siteName: 'Dated Site Alpha',
+        siteNumber: 1,
+        siteType: 'circle',
+        coordinateSystem: 'WGS84',
+        circleData: {
+          latitude: '51.507412',
+          longitude: '-0.127812',
+          width: '20'
+        },
+        activityDates: firstDates,
+        activityDescription: generateActivityDescription()
+      },
+      {
+        siteName: 'Dated Site Beta',
+        siteNumber: 2,
+        siteType: 'circle',
+        coordinateSystem: 'WGS84',
+        circleData: {
+          latitude: '50.812000',
+          longitude: '-1.087000',
+          width: '20'
+        },
+        activityDates: secondDates,
+        activityDescription: generateActivityDescription()
+      }
+    ]
+  })
+}
+
 export function generateActivityDescription() {
   return faker.lorem.sentence(10)
 }
