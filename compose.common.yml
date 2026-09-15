@@ -93,18 +93,13 @@ services:
   floci:
     image: floci/floci:latest-compat
     ports:
-      - '4566:4566' # Floci AWS edge port
+      - '4566:4566'
     restart: unless-stopped
     env_file:
       - 'compose/aws.env'
     environment:
-      # Hostname embedded in QueueUrls / response URLs. Keep 127.0.0.1 so
-      # host-side clients (e.g. mas-queue.js) can use GetQueueUrl results.
       FLOCI_HOSTNAME: 127.0.0.1
       QUARKUS_LOG_LEVEL: WARN
-      # Ephemeral in-memory state. resourceexplorer2 defaults to hybrid and
-      # otherwise requires a writable /app/data (anonymous Docker volumes are
-      # often root-owned, which breaks Floci uid 1001).
       FLOCI_STORAGE_MODE: memory
       FLOCI_STORAGE_SERVICES_RESOURCEEXPLORER2_MODE: memory
     volumes:
