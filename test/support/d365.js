@@ -2,6 +2,13 @@ import { chromium } from 'playwright'
 import { expect } from '@playwright/test'
 import { getConfig } from './config.js'
 
+// Dynamics renders task forms and the web resources behind the case tabs well
+// after navigation settles, and the pipeline container is slower at it than a
+// developer machine. These waits are for that rendering, not for anything the
+// test does, so they are generous and kept in one place.
+const D365_RENDER_TIMEOUT = 120_000
+const D365_NAVIGATION_TIMEOUT = 60_000
+
 const APPLICANT_ORG_SELECTOR =
   '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
 const APPLICANT_SELECTOR =
@@ -285,26 +292,41 @@ export async function readSiteCoordinatesCsvUrl(page) {
   })
 }
 
-export async function openSiteCheckTask(page) {
-  const link = siteCheckTaskLink(page)
-  // The Site check task is created by an asynchronous Dynamics flow after the
-  // case is submitted, so reload the case record until the task link appears.
-  for (let attempt = 1; attempt <= 10; attempt++) {
+// The case tasks are created by an asynchronous Dynamics flow after the case is
+// submitted, so the Tasks subgrid renders empty - "No data available" - for a
+// while rather than slowly. Waiting longer on one page load cannot help; the
+// record has to be reloaded until the flow has run.
+async function waitForCaseTaskLink(page, link, name) {
+  // Each attempt has to give the subgrid time to paint after the reload. A
+  // point-in-time check straight after load is always false and the next
+  // reload throws away the render that was on its way.
+  for (let attempt = 1; attempt <= 12; attempt++) {
     try {
-      await link.waitFor({ state: 'visible', timeout: 12_000 })
-      break
-    } catch (error) {
-      if (attempt === 10) throw error
+      await link.waitFor({ state: 'visible', timeout: 15_000 })
+      return
+    } catch {
       await page.reload().catch(() => {})
       await page.waitForLoadState('load').catch(() => {})
     }
   }
+  throw new Error(
+    `The ${name} task never appeared on the case after three minutes. The ` +
+      'Tasks list is most likely still empty because the Dynamics flow that ' +
+      'creates the tasks has not run yet.'
+  )
+}
+
+export async function openSiteCheckTask(page) {
+  const link = siteCheckTaskLink(page)
+  await waitForCaseTaskLink(page, link, 'Site check')
   await link.click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
   await page.waitForLoadState('load')
   await page
     .locator(siteCheckContainer(SITE_CHECK_FIELDS.coordinatesAndShape))
-    .waitFor({ state: 'visible', timeout: 30_000 })
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
 }
 
 export async function readSiteCheckFieldMeta(page) {
@@ -400,15 +422,17 @@ export function wfdTaskLink(page) {
 
 export async function openWfdTask(page) {
   const link = wfdTaskLink(page)
-  await link.waitFor({ state: 'visible', timeout: 30_000 })
+  await waitForCaseTaskLink(page, link, 'Water Framework Directive')
   await link.click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
   await page.waitForLoadState('load')
   await page
     .locator(
       `[data-id="${WFD_TASK_FIELDS.sectionComplete}-FieldSectionItemContainer"]`
     )
-    .waitFor({ state: 'visible', timeout: 30_000 })
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
 }
 
 export async function readWfdTaskFieldMeta(page) {
@@ -576,7 +600,7 @@ export function caseTab(page, tabLabel) {
 
 export async function openPublicRegisterTab(page) {
   const tab = caseTab(page, 'Public register')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -614,7 +638,7 @@ export const OTHER_PERMISSIONS_WEBRESOURCE_ID = 'WebResource_otherpermissions'
 
 export async function openOtherPermissionsTab(page) {
   const tab = caseTab(page, 'Other permissions')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -686,7 +710,7 @@ export const WFD_TAB_WEBRESOURCE_ID = 'WebResource_waterframeworkdirective'
 
 export async function openWfdTab(page) {
   const tab = caseTab(page, 'Water Framework Directive')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -758,7 +782,7 @@ export const SITES_ACTIVITIES_WEBRESOURCE_ID = 'WebResource_sitesandactivities'
 
 export async function openSitesAndActivitiesTab(page) {
   const tab = caseTab(page, 'Sites and activities')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -794,7 +818,7 @@ export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
 
 export async function openMarinePlanPoliciesTab(page) {
   const tab = caseTab(page, 'Marine plan policies')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
