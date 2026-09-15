@@ -99,7 +99,7 @@ Feature: LCML: View details page shows sites and activities
     When the internal user completes the Site check and opens the marine plan policy tasks
     Then the marine plan policy tasks are listed by policy code and were blocked until the Site check was done
     And a marine plan policy task shows its code, policy information and the applicant consideration
-    And completing marine plan policy tasks with an outcome and reason marks them as Done
+    And completing 2 marine plan policy tasks with an outcome and reason marks them as Done
 
   @real-defra-id @d365 @issue=ML-1440
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)

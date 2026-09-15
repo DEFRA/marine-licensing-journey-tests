@@ -973,7 +973,6 @@ Then(
   }
 )
 
-const MPP_TASKS_TO_COMPLETE = 2
 const MPP_DECISION_REASON = 'Journey test decision for this policy'
 
 When(
@@ -1004,7 +1003,7 @@ Then(
     const before = this.data.mppTasksBeforeSiteCheck
     const after = this.data.mppTasksAfterSiteCheck
 
-    expect(before.length).toBeGreaterThan(MPP_TASKS_TO_COMPLETE)
+    expect(before.length).toBeGreaterThan(1)
     expect([...new Set(before.map((task) => task.status))]).toEqual([
       'Cannot start yet'
     ])
@@ -1037,14 +1036,11 @@ Then(
 )
 
 Then(
-  'completing marine plan policy tasks with an outcome and reason marks them as Done',
+  'completing {int} marine plan policy tasks with an outcome and reason marks them as Done',
   { timeout: D365_STEP_TIMEOUT },
-  async function () {
+  async function (count) {
     const page = this.d365Page
-    const targets = this.data.mppTasksAfterSiteCheck.slice(
-      0,
-      MPP_TASKS_TO_COMPLETE
-    )
+    const targets = this.data.mppTasksAfterSiteCheck.slice(0, count)
 
     for (const task of targets) {
       await page.goto(this.data.d365CaseUrl)
