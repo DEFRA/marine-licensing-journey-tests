@@ -54,13 +54,6 @@ Given(
 )
 
 Given(
-  'an individual has submitted an exemption running today',
-  async function () {
-    await submitWithDates(this, generateLiveActivityDates())
-  }
-)
-
-Given(
   'an individual has submitted an exemption that has already ended',
   async function () {
     await submitWithDates(this, generateExpiredActivityDates())
