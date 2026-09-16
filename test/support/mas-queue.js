@@ -19,16 +19,16 @@ function buildTransferMessage(applicationReference) {
   }
 }
 
-// --- Local transport: LocalStack SQS -------------------------------------
-// The MAS queue is provisioned by the compose stack (compose/start-localstack.sh).
-// Locally the LocalStack gateway is on localhost:4566; inside the Docker
-// it is http://localstack:4566 .
+// --- Local transport: Floci SQS ------------------------------------------
+// The MAS queue is provisioned by the compose stack (compose/start-floci.sh).
+// Locally the Floci gateway is on localhost:4566; inside the Docker
+// network it is http://floci:4566 .
 const SQS_ENDPOINT = 'http://localhost:4566'
 const MAS_QUEUE_NAME = 'marine_licensing_mas'
 
 let sqsClient
 function getSqsClient() {
-  // This client only ever talks to LocalStack, which ignores the credentials —
+  // This client only ever talks to Floci, which ignores the credentials —
   // the AWS SDK just requires a region and creds to be present.
   sqsClient ??= new SQSClient({
     region: 'eu-west-2',
@@ -38,7 +38,7 @@ function getSqsClient() {
   return sqsClient
 }
 
-async function sendViaLocalStack(message) {
+async function sendViaFloci(message) {
   const client = getSqsClient()
   const { QueueUrl } = await client.send(
     new GetQueueUrlCommand({ QueueName: MAS_QUEUE_NAME })
@@ -120,13 +120,13 @@ async function sendViaGateway(message) {
   }
 }
 
-// Local runs deliver straight to LocalStack SQS; CDP environments go through the
+// Local runs deliver straight to Floci SQS; CDP environments go through the
 // cognito-protected API gateway, mirroring how D365 posts the message.
 async function sendToQueue(message) {
   const environment = process.env.ENVIRONMENT || 'local'
 
   if (environment === 'local') {
-    await sendViaLocalStack(message)
+    await sendViaFloci(message)
   } else {
     await sendViaGateway(message)
   }
