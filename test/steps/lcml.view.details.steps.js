@@ -46,6 +46,8 @@ import {
   waitForMarinePlanPolicyTaskStatus,
   MPP_TASK_OUTCOMES
 } from '../support/d365.js'
+import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
+import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
 const D365_STEP_TIMEOUT = 600_000
@@ -173,6 +175,13 @@ Given(
     await submitMarineLicence(this)
   }
 )
+
+Given('the shared submitted marine licence', function () {
+  expect(this.data.applicationReference).toBeTruthy()
+  expect(this.data.siteType).toBe('upload')
+  expect(this.data.sharingConsent.consent).toBe('No')
+  expect(this.data.wfdVariation).toEqual(SHARED_WFD_VARIATION)
+})
 
 Given(
   'an organisation user has submitted a marine licence application with a site in a marine plan area',
@@ -585,27 +594,6 @@ Then(
   }
 )
 
-const WFD_VARIATIONS = {
-  'one-answer': {
-    wfd: 'nautical-no',
-    nauticalMile: 'No',
-    excluded: null,
-    hasAssessment: false
-  },
-  'two-answer': {
-    wfd: 'excluded',
-    nauticalMile: 'Yes',
-    excluded: 'Yes',
-    hasAssessment: false
-  },
-  'three-answer': {
-    wfd: 'upload',
-    nauticalMile: 'Yes',
-    excluded: 'No',
-    hasAssessment: true
-  }
-}
-
 Given(
   'an organisation user has submitted a marine licence with the {string} WFD variation',
   { timeout: D365_STEP_TIMEOUT },
@@ -734,15 +722,6 @@ Then(
   async function () {
     const status = await completeWfdReview(this.d365Page)
     expect(status).toBe('Done')
-  }
-)
-
-Given(
-  'an organisation user has submitted a marine licence application with sharing consent {string}',
-  { timeout: D365_STEP_TIMEOUT },
-  async function (consent) {
-    await completeMarineAreaShapefileApp(this, { consent })
-    await submitMarineLicence(this)
   }
 )
 

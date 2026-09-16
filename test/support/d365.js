@@ -1152,21 +1152,66 @@ const MPP_REASON_INPUT =
   '[data-id="mmo_reasonforyourdecision.fieldControl-text-box-text"]'
 const MPP_SAVE_AND_CLOSE = 'button[data-id*="SaveAndClose"]'
 
+const MPP_SAVE_ATTEMPTS = 3
+
+async function readFormMessages(page) {
+  const texts = await page
+    .evaluate(() =>
+      Array.from(
+        document.querySelectorAll(
+          '[role="alert"], [role="dialog"], [data-id*="errorMessage"]'
+        )
+      )
+        .map((node) => node.innerText)
+        .filter(Boolean)
+    )
+    .catch(() => [])
+
+  return texts
+    .map((text) => text.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join(' | ')
+    .slice(0, 500)
+}
+
 export async function completeMarinePlanPolicyTask(page, outcome, reason) {
   const combobox = page.locator(MPP_OUTCOME_COMBOBOX).first()
   await combobox.waitFor({ state: 'visible', timeout: 60_000 })
-  await combobox.click()
-  await page.getByRole('option', { name: outcome, exact: true }).first().click()
 
   const reasonInput = page.locator(MPP_REASON_INPUT).first()
   await reasonInput.waitFor({ state: 'visible', timeout: 30_000 })
-  await reasonInput.click()
-  await reasonInput.fill(reason)
 
-  const save = page.locator(MPP_SAVE_AND_CLOSE).first()
-  await save.waitFor({ state: 'visible', timeout: 30_000 })
-  await save.click()
+  let lastMessages = ''
+  for (let attempt = 1; attempt <= MPP_SAVE_ATTEMPTS; attempt++) {
+    await combobox.click()
+    await page
+      .getByRole('option', { name: outcome, exact: true })
+      .first()
+      .click()
 
-  await page.waitForURL(/etn=incident/, { timeout: 120_000 })
-  await page.waitForLoadState('load')
+    await reasonInput.click()
+    await reasonInput.press('ControlOrMeta+a')
+    await reasonInput.pressSequentially(reason, { delay: 20 })
+    await reasonInput.press('Tab')
+
+    const save = page.locator(MPP_SAVE_AND_CLOSE).first()
+    await save.waitFor({ state: 'visible', timeout: 30_000 })
+    await save.click()
+
+    try {
+      await page.waitForURL(/etn=incident/, { timeout: 45_000 })
+      await page.waitForLoadState('load')
+      return
+    } catch {
+      lastMessages = await readFormMessages(page)
+      await page.waitForTimeout(attempt * 3_000)
+    }
+  }
+
+  throw new Error(
+    `Save and close did not return to the case after ${MPP_SAVE_ATTEMPTS} attempts. ` +
+      `Outcome: ${JSON.stringify(outcome)}. ` +
+      `Reason field value: ${JSON.stringify(await reasonInput.inputValue().catch(() => null))}. ` +
+      `Form messages: ${lastMessages || 'none captured'}`
+  )
 }

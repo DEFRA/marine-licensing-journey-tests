@@ -41,9 +41,9 @@ Feature: LCML: View details page shows sites and activities
     And the marine plan policies card shows Applicant's consideration with no Change links
     And the fee estimate, invoicing details and sharing project information cards are not displayed
 
-  @real-defra-id @d365 @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
   Scenario: A submitted marine licence case is shown in the D365 workbasket and case summary
-    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    Given the shared submitted marine licence
     When the internal user finds the submitted case in the Marine licence cases workbasket
     Then the Marine licence cases workbasket shows the submitted case with the following details
       | Reference       | the submitted reference |
@@ -61,31 +61,31 @@ Feature: LCML: View details page shows sites and activities
     And the case shows the "Site check" task in the task list
     And the Site check task page shows the mandatory site check questions, a 4000 character Notes field and a Download CSV link
 
-  @real-defra-id @d365 @issue=ML-1433
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1433
   Scenario: The Project details tab shows the submitted project information
-    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    Given the shared submitted marine licence
     When the internal user finds the submitted case in the Marine licence cases workbasket
     Then the Project details tab shows the project name, background and preferred licence dates
 
-  @real-defra-id @d365 @issue=ML-1438
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1438
   Scenario: The Public register tab shows the applicant's "No" sharing consent from CDP
-    Given an organisation user has submitted a marine licence application with sharing consent "No"
+    Given the shared submitted marine licence
     When the internal user opens the submitted case in D365
     Then the case shows the "Public register" tab in the tab strip
     And the Public register tab shows sharing consent "No"
 
-  @real-defra-id @d365 @issue=ML-1437 @issue=ML-1436
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1437 @issue=ML-1436
   Scenario: The case tabs show the applicant's Other permissions and WFD answers from CDP
-    Given an organisation user has submitted a marine licence with the "three-answer" WFD variation
+    Given the shared submitted marine licence
     When the internal user opens the submitted case in D365
     Then the case shows the "Other permissions" tab in the tab strip
     And the Other permissions tab shows the applicant's "No" answers for all four permissions
     And the case shows the "Water Framework Directive" tab in the tab strip
     And the Water Framework Directive tab shows the applicant's answers, guidance and the uploaded assessment
 
-  @real-defra-id @d365 @issue=ML-1434 @issue=ML-1435
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1434 @issue=ML-1435
   Scenario: The Sites and activities and Marine plan policies tabs show the submitted data from CDP
-    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    Given the shared submitted marine licence
     When the internal user opens the submitted case in D365
     Then the case shows the "Sites and activities" tab in the tab strip
     And the Sites and activities tab shows the uploaded site location and the site and activity details
@@ -93,9 +93,9 @@ Feature: LCML: View details page shows sites and activities
     And the Marine plan policies tab shows the policy list, policy information and the applicant's consideration
     And selecting the second policy updates the policy detail
 
-  @real-defra-id @d365 @issue=ML-1441
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1441
   Scenario: Marine plan policy tasks unlock after the Site check and can be completed
-    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    Given the shared submitted marine licence
     When the internal user completes the Site check and opens the marine plan policy tasks
     Then the marine plan policy tasks are listed by policy code and were blocked until the Site check was done
     And a marine plan policy task shows its code, policy information and the applicant consideration
