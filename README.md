@@ -41,7 +41,7 @@ Tests run against Docker containers defined in `compose.yml`. All services commu
 | `cdp-uploader`                     | `defradigital/cdp-uploader`                     | 7337  | File upload service          |
 | `mongodb`                          | `mongo:7.0.24`                                  | 27017 | Database                     |
 | `redis` / `redis-frontend`         | `redis:7`                                       | 6379  | Session cache                |
-| `localstack`                       | `localstack/localstack:3.0.2`                   | 4566  | S3, SQS, SNS (AWS mock)      |
+| `floci`                            | `floci/floci:latest-compat`                     | 4566  | S3, SQS, SNS (AWS mock)      |
 
 ### Starting services
 
@@ -349,7 +349,7 @@ Every test requires an IAT (Integrated Assessment Tool) context passed as URL qu
 The GitHub Actions workflow (`check-pull-request.yml`) runs:
 
 1. Lint checks (prettier, eslint, gherkin standards, step analysis)
-2. Docker Compose up (MongoDB, Redis, LocalStack, frontend, backend, DEFRA ID stub)
+2. Docker Compose up (MongoDB, Redis, Floci, frontend, backend, DEFRA ID stub)
 3. `npm run test:github` with 10 parallel workers
 4. Allure report generation and artifact upload
 5. PR comment with pass/fail summary

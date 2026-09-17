@@ -2,6 +2,13 @@ import { chromium } from 'playwright'
 import { expect } from '@playwright/test'
 import { getConfig } from './config.js'
 
+// Dynamics renders task forms and the web resources behind the case tabs well
+// after navigation settles, and the pipeline container is slower at it than a
+// developer machine. These waits are for that rendering, not for anything the
+// test does, so they are generous and kept in one place.
+const D365_RENDER_TIMEOUT = 120_000
+const D365_NAVIGATION_TIMEOUT = 60_000
+
 const APPLICANT_ORG_SELECTOR =
   '[data-id="mmo_applicantorganisationid.fieldControl-LookupResultsDropdown_mmo_applicantorganisationid_selected_tag_text"]'
 const APPLICANT_SELECTOR =
@@ -285,26 +292,41 @@ export async function readSiteCoordinatesCsvUrl(page) {
   })
 }
 
-export async function openSiteCheckTask(page) {
-  const link = siteCheckTaskLink(page)
-  // The Site check task is created by an asynchronous Dynamics flow after the
-  // case is submitted, so reload the case record until the task link appears.
-  for (let attempt = 1; attempt <= 10; attempt++) {
+// The case tasks are created by an asynchronous Dynamics flow after the case is
+// submitted, so the Tasks subgrid renders empty - "No data available" - for a
+// while rather than slowly. Waiting longer on one page load cannot help; the
+// record has to be reloaded until the flow has run.
+async function waitForCaseTaskLink(page, link, name) {
+  // Each attempt has to give the subgrid time to paint after the reload. A
+  // point-in-time check straight after load is always false and the next
+  // reload throws away the render that was on its way.
+  for (let attempt = 1; attempt <= 12; attempt++) {
     try {
-      await link.waitFor({ state: 'visible', timeout: 12_000 })
-      break
-    } catch (error) {
-      if (attempt === 10) throw error
+      await link.waitFor({ state: 'visible', timeout: 15_000 })
+      return
+    } catch {
       await page.reload().catch(() => {})
       await page.waitForLoadState('load').catch(() => {})
     }
   }
+  throw new Error(
+    `The ${name} task never appeared on the case after three minutes. The ` +
+      'Tasks list is most likely still empty because the Dynamics flow that ' +
+      'creates the tasks has not run yet.'
+  )
+}
+
+export async function openSiteCheckTask(page) {
+  const link = siteCheckTaskLink(page)
+  await waitForCaseTaskLink(page, link, 'Site check')
   await link.click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
   await page.waitForLoadState('load')
   await page
     .locator(siteCheckContainer(SITE_CHECK_FIELDS.coordinatesAndShape))
-    .waitFor({ state: 'visible', timeout: 30_000 })
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
 }
 
 export async function readSiteCheckFieldMeta(page) {
@@ -400,15 +422,17 @@ export function wfdTaskLink(page) {
 
 export async function openWfdTask(page) {
   const link = wfdTaskLink(page)
-  await link.waitFor({ state: 'visible', timeout: 30_000 })
+  await waitForCaseTaskLink(page, link, 'Water Framework Directive')
   await link.click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=task/, { timeout: 30_000 })
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
   await page.waitForLoadState('load')
   await page
     .locator(
       `[data-id="${WFD_TASK_FIELDS.sectionComplete}-FieldSectionItemContainer"]`
     )
-    .waitFor({ state: 'visible', timeout: 30_000 })
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
 }
 
 export async function readWfdTaskFieldMeta(page) {
@@ -576,7 +600,7 @@ export function caseTab(page, tabLabel) {
 
 export async function openPublicRegisterTab(page) {
   const tab = caseTab(page, 'Public register')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -614,7 +638,7 @@ export const OTHER_PERMISSIONS_WEBRESOURCE_ID = 'WebResource_otherpermissions'
 
 export async function openOtherPermissionsTab(page) {
   const tab = caseTab(page, 'Other permissions')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -686,7 +710,7 @@ export const WFD_TAB_WEBRESOURCE_ID = 'WebResource_waterframeworkdirective'
 
 export async function openWfdTab(page) {
   const tab = caseTab(page, 'Water Framework Directive')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -758,7 +782,7 @@ export const SITES_ACTIVITIES_WEBRESOURCE_ID = 'WebResource_sitesandactivities'
 
 export async function openSitesAndActivitiesTab(page) {
   const tab = caseTab(page, 'Sites and activities')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -794,7 +818,7 @@ export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
 
 export async function openMarinePlanPoliciesTab(page) {
   const tab = caseTab(page, 'Marine plan policies')
-  await tab.waitFor({ state: 'visible', timeout: 30_000 })
+  await tab.waitFor({ state: 'visible', timeout: D365_NAVIGATION_TIMEOUT })
   await tab.click()
   await page.waitForLoadState('load')
 }
@@ -988,4 +1012,206 @@ export async function completeTransferToMcms(page, mcmsReference) {
   const button = await waitForCaseCommand(page, COMPLETE_TRANSFER_COMMAND)
   await button.click()
   await submitTransferDialog(page, mcmsReference, /^complete transfer$/i)
+}
+
+export const MPP_TASK_OUTCOMES = {
+  compliant: 'Compliant',
+  nonCompliant: 'Non compliant',
+  consultationRequired: 'Consultation required'
+}
+
+export async function readMarinePlanPolicyTasks(page) {
+  const pageUrl = new URL(page.url())
+  const caseId = pageUrl.searchParams.get('id')?.replace(/[{}]/g, '')
+  if (!caseId) {
+    throw new Error(
+      `readMarinePlanPolicyTasks: no case id in URL ${page.url()}`
+    )
+  }
+
+  return page.evaluate(
+    async ({ id, origin }) => {
+      const query =
+        `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments` +
+        `?$filter=_mmo_caseid_value eq ${id}` +
+        `&$select=mmo_policycode,mmo_policyname,statuscode` +
+        `&$orderby=mmo_policycode`
+      const response = await fetch(query, {
+        headers: {
+          Accept: 'application/json',
+          Prefer: 'odata.include-annotations="*"'
+        }
+      })
+      const body = await response.json()
+      if (body.error) {
+        throw new Error(
+          `readMarinePlanPolicyTasks: ${body.error.message ?? 'query failed'}`
+        )
+      }
+      return (body.value ?? []).map((record) => ({
+        code: record.mmo_policycode,
+        name: record.mmo_policyname,
+        status:
+          record['statuscode@OData.Community.Display.V1.FormattedValue'] ?? null
+      }))
+    },
+    { id: caseId, origin: pageUrl.origin }
+  )
+}
+
+export async function waitForMarinePlanPolicyTaskStatus(page, expected) {
+  let tasks = []
+  for (let attempt = 1; attempt <= 20; attempt++) {
+    tasks = await readMarinePlanPolicyTasks(page)
+    const statuses = [...new Set(tasks.map((task) => task.status))]
+    if (statuses.length === 1 && statuses[0] === expected) {
+      return tasks
+    }
+    await page.waitForTimeout(6_000)
+  }
+  const seen = [...new Set(tasks.map((task) => task.status))]
+  throw new Error(
+    `Marine plan policy tasks are ${JSON.stringify(seen)} after two minutes, expected all "${expected}"`
+  )
+}
+
+export async function openMarinePlanPolicyTask(page, policyCode) {
+  const link = page
+    .getByRole('link', { name: new RegExp(`^${policyCode}\\b`) })
+    .first()
+  await link.waitFor({ state: 'visible', timeout: 60_000 })
+  await link.click()
+  await page.waitForURL(/etn=mmo_marineplanpolicyassessment/, {
+    timeout: 60_000
+  })
+  await page.waitForLoadState('load')
+}
+
+export async function readMarinePlanPolicyTaskMeta(page) {
+  const pageUrl = new URL(page.url())
+  const recordId = pageUrl.searchParams.get('id')?.replace(/[{}]/g, '')
+  const entity = pageUrl.searchParams.get('etn')
+  if (!recordId || entity !== 'mmo_marineplanpolicyassessment') {
+    throw new Error(
+      `readMarinePlanPolicyTaskMeta: expected a marine plan policy assessment record, got etn="${entity}" id="${recordId}"`
+    )
+  }
+
+  return page.evaluate(
+    async ({ id, origin }) => {
+      const get = async (url) => {
+        const response = await fetch(url, {
+          headers: {
+            Accept: 'application/json',
+            Prefer: 'odata.include-annotations="*"'
+          }
+        })
+        return response.json()
+      }
+
+      const record = await get(
+        `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments(${id})`
+      )
+      if (record.error) {
+        throw new Error(
+          `readMarinePlanPolicyTaskMeta: ${record.error.message ?? 'read failed'} (id ${id})`
+        )
+      }
+
+      const outcomeMeta = await get(
+        `${origin}/api/data/v9.2/EntityDefinitions(LogicalName='mmo_marineplanpolicyassessment')` +
+          `/Attributes(LogicalName='mmo_outcome')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata` +
+          `?$select=LogicalName&$expand=OptionSet`
+      )
+
+      return {
+        policyCode: record.mmo_policycode ?? null,
+        policyName: record.mmo_policyname ?? null,
+        policyCategory: record.mmo_policycategory ?? null,
+        policyInformation: record.mmo_policyinformationtext ?? null,
+        applicantConsideration: record.mmo_applicantconsideration ?? null,
+        outcome:
+          record['mmo_outcome@OData.Community.Display.V1.FormattedValue'] ??
+          null,
+        reason: record.mmo_reasonforyourdecision ?? null,
+        status:
+          record['statuscode@OData.Community.Display.V1.FormattedValue'] ??
+          null,
+        outcomeOptions: (outcomeMeta.OptionSet?.Options ?? [])
+          .map((option) => option.Label?.UserLocalizedLabel?.Label)
+          .filter(Boolean)
+      }
+    },
+    { id: recordId, origin: pageUrl.origin }
+  )
+}
+
+const MPP_OUTCOME_COMBOBOX =
+  '[data-id="mmo_outcome.fieldControl-option-set-select"]'
+const MPP_REASON_INPUT =
+  '[data-id="mmo_reasonforyourdecision.fieldControl-text-box-text"]'
+const MPP_SAVE_AND_CLOSE = 'button[data-id*="SaveAndClose"]'
+
+const MPP_SAVE_ATTEMPTS = 3
+
+async function readFormMessages(page) {
+  const texts = await page
+    .evaluate(() =>
+      Array.from(
+        document.querySelectorAll(
+          '[role="alert"], [role="dialog"], [data-id*="errorMessage"]'
+        )
+      )
+        .map((node) => node.innerText)
+        .filter(Boolean)
+    )
+    .catch(() => [])
+
+  return texts
+    .map((text) => text.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join(' | ')
+    .slice(0, 500)
+}
+
+export async function completeMarinePlanPolicyTask(page, outcome, reason) {
+  const combobox = page.locator(MPP_OUTCOME_COMBOBOX).first()
+  await combobox.waitFor({ state: 'visible', timeout: 60_000 })
+
+  const reasonInput = page.locator(MPP_REASON_INPUT).first()
+  await reasonInput.waitFor({ state: 'visible', timeout: 30_000 })
+
+  let lastMessages = ''
+  for (let attempt = 1; attempt <= MPP_SAVE_ATTEMPTS; attempt++) {
+    await combobox.click()
+    await page
+      .getByRole('option', { name: outcome, exact: true })
+      .first()
+      .click()
+
+    await reasonInput.click()
+    await reasonInput.press('ControlOrMeta+a')
+    await reasonInput.pressSequentially(reason, { delay: 20 })
+    await reasonInput.press('Tab')
+
+    const save = page.locator(MPP_SAVE_AND_CLOSE).first()
+    await save.waitFor({ state: 'visible', timeout: 30_000 })
+    await save.click()
+
+    try {
+      await page.waitForURL(/etn=incident/, { timeout: 45_000 })
+      await page.waitForLoadState('load')
+      return
+    } catch {
+      lastMessages = await readFormMessages(page)
+      await page.waitForTimeout(attempt * 3_000)
+    }
+  }
+
+  throw new Error(
+    `Save and close did not return to the case after ${MPP_SAVE_ATTEMPTS} attempts. ` +
+      `Outcome: ${JSON.stringify(outcome)}. ` +
+      `Reason field value: ${JSON.stringify(await reasonInput.inputValue().catch(() => null))}. ` +
+      `Form messages: ${lastMessages || 'none captured'}`
+  )
 }

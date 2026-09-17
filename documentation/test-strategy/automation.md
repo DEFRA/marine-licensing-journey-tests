@@ -177,7 +177,7 @@ CI/CD:          GitHub Actions + Docker
 - **Prettier** - Code formatting
 - **Husky** - Git hooks for quality gates
 - **Docker** - Consistent test environments
-- **LocalStack** - AWS services simulation
+- **Floci** - AWS services simulation
 
 ### **Quality monitoring (Project ecosystem)**
 
