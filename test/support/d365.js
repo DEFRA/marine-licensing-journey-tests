@@ -149,10 +149,30 @@ export async function verifyD365Login(page) {
     .waitFor({ state: 'visible', timeout: 60_000 })
 }
 
+const VIEW_SELECTOR = 'button[data-id^="ViewSelector_"]'
+export const COMPLETED_CASES_VIEW = 'Completed Cases'
+export const MARINE_LICENCE_CASES_VIEW = 'Marine license cases'
+
+export async function selectCasesView(page, viewName) {
+  const selector = page.locator(VIEW_SELECTOR).first()
+  await selector.waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+  if ((await selector.getAttribute('aria-label')) === viewName) {
+    return
+  }
+  await selector.click()
+  await page.getByRole('menuitemradio', { name: viewName }).first().click()
+  await expect(selector).toHaveAttribute('aria-label', viewName, {
+    timeout: D365_RENDER_TIMEOUT
+  })
+  await page.waitForLoadState('load')
+}
+
 export async function searchD365Case(page, reference) {
   // The "Please sign in again" modal can reappear between login and grid
   // interaction — dismiss it defensively before searching.
   await dismissSignInPrompt(page, { timeout: 3_000, attempts: 3 })
+
+  await selectCasesView(page, COMPLETED_CASES_VIEW)
 
   const searchInput = page
     .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
@@ -173,7 +193,8 @@ export async function searchD365Case(page, reference) {
     await searchInput.press('Enter')
     try {
       await page
-        .locator('div[role="treegrid"][aria-label="Completed Cases"]')
+        .locator('div[role="treegrid"]')
+        .first()
         .waitFor({ state: 'visible', timeout: 20_000 })
       await rowLabel.waitFor({ state: 'visible', timeout: 12_000 })
       found = true
@@ -296,7 +317,7 @@ export async function readSiteCoordinatesCsvUrl(page) {
 // submitted, so the Tasks subgrid renders empty - "No data available" - for a
 // while rather than slowly. Waiting longer on one page load cannot help; the
 // record has to be reloaded until the flow has run.
-async function waitForCaseTaskLink(page, link, name) {
+export async function waitForCaseTaskLink(page, link, name) {
   // Each attempt has to give the subgrid time to paint after the reload. A
   // point-in-time check straight after load is always false and the next
   // reload throws away the render that was on its way.
@@ -878,6 +899,7 @@ const CASE_STATUS_CELL = 'div[col-id="statuscode"]'
 async function findMarineLicenceCaseRow(page, reference) {
   await page.locator(MARINE_LICENCE_WORKBASKET).first().click()
   await page.waitForLoadState('load')
+  await selectCasesView(page, MARINE_LICENCE_CASES_VIEW)
 
   const search = page
     .locator('input[data-id^="quickFind_text"], #SearchBoxWithTypeAhead-input')
@@ -926,6 +948,23 @@ export async function expectMarineLicenceCaseStatus(page, reference, expected) {
   throw new Error(
     `Case ${reference} status is "${seen}" in D365, expected "${expected}"`
   )
+}
+
+const CASE_READ_ONLY_NOTIFICATION = '[data-id="warningNotification"]'
+
+export async function expectCaseReadOnly(page) {
+  await expect(
+    page
+      .locator(CASE_READ_ONLY_NOTIFICATION)
+      .filter({ hasText: /Read-only/i })
+      .first()
+  ).toBeVisible({ timeout: D365_RENDER_TIMEOUT })
+}
+
+export async function expectNoOpenCaseTasks(page) {
+  await expect(siteCheckTaskLink(page)).toHaveCount(0, {
+    timeout: D365_RENDER_TIMEOUT
+  })
 }
 
 export async function readCaseCommandLabels(page) {

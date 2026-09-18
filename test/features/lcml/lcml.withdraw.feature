@@ -17,3 +17,11 @@ Feature: LCML: Withdrawing a submitted marine licence application
     Given an organisation user has withdrawn a submitted marine licence application
     When the user opens View details for the submitted marine licence
     Then the application details card shows the Withdrawn status and the date withdrawn
+
+  @real-defra-id @d365 @issue=ML-1495
+  Scenario: Withdrawing the application tells Dynamics and closes the case
+    Given an organisation user has submitted a marine licence application with a site in a marine plan area
+    And the case tasks have been created in D365
+    When the user confirms the withdrawal of the submitted application
+    Then the case status in D365 becomes "Withdrawn"
+    And the case is read-only in D365 with no open tasks left
