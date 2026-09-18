@@ -104,6 +104,6 @@ export const cdp = {
   paths: ['test/features/**/*.feature'],
   tags:
     process.env.ENVIRONMENT === 'test'
-      ? '@real-defra-id or @d365 or @fivium'
+      ? '(@real-defra-id or @d365 or @fivium) and not @bug'
       : 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
