@@ -950,9 +950,6 @@ export async function expectMarineLicenceCaseStatus(page, reference, expected) {
   )
 }
 
-// Dynamics marks a resolved record read-only with a header notification. The
-// data-id carries no record GUID, and #des-formReadOnlyNotification is not used
-// because that span is the zero-height screen reader announcement.
 const CASE_READ_ONLY_NOTIFICATION = '[data-id="warningNotification"]'
 
 export async function expectCaseReadOnly(page) {
@@ -1058,7 +1055,7 @@ export async function completeTransferToMcms(page, mcmsReference) {
 
 export const MPP_TASK_OUTCOMES = {
   compliant: 'Compliant',
-  nonCompliant: 'Non-compliant',
+  nonCompliant: 'Non compliant',
   consultationRequired: 'Consultation required'
 }
 
