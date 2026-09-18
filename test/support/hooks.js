@@ -10,6 +10,7 @@ import {
 import { chromium } from 'playwright'
 import { getConfig } from './config.js'
 import { expireTestUser } from './auth.js'
+import { applySharedMarineLicence } from './shared-marine-licence.js'
 
 setDefaultTimeout(120_000)
 
@@ -49,6 +50,10 @@ Before(async function (scenario) {
   })
   this.page = await this.browserContext.newPage()
   this.page.setDefaultTimeout(30_000)
+})
+
+Before({ tags: '@shared-marine-licence', timeout: 600_000 }, async function () {
+  await applySharedMarineLicence(this)
 })
 
 async function attachPageScreenshot(world, page, label) {

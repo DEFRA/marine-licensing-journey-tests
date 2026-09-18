@@ -38,8 +38,16 @@ import {
   readSitesAndActivitiesMeta,
   openMarinePlanPoliciesTab,
   readMarinePlanPoliciesMeta,
-  selectMarinePlanPolicy
+  selectMarinePlanPolicy,
+  readMarinePlanPolicyTasks,
+  openMarinePlanPolicyTask,
+  readMarinePlanPolicyTaskMeta,
+  completeMarinePlanPolicyTask,
+  waitForMarinePlanPolicyTaskStatus,
+  MPP_TASK_OUTCOMES
 } from '../support/d365.js'
+import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
+import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
 
 const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
 const D365_STEP_TIMEOUT = 600_000
@@ -167,6 +175,13 @@ Given(
     await submitMarineLicence(this)
   }
 )
+
+Given('the shared submitted marine licence', function () {
+  expect(this.data.applicationReference).toBeTruthy()
+  expect(this.data.siteType).toBe('upload')
+  expect(this.data.sharingConsent.consent).toBe('No')
+  expect(this.data.wfdVariation).toEqual(SHARED_WFD_VARIATION)
+})
 
 Given(
   'an organisation user has submitted a marine licence application with a site in a marine plan area',
@@ -579,27 +594,6 @@ Then(
   }
 )
 
-const WFD_VARIATIONS = {
-  'one-answer': {
-    wfd: 'nautical-no',
-    nauticalMile: 'No',
-    excluded: null,
-    hasAssessment: false
-  },
-  'two-answer': {
-    wfd: 'excluded',
-    nauticalMile: 'Yes',
-    excluded: 'Yes',
-    hasAssessment: false
-  },
-  'three-answer': {
-    wfd: 'upload',
-    nauticalMile: 'Yes',
-    excluded: 'No',
-    hasAssessment: true
-  }
-}
-
 Given(
   'an organisation user has submitted a marine licence with the {string} WFD variation',
   { timeout: D365_STEP_TIMEOUT },
@@ -728,15 +722,6 @@ Then(
   async function () {
     const status = await completeWfdReview(this.d365Page)
     expect(status).toBe('Done')
-  }
-)
-
-Given(
-  'an organisation user has submitted a marine licence application with sharing consent {string}',
-  { timeout: D365_STEP_TIMEOUT },
-  async function (consent) {
-    await completeMarineAreaShapefileApp(this, { consent })
-    await submitMarineLicence(this)
   }
 )
 
@@ -964,5 +949,102 @@ Then(
     expect(after.detailTitle).toBe(target)
     expect(after.policyInformation).not.toBe(before.policyInformation)
     expect(after.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+  }
+)
+
+const MPP_DECISION_REASON = 'Journey test decision for this policy'
+
+When(
+  'the internal user completes the Site check and opens the marine plan policy tasks',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = await openWorkbasket(this)
+    this.d365CaseRow = await findCaseRowWithRetry(
+      page,
+      this.data.applicationReference
+    )
+    await openCaseRecordSummary(page, this.d365CaseRow)
+
+    this.data.d365CaseUrl = page.url()
+
+    this.data.mppTasksBeforeSiteCheck = await readMarinePlanPolicyTasks(page)
+    await completeSiteCheckTask(page)
+    this.data.mppTasksAfterSiteCheck = await waitForMarinePlanPolicyTaskStatus(
+      page,
+      'To do'
+    )
+  }
+)
+
+Then(
+  'the marine plan policy tasks are listed by policy code and were blocked until the Site check was done',
+  function () {
+    const before = this.data.mppTasksBeforeSiteCheck
+    const after = this.data.mppTasksAfterSiteCheck
+
+    expect(before.length).toBeGreaterThan(1)
+    expect([...new Set(before.map((task) => task.status))]).toEqual([
+      'Cannot start yet'
+    ])
+    expect([...new Set(after.map((task) => task.status))]).toEqual(['To do'])
+
+    const codes = after.map((task) => task.code)
+    expect(codes).toEqual([...codes].sort())
+  }
+)
+
+Then(
+  'a marine plan policy task shows its code, policy information and the applicant consideration',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    const [first] = this.data.mppTasksAfterSiteCheck
+
+    await openMarinePlanPolicyTask(page, first.code)
+    const meta = await readMarinePlanPolicyTaskMeta(page)
+
+    expect(meta.policyCode).toBe(first.code)
+    expect(meta.policyName).toBeTruthy()
+    expect(meta.policyInformation).toBeTruthy()
+    expect(meta.applicantConsideration).toBe(MARINE_PLAN_POLICY_RESPONSE)
+    expect(meta.outcomeOptions).toEqual(Object.values(MPP_TASK_OUTCOMES))
+    expect(meta.status).toBe('To do')
+    expect(meta.outcome).toBeNull()
+    expect(meta.reason).toBeNull()
+  }
+)
+
+Then(
+  'completing {int} marine plan policy tasks with an outcome and reason marks them as Done',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (count) {
+    const page = this.d365Page
+    const targets = this.data.mppTasksAfterSiteCheck.slice(0, count)
+
+    for (const task of targets) {
+      await page.goto(this.data.d365CaseUrl)
+      await page.waitForLoadState('load')
+      await openMarinePlanPolicyTask(page, task.code)
+      await completeMarinePlanPolicyTask(
+        page,
+        MPP_TASK_OUTCOMES.compliant,
+        MPP_DECISION_REASON
+      )
+    }
+
+    const expectedDone = targets.map((task) => task.code)
+    let done = []
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      const tasks = await readMarinePlanPolicyTasks(page)
+      done = tasks
+        .filter((task) => task.status === 'Done')
+        .map((task) => task.code)
+      if (done.length === expectedDone.length) {
+        break
+      }
+      await page.waitForTimeout(6_000)
+    }
+
+    expect(done).toEqual(expectedDone)
   }
 )
