@@ -296,7 +296,7 @@ export async function readSiteCoordinatesCsvUrl(page) {
 // submitted, so the Tasks subgrid renders empty - "No data available" - for a
 // while rather than slowly. Waiting longer on one page load cannot help; the
 // record has to be reloaded until the flow has run.
-async function waitForCaseTaskLink(page, link, name) {
+export async function waitForCaseTaskLink(page, link, name) {
   // Each attempt has to give the subgrid time to paint after the reload. A
   // point-in-time check straight after load is always false and the next
   // reload throws away the render that was on its way.
@@ -928,6 +928,26 @@ export async function expectMarineLicenceCaseStatus(page, reference, expected) {
   )
 }
 
+// Dynamics marks a resolved record read-only with a header notification. The
+// data-id carries no record GUID, and #des-formReadOnlyNotification is not used
+// because that span is the zero-height screen reader announcement.
+const CASE_READ_ONLY_NOTIFICATION = '[data-id="warningNotification"]'
+
+export async function expectCaseReadOnly(page) {
+  await expect(
+    page
+      .locator(CASE_READ_ONLY_NOTIFICATION)
+      .filter({ hasText: /Read-only/i })
+      .first()
+  ).toBeVisible({ timeout: D365_RENDER_TIMEOUT })
+}
+
+export async function expectNoOpenCaseTasks(page) {
+  await expect(siteCheckTaskLink(page)).toHaveCount(0, {
+    timeout: D365_RENDER_TIMEOUT
+  })
+}
+
 export async function readCaseCommandLabels(page) {
   return page.evaluate(() =>
     Array.from(document.querySelectorAll('button[aria-label]'))
@@ -1016,7 +1036,7 @@ export async function completeTransferToMcms(page, mcmsReference) {
 
 export const MPP_TASK_OUTCOMES = {
   compliant: 'Compliant',
-  nonCompliant: 'Non compliant',
+  nonCompliant: 'Non-compliant',
   consultationRequired: 'Consultation required'
 }
 
