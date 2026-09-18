@@ -12,6 +12,8 @@ import {
   openD365CaseRecord
 } from '../support/d365.js'
 
+const D365_STEP_TIMEOUT = 600_000
+
 When(
   'the user selects the {string} filter radio option',
   async function (option) {
@@ -169,7 +171,7 @@ When('the user withdraws the submitted notification', async function () {
 
 Then(
   'the case status in D365 matches',
-  { timeout: 180_000 },
+  { timeout: D365_STEP_TIMEOUT },
   async function (dataTable) {
     const expectedDetails = Object.fromEntries(dataTable.raw())
     const latestExemption =
@@ -189,8 +191,6 @@ Then(
     try {
       await loginToD365(d365Page)
       await verifyD365Login(d365Page)
-      // Give D365 time to index the case before global search
-      await d365Page.waitForTimeout(20_000)
       await searchD365Case(d365Page, latestExemption.applicationReference)
       await verifyD365CaseDetails(d365Page, expectedDetails)
 
