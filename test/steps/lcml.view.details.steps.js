@@ -44,12 +44,12 @@ import {
   readMarinePlanPolicyTaskMeta,
   completeMarinePlanPolicyTask,
   waitForMarinePlanPolicyTaskStatus,
+  marineLicenceWorkbasket,
   MPP_TASK_OUTCOMES
 } from '../support/d365.js'
 import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
 import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
 
-const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
 const D365_STEP_TIMEOUT = 600_000
 
 async function openWorkbasket(world) {
@@ -59,7 +59,7 @@ async function openWorkbasket(world) {
 
   await loginToD365(page)
   await verifyD365Login(page)
-  await page.locator(WORKBASKET_SELECTOR).first().click()
+  await marineLicenceWorkbasket(page).click()
   await page.waitForLoadState('load')
   return page
 }

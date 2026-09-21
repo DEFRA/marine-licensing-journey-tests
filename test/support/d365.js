@@ -150,13 +150,13 @@ export async function verifyD365Login(page) {
 }
 
 const VIEW_SELECTOR = 'button[data-id^="ViewSelector_"]'
-export const COMPLETED_CASES_VIEW = 'Completed Cases'
-export const MARINE_LICENCE_CASES_VIEW = 'Marine license cases'
+export const COMPLETED_CASES_VIEW = /Completed Cases/i
+export const MARINE_LICENCE_CASES_VIEW = /Marine licen[cs]e cases/i
 
 export async function selectCasesView(page, viewName) {
   const selector = page.locator(VIEW_SELECTOR).first()
   await selector.waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
-  if ((await selector.getAttribute('aria-label')) === viewName) {
+  if (viewName.test((await selector.getAttribute('aria-label')) ?? '')) {
     return
   }
   await selector.click()
@@ -887,7 +887,7 @@ export async function selectMarinePlanPolicy(page, policyCode) {
   )
 }
 const MARINE_LICENCE_WORKBASKET =
-  '[role="treeitem"][title="Marine license cases"]'
+  '[role="treeitem"][title="Marine licence cases"], [role="treeitem"][title="Marine license cases"]'
 
 const REQUEST_TRANSFER_COMMAND =
   'button[data-id^="incident|NoRelationship|Form|Requesttransferto"]'
@@ -897,7 +897,7 @@ const COMPLETE_TRANSFER_COMMAND =
 const CASE_STATUS_CELL = 'div[col-id="statuscode"]'
 
 async function findMarineLicenceCaseRow(page, reference) {
-  await page.locator(MARINE_LICENCE_WORKBASKET).first().click()
+  await marineLicenceWorkbasket(page).click()
   await page.waitForLoadState('load')
   await selectCasesView(page, MARINE_LICENCE_CASES_VIEW)
 
@@ -922,6 +922,10 @@ async function findMarineLicenceCaseRow(page, reference) {
       await page.waitForTimeout(15_000)
     }
   }
+}
+
+export function marineLicenceWorkbasket(page) {
+  return page.locator(MARINE_LICENCE_WORKBASKET).first()
 }
 
 export async function openMarineLicenceCaseInD365(page, reference) {
