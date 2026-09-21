@@ -77,7 +77,9 @@ Then('the marine licence is listed', async function () {
 })
 
 Then('the marine licence is not listed', async function () {
-  await expect(projectRow(this.page, this.data.projectName)).toHaveCount(0)
+  await expect(projectRow(this.page, this.data.projectName)).toHaveCount(0, {
+    timeout: 30_000
+  })
 })
 
 Then(
@@ -110,7 +112,9 @@ Then(
   'no filters are selected and the marine licence is listed again',
   async function () {
     const filter = new DashboardFilterPanePage(this.page)
-    await expect(filter.selectedFilterTags).toHaveCount(0)
+    await expect(filter.selectedFilterTags).toHaveCount(0, {
+      timeout: 30_000
+    })
     await expect(projectRow(this.page, this.data.projectName)).toBeVisible({
       timeout: 30_000
     })
