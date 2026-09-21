@@ -961,10 +961,42 @@ export async function expectCaseReadOnly(page) {
   ).toBeVisible({ timeout: D365_RENDER_TIMEOUT })
 }
 
-export async function expectNoOpenCaseTasks(page) {
-  await expect(siteCheckTaskLink(page)).toHaveCount(0, {
-    timeout: D365_RENDER_TIMEOUT
-  })
+const CASE_TASKS_SUBGRID = '[data-id^="dataSetRoot_Subgrid_"]'
+
+function caseTasksGrid(page) {
+  return page.locator(CASE_TASKS_SUBGRID).filter({ hasText: 'Tasks' }).first()
+}
+
+// The subgrid renders only once it is scrolled into view and unmounts again, so
+// the rows are polled rather than read once. Each row reads as its subject
+// followed by its status, for example "Site check Cancelled".
+export async function readCaseTaskRows(page) {
+  const grid = caseTasksGrid(page)
+  let rows = []
+  await expect
+    .poll(
+      async () => {
+        await grid.scrollIntoViewIfNeeded().catch(() => {})
+        rows = (await grid.locator('button[role="link"]').allInnerTexts()).map(
+          (text) => text.replace(/\s+/g, ' ').trim()
+        )
+        return rows.length
+      },
+      {
+        timeout: D365_RENDER_TIMEOUT,
+        message: 'the case Tasks list renders its rows'
+      }
+    )
+    .toBeGreaterThan(0)
+  return rows
+}
+
+export async function expectCaseTasksCancelled(page) {
+  const rows = await readCaseTaskRows(page)
+  for (const row of rows) {
+    expect(row).toMatch(/Cancelled/)
+  }
+  return rows
 }
 
 export async function readCaseCommandLabels(page) {

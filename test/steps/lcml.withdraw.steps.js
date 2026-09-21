@@ -12,7 +12,7 @@ import {
   openMarineLicenceCaseInD365,
   expectMarineLicenceCaseStatus,
   expectCaseReadOnly,
-  expectNoOpenCaseTasks,
+  expectCaseTasksCancelled,
   waitForCaseTaskLink,
   siteCheckTaskLink
 } from '../support/d365.js'
@@ -125,13 +125,14 @@ Then(
 )
 
 Then(
-  'the case is read-only in D365 with no open tasks left',
+  'the case is read-only in D365 with its tasks cancelled',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = this.d365Page
     await openMarineLicenceCaseInD365(page, this.data.applicationReference)
     await expectCaseReadOnly(page)
-    await expectNoOpenCaseTasks(page)
+    const tasks = await expectCaseTasksCancelled(page)
+    this.attach(`case tasks: ${tasks.join(' | ')}`, 'text/plain')
   }
 )
 

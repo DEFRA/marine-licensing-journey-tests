@@ -24,4 +24,4 @@ Feature: LCML: Withdrawing a submitted marine licence application
     And the case tasks have been created in D365
     When the user confirms the withdrawal of the submitted application
     Then the case status in D365 becomes "Withdrawn"
-    And the case is read-only in D365 with no open tasks left
+    And the case is read-only in D365 with its tasks cancelled
