@@ -2,6 +2,8 @@ import { mkdir, readFile, rename, rm, stat, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import path from 'path'
 import { completeManualCircleApp, submitMarineLicence } from './lcml-helpers.js'
+import { registerTestUser } from './auth.js'
+import { getConfig } from './config.js'
 
 const SHARED_ACROSS_WORKERS = process.env.CUCUMBER_PARALLEL === 'true'
 const CACHE_FILE = path.join(
@@ -48,7 +50,16 @@ async function releaseLock() {
   await rm(LOCK_DIR, { recursive: true, force: true })
 }
 
+// The organisation name is fixed rather than left to faker: the dashboard
+// caption is asserted against it, and faker company names carry apostrophes and
+// ampersands.
+const FIXTURE_ORGANISATION = 'Windfarm Co'
+
 async function createFixture(world) {
+  world.testUser = await registerTestUser(getConfig().defraIdUrl, {
+    userType: 'employee',
+    organisationName: FIXTURE_ORGANISATION
+  })
   await completeManualCircleApp(world)
   await submitMarineLicence(world)
 

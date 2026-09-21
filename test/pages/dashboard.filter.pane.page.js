@@ -49,6 +49,7 @@ export default class DashboardFilterPanePage {
   }
 
   async expectNotDisplayed() {
+    await expect(this.page.locator('h1')).toBeVisible({ timeout: 30_000 })
     await expect(this.filterToggle).toHaveCount(0)
     await expect(this.applyFiltersButton).toHaveCount(0)
   }

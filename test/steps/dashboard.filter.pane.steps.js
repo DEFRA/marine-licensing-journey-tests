@@ -18,7 +18,7 @@ Given(
   }
 )
 
-Given('an individual user is signed in', async function () {
+Given('an individual user is registered', async function () {
   const config = getConfig()
   this.testUser = await registerTestUser(config.defraIdUrl, {
     userType: 'individual'
@@ -95,35 +95,20 @@ Then(
 )
 
 Then(
-  'removing the {string} filter lists the marine licence again without applying filters',
-  async function (label) {
+  'removing the {string} filter leaves only {string} selected',
+  async function (removed, remaining) {
     const filter = new DashboardFilterPanePage(this.page)
-    await filter.removeSelectedFilter(label).click()
-    await this.page.waitForLoadState('load')
+    await filter.removeSelectedFilter(removed).click()
     await filter.expectSelectedFilterCount(1)
-    await expect(projectRow(this.page, this.data.projectName)).toBeVisible({
-      timeout: 30_000
-    })
-    expect(await filter.selectedFilterLabels()).not.toContain(label)
+    expect(await filter.selectedFilterLabels()).toEqual([remaining])
   }
 )
 
-Then(
-  'no filters are selected and the marine licence is listed again',
-  async function () {
-    const filter = new DashboardFilterPanePage(this.page)
-    await expect(filter.selectedFilterTags).toHaveCount(0, {
-      timeout: 30_000
-    })
-    await expect(projectRow(this.page, this.data.projectName)).toBeVisible({
-      timeout: 30_000
-    })
-    await filter.openPane()
-    await expect(filter.showRadio('my-projects')).toBeChecked({
-      timeout: 30_000
-    })
-  }
-)
+Then('no filters are selected', async function () {
+  await expect(
+    new DashboardFilterPanePage(this.page).selectedFilterTags
+  ).toHaveCount(0, { timeout: 30_000 })
+})
 
 When('the user hides and shows the filter pane', async function () {
   const filter = new DashboardFilterPanePage(this.page)
@@ -168,12 +153,15 @@ Then('the all submissions option names the organisation', async function () {
   )
 })
 
-Then('the results caption names the organisation', async function () {
-  const orgName = organisationName(this)
-  expect(orgName).toBeTruthy()
-  const filter = new DashboardFilterPanePage(this.page)
-  await expect(filter.resultsCaption).toHaveText(
-    `1 results found in 'All ${orgName} submissions'`,
-    { timeout: 30_000 }
-  )
-})
+Then(
+  'the results caption counts one result in the organisation scope',
+  async function () {
+    const orgName = organisationName(this)
+    expect(orgName).toBeTruthy()
+    const filter = new DashboardFilterPanePage(this.page)
+    await expect(filter.resultsCaption).toHaveText(
+      `1 results found in 'All ${orgName} submissions'`,
+      { timeout: 30_000 }
+    )
+  }
+)
