@@ -1,12 +1,24 @@
-import { Given, When, Then } from '@cucumber/cucumber'
+import { Given, When, Then, After } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   completeManualCircleApp,
   submitMarineLicence
 } from '../support/lcml-helpers.js'
 import DashboardPage from '../pages/dashboard.page.js'
+import {
+  launchD365Browser,
+  loginToD365,
+  verifyD365Login,
+  openMarineLicenceCaseInD365,
+  expectMarineLicenceCaseStatus,
+  expectCaseReadOnly,
+  expectCaseTasksCancelled,
+  waitForCaseTaskLink,
+  siteCheckTaskLink
+} from '../support/d365.js'
 
 const WITHDRAW_PATH = '/marine-licence/withdraw'
+const D365_STEP_TIMEOUT = 600_000
 
 async function openDashboard(page) {
   await page.getByRole('link', { name: 'Projects' }).click()
@@ -83,3 +95,50 @@ Then(
     })
   }
 )
+
+Given(
+  'the case tasks have been created in D365',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const { browser, page } = await launchD365Browser()
+    this.d365Browser = browser
+    this.d365Page = page
+
+    await loginToD365(page)
+    await verifyD365Login(page)
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    await waitForCaseTaskLink(page, siteCheckTaskLink(page), 'Site check')
+  }
+)
+
+Then(
+  'the case status in D365 becomes {string}',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (expected) {
+    const seen = await expectMarineLicenceCaseStatus(
+      this.d365Page,
+      this.data.applicationReference,
+      expected
+    )
+    expect(seen).toBe(expected)
+  }
+)
+
+Then(
+  'the case is read-only in D365 with its tasks cancelled',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    await expectCaseReadOnly(page)
+    const tasks = await expectCaseTasksCancelled(page)
+    this.attach(`case tasks: ${tasks.join(' | ')}`, 'text/plain')
+  }
+)
+
+After(async function () {
+  if (this.d365Browser) {
+    await this.d365Browser.close()
+    this.d365Browser = null
+  }
+})
