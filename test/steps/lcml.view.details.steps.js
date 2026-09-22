@@ -44,12 +44,13 @@ import {
   readMarinePlanPolicyTaskMeta,
   completeMarinePlanPolicyTask,
   waitForMarinePlanPolicyTaskStatus,
+  marineLicenceWorkbasket,
+  openCaseFromRow,
   MPP_TASK_OUTCOMES
 } from '../support/d365.js'
 import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
 import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
 
-const WORKBASKET_SELECTOR = '[role="treeitem"][title="Marine license cases"]'
 const D365_STEP_TIMEOUT = 600_000
 
 async function openWorkbasket(world) {
@@ -59,7 +60,7 @@ async function openWorkbasket(world) {
 
   await loginToD365(page)
   await verifyD365Login(page)
-  await page.locator(WORKBASKET_SELECTOR).first().click()
+  await marineLicenceWorkbasket(page).click()
   await page.waitForLoadState('load')
   return page
 }
@@ -124,11 +125,7 @@ async function readCaseSummaryField(page, attr) {
 }
 
 async function openCaseRecordSummary(page, row) {
-  await row.locator('div[col-id="title"] a').click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
-    timeout: 30_000
-  })
-  await page.waitForLoadState('load')
+  await openCaseFromRow(page, row)
 
   const summaryTab = page
     .locator('[role="tab"]', { hasText: 'Case summary' })
@@ -748,32 +745,55 @@ Then(
   }
 )
 
+async function readLoadedPublicRegister(page) {
+  await openPublicRegisterTab(page)
+  await expect
+    .poll(async () => (await readPublicRegisterMeta(page))?.contentVisible, {
+      timeout: 60_000,
+      message: 'Public register web resource loads the application from CDP'
+    })
+    .toBe(true)
+  return readPublicRegisterMeta(page)
+}
+
 Then(
-  'the Public register tab shows sharing consent {string}',
+  'the Public register tab shows the withholding request {string}',
   { timeout: D365_STEP_TIMEOUT },
-  async function (consent) {
-    const page = this.d365Page
-    await openPublicRegisterTab(page)
-
-    await expect
-      .poll(async () => (await readPublicRegisterMeta(page))?.contentVisible, {
-        timeout: 60_000,
-        message: 'Public register web resource loads the application from CDP'
-      })
-      .toBe(true)
-
-    const meta = await readPublicRegisterMeta(page)
-    expect(meta.labels).toContain(
-      'Do you consent to the MMO publishing your project information publicly?'
+  async function (answer) {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.labels.join(' ')).toMatch(
+      /request that information is withheld/
     )
-    expect(meta.consent).toBe(consent)
+    expect(meta.withhold).toBe(answer)
+  }
+)
 
-    if (consent === 'No') {
-      expect(meta.reasonRowVisible).toBe(true)
-      expect(meta.reason).toBe(this.data.sharingConsent.reason)
-    } else {
-      expect(meta.reasonRowVisible).toBe(false)
-    }
+Then(
+  "the withholding reason shown is the applicant's reason",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.reasonRowVisible).toBe(true)
+    expect(meta.reason).toBe(this.data.sharingConsent.reason)
+  }
+)
+
+Then(
+  'no withholding reason is shown',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.reasonRowVisible).toBe(false)
+    expect(meta.reason).toBeFalsy()
+  }
+)
+
+Given(
+  'an organisation user has submitted a marine licence application that withholds nothing',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    await completeMarineAreaShapefileApp(this, { consent: 'Yes' })
+    await submitMarineLicence(this)
   }
 )
 
