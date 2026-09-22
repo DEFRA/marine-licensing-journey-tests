@@ -151,20 +151,41 @@ export async function verifyD365Login(page) {
 
 const VIEW_SELECTOR = 'button[data-id^="ViewSelector_"]'
 export const COMPLETED_CASES_VIEW = /Completed Cases/i
-export const MARINE_LICENCE_CASES_VIEW = /Marine licen[cs]e cases/i
+export const MARINE_LICENCE_CASES_VIEW = /Marine licence cases/i
 
 export async function selectCasesView(page, viewName) {
   const selector = page.locator(VIEW_SELECTOR).first()
   await selector.waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
-  if (viewName.test((await selector.getAttribute('aria-label')) ?? '')) {
-    return
+  await expect
+    .poll(async () => (await selector.getAttribute('aria-label')) ?? '', {
+      timeout: D365_NAVIGATION_TIMEOUT,
+      message: 'the cases view picker names the view it is showing'
+    })
+    .not.toBe('')
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    if (viewName.test((await selector.getAttribute('aria-label')) ?? '')) {
+      return
+    }
+    try {
+      await selector.click()
+      const option = page.getByRole('menuitemradio', { name: viewName }).first()
+      await option.waitFor({ state: 'visible', timeout: 20_000 })
+      await option.click({ force: true, timeout: 15_000 })
+      await page.waitForLoadState('load').catch(() => {})
+      await expect(selector).toHaveAttribute('aria-label', viewName, {
+        timeout: 30_000
+      })
+      return
+    } catch {
+      await page.keyboard.press('Escape').catch(() => {})
+      await page.waitForTimeout(3_000)
+    }
   }
-  await selector.click()
-  await page.getByRole('menuitemradio', { name: viewName }).first().click()
-  await expect(selector).toHaveAttribute('aria-label', viewName, {
-    timeout: D365_RENDER_TIMEOUT
-  })
-  await page.waitForLoadState('load')
+
+  throw new Error(
+    `The cases list stayed on "${await selector.getAttribute('aria-label')}" instead of ${viewName}`
+  )
 }
 
 export async function searchD365Case(page, reference) {
@@ -887,7 +908,7 @@ export async function selectMarinePlanPolicy(page, policyCode) {
   )
 }
 const MARINE_LICENCE_WORKBASKET =
-  '[role="treeitem"][title="Marine licence cases"], [role="treeitem"][title="Marine license cases"]'
+  '[role="treeitem"][title="Marine licence cases"]'
 
 const REQUEST_TRANSFER_COMMAND =
   'button[data-id^="incident|NoRelationship|Form|Requesttransferto"]'
@@ -928,13 +949,35 @@ export function marineLicenceWorkbasket(page) {
   return page.locator(MARINE_LICENCE_WORKBASKET).first()
 }
 
+const CASE_RECORD_URL = /pagetype=entityrecord.*etn=incident/
+
+export async function openCaseFromRow(page, row) {
+  const link = row.locator('div[col-id="title"] a')
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    if (CASE_RECORD_URL.test(page.url())) {
+      await page.waitForLoadState('load')
+      return
+    }
+    try {
+      await link.waitFor({ state: 'visible', timeout: 20_000 })
+      await link.click({ timeout: 15_000 })
+      await page.waitForURL(CASE_RECORD_URL, { timeout: 30_000 })
+      await page.waitForLoadState('load')
+      return
+    } catch {
+      await page.waitForTimeout(3_000)
+    }
+  }
+
+  throw new Error(
+    `The case record did not open from the cases list; still on ${page.url()}`
+  )
+}
+
 export async function openMarineLicenceCaseInD365(page, reference) {
   const row = await findMarineLicenceCaseRow(page, reference)
-  await row.locator('div[col-id="title"] a').click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
-    timeout: 30_000
-  })
-  await page.waitForLoadState('load')
+  await openCaseFromRow(page, row)
 }
 
 // The MLA case form carries no status field, so the status is read from the

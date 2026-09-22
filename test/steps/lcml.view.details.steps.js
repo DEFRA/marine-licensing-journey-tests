@@ -45,6 +45,7 @@ import {
   completeMarinePlanPolicyTask,
   waitForMarinePlanPolicyTaskStatus,
   marineLicenceWorkbasket,
+  openCaseFromRow,
   MPP_TASK_OUTCOMES
 } from '../support/d365.js'
 import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
@@ -124,11 +125,7 @@ async function readCaseSummaryField(page, attr) {
 }
 
 async function openCaseRecordSummary(page, row) {
-  await row.locator('div[col-id="title"] a').click()
-  await page.waitForURL(/pagetype=entityrecord.*etn=incident/, {
-    timeout: 30_000
-  })
-  await page.waitForLoadState('load')
+  await openCaseFromRow(page, row)
 
   const summaryTab = page
     .locator('[role="tab"]', { hasText: 'Case summary' })
