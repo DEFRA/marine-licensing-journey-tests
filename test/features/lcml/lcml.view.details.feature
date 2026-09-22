@@ -67,12 +67,21 @@ Feature: LCML: View details page shows sites and activities
     When the internal user finds the submitted case in the Marine licence cases workbasket
     Then the Project details tab shows the project name, background and preferred licence dates
 
-  @real-defra-id @d365 @shared-marine-licence @issue=ML-1438
-  Scenario: The Public register tab shows the applicant's "No" sharing consent from CDP
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1438 @issue=ML-1529
+  Scenario: The Public register tab shows a withholding request and what is to be withheld
     Given the shared submitted marine licence
     When the internal user opens the submitted case in D365
     Then the case shows the "Public register" tab in the tab strip
-    And the Public register tab shows sharing consent "No"
+    And the Public register tab shows the withholding request "Yes"
+    And the withholding reason shown is the applicant's reason
+
+  @real-defra-id @d365 @issue=ML-1529
+  Scenario: The Public register tab shows when nothing was asked to be withheld
+    Given an organisation user has submitted a marine licence application that withholds nothing
+    When the internal user opens the submitted case in D365
+    Then the case shows the "Public register" tab in the tab strip
+    And the Public register tab shows the withholding request "No"
+    And no withholding reason is shown
 
   @real-defra-id @d365 @shared-marine-licence @issue=ML-1437 @issue=ML-1436
   Scenario: The case tabs show the applicant's Other permissions and WFD answers from CDP

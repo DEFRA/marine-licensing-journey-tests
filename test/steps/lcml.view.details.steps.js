@@ -748,32 +748,55 @@ Then(
   }
 )
 
+async function readLoadedPublicRegister(page) {
+  await openPublicRegisterTab(page)
+  await expect
+    .poll(async () => (await readPublicRegisterMeta(page))?.contentVisible, {
+      timeout: 60_000,
+      message: 'Public register web resource loads the application from CDP'
+    })
+    .toBe(true)
+  return readPublicRegisterMeta(page)
+}
+
 Then(
-  'the Public register tab shows sharing consent {string}',
+  'the Public register tab shows the withholding request {string}',
   { timeout: D365_STEP_TIMEOUT },
-  async function (consent) {
-    const page = this.d365Page
-    await openPublicRegisterTab(page)
-
-    await expect
-      .poll(async () => (await readPublicRegisterMeta(page))?.contentVisible, {
-        timeout: 60_000,
-        message: 'Public register web resource loads the application from CDP'
-      })
-      .toBe(true)
-
-    const meta = await readPublicRegisterMeta(page)
-    expect(meta.labels).toContain(
-      'Do you consent to the MMO publishing your project information publicly?'
+  async function (answer) {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.labels.join(' ')).toMatch(
+      /request that information is withheld/
     )
-    expect(meta.consent).toBe(consent)
+    expect(meta.withhold).toBe(answer)
+  }
+)
 
-    if (consent === 'No') {
-      expect(meta.reasonRowVisible).toBe(true)
-      expect(meta.reason).toBe(this.data.sharingConsent.reason)
-    } else {
-      expect(meta.reasonRowVisible).toBe(false)
-    }
+Then(
+  "the withholding reason shown is the applicant's reason",
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.reasonRowVisible).toBe(true)
+    expect(meta.reason).toBe(this.data.sharingConsent.reason)
+  }
+)
+
+Then(
+  'no withholding reason is shown',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const meta = await readLoadedPublicRegister(this.d365Page)
+    expect(meta.reasonRowVisible).toBe(false)
+    expect(meta.reason).toBeFalsy()
+  }
+)
+
+Given(
+  'an organisation user has submitted a marine licence application that withholds nothing',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    await completeMarineAreaShapefileApp(this, { consent: 'Yes' })
+    await submitMarineLicence(this)
   }
 )
 

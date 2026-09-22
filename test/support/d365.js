@@ -648,7 +648,7 @@ export async function readPublicRegisterMeta(page) {
       labels: [...doc.querySelectorAll('.mmo-field-label')].map((el) =>
         el.innerText.trim()
       ),
-      consent: text('#val-consent'),
+      withhold: text('#val-withhold'),
       reasonRowVisible: shown('#row-reason'),
       reason: text('#val-reason')
     }
@@ -1091,7 +1091,7 @@ export async function completeTransferToMcms(page, mcmsReference) {
 
 export const MPP_TASK_OUTCOMES = {
   compliant: 'Compliant',
-  nonCompliant: 'Non compliant',
+  nonCompliant: 'Non-compliant',
   consultationRequired: 'Consultation required'
 }
 
