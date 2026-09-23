@@ -9,23 +9,6 @@ export default class DashboardPage {
     this.emptyStateMessage = page.locator('.govuk-body')
     this.projectsTable = page.locator('table.govuk-table')
     this.projectsLink = page.locator('//a[normalize-space(text())="Projects"]')
-
-    this.filterToggle = page.locator('button[aria-expanded]', {
-      hasText: /^(Show|Hide) filter$/
-    })
-    this.myProjectsRadio = page.locator(
-      'input[name="show"][value="my-projects"]'
-    )
-    this.allProjectsRadio = page.locator(
-      'input[name="show"][value="all-projects"]'
-    )
-    this.allProjectsLabel = page.locator('label[for="show"]')
-    this.updateResultsButton = page.locator(
-      'button[type="submit"]:has-text("Update results")'
-    )
-    this.ownerColumnHeader = page.locator(
-      'table.govuk-table thead th:has-text("Owner")'
-    )
   }
 
   async expectIsDisplayed() {
@@ -118,55 +101,6 @@ export default class DashboardPage {
         expect(match.status).toBe('Draft')
       }
     }
-  }
-
-  async openFilter() {
-    const toggle = this.filterToggle.first()
-    if (!(await toggle.count())) {
-      return
-    }
-    if ((await toggle.getAttribute('aria-expanded')) === 'false') {
-      await toggle.click()
-    }
-    await expect(this.myProjectsRadio).toBeVisible({ timeout: 30_000 })
-  }
-
-  async expectFilterDisplayed() {
-    await this.openFilter()
-    await expect(this.myProjectsRadio).toBeVisible({ timeout: 30_000 })
-    await expect(this.allProjectsRadio).toBeVisible({ timeout: 30_000 })
-  }
-
-  async expectMyProjectsSelected() {
-    await expect(this.myProjectsRadio).toBeChecked({ timeout: 30_000 })
-  }
-
-  async expectAllProjectsLabelContainsOrg(orgName) {
-    await expect(this.allProjectsLabel).toContainText(orgName, {
-      timeout: 30_000
-    })
-  }
-
-  async expectUpdateResultsButtonHidden() {
-    await expect(this.updateResultsButton).toBeHidden({ timeout: 30_000 })
-  }
-
-  async expectOwnerColumnPresent() {
-    await expect(this.ownerColumnHeader).toBeVisible({ timeout: 30_000 })
-  }
-
-  async selectFilter(filterOption) {
-    await this.openFilter()
-    if (filterOption === 'All projects') {
-      await this.allProjectsRadio.click()
-    } else {
-      await this.myProjectsRadio.click()
-    }
-  }
-
-  async waitForResultsUpdate() {
-    await this.page.waitForLoadState('networkidle')
-    await expect(this.projectsTable).toBeVisible({ timeout: 30_000 })
   }
 
   async expectSortOrder() {

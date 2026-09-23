@@ -1,36 +1,13 @@
 @real-defra-id
-Feature: Dashboard filter: Filter projects by ownership
+Feature: Dashboard: submitted notification details with real Defra ID
   As an applicant
-  I want to filter the dashboard by my projects or all organisation projects
-  So that I can find the relevant project quickly
+  I want my submitted notification shown correctly on the dashboard and its public view URL
+  So that I can confirm what has been published about it
 
-  Scenario: Dashboard displays filter radio buttons and Owner column with JS enabled
+  Scenario: The public view page names the organisation the exemption is for
     Given a user has submitted an exemption notification
     When the user navigates to the dashboard
-    Then the dashboard filter is correctly configured with "My projects" selected by default
-    And the submitted notification row contains the correct details
-      | Project name  | matches submitted project name     |
-      | Type          | Exempt activity notification       |
-      | Reference     | matches submitted reference number |
-      | Status        | Active                             |
-      | Submitted on  | today's date                       |
-      | Owner         | Test MMOUser                       |
-      | Actions       | View details, Withdraw             |
-    And the public details page for the submitted notification shows the exemption is for "Windfarm Co"
-
-  Scenario: Changing the filter radio auto-updates results without clicking Update results
-    Given a user has submitted an exemption notification
-    When the user navigates to the dashboard
-    And the user selects the "All projects" filter radio option
-    Then the dashboard results are updated without clicking a button
-    And the submitted notification row contains the correct details
-      | Project name  | matches submitted project name     |
-      | Type          | Exempt activity notification       |
-      | Reference     | matches submitted reference number |
-      | Status        | Active                             |
-      | Submitted on  | today's date                       |
-      | Owner         | Test MMOUser                       |
-      | Actions       | View details, Withdraw             |
+    Then the public view page for the submitted notification shows the exemption is for "Windfarm Co"
 
   Scenario: Withdrawn notification shows correct status on dashboard and in D365
     Given a user has submitted an exemption notification

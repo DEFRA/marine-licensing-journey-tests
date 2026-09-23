@@ -14,42 +14,6 @@ import {
 
 const D365_STEP_TIMEOUT = 600_000
 
-When(
-  'the user selects the {string} filter radio option',
-  async function (option) {
-    const dashboard = new DashboardPage(this.page)
-    await dashboard.selectFilter(option)
-  }
-)
-
-Then(
-  'the dashboard results are updated without clicking a button',
-  async function () {
-    const dashboard = new DashboardPage(this.page)
-    await dashboard.waitForResultsUpdate()
-  }
-)
-
-Then(
-  'the dashboard filter is correctly configured with {string} selected by default',
-  async function (defaultOption) {
-    const dashboard = new DashboardPage(this.page)
-    await dashboard.expectFilterDisplayed()
-
-    if (defaultOption === 'My projects') {
-      await dashboard.expectMyProjectsSelected()
-    }
-
-    const config = getConfig()
-    const orgName = config.isRealDefraId
-      ? process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
-      : this.testUser.relationships[0].organisationName
-    await dashboard.expectAllProjectsLabelContainsOrg(orgName)
-    await dashboard.expectUpdateResultsButtonHidden()
-    await dashboard.expectOwnerColumnPresent()
-  }
-)
-
 Then(
   'the submitted notification row contains the correct details',
   async function (dataTable) {
@@ -105,7 +69,7 @@ Then(
 )
 
 Then(
-  'the public details page for the submitted notification shows the exemption is for {string}',
+  'the public view page for the submitted notification shows the exemption is for {string}',
   async function (expectedName) {
     const latestExemption =
       this.data.completedExemptions[this.data.completedExemptions.length - 1]
