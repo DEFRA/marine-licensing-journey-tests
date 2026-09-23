@@ -35,9 +35,7 @@ When(
 )
 
 When('the user selects Clear filters', async function () {
-  const filter = new DashboardFilterPanePage(this.page)
-  await filter.clearFiltersLinks.first().click()
-  await this.page.waitForLoadState('load')
+  await new DashboardFilterPanePage(this.page).clearFilters()
 })
 
 Then('no filter pane is offered', async function () {
@@ -99,6 +97,7 @@ Then(
   async function (removed, remaining) {
     const filter = new DashboardFilterPanePage(this.page)
     await filter.removeSelectedFilter(removed).click()
+    await filter.waitForResultsSettled()
     await filter.expectSelectedFilterCount(1)
     expect(await filter.selectedFilterLabels()).toEqual([remaining])
   }

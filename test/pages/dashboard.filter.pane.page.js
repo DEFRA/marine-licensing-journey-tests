@@ -19,6 +19,7 @@ const TYPE_VALUES = {
 export default class DashboardFilterPanePage {
   constructor(page) {
     this.page = page
+    this.root = page.locator('[data-module="moj-filter"]')
     this.showFilterButton = page.getByRole('button', { name: 'Show filter' })
     this.hideFilterButton = page.getByRole('button', { name: 'Hide filter' })
     this.applyFiltersButton = page.getByRole('button', {
@@ -66,7 +67,23 @@ export default class DashboardFilterPanePage {
     })
   }
 
+  // The pane only enhances the form once its script has run, and a click
+  // landing before that is lost. The app marks the root when it is ready.
+  async waitForPaneReady() {
+    await expect(this.root).toHaveClass(/app-filter-ready/, {
+      timeout: 30_000
+    })
+  }
+
+  // Filtering fetches the results, and the pane drops a second submit while one
+  // is in flight. The submit button is disabled for the duration of the fetch,
+  // so an enabled button is the app reporting that it has finished.
+  async waitForResultsSettled() {
+    await expect(this.applyFiltersButton).toBeEnabled({ timeout: 30_000 })
+  }
+
   async openPane() {
+    await this.waitForPaneReady()
     await this.filterToggle.waitFor({ state: 'visible', timeout: 30_000 })
     if ((await this.filterToggle.getAttribute('aria-expanded')) === 'false') {
       await this.filterToggle.click()
@@ -90,7 +107,7 @@ export default class DashboardFilterPanePage {
       await this.statusCheckbox(label).check()
     }
     await this.applyFiltersButton.click()
-    await this.page.waitForLoadState('load')
+    await this.waitForResultsSettled()
     await this.resultsCaption.waitFor({ state: 'visible', timeout: 30_000 })
   }
 
@@ -98,8 +115,14 @@ export default class DashboardFilterPanePage {
     await this.openPane()
     await this.showRadio(value).check()
     await this.applyFiltersButton.click()
-    await this.page.waitForLoadState('load')
+    await this.waitForResultsSettled()
     await this.resultsCaption.waitFor({ state: 'visible', timeout: 30_000 })
+  }
+
+  async clearFilters() {
+    await this.waitForResultsSettled()
+    await this.clearFiltersLinks.first().click()
+    await this.waitForResultsSettled()
   }
 
   async expectSelectedFilterCount(count) {
