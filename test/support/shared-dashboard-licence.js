@@ -5,20 +5,22 @@ import { completeManualCircleApp, submitMarineLicence } from './lcml-helpers.js'
 import { registerTestUser } from './auth.js'
 import { getConfig } from './config.js'
 
-const SHARED_ACROSS_WORKERS = process.env.CUCUMBER_PARALLEL === 'true'
+// Every worker used to submit its own application, six of them at once in the
+// pipeline, each contending with the others for the app. The scenarios only
+// read the dashboard, so one submission serves the whole run. The key is the
+// coordinator's pid, which every worker in a run shares.
 const CACHE_FILE = path.join(
   tmpdir(),
   `shared-dashboard-licence-${process.ppid}.json`
 )
 const LOCK_DIR = `${CACHE_FILE}.lock`
-const POLL_INTERVAL = 5_000
+const POLL_INTERVAL = 1_000
 const MAX_AGE = 1_800_000
 const MAX_WAIT = 600_000
 
 let cached = null
 
 async function readCache() {
-  if (!SHARED_ACROSS_WORKERS) return null
   try {
     const { mtimeMs } = await stat(CACHE_FILE)
     if (Date.now() - mtimeMs > MAX_AGE) return null
@@ -29,14 +31,12 @@ async function readCache() {
 }
 
 async function writeCache(fixture) {
-  if (!SHARED_ACROSS_WORKERS) return
   const partial = `${CACHE_FILE}.${process.pid}`
   await writeFile(partial, JSON.stringify(fixture))
   await rename(partial, CACHE_FILE)
 }
 
 async function acquireLock() {
-  if (!SHARED_ACROSS_WORKERS) return true
   try {
     await mkdir(LOCK_DIR)
     return true
@@ -46,7 +46,6 @@ async function acquireLock() {
 }
 
 async function releaseLock() {
-  if (!SHARED_ACROSS_WORKERS) return
   await rm(LOCK_DIR, { recursive: true, force: true })
 }
 
