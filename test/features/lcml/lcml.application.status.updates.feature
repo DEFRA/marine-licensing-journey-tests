@@ -8,6 +8,7 @@ Feature: LCML: Application status updates from Dynamics 365
     Given an organisation user has submitted a marine licence application
     When a transfer completed message is sent for the application
     Then the application status is "Transferred" on the dashboard
+    And filtering the dashboard by status "Transferred" lists the project
     And opening View details shows the "Your application has been transferred" page with the project name and reference
     And the transferred page links to MCMS and to the submitted application details
     And the submitted application details show the "Transferred" status and a date of transfer
@@ -27,6 +28,7 @@ Feature: LCML: Application status updates from Dynamics 365
     Given an organisation user has submitted a marine licence application
     When a rejected message is sent for the application
     Then the application status is "Unable to progress" on the dashboard
+    And filtering the dashboard by status "Unable to progress" lists the project
     And opening View details shows the "We are unable to progress your application" page with the project name and reference
     And the rejected page shows the reasons, free text and links, and the "Unable to progress" application details
 

@@ -88,10 +88,21 @@ export async function signOut(page) {
   await page.waitForURL(/login|cdp-defra-id-stub/, { timeout: 10_000 })
 }
 
+function landedOnTarget(page, url) {
+  const landed = new URL(page.url())
+  const target = new URL(url)
+  return landed.origin === target.origin && landed.pathname === target.pathname
+}
+
 export async function navigateAndReAuthenticate(world, targetPath) {
   const config = getConfig()
   const url = new URL(targetPath, config.baseURL).toString()
   await world.page.goto(url)
+
+  if (landedOnTarget(world.page, url)) {
+    await acceptCookies(world.page, { timeout: 500 })
+    return
+  }
 
   if (config.isRealDefraId) {
     if (!world.isAuthenticated) {
