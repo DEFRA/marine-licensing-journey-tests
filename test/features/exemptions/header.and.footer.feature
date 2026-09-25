@@ -20,7 +20,6 @@ Feature: Header and footer verification feature
   I WANT to be able to log in and carry out work for my organisation
   SO THAT my work is associated with my organisation
 
-  @smoke
   Scenario: The header and footer are correct on the dashboard
     Given a user has submitted an exemption notification
     When the user navigates to the dashboard
@@ -35,7 +34,6 @@ Feature: Header and footer verification feature
       | © Crown copyright            |
     And the organisation name is displayed in the header
 
-  @smoke
   Scenario: The header and footer are correct on the task list
     Given the project name page is displayed
     When entering and saving a project with a valid name
@@ -52,7 +50,6 @@ Feature: Header and footer verification feature
       | © Crown copyright            |
     And the organisation name is displayed in the header
 
-  @smoke
   Scenario: The header and footer are correct on the project name page
     Given a notification has been created with a valid project name
     When the "Project name" task is selected
