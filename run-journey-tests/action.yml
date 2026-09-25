@@ -14,6 +14,10 @@ inputs:
     required: false
     type: string
     default: main
+  profile:
+    description: 'Journey test profile to run: github (full suite) or smoke'
+    required: false
+    default: 'github'
 
 runs:
   using: 'composite'
@@ -295,9 +299,23 @@ runs:
       working-directory: ./marine-licensing-journey-tests
       env:
         DEFRA_ID_URL: http://localhost:3200
+        PROFILE: ${{ inputs.profile }}
       run: |
-        echo "=== Running Playwright tests ==="
-        npm run test:github
+        profile="${PROFILE:-github}"
+        case "$profile" in
+          github)
+            script="test:github"
+            ;;
+          smoke)
+            script="test:github:smoke"
+            ;;
+          *)
+            echo "Unsupported profile: '$profile' (allowed: github, smoke)"
+            exit 1
+            ;;
+        esac
+        echo "=== Running Playwright tests (profile=$profile, npm run $script) ==="
+        npm run "$script"
 
     - name: Print failure summary
       if: always() && steps.run-tests.outcome == 'failure'

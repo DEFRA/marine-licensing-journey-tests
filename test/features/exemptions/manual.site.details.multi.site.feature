@@ -2,7 +2,6 @@
 Feature: Multi-site: Manually provide multiple sites for an exemption notification
   These tests use a mix of circle and polygon sites with OSGB36 and WGS84 coordinate systems.
 
-  @smoke
   Scenario: Complete mixed site details with separate activity dates and descriptions
     Given a user is providing mixed site details for multiple sites with separate activity dates and descriptions
     And the site details task is reached

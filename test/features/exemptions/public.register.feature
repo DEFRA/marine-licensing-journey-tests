@@ -4,14 +4,12 @@ Feature: Public register: The user can consent or withhold from sharing informat
   I want to state whether I consent for my marine project to be shared on the public register
   So that my notification will only be shared if I consent
 
-  @smoke
   Scenario: Allowing information to be added to the public register
     Given the Public register page is displayed
     When choosing not to withhold information from the public register
     Then the "Sharing your project information publicly" task status is "Completed"
     And the public register information is saved
 
-  @smoke
   Scenario: Withholding information from the public register
     Given the Public register page is displayed
     When choosing to withhold information from the public register

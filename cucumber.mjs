@@ -31,20 +31,22 @@ export default {
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
 }
 
+const smokePaths = [
+  'test/features/exemptions/submit.notification.feature',
+  'test/features/exemptions/shapefile.site.details.multi.site.feature',
+  'test/features/lcml/lcml.apply.for.marine.licence.feature'
+]
+
+const githubFormat = [
+  './test/support/progress-formatter.js',
+  'html:cucumber-report.html',
+  'json:cucumber-results.json',
+  'allure-cucumberjs/reporter'
+]
+
 export const smoke = {
   ...common,
-  paths: [
-    'test/features/exemptions/task.list.feature',
-    'test/features/exemptions/cookies.feature',
-    'test/features/exemptions/header.and.footer.feature',
-    'test/features/exemptions/public.register.feature',
-    'test/features/exemptions/manual.site.details.multi.site.feature',
-    'test/features/exemptions/kml.file.site.details.multi.site.feature',
-    'test/features/exemptions/shapefile.site.details.multi.site.feature',
-    'test/features/exemptions/check.your.answers.feature',
-    'test/features/exemptions/submit.notification.feature',
-    'test/features/exemptions/dashboard.feature'
-  ],
+  paths: smokePaths,
   tags: '@smoke'
 }
 
@@ -57,14 +59,18 @@ export const all = {
 export const github = {
   ...common,
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
-  format: [
-    './test/support/progress-formatter.js',
-    'html:cucumber-report.html',
-    'json:cucumber-results.json',
-    'allure-cucumberjs/reporter'
-  ],
+  format: githubFormat,
   paths: ['test/features/**/*.feature'],
   tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only'
+}
+
+/** CI smoke suite — same scenarios as `smoke`, with github reporting format. */
+export const githubSmoke = {
+  ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
+  format: githubFormat,
+  paths: smokePaths,
+  tags: '@smoke'
 }
 
 export const exemption = {

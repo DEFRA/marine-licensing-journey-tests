@@ -2,7 +2,7 @@
 Feature: Multi-site: Provide kml files with multiple sites for an exemption notification
   These tests use a mix of circle and polygon sites with OSGB36 and WGS84 coordinate systems.
 
-  @kml @smoke
+  @kml
   Scenario: Complete a multi-site kml file upload with different activity dates and different descriptions
     Given a user is uploading a kml file with multiple sites with different activity dates and different descriptions
     And the site details task is reached
@@ -10,7 +10,7 @@ Feature: Multi-site: Provide kml files with multiple sites for an exemption noti
     Then the site details review page shows the site details
     And the "Site details" task status is "Completed"
 
-  @kml @smoke
+  @kml
   Scenario: Complete a multi-site kml file upload with same activity dates and descriptions
     Given a user is uploading a kml file with multiple sites with same activity dates and descriptions
     And the site details task is reached
