@@ -25,14 +25,12 @@ Feature: Cookies policy page allows users to manage cookie preferences
     When the analytics cookies are rejected from the cookie banner
     Then the analytics cookies are disabled
 
-  @smoke
   Scenario: Accepting analytics cookies
     Given a user is on the cookies policy page
     When selecting Yes for analytics cookies and saving preferences
     Then the cookie preferences confirmation banner is displayed
     And the analytics cookies are enabled
 
-  @smoke
   Scenario: Rejecting analytics cookies
     Given a user is on the cookies policy page
     When selecting No for analytics cookies and saving preferences

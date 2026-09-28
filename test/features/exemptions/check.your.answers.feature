@@ -8,25 +8,25 @@ which will play back all their answers and allow them to verify that the answers
   - ML-142: Check your answers page displays project summary with IAT context
   - ML-810: Check your answers page displays multiple sites details
 
-  @smoke @circle @wgs84
+  @circle @wgs84
   Scenario: After successfully completing all the tasks on the task list, with a circle using WGS84 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a circular site using WGS84 coordinates
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @smoke @boundary @wgs84
+  @boundary @wgs84
   Scenario: After successfully completing all the tasks on the task list, with a boundary using WGS84 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a boundary using WGS84 coordinates
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @smoke @circle @osgb36
+  @circle @osgb36
   Scenario: After successfully completing all the tasks on the task list, with a circle using OSGB36 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a circular site using OSGB36 coordinates
     When the user clicks Review and send
     Then the user is able to see all their answers in a summary format
 
-  @smoke @boundary @osgb36
+  @boundary @osgb36
   Scenario: After successfully completing all the tasks on the task list, with a boundary using OSGB36 coordinates, the user is able to access the "Check your answers" page
     Given the user has completed all the tasks on the task list for a boundary using OSGB36 coordinates
     When the user clicks Review and send
