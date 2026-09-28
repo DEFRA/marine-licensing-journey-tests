@@ -21,7 +21,7 @@ When(
 )
 
 Then(
-  'the public View details page shows the project heading, Application overview and no Project name row',
+  'the public View details page shows the project heading, Application overview and no Application name row',
   async function () {
     await expect(this.page.locator('#view-details-heading')).toHaveText(
       this.data.projectName,
@@ -39,7 +39,7 @@ Then(
     await expect(projectDetails).toBeVisible({ timeout: 30_000 })
     await expect(
       projectDetails.locator(
-        '.govuk-summary-list__row:has(dt:text-is("Project name"))'
+        '.govuk-summary-list__row:has(dt:text-is("Application name"))'
       )
     ).toHaveCount(0)
   }

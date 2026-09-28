@@ -149,7 +149,7 @@ Then(
 Then(
   'the submitted marine licence application is displayed on the projects page',
   async function () {
-    await this.page.getByRole('link', { name: 'Projects' }).click()
+    await this.page.getByRole('link', { name: 'Submissions' }).click()
     await this.page.waitForLoadState('load')
 
     const row = this.page.locator(

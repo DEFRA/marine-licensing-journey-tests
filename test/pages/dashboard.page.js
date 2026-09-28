@@ -1,14 +1,16 @@
 import { expect } from '@playwright/test'
 
 export default class DashboardPage {
-  static path = '/projects'
+  static path = '/submissions'
 
   constructor(page) {
     this.page = page
     this.heading = page.locator('h1')
     this.emptyStateMessage = page.locator('.govuk-body')
     this.projectsTable = page.locator('table.govuk-table')
-    this.projectsLink = page.locator('//a[normalize-space(text())="Projects"]')
+    this.projectsLink = page.locator(
+      '//a[normalize-space(text())="Submissions"]'
+    )
 
     this.filterToggle = page.locator('button[aria-expanded]', {
       hasText: /^(Show|Hide) filter$/
@@ -30,7 +32,7 @@ export default class DashboardPage {
 
   async expectIsDisplayed() {
     await expect(this.heading).toBeVisible({ timeout: 30_000 })
-    await expect(this.page).toHaveURL(/\/(home|projects)/)
+    await expect(this.page).toHaveURL(/\/(home|submissions)/)
   }
 
   async expectEmptyState() {

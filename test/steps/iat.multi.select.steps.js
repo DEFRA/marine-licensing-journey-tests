@@ -87,7 +87,7 @@ Then(
 Then(
   'the IAT question page has no header navigation links and any external guidance links open in a new tab',
   async function () {
-    // Service-navigation list links (Home / Projects / etc.) must not be
+    // Service-navigation list links (Home / Submissions / etc.) must not be
     // rendered for the anonymous IAT.
     const headerNavLinks = this.page.locator(
       '.govuk-service-navigation__list a, .govuk-header__navigation a'

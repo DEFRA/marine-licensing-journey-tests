@@ -95,7 +95,7 @@ When(
 )
 
 Then('the user is returned to the projects dashboard', async function () {
-  await expect(this.page).toHaveURL(/\/projects/, { timeout: 30_000 })
+  await expect(this.page).toHaveURL(/\/submissions/, { timeout: 30_000 })
 })
 
 Then(

@@ -7,12 +7,12 @@ Feature: LCML: Project background task
   Scenario: Project background task is displayed on the task list
     Given an organisation user is on the marine licence task list
     When the user views the task list
-    Then the "Project background" task status is "Not yet started"
+    Then the "Proposed works summary" task status is "Not yet started"
 
   Scenario: Completing the project background task
     Given an organisation user is on the project background page
     When the user enters a valid project background and saves
-    Then the user is returned to the task list with "Project background" status "Completed"
+    Then the user is returned to the task list with "Proposed works summary" status "Completed"
 
   Scenario: Previously saved project background is displayed on reload
     Given an organisation user has completed the project background task

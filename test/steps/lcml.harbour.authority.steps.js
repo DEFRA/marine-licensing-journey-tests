@@ -4,7 +4,7 @@ import { expect } from '@playwright/test'
 const TASK_LINK = 'Harbour authority'
 const PAGE_PATH = '/marine-licence/harbour-authority'
 const TASK_SECTION_ID_PREFIX = 'other-permissions-task-list'
-const HEADING = 'Is your project located in a harbour authority area?'
+const HEADING = 'Are your proposed works located in a harbour authority area?'
 const ROW_LABEL = 'Located in a harbour authority area'
 
 function harbourPage(page) {

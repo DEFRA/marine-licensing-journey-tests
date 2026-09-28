@@ -192,7 +192,7 @@ When(
 When(
   'the user views the submitted application on the projects page',
   async function () {
-    await this.page.getByRole('link', { name: 'Projects' }).click()
+    await this.page.getByRole('link', { name: 'Submissions' }).click()
     await this.page.waitForLoadState('load')
     const row = this.page.locator(
       `xpath=//tr[td[contains(text(), "${this.data.projectName}")]]`

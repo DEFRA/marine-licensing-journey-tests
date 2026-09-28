@@ -189,7 +189,7 @@ const FEE_CHANGE_DESTINATIONS = {
     url: /fee-estimate-are-you-sure/,
     heading: 'Are you sure you do not accept the fee estimate?'
   },
-  'projects dashboard': { url: /\/projects/ }
+  'projects dashboard': { url: /\/submissions/ }
 }
 
 async function expectDestination(page, destination) {
