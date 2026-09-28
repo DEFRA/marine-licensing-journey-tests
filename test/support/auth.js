@@ -130,10 +130,10 @@ export async function selectOrganisationRole(page) {
   }
 }
 
-export async function acceptCookies(page) {
+export async function acceptCookies(page, { timeout = 3000 } = {}) {
   const acceptButton = page.locator('button[name="analytics"][value="yes"]')
   try {
-    await acceptButton.click({ timeout: 3000 })
+    await acceptButton.click({ timeout })
   } catch {
     // Cookie banner not displayed — already accepted or not applicable
   }

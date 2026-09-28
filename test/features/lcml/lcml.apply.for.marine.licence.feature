@@ -4,6 +4,7 @@ Feature: LCML: Apply for a marine licence
   I want to apply for a marine licence
   So that I can carry out licensable marine activities
 
+  @smoke
   Scenario: Organisation user can submit a marine licence with other authorities Yes and sharing consent Yes
     Given an organisation user has completed all tasks with special legal powers "Yes", other authorities "Yes" and sharing consent "Yes"
     And the activity has type of activity, activity description, maximum duration, completion date, specific months and proposed working hours saved
