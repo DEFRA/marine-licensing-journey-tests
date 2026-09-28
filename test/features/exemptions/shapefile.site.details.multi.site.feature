@@ -10,7 +10,7 @@ Feature: Multi-site: Provide shapefiles with multiple sites for an exemption not
     Then the site details review page shows the site details
     And the "Site details" task status is "Completed"
 
-  @shapefile @smoke
+  @shapefile
   Scenario: Complete a multi-site shapefile upload with same activity dates and descriptions
     Given a user is uploading a shapefile with multiple sites with same activity dates and descriptions
     And the site details task is reached

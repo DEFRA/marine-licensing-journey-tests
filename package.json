@@ -29,6 +29,7 @@
     "test:lcml": "cucumber-js --config cucumber.mjs --profile lcml --format summary",
     "test:smoke": "cucumber-js --config cucumber.mjs --profile smoke --format summary",
     "test:github": "cucumber-js --config cucumber.mjs --profile github",
+    "test:github:smoke": "cucumber-js --config cucumber.mjs --profile githubSmoke",
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp"
   },
   "dependencies": {
