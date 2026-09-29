@@ -40,7 +40,7 @@ Feature: Header and footer verification feature
     Then the task list page is displayed
     And the service name "Get permission for marine work" is displayed in the header
     And the links are displayed in the header:
-      | Projects      |
+      | Submissions   |
       | Defra account |
       | Sign out      |
     And the links are displayed in the footer:
@@ -67,7 +67,7 @@ Feature: Header and footer verification feature
     When the "Site details" task is selected
     Then the service name "Get permission for marine work" is displayed in the header
     And the links are displayed in the header:
-      | Projects      |
+      | Submissions   |
       | Defra account |
       | Sign out      |
     And the links are displayed in the footer:
@@ -82,7 +82,7 @@ Feature: Header and footer verification feature
     When the "Sharing your project information publicly" task is selected
     Then the service name "Get permission for marine work" is displayed in the header
     And the links are displayed in the header:
-      | Projects      |
+      | Submissions   |
       | Defra account |
       | Sign out      |
     And the links are displayed in the footer:

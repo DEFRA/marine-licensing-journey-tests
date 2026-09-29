@@ -8,10 +8,10 @@ Feature: LCML: Redacting an application for the public register
   Scenario: A redaction is saved against the field without changing what the applicant sees
     Given a submitted marine licence and a signed in caseworker
     When the caseworker opens the application for redaction
-    And the caseworker redacts "Project background"
-    Then "Project background" shows the redaction marker in white on black
-    And only the change and remove options are offered for "Project background"
-    And the applicant still sees their own text for "Project background"
+    And the caseworker redacts "Proposed works summary"
+    Then "Proposed works summary" shows the redaction marker in white on black
+    And only the change and remove options are offered for "Proposed works summary"
+    And the applicant still sees their own text for "Proposed works summary"
 
   Scenario: Replacing a document uploads a new version and keeps the original
     Given a submitted marine licence and a signed in caseworker

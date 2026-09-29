@@ -56,7 +56,7 @@ Then(
   { timeout: 120_000 },
   async function (status) {
     const page = this.page
-    await page.getByRole('link', { name: 'Projects' }).click()
+    await page.getByRole('link', { name: 'Submissions' }).click()
     await page.waitForLoadState('load')
 
     // The backend MAS worker consumes the queue message asynchronously, so poll
@@ -205,7 +205,7 @@ Given(
     )
 
     const page = this.page
-    await page.getByRole('link', { name: 'Projects' }).click()
+    await page.getByRole('link', { name: 'Submissions' }).click()
     await page.waitForLoadState('load')
     const row = projectRow(page, this.data.projectName)
     for (let attempt = 0; attempt < 20; attempt++) {
@@ -282,7 +282,7 @@ Then(
   'the rejected application still shows the {string} status',
   async function (status) {
     const page = this.page
-    await page.getByRole('link', { name: 'Projects' }).click()
+    await page.getByRole('link', { name: 'Submissions' }).click()
     await page.waitForLoadState('load')
     await expect(dashboardRow(page, this.data.projectName, status)).toHaveCount(
       1,

@@ -21,8 +21,8 @@ const WITHDRAW_PATH = '/marine-licence/withdraw'
 const D365_STEP_TIMEOUT = 600_000
 
 async function openDashboard(page) {
-  await page.getByRole('link', { name: 'Projects' }).click()
-  await page.waitForURL(/\/projects/, { timeout: 30_000 })
+  await page.getByRole('link', { name: 'Submissions' }).click()
+  await page.waitForURL(/\/submissions/, { timeout: 30_000 })
   await page.waitForLoadState('load')
 }
 
@@ -40,7 +40,7 @@ async function confirmWithdrawal(page) {
       'xpath=//button[normalize-space(text())="Yes, withdraw application"]'
     )
     .click()
-  await page.waitForURL(/\/projects/, { timeout: 30_000 })
+  await page.waitForURL(/\/submissions/, { timeout: 30_000 })
   await page.waitForLoadState('load')
 }
 

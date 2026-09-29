@@ -18,7 +18,7 @@ Given(
   'an organisation user is on the project background page',
   async function () {
     await loginAndReachTaskList(this)
-    await this.page.locator('a:has-text("Project background")').click()
+    await this.page.locator('a:has-text("Proposed works summary")').click()
     await this.page.waitForLoadState('load')
   }
 )
@@ -46,7 +46,7 @@ When('the user enters a valid project background and saves', async function () {
 })
 
 When('the user re-enters the project background task', async function () {
-  await this.page.locator('a:has-text("Project background")').click()
+  await this.page.locator('a:has-text("Proposed works summary")').click()
   await this.page.waitForLoadState('load')
 })
 

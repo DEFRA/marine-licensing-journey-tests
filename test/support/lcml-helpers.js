@@ -222,7 +222,7 @@ export async function completeSharingConsent(page, answer) {
 }
 
 export async function completeProjectBackground(page, text) {
-  await page.locator('a:has-text("Project background")').click()
+  await page.locator('a:has-text("Proposed works summary")').click()
   await page.waitForLoadState('load')
 
   await page.locator('#projectBackground').fill(text)
@@ -1107,7 +1107,7 @@ export async function submitMarineLicence(world) {
 
 export async function openViewDetailsFromDashboard(world) {
   const page = world.page
-  await page.getByRole('link', { name: 'Projects' }).click()
+  await page.getByRole('link', { name: 'Submissions' }).click()
   await page.waitForLoadState('load')
   await page
     .locator(
@@ -1119,7 +1119,7 @@ export async function openViewDetailsFromDashboard(world) {
 
 export async function readMarineLicenceIdFromProjects(world) {
   const page = world.page
-  await page.getByRole('link', { name: 'Projects' }).click()
+  await page.getByRole('link', { name: 'Submissions' }).click()
   await page.waitForLoadState('load')
   const href = await page
     .locator(

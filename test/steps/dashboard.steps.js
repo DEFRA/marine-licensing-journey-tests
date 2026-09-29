@@ -58,7 +58,7 @@ Given(
       .click()
     await page.waitForLoadState('load')
 
-    // Withdrawing lands on the dashboard, where the "Projects" nav link the
+    // Withdrawing lands on the dashboard, where the "Submissions" nav link the
     // shared When step clicks is not rendered; go home so it can navigate.
     await page.goto(new URL('/home', getConfig().baseURL).toString())
     await page.waitForLoadState('load')
