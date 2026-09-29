@@ -1,7 +1,25 @@
 #!/bin/sh
 
 echo "run_id: $RUN_ID"
-npm run test:cdp
+
+# CDP passes a scheduled run's Profile value as PROFILE. The EMP overnight
+# schedule (ML-1500) sets it to emp-overnight; runs without one run cdp.
+profile="${PROFILE:-cdp}"
+case "$profile" in
+  cdp)
+    test_script="test:cdp"
+    ;;
+  emp-overnight)
+    test_script="test:emp-overnight"
+    ;;
+  *)
+    echo "Unsupported profile: '$profile' (allowed: cdp, emp-overnight)"
+    exit 1
+    ;;
+esac
+
+echo "running: npm run $test_script (PROFILE=${PROFILE:-unset})"
+npm run "$test_script"
 test_exit_code=$?
 
 npm run report:publish

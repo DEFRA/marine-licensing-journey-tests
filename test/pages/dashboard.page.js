@@ -52,6 +52,17 @@ export default class DashboardPage {
     )
   }
 
+  async withdraw(projectName) {
+    await this.withdrawLink(projectName).click()
+    await this.page.waitForLoadState('load')
+    await this.page
+      .locator(
+        'xpath=//button[normalize-space(text())="Yes, withdraw project"]'
+      )
+      .click()
+    await this.page.waitForLoadState('load')
+  }
+
   async getNotificationRow(projectName) {
     const row = this.page.locator(
       `//tr[td[1][normalize-space(text())="${projectName}"]]`

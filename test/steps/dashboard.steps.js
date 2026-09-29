@@ -49,14 +49,7 @@ Given(
     await dashboard.clickProjectsLink()
     await dashboard.expectIsDisplayed()
 
-    await dashboard.withdrawLink(latestExemption(this).projectName).click()
-    await page.waitForLoadState('load')
-    await page
-      .locator(
-        'xpath=//button[normalize-space(text())="Yes, withdraw project"]'
-      )
-      .click()
-    await page.waitForLoadState('load')
+    await dashboard.withdraw(latestExemption(this).projectName)
 
     // Withdrawing lands on the dashboard, where the "Submissions" nav link the
     // shared When step clicks is not rendered; go home so it can navigate.
