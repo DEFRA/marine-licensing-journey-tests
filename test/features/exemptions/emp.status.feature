@@ -1,4 +1,4 @@
-@issue=ML-1500 @emp-overnight
+@issue=ML-1500 @empOvernight
 Feature: Exemptions: status changes reach Explore Marine Planning
   As the MMO
   I want EMP to show each exemption's current status

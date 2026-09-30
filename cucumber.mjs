@@ -28,7 +28,7 @@ const common = {
 export default {
   ...common,
   paths: ['test/features/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @emp-overnight'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
 }
 
 const smokePaths = [
@@ -53,7 +53,7 @@ export const smoke = {
 export const all = {
   ...common,
   paths: ['test/features/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @emp-overnight'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @empOvernight'
 }
 
 export const github = {
@@ -61,7 +61,7 @@ export const github = {
   parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
   format: githubFormat,
   paths: ['test/features/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @emp-overnight'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
 }
 
 /** CI smoke suite — same scenarios as `smoke`, with github reporting format. */
@@ -76,13 +76,13 @@ export const githubSmoke = {
 export const exemption = {
   ...common,
   paths: ['test/features/exemptions/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @emp-overnight'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
 }
 
 export const lcml = {
   ...common,
   paths: ['test/features/lcml/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @emp-overnight'
+  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
 }
 
 export const iat = {
@@ -110,8 +110,8 @@ export const cdp = {
   paths: ['test/features/**/*.feature'],
   tags:
     process.env.ENVIRONMENT === 'test'
-      ? '(@real-defra-id or @d365 or @fivium) and not @emp-overnight'
-      : 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @emp-overnight'
+      ? '(@real-defra-id or @d365 or @fivium) and not @empOvernight'
+      : 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
 }
 
 // The EMP overnight run (ML-1500), against the test environment. The CDP
@@ -132,5 +132,5 @@ export const empOvernight = {
     'allure-cucumberjs/reporter'
   ],
   paths: ['test/features/exemptions/emp.status.feature'],
-  tags: '@emp-overnight'
+  tags: '@empOvernight'
 }
