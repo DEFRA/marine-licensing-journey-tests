@@ -3,17 +3,18 @@
 echo "run_id: $RUN_ID"
 
 # CDP passes a scheduled run's Profile value as PROFILE. The EMP overnight
-# schedule (ML-1500) sets it to emp-overnight; runs without one run cdp.
+# schedule (ML-1500) sets it to empOvernight; runs without one run cdp. Each
+# value is the name of the npm script and of the cucumber.mjs profile it runs.
 profile="${PROFILE:-cdp}"
 case "$profile" in
   cdp)
     test_script="test:cdp"
     ;;
-  emp-overnight)
-    test_script="test:emp-overnight"
+  empOvernight)
+    test_script="test:empOvernight"
     ;;
   *)
-    echo "Unsupported profile: '$profile' (allowed: cdp, emp-overnight)"
+    echo "Unsupported profile: '$profile' (allowed: cdp, empOvernight)"
     exit 1
     ;;
 esac

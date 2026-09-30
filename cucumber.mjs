@@ -115,7 +115,7 @@ export const cdp = {
 }
 
 // The EMP overnight run (ML-1500), against the test environment. The CDP
-// schedule at 23:55 London time sets PROFILE=emp-overnight, which entrypoint.sh
+// schedule at 23:55 London time sets PROFILE=empOvernight, which entrypoint.sh
 // maps to this profile; it can also be run by hand. The withdrawal scenarios
 // run at any time; the nightly one needs starting within ten minutes of
 // midnight.

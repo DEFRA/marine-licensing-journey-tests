@@ -31,7 +31,7 @@
     "test:github": "cucumber-js --config cucumber.mjs --profile github",
     "test:github:smoke": "cucumber-js --config cucumber.mjs --profile githubSmoke",
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp",
-    "test:emp-overnight": "cucumber-js --config cucumber.mjs --profile empOvernight"
+    "test:empOvernight": "cucumber-js --config cucumber.mjs --profile empOvernight"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "3.1107.0",
