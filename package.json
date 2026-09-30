@@ -30,13 +30,14 @@
     "test:smoke": "cucumber-js --config cucumber.mjs --profile smoke --format summary",
     "test:github": "cucumber-js --config cucumber.mjs --profile github",
     "test:github:smoke": "cucumber-js --config cucumber.mjs --profile githubSmoke",
-    "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp"
+    "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp",
+    "test:empOvernight": "cucumber-js --config cucumber.mjs --profile empOvernight"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "3.1107.0",
     "allure-commandline": "2.34.1",
     "date-fns": "4.1.0",
-    "undici": "8.10.0"
+    "undici": "8.11.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "12.6.0",
