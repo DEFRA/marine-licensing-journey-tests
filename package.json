@@ -37,7 +37,7 @@
     "@aws-sdk/client-sqs": "3.1107.0",
     "allure-commandline": "2.34.1",
     "date-fns": "4.1.0",
-    "undici": "8.10.0"
+    "undici": "8.11.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "12.6.0",
