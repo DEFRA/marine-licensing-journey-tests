@@ -1119,7 +1119,7 @@ export async function openViewDetailsFromDashboard(world) {
 
 export async function readMarineLicenceIdFromProjects(world) {
   const page = world.page
-  await page.getByRole('link', { name: 'Submissions' }).click()
+  await page.getByRole('link', { name: 'Submissions', exact: true }).click()
   await page.waitForLoadState('load')
   const href = await page
     .locator(

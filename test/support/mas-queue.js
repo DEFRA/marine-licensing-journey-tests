@@ -101,7 +101,7 @@ async function getCognitoToken() {
 async function sendViaGateway(message) {
   const queueUrl =
     process.env.GATEWAY_QUEUE_URL ||
-    'https://marine-licensing-backend.api.test.cdp-int.defra.cloud/queue'
+    `https://marine-licensing-backend.api.${process.env.ENVIRONMENT}.cdp-int.defra.cloud/queue`
   const token = await getCognitoToken()
 
   const response = await cdpFetch(queueUrl, {
@@ -152,4 +152,42 @@ function buildRejectedMessage(applicationReference) {
 
 export async function sendRejectedMessage(applicationReference) {
   return sendToQueue(buildRejectedMessage(applicationReference))
+}
+
+function buildWithholdingNotificationMessage(
+  applicationReference,
+  { nationalSecurity, commercial }
+) {
+  const requestRelatesTo =
+    nationalSecurity && commercial
+      ? 'BOTH'
+      : nationalSecurity
+        ? 'NATIONAL_SECURITY'
+        : 'COMMERCIAL'
+
+  return {
+    applicationReference,
+    taskType: 'PUBLIC_REGISTER',
+    requestRelatesTo,
+    decisionDate: new Date().toISOString(),
+    ...(nationalSecurity && {
+      nationalSecurityDecision: nationalSecurity.decision,
+      nationalSecurityApplicantMessage: nationalSecurity.comments
+    }),
+    ...(commercial && {
+      commercialDecision: commercial.decision,
+      commercialApplicantMessage: commercial.comments
+    }),
+    userName: 'Jane Doe',
+    userEmail: 'withholding-test@example.com'
+  }
+}
+
+export async function sendWithholdingNotificationMessage(
+  applicationReference,
+  decisions
+) {
+  return sendToQueue(
+    buildWithholdingNotificationMessage(applicationReference, decisions)
+  )
 }
