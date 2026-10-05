@@ -336,6 +336,9 @@ export function activityCardLocator(page, cardTitle) {
   )
 }
 
+export const MPP_CARDS = '[id^="marine-plan-policies-card"]'
+export const MPP_CARD_TITLE = /^\s*Marine plan policies\b/
+
 export function cardTitlesInOrder(page) {
   return page
     .locator('.govuk-summary-card__title')

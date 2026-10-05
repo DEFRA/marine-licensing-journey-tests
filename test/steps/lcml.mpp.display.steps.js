@@ -7,20 +7,27 @@ import {
   completeMarinePlanPolicies,
   ensureReadyForReviewAndSend,
   cardTitlesInOrder,
-  MARINE_PLAN_POLICY_RESPONSE
+  MARINE_PLAN_POLICY_RESPONSE,
+  MPP_CARDS,
+  MPP_CARD_TITLE
 } from '../support/lcml-helpers.js'
 import { clickReviewAndSend } from '../support/task-flow.js'
 
-const MPP_CARD = '#marine-plan-policies-card'
-
 function policyRows(page) {
-  return page.locator(`${MPP_CARD} .govuk-summary-list__row`)
+  return page.locator(`${MPP_CARDS} .govuk-summary-list__row`)
 }
 
-async function policyCodesInCard(page) {
-  return page
-    .locator(`${MPP_CARD} dt.govuk-summary-list__key`)
-    .evaluateAll((keys) => keys.map((k) => k.textContent.trim()))
+async function policyCodesByCard(page) {
+  return page.locator(MPP_CARDS).evaluateAll((cards) =>
+    cards.map((card) =>
+      Array.from(card.querySelectorAll('dt.govuk-summary-list__key')).map(
+        (key) => {
+          const text = key.textContent.trim()
+          return text.match(/\(([^()]+)\)$/)?.[1] ?? text
+        }
+      )
+    )
+  )
 }
 
 // --- Givens ---
@@ -71,13 +78,15 @@ When('the user opens the check your answers page', async function () {
 Then(
   'the marine plan policies card is displayed beneath the site and activity cards',
   async function () {
-    await expect(this.page.locator(MPP_CARD)).toBeVisible({ timeout: 30_000 })
-    await expect(
-      this.page.locator(`${MPP_CARD} .govuk-summary-card__title`)
-    ).toHaveText('Marine plan policies', { timeout: 30_000 })
+    const firstCard = this.page.locator(MPP_CARDS).first()
+    await expect(firstCard).toBeVisible({ timeout: 30_000 })
+    await expect(firstCard.locator('.govuk-summary-card__title')).toHaveText(
+      MPP_CARD_TITLE,
+      { timeout: 30_000 }
+    )
 
     const titles = await cardTitlesInOrder(this.page)
-    const mppIndex = titles.indexOf('Marine plan policies')
+    const mppIndex = titles.findIndex((title) => MPP_CARD_TITLE.test(title))
     const lastSiteOrActivity = titles.reduce(
       (last, title, index) => (/site|activity/i.test(title) ? index : last),
       -1
@@ -89,9 +98,11 @@ Then(
 Then(
   'the marine plan policies card lists the policies sorted by code with their wording and my response',
   async function () {
-    const codes = await policyCodesInCard(this.page)
-    expect(codes.length).toBeGreaterThan(0)
-    expect(codes).toEqual([...codes].sort((a, b) => a.localeCompare(b)))
+    const cards = await policyCodesByCard(this.page)
+    expect(cards.flat().length).toBeGreaterThan(0)
+    for (const codes of cards) {
+      expect(codes).toEqual([...codes].sort((a, b) => a.localeCompare(b)))
+    }
 
     const rows = policyRows(this.page)
     const count = await rows.count()
@@ -112,7 +123,7 @@ Then(
 
 Then('the marine plan policies card has no Change links', async function () {
   await expect(
-    this.page.locator(`${MPP_CARD} .govuk-summary-list__actions a`)
+    this.page.locator(`${MPP_CARDS} .govuk-summary-list__actions a`)
   ).toHaveCount(0)
 })
 
@@ -121,7 +132,7 @@ Then(
   async function () {
     const rowCount = await policyRows(this.page).count()
     const changeLinks = this.page.locator(
-      `${MPP_CARD} .govuk-summary-list__actions a`
+      `${MPP_CARDS} .govuk-summary-list__actions a`
     )
     await expect(changeLinks).toHaveCount(rowCount)
     await expect(changeLinks.first()).toContainText('Change')
@@ -167,7 +178,7 @@ When(
   'the user selects Change for the first marine plan policy',
   async function () {
     const firstChange = this.page
-      .locator(`${MPP_CARD} .govuk-summary-list__actions a`)
+      .locator(`${MPP_CARDS} .govuk-summary-list__actions a`)
       .first()
     const href = await firstChange.getAttribute('href')
     this.data.policyCode = href.split('/').pop()
