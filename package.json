@@ -27,9 +27,13 @@
     "test": "cucumber-js --config cucumber.mjs --format summary",
     "test:exemption": "cucumber-js --config cucumber.mjs --profile exemption --format summary",
     "test:lcml": "cucumber-js --config cucumber.mjs --profile lcml --format summary",
+    "test:iat": "cucumber-js --config cucumber.mjs --profile iat --format summary",
     "test:smoke": "cucumber-js --config cucumber.mjs --profile smoke --format summary",
     "test:github": "cucumber-js --config cucumber.mjs --profile github",
     "test:github:smoke": "cucumber-js --config cucumber.mjs --profile githubSmoke",
+    "test:github:exemption": "cucumber-js --config cucumber.mjs --profile githubExemption",
+    "test:github:lcml": "cucumber-js --config cucumber.mjs --profile githubLcml",
+    "test:github:iat": "cucumber-js --config cucumber.mjs --profile githubIat",
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp",
     "test:empOvernight": "cucumber-js --config cucumber.mjs --profile empOvernight"
   },

@@ -15,7 +15,7 @@ inputs:
     type: string
     default: main
   profile:
-    description: 'Journey test profile to run: github (full suite) or smoke'
+    description: 'Journey test profile to run: github | exemption | lcml | iat | smoke'
     required: false
     default: 'github'
 
@@ -309,8 +309,17 @@ runs:
           smoke)
             script="test:github:smoke"
             ;;
+          exemption)
+            script="test:github:exemption"
+            ;;
+          lcml)
+            script="test:github:lcml"
+            ;;
+          iat)
+            script="test:github:iat"
+            ;;
           *)
-            echo "Unsupported profile: '$profile' (allowed: github, smoke)"
+            echo "Unsupported profile: '$profile' (allowed: github, exemption, lcml, iat, smoke)"
             exit 1
             ;;
         esac

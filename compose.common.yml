@@ -102,13 +102,17 @@ services:
       QUARKUS_LOG_LEVEL: WARN
       FLOCI_STORAGE_MODE: memory
       FLOCI_STORAGE_SERVICES_RESOURCEEXPLORER2_MODE: memory
+      # Floci 2.2+ probes the Docker daemon at startup; keep root so the
+      # mounted socket is usable in CI and local Docker Desktop.
+      FLOCI_RUN_AS_ROOT: 'true'
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./compose/start-floci.sh:/etc/floci/init/ready.d/start-floci.sh
     healthcheck:
       test: ['CMD', 'curl', 'localhost:4566']
       interval: 5s
-      start_period: 5s
-      retries: 3
+      start_period: 15s
+      retries: 5
     networks:
       - cdp-tenant
 
