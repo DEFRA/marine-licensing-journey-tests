@@ -83,7 +83,39 @@ export default class LcmlRedactionPage {
   }
 
   replaceDrawing() {
-    return this.control('Replace document')
+    const card = this.card('Construction drawing')
+    return card
+      .getByRole('link', { name: 'Replace document' })
+      .or(card.getByRole('button', { name: 'Replace document' }))
+      .first()
+  }
+
+  withholdLocation(siteNumber = 1) {
+    return this.control(`Withhold location for site ${siteNumber}`)
+  }
+
+  withholdWaterFrameworkDirectiveDocument() {
+    return this.control(
+      'Withhold document for the Water Framework Directive assessment'
+    )
+  }
+
+  previewButton() {
+    return this.page
+      .locator('#redaction-preview')
+      .getByRole('button', { name: 'Preview with redactions' })
+      .or(
+        this.page
+          .locator('#redaction-preview')
+          .getByRole('link', { name: 'Preview with redactions' })
+      )
+      .first()
+  }
+
+  async withhold(control, undoName) {
+    await control.click()
+    await this.page.waitForLoadState('load').catch(() => {})
+    await expect(this.control(undoName)).toBeVisible({ timeout: 30_000 })
   }
 
   async revealDrawing() {

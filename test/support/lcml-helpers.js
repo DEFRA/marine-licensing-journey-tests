@@ -33,7 +33,7 @@ export const CONSTRUCTION_DRAWING_FILE = 'test/resources/test.pdf'
 export const MARINE_PLAN_POLICY_RESPONSE =
   'We have considered this policy and the proposal is compatible with it.'
 
-const SAMPLE_FILES = {
+export const SAMPLE_FILES = {
   KML: 'test/resources/EXE_2025_00009-LOCATIONS-without-site-name.kml',
   Shapefile: 'test/resources/valid-shapefile-without-site-name.zip'
 }
@@ -788,7 +788,8 @@ export async function completeManualPolygonSite(world, options = {}) {
 export async function completeSiteDetailsViaFileUpload(
   world,
   fileType = 'KML',
-  filePath = SAMPLE_FILES[fileType]
+  filePath = SAMPLE_FILES[fileType],
+  activityOptions = {}
 ) {
   await navigateToUploadPage(world, fileType)
   await uploadFileAndWaitForReviewPage(world, fileType, filePath)
@@ -798,7 +799,7 @@ export async function completeSiteDetailsViaFileUpload(
   const { completeRandomActivityFromReviewPage } = await import(
     './lcml-activity-flow.js'
   )
-  await completeRandomActivityFromReviewPage(world)
+  await completeRandomActivityFromReviewPage(world, activityOptions)
 
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
 
@@ -860,10 +861,15 @@ const POLYGON_COORDINATES = [
   { latitude: '50.102000', longitude: '-1.098000' }
 ]
 
-export async function completeUploadApp(world) {
+export async function completeUploadApp(world, opts = {}) {
   await loginAndStartApplication(world, 'organisation')
-  await completeNonSiteTasks(world)
-  await completeSiteDetailsViaFileUpload(world, 'KML')
+  await completeNonSiteTasks(world, opts)
+  await completeSiteDetailsViaFileUpload(
+    world,
+    'KML',
+    SAMPLE_FILES.KML,
+    opts.activity ?? {}
+  )
   world.data.siteType = 'upload'
 }
 
@@ -1122,7 +1128,7 @@ export async function openViewDetailsFromDashboard(world) {
 
 export async function readMarineLicenceIdFromProjects(world) {
   const page = world.page
-  await page.getByRole('link', { name: 'Submissions' }).click()
+  await page.getByRole('link', { name: 'Submissions', exact: true }).click()
   await page.waitForLoadState('load')
   const href = await page
     .locator(
