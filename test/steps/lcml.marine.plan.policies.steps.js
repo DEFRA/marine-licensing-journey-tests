@@ -149,19 +149,23 @@ Then(
       page.getByText(/\d+ policies to complete/i).first()
     ).toBeVisible({ timeout: 30_000 })
 
-    // Extract the policy code from each row (leading e.g. "E-AGG-3"), independent
-    // of whether the row is rendered as a link.
-    const codes = await page
-      .locator('main ul li')
-      .evaluateAll((items) =>
-        items
-          .map(
-            (li) => (li.textContent.trim().match(/^[A-Z]-[A-Z]+-\d+/) || [])[0]
-          )
+    const lists = await page.locator('main ul').evaluateAll((uls) =>
+      uls.map((ul) =>
+        Array.from(ul.querySelectorAll(':scope > li'))
+          .map((li) => {
+            const text = li.textContent.trim()
+            return (
+              text.match(/\(([A-Z]+(?:-[A-Z0-9]+)+)\)/)?.[1] ??
+              text.match(/^[A-Z]+(?:-[A-Z0-9]+)+/)?.[0]
+            )
+          })
           .filter(Boolean)
       )
-    expect(codes.length).toBeGreaterThan(0)
-    expect(codes).toEqual([...codes].sort())
+    )
+    expect(lists.flat().length).toBeGreaterThan(0)
+    for (const codes of lists) {
+      expect(codes).toEqual([...codes].sort((a, b) => a.localeCompare(b)))
+    }
   }
 )
 
@@ -224,7 +228,10 @@ Then(
       page.locator('.govuk-caption-l, .govuk-caption-m').first()
     ).toContainText(this.data.projectName, { timeout: 30_000 })
 
-    await expect(page.locator('h1')).toHaveText(code, { timeout: 30_000 })
+    await expect(page.locator('h1')).toHaveText(
+      new RegExp(`(^|\\()${code}\\)?\\s*$`),
+      { timeout: 30_000 }
+    )
 
     await expect(
       page.locator('h2', { hasText: 'Policy information' }).first()
