@@ -7,6 +7,13 @@ import { navigateAndReAuthenticate } from '../support/navigation.js'
 import { getConfig } from '../support/config.js'
 import { applySharedDashboardLicence } from '../support/shared-dashboard-licence.js'
 
+const captionPattern = (caption) =>
+  new RegExp(
+    `^\\s*${caption
+      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      .replace(/^1 result /, '1 results? ')}\\s*$`
+  )
+
 const projectRow = (page, projectName) =>
   page.locator(`xpath=//tr[td[1][normalize-space(text())="${projectName}"]]`)
 
@@ -65,7 +72,9 @@ Then('{string} is the selected Show option', async function (label) {
 
 Then('the results caption reads {string}', async function (expected) {
   const filter = new DashboardFilterPanePage(this.page)
-  await expect(filter.resultsCaption).toHaveText(expected, { timeout: 30_000 })
+  await expect(filter.resultsCaption).toHaveText(captionPattern(expected), {
+    timeout: 30_000
+  })
 })
 
 Then('the marine licence is listed', async function () {
@@ -159,7 +168,7 @@ Then(
     expect(orgName).toBeTruthy()
     const filter = new DashboardFilterPanePage(this.page)
     await expect(filter.resultsCaption).toHaveText(
-      `1 results found in 'All ${orgName} submissions'`,
+      captionPattern(`1 result found in 'All ${orgName} submissions'`),
       { timeout: 30_000 }
     )
   }

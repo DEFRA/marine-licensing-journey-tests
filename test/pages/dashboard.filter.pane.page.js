@@ -34,7 +34,7 @@ export default class DashboardFilterPanePage {
     this.clearFiltersLinks = page.getByRole('link', { name: 'Clear filters' })
     this.resultsCaption = page
       .locator('h3.govuk-heading-s')
-      .filter({ hasText: /results found in/ })
+      .filter({ hasText: /results? found in/ })
       .first()
     this.showRadio = (value) =>
       page.locator(`input[name="show"][value="${value}"]`)

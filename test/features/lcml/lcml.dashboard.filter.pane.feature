@@ -20,7 +20,7 @@ Feature: LCML: Dashboard filter pane
     Then the filter pane is hidden
     And selecting Show filter reveals it and Hide filter hides it again
     And "My submissions" is the selected Show option
-    And the results caption reads "1 results found in 'My submissions'"
+    And the results caption reads "1 result found in 'My submissions'"
 
   Scenario: Showing all organisation submissions names the organisation
     Given the shared submitted marine licence application
@@ -56,4 +56,4 @@ Feature: LCML: Dashboard filter pane
     Then no filters are selected
     And the marine licence is listed
     And "My submissions" is the selected Show option
-    And the results caption reads "1 results found in 'My submissions'"
+    And the results caption reads "1 result found in 'My submissions'"
