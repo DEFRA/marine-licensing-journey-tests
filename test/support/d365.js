@@ -917,9 +917,20 @@ const COMPLETE_TRANSFER_COMMAND =
 
 const CASE_STATUS_CELL = 'div[col-id="statuscode"]'
 
+async function openMarineLicenceWorkbasket(page) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await marineLicenceWorkbasket(page).click()
+    try {
+      await page.waitForURL(/pagetype=entitylist/, { timeout: 20_000 })
+      await page.waitForLoadState('load')
+      return
+    } catch {}
+  }
+  throw new Error('Marine licence cases did not open from the D365 menu')
+}
+
 async function findMarineLicenceCaseRow(page, reference) {
-  await marineLicenceWorkbasket(page).click()
-  await page.waitForLoadState('load')
+  await openMarineLicenceWorkbasket(page)
   await selectCasesView(page, MARINE_LICENCE_CASES_VIEW)
 
   const search = page
@@ -1270,6 +1281,9 @@ const MPP_REASON_INPUT =
   '[data-id="mmo_reasonforyourdecision.fieldControl-text-box-text"]'
 const MPP_SAVE_AND_CLOSE = 'button[data-id*="SaveAndClose"]'
 
+const PUBLIC_REGISTER_SETTLE_MS = 5_000
+const PUBLIC_REGISTER_STATUS_POLLS = 24
+
 const MPP_SAVE_ATTEMPTS = 3
 
 async function readFormMessages(page) {
@@ -1332,4 +1346,180 @@ export async function completeMarinePlanPolicyTask(page, outcome, reason) {
       `Reason field value: ${JSON.stringify(await reasonInput.inputValue().catch(() => null))}. ` +
       `Form messages: ${lastMessages || 'none captured'}`
   )
+}
+
+export const PUBLIC_REGISTER_TASK_FIELDS = {
+  requestRelatesTo: 'mmo_whatdoestherequestrelateto',
+  commercialDecision: 'mmo_doyouagreewiththeapplicantsrequest',
+  commercialRationale: 'mmo_whatisyourrationale',
+  commercialTellApplicant: 'mmo_whatdoyouwanttotelltheapplicant',
+  nationalSecurityDecision: 'mmo_ns_doyouagreewiththeapplicantsrequest',
+  nationalSecurityRationale: 'mmo_ns_whatisyourrationale',
+  nationalSecurityTellApplicant: 'mmo_ns_whatdoyouwanttotelltheapplicant',
+  containsPersonalInformation: 'mmo_doestheapplicationoranysupport',
+  markComplete: 'mmo_selecttomarkthetaskascomplete',
+  redactUrl: 'mmo_redacturl'
+}
+
+export function publicRegisterTaskLink(page) {
+  return page.getByRole('link', { name: 'Public register' }).first()
+}
+
+async function openEditablePublicRegisterTask(page, caseUrl) {
+  for (let attempt = 1; attempt <= 12; attempt++) {
+    const link = publicRegisterTaskLink(page)
+    await waitForCaseTaskLink(page, link, 'Public register')
+    await link.click()
+    await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+      timeout: D365_NAVIGATION_TIMEOUT
+    })
+    await page.waitForLoadState('load')
+    await page
+      .locator(
+        `[data-id="${PUBLIC_REGISTER_TASK_FIELDS.requestRelatesTo}-FieldSectionItemContainer"]`
+      )
+      .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+
+    const editable = await page.evaluate((attr) => {
+      const findXrm = (w, depth = 0) => {
+        if (depth > 4) return null
+        try {
+          if (w.Xrm?.Page?.getAttribute) return w.Xrm
+        } catch {}
+        for (let i = 0; i < (w.frames?.length || 0); i++) {
+          try {
+            const found = findXrm(w.frames[i], depth + 1)
+            if (found) return found
+          } catch {}
+        }
+        return null
+      }
+      const control = findXrm(window)?.Page.getControl(attr)
+      return Boolean(control) && !control.getDisabled()
+    }, PUBLIC_REGISTER_TASK_FIELDS.requestRelatesTo)
+
+    if (editable) {
+      return
+    }
+    await page.waitForTimeout(15_000)
+    await page.goto(caseUrl)
+    await page.waitForLoadState('load')
+  }
+  throw new Error(
+    'The Public register task stayed read-only for three minutes after the Site check was completed'
+  )
+}
+
+export async function completePublicRegisterTask(page, assessment) {
+  const caseUrl = page.url()
+  await openEditablePublicRegisterTask(page, caseUrl)
+
+  const { taskId, redactUrl } = await page.evaluate(
+    ({ fields, assessment }) => {
+      const findXrm = (w, depth = 0) => {
+        if (depth > 4) return null
+        try {
+          if (w.Xrm?.Page?.getAttribute) return w.Xrm
+        } catch {}
+        for (let i = 0; i < (w.frames?.length || 0); i++) {
+          try {
+            const found = findXrm(w.frames[i], depth + 1)
+            if (found) return found
+          } catch {}
+        }
+        return null
+      }
+      const Xrm = findXrm(window)
+      if (!Xrm) {
+        throw new Error('completePublicRegisterTask: Xrm not found')
+      }
+      const set = (attr, value) => {
+        const attribute = Xrm.Page.getAttribute(attr)
+        attribute.setValue(value)
+        attribute.fireOnChange()
+      }
+      const setOption = (attr, label) => {
+        const option = Xrm.Page.getAttribute(attr)
+          .getOptions()
+          .find((o) => o.text.trim() === label.trim())
+        if (!option) {
+          throw new Error(`No "${label}" option on ${attr}`)
+        }
+        set(attr, option.value)
+      }
+
+      setOption(fields.requestRelatesTo, assessment.relatesTo)
+      const bases = [
+        ['commercial', 'commercial'],
+        ['nationalSecurity', 'nationalSecurity']
+      ]
+      for (const [key, prefix] of bases) {
+        const basis = assessment[key]
+        if (!basis) continue
+        setOption(fields[`${prefix}Decision`], basis.decision)
+        set(fields[`${prefix}Rationale`], basis.rationale)
+        if (basis.tellApplicant) {
+          set(fields[`${prefix}TellApplicant`], basis.tellApplicant)
+        }
+      }
+      setOption(fields.containsPersonalInformation, 'No')
+      set(fields.markComplete, assessment.markComplete)
+      return {
+        taskId: Xrm.Page.data.entity.getId().replace(/[{}]/g, ''),
+        redactUrl: Xrm.Page.getAttribute(fields.redactUrl)?.getValue() ?? null
+      }
+    },
+    { fields: PUBLIC_REGISTER_TASK_FIELDS, assessment }
+  )
+
+  await page.waitForTimeout(PUBLIC_REGISTER_SETTLE_MS)
+  const save = page.locator(MPP_SAVE_AND_CLOSE).first()
+  await save.waitFor({ state: 'visible', timeout: 30_000 })
+  await save.click()
+  try {
+    await page.waitForURL(/etn=incident/, { timeout: 45_000 })
+  } catch {
+    throw new Error(
+      `completePublicRegisterTask: Save & Close did not return to the case. Form messages: ${JSON.stringify(await readFormMessages(page))}`
+    )
+  }
+  await page.waitForLoadState('load')
+
+  const status = await readTaskStatus(
+    page,
+    taskId,
+    assessment.markComplete ? 'Done' : 'In Progress'
+  )
+
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  return { status, redactUrl }
+}
+
+async function readTaskStatus(page, taskId, expected) {
+  let status
+  for (let attempt = 0; attempt < PUBLIC_REGISTER_STATUS_POLLS; attempt++) {
+    status = await page.evaluate(async (id) => {
+      const response = await fetch(
+        `/api/data/v9.2/tasks(${id})?$select=statuscode`,
+        {
+          headers: {
+            Accept: 'application/json',
+            Prefer:
+              'odata.include-annotations="OData.Community.Display.V1.FormattedValue"'
+          }
+        }
+      )
+      if (!response.ok) {
+        throw new Error(`task status read failed: ${response.status}`)
+      }
+      const task = await response.json()
+      return task['statuscode@OData.Community.Display.V1.FormattedValue']
+    }, taskId)
+    if (status === expected) {
+      break
+    }
+    await page.waitForTimeout(5_000)
+  }
+  return status
 }

@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test'
 
 const STATUS_VALUES = {
+  'Action required': 'ACTION_REQUIRED',
   Active: 'ACTIVE',
   Draft: 'DRAFT',
   Expired: 'EXPIRED',

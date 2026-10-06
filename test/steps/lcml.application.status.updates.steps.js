@@ -24,6 +24,7 @@ const projectRow = (page, projectName) =>
 
 Given(
   'an organisation user has submitted a marine licence application',
+  { timeout: 600_000 },
   async function () {
     await completeManualCircleApp(this, {
       activity: { topLevel: 'Deposit', subOptionIndex: 1 }
@@ -56,7 +57,7 @@ Then(
   { timeout: 120_000 },
   async function (status) {
     const page = this.page
-    await page.getByRole('link', { name: 'Submissions' }).click()
+    await page.getByRole('link', { name: 'Submissions', exact: true }).click()
     await page.waitForLoadState('load')
 
     // The backend MAS worker consumes the queue message asynchronously, so poll
