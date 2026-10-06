@@ -73,16 +73,46 @@ export const githubSmoke = {
   tags: '@smoke'
 }
 
+const githubExclusions =
+  'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
+
+/** CI exemption suite — all exemption features, github reporting format. */
+export const githubExemption = {
+  ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
+  format: githubFormat,
+  paths: ['test/features/exemptions/**/*.feature'],
+  tags: githubExclusions
+}
+
+/** CI LCML suite — LCML features plus @smoke safety net. */
+export const githubLcml = {
+  ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
+  format: githubFormat,
+  paths: ['test/features/lcml/**/*.feature', ...smokePaths],
+  tags: `@smoke or (@lcml and ${githubExclusions})`
+}
+
+/** CI IAT suite — IAT features plus @smoke safety net. */
+export const githubIat = {
+  ...common,
+  parallel: debug ? 1 : parseInt(process.env.MAX_INSTANCES || '8', 10),
+  format: githubFormat,
+  paths: ['test/features/iat/**/*.feature', ...smokePaths],
+  tags: `@smoke or (@iat and ${githubExclusions})`
+}
+
 export const exemption = {
   ...common,
   paths: ['test/features/exemptions/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
+  tags: githubExclusions
 }
 
 export const lcml = {
   ...common,
   paths: ['test/features/lcml/**/*.feature'],
-  tags: 'not @wip and not @bug and not @d365 and not @real-defra-id and not @fivium and not @local-only and not @empOvernight'
+  tags: githubExclusions
 }
 
 export const iat = {
