@@ -3,7 +3,7 @@ import { tmpdir } from 'os'
 import path from 'path'
 import { getConfig } from './config.js'
 import {
-  completeManualCircleApp,
+  completeUploadApp,
   readMarineLicenceIdFromProjects,
   submitMarineLicence
 } from './lcml-helpers.js'
@@ -53,12 +53,24 @@ export function redactionPath(applicationReference) {
   return `/marine-licence/redaction/${redactionUrlSegment(applicationReference)}`
 }
 
+export function redactionPreviewPath(applicationReference) {
+  return `${redactionPath(applicationReference)}/preview`
+}
+
 // The activity is otherwise picked at random, and only the construction path
 // asks for a drawing, so the document rows would come and go between runs.
 const FIXTURE_ACTIVITY = { topLevel: 'Construction', subOptionIndex: 0 }
 
-async function createFixture(world) {
-  await completeManualCircleApp(world, { activity: FIXTURE_ACTIVITY })
+const FIXTURE_WFD = 'upload'
+
+const buildSharedApplication = (world) =>
+  completeUploadApp(world, {
+    activity: FIXTURE_ACTIVITY,
+    wfd: FIXTURE_WFD
+  })
+
+async function createFixture(world, buildApplication) {
+  await buildApplication(world)
   await submitMarineLicence(world)
   await readMarineLicenceIdFromProjects(world)
   const applicantState = await world.browserContext.storageState()
@@ -100,7 +112,7 @@ export async function applySharedRedactionLicence(world) {
 
     if (await acquireLock()) {
       try {
-        const fixture = await createFixture(world)
+        const fixture = await createFixture(world, buildSharedApplication)
         cached = structuredClone(fixture)
         await writeCache(fixture)
         break
@@ -117,8 +129,12 @@ export async function applySharedRedactionLicence(world) {
     await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL))
   }
 
-  world.data = structuredClone(cached.data)
-  world.applicantState = cached.applicantState
+  return switchToCaseworker(world, cached)
+}
+
+async function switchToCaseworker(world, fixture) {
+  world.data = structuredClone(fixture.data)
+  world.applicantState = fixture.applicantState
   world.keepTestUser = true
 
   const browser = world.browserContext.browser()
@@ -126,7 +142,7 @@ export async function applySharedRedactionLicence(world) {
   await world.browserContext.close()
   world.browserContext = await browser.newContext({
     viewport: { width: 1440, height: 1400 },
-    storageState: cached.entraState
+    storageState: fixture.entraState
   })
   world.page = await world.browserContext.newPage()
   world.page.setDefaultTimeout(30_000)
