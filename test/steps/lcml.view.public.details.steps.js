@@ -2,13 +2,14 @@ import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   openPublicViewDetailsAsExternalUser,
-  cardTitlesInOrder
+  cardTitlesInOrder,
+  MPP_CARDS,
+  MPP_CARD_TITLE
 } from '../support/lcml-helpers.js'
 
 const APPLICATION_OVERVIEW_CARD = '#application-overview-card'
 const PROJECT_DETAILS_CARD = '#project-details-card'
 const ACTIVITY_CARD = '#activity-details-site-1-activity-1'
-const MPP_CARD = '#marine-plan-policies-card'
 const FEE_ESTIMATE_CARD = '#fee-estimate-card'
 const INVOICING_CARD = '#invoicing-card'
 const PUBLIC_REGISTER_CARD = '#public-register-card'
@@ -70,27 +71,28 @@ Then(
 Then(
   "the marine plan policies card shows Applicant's consideration with no Change links",
   async function () {
-    const card = this.page.locator(MPP_CARD)
-    await expect(card).toBeVisible({ timeout: 30_000 })
-    await expect(card.locator('.govuk-summary-card__title')).toHaveText(
-      'Marine plan policies',
-      { timeout: 30_000 }
-    )
+    const cards = this.page.locator(MPP_CARDS)
+    await expect(cards.first()).toBeVisible({ timeout: 30_000 })
+    await expect(
+      cards.first().locator('.govuk-summary-card__title')
+    ).toHaveText(MPP_CARD_TITLE, { timeout: 30_000 })
 
     const titles = await cardTitlesInOrder(this.page)
-    const mppIndex = titles.indexOf('Marine plan policies')
+    const mppIndex = titles.findIndex((title) => MPP_CARD_TITLE.test(title))
     const lastSiteOrActivity = titles.reduce(
       (last, title, index) => (/site|activity/i.test(title) ? index : last),
       -1
     )
     expect(mppIndex).toBeGreaterThan(lastSiteOrActivity)
 
-    await expect(card).toContainText("Applicant's consideration", {
-      timeout: 30_000
-    })
-    await expect(card).not.toContainText('Your consideration')
+    for (const card of await cards.all()) {
+      await expect(card).toContainText("Applicant's consideration", {
+        timeout: 30_000
+      })
+      await expect(card).not.toContainText('Your consideration')
+    }
     await expect(
-      this.page.locator(`${MPP_CARD} .govuk-summary-list__actions a`)
+      this.page.locator(`${MPP_CARDS} .govuk-summary-list__actions a`)
     ).toHaveCount(0)
   }
 )
