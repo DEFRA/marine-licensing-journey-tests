@@ -204,6 +204,19 @@ When(
 )
 
 Then(
+  'the Application overview card shows who the marine licence is for',
+  async function () {
+    const organisation = this.testUser?.relationships?.[0]?.organisationName
+    expect(organisation).toBeTruthy()
+    await expect(
+      this.page.locator(
+        '#application-overview-card .govuk-summary-list__row:has(dt:text-is("Who the marine licence is for")) .govuk-summary-list__value'
+      )
+    ).toHaveText(organisation, { timeout: 30_000 })
+  }
+)
+
+Then(
   'the View details page shows the site location and site card for that site type',
   async function () {
     const siteType = this.data.siteType
