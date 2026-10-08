@@ -666,19 +666,19 @@ Then(
       page.getByText(/\d+ policies to complete/i).first()
     ).toHaveText(`${expectedTotal} policies to complete`, { timeout: 60_000 })
 
-    const linkTexts = await page
-      .locator('main a')
-      .evaluateAll((links) => links.map((a) => a.textContent.trim()))
-
-    const codes = linkTexts.filter((text) => /^[A-Z]+-[A-Z]+-?\d*$/.test(text))
+    const codes = await page
+      .locator('main a[href^="/marine-licence/marine-plan-policy/"]')
+      .evaluateAll((links) =>
+        links.map((a) => a.getAttribute('href').split('/').pop())
+      )
 
     expect(codes).toHaveLength(expectedTotal)
 
     const foreign = codes.filter((code) => !code.startsWith(`${areaPrefix}-`))
     expect(foreign).toEqual([])
 
-    const excluded = linkTexts.filter((text) =>
-      new RegExp(`^${excludedCode}\\b`, 'i').test(text)
+    const excluded = codes.filter((code) =>
+      new RegExp(`^${excludedCode}\\b`, 'i').test(code)
     )
     expect(excluded).toEqual([])
   }
