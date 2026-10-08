@@ -111,12 +111,14 @@ When(
 When('the caseworker selects the preview with redactions', async function () {
   const preview = this.redaction.previewButton()
   await expect(preview).toBeVisible({ timeout: 30_000 })
+  const newTab = this.page.context().waitForEvent('page')
   await preview.click()
-  await this.page.waitForURL(/\/marine-licence\/redaction\/[^/]+\/preview$/, {
+  const previewPage = await newTab
+  await previewPage.waitForURL(/\/marine-licence\/redaction\/[^/]+\/preview$/, {
     timeout: 30_000
   })
-  await this.page.waitForLoadState('load')
-  this.preview = new LcmlRedactionPreviewPage(this.page)
+  await previewPage.waitForLoadState('load')
+  this.preview = new LcmlRedactionPreviewPage(previewPage)
   await expect(this.preview.heading).toBeVisible({ timeout: 30_000 })
 })
 
@@ -135,7 +137,7 @@ Then(
       this.preview.heading.locator('.app-redaction-label')
     )
     expect(this.applicantText).toBeTruthy()
-    expect(await this.page.content()).not.toContain(this.applicantText)
+    expect(await this.preview.page.content()).not.toContain(this.applicantText)
   }
 )
 
@@ -153,7 +155,7 @@ Then(
 
     const coordinates = withheldCoordinates(this)
     expect(coordinates.length).toBeGreaterThan(0)
-    const html = await this.page.content()
+    const html = await this.preview.page.content()
     for (const coordinate of coordinates) {
       expect(html).not.toContain(coordinate)
     }
@@ -177,7 +179,7 @@ Then(
         .card('Water Framework Directive')
         .locator('.app-redaction-label')
     )
-    expect(await this.page.content()).not.toContain(this.wfdFileName)
+    expect(await this.preview.page.content()).not.toContain(this.wfdFileName)
   }
 )
 

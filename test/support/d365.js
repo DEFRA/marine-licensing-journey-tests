@@ -1493,7 +1493,34 @@ export async function completePublicRegisterTask(page, assessment) {
 
   await page.goto(caseUrl)
   await page.waitForLoadState('load')
-  return { status, redactUrl }
+  return {
+    status,
+    redactUrl: redactUrl ?? (await readTaskRedactUrl(page, taskId))
+  }
+}
+
+async function readTaskRedactUrl(page, taskId) {
+  let redactUrl = null
+  for (let attempt = 0; attempt < PUBLIC_REGISTER_STATUS_POLLS; attempt++) {
+    redactUrl = await page.evaluate(
+      async ({ id, field }) => {
+        const response = await fetch(
+          `/api/data/v9.2/tasks(${id})?$select=${field}`,
+          { headers: { Accept: 'application/json' } }
+        )
+        if (!response.ok) {
+          throw new Error(`task redact url read failed: ${response.status}`)
+        }
+        return (await response.json())[field] ?? null
+      },
+      { id: taskId, field: PUBLIC_REGISTER_TASK_FIELDS.redactUrl }
+    )
+    if (redactUrl) {
+      break
+    }
+    await page.waitForTimeout(5_000)
+  }
+  return redactUrl
 }
 
 async function readTaskStatus(page, taskId, expected) {
