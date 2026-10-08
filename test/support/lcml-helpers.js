@@ -337,7 +337,71 @@ export function activityCardLocator(page, cardTitle) {
 }
 
 export const MPP_CARDS = '[id^="marine-plan-policies-card"]'
-export const MPP_CARD_TITLE = /^\s*Marine plan policies\b/
+const MPP_CARD_TITLE = /^Marine plan policies – (.+)$/
+const POLICY_CODE = '[A-Z]+(?:-[A-Z0-9]+)+'
+const TITLED_POLICY = new RegExp(`^.+ \\((${POLICY_CODE})\\)$`)
+const UNTITLED_POLICY = new RegExp(`^(${POLICY_CODE})$`)
+const UNCATEGORISED = 'Other'
+
+export function expectPolicyCategoriesInOrder(categories) {
+  expect(categories.length).toBeGreaterThan(0)
+  expect(new Set(categories).size).toBe(categories.length)
+  const byName = (a, b) => {
+    if (a === UNCATEGORISED) return 1
+    if (b === UNCATEGORISED) return -1
+    return a.localeCompare(b)
+  }
+  expect(categories).toEqual([...categories].sort(byName))
+}
+
+export function expectPoliciesNamedInCodeOrder(groups) {
+  let titled = 0
+  for (const names of groups) {
+    expect(names.length).toBeGreaterThan(0)
+    const codes = names.map((name) => {
+      const named = name.match(TITLED_POLICY) ?? name.match(UNTITLED_POLICY)
+      expect(named, `"${name}" is a policy title and code`).not.toBeNull()
+      titled += TITLED_POLICY.test(name) ? 1 : 0
+      return named[1]
+    })
+    expect(codes).toEqual([...codes].sort((a, b) => a.localeCompare(b)))
+  }
+  expect(titled).toBeGreaterThan(0)
+}
+
+export async function expectPolicyCardsByCategory(page) {
+  await expect(page.locator(MPP_CARDS).first()).toBeVisible({ timeout: 30_000 })
+  const cards = await page.locator(MPP_CARDS).evaluateAll((elements) =>
+    elements.map((card) => ({
+      title: card
+        .querySelector('.govuk-summary-card__title')
+        .textContent.replace(/\s+/g, ' ')
+        .trim(),
+      policies: Array.from(
+        card.querySelectorAll('dt.govuk-summary-list__key')
+      ).map((key) => key.textContent.replace(/\s+/g, ' ').trim())
+    }))
+  )
+  const categories = cards.map(({ title }) => {
+    const titled = title.match(MPP_CARD_TITLE)
+    expect(titled, `"${title}" names its category`).not.toBeNull()
+    return titled[1]
+  })
+  expectPolicyCategoriesInOrder(categories)
+  expectPoliciesNamedInCodeOrder(cards.map(({ policies }) => policies))
+
+  const titles = await cardTitlesInOrder(page)
+  const positions = titles
+    .map((title, index) => (MPP_CARD_TITLE.test(title) ? index : -1))
+    .filter((index) => index >= 0)
+  const lastSiteOrActivity = titles.reduce(
+    (last, title, index) => (/site|activity/i.test(title) ? index : last),
+    -1
+  )
+  expect(positions).toEqual(
+    positions.map((_, offset) => lastSiteOrActivity + 1 + offset)
+  )
+}
 
 export function cardTitlesInOrder(page) {
   return page
