@@ -22,17 +22,18 @@ Feature: LCML: Marine plan policies
     When the user views the marine licence task list
     Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
 
-  @issue=ML-1248
-  Scenario: Selecting the task opens the Policy list page with the policies sorted alphabetically by code
+  @issue=ML-1248 @issue=ML-1370
+  Scenario: Selecting the task opens the Policy list page with the policies under category headings, sorted by code
     Given an organisation user has completed the site details for a marine licence application
     When the user opens the Marine plan policy considerations task
-    Then the policy list page shows the policy count and an alphabetically sorted list of policy codes
+    Then the policy list page shows the policy count and the policies under category headings in alphabetical order
+    And each policy on the list is named by its title and code, in code order, and is "Not yet started"
 
-  @issue=ML-1249
+  @issue=ML-1249 @issue=ML-1370
   Scenario: The Policy consideration page displays the policy details
     Given an organisation user has completed the site details for a marine licence application
     When the user opens a policy from the marine plan policy list
-    Then the policy consideration page shows the policy code, policy information and a blank consideration textarea
+    Then the policy consideration page shows the policy title and code, policy information and a blank consideration textarea
 
   @issue=ML-1249
   Scenario: Saving a policy consideration with no text shows the mandatory error
