@@ -56,13 +56,14 @@ Feature: LCML: Telling the applicant what we decided about withholding their inf
     And the notification gives the "National security" decision "We've decided not to withhold the information you asked us to." with the caseworker's comments
     And the Public register task links to the redaction page for the application
 
-  @real-defra-id @d365 @issue=ML-1374
+  @real-defra-id @d365 @issue=ML-1374 @issue=ML-1543
   Scenario Outline: A Public register task <outcome> gives the applicant nothing to read
     Given an organisation user has submitted a marine licence application
     When the caseworker completes the Site check in D365
     And the caseworker saves the Public register task with "<decision>" on commercial confidentiality, <completion> as complete
     Then the Public register task is "<status>" in D365
     And View details still shows the application as "Submitted" with no withholding notification task
+    And the Application overview card shows who the marine licence is for
 
     Examples:
       | outcome                             | decision                             | completion | status      |
