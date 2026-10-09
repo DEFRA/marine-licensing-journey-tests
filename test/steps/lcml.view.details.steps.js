@@ -1,5 +1,6 @@
 import { Given, When, Then, After } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { getConfig } from '../support/config.js'
 import { ACTIVITY_TYPES } from '../test-data/lcml-activity.js'
 import {
   completeUploadApp,
@@ -206,7 +207,9 @@ When(
 Then(
   'the Application overview card shows who the marine licence is for',
   async function () {
-    const organisation = this.testUser?.relationships?.[0]?.organisationName
+    const organisation = getConfig().isRealDefraId
+      ? process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+      : this.testUser?.relationships?.[0]?.organisationName
     expect(organisation).toBeTruthy()
     await expect(
       this.page.locator(
