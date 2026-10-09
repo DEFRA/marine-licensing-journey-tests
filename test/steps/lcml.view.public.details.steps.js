@@ -2,9 +2,8 @@ import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   openPublicViewDetailsAsExternalUser,
-  cardTitlesInOrder,
   MPP_CARDS,
-  MPP_CARD_TITLE
+  expectPolicyCardsByCategory
 } from '../support/lcml-helpers.js'
 
 const APPLICATION_OVERVIEW_CARD = '#application-overview-card'
@@ -69,21 +68,10 @@ Then(
 )
 
 Then(
-  "the marine plan policies card shows Applicant's consideration with no Change links",
+  "the marine plan policies cards show Applicant's consideration with no Change links",
   async function () {
+    await expectPolicyCardsByCategory(this.page)
     const cards = this.page.locator(MPP_CARDS)
-    await expect(cards.first()).toBeVisible({ timeout: 30_000 })
-    await expect(
-      cards.first().locator('.govuk-summary-card__title')
-    ).toHaveText(MPP_CARD_TITLE, { timeout: 30_000 })
-
-    const titles = await cardTitlesInOrder(this.page)
-    const mppIndex = titles.findIndex((title) => MPP_CARD_TITLE.test(title))
-    const lastSiteOrActivity = titles.reduce(
-      (last, title, index) => (/site|activity/i.test(title) ? index : last),
-      -1
-    )
-    expect(mppIndex).toBeGreaterThan(lastSiteOrActivity)
 
     for (const card of await cards.all()) {
       await expect(card).toContainText("Applicant's consideration", {

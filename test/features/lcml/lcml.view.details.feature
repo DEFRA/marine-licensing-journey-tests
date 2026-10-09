@@ -18,13 +18,13 @@ Feature: LCML: View details page shows sites and activities
     Then the View details page shows the "File upload" site location method
     And the View details page shows an uploaded site card with a name and a map
 
-  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1370
   Scenario: View details shows the marine plan policies, fee estimate and invoicing cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When the user opens View details for the submitted marine licence
-    Then the marine plan policies card is displayed beneath the site and activity cards
-    And the marine plan policies card lists the policies sorted by code with their wording and my response
-    And the marine plan policies card has no Change links
+    Then the marine plan policies are displayed in a card per category directly beneath the site and activity cards
+    And each marine plan policies card lists its policies by title and code, in code order, with their wording and my response
+    And the marine plan policies cards have no Change links
     And the fee estimate and invoicing details cards are displayed beneath the Other permissions card
     And the invoicing details card has no Change link
 
@@ -34,14 +34,14 @@ Feature: LCML: View details page shows sites and activities
     When the user opens View details for the submitted marine licence
     Then the fee estimate card has no Change link
 
-  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1432 @issue=ML-1543
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1432 @issue=ML-1370 @issue=ML-1543
   Scenario: Public View details shows applicant-framed content and hides sensitive cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When an external user opens the public View details page using the Projects page mongo id
     Then the public View details page shows the project heading, Application overview and no Application name row
     And the Application overview card shows who the marine licence is for
     And the activity details card uses the external-user sub-activity label
-    And the marine plan policies card shows Applicant's consideration with no Change links
+    And the marine plan policies cards show Applicant's consideration with no Change links
     And the fee estimate, invoicing details and sharing project information cards are not displayed
 
   @real-defra-id @d365 @shared-marine-licence @issue=ML-1407 @issue=ML-1375 @issue=ML-1439
