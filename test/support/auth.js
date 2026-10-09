@@ -156,6 +156,14 @@ const USER_TYPES = {
       roleName: 'Some Agentic Role',
       roleStatus: '1'
     }
+  ],
+  consultee: (orgName) => [
+    {
+      organisationName: orgName || faker.company.name(),
+      relationshipRole: 'Consultee',
+      roleName: 'Consultee',
+      roleStatus: '1'
+    }
   ]
 }
 
