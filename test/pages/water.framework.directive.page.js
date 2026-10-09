@@ -11,6 +11,8 @@ export default class WaterFrameworkDirectivePage {
   static NAUTICAL_MILE_PATH =
     '/marine-licence/water-framework-directive-nautical-mile'
   static UPLOAD_PATH = '/marine-licence/water-framework-directive-file-upload'
+  static BEFORE_YOU_START_PATH =
+    '/marine-licence/water-framework-directive-before-you-start'
   static CARD_TITLE = 'Water Framework Directive assessment'
 
   static ROW = {
@@ -62,6 +64,27 @@ export default class WaterFrameworkDirectivePage {
       }
     )
     await this.page.waitForLoadState('load')
+  }
+
+  templateHelp(summary) {
+    return this.page.locator('details.govuk-details').filter({
+      has: this.page.locator('summary', { hasText: summary })
+    })
+  }
+
+  beforeYouStartTemplateLinks() {
+    return this.page.locator(
+      'xpath=//h3[normalize-space()="Getting a WFD assessment template"]/following-sibling::p//a'
+    )
+  }
+
+  static readLinks(links) {
+    return links.evaluateAll((anchors) =>
+      anchors.map((a) => ({
+        text: a.textContent.replace(/\s+/g, ' ').trim(),
+        href: a.getAttribute('href')
+      }))
+    )
   }
 
   async #submit() {

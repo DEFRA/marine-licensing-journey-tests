@@ -277,3 +277,45 @@ Then('the WFD upload page is displayed', async function () {
     { timeout: 30_000 }
   )
 })
+
+Then(
+  'the WFD upload page has a collapsed {string} section',
+  async function (summary) {
+    const help = new WaterFrameworkDirectivePage(this.page).templateHelp(
+      summary
+    )
+    await expect(help).toHaveCount(1)
+    await expect(help).not.toHaveAttribute('open')
+    await expect(help.locator('a').first()).toBeHidden()
+    this.wfdTemplateHelp = help
+  }
+)
+
+Then(
+  'the help section holds the same template links as the WFD Before you start page',
+  async function () {
+    const help = this.wfdTemplateHelp
+    await help.locator('summary').click()
+    await expect(help.locator('a').first()).toBeVisible()
+    const uploadPageLinks = await WaterFrameworkDirectivePage.readLinks(
+      help.locator('a')
+    )
+
+    const beforeYouStart = await this.browserContext.newPage()
+    await beforeYouStart.goto(
+      new URL(
+        WaterFrameworkDirectivePage.BEFORE_YOU_START_PATH,
+        this.page.url()
+      ).toString()
+    )
+    const beforeYouStartLinks = await WaterFrameworkDirectivePage.readLinks(
+      new WaterFrameworkDirectivePage(
+        beforeYouStart
+      ).beforeYouStartTemplateLinks()
+    )
+    await beforeYouStart.close()
+
+    expect(uploadPageLinks).toHaveLength(2)
+    expect(uploadPageLinks).toEqual(beforeYouStartLinks)
+  }
+)

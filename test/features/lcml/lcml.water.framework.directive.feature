@@ -50,11 +50,13 @@ Feature: LCML: Water Framework Directive
     Then the user is returned to the marine licence task list
     And the "Water Framework Directive assessment" task is displayed with status "Completed"
 
-  @issue=ML-1348
+  @issue=ML-1348 @issue=ML-1582
   Scenario: Changing the excluded activities answer to "No" from the Review WFD answers page continues to the WFD upload page
     Given an organisation user is on the Review WFD answers page
     When the user changes the excluded activities answer to "No"
     Then the WFD upload page is displayed
+    And the WFD upload page has a collapsed "Help with getting a WFD assessment template" section
+    And the help section holds the same template links as the WFD Before you start page
 
   @issue=ML-1348
   Scenario: Changing the excluded activities answer to "Yes" from the Review WFD answers page returns to the Review WFD answers page
