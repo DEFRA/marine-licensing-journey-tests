@@ -11,7 +11,9 @@ import {
   enterCircleSiteDetails,
   completeActivityDetailsFromReview,
   openReviewSiteDetailsFromTaskList,
-  finishSiteDetailsAndContinue
+  finishSiteDetailsAndContinue,
+  expectPolicyCategoriesInOrder,
+  expectPoliciesNamedInCodeOrder
 } from '../support/lcml-helpers.js'
 import {
   clickAddTypeOfActivity,
@@ -37,11 +39,12 @@ async function openFirstPolicyConsideration(page) {
   await firstPolicy.waitFor({ state: 'visible', timeout: 30_000 })
   const href = await firstPolicy.getAttribute('href')
   const code = href.split('/').pop()
+  const name = (await firstPolicy.innerText()).replace(/\s+/g, ' ').trim()
   await firstPolicy.click()
   await page.waitForURL(new RegExp(`marine-plan-policy/${code}$`), {
     timeout: 30_000
   })
-  return code
+  return { code, name }
 }
 
 async function saveConsideration(page) {
@@ -137,8 +140,25 @@ When(
   }
 )
 
+const policyListSections = (page) =>
+  page.locator('main h2 + ul.govuk-task-list').evaluateAll((lists) =>
+    lists.map((list) => ({
+      category: list.previousElementSibling.textContent.trim(),
+      policies: Array.from(list.querySelectorAll(':scope > li')).map((row) => ({
+        name: row
+          .querySelector('.govuk-task-list__name-and-hint')
+          .textContent.replace(/\s+/g, ' ')
+          .trim(),
+        status: row
+          .querySelector('.govuk-task-list__status')
+          .textContent.replace(/\s+/g, ' ')
+          .trim()
+      }))
+    }))
+  )
+
 Then(
-  'the policy list page shows the policy count and an alphabetically sorted list of policy codes',
+  'the policy list page shows the policy count and the policies under category headings in alphabetical order',
   async function () {
     const page = this.page
     await expect(
@@ -149,22 +169,25 @@ Then(
       page.getByText(/\d+ policies to complete/i).first()
     ).toBeVisible({ timeout: 30_000 })
 
-    const lists = await page.locator('main ul').evaluateAll((uls) =>
-      uls.map((ul) =>
-        Array.from(ul.querySelectorAll(':scope > li'))
-          .map((li) => {
-            const text = li.textContent.trim()
-            return (
-              text.match(/\(([A-Z]+(?:-[A-Z0-9]+)+)\)/)?.[1] ??
-              text.match(/^[A-Z]+(?:-[A-Z0-9]+)+/)?.[0]
-            )
-          })
-          .filter(Boolean)
-      )
+    const sections = await policyListSections(page)
+    expectPolicyCategoriesInOrder(sections.map(({ category }) => category))
+    expect(await page.locator('main ul.govuk-task-list').count()).toBe(
+      sections.length
     )
-    expect(lists.flat().length).toBeGreaterThan(0)
-    for (const codes of lists) {
-      expect(codes).toEqual([...codes].sort((a, b) => a.localeCompare(b)))
+  }
+)
+
+Then(
+  'each policy on the list is named by its title and code, in code order, and is {string}',
+  async function (status) {
+    const sections = await policyListSections(this.page)
+    expectPoliciesNamedInCodeOrder(
+      sections.map(({ policies }) => policies.map(({ name }) => name))
+    )
+    for (const { policies } of sections) {
+      expect(policies.map((policy) => policy.status)).toEqual(
+        policies.map(() => status)
+      )
     }
   }
 )
@@ -172,14 +195,18 @@ Then(
 When(
   'the user opens a policy from the marine plan policy list',
   async function () {
-    this.data.policyCode = await openFirstPolicyConsideration(this.page)
+    const policy = await openFirstPolicyConsideration(this.page)
+    this.data.policyCode = policy.code
+    this.data.policyName = policy.name
   }
 )
 
 When(
   'the user opens a policy and saves an empty consideration',
   async function () {
-    this.data.policyCode = await openFirstPolicyConsideration(this.page)
+    const policy = await openFirstPolicyConsideration(this.page)
+    this.data.policyCode = policy.code
+    this.data.policyName = policy.name
     await saveConsideration(this.page)
   }
 )
@@ -187,7 +214,9 @@ When(
 When(
   'the user opens a policy and saves a consideration of {int} characters',
   async function (count) {
-    this.data.policyCode = await openFirstPolicyConsideration(this.page)
+    const policy = await openFirstPolicyConsideration(this.page)
+    this.data.policyCode = policy.code
+    this.data.policyName = policy.name
     await this.page.locator('#policyConsideration').evaluate((el, n) => {
       el.value = 'a'.repeat(n)
       el.dispatchEvent(new Event('input', { bubbles: true }))
@@ -199,7 +228,9 @@ When(
 When(
   'the user opens a policy and saves a valid consideration',
   async function () {
-    this.data.policyCode = await openFirstPolicyConsideration(this.page)
+    const policy = await openFirstPolicyConsideration(this.page)
+    this.data.policyCode = policy.code
+    this.data.policyName = policy.name
     this.data.policyResponse =
       'We have considered this policy and the proposal has been designed to mitigate the relevant impacts.'
     await this.page
@@ -219,7 +250,7 @@ When('the user reopens the saved policy', async function () {
 })
 
 Then(
-  'the policy consideration page shows the policy code, policy information and a blank consideration textarea',
+  'the policy consideration page shows the policy title and code, policy information and a blank consideration textarea',
   async function () {
     const page = this.page
     const code = this.data.policyCode
@@ -228,10 +259,11 @@ Then(
       page.locator('.govuk-caption-l, .govuk-caption-m').first()
     ).toContainText(this.data.projectName, { timeout: 30_000 })
 
-    await expect(page.locator('h1')).toHaveText(
-      new RegExp(`(^|\\()${code}\\)?\\s*$`),
-      { timeout: 30_000 }
-    )
+    expectPoliciesNamedInCodeOrder([[this.data.policyName]])
+    expect(this.data.policyName).toContain(`(${code})`)
+    await expect(page.locator('h1')).toHaveText(this.data.policyName, {
+      timeout: 30_000
+    })
 
     await expect(
       page.locator('h2', { hasText: 'Policy information' }).first()
