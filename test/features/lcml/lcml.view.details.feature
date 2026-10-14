@@ -4,11 +4,13 @@ Feature: LCML: View details page shows sites and activities
   I want the submitted marine licence "View details" page to show my sites and activities
   So that I can review what was submitted in a read-only summary
 
+  @issue=ML-1543
   Scenario: View details shows the submitted sites and activities
     Given an organisation user has submitted a marine licence application with a random site type
     When the user opens View details for the submitted marine licence
     Then the View details page shows the site location and site card for that site type
     And the View details page shows an activity details card
+    And the Application overview card shows who the marine licence is for
 
   Scenario: Public View details shows the submitted sites
     Given an organisation user has submitted a marine licence application with uploaded sites
@@ -32,11 +34,12 @@ Feature: LCML: View details page shows sites and activities
     When the user opens View details for the submitted marine licence
     Then the fee estimate card has no Change link
 
-  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1432 @issue=ML-1370
+  @issue=ML-1377 @issue=ML-1457 @issue=ML-1491 @issue=ML-1432 @issue=ML-1370 @issue=ML-1543
   Scenario: Public View details shows applicant-framed content and hides sensitive cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When an external user opens the public View details page using the Projects page mongo id
     Then the public View details page shows the project heading, Application overview and no Application name row
+    And the Application overview card shows who the marine licence is for
     And the activity details card uses the external-user sub-activity label
     And the marine plan policies cards show Applicant's consideration with no Change links
     And the fee estimate, invoicing details and sharing project information cards are not displayed
