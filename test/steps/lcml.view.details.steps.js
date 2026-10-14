@@ -1,5 +1,6 @@
 import { Given, When, Then, After } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
+import { getConfig } from '../support/config.js'
 import { ACTIVITY_TYPES } from '../test-data/lcml-activity.js'
 import {
   completeUploadApp,
@@ -200,6 +201,21 @@ When(
   'the user opens the public View details link for the submitted marine licence',
   async function () {
     await openPublicViewDetailsFromDashboard(this)
+  }
+)
+
+Then(
+  'the Application overview card shows who the marine licence is for',
+  async function () {
+    const organisation = getConfig().isRealDefraId
+      ? process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+      : this.testUser?.relationships?.[0]?.organisationName
+    expect(organisation).toBeTruthy()
+    await expect(
+      this.page.locator(
+        '#application-overview-card .govuk-summary-list__row:has(dt:text-is("Who the marine licence is for")) .govuk-summary-list__value'
+      )
+    ).toHaveText(organisation, { timeout: 30_000 })
   }
 )
 
