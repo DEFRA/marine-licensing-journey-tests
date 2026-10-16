@@ -140,7 +140,7 @@ Then(
     await openViewDetailsWithTask(this)
     const page = this.page
     await expect(page.locator('#application-tasks-heading')).toHaveText(
-      'Things that require your attention'
+      'Updates and tasks'
     )
     await expect(withholdingTask(page)).toHaveCount(1)
     await expect(withholdingTask(page)).toContainText(status)
