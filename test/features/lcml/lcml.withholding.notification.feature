@@ -34,7 +34,7 @@ Feature: LCML: Telling the applicant what we decided about withholding their inf
     Then the dashboard offers View details and Withdraw for the application
     And filtering the dashboard by status "Action required" lists the project
     And View details shows the withholding notification task as "Not yet read"
-    And the public view of the application has no "Updates and tasks" section
+    And the public view of the application has no "Things that require your attention" section
 
   @lcml @issue=ML-1524 @issue=ML-1538
   Scenario: An application that needs the applicant's action can be withdrawn and stays withdrawn once the notification is read
