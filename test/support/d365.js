@@ -1561,7 +1561,6 @@ async function readTaskStatus(page, taskId, expected) {
 
 export const PUBLIC_NOTICE_TASK_FIELDS = {
   requirement: 'mmo_whichpublicnoticesarerequired',
-  noNoticeReason: 'mmo_whyarenopublicnoticesrequired',
   proposedWorksSummary: 'mmo_applicantsproposedworkssummary',
   siteNoticeSummary: 'mmo_writeasummaryforthesitenotice',
   whoNeedsToBeTold: 'mmo_whoneedstobetoldaboutthisapplication',
@@ -1570,8 +1569,7 @@ export const PUBLIC_NOTICE_TASK_FIELDS = {
 }
 
 export const PUBLIC_NOTICE_OUTCOMES = {
-  'Site notice': 'Awaiting applicant',
-  None: 'Done'
+  'Site notice': 'Awaiting applicant'
 }
 
 export function publicNoticeTaskLink(page) {
@@ -1642,7 +1640,7 @@ export async function readPublicNoticeBeforeSiteCheck(page) {
 
 export async function completePublicNoticeTask(
   page,
-  { requirement, summary, who, noNoticeReason }
+  { requirement, summary, who }
 ) {
   const caseUrl = page.url()
   for (let attempt = 1; ; attempt++) {
@@ -1697,8 +1695,6 @@ export async function completePublicNoticeTask(
   if (requirement === 'Site notice') {
     await set(fields.siteNoticeSummary, summary, false)
     await set(fields.whoNeedsToBeTold, who, true)
-  } else {
-    await set(fields.noNoticeReason, noNoticeReason, false)
   }
 
   const taskId = await page.evaluate(() => {

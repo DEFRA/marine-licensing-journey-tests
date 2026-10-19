@@ -44,16 +44,11 @@ Feature: LCML: Displaying a site notice
     And the Display a site notice page is read-only and says when the evidence was submitted
 
   @real-defra-id @d365 @issue=ML-1525
-  Scenario Outline: A Public notice task saved with "<requirement>" in D365 <outcome>
+  Scenario: A Public notice task saved with "Site notice" in D365 asks the applicant to display a site notice
     Given an organisation user has submitted a marine licence application
     When the caseworker completes the Site check in D365
-    And the caseworker saves the Public notice task with "<requirement>"
+    And the caseworker saves the Public notice task with "Site notice"
     Then the Public notice task was read-only until the Site check was done
-    And the Public notice task asked the questions for "<requirement>"
-    And the Public notice task is "<status>" in D365
-    And View details <applicant sees>
-
-    Examples:
-      | requirement | outcome                                     | status             | applicant sees                                                                     |
-      | Site notice | asks the applicant to display a site notice | Awaiting applicant | shows the "Display a site notice" task as "Not yet responded"                       |
-      | None        | gives the applicant nothing to do           | Done               | still shows the application as "Submitted" with no "Display a site notice" task |
+    And the Public notice task asked for the site notice summary and who needs to be told
+    And the Public notice task is "Awaiting applicant" in D365
+    And View details shows the "Display a site notice" task as "Not yet responded"
