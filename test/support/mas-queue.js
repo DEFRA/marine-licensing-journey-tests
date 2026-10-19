@@ -191,3 +191,25 @@ export async function sendWithholdingNotificationMessage(
     buildWithholdingNotificationMessage(applicationReference, decisions)
   )
 }
+
+function buildSiteNoticeMessage(applicationReference, requestRelatesTo) {
+  return {
+    applicationReference,
+    taskType: 'PUBLIC_NOTICE',
+    publicNoticeRequirement: 'SITE_NOTICE',
+    proposedWorksSummary: 'Journey test proposed works summary.',
+    siteNoticeSummary: 'Journey test site notice summary.',
+    requestRelatesTo,
+    userName: 'Jane Doe',
+    userEmail: 'site-notice-test@example.com'
+  }
+}
+
+export async function sendSiteNoticeMessage(
+  applicationReference,
+  requestRelatesTo
+) {
+  return sendToQueue(
+    buildSiteNoticeMessage(applicationReference, requestRelatesTo)
+  )
+}

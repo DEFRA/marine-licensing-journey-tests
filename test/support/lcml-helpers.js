@@ -1225,3 +1225,33 @@ export async function openPublicViewDetailsAsExternalUser(world) {
   await world.page.goto(publicViewDetailsUrl(marineLicenceId))
   await world.page.waitForLoadState('load')
 }
+
+export async function addAnotherCircularSite(world) {
+  const {
+    clickAddTypeOfActivity,
+    selectActivityTypeAndContinue,
+    pickRandomNonOtherCheckbox,
+    checkCheckboxById,
+    submitWhatActivityForm
+  } = await import('./lcml-activity-flow.js')
+  const { pickRandomActivity } = await import('../test-data/lcml-activity.js')
+
+  await world.page
+    .locator('button[name="add"]:has-text("Add another site")')
+    .click()
+  await world.page.waitForLoadState('load')
+  await enterCircleSiteDetails(world, {
+    siteName: `Added Site ${faker.location.city()}`,
+    latitude: '51.500000',
+    longitude: '-2.000000',
+    width: '30'
+  })
+
+  await clickAddTypeOfActivity(world.page, 2, 1)
+  const { topLevel, subOption } = pickRandomActivity()
+  await selectActivityTypeAndContinue(world.page, topLevel, subOption)
+  const chosen = await pickRandomNonOtherCheckbox(world.page)
+  await checkCheckboxById(world.page, chosen.id)
+  await submitWhatActivityForm(world.page)
+  await completeActivityDetailsFromReview(world, 'Site 2 - Activity 1')
+}
