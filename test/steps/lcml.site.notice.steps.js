@@ -2,13 +2,16 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   completeManualCircleApp,
-  submitMarineLicence
+  submitMarineLicence,
+  readMarineLicenceIdFromProjects
 } from '../support/lcml-helpers.js'
+import { completePublicNoticeTask } from '../support/d365.js'
 import { sendSiteNoticeMessage } from '../support/mas-queue.js'
 import {
   waitForActionRequired,
   applicationTask,
-  openViewDetailsWithTask
+  openViewDetailsWithTask,
+  viewDetailsUrl
 } from '../support/lcml-application-tasks.js'
 import LcmlSiteNoticePage from '../pages/lcml.site.notice.page.js'
 
@@ -228,5 +231,102 @@ Then(
     await this.page.waitForLoadState('load')
     await expect(applicationTask(this.page, title)).toHaveCount(1)
     await expect(applicationTask(this.page, title)).toContainText(status)
+  }
+)
+
+const D365_STEP_TIMEOUT = 600_000
+const SITE_NOTICE_SUMMARY =
+  'Journey test summary of the proposed works for the site notice.'
+const NO_NOTICE_REASON = 'Journey test reason why no public notice is required.'
+const NO_SITE_NOTICE_WAIT_MS = 60_000
+
+When(
+  'the caseworker saves the Public notice task with {string}',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (requirement) {
+    const { status, form } = await completePublicNoticeTask(this.d365Page, {
+      requirement,
+      summary: SITE_NOTICE_SUMMARY,
+      who: 'Marine users',
+      noNoticeReason: NO_NOTICE_REASON
+    })
+    this.data.publicNotice = { requirement, status, form }
+  }
+)
+
+Then('the Public notice task is {string} in D365', function (status) {
+  expect(this.data.publicNotice.status).toBe(status)
+})
+
+Then(
+  'View details still shows the application as {string} with no {string} task',
+  { timeout: 180_000 },
+  async function (status, title) {
+    if (!this.data.marineLicenceId) {
+      await readMarineLicenceIdFromProjects(this)
+    }
+    const page = this.page
+    await page.waitForTimeout(NO_SITE_NOTICE_WAIT_MS)
+    await page.goto(viewDetailsUrl(this))
+    await page.waitForLoadState('load')
+    await expect(page.locator('#application-overview-card')).toBeVisible({
+      timeout: 30_000
+    })
+    await expect(applicationTask(page, title)).toHaveCount(0)
+    await expect(
+      page.locator(
+        '#application-overview-card .govuk-summary-list__row:has(dt:text-is("Status"))'
+      )
+    ).toContainText(status)
+  }
+)
+
+Then(
+  'the Public notice task was read-only until the Site check was done',
+  function () {
+    const { tasks, form } = this.data.publicNoticeBeforeSiteCheck
+    expect(tasks[0]).toMatch(/^Site check\b/)
+    expect(tasks.find((row) => row.startsWith('Public notice'))).toMatch(
+      /Cannot start yet$/
+    )
+    expect(form.requirement.disabled).toBe(true)
+    expect(this.data.publicNotice.status).toBeTruthy()
+  }
+)
+
+Then(
+  'the Public notice task asked the questions for {string}',
+  function (requirement) {
+    const { form } = this.data.publicNotice
+    expect(form.requirement).toMatchObject({
+      shown: true,
+      required: 'required',
+      options: ['Site notice', 'None']
+    })
+    if (requirement === 'None') {
+      expect(form.noNoticeReason).toMatchObject({
+        shown: true,
+        required: 'required'
+      })
+      expect(form.siteNoticeSummary.shown).toBe(false)
+      expect(form.whoNeedsToBeTold.shown).toBe(false)
+      return
+    }
+    expect(form.proposedWorksSummary).toMatchObject({
+      shown: true,
+      disabled: true,
+      value: this.data.projectBackground
+    })
+    expect(form.siteNoticeSummary).toMatchObject({
+      shown: true,
+      required: 'required'
+    })
+    expect(form.whoNeedsToBeTold).toMatchObject({
+      shown: true,
+      required: 'required',
+      options: ['Marine users', 'Community users', 'Both']
+    })
+    expect(form.summaryGuidance.shown).toBe(true)
+    expect(form.whoGuidance.shown).toBe(true)
   }
 )
