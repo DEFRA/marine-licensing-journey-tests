@@ -9,15 +9,15 @@ Feature: LCML: Displaying a site notice
     Given an organisation user has submitted a marine licence application
     When the caseworker sends the applicant a site notice for marine and community users
     Then the application status is "Action required" on the dashboard
-    And View details shows the "Display a site notice" task as "Not yet responded"
+    And View details shows the "Display a site notice" task as "Incomplete"
 
   @issue=ML-1526
-  Scenario: Going back from the Display a site notice page leaves the task not yet responded
+  Scenario: Going back from the Display a site notice page leaves the task incomplete
     Given an organisation user has submitted a marine licence application
     When the caseworker sends the applicant a site notice for marine users
     And the applicant opens the Display a site notice task
     And the applicant goes back from the site notice page
-    Then View details shows the "Display a site notice" task as "Not yet responded"
+    Then View details shows the "Display a site notice" task as "Incomplete"
     And the application status is "Action required" on the dashboard
 
   @issue=ML-1528
@@ -51,4 +51,4 @@ Feature: LCML: Displaying a site notice
     Then the Public notice task was read-only until the Site check was done
     And the Public notice task asked for the site notice summary and who needs to be told
     And the Public notice task is "Awaiting applicant" in D365
-    And View details shows the "Display a site notice" task as "Not yet responded"
+    And View details shows the "Display a site notice" task as "Incomplete"
