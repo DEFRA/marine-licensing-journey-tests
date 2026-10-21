@@ -36,7 +36,11 @@ Feature: LCML: Application status updates from Dynamics 365
   Scenario: An application rejected in D365 shows the rejection on the case and the unable-to-progress page to the applicant
     Given an organisation user has submitted a marine licence application with a site in a marine plan area
     When the internal user rejects the application in D365 for "Marine plan policies" and "Site location"
-    Then the case is "Rejected" in D365 with the rejection details on the Case summary
+    Then the case is "Rejected" in D365 and its Rejection details card on the Case summary shows:
+      | Rejected by                             | SA-MMO Dynamics                                                           |
+      | Date rejected                           | today                                                                     |
+      | Sections of the application with issues | Marine plan policies, Site location                                       |
+      | Provide details for each issue          | The marine plan policy answers do not say how the works meet each policy. |
     And the application status is "Unable to progress" on the dashboard
     And opening View details shows the "We are unable to progress your application" page with the project name and reference
     And the rejected page shows the reasons, free text and links, and the "Unable to progress" application details

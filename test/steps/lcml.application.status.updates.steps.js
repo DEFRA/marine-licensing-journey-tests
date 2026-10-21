@@ -386,9 +386,9 @@ When(
 )
 
 Then(
-  'the case is {string} in D365 with the rejection details on the Case summary',
+  'the case is {string} in D365 and its Rejection details card on the Case summary shows:',
   { timeout: 300_000 },
-  async function (status) {
+  async function (status, dataTable) {
     const page = this.d365Page
     let rejection
     for (let attempt = 0; attempt < 12; attempt++) {
@@ -397,25 +397,36 @@ Then(
       if (rejection.status === status && rejection.details) break
       await page.waitForTimeout(10_000)
     }
-    const today = new Date().toLocaleDateString('en-GB', {
-      timeZone: 'Europe/London'
-    })
     expect(rejection.status).toBe(status)
     expect(rejection).toMatchObject({
       cardTitle: 'Rejection details',
       cardShown: true,
       cardOnTab: 'Case summary',
-      readOnly: true,
-      details: this.data.rejection.details
+      readOnly: true
     })
-    expect(rejection.rejectedBy).toHaveLength(1)
-    expect(
-      new Date(rejection.rejectedOn).toLocaleDateString('en-GB', {
-        timeZone: 'Europe/London'
-      })
-    ).toBe(today)
-    expect([...rejection.sections].sort()).toEqual(
-      [...this.data.rejection.sections].sort()
-    )
+
+    const card = page.locator('[aria-label="Rejection details"]').first()
+    await expect(card).toBeVisible({ timeout: 30_000 })
+
+    const londonDate = (date) =>
+      new Date(date).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })
+    const shown = {
+      'Rejected by': rejection.rejectedBy.join(', '),
+      'Date rejected': londonDate(rejection.rejectedOn),
+      'Sections of the application with issues': [...rejection.sections]
+        .sort()
+        .join(', '),
+      'Provide details for each issue': rejection.details
+    }
+    for (const [label, expected] of dataTable.raw()) {
+      await expect(card.getByText(label, { exact: true })).toBeVisible()
+      const value =
+        label === 'Date rejected' && expected === 'today'
+          ? londonDate(new Date())
+          : label === 'Sections of the application with issues'
+            ? expected.split(', ').sort().join(', ')
+            : expected
+      expect(shown[label], label).toBe(value)
+    }
   }
 )
