@@ -18,7 +18,8 @@ import {
   verifyD365Login,
   openMarineLicenceCaseInD365,
   completeSiteCheckTask,
-  completePublicRegisterTask
+  completePublicRegisterTask,
+  readPublicNoticeBeforeSiteCheck
 } from '../support/d365.js'
 import { redactionPath } from '../support/shared-redaction-licence.js'
 
@@ -183,6 +184,8 @@ When(
     await loginToD365(page)
     await verifyD365Login(page)
     await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    this.data.publicNoticeBeforeSiteCheck =
+      await readPublicNoticeBeforeSiteCheck(page)
     await completeSiteCheckTask(page)
   }
 )

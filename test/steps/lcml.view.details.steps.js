@@ -445,17 +445,17 @@ Then(
 )
 
 Then(
-  'the Project details tab shows the project name, background and preferred licence dates',
+  'the Application details tab shows the application name, proposed works summary and preferred licence dates',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = this.d365Page
     await openCaseRecordSummary(page, this.d365CaseRow)
     await expect(
-      page.getByRole('tab', { name: 'Project details' })
+      page.getByRole('tab', { name: 'Application details' })
     ).toBeVisible({ timeout: 30_000 })
 
     const details = await readProjectDetailsTab(page)
-    expect(details, 'Project details tab content loaded').not.toBeNull()
+    expect(details, 'Application details tab content loaded').not.toBeNull()
     expect(details.projectName).toBe(this.data.projectName)
     expect(details.projectBackground).toBe(this.data.projectBackground)
     expect(details.preferredDates).toMatch(

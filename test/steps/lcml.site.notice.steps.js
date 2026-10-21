@@ -4,6 +4,7 @@ import {
   completeManualCircleApp,
   submitMarineLicence
 } from '../support/lcml-helpers.js'
+import { completePublicNoticeTask } from '../support/d365.js'
 import { sendSiteNoticeMessage } from '../support/mas-queue.js'
 import {
   waitForActionRequired,
@@ -228,5 +229,67 @@ Then(
     await this.page.waitForLoadState('load')
     await expect(applicationTask(this.page, title)).toHaveCount(1)
     await expect(applicationTask(this.page, title)).toContainText(status)
+  }
+)
+
+const D365_STEP_TIMEOUT = 600_000
+const SITE_NOTICE_SUMMARY =
+  'Journey test summary of the proposed works for the site notice.'
+
+When(
+  'the caseworker saves the Public notice task with {string}',
+  { timeout: D365_STEP_TIMEOUT },
+  async function (requirement) {
+    const { status, form } = await completePublicNoticeTask(this.d365Page, {
+      requirement,
+      summary: SITE_NOTICE_SUMMARY,
+      who: 'Marine users'
+    })
+    this.data.publicNotice = { requirement, status, form }
+  }
+)
+
+Then('the Public notice task is {string} in D365', function (status) {
+  expect(this.data.publicNotice.status).toBe(status)
+})
+
+Then(
+  'the Public notice task was read-only until the Site check was done',
+  function () {
+    const { tasks, form } = this.data.publicNoticeBeforeSiteCheck
+    expect(tasks[0]).toMatch(/^Site check\b/)
+    expect(tasks.find((row) => row.startsWith('Public notice'))).toMatch(
+      /Cannot start yet$/
+    )
+    expect(form.requirement.disabled).toBe(true)
+    expect(this.data.publicNotice.status).toBeTruthy()
+  }
+)
+
+Then(
+  'the Public notice task asked for the site notice summary and who needs to be told',
+  function () {
+    const { form } = this.data.publicNotice
+    expect(form.requirement).toMatchObject({
+      shown: true,
+      required: 'required',
+      options: ['Site notice', 'None']
+    })
+    expect(form.proposedWorksSummary).toMatchObject({
+      shown: true,
+      disabled: true,
+      value: this.data.projectBackground
+    })
+    expect(form.siteNoticeSummary).toMatchObject({
+      shown: true,
+      required: 'required'
+    })
+    expect(form.whoNeedsToBeTold).toMatchObject({
+      shown: true,
+      required: 'required',
+      options: ['Marine users', 'Community users', 'Both']
+    })
+    expect(form.summaryGuidance.shown).toBe(true)
+    expect(form.whoGuidance.shown).toBe(true)
   }
 )
