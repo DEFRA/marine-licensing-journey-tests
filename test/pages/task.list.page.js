@@ -19,7 +19,7 @@ export default class TaskListPage {
 
   getReviewAndSendButton() {
     return this.page.locator(
-      '//a[normalize-space(text()) = "Review and send your information"]'
+      '//a[normalize-space(text()) = "Review and send your information" or normalize-space(text()) = "Check and send your information"]'
     )
   }
 

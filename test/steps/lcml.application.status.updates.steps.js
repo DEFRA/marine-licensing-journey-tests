@@ -251,18 +251,15 @@ Then(
   'a new draft application is created pre-populated from the rejected application',
   async function () {
     const page = this.page
-    await expect(page.locator('h1')).toContainText(
-      'Marine licence start page',
-      {
-        timeout: 30_000
-      }
-    )
+    await expect(page.locator('h1')).toContainText(this.data.projectName, {
+      timeout: 30_000
+    })
     await expect(
       page.locator('.govuk-caption-l, .govuk-caption-xl').first()
-    ).toContainText(this.data.projectName, { timeout: 30_000 })
+    ).toHaveText('Marine licence', { timeout: 30_000 })
     await expect(
       page
-        .locator('.govuk-task-list__item', { hasText: 'Site details' })
+        .locator('.govuk-task-list__item', { hasText: 'Sites and activities' })
         .locator('.govuk-task-list__status')
     ).toContainText('Completed', { timeout: 30_000 })
   }
