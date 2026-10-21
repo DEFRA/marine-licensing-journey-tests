@@ -607,7 +607,12 @@ export async function readProjectDetailsTab(page) {
             projectBackground: doc
               .getElementById('val-background')
               ?.textContent?.trim(),
-            preferredDates: doc.getElementById('val-dates')?.textContent?.trim()
+            preferredDates: doc
+              .getElementById('val-dates')
+              ?.textContent?.trim(),
+            labels: [
+              ...doc.querySelectorAll('#mmo-content .mmo-field-label')
+            ].map((label) => label.textContent.trim())
           }
         }
         for (let i = 0; i < (w.frames?.length || 0); i++) {
