@@ -47,7 +47,12 @@ import {
   waitForMarinePlanPolicyTaskStatus,
   marineLicenceWorkbasket,
   openCaseFromRow,
-  MPP_TASK_OUTCOMES
+  MPP_TASK_OUTCOMES,
+  openRejectApplicationDialog,
+  submitEmptyRejection,
+  cancelRejection,
+  readCaseStatus,
+  REJECTION_ERRORS
 } from '../support/d365.js'
 import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
 import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
@@ -1082,5 +1087,20 @@ Then(
     }
 
     expect(done).toEqual(expectedDone)
+  }
+)
+
+Then(
+  'the Reject application form needs a section and details, and cancelling leaves the case unchanged',
+  { timeout: D365_STEP_TIMEOUT },
+  async function () {
+    const page = this.d365Page
+    const statusBefore = await readCaseStatus(page)
+    const dialog = await openRejectApplicationDialog(page)
+    const shown = await submitEmptyRejection(page, dialog)
+    expect(shown).toContain(REJECTION_ERRORS.sections)
+    expect(shown).toContain(REJECTION_ERRORS.details)
+    await cancelRejection(page, dialog)
+    expect(await readCaseStatus(page)).toBe(statusBefore)
   }
 )
