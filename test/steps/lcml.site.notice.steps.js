@@ -293,3 +293,83 @@ Then(
     expect(form.whoGuidance.shown).toBe(true)
   }
 )
+
+const DELETE_LOCATION_PATH = /\/marine-licence\/[^/]+\/delete-location\?location=\d+/
+
+async function openDeleteLocation(page, siteNotice, number) {
+  await siteNotice.deleteLocationLink(number).click()
+  await page.waitForURL(DELETE_LOCATION_PATH, { timeout: 30_000 })
+  await page.waitForLoadState('load')
+  await expect(page.locator('h1')).toHaveText(
+    `Are you sure you want to delete location ${number}?`
+  )
+}
+
+When('the applicant adds another evidence location', async function () {
+  const siteNotice = new LcmlSiteNoticePage(this.page)
+  await expect(siteNotice.sendEvidenceButton()).toBeVisible()
+  const cardsBefore = await siteNotice.locationCards().count()
+  await siteNotice.addAnotherLocationButton().click()
+  await expect(siteNotice.locationCards()).toHaveCount(cardsBefore + 1, {
+    timeout: 30_000
+  })
+  await siteNotice.waitForDisplayPage()
+})
+
+Then(
+  'a {string} card is added with a Delete location link, the first card has none, and Send evidence is hidden',
+  async function (title) {
+    const siteNotice = new LcmlSiteNoticePage(this.page)
+    await expect(siteNotice.locationCards()).toHaveText([
+      'Location 1 evidence',
+      title
+    ])
+    await expect(siteNotice.deleteLocationLink(2)).toBeVisible()
+    await expect(siteNotice.deleteLocationLink(1)).toHaveCount(0)
+    await expect(
+      siteNotice.locationCard(2).locator('.govuk-summary-list__value')
+    ).toHaveText(['Incomplete', 'Incomplete', 'Incomplete', 'Incomplete'])
+    await expect(siteNotice.sendEvidenceButton()).toHaveCount(0)
+  }
+)
+
+Then(
+  'cancelling or going back from deleting location {int} keeps both cards',
+  async function (number) {
+    const page = this.page
+    const siteNotice = new LcmlSiteNoticePage(page)
+
+    await openDeleteLocation(page, siteNotice, number)
+    await page.getByRole('link', { name: 'Cancel', exact: true }).click()
+    await siteNotice.waitForDisplayPage()
+    await expect(siteNotice.locationCards()).toHaveCount(2)
+
+    await openDeleteLocation(page, siteNotice, number)
+    await page.getByRole('link', { name: 'Back', exact: true }).click()
+    await siteNotice.waitForDisplayPage()
+    await expect(siteNotice.locationCards()).toHaveCount(2)
+  }
+)
+
+Then(
+  'confirming the deletion of location {int} leaves only the first card and shows Send evidence again',
+  async function (number) {
+    const page = this.page
+    const siteNotice = new LcmlSiteNoticePage(page)
+    await openDeleteLocation(page, siteNotice, number)
+    await page
+      .getByRole('button', { name: 'Yes, delete this location' })
+      .click()
+    await siteNotice.waitForDisplayPage()
+    await expect(siteNotice.locationCards()).toHaveText(['Location 1 evidence'])
+    for (const [item, answer] of Object.entries(this.data.siteNoticeEvidence)) {
+      await expect(siteNotice.evidenceValue(item)).toHaveText(answer)
+    }
+    await expect(siteNotice.sendEvidenceButton()).toBeVisible()
+    await expect(
+      page.getByText(
+        'Check that you have added evidence for every location where you displayed a site notice.'
+      )
+    ).toBeVisible()
+  }
+)
