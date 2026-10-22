@@ -294,7 +294,8 @@ Then(
   }
 )
 
-const DELETE_LOCATION_PATH = /\/marine-licence\/[^/]+\/delete-location\?location=\d+/
+const DELETE_LOCATION_PATH =
+  /\/marine-licence\/[^/]+\/delete-location\?location=\d+/
 
 async function openDeleteLocation(page, siteNotice, number) {
   await siteNotice.deleteLocationLink(number).click()
