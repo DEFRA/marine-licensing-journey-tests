@@ -38,7 +38,7 @@ Feature: LCML: View details page shows sites and activities
   Scenario: Public View details shows applicant-framed content and hides sensitive cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When an external user opens the public View details page using the Projects page mongo id
-    Then the public View details page shows the project heading, Application overview and no Application name row
+    Then the public View details page shows the project heading, Application overview and the application name as the first project detail
     And the Application overview card shows who the marine licence is for
     And the activity details card uses the external-user sub-activity label
     And the marine plan policies cards show Applicant's consideration with no Change links

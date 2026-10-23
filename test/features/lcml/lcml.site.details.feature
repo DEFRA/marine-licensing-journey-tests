@@ -31,23 +31,23 @@ Feature: LCML: Site details journey
       | Shapefile |
 
   @issue=ML-1308
-  Scenario: Site details task is "Not yet started" and opens the start page before any sites are added
+  Scenario: Sites and activities task is "Not yet started" and opens the start page before any sites are added
     Given an organisation user has started a marine licence application
-    And the "Site details" task is displayed with status "Not yet started"
-    When the "Site details" task is selected
+    And the "Sites and activities" task is displayed with status "Not yet started"
+    When the "Sites and activities" task is selected
     Then the site details start page is displayed
 
   @issue=ML-1308
   Scenario: Site details task is "In progress" and opens the review site details page while details are incomplete
     Given an organisation user has manually entered a circular site for a marine licence
     And the user continues from the review site details page
-    And the "Site details" task is displayed with status "In progress"
-    When the "Site details" task is selected
+    And the "Sites and activities" task is displayed with status "In progress"
+    When the "Sites and activities" task is selected
     Then the review site details page is displayed
 
   @issue=ML-1308
   Scenario: Site details task is "Completed" and opens the review site details page once all details are done
     Given an organisation user has completed all site and activity details for a marine licence
-    And the "Site details" task is displayed with status "Completed"
-    When the "Site details" task is selected
+    And the "Sites and activities" task is displayed with status "Completed"
+    When the "Sites and activities" task is selected
     Then the review site details page is displayed
