@@ -607,7 +607,12 @@ export async function readProjectDetailsTab(page) {
             projectBackground: doc
               .getElementById('val-background')
               ?.textContent?.trim(),
-            preferredDates: doc.getElementById('val-dates')?.textContent?.trim()
+            preferredDates: doc
+              .getElementById('val-dates')
+              ?.textContent?.trim(),
+            labels: [
+              ...doc.querySelectorAll('#mmo-content .mmo-field-label')
+            ].map((label) => label.textContent.trim())
           }
         }
         for (let i = 0; i < (w.frames?.length || 0); i++) {
@@ -964,6 +969,7 @@ const CASE_RECORD_URL = /pagetype=entityrecord.*etn=incident/
 
 export async function openCaseFromRow(page, row) {
   const link = row.locator('div[col-id="title"] a')
+  let lastError
 
   for (let attempt = 1; attempt <= 3; attempt++) {
     if (CASE_RECORD_URL.test(page.url())) {
@@ -971,18 +977,25 @@ export async function openCaseFromRow(page, row) {
       return
     }
     try {
-      await link.waitFor({ state: 'visible', timeout: 20_000 })
-      await link.click({ timeout: 15_000 })
+      if (attempt === 1) {
+        await link.waitFor({ state: 'visible', timeout: 20_000 })
+        await link.click({ timeout: 15_000 })
+      } else {
+        await row
+          .locator('[col-id="ticketnumber"]')
+          .dblclick({ timeout: 15_000 })
+      }
       await page.waitForURL(CASE_RECORD_URL, { timeout: 30_000 })
       await page.waitForLoadState('load')
       return
-    } catch {
+    } catch (error) {
+      lastError = error
       await page.waitForTimeout(3_000)
     }
   }
 
   throw new Error(
-    `The case record did not open from the cases list; still on ${page.url()}`
+    `The case record did not open from the cases list; still on ${page.url()}: ${lastError?.message.split('\n')[0]}`
   )
 }
 
@@ -1549,4 +1562,297 @@ async function readTaskStatus(page, taskId, expected) {
     await page.waitForTimeout(5_000)
   }
   return status
+}
+
+export const PUBLIC_NOTICE_TASK_FIELDS = {
+  requirement: 'mmo_whichpublicnoticesarerequired',
+  proposedWorksSummary: 'mmo_applicantsproposedworkssummary',
+  siteNoticeSummary: 'mmo_writeasummaryforthesitenotice',
+  whoNeedsToBeTold: 'mmo_whoneedstobetoldaboutthisapplication',
+  summaryGuidance: 'WebResource_helptextpublicnoticesummary',
+  whoGuidance: 'WebResource_helptextpublicnoticegroups'
+}
+
+export const PUBLIC_NOTICE_OUTCOMES = {
+  'Site notice': 'Awaiting applicant'
+}
+
+export function publicNoticeTaskLink(page) {
+  return page.getByRole('link', { name: 'Public notice' }).first()
+}
+
+async function openPublicNoticeTask(page) {
+  const link = publicNoticeTaskLink(page)
+  await waitForCaseTaskLink(page, link, 'Public notice')
+  await link.click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
+  await page.waitForLoadState('load')
+  await page
+    .locator(
+      `[data-id="${PUBLIC_NOTICE_TASK_FIELDS.requirement}-FieldSectionItemContainer"]`
+    )
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+async function readPublicNoticeForm(page) {
+  return page.evaluate((fields) => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {}
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {}
+      }
+      return null
+    }
+    const Xrm = findXrm(window)
+    const read = (name) => {
+      const control = Xrm.Page.getControl(name)
+      if (!control) return null
+      const section = control.getParent?.()
+      const attribute = control.getAttribute?.()
+      return {
+        shown: control.getVisible() && (section ? section.getVisible() : true),
+        disabled: control.getDisabled?.() ?? null,
+        required: attribute?.getRequiredLevel?.() ?? null,
+        value: attribute
+          ? (attribute.getText?.() ?? attribute.getValue())
+          : null,
+        options: attribute?.getOptions?.().map((o) => o.text.trim()) ?? null
+      }
+    }
+    return Object.fromEntries(
+      Object.entries(fields).map(([key, name]) => [key, read(name)])
+    )
+  }, PUBLIC_NOTICE_TASK_FIELDS)
+}
+
+export async function readPublicNoticeBeforeSiteCheck(page) {
+  const caseUrl = page.url()
+  const tasks = await readCaseTaskRows(page)
+  await openPublicNoticeTask(page)
+  const form = await readPublicNoticeForm(page)
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  return { tasks, form }
+}
+
+export async function completePublicNoticeTask(
+  page,
+  { requirement, summary, who }
+) {
+  const caseUrl = page.url()
+  for (let attempt = 1; ; attempt++) {
+    await openPublicNoticeTask(page)
+    const { requirement: question } = await readPublicNoticeForm(page)
+    if (!question.disabled) break
+    if (attempt === 12) {
+      throw new Error(
+        'The Public notice task stayed read-only for three minutes after the Site check was completed'
+      )
+    }
+    await page.waitForTimeout(15_000)
+    await page.goto(caseUrl)
+    await page.waitForLoadState('load')
+  }
+
+  const set = (attr, value, isOption) =>
+    page.evaluate(
+      ({ attr, value, isOption }) => {
+        const findXrm = (w, depth = 0) => {
+          if (depth > 4) return null
+          try {
+            if (w.Xrm?.Page?.getAttribute) return w.Xrm
+          } catch {}
+          for (let i = 0; i < (w.frames?.length || 0); i++) {
+            try {
+              const found = findXrm(w.frames[i], depth + 1)
+              if (found) return found
+            } catch {}
+          }
+          return null
+        }
+        const attribute = findXrm(window).Page.getAttribute(attr)
+        if (isOption) {
+          const option = attribute
+            .getOptions()
+            .find((o) => o.text.trim() === value)
+          if (!option) throw new Error(`No "${value}" option on ${attr}`)
+          attribute.setValue(option.value)
+        } else {
+          attribute.setValue(value)
+        }
+        attribute.fireOnChange()
+      },
+      { attr, value, isOption }
+    )
+
+  const fields = PUBLIC_NOTICE_TASK_FIELDS
+  await set(fields.requirement, requirement, true)
+  await page.waitForTimeout(2_000)
+  const form = await readPublicNoticeForm(page)
+  if (requirement === 'Site notice') {
+    await set(fields.siteNoticeSummary, summary, false)
+    await set(fields.whoNeedsToBeTold, who, true)
+  }
+
+  const taskId = await page.evaluate(() => {
+    const findXrm = (w, depth = 0) => {
+      if (depth > 4) return null
+      try {
+        if (w.Xrm?.Page?.getAttribute) return w.Xrm
+      } catch {}
+      for (let i = 0; i < (w.frames?.length || 0); i++) {
+        try {
+          const found = findXrm(w.frames[i], depth + 1)
+          if (found) return found
+        } catch {}
+      }
+      return null
+    }
+    return findXrm(window).Page.data.entity.getId().replace(/[{}]/g, '')
+  })
+
+  await page.waitForTimeout(PUBLIC_REGISTER_SETTLE_MS)
+  const save = page.locator(MPP_SAVE_AND_CLOSE).first()
+  await save.waitFor({ state: 'visible', timeout: 30_000 })
+  await save.click()
+  try {
+    await page.waitForURL(/etn=incident/, { timeout: 45_000 })
+  } catch {
+    throw new Error(
+      `completePublicNoticeTask: Save & Close did not return to the case. Form messages: ${JSON.stringify(await readFormMessages(page))}`
+    )
+  }
+  await page.waitForLoadState('load')
+
+  const status = await readTaskStatus(
+    page,
+    taskId,
+    PUBLIC_NOTICE_OUTCOMES[requirement]
+  )
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  return { status, form }
+}
+
+const REJECT_APPLICATION_COMMAND =
+  'button[data-id^="incident|NoRelationship|Form|RejectApplication"]'
+
+export const REJECTION_ERRORS = {
+  sections:
+    'Sections of the application with issues: Required fields must be filled in.',
+  details: 'Provide details for each issue: Required fields must be filled in.'
+}
+
+export async function openRejectApplicationDialog(page) {
+  const button = await waitForCaseCommand(page, REJECT_APPLICATION_COMMAND)
+  await button.click()
+  const dialog = page.locator('[role="dialog"]').last()
+  await dialog
+    .locator('textarea')
+    .first()
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+  await page.waitForTimeout(3_000)
+  return dialog
+}
+
+export async function submitEmptyRejection(page, dialog) {
+  await dialog.getByRole('button', { name: /^Reject application$/ }).click()
+  await page.waitForTimeout(3_000)
+  return ((await dialog.innerText()) || '').replace(/\s+/g, ' ')
+}
+
+export async function cancelRejection(page, dialog) {
+  await dialog.getByRole('button', { name: /^Cancel$/ }).click()
+  await dialog.waitFor({ state: 'hidden', timeout: 60_000 })
+  await page.waitForLoadState('load')
+}
+
+async function selectRejectionSections(page, dialog, sections) {
+  const box = await dialog.locator('[role="combobox"]').first().boundingBox()
+  for (const section of sections) {
+    await page.mouse.click(box.x + 60, box.y + box.height / 2)
+    await page.waitForTimeout(800)
+    await page.keyboard.type(section, { delay: 50 })
+    await page.waitForTimeout(1_500)
+    await page.keyboard.press('Enter')
+    await page.waitForTimeout(1_200)
+  }
+}
+
+export async function rejectApplicationInD365(page, { sections, details }) {
+  const dialog = await openRejectApplicationDialog(page)
+  await selectRejectionSections(page, dialog, sections)
+  const field = dialog.locator('textarea').first()
+  await field.click()
+  await field.pressSequentially(details, { delay: 20 })
+  await page.waitForTimeout(1_500)
+  await dialog.getByRole('button', { name: /^Reject application$/ }).click()
+  try {
+    await dialog.waitFor({ state: 'hidden', timeout: 60_000 })
+  } catch {
+    throw new Error(
+      `The Reject application dialog stayed open: ${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ')}`
+    )
+  }
+  await page.waitForLoadState('load')
+}
+
+const XRM_FINDER = `
+  const findXrm = (w, depth = 0) => {
+    if (depth > 4) return null
+    try {
+      if (w.Xrm?.Page?.getAttribute) return w.Xrm
+    } catch {}
+    for (let i = 0; i < (w.frames?.length || 0); i++) {
+      try {
+        const found = findXrm(w.frames[i], depth + 1)
+        if (found) return found
+      } catch {}
+    }
+    return null
+  }
+  const Xrm = findXrm(window)
+`
+
+export function readCaseStatus(page) {
+  return page.evaluate(
+    `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
+  )
+}
+
+export function readCaseRejection(page) {
+  return page.evaluate(`(() => {
+    ${XRM_FINDER}
+    const value = (name) => {
+      const attribute = Xrm.Page.getAttribute(name)
+      if (!attribute) return null
+      const raw = attribute.getValue()
+      const text = attribute.getText?.()
+      if (Array.isArray(text)) return text
+      if (Array.isArray(raw)) return raw.map((item) => item.name ?? item)
+      return text ?? raw
+    }
+    const fields = ['mmo_applicationrejectedbyid', 'mmo_applicationrejectedon', 'mmo_rejectionreasons', 'mmo_rejectiondetails']
+    const section = Xrm.Page.getControl('mmo_rejectiondetails')?.getParent?.()
+    const rejectedOn = Xrm.Page.getAttribute('mmo_applicationrejectedon')?.getValue()
+    return {
+      status: Xrm.Page.getAttribute('statuscode')?.getText?.() ?? null,
+      cardTitle: section?.getLabel?.() ?? null,
+      cardShown: Boolean(section?.getVisible?.()),
+      cardOnTab: section?.getParent?.()?.getLabel?.() ?? null,
+      readOnly: fields.every((name) => Xrm.Page.getControl(name)?.getDisabled?.()),
+      rejectedBy: value('mmo_applicationrejectedbyid'),
+      rejectedOn: rejectedOn ? new Date(rejectedOn).toISOString() : null,
+      sections: value('mmo_rejectionreasons'),
+      details: value('mmo_rejectiondetails')
+    }
+  })()`)
 }

@@ -3,6 +3,14 @@ import { expect } from '@playwright/test'
 import DashboardPage from '../pages/dashboard.page.js'
 import { getConfig } from '../support/config.js'
 import { readMarineLicenceIdFromProjects } from '../support/lcml-helpers.js'
+import {
+  ACTION_REQUIRED,
+  dashboardRow,
+  waitForActionRequired,
+  viewDetailsUrl,
+  applicationTask,
+  openViewDetailsWithTask
+} from '../support/lcml-application-tasks.js'
 import { sendWithholdingNotificationMessage } from '../support/mas-queue.js'
 import {
   launchD365Browser,
@@ -10,7 +18,8 @@ import {
   verifyD365Login,
   openMarineLicenceCaseInD365,
   completeSiteCheckTask,
-  completePublicRegisterTask
+  completePublicRegisterTask,
+  readPublicNoticeBeforeSiteCheck
 } from '../support/d365.js'
 import { redactionPath } from '../support/shared-redaction-licence.js'
 
@@ -26,11 +35,6 @@ const DECISION_BASIS = {
   'commercial confidentiality': 'commercial'
 }
 
-const ACTION_REQUIRED = 'Action required'
-
-const dashboardRow = (page, projectName) =>
-  page.locator(`xpath=//tr[td[1][normalize-space(text())="${projectName}"]]`)
-
 async function tellApplicant(world, decisions) {
   await sendWithholdingNotificationMessage(
     world.data.applicationReference,
@@ -39,49 +43,7 @@ async function tellApplicant(world, decisions) {
   await waitForActionRequired(world)
 }
 
-async function waitForActionRequired(world) {
-  await readMarineLicenceIdFromProjects(world)
-  const page = world.page
-  const row = dashboardRow(page, world.data.projectName)
-  for (let attempt = 0; attempt < 36; attempt++) {
-    if (
-      ((await row.innerText().catch(() => '')) || '').includes(ACTION_REQUIRED)
-    ) {
-      return
-    }
-    await page.waitForTimeout(5_000)
-    await page.reload()
-    await page.waitForLoadState('load')
-  }
-  await expect(row).toContainText(ACTION_REQUIRED, { timeout: 10_000 })
-}
-
-function viewDetailsUrl(world, publicView = false) {
-  const route = publicView ? 'view-public-details' : 'view-details'
-  return new URL(
-    `/marine-licence/${route}/${world.data.marineLicenceId}`,
-    getConfig().baseURL
-  ).toString()
-}
-
-const withholdingTask = (page) =>
-  page.locator('.govuk-task-list__item').filter({ hasText: WITHHOLDING_TASK })
-
-async function openViewDetailsWithTask(world) {
-  if (!world.data.marineLicenceId) {
-    await readMarineLicenceIdFromProjects(world)
-  }
-  const page = world.page
-  for (let attempt = 0; attempt < 36; attempt++) {
-    await page.goto(viewDetailsUrl(world))
-    await page.waitForLoadState('load')
-    if (await withholdingTask(page).count()) {
-      return
-    }
-    await page.waitForTimeout(5_000)
-  }
-  await expect(withholdingTask(page)).toBeVisible({ timeout: 10_000 })
-}
+const withholdingTask = (page) => applicationTask(page, WITHHOLDING_TASK)
 
 When(
   'the caseworker tells the applicant the outcome of their request to withhold information',
@@ -112,7 +74,7 @@ When(
   'the applicant opens the withholding notification',
   { timeout: 300_000 },
   async function () {
-    await openViewDetailsWithTask(this)
+    await openViewDetailsWithTask(this, WITHHOLDING_TASK)
     await withholdingTask(this.page)
       .getByRole('link', { name: WITHHOLDING_TASK })
       .click()
@@ -137,10 +99,10 @@ Then(
   'View details shows the withholding notification task as {string}',
   { timeout: 300_000 },
   async function (status) {
-    await openViewDetailsWithTask(this)
+    await openViewDetailsWithTask(this, WITHHOLDING_TASK)
     const page = this.page
     await expect(page.locator('#application-tasks-heading')).toHaveText(
-      'Things that require your attention'
+      'Updates and tasks'
     )
     await expect(withholdingTask(page)).toHaveCount(1)
     await expect(withholdingTask(page)).toContainText(status)
@@ -222,6 +184,8 @@ When(
     await loginToD365(page)
     await verifyD365Login(page)
     await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    this.data.publicNoticeBeforeSiteCheck =
+      await readPublicNoticeBeforeSiteCheck(page)
     await completeSiteCheckTask(page)
   }
 )

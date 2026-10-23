@@ -14,7 +14,7 @@ import {
 } from '../support/shared-redaction-licence.js'
 
 const REDACTION_TIMEOUT = 900_000
-const UPLOAD_TIMEOUT = 180_000
+const UPLOAD_TIMEOUT = 240_000
 const REDACTED = '***REDACTED***'
 
 async function expectWhiteOnBlack(marker) {
@@ -234,6 +234,8 @@ Then(
   }
 )
 
+const REPLACEMENT_SAVE_POLLS = 12
+
 When(
   'the caseworker replaces the construction drawing with {string}',
   { timeout: UPLOAD_TIMEOUT },
@@ -252,6 +254,19 @@ When(
       timeout: 150_000
     })
     await this.page.waitForLoadState('load')
+
+    for (let attempt = 0; attempt < REPLACEMENT_SAVE_POLLS; attempt++) {
+      if (
+        (await this.redaction.cardText('Construction drawing')).includes(
+          fileName
+        )
+      ) {
+        return
+      }
+      await this.page.waitForTimeout(5_000)
+      await this.page.reload()
+      await this.page.waitForLoadState('load')
+    }
   }
 )
 

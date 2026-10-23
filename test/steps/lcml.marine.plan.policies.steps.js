@@ -1,6 +1,5 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import { faker } from '@faker-js/faker'
 import ReviewSiteDetailsPage from '../pages/review.site.details.page.js'
 import { enterWidth } from '../support/site-details-flow.js'
 import {
@@ -8,20 +7,12 @@ import {
   completeShapefileAppToPolicies,
   changeSiteLocationToShapefile,
   openMarinePlanPolicyList,
-  enterCircleSiteDetails,
-  completeActivityDetailsFromReview,
   openReviewSiteDetailsFromTaskList,
   finishSiteDetailsAndContinue,
   expectPolicyCategoriesInOrder,
-  expectPoliciesNamedInCodeOrder
+  expectPoliciesNamedInCodeOrder,
+  addAnotherCircularSite
 } from '../support/lcml-helpers.js'
-import {
-  clickAddTypeOfActivity,
-  selectActivityTypeAndContinue,
-  pickRandomNonOtherCheckbox,
-  checkCheckboxById,
-  submitWhatActivityForm
-} from '../support/lcml-activity-flow.js'
 
 const POLICY_MAP_URL =
   'https://environment.data.gov.uk/marine-plans-explorer/policy'
@@ -431,20 +422,6 @@ Then(
   }
 )
 
-async function completeActivityForSite(world, siteNumber) {
-  const { pickRandomActivity } = await import('../test-data/lcml-activity.js')
-  await clickAddTypeOfActivity(world.page, siteNumber, 1)
-  const { topLevel, subOption } = pickRandomActivity()
-  await selectActivityTypeAndContinue(world.page, topLevel, subOption)
-  const chosen = await pickRandomNonOtherCheckbox(world.page)
-  await checkCheckboxById(world.page, chosen.id)
-  await submitWhatActivityForm(world.page)
-  await completeActivityDetailsFromReview(
-    world,
-    `Site ${siteNumber} - Activity 1`
-  )
-}
-
 Given(
   'the user opens the review site details page from the task list',
   async function () {
@@ -461,17 +438,7 @@ When('the user changes the width of the circular site', async function () {
 })
 
 When('the user adds another circular site', async function () {
-  await this.page
-    .locator('button[name="add"]:has-text("Add another site")')
-    .click()
-  await this.page.waitForLoadState('load')
-  await enterCircleSiteDetails(this, {
-    siteName: `Added Site ${faker.location.city()}`,
-    latitude: '51.500000',
-    longitude: '-2.000000',
-    width: '30'
-  })
-  await completeActivityForSite(this, 2)
+  await addAnotherCircularSite(this)
 })
 
 When(
