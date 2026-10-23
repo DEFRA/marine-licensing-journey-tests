@@ -456,6 +456,14 @@ Then(
 
     const details = await readProjectDetailsTab(page)
     expect(details, 'Application details tab content loaded').not.toBeNull()
+    expect(details.labels).toEqual([
+      'Application name',
+      'Proposed works summary',
+      'Preferred start and end dates for the licence'
+    ])
+    await expect(
+      page.locator('h2, [role="heading"]', { hasText: /^Application details$/ })
+    ).not.toHaveCount(0)
     expect(details.projectName).toBe(this.data.projectName)
     expect(details.projectBackground).toBe(this.data.projectBackground)
     expect(details.preferredDates).toMatch(
