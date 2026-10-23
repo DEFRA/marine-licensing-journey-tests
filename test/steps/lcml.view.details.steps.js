@@ -52,7 +52,10 @@ import {
   submitEmptyRejection,
   cancelRejection,
   readCaseStatus,
-  REJECTION_ERRORS
+  REJECTION_ERRORS,
+  answerWfdReview,
+  readSavedWfdReview,
+  WFD_CONSIDERATIONS
 } from '../support/d365.js'
 import { SHARED_WFD_VARIATION } from '../support/shared-marine-licence.js'
 import { WFD_VARIATIONS } from '../support/lcml-wfd.js'
@@ -716,7 +719,7 @@ Then(
 )
 
 Then(
-  'the WFD task has the mandatory WFD review question',
+  'the WFD task has the mandatory WFD review question, and answering "Yes" asks for mandatory considerations',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = this.d365Page
@@ -731,15 +734,39 @@ Then(
     const meta = await readWfdTaskFieldMeta(page)
     expect(meta.sectionComplete.options).toEqual(['Yes', 'No'])
     expect(meta.sectionComplete.visible).toBe(true)
+    expect(meta.considerations.visible).toBe(false)
+
+    await answerWfdReview(page, 'Yes')
+    const afterYes = await readWfdTaskFieldMeta(page)
+    expect(afterYes.considerations).toMatchObject({
+      visible: true,
+      requiredLevel: 'required'
+    })
+
+    await answerWfdReview(page, 'No')
+    expect((await readWfdTaskFieldMeta(page)).considerations.visible).toBe(
+      false
+    )
   }
 )
 
 Then(
-  'completing the WFD review marks the task as Done',
+  'completing the WFD review saves "Yes" with the considerations and marks the task as Done',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const status = await completeWfdReview(this.d365Page)
     expect(status).toBe('Done')
+
+    await expect
+      .poll(() => readSavedWfdReview(this.d365Page), {
+        timeout: 60_000,
+        message: 'the saved WFD review answers'
+      })
+      .toEqual({
+        review: 'Yes',
+        considerations: WFD_CONSIDERATIONS,
+        status: 'Done'
+      })
   }
 )
 
