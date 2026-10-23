@@ -64,7 +64,7 @@ Feature: LCML: View details page shows sites and activities
     And the case shows the "Site check" task in the task list
     And the Site check task page shows the mandatory site check questions, a 4000 character Notes field and a Download CSV link
 
-  @real-defra-id @d365 @shared-marine-licence @issue=ML-1433
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1433 @issue=ML-1518
   Scenario: The Application details tab shows the submitted application information
     Given the shared submitted marine licence
     When the internal user finds the submitted case in the Marine licence cases workbasket
