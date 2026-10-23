@@ -52,3 +52,12 @@ Feature: LCML: Displaying a site notice
     And the Public notice task asked for the site notice summary and who needs to be told
     And the Public notice task is "Awaiting applicant" in D365
     And View details shows the "Display a site notice" task as "Not yet responded"
+
+  @issue=ML-1571
+  Scenario: Another evidence location can be added and deleted, and Send evidence waits for every location
+    Given an applicant asked to display a site notice is on the Display a site notice page
+    When the applicant adds all the site notice evidence for the location
+    And the applicant adds another evidence location
+    Then a "Location 2 evidence" card is added with a Delete location link, the first card has none, and Send evidence is hidden
+    And cancelling or going back from deleting location 2 keeps both cards
+    And confirming the deletion of location 2 leaves only the first card and shows Send evidence again
