@@ -11,6 +11,7 @@ import { chromium } from 'playwright'
 import { getConfig } from './config.js'
 import { expireTestUser } from './auth.js'
 import { applySharedMarineLicence } from './shared-marine-licence.js'
+import { cleanupJourneyTestData } from './cleanup-test-data.js'
 
 setDefaultTimeout(120_000)
 
@@ -129,6 +130,10 @@ After(async function (scenario) {
   if (this.testUser && !config.isRealDefraId) {
     await expireTestUser(config.defraIdUrl, this.testUser.userId)
   }
+
+  // CDP dev/test only — removes exemptions, marine licences, and related
+  // queue records via the backend cleanup endpoint (no-op elsewhere).
+  await cleanupJourneyTestData()
 
   await this.page?.close()
   await this.browserContext?.close()
