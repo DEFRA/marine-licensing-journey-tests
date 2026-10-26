@@ -16,7 +16,9 @@ import {
   openMarineLicenceCaseInD365,
   requestTransferToMcms,
   completeTransferToMcms,
-  expectMarineLicenceCaseStatus
+  expectMarineLicenceCaseStatus,
+  rejectApplicationInD365,
+  readCaseRejection
 } from '../support/d365.js'
 
 const projectRow = (page, projectName) =>
@@ -147,11 +149,14 @@ Then(
     const page = this.page
 
     const reasons = page.locator('main ul.govuk-list--bullet').first()
-    await expect(reasons).toContainText('Marine plan policies', {
-      timeout: 30_000
-    })
-    await expect(reasons).toContainText('Another reason', { timeout: 30_000 })
-    await expect(page.locator('main')).toContainText('Test free text', {
+    const rejection = this.data.rejection ?? {
+      sections: ['Marine plan policies', 'Another reason'],
+      details: 'Test free text'
+    }
+    for (const section of rejection.sections) {
+      await expect(reasons).toContainText(section, { timeout: 30_000 })
+    }
+    await expect(page.locator('main')).toContainText(rejection.details, {
       timeout: 30_000
     })
 
@@ -352,5 +357,73 @@ When(
       this.data.applicationReference,
       TRANSFERRED_STATUS
     )
+  }
+)
+
+const REJECTION_DETAILS =
+  'The marine plan policy answers do not say how the works meet each policy.'
+
+When(
+  'the internal user rejects the application in D365 for {string} and {string}',
+  { timeout: 900_000 },
+  async function (firstSection, secondSection) {
+    const { browser, page } = await launchD365Browser()
+    this.d365Browser = browser
+    this.d365Page = page
+
+    await loginToD365(page)
+    await verifyD365Login(page)
+    await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+    this.data.rejection = {
+      sections: [firstSection, secondSection],
+      details: REJECTION_DETAILS
+    }
+    await rejectApplicationInD365(page, this.data.rejection)
+  }
+)
+
+Then(
+  'the case is {string} in D365 and its Rejection details card on the Case summary shows:',
+  { timeout: 300_000 },
+  async function (status, dataTable) {
+    const page = this.d365Page
+    let rejection
+    for (let attempt = 0; attempt < 12; attempt++) {
+      await openMarineLicenceCaseInD365(page, this.data.applicationReference)
+      rejection = await readCaseRejection(page)
+      if (rejection.status === status && rejection.details) break
+      await page.waitForTimeout(10_000)
+    }
+    expect(rejection.status).toBe(status)
+    expect(rejection).toMatchObject({
+      cardTitle: 'Rejection details',
+      cardShown: true,
+      cardOnTab: 'Case summary',
+      readOnly: true
+    })
+
+    const card = page.locator('[aria-label="Rejection details"]').first()
+    await expect(card).toBeVisible({ timeout: 30_000 })
+
+    const londonDate = (date) =>
+      new Date(date).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })
+    const shown = {
+      'Rejected by': rejection.rejectedBy.join(', '),
+      'Date rejected': londonDate(rejection.rejectedOn),
+      'Sections of the application with issues': [...rejection.sections]
+        .sort()
+        .join(', '),
+      'Provide details for each issue': rejection.details
+    }
+    for (const [label, expected] of dataTable.raw()) {
+      await expect(card.getByText(label, { exact: true })).toBeVisible()
+      const value =
+        label === 'Date rejected' && expected === 'today'
+          ? londonDate(new Date())
+          : label === 'Sections of the application with issues'
+            ? expected.split(', ').sort().join(', ')
+            : expected
+      expect(shown[label], label).toBe(value)
+    }
   }
 )

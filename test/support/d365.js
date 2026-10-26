@@ -607,7 +607,12 @@ export async function readProjectDetailsTab(page) {
             projectBackground: doc
               .getElementById('val-background')
               ?.textContent?.trim(),
-            preferredDates: doc.getElementById('val-dates')?.textContent?.trim()
+            preferredDates: doc
+              .getElementById('val-dates')
+              ?.textContent?.trim(),
+            labels: [
+              ...doc.querySelectorAll('#mmo-content .mmo-field-label')
+            ].map((label) => label.textContent.trim())
           }
         }
         for (let i = 0; i < (w.frames?.length || 0); i++) {
@@ -1735,4 +1740,119 @@ export async function completePublicNoticeTask(
   await page.goto(caseUrl)
   await page.waitForLoadState('load')
   return { status, form }
+}
+
+const REJECT_APPLICATION_COMMAND =
+  'button[data-id^="incident|NoRelationship|Form|RejectApplication"]'
+
+export const REJECTION_ERRORS = {
+  sections:
+    'Sections of the application with issues: Required fields must be filled in.',
+  details: 'Provide details for each issue: Required fields must be filled in.'
+}
+
+export async function openRejectApplicationDialog(page) {
+  const button = await waitForCaseCommand(page, REJECT_APPLICATION_COMMAND)
+  await button.click()
+  const dialog = page.locator('[role="dialog"]').last()
+  await dialog
+    .locator('textarea')
+    .first()
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+  await page.waitForTimeout(3_000)
+  return dialog
+}
+
+export async function submitEmptyRejection(page, dialog) {
+  await dialog.getByRole('button', { name: /^Reject application$/ }).click()
+  await page.waitForTimeout(3_000)
+  return ((await dialog.innerText()) || '').replace(/\s+/g, ' ')
+}
+
+export async function cancelRejection(page, dialog) {
+  await dialog.getByRole('button', { name: /^Cancel$/ }).click()
+  await dialog.waitFor({ state: 'hidden', timeout: 60_000 })
+  await page.waitForLoadState('load')
+}
+
+async function selectRejectionSections(page, dialog, sections) {
+  const box = await dialog.locator('[role="combobox"]').first().boundingBox()
+  for (const section of sections) {
+    await page.mouse.click(box.x + 60, box.y + box.height / 2)
+    await page.waitForTimeout(800)
+    await page.keyboard.type(section, { delay: 50 })
+    await page.waitForTimeout(1_500)
+    await page.keyboard.press('Enter')
+    await page.waitForTimeout(1_200)
+  }
+}
+
+export async function rejectApplicationInD365(page, { sections, details }) {
+  const dialog = await openRejectApplicationDialog(page)
+  await selectRejectionSections(page, dialog, sections)
+  const field = dialog.locator('textarea').first()
+  await field.click()
+  await field.pressSequentially(details, { delay: 20 })
+  await page.waitForTimeout(1_500)
+  await dialog.getByRole('button', { name: /^Reject application$/ }).click()
+  try {
+    await dialog.waitFor({ state: 'hidden', timeout: 60_000 })
+  } catch {
+    throw new Error(
+      `The Reject application dialog stayed open: ${((await dialog.innerText().catch(() => '')) || '').replace(/\s+/g, ' ')}`
+    )
+  }
+  await page.waitForLoadState('load')
+}
+
+const XRM_FINDER = `
+  const findXrm = (w, depth = 0) => {
+    if (depth > 4) return null
+    try {
+      if (w.Xrm?.Page?.getAttribute) return w.Xrm
+    } catch {}
+    for (let i = 0; i < (w.frames?.length || 0); i++) {
+      try {
+        const found = findXrm(w.frames[i], depth + 1)
+        if (found) return found
+      } catch {}
+    }
+    return null
+  }
+  const Xrm = findXrm(window)
+`
+
+export function readCaseStatus(page) {
+  return page.evaluate(
+    `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
+  )
+}
+
+export function readCaseRejection(page) {
+  return page.evaluate(`(() => {
+    ${XRM_FINDER}
+    const value = (name) => {
+      const attribute = Xrm.Page.getAttribute(name)
+      if (!attribute) return null
+      const raw = attribute.getValue()
+      const text = attribute.getText?.()
+      if (Array.isArray(text)) return text
+      if (Array.isArray(raw)) return raw.map((item) => item.name ?? item)
+      return text ?? raw
+    }
+    const fields = ['mmo_applicationrejectedbyid', 'mmo_applicationrejectedon', 'mmo_rejectionreasons', 'mmo_rejectiondetails']
+    const section = Xrm.Page.getControl('mmo_rejectiondetails')?.getParent?.()
+    const rejectedOn = Xrm.Page.getAttribute('mmo_applicationrejectedon')?.getValue()
+    return {
+      status: Xrm.Page.getAttribute('statuscode')?.getText?.() ?? null,
+      cardTitle: section?.getLabel?.() ?? null,
+      cardShown: Boolean(section?.getVisible?.()),
+      cardOnTab: section?.getParent?.()?.getLabel?.() ?? null,
+      readOnly: fields.every((name) => Xrm.Page.getControl(name)?.getDisabled?.()),
+      rejectedBy: value('mmo_applicationrejectedbyid'),
+      rejectedOn: rejectedOn ? new Date(rejectedOn).toISOString() : null,
+      sections: value('mmo_rejectionreasons'),
+      details: value('mmo_rejectiondetails')
+    }
+  })()`)
 }

@@ -33,6 +33,30 @@ export default class LcmlSiteNoticePage {
     return this.evidenceRow(item).locator('.govuk-summary-list__actions a')
   }
 
+  locationCard(number) {
+    return this.page.locator('.govuk-summary-card', {
+      has: this.page.locator('.govuk-summary-card__title', {
+        hasText: new RegExp(`^\\s*Location ${number} evidence\\s*$`)
+      })
+    })
+  }
+
+  locationCards() {
+    return this.page.locator('.govuk-summary-card__title', {
+      hasText: /^\s*Location \d+ evidence\s*$/
+    })
+  }
+
+  deleteLocationLink(number) {
+    return this.locationCard(number).getByRole('link', {
+      name: /Delete location/
+    })
+  }
+
+  addAnotherLocationButton() {
+    return this.page.getByRole('button', { name: 'Add another location' })
+  }
+
   sendEvidenceButton() {
     return this.page.getByRole('button', { name: 'Send evidence' })
   }
