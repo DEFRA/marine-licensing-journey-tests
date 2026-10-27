@@ -158,13 +158,13 @@ Feature: LCML: Marine plan policies
   Scenario: Review and send is hidden while the marine plan policy considerations are incomplete
     Given an organisation user has completed the site details for a marine licence application
     When the user views the marine licence task list
-    Then the Check and send your information button is not displayed
+    Then the Check and send your application button is not displayed
 
   @issue=ML-1377
   Scenario: Review and send is shown once the marine plan policy considerations are completed
     Given an organisation user has completed the site details for a marine licence application
     When the user completes the marine plan policy considerations and returns to the task list
-    Then the Check and send your information button is displayed
+    Then the Check and send your application button is displayed
 
   @real-defra-id @issue=ML-1400
   Scenario: A site outside any marine plan area falls back to the nearest area's policies
