@@ -5,7 +5,10 @@ import {
   submitMarineLicence
 } from '../support/lcml-helpers.js'
 import { completePublicNoticeTask } from '../support/d365.js'
-import { sendSiteNoticeMessage } from '../support/mas-queue.js'
+import {
+  sendSiteNoticeMessage,
+  sendSiteNoticeEvidenceRejectionMessage
+} from '../support/mas-queue.js'
 import {
   waitForActionRequired,
   applicationTask,
@@ -36,6 +39,31 @@ function daysFromToday(days) {
   const date = new Date()
   date.setDate(date.getDate() + days)
   return date
+}
+
+async function addLocationEvidence(siteNotice, number, name, displayed) {
+  await siteNotice.openEvidenceItem(EVIDENCE.locationName, number)
+  await siteNotice.saveLocationName(name)
+  await siteNotice.waitForDisplayPage()
+
+  await siteNotice.openEvidenceItem(EVIDENCE.dateDisplayed, number)
+  await siteNotice.saveDateDisplayed(dateParts(displayed))
+  await siteNotice.waitForDisplayPage()
+
+  await siteNotice.openEvidenceItem(EVIDENCE.closeUpPhoto, number)
+  await siteNotice.uploadPhoto(CLOSE_UP_PHOTO)
+  await siteNotice.waitForDisplayPage()
+
+  await siteNotice.openEvidenceItem(EVIDENCE.positionPhoto, number)
+  await siteNotice.uploadPhoto(POSITION_PHOTO)
+  await siteNotice.waitForDisplayPage()
+
+  return {
+    [EVIDENCE.locationName]: name,
+    [EVIDENCE.dateDisplayed]: displayed.toLocaleDateString('en-GB', LONG_DATE),
+    [EVIDENCE.closeUpPhoto]: CLOSE_UP_PHOTO.split('/').pop(),
+    [EVIDENCE.positionPhoto]: POSITION_PHOTO.split('/').pop()
+  }
 }
 
 async function openSiteNoticeTask(world) {
@@ -97,33 +125,12 @@ When(
   'the applicant adds all the site notice evidence for the location',
   { timeout: 300_000 },
   async function () {
-    const siteNotice = new LcmlSiteNoticePage(this.page)
-    const displayed = daysFromToday(-1)
-    this.data.siteNoticeEvidence = {
-      [EVIDENCE.locationName]: LOCATION_NAME,
-      [EVIDENCE.dateDisplayed]: displayed.toLocaleDateString(
-        'en-GB',
-        LONG_DATE
-      ),
-      [EVIDENCE.closeUpPhoto]: CLOSE_UP_PHOTO.split('/').pop(),
-      [EVIDENCE.positionPhoto]: POSITION_PHOTO.split('/').pop()
-    }
-
-    await siteNotice.openEvidenceItem(EVIDENCE.locationName)
-    await siteNotice.saveLocationName(LOCATION_NAME)
-    await siteNotice.waitForDisplayPage()
-
-    await siteNotice.openEvidenceItem(EVIDENCE.dateDisplayed)
-    await siteNotice.saveDateDisplayed(dateParts(displayed))
-    await siteNotice.waitForDisplayPage()
-
-    await siteNotice.openEvidenceItem(EVIDENCE.closeUpPhoto)
-    await siteNotice.uploadPhoto(CLOSE_UP_PHOTO)
-    await siteNotice.waitForDisplayPage()
-
-    await siteNotice.openEvidenceItem(EVIDENCE.positionPhoto)
-    await siteNotice.uploadPhoto(POSITION_PHOTO)
-    await siteNotice.waitForDisplayPage()
+    this.data.siteNoticeEvidence = await addLocationEvidence(
+      new LcmlSiteNoticePage(this.page),
+      1,
+      LOCATION_NAME,
+      daysFromToday(-1)
+    )
   }
 )
 
@@ -372,5 +379,213 @@ Then(
         'Check that you have added evidence for every location where you displayed a site notice.'
       )
     ).toBeVisible()
+  }
+)
+
+const RESUBMIT_TASK = 'Resubmit site notice evidence'
+const RESUBMIT_STEP_TIMEOUT = 900_000
+const REJECTION_REASONS = {
+  1: 'The close-up photo is blurred, so we cannot read the notice.',
+  2: 'The close-up photo does not show the whole notice.',
+  3: 'The position photo does not show where the notice is.'
+}
+const RESUBMITTED_CLOSE_UP_PHOTO = POSITION_PHOTO
+const RESUBMITTED_POSITION_PHOTO = CLOSE_UP_PHOTO
+
+async function sendSiteNoticeEvidenceForLocations(world, count) {
+  await completeManualCircleApp(world)
+  await submitMarineLicence(world)
+  await sendSiteNoticeMessage(world.data.applicationReference, 'BOTH')
+  await waitForActionRequired(world)
+  await openSiteNoticeTask(world)
+
+  const siteNotice = new LcmlSiteNoticePage(world.page)
+  world.data.siteNoticeLocations = {}
+  for (let number = 1; number <= count; number++) {
+    if (number > 1) {
+      await siteNotice.addAnotherLocationButton().click()
+      await expect(siteNotice.locationCards()).toHaveCount(number, {
+        timeout: 30_000
+      })
+      await siteNotice.waitForDisplayPage()
+    }
+    world.data.siteNoticeLocations[number] = await addLocationEvidence(
+      siteNotice,
+      number,
+      `Location ${number} noticeboard`,
+      daysFromToday(-number)
+    )
+  }
+
+  await siteNotice.sendEvidenceButton().click()
+  await world.page.waitForURL(/\/marine-licence\/view-details\//, {
+    timeout: 30_000
+  })
+  await world.page.waitForLoadState('load')
+}
+
+async function rejectLocationPhotographs(world, locations) {
+  await sendSiteNoticeEvidenceRejectionMessage(
+    world.data.applicationReference,
+    locations.map((locationNumber) => ({
+      locationNumber,
+      reason: REJECTION_REASONS[locationNumber]
+    }))
+  )
+  world.data.rejectedLocations = [...locations].sort((a, b) => a - b)
+  await waitForActionRequired(world)
+}
+
+async function openResubmitTask(world) {
+  await openViewDetailsWithTask(world, RESUBMIT_TASK)
+  await applicationTask(world.page, RESUBMIT_TASK)
+    .getByRole('link', { name: RESUBMIT_TASK })
+    .click()
+  const siteNotice = new LcmlSiteNoticePage(world.page)
+  await siteNotice.waitForResubmitPage()
+  await expect(world.page.locator('h1')).toHaveText(RESUBMIT_TASK, {
+    timeout: 30_000
+  })
+  return siteNotice
+}
+
+Given(
+  'an applicant has sent site notice evidence for {int} locations',
+  { timeout: RESUBMIT_STEP_TIMEOUT },
+  async function (count) {
+    await sendSiteNoticeEvidenceForLocations(this, count)
+  }
+)
+
+When(
+  'the caseworker rejects the photographs for locations {int} and {int}',
+  { timeout: 300_000 },
+  async function (first, second) {
+    await rejectLocationPhotographs(this, [first, second])
+  }
+)
+
+Given(
+  'an applicant asked to resubmit the photographs for locations {int} and {int} of {int} is on the Resubmit site notice evidence page',
+  { timeout: RESUBMIT_STEP_TIMEOUT },
+  async function (first, second, count) {
+    await sendSiteNoticeEvidenceForLocations(this, count)
+    await rejectLocationPhotographs(this, [first, second])
+    await openResubmitTask(this)
+  }
+)
+
+When(
+  'the applicant uploads new photographs for each rejected location',
+  { timeout: 600_000 },
+  async function () {
+    const siteNotice = new LcmlSiteNoticePage(this.page)
+    for (const number of this.data.rejectedLocations) {
+      await siteNotice.openEvidenceItem(EVIDENCE.closeUpPhoto, number)
+      await siteNotice.uploadPhoto(RESUBMITTED_CLOSE_UP_PHOTO)
+      await siteNotice.waitForResubmitPage()
+
+      await siteNotice.openEvidenceItem(EVIDENCE.positionPhoto, number)
+      await siteNotice.uploadPhoto(RESUBMITTED_POSITION_PHOTO)
+      await siteNotice.waitForResubmitPage()
+    }
+  }
+)
+
+Then(
+  "the Resubmit site notice evidence task shows only the rejected locations in order, with the original name and date, the caseworker's reason and no photos",
+  { timeout: 300_000 },
+  async function () {
+    const siteNotice = await openResubmitTask(this)
+    const rejected = this.data.rejectedLocations
+    await expect(siteNotice.locationCards()).toHaveText(
+      rejected.map((number) => `Location ${number} evidence`)
+    )
+    for (const number of rejected) {
+      const original = this.data.siteNoticeLocations[number]
+      await expect(
+        siteNotice.locationCard(number).locator('.govuk-summary-list__key')
+      ).toHaveText([
+        EVIDENCE.locationName,
+        EVIDENCE.dateDisplayed,
+        'Why we could not accept your photographs',
+        EVIDENCE.closeUpPhoto,
+        EVIDENCE.positionPhoto
+      ])
+      await expect(
+        siteNotice.locationCard(number).locator('.govuk-summary-list__value')
+      ).toHaveText([
+        original[EVIDENCE.locationName],
+        original[EVIDENCE.dateDisplayed],
+        REJECTION_REASONS[number],
+        'Incomplete',
+        'Incomplete'
+      ])
+      for (const item of [EVIDENCE.locationName, EVIDENCE.dateDisplayed]) {
+        await expect(siteNotice.evidenceLink(item, number)).toHaveCount(0)
+      }
+      for (const item of [EVIDENCE.closeUpPhoto, EVIDENCE.positionPhoto]) {
+        await expect(siteNotice.evidenceLink(item, number)).toHaveText(
+          /^\s*Add\b/
+        )
+      }
+    }
+  }
+)
+
+Then(
+  'the applicant cannot add or delete locations, or send evidence yet',
+  async function () {
+    const siteNotice = new LcmlSiteNoticePage(this.page)
+    await expect(siteNotice.addAnotherLocationButton()).toHaveCount(0)
+    await expect(
+      this.page.getByRole('link', { name: /Delete location/ })
+    ).toHaveCount(0)
+    await expect(siteNotice.sendEvidenceButton()).toHaveCount(0)
+  }
+)
+
+Then(
+  'going back from the Resubmit site notice evidence task leaves it {string} and the application {string}',
+  { timeout: 300_000 },
+  async function (taskStatus, applicationStatus) {
+    await this.page.getByRole('link', { name: 'Back', exact: true }).click()
+    await this.page.waitForURL(/\/marine-licence\/view-details\//, {
+      timeout: 30_000
+    })
+    await this.page.waitForLoadState('load')
+    await expect(applicationTask(this.page, RESUBMIT_TASK)).toContainText(
+      taskStatus
+    )
+    await expect(
+      this.page.locator(
+        '#application-overview-card .govuk-summary-list__row:has(dt:text-is("Status")) .govuk-summary-list__value'
+      )
+    ).toContainText(applicationStatus)
+  }
+)
+
+Then(
+  'the Resubmit site notice evidence task is read-only and says when the evidence was resubmitted',
+  { timeout: 300_000 },
+  async function () {
+    const siteNotice = await openResubmitTask(this)
+    const today = new Date().toLocaleDateString('en-GB', LONG_DATE)
+    await expect(siteNotice.resubmissionNote()).toHaveText(
+      new RegExp(`^\\s*Evidence was resubmitted ${today}( by .+)?\\s*$`)
+    )
+    for (const number of this.data.rejectedLocations) {
+      await expect(
+        siteNotice.locationCard(number).locator('.govuk-summary-list__value')
+      ).toHaveText([
+        this.data.siteNoticeLocations[number][EVIDENCE.locationName],
+        this.data.siteNoticeLocations[number][EVIDENCE.dateDisplayed],
+        REJECTION_REASONS[number],
+        RESUBMITTED_CLOSE_UP_PHOTO.split('/').pop(),
+        RESUBMITTED_POSITION_PHOTO.split('/').pop()
+      ])
+      await expect(siteNotice.locationCard(number).locator('a')).toHaveCount(0)
+    }
+    await expect(siteNotice.sendEvidenceButton()).toHaveCount(0)
   }
 )
