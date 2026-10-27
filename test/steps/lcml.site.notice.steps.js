@@ -2,16 +2,22 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import {
   completeManualCircleApp,
-  submitMarineLicence
+  submitMarineLicence,
+  publicViewDetailsUrl
 } from '../support/lcml-helpers.js'
 import { completePublicNoticeTask } from '../support/d365.js'
-import { sendSiteNoticeMessage } from '../support/mas-queue.js'
+import {
+  sendSiteNoticeMessage,
+  SITE_NOTICE_MESSAGE_SUMMARY
+} from '../support/mas-queue.js'
+import { getConfig } from '../support/config.js'
 import {
   waitForActionRequired,
   applicationTask,
   openViewDetailsWithTask
 } from '../support/lcml-application-tasks.js'
 import LcmlSiteNoticePage from '../pages/lcml.site.notice.page.js'
+import LcmlSiteNoticePrintPage from '../pages/lcml.site.notice.print.page.js'
 
 const SITE_NOTICE_TASK = 'Display a site notice'
 const REQUEST_RELATES_TO = {
@@ -229,6 +235,100 @@ Then(
     await this.page.waitForLoadState('load')
     await expect(applicationTask(this.page, title)).toHaveCount(1)
     await expect(applicationTask(this.page, title)).toContainText(status)
+  }
+)
+
+const SITE_NOTICE_LINK = 'View and print the site notice (opens in new tab)'
+
+function applicantName(world) {
+  return getConfig().isRealDefraId
+    ? process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+    : world.testUser?.relationships?.[0]?.organisationName
+}
+
+When(
+  'the applicant opens the site notice from the Get your site notice section',
+  async function () {
+    const section = this.page.locator('h2', { hasText: 'Get your site notice' })
+    await expect(section).toBeVisible()
+    const newTab = this.page.context().waitForEvent('page')
+    await this.page.getByRole('link', { name: SITE_NOTICE_LINK }).click()
+    const page = await newTab
+    await page.waitForURL(LcmlSiteNoticePrintPage.PATH, { timeout: 30_000 })
+    await page.waitForLoadState('load')
+    this.siteNotice = new LcmlSiteNoticePrintPage(page)
+  }
+)
+
+Then(
+  "the site notice shows the application reference, the applicant's name and the summary of the works in a standard font",
+  async function () {
+    const notice = this.siteNotice
+    const reference = this.data.applicationReference
+    const applicant = applicantName(this)
+    expect(applicant).toBeTruthy()
+    await expect(this.page).toHaveURL(LcmlSiteNoticePage.DISPLAY_PATH)
+
+    await expect(notice.heading).toHaveText(
+      'Have your say on a proposed marine activity'
+    )
+    await expect(notice.subheading).toHaveText(
+      `Marine licence application notice ${reference}`
+    )
+    await expect(notice.qrReference).toHaveText(
+      `Application reference: ${reference}`
+    )
+    await expect(notice.bulletReference).toHaveText(
+      `quote the application reference ${reference}`
+    )
+    await expect(notice.applicant).toHaveText(
+      `${applicant} has applied to the Marine Management Organisation (MMO) under Part 4 of the Marine and Coastal Access Act 2009 for a marine licence.`
+    )
+    await expect(notice.summary).toHaveText(SITE_NOTICE_MESSAGE_SUMMARY)
+    await expect(notice.summary).toHaveCSS('font-weight', '700')
+    for (const fontFamily of await notice.fontFamilies()) {
+      expect(fontFamily).not.toMatch(/GDS Transport/i)
+    }
+  }
+)
+
+Then(
+  "the site notice QR code and web address go to the application's page on the public register",
+  async function () {
+    const notice = this.siteNotice
+    const publicPage = publicViewDetailsUrl(notice.marineLicenceId())
+    expect(await notice.decodeQrCode()).toBe(publicPage)
+    await expect(notice.webAddress).toHaveText(
+      publicPage.replace(/^https?:\/\//, '')
+    )
+  }
+)
+
+Then(
+  'the site notice has no links other than the survey link and the GOV.UK logo',
+  async function () {
+    const notice = this.siteNotice
+    expect(await notice.links()).toEqual([
+      { text: 'give your feedback (opens in new tab)', inPhaseBanner: true }
+    ])
+    await expect(notice.page.locator('.govuk-footer')).toHaveCount(0)
+    await expect(notice.page.locator('.govuk-back-link')).toHaveCount(0)
+  }
+)
+
+Then(
+  'printing the site notice opens the print dialog and prints only the notice on a single page',
+  async function () {
+    const notice = this.siteNotice
+    await notice.interceptPrintDialog()
+    await notice.printButton.click()
+    expect(await notice.printDialogOpenings()).toBe(1)
+
+    await notice.page.emulateMedia({ media: 'print' })
+    await expect(notice.printControls).toBeHidden()
+    await expect(notice.page.locator('.govuk-header')).toBeHidden()
+    await expect(notice.page.locator('.govuk-phase-banner')).toBeHidden()
+    expect(await notice.printedPageCount()).toBe(1)
   }
 )
 
