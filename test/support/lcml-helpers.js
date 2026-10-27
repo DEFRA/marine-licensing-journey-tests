@@ -860,9 +860,8 @@ export async function completeSiteDetailsViaFileUpload(
 
   world.data.siteName = await addSiteNameFromReview(world.page, 1)
 
-  const { completeRandomActivityFromReviewPage } = await import(
-    './lcml-activity-flow.js'
-  )
+  const { completeRandomActivityFromReviewPage } =
+    await import('./lcml-activity-flow.js')
   await completeRandomActivityFromReviewPage(world, activityOptions)
 
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
@@ -910,9 +909,8 @@ export async function finishSiteDetailsAndContinue(page, answer = 'yes') {
 }
 
 async function addActivityForSite1AndContinue(world, activityOptions = {}) {
-  const { completeRandomActivityFromReviewPage } = await import(
-    './lcml-activity-flow.js'
-  )
+  const { completeRandomActivityFromReviewPage } =
+    await import('./lcml-activity-flow.js')
   await completeRandomActivityFromReviewPage(world, activityOptions)
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
   await finishSiteDetailsAndContinue(world.page)
@@ -961,9 +959,8 @@ export async function completeShapefileAppToPolicies(world, filePath) {
   await navigateToUploadPage(world, 'Shapefile')
   await uploadFileAndWaitForReviewPage(world, 'Shapefile', filePath)
   await addSiteNameFromReview(world.page, 1)
-  const { completeRandomActivityFromReviewPage } = await import(
-    './lcml-activity-flow.js'
-  )
+  const { completeRandomActivityFromReviewPage } =
+    await import('./lcml-activity-flow.js')
   await completeRandomActivityFromReviewPage(world, { topLevel: 'Deposit' })
   await completeActivityDetailsFromReview(world, 'Site 1 - Activity 1')
   await finishSiteDetailsAndContinue(world.page)
