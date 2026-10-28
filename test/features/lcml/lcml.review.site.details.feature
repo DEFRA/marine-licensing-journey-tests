@@ -17,7 +17,7 @@ Feature: LCML: Review site details page (manual entry)
     Given an organisation user has manually entered a circular site for a marine licence
     When the user continues from the review site details page
     Then the marine licence task list is displayed
-    And the "Site details" task status is "In progress"
+    And the "Sites and activities" task status is "In progress"
 
   @issue=ML-1203
   Scenario Outline: The <field> change link opens a pre-populated page with no Cancel option
@@ -106,7 +106,7 @@ Feature: LCML: Review site details page (manual entry)
     Given an organisation user has manually entered a circular site for a marine licence
     When the user deletes site 1
     Then the marine licence task list is displayed
-    And the "Site details" task status is "Not yet started"
+    And the "Sites and activities" task status is "Not yet started"
 
   @issue=ML-1200
   Scenario Outline: Selecting <option> on the delete confirmation page returns to review without deleting
@@ -134,7 +134,7 @@ Feature: LCML: Review site details page (manual entry)
     When the user selects the Delete all site details option
     And the user confirms deletion of all sites
     Then the marine licence task list is displayed
-    And the "Site details" task status is "Not yet started"
+    And the "Sites and activities" task status is "Not yet started"
 
   @issue=ML-1201
   Scenario Outline: Selecting <option> on the delete all sites confirmation page returns to review without deleting
