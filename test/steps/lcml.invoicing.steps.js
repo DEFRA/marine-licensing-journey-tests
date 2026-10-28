@@ -44,13 +44,17 @@ const SUPPORTED_COUNTRIES = [
   'Spain'
 ]
 
-// The GB locale generates UK-format postcodes; the only ones the app rejects are
-// BFPO ("BF" + digit), excluded by its UK_POSTCODE_PATTERN, so regenerate those.
+// Mirrors the app's UK_POSTCODE_PATTERN, which also rejects BFPO ("BF" + digit).
+const UK_POSTCODE_PATTERN = /^(?!BF\d)[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i
+
+// The GB locale doesn't always produce postcodes the app accepts: BFPO ones, and
+// in faker 10.5–10.6 an invalid "## ##?" inward code (faker-js/faker#4102, fixed
+// after 10.6.0). Regenerate until the postcode matches the app's validation.
 function ukPostcode() {
   let postcode
   do {
     postcode = faker.location.zipCode()
-  } while (/^BF\d/i.test(postcode))
+  } while (!UK_POSTCODE_PATTERN.test(postcode))
   return postcode
 }
 
