@@ -27,7 +27,7 @@ Feature: LCML: Marine plan policies
     Given an organisation user has completed the site details for a marine licence application
     When the user opens the Marine plan policy considerations task
     Then the policy list page shows the policy count and the policies under category headings in alphabetical order
-    And each policy on the list is named by its title and code, in code order, and is "Not yet started"
+    And each policy on the list is named by its title and code, in code order, and is "Incomplete"
 
   @issue=ML-1249 @issue=ML-1370
   Scenario: The Policy consideration page displays the policy details
@@ -128,7 +128,7 @@ Feature: LCML: Marine plan policies
     And the user opens the review site details page from the task list
     When the user answers "No" and continues from the review page
     Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
-    And the "Site details" task has status "In progress"
+    And the "Sites and activities" task has status "In progress"
 
   @issue=ML-1261
   Scenario: The finished-site-details answer is not retained when the review page is revisited
@@ -158,13 +158,13 @@ Feature: LCML: Marine plan policies
   Scenario: Review and send is hidden while the marine plan policy considerations are incomplete
     Given an organisation user has completed the site details for a marine licence application
     When the user views the marine licence task list
-    Then the Review and send your information button is not displayed
+    Then the Check and send your application button is not displayed
 
   @issue=ML-1377
   Scenario: Review and send is shown once the marine plan policy considerations are completed
     Given an organisation user has completed the site details for a marine licence application
     When the user completes the marine plan policy considerations and returns to the task list
-    Then the Review and send your information button is displayed
+    Then the Check and send your application button is displayed
 
   @real-defra-id @issue=ML-1400
   Scenario: A site outside any marine plan area falls back to the nearest area's policies

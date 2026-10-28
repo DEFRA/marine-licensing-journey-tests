@@ -38,7 +38,7 @@ Feature: LCML: View details page shows sites and activities
   Scenario: Public View details shows applicant-framed content and hides sensitive cards
     Given an organisation user has submitted a marine licence application with marine plan policies
     When an external user opens the public View details page using the Projects page mongo id
-    Then the public View details page shows the project heading, Application overview and no Application name row
+    Then the public View details page shows the project heading, Application overview and the application name as the first project detail
     And the Application overview card shows who the marine licence is for
     And the activity details card uses the external-user sub-activity label
     And the marine plan policies cards show Applicant's consideration with no Change links
@@ -114,26 +114,26 @@ Feature: LCML: View details page shows sites and activities
     And a marine plan policy task shows its code, policy information and the applicant consideration
     And completing 2 marine plan policy tasks with an outcome and reason marks them as Done
 
-  @real-defra-id @d365 @issue=ML-1440
+  @real-defra-id @d365 @issue=ML-1440 @issue=ML-1581
   Scenario: The WFD task shows the one-answer applicant version (nautical mile No)
     Given an organisation user has submitted a marine licence with the "one-answer" WFD variation
     When the internal user completes the Site check and opens the WFD task
     Then the WFD task applicant's answers match the submitted variation
-    And the WFD task has the mandatory WFD review question
-    And completing the WFD review marks the task as Done
+    And the WFD task has the mandatory WFD review question, and answering "Yes" asks for mandatory considerations
+    And completing the WFD review saves "Yes" with the considerations and marks the task as Done
 
-  @real-defra-id @d365 @issue=ML-1440
+  @real-defra-id @d365 @issue=ML-1440 @issue=ML-1581
   Scenario: The WFD task shows the two-answer applicant version (nautical mile Yes, excluded activities Yes)
     Given an organisation user has submitted a marine licence with the "two-answer" WFD variation
     When the internal user completes the Site check and opens the WFD task
     Then the WFD task applicant's answers match the submitted variation
-    And the WFD task has the mandatory WFD review question
-    And completing the WFD review marks the task as Done
+    And the WFD task has the mandatory WFD review question, and answering "Yes" asks for mandatory considerations
+    And completing the WFD review saves "Yes" with the considerations and marks the task as Done
 
-  @real-defra-id @d365 @issue=ML-1440
+  @real-defra-id @d365 @issue=ML-1440 @issue=ML-1581
   Scenario: The WFD task shows the three-answer applicant version (nautical mile Yes, excluded activities No, assessment uploaded)
     Given an organisation user has submitted a marine licence with the "three-answer" WFD variation
     When the internal user completes the Site check and opens the WFD task
     Then the WFD task applicant's answers match the submitted variation
-    And the WFD task has the mandatory WFD review question
-    And completing the WFD review marks the task as Done
+    And the WFD task has the mandatory WFD review question, and answering "Yes" asks for mandatory considerations
+    And completing the WFD review saves "Yes" with the considerations and marks the task as Done
