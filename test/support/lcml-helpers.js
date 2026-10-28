@@ -305,7 +305,7 @@ export async function loginAndNavigateToUploadPage(world, fileType) {
 }
 
 export async function navigateToUploadPage(world, fileType) {
-  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.locator('a:has-text("Sites and activities")').click()
   await world.page.waitForLoadState('load')
   await continueFromBeforeYouStart(world.page)
   await world.page.waitForLoadState('load')
@@ -628,7 +628,7 @@ export async function verifyActivityCardCompleted(
 }
 
 export async function navigateToManualSiteEntry(world) {
-  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.locator('a:has-text("Sites and activities")').click()
   await world.page.waitForLoadState('load')
   await continueFromBeforeYouStart(world.page)
   await world.page.waitForLoadState('load')
@@ -712,7 +712,7 @@ export async function submitPrimaryAndWait(page) {
 export async function openReviewSiteDetailsFromTaskList(world) {
   // Once site details are completed the "Site details" task on the task list
   // links straight to the review page.
-  await world.page.locator('a:has-text("Site details")').click()
+  await world.page.locator('a:has-text("Sites and activities")').click()
   await world.page.waitForLoadState('load')
   await expectReviewSiteDetailsPage(world.page)
 }
@@ -972,7 +972,7 @@ export async function completeShapefileAppToPolicies(world, filePath) {
 // query.
 export async function changeSiteLocationToShapefile(world, filePath) {
   const page = world.page
-  await page.locator('a:has-text("Site details")').click()
+  await page.locator('a:has-text("Sites and activities")').click()
   await page.waitForLoadState('load')
   await page.locator('a:has-text("Change site location")').first().click()
   await page.waitForLoadState('load')

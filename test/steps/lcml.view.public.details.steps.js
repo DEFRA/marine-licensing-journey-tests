@@ -21,7 +21,7 @@ When(
 )
 
 Then(
-  'the public View details page shows the project heading, Application overview and no Application name row',
+  'the public View details page shows the project heading, Application overview and the application name as the first project detail',
   async function () {
     await expect(this.page.locator('#view-details-heading')).toHaveText(
       this.data.projectName,
@@ -37,11 +37,13 @@ Then(
 
     const projectDetails = this.page.locator(PROJECT_DETAILS_CARD)
     await expect(projectDetails).toBeVisible({ timeout: 30_000 })
-    await expect(
-      projectDetails.locator(
-        '.govuk-summary-list__row:has(dt:text-is("Application name"))'
-      )
-    ).toHaveCount(0)
+    const firstRow = projectDetails.locator('.govuk-summary-list__row').first()
+    await expect(firstRow.locator('.govuk-summary-list__key')).toHaveText(
+      'Application name'
+    )
+    await expect(firstRow.locator('.govuk-summary-list__value')).toHaveText(
+      this.data.projectName
+    )
   }
 )
 

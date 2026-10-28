@@ -17,7 +17,7 @@ import ReviewSiteDetailsPage from '../pages/review.site.details.page.js'
 
 Given('an organisation user is on the site details page', async function () {
   await loginAndReachTaskList(this)
-  await this.page.locator('a:has-text("Site details")').click()
+  await this.page.locator('a:has-text("Sites and activities")').click()
   await this.page.waitForLoadState('load')
 })
 
@@ -33,7 +33,7 @@ When(
   async function () {
     // Verify site details intro page
     await expect(this.page.locator('h1').first()).toContainText(
-      'Site details',
+      'Sites and activities',
       {
         timeout: 30_000
       }
@@ -63,7 +63,7 @@ When(
     //we are not asserting on the status until the site details work is complete
     // await taskList.expectTaskStatus('Site details', 'Completed')
 
-    await taskList.selectTask('Site details')
+    await taskList.selectTask('Sites and activities')
     await this.page.waitForLoadState('load')
   }
 )
