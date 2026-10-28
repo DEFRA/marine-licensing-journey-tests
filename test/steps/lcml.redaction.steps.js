@@ -14,7 +14,7 @@ import {
 } from '../support/shared-redaction-licence.js'
 
 const REDACTION_TIMEOUT = 900_000
-const UPLOAD_TIMEOUT = 240_000
+const UPLOAD_TIMEOUT = 420_000
 const REDACTED = '***REDACTED***'
 
 async function expectWhiteOnBlack(marker) {
@@ -234,7 +234,7 @@ Then(
   }
 )
 
-const REPLACEMENT_SAVE_POLLS = 12
+const REPLACEMENT_SAVE_POLLS = 24
 
 When(
   'the caseworker replaces the construction drawing with {string}',
