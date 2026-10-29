@@ -70,3 +70,20 @@ Feature: LCML: Displaying a site notice
     Then a "Location 2 evidence" card is added with a Delete location link, the first card has none, and Send evidence is hidden
     And cancelling or going back from deleting location 2 keeps both cards
     And confirming the deletion of location 2 leaves only the first card and shows Send evidence again
+
+  @issue=ML-1564
+  Scenario: Rejected site notice photographs ask the applicant to resubmit them for those locations only
+    Given an applicant has sent site notice evidence for 3 locations
+    When the caseworker rejects the photographs for locations 3 and 1
+    Then the application status is "Action required" on the dashboard
+    And the Resubmit site notice evidence task shows only the rejected locations in order, with the original name and date, the caseworker's reason and no photos
+    And the applicant cannot add or delete locations, or send evidence yet
+    And going back from the Resubmit site notice evidence task leaves it "Incomplete" and the application "Action required"
+
+  @issue=ML-1564
+  Scenario: Resubmitting the rejected photographs completes the task and returns the application to its previous status
+    Given an applicant asked to resubmit the photographs for locations 3 and 1 of 3 is on the Resubmit site notice evidence page
+    When the applicant uploads new photographs for each rejected location
+    Then sending the evidence shows the "Resubmit site notice evidence" task as "Completed" on View details
+    And the application status is "Submitted" on the dashboard
+    And the Resubmit site notice evidence task is read-only and says when the evidence was resubmitted

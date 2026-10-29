@@ -215,3 +215,28 @@ export async function sendSiteNoticeMessage(
     buildSiteNoticeMessage(applicationReference, requestRelatesTo)
   )
 }
+
+function buildSiteNoticeEvidenceRejectionMessage(
+  applicationReference,
+  rejectedLocations
+) {
+  return {
+    applicationReference,
+    taskType: 'PUBLIC_NOTICE_EVIDENCE',
+    rejectedLocations,
+    userName: 'Jane Doe',
+    userEmail: 'site-notice-test@example.com'
+  }
+}
+
+export async function sendSiteNoticeEvidenceRejectionMessage(
+  applicationReference,
+  rejectedLocations
+) {
+  return sendToQueue(
+    buildSiteNoticeEvidenceRejectionMessage(
+      applicationReference,
+      rejectedLocations
+    )
+  )
+}

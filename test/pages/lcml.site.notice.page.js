@@ -6,6 +6,8 @@ export default class LcmlSiteNoticePage {
   }
 
   static DISPLAY_PATH = /\/marine-licence\/site-notice\/display\//
+  static RESUBMIT_PATH =
+    /\/marine-licence\/site-notice\/resubmit\/[^/]+\/[^/?#]+$/
   static EVIDENCE_ITEMS = {
     locationName: 'Location name',
     dateDisplayed: 'Date you displayed the notice',
@@ -13,24 +15,24 @@ export default class LcmlSiteNoticePage {
     positionPhoto: 'Photo evidencing notice position and location'
   }
 
-  evidenceCard() {
-    return this.page.locator('.govuk-summary-card', {
-      hasText: 'Location 1 evidence'
-    })
+  evidenceCard(number = 1) {
+    return this.locationCard(number)
   }
 
-  evidenceRow(item) {
-    return this.evidenceCard().locator(
+  evidenceRow(item, number = 1) {
+    return this.evidenceCard(number).locator(
       `.govuk-summary-list__row:has(dt:text-is("${item}"))`
     )
   }
 
-  evidenceValue(item) {
-    return this.evidenceRow(item).locator('.govuk-summary-list__value')
+  evidenceValue(item, number = 1) {
+    return this.evidenceRow(item, number).locator('.govuk-summary-list__value')
   }
 
-  evidenceLink(item) {
-    return this.evidenceRow(item).locator('.govuk-summary-list__actions a')
+  evidenceLink(item, number = 1) {
+    return this.evidenceRow(item, number).locator(
+      '.govuk-summary-list__actions a'
+    )
   }
 
   locationCard(number) {
@@ -67,17 +69,30 @@ export default class LcmlSiteNoticePage {
     })
   }
 
+  resubmissionNote() {
+    return this.page.locator('main .govuk-inset-text', {
+      hasText: 'Evidence was resubmitted'
+    })
+  }
+
   errorSummary() {
     return this.page.locator('.govuk-error-summary')
   }
 
-  async openEvidenceItem(item) {
-    await this.evidenceLink(item).click()
+  async openEvidenceItem(item, number = 1) {
+    await this.evidenceLink(item, number).click()
     await this.page.waitForLoadState('load')
   }
 
   async waitForDisplayPage() {
     await this.page.waitForURL(LcmlSiteNoticePage.DISPLAY_PATH, {
+      timeout: 90_000
+    })
+    await this.page.waitForLoadState('load')
+  }
+
+  async waitForResubmitPage() {
+    await this.page.waitForURL(LcmlSiteNoticePage.RESUBMIT_PATH, {
       timeout: 90_000
     })
     await this.page.waitForLoadState('load')
