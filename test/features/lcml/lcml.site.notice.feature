@@ -43,6 +43,15 @@ Feature: LCML: Displaying a site notice
     And the application status is "Submitted" on the dashboard
     And the Display a site notice page is read-only and says when the evidence was submitted
 
+  @issue=ML-1566 @issue=ML-1607
+  Scenario: The applicant opens a printable site notice for their application in a new tab
+    Given an applicant asked to display a site notice is on the Display a site notice page
+    When the applicant opens the site notice from the Get your site notice section
+    Then the site notice shows the application reference, the applicant's name and the summary of the works in a standard font
+    And the site notice QR code and web address go to the application's page on the public register
+    And the site notice has no links other than the survey link and the GOV.UK logo
+    And printing the site notice opens the print dialog and prints only the notice on a single page
+
   @real-defra-id @d365 @issue=ML-1525
   Scenario: A Public notice task saved with "Site notice" in D365 asks the applicant to display a site notice
     Given an organisation user has submitted a marine licence application
