@@ -9,15 +9,15 @@ Feature: LCML: Displaying a site notice
     Given an organisation user has submitted a marine licence application
     When the caseworker sends the applicant a site notice for marine and community users
     Then the application status is "Action required" on the dashboard
-    And View details shows the "Display a site notice" task as "Not yet responded"
+    And View details shows the "Display a site notice" task as "Incomplete"
 
   @issue=ML-1526
-  Scenario: Going back from the Display a site notice page leaves the task not yet responded
+  Scenario: Going back from the Display a site notice page leaves the task incomplete
     Given an organisation user has submitted a marine licence application
     When the caseworker sends the applicant a site notice for marine users
     And the applicant opens the Display a site notice task
     And the applicant goes back from the site notice page
-    Then View details shows the "Display a site notice" task as "Not yet responded"
+    Then View details shows the "Display a site notice" task as "Incomplete"
     And the application status is "Action required" on the dashboard
 
   @issue=ML-1528
@@ -43,6 +43,15 @@ Feature: LCML: Displaying a site notice
     And the application status is "Submitted" on the dashboard
     And the Display a site notice page is read-only and says when the evidence was submitted
 
+  @issue=ML-1566 @issue=ML-1607
+  Scenario: The applicant opens a printable site notice for their application in a new tab
+    Given an applicant asked to display a site notice is on the Display a site notice page
+    When the applicant opens the site notice from the Get your site notice section
+    Then the site notice shows the application reference, the applicant's name and the summary of the works in a standard font
+    And the site notice QR code and web address go to the application's page on the public register
+    And the site notice has no links other than the survey link and the GOV.UK logo
+    And printing the site notice opens the print dialog and prints only the notice on a single page
+
   @real-defra-id @d365 @issue=ML-1525
   Scenario: A Public notice task saved with "Site notice" in D365 asks the applicant to display a site notice
     Given an organisation user has submitted a marine licence application
@@ -51,4 +60,30 @@ Feature: LCML: Displaying a site notice
     Then the Public notice task was read-only until the Site check was done
     And the Public notice task asked for the site notice summary and who needs to be told
     And the Public notice task is "Awaiting applicant" in D365
-    And View details shows the "Display a site notice" task as "Not yet responded"
+    And View details shows the "Display a site notice" task as "Incomplete"
+
+  @issue=ML-1571
+  Scenario: Another evidence location can be added and deleted, and Send evidence waits for every location
+    Given an applicant asked to display a site notice is on the Display a site notice page
+    When the applicant adds all the site notice evidence for the location
+    And the applicant adds another evidence location
+    Then a "Location 2 evidence" card is added with a Delete location link, the first card has none, and Send evidence is hidden
+    And cancelling or going back from deleting location 2 keeps both cards
+    And confirming the deletion of location 2 leaves only the first card and shows Send evidence again
+
+  @issue=ML-1564
+  Scenario: Rejected site notice photographs ask the applicant to resubmit them for those locations only
+    Given an applicant has sent site notice evidence for 3 locations
+    When the caseworker rejects the photographs for locations 3 and 1
+    Then the application status is "Action required" on the dashboard
+    And the Resubmit site notice evidence task shows only the rejected locations in order, with the original name and date, the caseworker's reason and no photos
+    And the applicant cannot add or delete locations, or send evidence yet
+    And going back from the Resubmit site notice evidence task leaves it "Incomplete" and the application "Action required"
+
+  @issue=ML-1564
+  Scenario: Resubmitting the rejected photographs completes the task and returns the application to its previous status
+    Given an applicant asked to resubmit the photographs for locations 3 and 1 of 3 is on the Resubmit site notice evidence page
+    When the applicant uploads new photographs for each rejected location
+    Then sending the evidence shows the "Resubmit site notice evidence" task as "Completed" on View details
+    And the application status is "Submitted" on the dashboard
+    And the Resubmit site notice evidence task is read-only and says when the evidence was resubmitted

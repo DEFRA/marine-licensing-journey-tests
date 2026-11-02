@@ -25,7 +25,7 @@ HEADLESS=false npm run test
 
 ### Prerequisites
 
-- Node.js >= 22.21.0
+- Node.js >= 24.22.1 (npm >= 11.19.1, bundled with it)
 - Docker & Docker Compose
 
 ### Services

@@ -130,8 +130,11 @@ Then(
 )
 
 Then('the marine licence task list is displayed', async function () {
-  await expect(this.page.locator('h1').first()).toContainText(
-    'Marine licence start page',
+  await expect(this.page).toHaveURL(/\/marine-licence\/task-list/, {
+    timeout: 30_000
+  })
+  await expect(this.page.locator('.govuk-caption-l').first()).toHaveText(
+    'Marine licence',
     { timeout: 30_000 }
   )
 })

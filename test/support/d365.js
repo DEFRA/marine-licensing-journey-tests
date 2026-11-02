@@ -417,7 +417,36 @@ export const WFD_TASK_FIELDS = {
   limitedToExcludedActivities: 'mmo_isyourprojectlimitedtooneofthefollowing',
   documentUrl: 'mmo_wfddocumenturl',
   documentFilename: 'mmo_wfdfilename',
-  sectionComplete: 'mmo_isthewfdsectioncompleteandacceptable'
+  sectionComplete: 'mmo_isthewfdsectioncompleteandacceptable',
+  considerations: 'mmo_recordyourconsiderations'
+}
+
+export const WFD_CONSIDERATIONS =
+  'Journey test considerations for the WFD assessment.'
+
+export async function answerWfdReview(page, answer) {
+  await page.evaluate(
+    ({ attr, answer }) => {
+      const findXrm = (w, depth = 0) => {
+        if (depth > 4) return null
+        try {
+          if (w.Xrm?.Page?.getAttribute) return w.Xrm
+        } catch {}
+        for (let i = 0; i < (w.frames?.length || 0); i++) {
+          try {
+            const found = findXrm(w.frames[i], depth + 1)
+            if (found) return found
+          } catch {}
+        }
+        return null
+      }
+      const review = findXrm(window).Page.getAttribute(attr)
+      review.setValue(review.getOptions().find((o) => o.text === answer).value)
+      review.fireOnChange()
+    },
+    { attr: WFD_TASK_FIELDS.sectionComplete, answer }
+  )
+  await page.waitForTimeout(1_500)
 }
 
 export async function completeSiteCheckTask(page) {
@@ -521,47 +550,92 @@ export async function readWfdTaskFieldMeta(page) {
   }, WFD_TASK_FIELDS)
 }
 
-export async function completeWfdReview(page) {
+export async function readSavedWfdReview(page) {
   return page.evaluate(async (fields) => {
     const findXrm = (w, depth = 0) => {
       if (depth > 4) return null
       try {
         if (w.Xrm?.Page?.getAttribute) return w.Xrm
-      } catch {
-        /* cross-origin frame */
-      }
+      } catch {}
       for (let i = 0; i < (w.frames?.length || 0); i++) {
         try {
           const found = findXrm(w.frames[i], depth + 1)
           if (found) return found
-        } catch {
-          /* cross-origin frame */
-        }
+        } catch {}
       }
       return null
     }
-    const Xrm = findXrm(window)
-    if (!Xrm) {
-      throw new Error('completeWfdReview: Xrm not found on WFD task page')
+    const id = findXrm(window).Page.data.entity.getId().replace(/[{}]/g, '')
+    const response = await fetch(
+      `/api/data/v9.2/tasks(${id})?$select=${fields.sectionComplete},${fields.considerations},statuscode`,
+      {
+        headers: {
+          Accept: 'application/json',
+          Prefer:
+            'odata.include-annotations="OData.Community.Display.V1.FormattedValue"'
+        }
+      }
+    )
+    if (!response.ok) {
+      throw new Error(`WFD task read failed: ${response.status}`)
     }
-    const review = Xrm.Page.getAttribute(fields.sectionComplete)
-    const yes = review.getOptions().find((o) => o.text === 'Yes')
-    review.setValue(yes.value)
-    try {
-      await Xrm.Page.data.save()
-    } catch (e) {
-      throw new Error(
-        `completeWfdReview: save failed: ${e?.message ?? JSON.stringify(e)}`
-      )
+    const task = await response.json()
+    const formatted = (name) =>
+      task[`${name}@OData.Community.Display.V1.FormattedValue`]
+    return {
+      review: formatted(fields.sectionComplete),
+      considerations: task[fields.considerations],
+      status: formatted('statuscode')
     }
-    const statuscode = Xrm.Page.getAttribute('statuscode')
-    let status = statuscode.getText()
-    for (let i = 0; i < 10 && status !== 'Done'; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 300))
-      status = statuscode.getText()
-    }
-    return status
   }, WFD_TASK_FIELDS)
+}
+
+export async function completeWfdReview(page) {
+  return page.evaluate(
+    async ({ fields, considerations }) => {
+      const findXrm = (w, depth = 0) => {
+        if (depth > 4) return null
+        try {
+          if (w.Xrm?.Page?.getAttribute) return w.Xrm
+        } catch {
+          /* cross-origin frame */
+        }
+        for (let i = 0; i < (w.frames?.length || 0); i++) {
+          try {
+            const found = findXrm(w.frames[i], depth + 1)
+            if (found) return found
+          } catch {
+            /* cross-origin frame */
+          }
+        }
+        return null
+      }
+      const Xrm = findXrm(window)
+      if (!Xrm) {
+        throw new Error('completeWfdReview: Xrm not found on WFD task page')
+      }
+      const review = Xrm.Page.getAttribute(fields.sectionComplete)
+      const yes = review.getOptions().find((o) => o.text === 'Yes')
+      review.setValue(yes.value)
+      review.fireOnChange()
+      Xrm.Page.getAttribute(fields.considerations)?.setValue(considerations)
+      try {
+        await Xrm.Page.data.save()
+      } catch (e) {
+        throw new Error(
+          `completeWfdReview: save failed: ${e?.message ?? JSON.stringify(e)}`
+        )
+      }
+      const statuscode = Xrm.Page.getAttribute('statuscode')
+      let status = statuscode.getText()
+      for (let i = 0; i < 10 && status !== 'Done'; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 300))
+        status = statuscode.getText()
+      }
+      return status
+    },
+    { fields: WFD_TASK_FIELDS, considerations: WFD_CONSIDERATIONS }
+  )
 }
 
 export async function readProjectDetailsTab(page) {

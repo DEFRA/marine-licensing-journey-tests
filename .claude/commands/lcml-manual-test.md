@@ -251,9 +251,7 @@ function separator() {
 const doc = new Document({
   sections: [
     {
-      children: [
-        /* ... all paragraphs ... */
-      ]
+      children: [/* ... all paragraphs ... */]
     }
   ]
 })

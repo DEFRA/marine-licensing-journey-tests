@@ -112,7 +112,7 @@ Then(
 // --- AC2: Review and send button gating ---
 
 Then(
-  'the Review and send your information button is not displayed',
+  'the Check and send your application button is not displayed',
   async function () {
     await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
       timeout: 30_000
@@ -131,7 +131,7 @@ When(
 )
 
 Then(
-  'the Review and send your information button is displayed',
+  'the Check and send your application button is displayed',
   async function () {
     await expect(this.page).toHaveURL(/marine-licence\/task-list/, {
       timeout: 30_000

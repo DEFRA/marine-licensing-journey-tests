@@ -192,13 +192,15 @@ export async function sendWithholdingNotificationMessage(
   )
 }
 
+export const SITE_NOTICE_MESSAGE_SUMMARY = 'Journey test site notice summary.'
+
 function buildSiteNoticeMessage(applicationReference, requestRelatesTo) {
   return {
     applicationReference,
     taskType: 'PUBLIC_NOTICE',
     publicNoticeRequirement: 'SITE_NOTICE',
     proposedWorksSummary: 'Journey test proposed works summary.',
-    siteNoticeSummary: 'Journey test site notice summary.',
+    siteNoticeSummary: SITE_NOTICE_MESSAGE_SUMMARY,
     requestRelatesTo,
     userName: 'Jane Doe',
     userEmail: 'site-notice-test@example.com'
@@ -211,5 +213,30 @@ export async function sendSiteNoticeMessage(
 ) {
   return sendToQueue(
     buildSiteNoticeMessage(applicationReference, requestRelatesTo)
+  )
+}
+
+function buildSiteNoticeEvidenceRejectionMessage(
+  applicationReference,
+  rejectedLocations
+) {
+  return {
+    applicationReference,
+    taskType: 'PUBLIC_NOTICE_EVIDENCE',
+    rejectedLocations,
+    userName: 'Jane Doe',
+    userEmail: 'site-notice-test@example.com'
+  }
+}
+
+export async function sendSiteNoticeEvidenceRejectionMessage(
+  applicationReference,
+  rejectedLocations
+) {
+  return sendToQueue(
+    buildSiteNoticeEvidenceRejectionMessage(
+      applicationReference,
+      rejectedLocations
+    )
   )
 }
