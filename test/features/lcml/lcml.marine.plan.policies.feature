@@ -47,6 +47,12 @@ Feature: LCML: Marine plan policies
     When the user opens a policy and saves a consideration of 2001 characters
     Then the policy consideration error "Policy consideration must be 2000 characters or less" is shown
 
+  @issue=ML-1620
+  Scenario: Saving a policy consideration under 70 characters shows the minimum length error
+    Given an organisation user has completed the site details for a marine licence application
+    When the user opens a policy and saves a consideration of 69 characters
+    Then the policy consideration error "Your consideration must be 70 characters or more. If you do not explain fully how you have considered this policy, we will reject your application." is shown
+
   @issue=ML-1249
   Scenario: Saving a valid policy consideration marks the policy Completed and updates the count
     Given an organisation user has completed the site details for a marine licence application
