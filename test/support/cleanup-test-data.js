@@ -29,10 +29,13 @@ function getBackendBaseUrl() {
 
 /**
  * Asks the backend to remove journey-test data left in MongoDB.
- * Only called for CDP `dev` and `test` — the backend endpoint itself is also
+ * Called once after the full suite finishes (entrypoint.sh), not after each
+ * scenario — per-scenario wipe races with parallel workers.
+ *
+ * No-op unless ENVIRONMENT is `dev` or `test`. The backend endpoint is also
  * registered only on those environments.
  *
- * Errors are logged and swallowed so cleanup never masks the scenario result.
+ * Errors are logged and swallowed so cleanup never fails the suite.
  */
 export async function cleanupJourneyTestData() {
   const { environment } = getConfig()

@@ -35,7 +35,8 @@
     "test:github:lcml": "cucumber-js --config cucumber.mjs --profile githubLcml",
     "test:github:iat": "cucumber-js --config cucumber.mjs --profile githubIat",
     "test:cdp": "cucumber-js --config cucumber.mjs --profile cdp",
-    "test:empOvernight": "cucumber-js --config cucumber.mjs --profile empOvernight"
+    "test:empOvernight": "cucumber-js --config cucumber.mjs --profile empOvernight",
+    "cleanup:test-data": "node test/support/run-cleanup.js"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "3.1153.0",
