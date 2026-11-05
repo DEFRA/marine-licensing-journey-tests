@@ -2090,80 +2090,291 @@ export async function waitForCaseStatus(page, status) {
   return current
 }
 
+const MPP_TASKS_SETTLE_MS = 10_000
+
 export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
   const caseUrl = page.url()
-  const tasks = await readMarinePlanPolicyTasks(page)
-  for (const task of tasks.filter((t) => t.status !== 'Done')) {
-    await page.goto(caseUrl)
-    await page.waitForLoadState('load')
-    await openMarinePlanPolicyTask(page, task.code)
-    await completeMarinePlanPolicyTask(page, outcome, reason)
-  }
-  await page.goto(caseUrl)
-  await page.waitForLoadState('load')
-  let done = []
-  for (let attempt = 1; attempt <= 10; attempt++) {
-    done = (await readMarinePlanPolicyTasks(page)).filter(
-      (t) => t.status === 'Done'
+  const completed = new Set()
+  let tasks = []
+  let stableChecks = 0
+  for (let check = 1; check <= 40; check++) {
+    const previousCount = tasks.length
+    tasks = await readMarinePlanPolicyTasks(page)
+    const pending = tasks.filter(
+      (task) => task.status !== 'Done' && !completed.has(task.code)
     )
-    if (done.length === tasks.length) {
+    for (const task of pending) {
+      await page.goto(caseUrl)
+      await page.waitForLoadState('load')
+      await openMarinePlanPolicyTask(page, task.code)
+      await completeMarinePlanPolicyTask(page, outcome, reason)
+      completed.add(task.code)
+    }
+    if (pending.length) {
+      await page.goto(caseUrl)
+      await page.waitForLoadState('load')
+      stableChecks = 0
+      continue
+    }
+    const allDone = tasks.length > 0 && tasks.every((t) => t.status === 'Done')
+    stableChecks =
+      allDone && tasks.length === previousCount ? stableChecks + 1 : 0
+    if (stableChecks >= 3) {
       return tasks.length
     }
-    await page.waitForTimeout(6_000)
+    await page.waitForTimeout(MPP_TASKS_SETTLE_MS)
   }
+  const done = tasks.filter((t) => t.status === 'Done').length
   throw new Error(
-    `Only ${done.length} of ${tasks.length} marine plan policy tasks became Done`
+    `Only ${done} of ${tasks.length} marine plan policy tasks became Done`
   )
 }
 
-export async function completePrepareForConsultationTask(page, consultees) {
+const CONSULTEES_GRID = 'consultees_subgrid_new_1'
+const CONSULTEE_LOOKUP_INPUT = `input[data-id*="${CONSULTEE_FIELDS.organisation}"][data-id*="textInputBox"]`
+const CONSULTEE_FORM_MESSAGES =
+  '[role="alert"], [role="dialog"], [data-id*="errorMessage"]'
+
+async function waitForTaskForm(page) {
+  await page
+    .locator(`[data-id="${TASK_COMPLETE_FIELD}-FieldSectionItemContainer"]`)
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+async function readFormNotices(page) {
+  const texts = await page
+    .locator(CONSULTEE_FORM_MESSAGES)
+    .allInnerTexts()
+    .catch(() => [])
+  return [
+    ...new Set(
+      texts
+        .map((text) =>
+          text
+            .replace(/Press Alt \+ B to navigate to the notification/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+        )
+        .filter((text) => text && !/^You have \d+ notifications?\b/.test(text))
+    )
+  ]
+}
+
+async function readVisibleFieldLabels(page) {
+  return page.evaluate(
+    `(() => { ${XRM_FINDER}
+      return Xrm.Page.ui.controls.get()
+        .filter((c) => c.getVisible?.() !== false && !['webresource', 'subgrid'].includes(c.getControlType()) && c.getLabel())
+        .map((c) => c.getLabel())
+    })()`
+  )
+}
+
+export async function openPrepareForConsultationTask(page) {
   const caseUrl = page.url()
   await openCaseTask(page, PREPARE_FOR_CONSULTATION_TASK)
-  const taskUrl = page.url()
+  return { caseUrl, taskUrl: page.url() }
+}
 
-  for (const consultee of consultees) {
-    await page
-      .getByRole('menuitem', { name: /Add consultee/i })
-      .or(page.getByRole('button', { name: /Add consultee/i }))
-      .first()
-      .click()
-    await page.waitForURL(/etn=mmo_consultee/, {
-      timeout: D365_NAVIGATION_TIMEOUT
-    })
-    await page
-      .locator(
-        `[data-id="${CONSULTEE_FIELDS.consultationType}-FieldSectionItemContainer"]`
-      )
-      .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
-    await page.evaluate(
+export async function readPrepareForConsultationTask(page) {
+  await waitForTaskForm(page)
+  let task = null
+  for (let attempt = 0; !task && attempt < 30; attempt++) {
+    task = await page.evaluate(
       `(() => { ${XRM_FINDER}
-        const consultee = ${JSON.stringify(consultee)}
-        const fields = ${JSON.stringify(CONSULTEE_FIELDS)}
-        const organisation = Xrm.Page.getAttribute(fields.organisation)
-        organisation.setValue([{ id: consultee.organisationId, name: consultee.organisationName, entityType: 'account' }])
-        organisation.fireOnChange()
-        const type = Xrm.Page.getAttribute(fields.consultationType)
-        type.setValue(type.getOptions().find((o) => o.text === consultee.type).value)
-        type.fireOnChange()
-        if (consultee.notes) {
-          const notes = Xrm.Page.getAttribute(fields.notes)
-          notes.setValue(consultee.notes)
-          notes.fireOnChange()
+        const control = Xrm?.Page.getControl('${TASK_COMPLETE_FIELD}')
+        const grid = Xrm?.Page.getControl('${CONSULTEES_GRID}')?.getGrid?.()
+        if (!control || !grid) return null
+        const total = grid.getTotalRecordCount()
+        if (total < 0 || grid.getRows().getLength() < Math.min(total, 50)) return null
+        return {
+          completeDisabled: control.getDisabled(),
+          consultees: grid.getRows().get().map((row) => ({
+            organisation: row.data.entity.attributes.get('${CONSULTEE_FIELDS.organisation}').getValue()?.[0]?.name,
+            type: row.data.entity.attributes.get('${CONSULTEE_FIELDS.consultationType}').getText()
+          }))
         }
       })()`
     )
-    await page.waitForTimeout(2_000)
-    await page.locator(MPP_SAVE_AND_CLOSE).first().click()
-    await page.waitForURL((url) => !/etn=mmo_consultee/.test(url.toString()), {
-      timeout: 45_000
-    })
-    await page.goto(taskUrl)
-    await page.waitForLoadState('load')
-    await page
-      .locator(`[data-id="${TASK_COMPLETE_FIELD}-FieldSectionItemContainer"]`)
-      .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+    if (!task) {
+      await page.waitForTimeout(1_000)
+    }
   }
+  return {
+    ...task,
+    columns: (
+      await page
+        .locator(
+          `[data-id="dataSetRoot_${CONSULTEES_GRID}"] [role="columnheader"]`
+        )
+        .allInnerTexts()
+    )
+      .map((text) => text.split('\n')[0].trim())
+      .filter((text) => /[a-z]/i.test(text) && !/^Status column/.test(text)),
+    addConsulteeShown:
+      (await page.getByRole('menuitem', { name: /Add consultee/i }).count()) >
+      0,
+    notices: await waitForFormNotices(page, task.completeDisabled)
+  }
+}
 
+async function waitForFormNotices(page, expected) {
+  let notices = await readFormNotices(page)
+  if (!expected) {
+    return notices
+  }
+  for (let attempt = 0; !notices.length && attempt < 15; attempt++) {
+    await page.waitForTimeout(1_000)
+    notices = await readFormNotices(page)
+  }
+  return notices
+}
+
+export async function openAddConsultee(page) {
+  await page
+    .getByRole('menuitem', { name: /Add consultee/i })
+    .or(page.getByRole('button', { name: /Add consultee/i }))
+    .first()
+    .click()
+  await page.waitForURL(/etn=mmo_consultee/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
+  await page
+    .locator(
+      `[data-id="${CONSULTEE_FIELDS.consultationType}-FieldSectionItemContainer"]`
+    )
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+export function readConsulteeFormFields(page) {
+  return readVisibleFieldLabels(page)
+}
+
+export async function searchConsulteeOrganisations(page, text) {
+  const input = page.locator(CONSULTEE_LOOKUP_INPUT).first()
+  await input.click()
+  await input.fill('')
+  await input.pressSequentially(text, { delay: 60 })
+  let results = []
+  for (let attempt = 0; attempt < 8; attempt++) {
+    await page.waitForTimeout(1_000)
+    results = (
+      await page
+        .locator('[data-id*="LookupResultsDropdown"] li')
+        .allInnerTexts()
+    )
+      .map((result) => result.replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+    if (results.length) break
+  }
+  await page.keyboard.press('Escape')
+  await input.fill('')
+  return results
+}
+
+export async function fillConsultee(page, consultee) {
+  await page.evaluate(
+    `(() => { ${XRM_FINDER}
+      const consultee = ${JSON.stringify(consultee)}
+      const fields = ${JSON.stringify(CONSULTEE_FIELDS)}
+      if (consultee.organisationId) {
+        const organisation = Xrm.Page.getAttribute(fields.organisation)
+        organisation.setValue([{ id: consultee.organisationId, name: consultee.organisationName, entityType: 'account' }])
+        organisation.fireOnChange()
+      }
+      if (consultee.type) {
+        const type = Xrm.Page.getAttribute(fields.consultationType)
+        type.setValue(type.getOptions().find((o) => o.text === consultee.type).value)
+        type.fireOnChange()
+      }
+      if (consultee.notes) {
+        const notes = Xrm.Page.getAttribute(fields.notes)
+        notes.setValue(consultee.notes)
+        notes.fireOnChange()
+      }
+    })()`
+  )
+  await page.waitForTimeout(1_500)
+}
+
+export async function saveConsultee(page, taskUrl) {
+  let saved = false
+  let notices = []
+  for (let attempt = 1; attempt <= 3 && !saved; attempt++) {
+    await page.locator(MPP_SAVE_AND_CLOSE).first().click()
+    try {
+      await page.waitForURL(
+        (url) => !/etn=mmo_consultee/.test(url.toString()),
+        { timeout: 15_000 }
+      )
+      saved = true
+    } catch {
+      notices = await readFormNotices(page)
+      if (notices.length) break
+    }
+  }
+  await page.goto(taskUrl)
+  await page.waitForLoadState('load')
+  await waitForTaskForm(page)
+  return { saved, notices: saved ? [] : notices }
+}
+
+export async function addConsultee(page, taskUrl, consultee) {
+  let result
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await openAddConsultee(page)
+    await fillConsultee(page, consultee)
+    result = await saveConsultee(page, taskUrl)
+    if (result.saved || result.notices.length) {
+      return result
+    }
+    await page.reload()
+    await page.waitForLoadState('load')
+    await waitForTaskForm(page)
+  }
+  return result
+}
+
+export async function savePrepareForConsultationTask(
+  page,
+  caseUrl,
+  { complete }
+) {
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  await openCaseTask(page, PREPARE_FOR_CONSULTATION_TASK)
+  const taskId = new URL(page.url()).searchParams.get('id').replace(/[{}]/g, '')
+  await setTaskComplete(page, complete)
+  await saveAndCloseTask(page, caseUrl)
+  return readTaskStatus(page, taskId, complete ? 'Done' : 'In Progress')
+}
+
+export async function listConsulteeOrganisations(page, count) {
+  return page.evaluate(async (top) => {
+    const response = await fetch(
+      `/api/data/v9.2/accounts?$select=accountid,name&$filter=mmo_isconsultee eq true and statecode eq 0&$orderby=name&$top=${top}`,
+      { headers: { Accept: 'application/json' } }
+    )
+    if (!response.ok) {
+      throw new Error(`consultee organisations read failed: ${response.status}`)
+    }
+    return (await response.json()).value.map((account) => ({
+      organisationId: account.accountid,
+      organisationName: account.name
+    }))
+  }, count)
+}
+
+export async function completePrepareForConsultationTask(page, consultees) {
+  const { caseUrl, taskUrl } = await openPrepareForConsultationTask(page)
+  for (const consultee of consultees) {
+    const { saved, notices } = await addConsultee(page, taskUrl, consultee)
+    if (!saved) {
+      throw new Error(
+        `Could not add ${consultee.organisationName} as a consultee: ${notices.join(' | ')}`
+      )
+    }
+  }
   await setTaskComplete(page, true)
   await saveAndCloseTask(page, caseUrl)
   return waitForCaseTaskStatus(page, PREPARE_FOR_CONSULTATION_TASK, 'Done')
