@@ -1250,7 +1250,7 @@ export async function readMarinePlanPolicyTasks(page) {
       const query =
         `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments` +
         `?$filter=_mmo_caseid_value eq ${id}` +
-        `&$select=mmo_policycode,mmo_policyname,statuscode` +
+        `&$select=mmo_marineplanpolicyassessmentid,mmo_policycode,mmo_policyname,statuscode` +
         `&$orderby=mmo_policycode`
       const response = await fetch(query, {
         headers: {
@@ -1265,6 +1265,7 @@ export async function readMarinePlanPolicyTasks(page) {
         )
       }
       return (body.value ?? []).map((record) => ({
+        id: record.mmo_marineplanpolicyassessmentid,
         code: record.mmo_policycode,
         name: record.mmo_policyname,
         status:
@@ -1969,9 +1970,16 @@ async function openCaseTask(page, name) {
 }
 
 async function readWebResourceText(page, fragment) {
-  for (const frame of page.frames()) {
-    if (frame.url().toLowerCase().includes(fragment)) {
-      return (
+  let text = null
+  for (let attempt = 0; !text && attempt < 20; attempt++) {
+    if (attempt) {
+      await page.waitForTimeout(1_000)
+    }
+    const frame = page
+      .frames()
+      .find((candidate) => candidate.url().toLowerCase().includes(fragment))
+    if (frame) {
+      text = (
         await frame
           .locator('body')
           .innerText()
@@ -1981,7 +1989,7 @@ async function readWebResourceText(page, fragment) {
         .trim()
     }
   }
-  return null
+  return text
 }
 
 async function setTaskComplete(page, complete) {
@@ -2100,6 +2108,48 @@ export async function waitForCaseStatus(page, status) {
 }
 
 const MPP_TASKS_SETTLE_MS = 10_000
+const MPP_PARALLEL_TABS = Number(process.env.MPP_PARALLEL_TABS) || 4
+
+function marinePlanPolicyTaskUrl(caseUrl, id) {
+  const url = new URL(caseUrl)
+  url.search = new URLSearchParams({
+    appid: url.searchParams.get('appid'),
+    pagetype: 'entityrecord',
+    etn: 'mmo_marineplanpolicyassessment',
+    id
+  }).toString()
+  return url.toString()
+}
+
+async function completeMarinePlanPolicyTasksInTabs(
+  page,
+  caseUrl,
+  tasks,
+  outcome,
+  reason
+) {
+  const queue = [...tasks]
+  const tabs = await Promise.all(
+    Array.from({ length: Math.min(MPP_PARALLEL_TABS, queue.length) }, () =>
+      page.context().newPage()
+    )
+  )
+  try {
+    await Promise.all(
+      tabs.map(async (tab) => {
+        await tab.goto(caseUrl)
+        await tab.waitForLoadState('load')
+        for (let task = queue.shift(); task; task = queue.shift()) {
+          await tab.goto(marinePlanPolicyTaskUrl(caseUrl, task.id))
+          await tab.waitForLoadState('load')
+          await completeMarinePlanPolicyTask(tab, outcome, reason)
+        }
+      })
+    )
+  } finally {
+    await Promise.all(tabs.map((tab) => tab.close().catch(() => {})))
+  }
+}
 
 export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
   const caseUrl = page.url()
@@ -2112,12 +2162,15 @@ export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
     const pending = tasks.filter(
       (task) => task.status !== 'Done' && !completed.has(task.code)
     )
-    for (const task of pending) {
-      await page.goto(caseUrl)
-      await page.waitForLoadState('load')
-      await openMarinePlanPolicyTask(page, task.code)
-      await completeMarinePlanPolicyTask(page, outcome, reason)
-      completed.add(task.code)
+    if (pending.length) {
+      await completeMarinePlanPolicyTasksInTabs(
+        page,
+        caseUrl,
+        pending,
+        outcome,
+        reason
+      )
+      pending.forEach((task) => completed.add(task.code))
     }
     if (pending.length) {
       await page.goto(caseUrl)
@@ -2185,7 +2238,10 @@ export async function openPrepareForConsultationTask(page) {
   return { caseUrl, taskUrl: page.url() }
 }
 
-export async function readPrepareForConsultationTask(page) {
+export async function readPrepareForConsultationTask(
+  page,
+  { expectLocked = false } = {}
+) {
   await waitForTaskForm(page)
   let task = null
   for (let attempt = 0; !task && attempt < 30; attempt++) {
@@ -2209,6 +2265,15 @@ export async function readPrepareForConsultationTask(page) {
       await page.waitForTimeout(1_000)
     }
   }
+  if (
+    !task.completeDisabled &&
+    (expectLocked ||
+      (await readFormNotices(page)).some((notice) =>
+        /cannot start/i.test(notice)
+      ))
+  ) {
+    task.completeDisabled = await waitForTaskCompleteLocked(page)
+  }
   return {
     ...task,
     columns: (
@@ -2220,11 +2285,34 @@ export async function readPrepareForConsultationTask(page) {
     )
       .map((text) => text.split('\n')[0].trim())
       .filter((text) => /[a-z]/i.test(text) && !/^Status column/.test(text)),
-    addConsulteeShown:
-      (await page.getByRole('menuitem', { name: /Add consultee/i }).count()) >
-      0,
+    addConsulteeShown: await isAddConsulteeShown(page, !task.completeDisabled),
     notices: await waitForFormNotices(page, task.completeDisabled)
   }
+}
+
+async function waitForTaskCompleteLocked(page) {
+  let locked = false
+  for (let attempt = 0; !locked && attempt < 20; attempt++) {
+    await page.waitForTimeout(1_000)
+    locked = await page.evaluate(
+      `(() => { ${XRM_FINDER} return Xrm?.Page.getControl('${TASK_COMPLETE_FIELD}')?.getDisabled?.() === true })()`
+    )
+  }
+  return locked
+}
+
+async function isAddConsulteeShown(page, expected) {
+  const addConsultee = page
+    .getByRole('menuitem', { name: /Add consultee/i })
+    .or(page.getByRole('button', { name: /Add consultee/i }))
+    .first()
+  if (!expected) {
+    return addConsultee.isVisible()
+  }
+  return addConsultee
+    .waitFor({ state: 'visible', timeout: 15_000 })
+    .then(() => true)
+    .catch(() => false)
 }
 
 async function waitForFormNotices(page, expected) {

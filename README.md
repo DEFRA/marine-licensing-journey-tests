@@ -157,17 +157,19 @@ DEBUG=pw:api MAX_INSTANCES=1 HEADLESS=false npx cucumber-js --config cucumber.mj
 
 ## Environment Variables
 
-| Variable                 | Default                          | Description                                       |
-| ------------------------ | -------------------------------- | ------------------------------------------------- |
-| `ENVIRONMENT`            | `local`                          | Target environment (`local`, `dev`, `test`, etc.) |
-| `BASE_URL`               | Auto-resolved from `ENVIRONMENT` | Frontend URL to test against                      |
-| `DEFRA_ID_URL`           | Auto-resolved from `ENVIRONMENT` | DEFRA ID stub URL                                 |
-| `HEADLESS`               | `true`                           | Set to `false` to run headed                      |
-| `MAX_INSTANCES`          | `1` (local) / `10` (CI)          | Parallel Cucumber workers                         |
-| `DEBUG`                  | `false`                          | Forces `parallel: 1` for debugging                |
-| `DEFRA_ID_USER_ID`       | -                                | Real DEFRA ID username (when `ENVIRONMENT=test`)  |
-| `DEFRA_ID_USER_PASSWORD` | -                                | Real DEFRA ID password (when `ENVIRONMENT=test`)  |
-| `DEFRA_ID_ORG_NAME`      | `Windfarm Co`                    | Organisation name for real DEFRA ID               |
+| Variable                           | Default                          | Description                                                        |
+| ---------------------------------- | -------------------------------- | ------------------------------------------------------------------ |
+| `ENVIRONMENT`                      | `local`                          | Target environment (`local`, `dev`, `test`, etc.)                  |
+| `BASE_URL`                         | Auto-resolved from `ENVIRONMENT` | Frontend URL to test against                                       |
+| `DEFRA_ID_URL`                     | Auto-resolved from `ENVIRONMENT` | DEFRA ID stub URL                                                  |
+| `HEADLESS`                         | `true`                           | Set to `false` to run headed                                       |
+| `MAX_INSTANCES`                    | `1` (local) / `10` (CI)          | Parallel Cucumber workers                                          |
+| `DEBUG`                            | `false`                          | Forces `parallel: 1` for debugging                                 |
+| `DEFRA_ID_USER_ID`                 | -                                | Real DEFRA ID username (when `ENVIRONMENT=test`)                   |
+| `DEFRA_ID_USER_PASSWORD`           | -                                | Real DEFRA ID password (when `ENVIRONMENT=test`)                   |
+| `DEFRA_ID_ORG_NAME`                | `Windfarm Co`                    | Organisation name for real DEFRA ID                                |
+| `CONSULTEE_DEFRA_ID_USER_ID`       | -                                | Real DEFRA ID username of the consultee (organisation `Test name`) |
+| `CONSULTEE_DEFRA_ID_USER_PASSWORD` | -                                | Real DEFRA ID password of the consultee                            |
 
 ## Running Real DEFRA ID Tests
 
@@ -179,7 +181,11 @@ Tests tagged `@real-defra-id` run against the actual Government Gateway login (n
 ENVIRONMENT=test
 DEFRA_ID_USER_ID=<Government Gateway user ID>
 DEFRA_ID_USER_PASSWORD=<Government Gateway password>
+CONSULTEE_DEFRA_ID_USER_ID=<consultee Government Gateway user ID>
+CONSULTEE_DEFRA_ID_USER_PASSWORD=<consultee Government Gateway password>
 ```
+
+The consultee credentials are used by the consultation scenario (`lcml.start.consultation.feature`), where the consultee signs in and responds to the request for advice. On CDP, add them as secrets of the test suite for the `test` environment, alongside `DEFRA_ID_USER_ID` and `DEFRA_ID_USER_PASSWORD`.
 
 ### How to Run
 

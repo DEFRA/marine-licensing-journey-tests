@@ -29,6 +29,9 @@ import {
   waitForCaseTaskStatus,
   waitForCaseStatus
 } from '../support/d365.js'
+import { getConfig } from '../support/config.js'
+import { loginWithRealDefraId, acceptCookies } from '../support/auth.js'
+import ConsultationsPage from '../pages/consultations.page.js'
 
 const CONSULTATION_TIMEOUT = 1_800_000
 const CONSULTEE = {
@@ -41,6 +44,8 @@ const CONSULTEE = {
 }
 const NOT_A_CONSULTEE =
   process.env.NON_CONSULTEE_ORGANISATION_NAME || 'Dredging Co'
+const CONSULTEE_RESPONSE =
+  'Journey test advice: no objection to the works.\nAvoid the bird nesting season from March to August.'
 const NOTES_FIELD = 'Notes for the organisation'
 const SITE_CHECK_NOTICE =
   'You cannot start this task until you complete the Site check task.'
@@ -70,7 +75,11 @@ async function prepareSnapshot(page) {
   )
   const tasks = await readCaseTaskRows(page)
   const { caseUrl, taskUrl } = await openPrepareForConsultationTask(page)
-  const form = await readPrepareForConsultationTask(page)
+  const form = await readPrepareForConsultationTask(page, {
+    expectLocked: tasks.includes(
+      `${PREPARE_FOR_CONSULTATION_TASK} Cannot start yet`
+    )
+  })
   return { caseUrl, taskUrl, tasks, form }
 }
 
@@ -127,7 +136,7 @@ async function completeAssessmentTasks(page, caseUrl) {
 }
 
 When(
-  'the caseworker prepares the case for consultation and starts the consultation in D365',
+  'the caseworker starts a consultation in D365 and the consultee responds to the request for advice',
   { timeout: CONSULTATION_TIMEOUT },
   async function () {
     const { browser, page } = await launchD365Browser()
@@ -192,6 +201,8 @@ When(
       tasks: await waitForCaseTaskStatus(page, START_CONSULTATION_TASK, 'Done'),
       caseStatus: await waitForCaseStatus(page, 'Consultation')
     }
+
+    consultation.consultee = await respondAsConsultee(this)
   }
 )
 
@@ -252,13 +263,16 @@ Then(
 )
 
 Then(
-  'Start consultation could only be started once Prepare for consultation was Done',
-  function () {
+  'Start consultation could only be started once Prepare for consultation was Done, and starting it moved the case from {string} to {string}',
+  function (statusBefore, statusAfter) {
     const {
       startAfterSiteCheck,
       startBeforePreparation,
       startAfterPreparation,
-      marinePlanPolicyTasks
+      marinePlanPolicyTasks,
+      caseStatusBeforeStart,
+      startSavedUnconfirmed,
+      startSavedConfirmed
     } = this.data.consultation
     for (const { tasks, form } of [
       startAfterSiteCheck,
@@ -289,17 +303,7 @@ Then(
     for (const line of EXPLANATION) {
       expect(startAfterPreparation.form.explanation).toContain(line)
     }
-  }
-)
 
-Then(
-  'starting the consultation moved the case from {string} to {string}',
-  function (statusBefore, statusAfter) {
-    const {
-      caseStatusBeforeStart,
-      startSavedUnconfirmed,
-      startSavedConfirmed
-    } = this.data.consultation
     expect(caseStatusBeforeStart).toBe(statusBefore)
     expect(startSavedUnconfirmed.tasks.at(-1)).toBe(
       `${START_CONSULTATION_TASK} To do`
@@ -309,5 +313,199 @@ Then(
       `${START_CONSULTATION_TASK} Done`
     )
     expect(startSavedConfirmed.caseStatus).toBe(statusAfter)
+  }
+)
+
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+]
+
+function todayInLondon() {
+  const [year, month, day] = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/London'
+  })
+    .format(new Date())
+    .split('-')
+    .map(Number)
+  return `${day} ${MONTHS[month - 1]} ${year}`
+}
+
+function receivedDate(text) {
+  const [day, month, year] = text.split(' ')
+  return new Date(Number(year), MONTHS.indexOf(month), Number(day)).getTime()
+}
+
+async function signInAsConsultee(world) {
+  const config = getConfig()
+  const context = await world.browserContext.browser().newContext({
+    viewport: { width: 1920, height: 1080 }
+  })
+  world.consulteeContext = context
+  const page = await context.newPage()
+  page.setDefaultTimeout(30_000)
+  await page.goto(new URL('/consultations', config.baseURL).toString())
+  await loginWithRealDefraId(page, {
+    userId: process.env.CONSULTEE_DEFRA_ID_USER_ID,
+    password: process.env.CONSULTEE_DEFRA_ID_USER_PASSWORD,
+    orgName: CONSULTEE.organisationName
+  })
+  await acceptCookies(page)
+  if (!ConsultationsPage.PATH.test(new URL(page.url()).pathname)) {
+    await page.goto(new URL('/consultations', config.baseURL).toString())
+  }
+  return page
+}
+
+async function waitForConsultationRow(page, reference) {
+  const dashboard = new ConsultationsPage(page)
+  const row = dashboard.rows.filter({ hasText: reference })
+  for (let attempt = 1; attempt <= 18; attempt++) {
+    if (await row.count()) {
+      return dashboard
+    }
+    await page.waitForTimeout(10_000)
+    await page.reload()
+    await page.waitForLoadState('load')
+  }
+  return dashboard
+}
+
+async function readDashboard(dashboard, reference) {
+  const headers = (await dashboard.columnHeaders.allInnerTexts()).map(
+    (header) => header.trim()
+  )
+  const rows = (await dashboard.rowCells()).map((cells) =>
+    Object.fromEntries(headers.map((header, i) => [header, cells[i]]))
+  )
+  return {
+    heading: await dashboard.heading.innerText(),
+    headerLinks: await dashboard.headerLinks.allInnerTexts(),
+    currentHeaderLink: await dashboard.currentHeaderLink.innerText(),
+    phaseBannerShown: await dashboard.phaseBanner.isVisible(),
+    organisationShown: await dashboard
+      .organisationName(CONSULTEE.organisationName)
+      .isVisible(),
+    headers,
+    sortControls: await dashboard.headerSortControls(),
+    received: rows.map((row) => receivedDate(row.Received)),
+    row: rows.filter((row) => row.Reference === reference)
+  }
+}
+
+async function openRequest(page, dashboard, projectName) {
+  await dashboard.rows
+    .getByRole('link', { name: projectName, exact: true })
+    .click()
+  await page.waitForLoadState('load')
+  const main = page.locator('main')
+  return {
+    path: new URL(page.url()).pathname,
+    caption: await main.locator('.govuk-caption-l').innerText(),
+    heading: await main.locator('h1').innerText(),
+    backHref: await page
+      .getByRole('link', { name: 'Back', exact: true })
+      .getAttribute('href'),
+    respondButtons: await main
+      .locator('.govuk-button', { hasText: 'Respond to the request' })
+      .count(),
+    response: await main
+      .locator('h2:has-text("Your response") + p')
+      .innerText()
+      .catch(() => null)
+  }
+}
+
+async function respondAsConsultee(world) {
+  const reference = world.data.applicationReference
+  const { projectName } = world.data
+  try {
+    const page = await signInAsConsultee(world)
+    let dashboard = await waitForConsultationRow(page, reference)
+    const before = await readDashboard(dashboard, reference)
+    const request = await openRequest(page, dashboard, projectName)
+
+    await page
+      .locator('main .govuk-button', { hasText: 'Respond to the request' })
+      .click()
+    await page.waitForURL(/\/consultation-response\//)
+    const responsePage = {
+      caption: await page.locator('main .govuk-caption-l').innerText(),
+      heading: await page.locator('main h1').innerText()
+    }
+    await page.locator('#consultationResponse').fill(CONSULTEE_RESPONSE)
+    await page.getByRole('button', { name: 'Send response' }).click()
+    await page.waitForURL(ConsultationsPage.PATH)
+
+    dashboard = new ConsultationsPage(page)
+    const after = await readDashboard(dashboard, reference)
+    const requestAfterResponse = await openRequest(page, dashboard, projectName)
+    return { before, request, responsePage, after, requestAfterResponse }
+  } finally {
+    await world.consulteeContext?.close()
+  }
+}
+
+Then(
+  'the consultee\'s Consultations dashboard showed the request for advice as "Response needed", and as "Responded" with their response once they had responded',
+  function () {
+    const { before, request, responsePage, after, requestAfterResponse } =
+      this.data.consultation.consultee
+    const { projectName, applicationReference } = this.data
+    const dashboardRow = (status) => ({
+      'Application name': projectName,
+      Type: CONSULTEE.type,
+      Reference: applicationReference,
+      Status: status,
+      Received: todayInLondon()
+    })
+
+    expect(before.heading).toBe('Consultations')
+    expect(before.headerLinks).toEqual([
+      'Consultations',
+      'Defra account',
+      'Sign out'
+    ])
+    expect(before.currentHeaderLink).toBe('Consultations')
+    expect(before.phaseBannerShown).toBe(true)
+    expect(before.organisationShown).toBe(true)
+    expect([...before.headers].sort()).toEqual(
+      ['Application name', 'Received', 'Reference', 'Status', 'Type'].sort()
+    )
+    expect(before.sortControls).toBe(0)
+    expect(before.received).toEqual([...before.received].sort((a, b) => b - a))
+    expect(before.row).toEqual([dashboardRow('Response needed')])
+
+    expect(request).toEqual({
+      path: expect.stringMatching(
+        /^\/marine-licence\/request-for-advice\/[a-f0-9]{24}$/
+      ),
+      caption: projectName,
+      heading: 'Request for advice for a marine licence application',
+      backHref: '/consultations',
+      respondButtons: 1,
+      response: null
+    })
+    expect(responsePage).toEqual({
+      caption: projectName,
+      heading: 'Your response'
+    })
+
+    expect(after.row).toEqual([dashboardRow('Responded')])
+    expect(requestAfterResponse).toEqual({
+      ...request,
+      respondButtons: 0,
+      response: CONSULTEE_RESPONSE
+    })
   }
 )
