@@ -185,7 +185,7 @@ Then(
 When(
   'the user updates the consideration and selects Save and continue',
   async function () {
-    this.data.updatedResponse = `Updated consideration ${faker.lorem.sentence(6)}`
+    this.data.updatedResponse = `Updated consideration ${faker.lorem.sentence(20)}`
     await this.page
       .locator('#policyConsideration')
       .fill(this.data.updatedResponse)
