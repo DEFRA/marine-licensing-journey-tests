@@ -1901,10 +1901,19 @@ const XRM_FINDER = `
   const Xrm = findXrm(window)
 `
 
-export function readCaseStatus(page) {
-  return page.evaluate(
-    `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
-  )
+export async function readCaseStatus(page) {
+  let status = null
+  for (let attempt = 0; status === null && attempt < 30; attempt++) {
+    if (attempt) {
+      await page.waitForTimeout(1_000)
+    }
+    status = await page
+      .evaluate(
+        `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
+      )
+      .catch(() => null)
+  }
+  return status
 }
 
 export function readCaseRejection(page) {
@@ -2347,37 +2356,6 @@ export async function savePrepareForConsultationTask(
   await setTaskComplete(page, complete)
   await saveAndCloseTask(page, caseUrl)
   return readTaskStatus(page, taskId, complete ? 'Done' : 'In Progress')
-}
-
-export async function listConsulteeOrganisations(page, count) {
-  return page.evaluate(async (top) => {
-    const response = await fetch(
-      `/api/data/v9.2/accounts?$select=accountid,name&$filter=mmo_isconsultee eq true and statecode eq 0&$orderby=name&$top=${top}`,
-      { headers: { Accept: 'application/json' } }
-    )
-    if (!response.ok) {
-      throw new Error(`consultee organisations read failed: ${response.status}`)
-    }
-    return (await response.json()).value.map((account) => ({
-      organisationId: account.accountid,
-      organisationName: account.name
-    }))
-  }, count)
-}
-
-export async function completePrepareForConsultationTask(page, consultees) {
-  const { caseUrl, taskUrl } = await openPrepareForConsultationTask(page)
-  for (const consultee of consultees) {
-    const { saved, notices } = await addConsultee(page, taskUrl, consultee)
-    if (!saved) {
-      throw new Error(
-        `Could not add ${consultee.organisationName} as a consultee: ${notices.join(' | ')}`
-      )
-    }
-  }
-  await setTaskComplete(page, true)
-  await saveAndCloseTask(page, caseUrl)
-  return waitForCaseTaskStatus(page, PREPARE_FOR_CONSULTATION_TASK, 'Done')
 }
 
 export async function saveStartConsultationTask(page, { confirm }) {

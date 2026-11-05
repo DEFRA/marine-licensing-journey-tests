@@ -1,15 +1,15 @@
 @real-defra-id @d365
-Feature: LCML: Start consultation task in D365
+Feature: LCML: Prepare for and start a consultation in D365
   As a case worker
-  I want to be able to start the consultation once all the pre-requisites have been completed
-  So that the consultation can start at the appropriate time
+  I want to choose the consultees for a case and start the consultation once all the pre-requisites have been completed
+  So that the consultees are informed correctly and the consultation starts at the appropriate time
 
-  @issue=ML-1617
-  Scenario: Start consultation can only be started once its prerequisite tasks are Done, and starting it moves the case to Consultation
+  @issue=ML-1611 @issue=ML-1617
+  Scenario: A caseworker prepares for and starts a consultation in D365
     Given an organisation user has submitted a marine licence application
-    And the caseworker completes the Site check in D365
-    When the caseworker completes every other task the Start consultation task depends on, with a consultee to ask for advice
-    Then the Start consultation task is last in the task list and stayed "Cannot start yet" and read-only until Prepare for consultation was Done
-    And the Start consultation task is "To do" with the explanation of what starting consultation does and an unticked confirmation
-    And saving the Start consultation task without the confirmation leaves it "To do" and the case "Submitted"
-    And saving the Start consultation task with the confirmation marks it "Done" and moves the case to "Consultation"
+    When the caseworker prepares the case for consultation and starts the consultation in D365
+    Then Prepare for consultation could only be started once the Site check was Done
+    And Add consultee offered only consultee organisations, and asked for notes only for a request for advice
+    And Prepare for consultation was "In Progress" when saved unticked and "Done" when saved ticked
+    And Start consultation could only be started once Prepare for consultation was Done
+    And starting the consultation moved the case from "Submitted" to "Consultation"
