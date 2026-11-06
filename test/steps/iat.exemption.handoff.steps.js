@@ -17,6 +17,8 @@ import {
   walkIatPath
 } from '../support/iat-walk.js'
 
+const FIVIUM_HPMA_ANSWER = 'No'
+
 const EXEMPTION_GUIDANCE_RE = new RegExp(
   GUIDANCE_PATH.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 )
@@ -157,7 +159,7 @@ Given(
   async function () {
     await walkIatPath(
       this,
-      EXEMPTION_HANDOFF_PATHS.DREDGE,
+      [...EXEMPTION_HANDOFF_PATHS.DREDGE, FIVIUM_HPMA_ANSWER],
       FIVIUM_IAT_START_URL
     )
   }
