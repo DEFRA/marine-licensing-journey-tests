@@ -1,7 +1,7 @@
 import { ProxyAgent, fetch } from 'undici'
 import { CDP_PROXY_URL, getConfig } from './config.js'
 
-const CLEANUP_ENVIRONMENTS = ['dev', 'test']
+const CLEANUP_ENVIRONMENTS = ['dev']
 
 let proxyAgent
 
@@ -32,8 +32,8 @@ function getBackendBaseUrl() {
  * Called once after the full suite finishes (entrypoint.sh), not after each
  * scenario — per-scenario wipe races with parallel workers.
  *
- * No-op unless ENVIRONMENT is `dev` or `test`. The backend endpoint is also
- * registered only on those environments.
+ * No-op unless ENVIRONMENT is `dev`. Not run on `test` so shared example data
+ * is preserved. The backend endpoint is also registered only on `dev`.
  *
  * Errors are logged and swallowed so cleanup never fails the suite.
  */

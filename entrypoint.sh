@@ -24,7 +24,8 @@ npm run "$test_script"
 test_exit_code=$?
 
 # Wipe journey-test data once all workers have finished. Runs for CDP
-# ENVIRONMENT=dev|test only; no-op elsewhere. Non-fatal if the call fails.
+# ENVIRONMENT=dev only (not test — preserves shared example data).
+# Non-fatal if the call fails.
 echo "running: npm run cleanup:test-data"
 npm run cleanup:test-data || echo "cleanup:test-data failed (continuing)"
 
