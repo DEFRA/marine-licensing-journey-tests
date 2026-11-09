@@ -64,13 +64,12 @@ export async function loginWithRealDefraId(
   page,
   {
     userId = process.env.DEFRA_ID_USER_ID,
-    password = process.env.DEFRA_ID_USER_PASSWORD,
-    orgName = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
+    password = process.env.DEFRA_ID_USER_PASSWORD
   } = {}
 ) {
   if (!userId || !password) {
     throw new Error(
-      'A DEFRA ID user id and password are required for real DEFRA ID authentication'
+      'DEFRA_ID_USER_ID and DEFRA_ID_USER_PASSWORD environment variables are required for real DEFRA ID authentication'
     )
   }
 
@@ -98,6 +97,7 @@ export async function loginWithRealDefraId(
   }
 
   // Step 3: Select organisation relationship if prompted
+  const orgName = process.env.DEFRA_ID_ORG_NAME || 'Windfarm Co'
   try {
     const orgLabel = page.locator(`label:has-text("${orgName}")`)
     await orgLabel.waitFor({ state: 'visible', timeout: 15_000 })

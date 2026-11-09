@@ -2108,7 +2108,7 @@ export async function waitForCaseStatus(page, status) {
 }
 
 const MPP_TASKS_SETTLE_MS = 10_000
-const MPP_PARALLEL_TABS = Number(process.env.MPP_PARALLEL_TABS) || 4
+const MPP_PARALLEL_TABS = 4
 
 function marinePlanPolicyTaskUrl(caseUrl, id) {
   const url = new URL(caseUrl)

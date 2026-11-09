@@ -35,15 +35,12 @@ import ConsultationsPage from '../pages/consultations.page.js'
 
 const CONSULTATION_TIMEOUT = 1_800_000
 const CONSULTEE = {
-  organisationId:
-    process.env.CONSULTEE_ORGANISATION_ID ||
-    '12db77a8-3f24-f111-8341-000d3a495719',
-  organisationName: process.env.CONSULTEE_ORGANISATION_NAME || 'Test name',
+  organisationId: '12db77a8-3f24-f111-8341-000d3a495719',
+  organisationName: 'Test name',
   type: 'Request for advice',
   notes: 'Journey test advice requested from the consultee.'
 }
-const NOT_A_CONSULTEE =
-  process.env.NON_CONSULTEE_ORGANISATION_NAME || 'Dredging Co'
+const NOT_A_CONSULTEE = 'Dredging Co'
 const CONSULTEE_RESPONSE =
   'Journey test advice: no objection to the works.\nAvoid the bird nesting season from March to August.'
 const NOTES_FIELD = 'Notes for the organisation'
@@ -347,6 +344,13 @@ function receivedDate(text) {
 }
 
 async function signInAsConsultee(world) {
+  const userId = process.env.CONSULTEE_DEFRA_ID_USER_ID
+  const password = process.env.CONSULTEE_DEFRA_ID_USER_PASSWORD
+  if (!userId || !password) {
+    throw new Error(
+      'CONSULTEE_DEFRA_ID_USER_ID and CONSULTEE_DEFRA_ID_USER_PASSWORD environment variables are required to sign in as the consultee'
+    )
+  }
   const config = getConfig()
   const context = await world.browserContext.browser().newContext({
     viewport: { width: 1920, height: 1080 }
@@ -355,11 +359,7 @@ async function signInAsConsultee(world) {
   const page = await context.newPage()
   page.setDefaultTimeout(30_000)
   await page.goto(new URL('/consultations', config.baseURL).toString())
-  await loginWithRealDefraId(page, {
-    userId: process.env.CONSULTEE_DEFRA_ID_USER_ID,
-    password: process.env.CONSULTEE_DEFRA_ID_USER_PASSWORD,
-    orgName: CONSULTEE.organisationName
-  })
+  await loginWithRealDefraId(page, { userId, password })
   await acceptCookies(page)
   if (!ConsultationsPage.PATH.test(new URL(page.url()).pathname)) {
     await page.goto(new URL('/consultations', config.baseURL).toString())
