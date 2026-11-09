@@ -23,6 +23,12 @@ echo "running: npm run $test_script (PROFILE=${PROFILE:-unset})"
 npm run "$test_script"
 test_exit_code=$?
 
+# Wipe journey-test data once all workers have finished. Runs for CDP
+# ENVIRONMENT=dev only (not test — preserves shared example data).
+# Non-fatal if the call fails.
+echo "running: npm run cleanup:test-data"
+npm run cleanup:test-data || echo "cleanup:test-data failed (continuing)"
+
 npm run report:publish
 publish_exit_code=$?
 
