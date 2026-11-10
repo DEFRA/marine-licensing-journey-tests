@@ -60,10 +60,13 @@ export async function loginAsTestUser(page, testUser) {
   }
 }
 
-export async function loginWithRealDefraId(page) {
-  const userId = process.env.DEFRA_ID_USER_ID
-  const password = process.env.DEFRA_ID_USER_PASSWORD
-
+export async function loginWithRealDefraId(
+  page,
+  {
+    userId = process.env.DEFRA_ID_USER_ID,
+    password = process.env.DEFRA_ID_USER_PASSWORD
+  } = {}
+) {
   if (!userId || !password) {
     throw new Error(
       'DEFRA_ID_USER_ID and DEFRA_ID_USER_PASSWORD environment variables are required for real DEFRA ID authentication'

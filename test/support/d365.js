@@ -1250,7 +1250,7 @@ export async function readMarinePlanPolicyTasks(page) {
       const query =
         `${origin}/api/data/v9.2/mmo_marineplanpolicyassessments` +
         `?$filter=_mmo_caseid_value eq ${id}` +
-        `&$select=mmo_policycode,mmo_policyname,statuscode` +
+        `&$select=mmo_marineplanpolicyassessmentid,mmo_policycode,mmo_policyname,statuscode` +
         `&$orderby=mmo_policycode`
       const response = await fetch(query, {
         headers: {
@@ -1265,6 +1265,7 @@ export async function readMarinePlanPolicyTasks(page) {
         )
       }
       return (body.value ?? []).map((record) => ({
+        id: record.mmo_marineplanpolicyassessmentid,
         code: record.mmo_policycode,
         name: record.mmo_policyname,
         status:
@@ -1643,12 +1644,14 @@ export const PUBLIC_NOTICE_TASK_FIELDS = {
   proposedWorksSummary: 'mmo_applicantsproposedworkssummary',
   siteNoticeSummary: 'mmo_writeasummaryforthesitenotice',
   whoNeedsToBeTold: 'mmo_whoneedstobetoldaboutthisapplication',
+  noPublicNoticeReason: 'mmo_whyarenopublicnoticesrequired',
   summaryGuidance: 'WebResource_helptextpublicnoticesummary',
   whoGuidance: 'WebResource_helptextpublicnoticegroups'
 }
 
 export const PUBLIC_NOTICE_OUTCOMES = {
-  'Site notice': 'Awaiting applicant'
+  'Site notice': 'Awaiting applicant',
+  None: 'Done'
 }
 
 export function publicNoticeTaskLink(page) {
@@ -1719,7 +1722,7 @@ export async function readPublicNoticeBeforeSiteCheck(page) {
 
 export async function completePublicNoticeTask(
   page,
-  { requirement, summary, who }
+  { requirement, summary, who, reason }
 ) {
   const caseUrl = page.url()
   for (let attempt = 1; ; attempt++) {
@@ -1774,6 +1777,9 @@ export async function completePublicNoticeTask(
   if (requirement === 'Site notice') {
     await set(fields.siteNoticeSummary, summary, false)
     await set(fields.whoNeedsToBeTold, who, true)
+  }
+  if (requirement === 'None') {
+    await set(fields.noPublicNoticeReason, reason, false)
   }
 
   const taskId = await page.evaluate(() => {
@@ -1896,10 +1902,19 @@ const XRM_FINDER = `
   const Xrm = findXrm(window)
 `
 
-export function readCaseStatus(page) {
-  return page.evaluate(
-    `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
-  )
+export async function readCaseStatus(page) {
+  let status = null
+  for (let attempt = 0; status === null && attempt < 30; attempt++) {
+    if (attempt) {
+      await page.waitForTimeout(1_000)
+    }
+    status = await page
+      .evaluate(
+        `(() => { ${XRM_FINDER} return Xrm?.Page.getAttribute('statuscode')?.getText?.() ?? null })()`
+      )
+      .catch(() => null)
+  }
+  return status
 }
 
 export function readCaseRejection(page) {
@@ -1929,4 +1944,513 @@ export function readCaseRejection(page) {
       details: value('mmo_rejectiondetails')
     }
   })()`)
+}
+
+export const START_CONSULTATION_TASK = 'Start consultation'
+export const PREPARE_FOR_CONSULTATION_TASK = 'Prepare for consultation'
+const TASK_COMPLETE_FIELD = 'mmo_selecttomarkthetaskascomplete'
+const DEFAULT_TASK_COMPLETE_LABEL = 'Select to mark the task as complete'
+const CONSULTEE_FIELDS = {
+  organisation: 'mmo_organisationid',
+  consultationType: 'mmo_consultationtype',
+  notes: 'mmo_notesfortheorganisation'
+}
+
+async function openCaseTask(page, name) {
+  const link = page.getByRole('link', { name }).first()
+  await waitForCaseTaskLink(page, link, name)
+  await link.click()
+  await page.waitForURL(/pagetype=entityrecord.*etn=task/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
+  await page.waitForLoadState('load')
+  await page
+    .locator(`[data-id="${TASK_COMPLETE_FIELD}-FieldSectionItemContainer"]`)
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+async function readWebResourceText(page, fragment) {
+  let text = null
+  for (let attempt = 0; !text && attempt < 20; attempt++) {
+    if (attempt) {
+      await page.waitForTimeout(1_000)
+    }
+    const frame = page
+      .frames()
+      .find((candidate) => candidate.url().toLowerCase().includes(fragment))
+    if (frame) {
+      text = (
+        await frame
+          .locator('body')
+          .innerText()
+          .catch(() => '')
+      )
+        .replace(/\s+/g, ' ')
+        .trim()
+    }
+  }
+  return text
+}
+
+async function setTaskComplete(page, complete) {
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const set = await page.evaluate(
+      `(() => { ${XRM_FINDER}
+        const attribute = Xrm?.Page.getAttribute('${TASK_COMPLETE_FIELD}')
+        if (!attribute) return false
+        attribute.setValue(${complete})
+        attribute.fireOnChange()
+        return true
+      })()`
+    )
+    if (set) {
+      return
+    }
+    await page.waitForTimeout(1_000)
+  }
+  throw new Error('The task form did not load its complete checkbox')
+}
+
+async function saveAndCloseTask(page, caseUrl) {
+  await page.waitForTimeout(PUBLIC_REGISTER_SETTLE_MS)
+  await page.locator(MPP_SAVE_AND_CLOSE).first().click()
+  try {
+    await page.waitForURL(/etn=incident/, { timeout: 45_000 })
+  } catch {
+    throw new Error(
+      `Save & Close did not return to the case. Form messages: ${JSON.stringify(await readFormMessages(page))}`
+    )
+  }
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+}
+
+export async function readStartConsultationTask(page) {
+  const caseUrl = page.url()
+  await openCaseTask(page, START_CONSULTATION_TASK)
+  let confirmation = null
+  for (
+    let attempt = 0;
+    attempt < 30 &&
+    (!confirmation ||
+      (confirmation.label === DEFAULT_TASK_COMPLETE_LABEL && attempt < 15));
+    attempt++
+  ) {
+    confirmation = await page.evaluate(
+      `(() => { ${XRM_FINDER}
+        const control = Xrm?.Page.getControl('${TASK_COMPLETE_FIELD}')
+        if (!control) return null
+        return {
+          label: control.getLabel(),
+          disabled: control.getDisabled(),
+          ticked: Xrm.Page.getAttribute('${TASK_COMPLETE_FIELD}').getValue() === true
+        }
+      })()`
+    )
+    if (!confirmation || confirmation.label === DEFAULT_TASK_COMPLETE_LABEL) {
+      await page.waitForTimeout(1_000)
+    }
+  }
+  if (!confirmation) {
+    throw new Error(
+      'The Start consultation task form did not load its confirmation checkbox'
+    )
+  }
+  let notices = await readFormMessages(page)
+  for (
+    let attempt = 0;
+    confirmation.disabled && !notices && attempt < 10;
+    attempt++
+  ) {
+    await page.waitForTimeout(1_000)
+    notices = await readFormMessages(page)
+  }
+  const task = {
+    confirmation,
+    explanation: await readWebResourceText(page, 'startconsultation'),
+    notices
+  }
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  return task
+}
+
+export async function waitForCaseTaskStatus(page, name, status) {
+  const caseUrl = page.url()
+  let rows = []
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    rows = await readCaseTaskRows(page).catch(() => [])
+    if (rows.includes(`${name} ${status}`)) {
+      return rows
+    }
+    await page.waitForTimeout(6_000)
+    await page.goto(caseUrl)
+    await page.waitForLoadState('load')
+  }
+  throw new Error(
+    `${name} never became "${status}". Tasks: ${rows.join(' | ')}`
+  )
+}
+
+export async function waitForCaseStatus(page, status) {
+  const caseUrl = page.url()
+  let current
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    current = await readCaseStatus(page)
+    if (current === status) {
+      return current
+    }
+    await page.waitForTimeout(6_000)
+    await page.goto(caseUrl)
+    await page.waitForLoadState('load')
+  }
+  return current
+}
+
+const MPP_TASKS_SETTLE_MS = 10_000
+const MPP_PARALLEL_TABS = 4
+
+function marinePlanPolicyTaskUrl(caseUrl, id) {
+  const url = new URL(caseUrl)
+  url.search = new URLSearchParams({
+    appid: url.searchParams.get('appid'),
+    pagetype: 'entityrecord',
+    etn: 'mmo_marineplanpolicyassessment',
+    id
+  }).toString()
+  return url.toString()
+}
+
+async function completeMarinePlanPolicyTasksInTabs(
+  page,
+  caseUrl,
+  tasks,
+  outcome,
+  reason
+) {
+  const queue = [...tasks]
+  const tabs = await Promise.all(
+    Array.from({ length: Math.min(MPP_PARALLEL_TABS, queue.length) }, () =>
+      page.context().newPage()
+    )
+  )
+  try {
+    await Promise.all(
+      tabs.map(async (tab) => {
+        await tab.goto(caseUrl)
+        await tab.waitForLoadState('load')
+        for (let task = queue.shift(); task; task = queue.shift()) {
+          await tab.goto(marinePlanPolicyTaskUrl(caseUrl, task.id))
+          await tab.waitForLoadState('load')
+          await completeMarinePlanPolicyTask(tab, outcome, reason)
+        }
+      })
+    )
+  } finally {
+    await Promise.all(tabs.map((tab) => tab.close().catch(() => {})))
+  }
+}
+
+export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
+  const caseUrl = page.url()
+  const completed = new Set()
+  let tasks = []
+  let stableChecks = 0
+  for (let check = 1; check <= 40; check++) {
+    const previousCount = tasks.length
+    tasks = await readMarinePlanPolicyTasks(page)
+    const pending = tasks.filter(
+      (task) => task.status !== 'Done' && !completed.has(task.code)
+    )
+    if (pending.length) {
+      await completeMarinePlanPolicyTasksInTabs(
+        page,
+        caseUrl,
+        pending,
+        outcome,
+        reason
+      )
+      pending.forEach((task) => completed.add(task.code))
+    }
+    if (pending.length) {
+      await page.goto(caseUrl)
+      await page.waitForLoadState('load')
+      stableChecks = 0
+      continue
+    }
+    const allDone = tasks.length > 0 && tasks.every((t) => t.status === 'Done')
+    stableChecks =
+      allDone && tasks.length === previousCount ? stableChecks + 1 : 0
+    if (stableChecks >= 3) {
+      return tasks.length
+    }
+    await page.waitForTimeout(MPP_TASKS_SETTLE_MS)
+  }
+  const done = tasks.filter((t) => t.status === 'Done').length
+  throw new Error(
+    `Only ${done} of ${tasks.length} marine plan policy tasks became Done`
+  )
+}
+
+const CONSULTEES_GRID = 'consultees_subgrid_new_1'
+const CONSULTEE_LOOKUP_INPUT = `input[data-id*="${CONSULTEE_FIELDS.organisation}"][data-id*="textInputBox"]`
+const CONSULTEE_FORM_MESSAGES =
+  '[role="alert"], [role="dialog"], [data-id*="errorMessage"]'
+
+async function waitForTaskForm(page) {
+  await page
+    .locator(`[data-id="${TASK_COMPLETE_FIELD}-FieldSectionItemContainer"]`)
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+async function readFormNotices(page) {
+  const texts = await page
+    .locator(CONSULTEE_FORM_MESSAGES)
+    .allInnerTexts()
+    .catch(() => [])
+  return [
+    ...new Set(
+      texts
+        .map((text) =>
+          text
+            .replace(/Press Alt \+ B to navigate to the notification/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+        )
+        .filter((text) => text && !/^You have \d+ notifications?\b/.test(text))
+    )
+  ]
+}
+
+async function readVisibleFieldLabels(page) {
+  return page.evaluate(
+    `(() => { ${XRM_FINDER}
+      return Xrm.Page.ui.controls.get()
+        .filter((c) => c.getVisible?.() !== false && !['webresource', 'subgrid'].includes(c.getControlType()) && c.getLabel())
+        .map((c) => c.getLabel())
+    })()`
+  )
+}
+
+export async function openPrepareForConsultationTask(page) {
+  const caseUrl = page.url()
+  await openCaseTask(page, PREPARE_FOR_CONSULTATION_TASK)
+  return { caseUrl, taskUrl: page.url() }
+}
+
+export async function readPrepareForConsultationTask(
+  page,
+  { expectLocked = false } = {}
+) {
+  await waitForTaskForm(page)
+  let task = null
+  for (let attempt = 0; !task && attempt < 30; attempt++) {
+    task = await page.evaluate(
+      `(() => { ${XRM_FINDER}
+        const control = Xrm?.Page.getControl('${TASK_COMPLETE_FIELD}')
+        const grid = Xrm?.Page.getControl('${CONSULTEES_GRID}')?.getGrid?.()
+        if (!control || !grid) return null
+        const total = grid.getTotalRecordCount()
+        if (total < 0 || grid.getRows().getLength() < Math.min(total, 50)) return null
+        return {
+          completeDisabled: control.getDisabled(),
+          consultees: grid.getRows().get().map((row) => ({
+            organisation: row.data.entity.attributes.get('${CONSULTEE_FIELDS.organisation}').getValue()?.[0]?.name,
+            type: row.data.entity.attributes.get('${CONSULTEE_FIELDS.consultationType}').getText()
+          }))
+        }
+      })()`
+    )
+    if (!task) {
+      await page.waitForTimeout(1_000)
+    }
+  }
+  if (
+    !task.completeDisabled &&
+    (expectLocked ||
+      (await readFormNotices(page)).some((notice) =>
+        /cannot start/i.test(notice)
+      ))
+  ) {
+    task.completeDisabled = await waitForTaskCompleteLocked(page)
+  }
+  return {
+    ...task,
+    columns: (
+      await page
+        .locator(
+          `[data-id="dataSetRoot_${CONSULTEES_GRID}"] [role="columnheader"]`
+        )
+        .allInnerTexts()
+    )
+      .map((text) => text.split('\n')[0].trim())
+      .filter((text) => /[a-z]/i.test(text) && !/^Status column/.test(text)),
+    addConsulteeShown: await isAddConsulteeShown(page, !task.completeDisabled),
+    notices: await waitForFormNotices(page, task.completeDisabled)
+  }
+}
+
+async function waitForTaskCompleteLocked(page) {
+  let locked = false
+  for (let attempt = 0; !locked && attempt < 20; attempt++) {
+    await page.waitForTimeout(1_000)
+    locked = await page.evaluate(
+      `(() => { ${XRM_FINDER} return Xrm?.Page.getControl('${TASK_COMPLETE_FIELD}')?.getDisabled?.() === true })()`
+    )
+  }
+  return locked
+}
+
+async function isAddConsulteeShown(page, expected) {
+  const addConsultee = page
+    .getByRole('menuitem', { name: /Add consultee/i })
+    .or(page.getByRole('button', { name: /Add consultee/i }))
+    .first()
+  if (!expected) {
+    return addConsultee.isVisible()
+  }
+  return addConsultee
+    .waitFor({ state: 'visible', timeout: 15_000 })
+    .then(() => true)
+    .catch(() => false)
+}
+
+async function waitForFormNotices(page, expected) {
+  let notices = await readFormNotices(page)
+  if (!expected) {
+    return notices
+  }
+  for (let attempt = 0; !notices.length && attempt < 15; attempt++) {
+    await page.waitForTimeout(1_000)
+    notices = await readFormNotices(page)
+  }
+  return notices
+}
+
+export async function openAddConsultee(page) {
+  await page
+    .getByRole('menuitem', { name: /Add consultee/i })
+    .or(page.getByRole('button', { name: /Add consultee/i }))
+    .first()
+    .click()
+  await page.waitForURL(/etn=mmo_consultee/, {
+    timeout: D365_NAVIGATION_TIMEOUT
+  })
+  await page
+    .locator(
+      `[data-id="${CONSULTEE_FIELDS.consultationType}-FieldSectionItemContainer"]`
+    )
+    .waitFor({ state: 'visible', timeout: D365_RENDER_TIMEOUT })
+}
+
+export function readConsulteeFormFields(page) {
+  return readVisibleFieldLabels(page)
+}
+
+export async function searchConsulteeOrganisations(page, text) {
+  const input = page.locator(CONSULTEE_LOOKUP_INPUT).first()
+  await input.click()
+  await input.fill('')
+  await input.pressSequentially(text, { delay: 60 })
+  let results = []
+  for (let attempt = 0; attempt < 8; attempt++) {
+    await page.waitForTimeout(1_000)
+    results = (
+      await page
+        .locator('[data-id*="LookupResultsDropdown"] li')
+        .allInnerTexts()
+    )
+      .map((result) => result.replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+    if (results.length) break
+  }
+  await page.keyboard.press('Escape')
+  await input.fill('')
+  return results
+}
+
+export async function fillConsultee(page, consultee) {
+  await page.evaluate(
+    `(() => { ${XRM_FINDER}
+      const consultee = ${JSON.stringify(consultee)}
+      const fields = ${JSON.stringify(CONSULTEE_FIELDS)}
+      if (consultee.organisationId) {
+        const organisation = Xrm.Page.getAttribute(fields.organisation)
+        organisation.setValue([{ id: consultee.organisationId, name: consultee.organisationName, entityType: 'account' }])
+        organisation.fireOnChange()
+      }
+      if (consultee.type) {
+        const type = Xrm.Page.getAttribute(fields.consultationType)
+        type.setValue(type.getOptions().find((o) => o.text === consultee.type).value)
+        type.fireOnChange()
+      }
+      if (consultee.notes) {
+        const notes = Xrm.Page.getAttribute(fields.notes)
+        notes.setValue(consultee.notes)
+        notes.fireOnChange()
+      }
+    })()`
+  )
+  await page.waitForTimeout(1_500)
+}
+
+export async function saveConsultee(page, taskUrl) {
+  let saved = false
+  let notices = []
+  for (let attempt = 1; attempt <= 3 && !saved; attempt++) {
+    await page.locator(MPP_SAVE_AND_CLOSE).first().click()
+    try {
+      await page.waitForURL(
+        (url) => !/etn=mmo_consultee/.test(url.toString()),
+        { timeout: 15_000 }
+      )
+      saved = true
+    } catch {
+      notices = await readFormNotices(page)
+      if (notices.length) break
+    }
+  }
+  await page.goto(taskUrl)
+  await page.waitForLoadState('load')
+  await waitForTaskForm(page)
+  return { saved, notices: saved ? [] : notices }
+}
+
+export async function addConsultee(page, taskUrl, consultee) {
+  let result
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await openAddConsultee(page)
+    await fillConsultee(page, consultee)
+    result = await saveConsultee(page, taskUrl)
+    if (result.saved || result.notices.length) {
+      return result
+    }
+    await page.reload()
+    await page.waitForLoadState('load')
+    await waitForTaskForm(page)
+  }
+  return result
+}
+
+export async function savePrepareForConsultationTask(
+  page,
+  caseUrl,
+  { complete }
+) {
+  await page.goto(caseUrl)
+  await page.waitForLoadState('load')
+  await openCaseTask(page, PREPARE_FOR_CONSULTATION_TASK)
+  const taskId = new URL(page.url()).searchParams.get('id').replace(/[{}]/g, '')
+  await setTaskComplete(page, complete)
+  await saveAndCloseTask(page, caseUrl)
+  return readTaskStatus(page, taskId, complete ? 'Done' : 'In Progress')
+}
+
+export async function saveStartConsultationTask(page, { confirm }) {
+  const caseUrl = page.url()
+  await openCaseTask(page, START_CONSULTATION_TASK)
+  if (confirm) {
+    await setTaskComplete(page, true)
+  }
+  await saveAndCloseTask(page, caseUrl)
 }
