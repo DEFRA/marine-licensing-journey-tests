@@ -96,12 +96,12 @@ Feature: LCML: View details page shows sites and activities
     And the case shows the "Water Framework Directive" tab in the tab strip
     And the Water Framework Directive tab shows the applicant's answers, guidance and the uploaded assessment
 
-  @real-defra-id @d365 @shared-marine-licence @issue=ML-1434 @issue=ML-1435
+  @real-defra-id @d365 @shared-marine-licence @issue=ML-1434 @issue=ML-1435 @issue=ML-1537
   Scenario: The Sites and activities and Marine plan policies tabs show the submitted data from CDP
     Given the shared submitted marine licence
     When the internal user opens the submitted case in D365
     Then the case shows the "Sites and activities" tab in the tab strip
-    And the Sites and activities tab shows the uploaded site location and the site and activity details
+    And the Sites and activities tab shows the uploaded site location, the site and activity details, and the construction drawings as download links in upload order
     And the case shows the "Marine plan policies" tab in the tab strip
     And the Marine plan policies tab shows the policy list, policy information and the applicant's consideration
     And selecting the second policy updates the policy detail
