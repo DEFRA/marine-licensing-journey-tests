@@ -128,12 +128,12 @@ Feature: LCML: Marine plan policies
     And the user answers "Yes" and continues from the review page
     Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
 
-  @issue=ML-1261
-  Scenario: Answering No returns to the task list without re-querying and resets the tasks
+  @issue=ML-1261 @issue=ML-1638
+  Scenario: Answering No returns to the task list and keeps the marine plan policy considerations
     Given an organisation user has completed the site details for a marine licence application
     And the user opens the review site details page from the task list
     When the user answers "No" and continues from the review page
-    Then the "Marine plan policy considerations" task is "Cannot start yet" and is not a link
+    Then the "Marine plan policy considerations" task is "Not yet started" and shows the number of policies to complete
     And the "Sites and activities" task has status "In progress"
 
   @issue=ML-1261
