@@ -23,7 +23,10 @@ import {
   enterPolygonCoordinatesWGS84,
   enterPolygonCoordinatesOSGB36
 } from './site-details-flow.js'
-import LcmlPublicRegisterPage from '../pages/lcml.public.register.page.js'
+import LcmlPublicRegisterPage, {
+  PUBLIC_REGISTER_TASK,
+  WITHHOLD_REASONS
+} from '../pages/lcml.public.register.page.js'
 import WaterFrameworkDirectivePage from '../pages/water.framework.directive.page.js'
 
 export const WFD_ASSESSMENT_FILE = 'test/resources/WFD.odt'
@@ -208,14 +211,16 @@ export async function completePreferredDates(page) {
 
 export async function completeSharingConsent(page, answer) {
   await page
-    .getByRole('link', { name: 'Public register', exact: true })
+    .getByRole('link', { name: PUBLIC_REGISTER_TASK, exact: true })
     .first()
     .click()
   await page.waitForLoadState('load')
 
   const publicRegister = new LcmlPublicRegisterPage(page)
   const withhold = answer !== 'Yes'
-  const reason = withhold ? faker.lorem.sentence() : undefined
+  const reason = withhold
+    ? faker.helpers.arrayElement(Object.keys(WITHHOLD_REASONS))
+    : undefined
   await publicRegister.completeAndSave(withhold, reason)
   await page.waitForLoadState('load')
   return reason

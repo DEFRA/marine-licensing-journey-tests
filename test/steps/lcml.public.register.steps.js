@@ -1,8 +1,9 @@
 import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import LcmlPublicRegisterPage from '../pages/lcml.public.register.page.js'
+import LcmlPublicRegisterPage, {
+  PUBLIC_REGISTER_TASK
+} from '../pages/lcml.public.register.page.js'
 
-const TASK_LINK = 'Public register'
 const CARD_ID = '#public-register-card'
 
 function cardRow(page, label) {
@@ -12,27 +13,28 @@ function cardRow(page, label) {
 }
 
 async function openPublicRegisterTask(page) {
-  await page.getByRole('link', { name: TASK_LINK, exact: true }).first().click()
+  await page
+    .getByRole('link', { name: PUBLIC_REGISTER_TASK, exact: true })
+    .first()
+    .click()
   await page.waitForLoadState('load')
 }
 
-When('the user opens the Public register task', async function () {
-  await openPublicRegisterTask(this.page)
-})
+When(
+  'the user opens the Information published on the public register task',
+  async function () {
+    await openPublicRegisterTask(this.page)
+  }
+)
 
 When(
-  'the user saves {string} with details {string} on the Public register page',
-  async function (answer, details) {
+  'the user saves {string} with reason {string} on the public register page',
+  async function (answer, reason) {
     await openPublicRegisterTask(this.page)
-    const publicRegister = new LcmlPublicRegisterPage(this.page)
-
-    if (answer) {
-      await publicRegister.selectWithhold(answer === 'Yes')
-    }
-    if (details) {
-      await publicRegister.reasonTextarea.fill(details)
-    }
-    await publicRegister.saveAndContinue.click()
+    await new LcmlPublicRegisterPage(this.page).completeAndSave(
+      answer === 'Yes',
+      reason
+    )
     await this.page.waitForLoadState('load')
   }
 )
@@ -43,28 +45,36 @@ Then('the page asks {string}', async function (question) {
   ).toBeVisible({ timeout: 30_000 })
 })
 
-Then('the withholding details field is hidden', async function () {
-  await new LcmlPublicRegisterPage(this.page).expectReasonNotVisible()
+Then('the withholding reasons are hidden', async function () {
+  await new LcmlPublicRegisterPage(this.page).expectReasonsNotVisible()
 })
 
 Then(
-  'selecting {string} reveals the withholding details field with a {int} character limit',
-  async function (answer, limit) {
+  'selecting {string} reveals the withholding reasons {string} and {string}',
+  async function (answer, firstReason, secondReason) {
     const publicRegister = new LcmlPublicRegisterPage(this.page)
     await publicRegister.selectWithhold(answer === 'Yes')
-    await expect(publicRegister.reasonTextarea).toBeVisible({ timeout: 30_000 })
-    await expect(
-      this.page.locator('.govuk-character-count').first()
-    ).toHaveAttribute('data-maxlength', String(limit), { timeout: 30_000 })
+    const labels = await publicRegister.withholdReasonRadios.evaluateAll(
+      (radios) =>
+        radios.map((radio) =>
+          document.querySelector(`label[for="${radio.id}"]`).innerText.trim()
+        )
+    )
+    expect(labels).toEqual([firstReason, secondReason])
+    for (const label of labels) {
+      await expect(publicRegister.withholdReason(label)).toBeVisible({
+        timeout: 30_000
+      })
+    }
   }
 )
 
 Then(
-  'selecting {string} hides the withholding details field',
+  'selecting {string} hides the withholding reasons',
   async function (answer) {
     const publicRegister = new LcmlPublicRegisterPage(this.page)
     await publicRegister.selectWithhold(answer === 'Yes')
-    await publicRegister.expectReasonNotVisible()
+    await publicRegister.expectReasonsNotVisible()
   }
 )
 
