@@ -934,6 +934,44 @@ export async function readSitesAndActivitiesMeta(page) {
   }, SITES_ACTIVITIES_WEBRESOURCE_ID)
 }
 
+export async function readSitesAndActivitiesSections(page) {
+  return page.evaluate((frameId) => {
+    const doc = document.getElementById(frameId)?.contentDocument
+    if (!doc) return null
+    const sections = []
+    for (const el of doc.querySelectorAll(
+      'h2.mmo-sa-subtitle, .mmo-sa-field'
+    )) {
+      if (el.matches('h2.mmo-sa-subtitle')) {
+        sections.push({ title: el.innerText.trim(), fields: [] })
+        continue
+      }
+      const label = el.querySelector('.mmo-sa-label')?.innerText.trim()
+      const file = el.querySelector('button.mmo-file-download')
+      sections.at(-1)?.fields.push({
+        label,
+        value: el.innerText.replace(label ?? '', '').trim(),
+        file: file
+          ? { name: file.innerText.trim(), link: file.matches('.mmo-doc-link') }
+          : null
+      })
+    }
+    return sections
+  }, SITES_ACTIVITIES_WEBRESOURCE_ID)
+}
+
+export async function downloadSitesAndActivitiesFile(page, fileName) {
+  const button = page
+    .frameLocator(`#${SITES_ACTIVITIES_WEBRESOURCE_ID}`)
+    .locator('button.mmo-file-download', { hasText: fileName })
+    .first()
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 60_000 }),
+    button.click()
+  ])
+  return download
+}
+
 export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
   'WebResource_marineplanpolicies'
 

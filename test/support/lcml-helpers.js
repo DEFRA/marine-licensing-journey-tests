@@ -943,7 +943,8 @@ export async function completeMarineAreaShapefileApp(world, opts = {}) {
   await completeSiteDetailsViaFileUpload(
     world,
     'Shapefile',
-    MARINE_AREA_SHAPEFILE
+    MARINE_AREA_SHAPEFILE,
+    opts.activity ?? {}
   )
   world.data.siteType = 'upload'
 }
@@ -1221,6 +1222,56 @@ export async function openPublicViewDetailsAsExternalUser(world) {
   await world.browserContext.clearCookies()
   await world.page.goto(publicViewDetailsUrl(marineLicenceId))
   await world.page.waitForLoadState('load')
+}
+
+export const SECOND_CONSTRUCTION_DRAWING_FILE =
+  'test/resources/site-notice-close-up.png'
+
+export async function addAnotherConstructionDrawing(
+  page,
+  siteNumber,
+  drawingNumber,
+  filePath
+) {
+  await page
+    .locator(`#add-another-construction-drawing-site-${siteNumber}`)
+    .click()
+  await page.waitForLoadState('load')
+  await page
+    .locator(
+      `a[href*="upload-construction-drawing"][href*="drawing=${drawingNumber}"][href*="action=add"]`
+    )
+    .first()
+    .click()
+  await page.waitForURL(/upload-construction-drawing/, { timeout: 30_000 })
+  await uploadFile(page, filePath)
+  await page.waitForURL(
+    (url) => url.toString().includes('review-site-details'),
+    { timeout: 60_000 }
+  )
+  await page.waitForLoadState('load')
+}
+
+export async function addSecondConstructionDrawingToSite1(world) {
+  const page = world.page
+  await page.locator('a:has-text("Sites and activities")').click()
+  await page.waitForURL(
+    (url) => url.toString().includes('review-site-details'),
+    { timeout: 30_000 }
+  )
+  await addAnotherConstructionDrawing(
+    page,
+    1,
+    2,
+    SECOND_CONSTRUCTION_DRAWING_FILE
+  )
+  await finishSiteDetailsAndContinue(page)
+  world.data.constructionDrawings = {
+    'Site 1': [
+      CONSTRUCTION_DRAWING_FILE.split('/').pop(),
+      SECOND_CONSTRUCTION_DRAWING_FILE.split('/').pop()
+    ]
+  }
 }
 
 export async function addAnotherCircularSite(world) {
