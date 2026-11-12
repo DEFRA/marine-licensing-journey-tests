@@ -3,6 +3,7 @@ import { tmpdir } from 'os'
 import path from 'path'
 import {
   completeMarineAreaShapefileApp,
+  addSecondConstructionDrawingToSite1,
   submitMarineLicence
 } from './lcml-helpers.js'
 import { WFD_VARIATIONS } from './lcml-wfd.js'
@@ -56,8 +57,10 @@ async function releaseLock() {
 
 async function createSharedMarineLicence(world) {
   await completeMarineAreaShapefileApp(world, {
-    wfd: SHARED_WFD_VARIATION.wfd
+    wfd: SHARED_WFD_VARIATION.wfd,
+    activity: { topLevel: 'Construction', subOptionIndex: 0 }
   })
+  await addSecondConstructionDrawingToSite1(world)
   await submitMarineLicence(world)
   world.data.wfdVariation = SHARED_WFD_VARIATION
   return world.data

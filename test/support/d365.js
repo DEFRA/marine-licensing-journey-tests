@@ -934,6 +934,44 @@ export async function readSitesAndActivitiesMeta(page) {
   }, SITES_ACTIVITIES_WEBRESOURCE_ID)
 }
 
+export async function readSitesAndActivitiesSections(page) {
+  return page.evaluate((frameId) => {
+    const doc = document.getElementById(frameId)?.contentDocument
+    if (!doc) return null
+    const sections = []
+    for (const el of doc.querySelectorAll(
+      'h2.mmo-sa-subtitle, .mmo-sa-field'
+    )) {
+      if (el.matches('h2.mmo-sa-subtitle')) {
+        sections.push({ title: el.innerText.trim(), fields: [] })
+        continue
+      }
+      const label = el.querySelector('.mmo-sa-label')?.innerText.trim()
+      const file = el.querySelector('button.mmo-file-download')
+      sections.at(-1)?.fields.push({
+        label,
+        value: el.innerText.replace(label ?? '', '').trim(),
+        file: file
+          ? { name: file.innerText.trim(), link: file.matches('.mmo-doc-link') }
+          : null
+      })
+    }
+    return sections
+  }, SITES_ACTIVITIES_WEBRESOURCE_ID)
+}
+
+export async function downloadSitesAndActivitiesFile(page, fileName) {
+  const button = page
+    .frameLocator(`#${SITES_ACTIVITIES_WEBRESOURCE_ID}`)
+    .locator('button.mmo-file-download', { hasText: fileName })
+    .first()
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 60_000 }),
+    button.click()
+  ])
+  return download
+}
+
 export const MARINE_PLAN_POLICIES_WEBRESOURCE_ID =
   'WebResource_marineplanpolicies'
 
@@ -2108,7 +2146,8 @@ export async function waitForCaseStatus(page, status) {
 }
 
 const MPP_TASKS_SETTLE_MS = 10_000
-const MPP_PARALLEL_TABS = 4
+const MPP_PARALLEL_TABS = 2
+const MPP_TASK_ATTEMPTS = 2
 
 function marinePlanPolicyTaskUrl(caseUrl, id) {
   const url = new URL(caseUrl)
@@ -2129,26 +2168,42 @@ async function completeMarinePlanPolicyTasksInTabs(
   reason
 ) {
   const queue = [...tasks]
-  const tabs = await Promise.all(
-    Array.from({ length: Math.min(MPP_PARALLEL_TABS, queue.length) }, () =>
-      page.context().newPage()
+  const completed = []
+  const openTab = async () => {
+    const tab = await page.context().newPage()
+    await tab.goto(caseUrl)
+    await tab.waitForLoadState('load')
+    return tab
+  }
+  const completeInTab = async () => {
+    let tab = await openTab()
+    try {
+      for (let task = queue.shift(); task; task = queue.shift()) {
+        for (let attempt = 1; ; attempt++) {
+          try {
+            await tab.goto(marinePlanPolicyTaskUrl(caseUrl, task.id))
+            await tab.waitForLoadState('load')
+            await completeMarinePlanPolicyTask(tab, outcome, reason)
+            completed.push(task.code)
+            break
+          } catch (error) {
+            if (attempt === MPP_TASK_ATTEMPTS) throw error
+            await tab.close().catch(() => {})
+            tab = await openTab()
+          }
+        }
+      }
+    } finally {
+      await tab.close().catch(() => {})
+    }
+  }
+  await Promise.all(
+    Array.from(
+      { length: Math.min(MPP_PARALLEL_TABS, queue.length) },
+      completeInTab
     )
   )
-  try {
-    await Promise.all(
-      tabs.map(async (tab) => {
-        await tab.goto(caseUrl)
-        await tab.waitForLoadState('load')
-        for (let task = queue.shift(); task; task = queue.shift()) {
-          await tab.goto(marinePlanPolicyTaskUrl(caseUrl, task.id))
-          await tab.waitForLoadState('load')
-          await completeMarinePlanPolicyTask(tab, outcome, reason)
-        }
-      })
-    )
-  } finally {
-    await Promise.all(tabs.map((tab) => tab.close().catch(() => {})))
-  }
+  return completed
 }
 
 export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
@@ -2163,14 +2218,14 @@ export async function completeAllMarinePlanPolicyTasks(page, outcome, reason) {
       (task) => task.status !== 'Done' && !completed.has(task.code)
     )
     if (pending.length) {
-      await completeMarinePlanPolicyTasksInTabs(
+      const saved = await completeMarinePlanPolicyTasksInTabs(
         page,
         caseUrl,
         pending,
         outcome,
         reason
       )
-      pending.forEach((task) => completed.add(task.code))
+      saved.forEach((code) => completed.add(code))
     }
     if (pending.length) {
       await page.goto(caseUrl)

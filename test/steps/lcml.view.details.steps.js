@@ -1,3 +1,4 @@
+import { stat } from 'fs/promises'
 import { Given, When, Then, After } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { getConfig } from '../support/config.js'
@@ -37,6 +38,8 @@ import {
   readWfdTabAnswers,
   openSitesAndActivitiesTab,
   readSitesAndActivitiesMeta,
+  readSitesAndActivitiesSections,
+  downloadSitesAndActivitiesFile,
   openMarinePlanPoliciesTab,
   readMarinePlanPoliciesMeta,
   selectMarinePlanPolicy,
@@ -918,8 +921,10 @@ Then(
   }
 )
 
+const isDrawing = (field) => /^Construction drawing/.test(field.label ?? '')
+
 Then(
-  'the Sites and activities tab shows the uploaded site location and the site and activity details',
+  'the Sites and activities tab shows the uploaded site location, the site and activity details, and the construction drawings as download links in upload order',
   { timeout: D365_STEP_TIMEOUT },
   async function () {
     const page = this.d365Page
@@ -947,7 +952,6 @@ Then(
     expect(meta.subtitles).toContain('Site 1')
     expect(meta.subtitles.some((s) => /Site 1 . Activity 1/.test(s))).toBe(true)
 
-    // The tab reflects the exact values submitted by the applicant (from CDP).
     const activity = this.data.activity
     expect(meta.bodyText).toContain(this.data.siteName)
     expect(meta.bodyText).toContain(
@@ -956,6 +960,25 @@ Then(
     expect(
       meta.subActivities.some((s) => s.includes(activity.checkbox.label))
     ).toBe(true)
+
+    const sections = await readSitesAndActivitiesSections(page)
+    const fields = sections.flatMap((section) =>
+      section.fields.map((field) => ({ ...field, section: section.title }))
+    )
+    const drawings = this.data.constructionDrawings['Site 1']
+    expect(fields.filter(isDrawing)).toEqual(
+      drawings.map((name, index) => ({
+        section: 'Site 1',
+        label: `Construction drawing ${index + 1}`,
+        value: name,
+        file: { name, link: true }
+      }))
+    )
+    for (const name of drawings) {
+      const download = await downloadSitesAndActivitiesFile(page, name)
+      expect(download.suggestedFilename()).toBe(name)
+      expect((await stat(await download.path())).size).toBeGreaterThan(0)
+    }
   }
 )
 
