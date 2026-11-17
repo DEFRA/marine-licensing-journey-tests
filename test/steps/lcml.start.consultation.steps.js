@@ -34,11 +34,26 @@ import { loginWithRealDefraId, acceptCookies } from '../support/auth.js'
 import ConsultationsPage from '../pages/consultations.page.js'
 
 const CONSULTATION_TIMEOUT = 1_800_000
-const CONSULTEE = {
+const CONSULTEE_ORGANISATION = {
   organisationId: '12db77a8-3f24-f111-8341-000d3a495719',
-  organisationName: 'Test name',
-  type: 'Request for advice',
-  notes: 'Journey test advice requested from the consultee.'
+  organisationName: 'Test name'
+}
+const CONSULTATION_TYPES = {
+  'request for advice': {
+    type: 'Request for advice',
+    notes: 'Journey test advice requested from the consultee.',
+    path: /^\/marine-licence\/request-for-advice\/[a-f0-9]{24}$/,
+    heading: 'Request for advice for a marine licence application',
+    respond: (main) =>
+      main.locator('.govuk-button', { hasText: 'Respond to the request' })
+  },
+  'application notification': {
+    type: 'Application notification',
+    path: /^\/marine-licence\/notification-of-application\/[a-f0-9]{24}$/,
+    heading: 'Notification of a marine licence application',
+    respond: (main) =>
+      main.getByRole('link', { name: 'Respond to the notification' })
+  }
 }
 const NOT_A_CONSULTEE = 'Dredging Co'
 const CONSULTEE_RESPONSE =
@@ -54,6 +69,11 @@ const EXPLANATION = [
   'Application notifications and requests for advice are sent to the organisations you selected in Prepare for consultation',
   'The case status changes to Consultation.'
 ]
+
+function consulteeFor(consultationType) {
+  const { type, notes } = CONSULTATION_TYPES[consultationType]
+  return { ...CONSULTEE_ORGANISATION, type, ...(notes && { notes }) }
+}
 
 function acceptLeavePrompts(page) {
   page.on('dialog', (dialog) => dialog.accept().catch(() => {}))
@@ -97,9 +117,9 @@ async function checkAddConsultee(page, taskUrl) {
   const notFlagged = await searchConsulteeOrganisations(page, NOT_A_CONSULTEE)
   const flagged = await searchConsulteeOrganisations(
     page,
-    CONSULTEE.organisationName
+    CONSULTEE_ORGANISATION.organisationName
   )
-  await fillConsultee(page, CONSULTEE)
+  await fillConsultee(page, consulteeFor('request for advice'))
   const adviceFields = await readConsulteeFormFields(page)
   await fillConsultee(page, { type: 'Application notification' })
   const notificationFields = await readConsulteeFormFields(page)
@@ -133,9 +153,9 @@ async function completeAssessmentTasks(page, caseUrl) {
 }
 
 When(
-  'the caseworker starts a consultation in D365 and the consultee responds to the request for advice',
+  /^the caseworker starts a consultation in D365 and the consultee responds to the (request for advice|application notification)$/,
   { timeout: CONSULTATION_TIMEOUT },
-  async function () {
+  async function (consultationType) {
     const { browser, page } = await launchD365Browser()
     this.d365Browser = browser
     this.d365Page = page
@@ -143,7 +163,7 @@ When(
     await loginToD365(page)
     await verifyD365Login(page)
     await openMarineLicenceCaseInD365(page, this.data.applicationReference)
-    const consultation = {}
+    const consultation = { consultationType }
     this.data.consultation = consultation
 
     consultation.prepareBeforeSiteCheck = await prepareSnapshot(page)
@@ -164,7 +184,11 @@ When(
     consultation.startBeforePreparation = await startConsultationSnapshot(page)
 
     await returnTo(page, taskUrl)
-    consultation.consulteeAdded = await addConsultee(page, taskUrl, CONSULTEE)
+    consultation.consulteeAdded = await addConsultee(
+      page,
+      taskUrl,
+      consulteeFor(consultationType)
+    )
     consultation.consultees = (
       await readPrepareForConsultationTask(page)
     ).consultees
@@ -199,7 +223,10 @@ When(
       caseStatus: await waitForCaseStatus(page, 'Consultation')
     }
 
-    consultation.consultee = await respondAsConsultee(this)
+    consultation.consultee = await respondAsConsultee(
+      this,
+      CONSULTATION_TYPES[consultationType]
+    )
   }
 )
 
@@ -230,7 +257,9 @@ Then(
     const { notFlagged, flagged, adviceFields, notificationFields } =
       this.data.consultation.addConsultee
     expect(notFlagged.join(' | ')).not.toContain(NOT_A_CONSULTEE)
-    expect(flagged.join(' | ')).toContain(CONSULTEE.organisationName)
+    expect(flagged.join(' | ')).toContain(
+      CONSULTEE_ORGANISATION.organisationName
+    )
     expect(adviceFields).toEqual(
       expect.arrayContaining(['Organisation', 'Consultation type', NOTES_FIELD])
     )
@@ -245,6 +274,7 @@ Then(
   'Prepare for consultation was "In Progress" when saved unticked and "Done" when saved ticked',
   function () {
     const {
+      consultationType,
       consulteeAdded,
       consultees,
       prepareSavedUnticked,
@@ -252,7 +282,10 @@ Then(
     } = this.data.consultation
     expect(consulteeAdded.saved, consulteeAdded.notices.join(' | ')).toBe(true)
     expect(consultees).toEqual([
-      { organisation: CONSULTEE.organisationName, type: CONSULTEE.type }
+      {
+        organisation: CONSULTEE_ORGANISATION.organisationName,
+        type: CONSULTATION_TYPES[consultationType].type
+      }
     ])
     expect(prepareSavedUnticked).toBe('In Progress')
     expect(prepareSavedTicked).toBe('Done')
@@ -394,7 +427,7 @@ async function readDashboard(dashboard, reference) {
     currentHeaderLink: await dashboard.currentHeaderLink.innerText(),
     phaseBannerShown: await dashboard.phaseBanner.isVisible(),
     organisationShown: await dashboard
-      .organisationName(CONSULTEE.organisationName)
+      .organisationName(CONSULTEE_ORGANISATION.organisationName)
       .isVisible(),
     headers,
     sortControls: await dashboard.headerSortControls(),
@@ -403,7 +436,7 @@ async function readDashboard(dashboard, reference) {
   }
 }
 
-async function openRequest(page, dashboard, projectName) {
+async function openRequest(page, dashboard, projectName, consultationType) {
   await dashboard.rows
     .getByRole('link', { name: projectName, exact: true })
     .click()
@@ -416,9 +449,7 @@ async function openRequest(page, dashboard, projectName) {
     backHref: await page
       .getByRole('link', { name: 'Back', exact: true })
       .getAttribute('href'),
-    respondButtons: await main
-      .locator('.govuk-button', { hasText: 'Respond to the request' })
-      .count(),
+    respondActions: await consultationType.respond(main).count(),
     response: await main
       .locator('h2:has-text("Your response") + p')
       .innerText()
@@ -426,18 +457,21 @@ async function openRequest(page, dashboard, projectName) {
   }
 }
 
-async function respondAsConsultee(world) {
+async function respondAsConsultee(world, consultationType) {
   const reference = world.data.applicationReference
   const { projectName } = world.data
   try {
     const page = await signInAsConsultee(world)
     let dashboard = await waitForConsultationRow(page, reference)
     const before = await readDashboard(dashboard, reference)
-    const request = await openRequest(page, dashboard, projectName)
+    const request = await openRequest(
+      page,
+      dashboard,
+      projectName,
+      consultationType
+    )
 
-    await page
-      .locator('main .govuk-button', { hasText: 'Respond to the request' })
-      .click()
+    await consultationType.respond(page.locator('main')).click()
     await page.waitForURL(/\/consultation-response\//)
     const responsePage = {
       caption: await page.locator('main .govuk-caption-l').innerText(),
@@ -449,7 +483,12 @@ async function respondAsConsultee(world) {
 
     dashboard = new ConsultationsPage(page)
     const after = await readDashboard(dashboard, reference)
-    const requestAfterResponse = await openRequest(page, dashboard, projectName)
+    const requestAfterResponse = await openRequest(
+      page,
+      dashboard,
+      projectName,
+      consultationType
+    )
     return { before, request, responsePage, after, requestAfterResponse }
   } finally {
     await world.consulteeContext?.close()
@@ -457,14 +496,15 @@ async function respondAsConsultee(world) {
 }
 
 Then(
-  'the consultee\'s Consultations dashboard showed the request for advice as "Response needed", and as "Responded" with their response once they had responded',
-  function () {
+  /^the consultee's Consultations dashboard showed the (request for advice|application notification) as "([^"]+)", and as "Responded" with their response once they had responded$/,
+  function (consultationType, statusBeforeResponding) {
     const { before, request, responsePage, after, requestAfterResponse } =
       this.data.consultation.consultee
+    const { type, path, heading } = CONSULTATION_TYPES[consultationType]
     const { projectName, applicationReference } = this.data
     const dashboardRow = (status) => ({
       'Application name': projectName,
-      Type: CONSULTEE.type,
+      Type: type,
       Reference: applicationReference,
       Status: status,
       Received: todayInLondon()
@@ -484,16 +524,14 @@ Then(
     )
     expect(before.sortControls).toBe(0)
     expect(before.received).toEqual([...before.received].sort((a, b) => b - a))
-    expect(before.row).toEqual([dashboardRow('Response needed')])
+    expect(before.row).toEqual([dashboardRow(statusBeforeResponding)])
 
     expect(request).toEqual({
-      path: expect.stringMatching(
-        /^\/marine-licence\/request-for-advice\/[a-f0-9]{24}$/
-      ),
+      path: expect.stringMatching(path),
       caption: projectName,
-      heading: 'Request for advice for a marine licence application',
+      heading,
       backHref: '/consultations',
-      respondButtons: 1,
+      respondActions: 1,
       response: null
     })
     expect(responsePage).toEqual({
@@ -504,7 +542,7 @@ Then(
     expect(after.row).toEqual([dashboardRow('Responded')])
     expect(requestAfterResponse).toEqual({
       ...request,
-      respondButtons: 0,
+      respondActions: 0,
       response: CONSULTEE_RESPONSE
     })
   }
