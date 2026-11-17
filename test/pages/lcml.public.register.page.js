@@ -3,6 +3,9 @@ import { expect } from '@playwright/test'
 export const PUBLIC_REGISTER_TASK =
   'Information published on the public register'
 
+export const NATIONAL_SECURITY_PATH =
+  '/marine-licence/withholding-information-national-security'
+
 export const WITHHOLD_REASONS = {
   'National security reasons': 'nationalSecurity',
   'Commercial or industrial confidentiality reasons':
@@ -23,6 +26,22 @@ export default class LcmlPublicRegisterPage {
     this.withholdError = page.locator('#withholdConsent-error')
     this.withholdReasonError = page.locator('#withholdReason-error')
     this.projectNameCaption = page.locator('span.govuk-caption-l')
+  }
+
+  nationalSecurityApproval(answer) {
+    return this.page.locator(
+      `input[name="nationalSecurityApproval"][value="${answer.toLowerCase()}"]`
+    )
+  }
+
+  isOnNationalSecurityPage() {
+    return new URL(this.page.url()).pathname === NATIONAL_SECURITY_PATH
+  }
+
+  async saveNationalSecurityApproval(answer) {
+    await this.nationalSecurityApproval(answer).check()
+    await this.saveAndContinue.click()
+    await this.page.waitForLoadState('load')
   }
 
   withholdReason(label) {

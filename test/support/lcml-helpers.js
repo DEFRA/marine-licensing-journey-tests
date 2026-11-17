@@ -223,6 +223,15 @@ export async function completeSharingConsent(page, answer) {
     : undefined
   await publicRegister.completeAndSave(withhold, reason)
   await page.waitForLoadState('load')
+  if (publicRegister.isOnNationalSecurityPage()) {
+    await publicRegister.saveNationalSecurityApproval('No')
+    if (!/marine-licence\/task-list/.test(page.url())) {
+      await page.goto(
+        new URL('/marine-licence/task-list', page.url()).toString()
+      )
+    }
+    await waitForTaskList(page)
+  }
   return reason
 }
 
