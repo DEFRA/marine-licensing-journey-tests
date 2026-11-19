@@ -2,6 +2,8 @@ import path from 'path'
 
 export const MARINE_PLAN_POLICIES_PATH = '/marine-licence/marine-plan-policies'
 export const SUPPORTING_DOCUMENTS_TASK = 'Upload supporting documents'
+export const SUPPORTING_DOCUMENTS_REVIEW_PATH =
+  '/marine-licence/marine-plan-policy/supporting-documents-review'
 const LOCATION_LABEL = 'Where is the information in this document?'
 
 export default class LcmlSupportingDocumentsPage {
@@ -65,11 +67,78 @@ export default class LcmlSupportingDocumentsPage {
     }
   }
 
-  async openUploadTask() {
+  async openSupportingDocumentsTask() {
     await this.page
       .getByRole('link', { name: SUPPORTING_DOCUMENTS_TASK })
       .click()
     await this.page.waitForLoadState('load')
+    return new URL(this.page.url()).pathname
+  }
+
+  async openUploadTask() {
+    const landedOn = await this.openSupportingDocumentsTask()
+    if (landedOn === SUPPORTING_DOCUMENTS_REVIEW_PATH) {
+      await this.page
+        .getByRole('button', { name: 'Add another document' })
+        .click()
+      await this.page.waitForLoadState('load')
+    }
+    return landedOn
+  }
+
+  reviewCards() {
+    return this.page.locator('main .govuk-summary-card').evaluateAll((cards) =>
+      cards.map((card) => {
+        const row = (key) =>
+          [...card.querySelectorAll('.govuk-summary-list__row')].find(
+            (r) => r.querySelector('dt').innerText.trim() === key
+          )
+        return {
+          title: card
+            .querySelector('.govuk-summary-card__title')
+            .innerText.trim(),
+          type: row('Type')
+            .querySelector('.govuk-summary-list__value')
+            .innerText.trim(),
+          policies: [
+            ...row('Policies').querySelectorAll('.govuk-summary-list__value li')
+          ].map((li) => li.innerText.trim())
+        }
+      })
+    )
+  }
+
+  async changeOnReview(cardNumber, rowKey) {
+    await this.page
+      .locator(`#document-card-${cardNumber} .govuk-summary-list__row`, {
+        has: this.page.locator('dt', { hasText: rowKey })
+      })
+      .getByRole('link', { name: /Change/ })
+      .click()
+    await this.page.waitForLoadState('load')
+  }
+
+  async continueFromReview() {
+    await this.page.getByRole('button', { name: 'Continue' }).click()
+    await this.page.waitForLoadState('load')
+  }
+
+  selectedDocumentType() {
+    return this.page
+      .locator('input[name="documentType"]:checked')
+      .evaluateAll((inputs) =>
+        inputs.map((input) =>
+          document.querySelector(`label[for="${input.id}"]`).innerText.trim()
+        )
+      )
+  }
+
+  async selectDocumentType(name) {
+    await this.page.getByRole('radio', { name, exact: true }).check()
+  }
+
+  cancelLinkCount() {
+    return this.page.getByRole('link', { name: 'Cancel', exact: true }).count()
   }
 
   async errors() {

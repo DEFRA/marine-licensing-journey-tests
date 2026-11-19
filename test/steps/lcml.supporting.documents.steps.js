@@ -1,6 +1,8 @@
 import { When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import LcmlSupportingDocumentsPage, {
+  MARINE_PLAN_POLICIES_PATH,
+  SUPPORTING_DOCUMENTS_REVIEW_PATH,
   SUPPORTING_DOCUMENTS_TASK
 } from '../pages/lcml.supporting.documents.page.js'
 
@@ -10,7 +12,10 @@ const DOCUMENTS = [
   'test/resources/test.pdf',
   'test/resources/replacement-drawing.pdf'
 ]
+const FIRST_TYPE = 'Ecological Assessment'
+const CHANGED_TYPE = 'Fisheries Assessment'
 const LOCATION = 'Section 4.2'
+const CHANGED_LOCATION = 'Appendix B'
 const SECTION = 'Supporting documents'
 const SUPPORTING_DOCUMENT_UPLOAD_PATH =
   '/marine-licence/marine-plan-policy/supporting-document-upload'
@@ -26,19 +31,63 @@ async function policyListState(documents) {
   }
 }
 
+const pathOf = (page) => new URL(page.url()).pathname
+
 async function uploadAndLink(documents, file, code) {
-  await documents.openUploadTask()
+  const taskOpened = await documents.openUploadTask()
   await documents.uploadAndWaitForDocumentType(file)
-  await documents.page.getByRole('radio').first().check()
+  await documents.selectDocumentType(FIRST_TYPE)
   await documents.continue()
   await documents.policyCheckbox(code).check()
   await (await documents.locationFor(code)).fill(LOCATION)
   await documents.continue('Save and continue')
+  const review = {
+    path: pathOf(documents.page),
+    cards: await documents.reviewCards()
+  }
+  await documents.continueFromReview()
+  return { taskOpened, review, afterContinue: pathOf(documents.page) }
+}
+
+async function changeFirstDocument(documents, [first, second]) {
+  const taskOpened = await documents.openSupportingDocumentsTask()
+  const cardsWhenReopened = await documents.reviewCards()
+
+  await documents.changeOnReview(1, 'Type')
+  const type = {
+    selected: await documents.selectedDocumentType(),
+    cancelLinks: await documents.cancelLinkCount()
+  }
+  await documents.selectDocumentType(CHANGED_TYPE)
+  await documents.continue('Save and continue')
+  type.returnedTo = pathOf(documents.page)
+
+  await documents.changeOnReview(1, 'Policies')
+  const policies = {
+    ticked: [
+      await documents.policyCheckbox(first).isChecked(),
+      await documents.policyCheckbox(second).isChecked()
+    ],
+    location: await (await documents.locationFor(first)).inputValue(),
+    cancelLinks: await documents.cancelLinkCount()
+  }
+  await documents.policyCheckbox(second).check()
+  await (await documents.locationFor(second)).fill(CHANGED_LOCATION)
+  await documents.continue('Save and continue')
+  policies.returnedTo = pathOf(documents.page)
+
+  return {
+    taskOpened,
+    cardsWhenReopened,
+    type,
+    policies,
+    cardsAfterChange: await documents.reviewCards()
+  }
 }
 
 When(
-  'the user completes every policy consideration, {int} of which refer to a document, and uploads a supporting document for each of those policies',
-  { timeout: 300_000 },
+  "the user completes every policy consideration, {int} of which refer to a document, uploads a supporting document for each of those policies, then changes the first document's type and policies",
+  { timeout: 400_000 },
   async function (count) {
     const documents = new LcmlSupportingDocumentsPage(this.page)
     const states = [await policyListState(documents)]
@@ -61,11 +110,20 @@ When(
     await documents.openPolicy(referring[0])
     const tickedWhenReopened = await documents.refersToDocument.isChecked()
 
+    const uploads = []
     for (const [index, code] of referring.entries()) {
       await documents.openPolicyList()
-      await uploadAndLink(documents, DOCUMENTS[index % DOCUMENTS.length], code)
+      uploads.push(
+        await uploadAndLink(
+          documents,
+          DOCUMENTS[index % DOCUMENTS.length],
+          code
+        )
+      )
       states.push(await policyListState(documents))
     }
+
+    const changes = await changeFirstDocument(documents, referring)
 
     const [
       beforeAny,
@@ -78,6 +136,8 @@ When(
       referring,
       tickedAtFirst,
       tickedWhenReopened,
+      uploads,
+      changes,
       listStates: {
         beforeAny,
         firstReferring,
@@ -97,9 +157,22 @@ function stillNeededFor(codes) {
   return `Still needed for ${list.format([...codes].sort())}`
 }
 
+function expectCard(card, { file, type, links }) {
+  expect(card.title).toBe(file)
+  expect(card.type).toBe(type)
+  expect(card.policies).toHaveLength(links.length)
+  for (const [index, [code, location]] of links.entries()) {
+    expect(card.policies[index]).toMatch(
+      new RegExp(`\\(${code}\\) - ${location}$`)
+    )
+  }
+}
+
+const fileName = (index) => DOCUMENTS[index].split('/').pop()
+
 Then(
-  'the {string} section appears once a policy consideration refers to a document, with the {string} task {string} for that policy',
-  function (section, task, status) {
+  'the {string} section appears once a policy consideration refers to a document, with the {string} task {string} for that policy, and stays {string} for both policies once every policy consideration is completed',
+  function (section, task, status, allCompletedStatus) {
     const { listStates, referring } = this.data.supportingDocuments
     expect(section).toBe(SECTION)
     expect(task).toBe(SUPPORTING_DOCUMENTS_TASK)
@@ -107,6 +180,10 @@ Then(
     expect(listStates.firstReferring).toEqual({
       sectionShown: true,
       task: { status, hint: stillNeededFor([referring[0]]) }
+    })
+    expect(listStates.allCompleted.task).toEqual({
+      status: allCompletedStatus,
+      hint: stillNeededFor(referring)
     })
   }
 )
@@ -126,20 +203,19 @@ Then(
 )
 
 Then(
-  'the task is still {string} for both policies once every policy consideration is completed',
-  function (status) {
-    const { listStates, referring } = this.data.supportingDocuments
-    expect(listStates.allCompleted.task).toEqual({
-      status,
-      hint: stillNeededFor(referring)
+  'after the first document is linked, the {string} page shows it with its type and policy, Continue returns to the policy list, and the task is {string} for the second policy',
+  function (heading, status) {
+    const { uploads, listStates, referring } = this.data.supportingDocuments
+    const [first] = uploads
+    expect(heading).toBe(SECTION)
+    expect(first.review.path).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(first.review.cards).toHaveLength(1)
+    expectCard(first.review.cards[0], {
+      file: fileName(0),
+      type: FIRST_TYPE,
+      links: [[referring[0], LOCATION]]
     })
-  }
-)
-
-Then(
-  'the task is {string} for the second policy once a document is uploaded for the first policy',
-  function (status) {
-    const { listStates, referring } = this.data.supportingDocuments
+    expect(first.afterContinue).toBe(MARINE_PLAN_POLICIES_PATH)
     expect(listStates.firstUploaded.task).toEqual({
       status,
       hint: stillNeededFor([referring[1]])
@@ -148,10 +224,51 @@ Then(
 )
 
 Then(
-  'the task is {string} once a document is uploaded for the second policy',
-  function (status) {
-    const { listStates } = this.data.supportingDocuments
+  'after the second document is linked, selecting the task again shows the {string} page with both documents, and the task is {string}',
+  function (heading, status) {
+    const { uploads, changes, listStates, referring } =
+      this.data.supportingDocuments
+    expect(heading).toBe(SECTION)
+    expect(uploads[1].taskOpened).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(changes.taskOpened).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(changes.cardsWhenReopened).toHaveLength(2)
+    for (const [index, code] of referring.entries()) {
+      expectCard(changes.cardsWhenReopened[index], {
+        file: fileName(index),
+        type: FIRST_TYPE,
+        links: [[code, LOCATION]]
+      })
+    }
     expect(listStates.secondUploaded.task).toEqual({ status, hint: '' })
+  }
+)
+
+Then(
+  "changing the first document's type and policies from the {string} page shows the saved answers, has no Cancel link, and returns to the page with the new answers",
+  function (heading) {
+    const { changes, referring } = this.data.supportingDocuments
+    const [first, second] = referring
+    expect(heading).toBe(SECTION)
+    expect(changes.type).toEqual({
+      selected: [FIRST_TYPE],
+      cancelLinks: 0,
+      returnedTo: SUPPORTING_DOCUMENTS_REVIEW_PATH
+    })
+    expect(changes.policies).toEqual({
+      ticked: [true, false],
+      location: LOCATION,
+      cancelLinks: 0,
+      returnedTo: SUPPORTING_DOCUMENTS_REVIEW_PATH
+    })
+    const links = [
+      [first, LOCATION],
+      [second, CHANGED_LOCATION]
+    ].sort(([a], [b]) => a.localeCompare(b))
+    expectCard(changes.cardsAfterChange[0], {
+      file: fileName(0),
+      type: CHANGED_TYPE,
+      links
+    })
   }
 )
 
