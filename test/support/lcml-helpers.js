@@ -241,6 +241,9 @@ export async function completeWithholdingFollowUpPage(page) {
   } else {
     return
   }
+  if (publicRegister.isOnCheckAnswersPage()) {
+    await publicRegister.confirmCheckAnswers()
+  }
   if (!/marine-licence\/task-list/.test(page.url())) {
     await page.goto(new URL('/marine-licence/task-list', page.url()).toString())
   }
