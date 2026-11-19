@@ -47,11 +47,22 @@ Feature: LCML: Marine plan policies
     When the user opens a policy and saves a consideration of 2001 characters
     Then the policy consideration error "Policy consideration must be 2000 characters or less" is shown
 
-  @issue=ML-1620
-  Scenario: Saving a policy consideration under 70 characters shows the minimum length error
+  @issue=ML-1620 @issue=ML-1651 @issue=ML-1652 @issue=ML-1653
+  Scenario: A consideration that refers to a document adds the Supporting documents task, which is completed by uploading a document for each such policy
     Given an organisation user has completed the site details for a marine licence application
-    When the user opens a policy and saves a consideration of 69 characters
-    Then the policy consideration error "Your consideration must be 70 characters or more. If you do not explain fully how you have considered this policy, we will reject your application." is shown
+    When the user completes every policy consideration, 2 of which refer to a document, and uploads a supporting document for each of those policies
+    Then the "Supporting documents" section appears once a policy consideration refers to a document, with the "Upload supporting documents" task "Not yet started" for that policy
+    And the "My consideration refers to an assessment, report or other document" checkbox is unticked on a new policy and stays ticked when the saved policy is opened again
+    And the task is still "Not yet started" for both policies once every policy consideration is completed
+    And the task is "In progress" for the second policy once a document is uploaded for the first policy
+    And the task is "Completed" once a document is uploaded for the second policy
+
+  @issue=ML-1652
+  Scenario: A supporting document that is not a PDF or document is rejected and nothing is saved
+    Given an organisation user has completed the site details for a marine licence application
+    When a policy consideration refers to a document and the user uploads a PNG image as the supporting document
+    Then the "Upload a supporting document" page showed the error "The selected file must be a PDF or document (.doc, .docx, .odt) file"
+    And the "Upload supporting documents" task is still "Not yet started"
 
   @issue=ML-1249
   Scenario: Saving a valid policy consideration marks the policy Completed and updates the count
