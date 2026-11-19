@@ -223,16 +223,28 @@ export async function completeSharingConsent(page, answer) {
     : undefined
   await publicRegister.completeAndSave(withhold, reason)
   await page.waitForLoadState('load')
+  await completeWithholdingFollowUpPage(page)
+  return reason
+}
+
+export const COMMERCIAL_CONFIDENTIALITY_DETAILS =
+  'Journey test: the mooring layout and pricing are commercially confidential.'
+
+export async function completeWithholdingFollowUpPage(page) {
+  const publicRegister = new LcmlPublicRegisterPage(page)
   if (publicRegister.isOnNationalSecurityPage()) {
     await publicRegister.saveNationalSecurityApproval('No')
-    if (!/marine-licence\/task-list/.test(page.url())) {
-      await page.goto(
-        new URL('/marine-licence/task-list', page.url()).toString()
-      )
-    }
-    await waitForTaskList(page)
+  } else if (publicRegister.isOnCommercialConfidentialityPage()) {
+    await publicRegister.saveCommercialConfidentialityDetails(
+      COMMERCIAL_CONFIDENTIALITY_DETAILS
+    )
+  } else {
+    return
   }
-  return reason
+  if (!/marine-licence\/task-list/.test(page.url())) {
+    await page.goto(new URL('/marine-licence/task-list', page.url()).toString())
+  }
+  await waitForTaskList(page)
 }
 
 export async function completeProjectBackground(page, text) {
