@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import LcmlPublicRegisterPage, {
   PUBLIC_REGISTER_TASK
 } from '../pages/lcml.public.register.page.js'
+import { completeWithholdingFollowUpPage } from '../support/lcml-helpers.js'
 
 const CARD_ID = '#public-register-card'
 
@@ -36,6 +37,7 @@ When(
       reason
     )
     await this.page.waitForLoadState('load')
+    await completeWithholdingFollowUpPage(this.page)
   }
 )
 
