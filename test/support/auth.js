@@ -43,7 +43,8 @@ export async function expireTestUser(stubUrl, userId) {
   try {
     await fetch(`${stubUrl}/cdp-defra-id-stub/API/register/${userId}/expire`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(15_000)
     })
   } catch {
     // Swallow cleanup errors
