@@ -9,6 +9,9 @@ export const NATIONAL_SECURITY_PATH =
 export const COMMERCIAL_CONFIDENTIALITY_PATH =
   '/marine-licence/withholding-information-commercial-confidentiality'
 
+export const CHECK_ANSWERS_PATH =
+  '/marine-licence/sharing-your-project-information-publicly-check-answers'
+
 export const WITHHOLD_REASONS = {
   'National security reasons': 'nationalSecurity',
   'Commercial or industrial confidentiality reasons':
@@ -53,6 +56,15 @@ export default class LcmlPublicRegisterPage {
 
   async saveCommercialConfidentialityDetails(details) {
     await this.page.locator('#reason').fill(details)
+    await this.saveAndContinue.click()
+    await this.page.waitForLoadState('load')
+  }
+
+  isOnCheckAnswersPage() {
+    return new URL(this.page.url()).pathname === CHECK_ANSWERS_PATH
+  }
+
+  async confirmCheckAnswers() {
     await this.saveAndContinue.click()
     await this.page.waitForLoadState('load')
   }
