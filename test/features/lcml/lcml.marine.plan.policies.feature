@@ -64,6 +64,22 @@ Feature: LCML: Marine plan policies
     Then the "Upload a supporting document" page showed the error "The selected file must be a PDF or document (.doc, .docx, .odt) file"
     And the "Upload supporting documents" task is still "Not yet started"
 
+  @issue=ML-1666
+  Scenario: Deleting a supporting document removes it and its policy links, and deleting the last one returns to the policy list
+    Given an organisation user has completed the site details for a marine licence application
+    When two policy considerations refer to a document, the user uploads a document for each, then deletes both from the "Supporting documents" page, cancelling the first delete once
+    Then the delete page showed the document name and the policies it supports
+    And Cancel on the delete page returned to the "Supporting documents" page with nothing changed
+    And after the first delete the "Supporting documents" page no longer shows it, and the task is "In progress" for the policy only it supported
+    And after the last delete the user is on the policy list, and the task is "Not yet started" for both policies
+
+  @issue=ML-1724
+  Scenario: Cancelling on the document type or document policies page discards the uploaded document
+    Given an organisation user has completed the site details for a marine licence application
+    When a policy consideration refers to a document and the user uploads a document but cancels on the "Supporting document type" page, then uploads another and cancels on the "Document policies" page
+    Then the "Upload supporting documents" task is still "Not yet started"
+    And selecting the task opens the "Upload a supporting document" page, not the "Supporting documents" page
+
   @issue=ML-1249
   Scenario: Saving a valid policy consideration marks the policy Completed and updates the count
     Given an organisation user has completed the site details for a marine licence application

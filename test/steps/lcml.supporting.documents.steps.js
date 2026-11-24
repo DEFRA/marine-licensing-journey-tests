@@ -33,13 +33,15 @@ async function policyListState(documents) {
 
 const pathOf = (page) => new URL(page.url()).pathname
 
-async function uploadAndLink(documents, file, code) {
+async function uploadAndLink(documents, file, codes) {
   const taskOpened = await documents.openUploadTask()
   await documents.uploadAndWaitForDocumentType(file)
   await documents.selectDocumentType(FIRST_TYPE)
   await documents.continue()
-  await documents.policyCheckbox(code).check()
-  await (await documents.locationFor(code)).fill(LOCATION)
+  for (const code of codes) {
+    await documents.policyCheckbox(code).check()
+    await (await documents.locationFor(code)).fill(LOCATION)
+  }
   await documents.continue('Save and continue')
   const review = {
     path: pathOf(documents.page),
@@ -114,11 +116,9 @@ When(
     for (const [index, code] of referring.entries()) {
       await documents.openPolicyList()
       uploads.push(
-        await uploadAndLink(
-          documents,
-          DOCUMENTS[index % DOCUMENTS.length],
+        await uploadAndLink(documents, DOCUMENTS[index % DOCUMENTS.length], [
           code
-        )
+        ])
       )
       states.push(await policyListState(documents))
     }
@@ -313,3 +313,178 @@ Then('the {string} task is still {string}', function (task, status) {
   expect(task).toBe(SUPPORTING_DOCUMENTS_TASK)
   expect(listAfter.task.status).toBe(status)
 })
+
+const DELETE_HEADING = 'Are you sure you want to delete this document?'
+const listOf = (codes) =>
+  new Intl.ListFormat('en-GB', { type: 'conjunction' }).format(
+    [...codes].sort()
+  )
+
+async function reviewState(documents) {
+  return {
+    path: pathOf(documents.page),
+    cards: await documents.reviewCards()
+  }
+}
+
+When(
+  'two policy considerations refer to a document, the user uploads a document for each, then deletes both from the {string} page, cancelling the first delete once',
+  { timeout: 400_000 },
+  async function (heading) {
+    expect(heading).toBe(SECTION)
+    const documents = new LcmlSupportingDocumentsPage(this.page)
+    await documents.openPolicyList()
+    const referring = (await documents.policyCodes()).slice(0, 2)
+    for (const code of referring) {
+      await documents.openPolicyList()
+      await documents.openPolicy(code)
+      await documents.saveConsideration(CONSIDERATION, true)
+    }
+    await documents.openPolicyList()
+    await uploadAndLink(documents, DOCUMENTS[0], referring)
+    await uploadAndLink(documents, DOCUMENTS[1], [referring[1]])
+
+    await documents.openSupportingDocumentsTask()
+    const beforeDelete = await documents.reviewCards()
+    await documents.deleteOnReview(1)
+    const deletePage = await documents.deletePage()
+    await documents.cancel()
+    const afterCancel = await reviewState(documents)
+
+    await documents.deleteOnReview(1)
+    await documents.confirmDelete()
+    const afterFirstDelete = await reviewState(documents)
+    const listAfterFirstDelete = await policyListState(documents)
+
+    await documents.openSupportingDocumentsTask()
+    await documents.deleteOnReview(1)
+    await documents.confirmDelete()
+    const afterLastDelete = pathOf(this.page)
+    const listAfterLastDelete = await policyListState(documents)
+
+    this.data.supportingDocuments = {
+      referring,
+      beforeDelete,
+      deletePage,
+      afterCancel,
+      afterFirstDelete,
+      listAfterFirstDelete,
+      afterLastDelete,
+      listAfterLastDelete
+    }
+  }
+)
+
+Then(
+  'the delete page showed the document name and the policies it supports',
+  function () {
+    const { deletePage, referring } = this.data.supportingDocuments
+    expect(deletePage).toEqual({
+      path: expect.stringMatching(/delete-supporting-document\//),
+      heading: DELETE_HEADING,
+      fileName: fileName(0),
+      supports: [`It will no longer support ${listOf(referring)}`]
+    })
+  }
+)
+
+Then(
+  'Cancel on the delete page returned to the {string} page with nothing changed',
+  function (heading) {
+    const { afterCancel, beforeDelete } = this.data.supportingDocuments
+    expect(heading).toBe(SECTION)
+    expect(afterCancel.path).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(beforeDelete).toHaveLength(2)
+    expect(afterCancel.cards).toEqual(beforeDelete)
+  }
+)
+
+Then(
+  'after the first delete the {string} page no longer shows it, and the task is {string} for the policy only it supported',
+  function (heading, status) {
+    const { afterFirstDelete, listAfterFirstDelete, referring } =
+      this.data.supportingDocuments
+    expect(heading).toBe(SECTION)
+    expect(afterFirstDelete.path).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(afterFirstDelete.cards.map((card) => card.title)).toEqual([
+      fileName(1)
+    ])
+    expect(listAfterFirstDelete.task).toEqual({
+      status,
+      hint: stillNeededFor([referring[0]])
+    })
+  }
+)
+
+Then(
+  'after the last delete the user is on the policy list, and the task is {string} for both policies',
+  function (status) {
+    const { afterLastDelete, listAfterLastDelete, referring } =
+      this.data.supportingDocuments
+    expect(afterLastDelete).toBe(MARINE_PLAN_POLICIES_PATH)
+    expect(listAfterLastDelete.task).toEqual({
+      status,
+      hint: stillNeededFor(referring)
+    })
+  }
+)
+
+When(
+  'a policy consideration refers to a document and the user uploads a document but cancels on the {string} page, then uploads another and cancels on the {string} page',
+  { timeout: 300_000 },
+  async function (typePage, policiesPage) {
+    expect([typePage, policiesPage]).toEqual([
+      'Supporting document type',
+      'Document policies'
+    ])
+    const documents = new LcmlSupportingDocumentsPage(this.page)
+    const [code] = await policyCodesFromList(documents)
+    await documents.openPolicy(code)
+    await documents.saveConsideration(CONSIDERATION, true)
+
+    await documents.openUploadTask()
+    await documents.uploadAndWaitForDocumentType(DOCUMENTS[0])
+    await documents.cancel()
+    const afterTypeCancel = pathOf(this.page)
+
+    await documents.openUploadTask()
+    await documents.uploadAndWaitForDocumentType(DOCUMENTS[1])
+    await documents.selectDocumentType(FIRST_TYPE)
+    await documents.continue()
+    await documents.policyCheckbox(code).check()
+    await (await documents.locationFor(code)).fill(LOCATION)
+    await documents.cancel()
+    const afterPoliciesCancel = pathOf(this.page)
+
+    const listAfter = await policyListState(documents)
+    const taskOpens = await documents.openSupportingDocumentsTask()
+    this.data.supportingDocuments = {
+      afterTypeCancel,
+      afterPoliciesCancel,
+      listAfter,
+      taskOpens
+    }
+  }
+)
+
+async function policyCodesFromList(documents) {
+  await documents.openPolicyList()
+  return documents.policyCodes()
+}
+
+Then(
+  'selecting the task opens the {string} page, not the {string} page',
+  function (uploadHeading, reviewHeading) {
+    const { afterTypeCancel, afterPoliciesCancel, taskOpens } =
+      this.data.supportingDocuments
+    expect([uploadHeading, reviewHeading]).toEqual([
+      'Upload a supporting document',
+      SECTION
+    ])
+    expect([afterTypeCancel, afterPoliciesCancel]).toEqual([
+      MARINE_PLAN_POLICIES_PATH,
+      MARINE_PLAN_POLICIES_PATH
+    ])
+    expect(taskOpens).toBe(SUPPORTING_DOCUMENT_UPLOAD_PATH)
+  }
+)
