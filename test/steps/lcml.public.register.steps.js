@@ -63,7 +63,9 @@ When(
     if (publicRegister.isOnNationalSecurityPage()) {
       await publicRegister.answerNationalSecurity(approval, WITHHELD_DETAILS)
     } else {
-      await publicRegister.saveWithholdingDetails(WITHHELD_DETAILS)
+      await publicRegister.saveCommercialConfidentialityDetails(
+        WITHHELD_DETAILS
+      )
     }
 
     const review = {

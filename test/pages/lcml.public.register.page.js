@@ -44,23 +44,11 @@ export default class LcmlPublicRegisterPage {
     return new URL(this.page.url()).pathname === NATIONAL_SECURITY_PATH
   }
 
-  async saveNationalSecurityApproval(answer) {
-    await this.nationalSecurityApproval(answer).check()
-    await this.saveAndContinue.click()
-    await this.page.waitForLoadState('load')
-  }
-
   isOnCommercialConfidentialityPage() {
     return new URL(this.page.url()).pathname === COMMERCIAL_CONFIDENTIALITY_PATH
   }
 
   async saveCommercialConfidentialityDetails(details) {
-    await this.page.locator('#reason').fill(details)
-    await this.saveAndContinue.click()
-    await this.page.waitForLoadState('load')
-  }
-
-  async saveWithholdingDetails(details) {
     await this.page.locator('#reason').fill(details)
     await this.saveAndContinue.click()
     await this.page.waitForLoadState('load')
