@@ -28,6 +28,19 @@ function failingStepWindowText(duration) {
 
 let browser
 
+const CLOSE_TIMEOUT_MS = 15_000
+
+function closeWithin(closing, ms) {
+  if (!closing) return undefined
+  let timer
+  return Promise.race([
+    closing.catch(() => {}),
+    new Promise((resolve) => {
+      timer = setTimeout(resolve, ms)
+    })
+  ]).finally(() => clearTimeout(timer))
+}
+
 BeforeAll(async function () {
   const config = getConfig()
   console.log('[DEBUG] ENVIRONMENT:', config.environment)
@@ -130,8 +143,8 @@ After(async function (scenario) {
     await expireTestUser(config.defraIdUrl, this.testUser.userId)
   }
 
-  await this.page?.close()
-  await this.browserContext?.close()
+  await closeWithin(this.page?.close(), CLOSE_TIMEOUT_MS)
+  await closeWithin(this.browserContext?.close(), CLOSE_TIMEOUT_MS)
 })
 
 AfterAll(async function () {
