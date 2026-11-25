@@ -44,8 +44,6 @@ When(
   }
 )
 
-const WITHHOLD_QUESTION =
-  'Do you want to ask us to withhold any information from the public register?'
 const APPROVAL_QUESTION =
   'Do you have approval from the Secretary of State for Defence to withhold information for national security reasons?'
 const WITHHELD_DETAILS =
