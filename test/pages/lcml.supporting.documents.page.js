@@ -118,6 +118,39 @@ export default class LcmlSupportingDocumentsPage {
     await this.page.waitForLoadState('load')
   }
 
+  async deleteOnReview(cardNumber) {
+    await this.page
+      .locator(`#document-card-${cardNumber} .govuk-summary-card__actions`)
+      .getByRole('link', { name: /Delete/ })
+      .click()
+    await this.page.waitForLoadState('load')
+  }
+
+  async deletePage() {
+    return {
+      path: new URL(this.page.url()).pathname,
+      heading: (await this.heading.innerText()).trim(),
+      fileName: (
+        await this.page.locator('main .govuk-inset-text').innerText()
+      ).trim(),
+      supports: (
+        await this.page.locator('main p.govuk-body').allInnerTexts()
+      ).map((text) => text.trim())
+    }
+  }
+
+  async confirmDelete() {
+    await this.page
+      .getByRole('button', { name: 'Yes, delete document' })
+      .click()
+    await this.page.waitForLoadState('load')
+  }
+
+  async cancel() {
+    await this.page.getByRole('link', { name: 'Cancel', exact: true }).click()
+    await this.page.waitForLoadState('load')
+  }
+
   async continueFromReview() {
     await this.page.getByRole('button', { name: 'Continue' }).click()
     await this.page.waitForLoadState('load')
