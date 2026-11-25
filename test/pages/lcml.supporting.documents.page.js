@@ -108,6 +108,23 @@ export default class LcmlSupportingDocumentsPage {
     )
   }
 
+  async insetText(hasText) {
+    const inset = this.page.locator('main .govuk-inset-text', { hasText })
+    return (await inset.count()) ? inset : null
+  }
+
+  async outstandingPoliciesInset() {
+    const inset = await this.insetText('You still need to add a document for')
+    return inset ? (await inset.innerText()).trim() : null
+  }
+
+  async documentsLinkedToPolicy() {
+    const inset = await this.insetText('Documents linked to this policy')
+    return inset
+      ? (await inset.locator('li').allInnerTexts()).map((text) => text.trim())
+      : null
+  }
+
   async changeOnReview(cardNumber, rowKey) {
     await this.page
       .locator(`#document-card-${cardNumber} .govuk-summary-list__row`, {

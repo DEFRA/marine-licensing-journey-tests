@@ -47,14 +47,14 @@ Feature: LCML: Marine plan policies
     When the user opens a policy and saves a consideration of 2001 characters
     Then the policy consideration error "Policy consideration must be 2000 characters or less" is shown
 
-  @issue=ML-1620 @issue=ML-1651 @issue=ML-1652 @issue=ML-1653 @issue=ML-1654 @issue=ML-1682
+  @issue=ML-1620 @issue=ML-1651 @issue=ML-1652 @issue=ML-1653 @issue=ML-1654 @issue=ML-1682 @issue=ML-1702
   Scenario: A consideration that refers to a document adds the Supporting documents task, which is completed by uploading a document for each such policy, and the documents can be reviewed and changed
     Given an organisation user has completed the site details for a marine licence application
     When the user completes every policy consideration, 2 of which refer to a document, uploads a supporting document for each of those policies, then changes the first document's type and policies
     Then the "Supporting documents" section appears once a policy consideration refers to a document, with the "Upload supporting documents" task "Not yet started" for that policy, and stays "Not yet started" for both policies once every policy consideration is completed
     And the "My consideration refers to an assessment, report or other document" checkbox is unticked on a new policy and stays ticked when the saved policy is opened again
-    And after the first document is linked, the "Supporting documents" page shows it with its type and policy, Continue returns to the policy list, and the task is "In progress" for the second policy
-    And after the second document is linked, selecting the task again shows the "Supporting documents" page with both documents, and the task is "Completed"
+    And after the first document is linked, the "Supporting documents" page shows it with its type and policy and says a document is still needed for the second policy, Continue returns to the policy list, and the task is "In progress" for the second policy
+    And after the second document is linked, selecting the task again shows the "Supporting documents" page with both documents and no document still needed, and the task is "Completed"
     And changing the first document's type and policies from the "Supporting documents" page shows the saved answers, has no Cancel link, and returns to the page with the new answers
 
   @issue=ML-1652
@@ -64,7 +64,7 @@ Feature: LCML: Marine plan policies
     Then the "Upload a supporting document" page showed the error "The selected file must be a PDF or document (.doc, .docx, .odt) file"
     And the "Upload supporting documents" task is still "Not yet started"
 
-  @issue=ML-1666
+  @issue=ML-1666 @issue=ML-1683
   Scenario: Deleting a supporting document removes it and its policy links, and deleting the last one returns to the policy list
     Given an organisation user has completed the site details for a marine licence application
     When two policy considerations refer to a document, the user uploads a document for each, then deletes both from the "Supporting documents" page, cancelling the first delete once
@@ -72,6 +72,7 @@ Feature: LCML: Marine plan policies
     And Cancel on the delete page returned to the "Supporting documents" page with nothing changed
     And after the first delete the "Supporting documents" page no longer shows it, and the task is "In progress" for the policy only it supported
     And after the last delete the user is on the policy list, and the task is "Not yet started" for both policies
+    And each policy page listed the documents linked to it with where the information is, and stopped listing a document once it was deleted
 
   @issue=ML-1724
   Scenario: Cancelling on the document type or document policies page discards the uploaded document
