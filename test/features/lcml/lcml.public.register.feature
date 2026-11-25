@@ -22,7 +22,8 @@ Feature: LCML: Information published on the public register task
     And the activity has type of activity, activity description, maximum duration, completion date, specific months and proposed working hours saved
     And the user saves "Yes" with reason "Commercial or industrial confidentiality reasons" on the public register page
     When the user opens the check your answers page from the task list
-    Then "Request that information is withheld" on the public register card is "Yes"
+    Then "Do you want to ask us to withhold any information from the public register?" on the public register card is "Yes – Commercial or industrial confidentiality reasons"
+    And "What you want withheld and why" on the public register card is "Journey test: the mooring layout and pricing are commercially confidential."
 
   Scenario: The public register answers are read-only on the View details page
     Given an organisation user has completed all tasks with special legal powers "No", other authorities "No" and sharing consent "No"
