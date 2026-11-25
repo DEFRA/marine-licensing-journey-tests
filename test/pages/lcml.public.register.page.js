@@ -44,12 +44,6 @@ export default class LcmlPublicRegisterPage {
     return new URL(this.page.url()).pathname === NATIONAL_SECURITY_PATH
   }
 
-  async saveNationalSecurityApproval(answer) {
-    await this.nationalSecurityApproval(answer).check()
-    await this.saveAndContinue.click()
-    await this.page.waitForLoadState('load')
-  }
-
   isOnCommercialConfidentialityPage() {
     return new URL(this.page.url()).pathname === COMMERCIAL_CONFIDENTIALITY_PATH
   }
@@ -58,6 +52,32 @@ export default class LcmlPublicRegisterPage {
     await this.page.locator('#reason').fill(details)
     await this.saveAndContinue.click()
     await this.page.waitForLoadState('load')
+  }
+
+  async answerNationalSecurity(answer, details) {
+    await this.nationalSecurityApproval(answer).check()
+    if (answer === 'Yes') {
+      await this.page.locator('#reason').fill(details)
+    }
+    await this.saveAndContinue.click()
+    await this.page.waitForLoadState('load')
+  }
+
+  heading() {
+    return this.page.locator('main h1').first().innerText()
+  }
+
+  reviewRows() {
+    return this.page
+      .locator('main .govuk-summary-list__row')
+      .evaluateAll((rows) =>
+        rows.map((row) => ({
+          question: row.querySelector('dt').innerText.trim(),
+          answer: row
+            .querySelector('.govuk-summary-list__value')
+            .innerText.trim()
+        }))
+      )
   }
 
   isOnCheckAnswersPage() {
