@@ -256,9 +256,8 @@ Then('the file is successfully processed', async function () {
 Then(
   'the file upload error {string} is displayed',
   async function (errorMessage) {
-    await expect(this.page.locator('#file-id-error')).toContainText(
-      errorMessage,
-      { timeout: 30_000 }
-    )
+    await expect(
+      this.page.locator('#file-error, #file-id-error')
+    ).toContainText(errorMessage, { timeout: 30_000 })
   }
 )

@@ -165,7 +165,9 @@ When(
 Then(
   'the construction drawing upload error {string} is displayed',
   async function (error) {
-    await expect(this.page.locator('#file-id-error')).toContainText(error, {
+    await expect(
+      this.page.locator('#file-error, #file-id-error')
+    ).toContainText(error, {
       timeout: 90_000
     })
   }
