@@ -233,7 +233,7 @@ export const COMMERCIAL_CONFIDENTIALITY_DETAILS =
 export async function completeWithholdingFollowUpPage(page) {
   const publicRegister = new LcmlPublicRegisterPage(page)
   if (publicRegister.isOnNationalSecurityPage()) {
-    await publicRegister.saveNationalSecurityApproval('No')
+    await publicRegister.answerNationalSecurity('No')
   } else if (publicRegister.isOnCommercialConfidentialityPage()) {
     await publicRegister.saveCommercialConfidentialityDetails(
       COMMERCIAL_CONFIDENTIALITY_DETAILS

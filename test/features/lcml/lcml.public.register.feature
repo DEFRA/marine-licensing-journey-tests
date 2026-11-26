@@ -12,10 +12,20 @@ Feature: LCML: Information published on the public register task
     And selecting "Yes" reveals the withholding reasons "National security reasons" and "Commercial or industrial confidentiality reasons"
     And selecting "No" hides the withholding reasons
 
-  Scenario: Saving a request to withhold information marks the task Completed
+  @issue=ML-1667 @issue=ML-1668 @issue=ML-1673
+  Scenario Outline: Withholding information for <reason> goes through its page and the review page, and completes the task
     Given an organisation user has started a marine licence application
-    When the user saves "Yes" with reason "Commercial or industrial confidentiality reasons" on the public register page
-    Then the "Information published on the public register" task status is "Completed"
+    When the user asks to withhold information for "<reason>" with approval "<approval>", and continues from the review page
+    Then the "<follow-up page>" page was shown after the withholding question
+    And the review page showed "<withhold answer>", the approval "<approval answer>" and the details row "<details row>"
+    And the "Information published on the public register" task status is "Completed"
+    And selecting the task again shows the review page with the same answers
+
+    Examples:
+      | reason                                           | approval | follow-up page                                                               | withhold answer                                        | approval answer                                                                                         | details row                    |
+      | Commercial or industrial confidentiality reasons | n/a      | Withholding information for commercial or industrial confidentiality reasons | Yes – Commercial or industrial confidentiality reasons | not shown                                                                                               | What you want withheld and why |
+      | National security reasons                        | Yes      | Withholding information for national security reasons                        | Yes – National security reasons                        | Yes                                                                                                     | What you want withheld         |
+      | National security reasons                        | No       | Withholding information for national security reasons                        | Yes – National security reasons                        | No – If you get approval later, you can come back and change your answer before you submit your application. | not shown                      |
 
   Scenario: The saved withholding request is shown on Check your answers
     Given an organisation user has completed all tasks with special legal powers "No", other authorities "No" and sharing consent "Yes"
