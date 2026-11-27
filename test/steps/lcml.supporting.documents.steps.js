@@ -33,19 +33,20 @@ async function policyListState(documents) {
 
 const pathOf = (page) => new URL(page.url()).pathname
 
-async function uploadAndLink(documents, file, codes) {
+async function uploadAndLink(documents, file, codes, location = LOCATION) {
   const taskOpened = await documents.openUploadTask()
   await documents.uploadAndWaitForDocumentType(file)
   await documents.selectDocumentType(FIRST_TYPE)
   await documents.continue()
   for (const code of codes) {
     await documents.policyCheckbox(code).check()
-    await (await documents.locationFor(code)).fill(LOCATION)
+    await (await documents.locationFor(code)).fill(location)
   }
   await documents.continue('Save and continue')
   const review = {
     path: pathOf(documents.page),
-    cards: await documents.reviewCards()
+    cards: await documents.reviewCards(),
+    outstanding: await documents.outstandingPoliciesInset()
   }
   await documents.continueFromReview()
   return { taskOpened, review, afterContinue: pathOf(documents.page) }
@@ -54,6 +55,7 @@ async function uploadAndLink(documents, file, codes) {
 async function changeFirstDocument(documents, [first, second]) {
   const taskOpened = await documents.openSupportingDocumentsTask()
   const cardsWhenReopened = await documents.reviewCards()
+  const outstandingWhenReopened = await documents.outstandingPoliciesInset()
 
   await documents.changeOnReview(1, 'Type')
   const type = {
@@ -81,6 +83,7 @@ async function changeFirstDocument(documents, [first, second]) {
   return {
     taskOpened,
     cardsWhenReopened,
+    outstandingWhenReopened,
     type,
     policies,
     cardsAfterChange: await documents.reviewCards()
@@ -157,6 +160,14 @@ function stillNeededFor(codes) {
   return `Still needed for ${list.format([...codes].sort())}`
 }
 
+const listOf = (codes) =>
+  new Intl.ListFormat('en-GB', { type: 'conjunction' }).format(
+    [...codes].sort()
+  )
+
+const stillNeedToAdd = (codes) =>
+  `You still need to add a document for ${listOf(codes)}, or link one you've already uploaded.`
+
 function expectCard(card, { file, type, links }) {
   expect(card.title).toBe(file)
   expect(card.type).toBe(type)
@@ -203,12 +214,13 @@ Then(
 )
 
 Then(
-  'after the first document is linked, the {string} page shows it with its type and policy, Continue returns to the policy list, and the task is {string} for the second policy',
+  'after the first document is linked, the {string} page shows it with its type and policy and says a document is still needed for the second policy, Continue returns to the policy list, and the task is {string} for the second policy',
   function (heading, status) {
     const { uploads, listStates, referring } = this.data.supportingDocuments
     const [first] = uploads
     expect(heading).toBe(SECTION)
     expect(first.review.path).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(first.review.outstanding).toBe(stillNeedToAdd([referring[1]]))
     expect(first.review.cards).toHaveLength(1)
     expectCard(first.review.cards[0], {
       file: fileName(0),
@@ -224,13 +236,15 @@ Then(
 )
 
 Then(
-  'after the second document is linked, selecting the task again shows the {string} page with both documents, and the task is {string}',
+  'after the second document is linked, selecting the task again shows the {string} page with both documents and no document still needed, and the task is {string}',
   function (heading, status) {
     const { uploads, changes, listStates, referring } =
       this.data.supportingDocuments
     expect(heading).toBe(SECTION)
     expect(uploads[1].taskOpened).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(uploads[1].review.outstanding).toBeNull()
     expect(changes.taskOpened).toBe(SUPPORTING_DOCUMENTS_REVIEW_PATH)
+    expect(changes.outstandingWhenReopened).toBeNull()
     expect(changes.cardsWhenReopened).toHaveLength(2)
     for (const [index, code] of referring.entries()) {
       expectCard(changes.cardsWhenReopened[index], {
@@ -315,10 +329,16 @@ Then('the {string} task is still {string}', function (task, status) {
 })
 
 const DELETE_HEADING = 'Are you sure you want to delete this document?'
-const listOf = (codes) =>
-  new Intl.ListFormat('en-GB', { type: 'conjunction' }).format(
-    [...codes].sort()
-  )
+
+async function linkedDocumentsOn(documents, codes) {
+  const linked = {}
+  for (const code of codes) {
+    await documents.openPolicyList()
+    await documents.openPolicy(code)
+    linked[code] = await documents.documentsLinkedToPolicy()
+  }
+  return linked
+}
 
 async function reviewState(documents) {
   return {
@@ -342,8 +362,15 @@ When(
     }
     await documents.openPolicyList()
     await uploadAndLink(documents, DOCUMENTS[0], referring)
-    await uploadAndLink(documents, DOCUMENTS[1], [referring[1]])
+    await uploadAndLink(
+      documents,
+      DOCUMENTS[1],
+      [referring[1]],
+      CHANGED_LOCATION
+    )
+    const linkedBeforeDelete = await linkedDocumentsOn(documents, referring)
 
+    await documents.openPolicyList()
     await documents.openSupportingDocumentsTask()
     const beforeDelete = await documents.reviewCards()
     await documents.deleteOnReview(1)
@@ -355,7 +382,9 @@ When(
     await documents.confirmDelete()
     const afterFirstDelete = await reviewState(documents)
     const listAfterFirstDelete = await policyListState(documents)
+    const linkedAfterFirstDelete = await linkedDocumentsOn(documents, referring)
 
+    await documents.openPolicyList()
     await documents.openSupportingDocumentsTask()
     await documents.deleteOnReview(1)
     await documents.confirmDelete()
@@ -370,8 +399,30 @@ When(
       afterFirstDelete,
       listAfterFirstDelete,
       afterLastDelete,
-      listAfterLastDelete
+      listAfterLastDelete,
+      linkedBeforeDelete,
+      linkedAfterFirstDelete
     }
+  }
+)
+
+Then(
+  'each policy page listed the documents linked to it with where the information is, and stopped listing a document once it was deleted',
+  function () {
+    const { linkedBeforeDelete, linkedAfterFirstDelete, referring } =
+      this.data.supportingDocuments
+    const [first, second] = referring
+    expect(linkedBeforeDelete).toEqual({
+      [first]: [`${fileName(0)} - ${LOCATION}`],
+      [second]: [
+        `${fileName(0)} - ${LOCATION}`,
+        `${fileName(1)} - ${CHANGED_LOCATION}`
+      ]
+    })
+    expect(linkedAfterFirstDelete).toEqual({
+      [first]: null,
+      [second]: [`${fileName(1)} - ${CHANGED_LOCATION}`]
+    })
   }
 )
 
