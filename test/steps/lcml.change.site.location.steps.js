@@ -180,7 +180,9 @@ Then(
       message,
       { timeout: 30_000 }
     )
-    await expect(this.page.locator('#file-id-error')).toContainText(message, {
+    await expect(
+      this.page.locator('#file-error, #file-id-error')
+    ).toContainText(message, {
       timeout: 30_000
     })
   }
