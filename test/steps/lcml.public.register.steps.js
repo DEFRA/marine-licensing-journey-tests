@@ -7,6 +7,8 @@ import LcmlPublicRegisterPage, {
 import { completeWithholdingFollowUpPage } from '../support/lcml-helpers.js'
 
 const CARD_ID = '#public-register-card'
+const WITHHOLD_QUESTION =
+  'Do you want to ask us to withhold any information from the public register?'
 
 function cardRow(page, label) {
   return page.locator(
@@ -42,8 +44,6 @@ When(
   }
 )
 
-const WITHHOLD_QUESTION =
-  'Do you want to ask us to withhold any information from the public register?'
 const APPROVAL_QUESTION =
   'Do you have approval from the Secretary of State for Defence to withhold information for national security reasons?'
 const WITHHELD_DETAILS =
@@ -169,9 +169,9 @@ Then(
   async function (value) {
     const card = this.page.locator(CARD_ID)
     await expect(card).toBeVisible({ timeout: 30_000 })
-    await expect(
-      cardRow(this.page, 'Request that information is withheld')
-    ).toContainText(value, { timeout: 30_000 })
+    await expect(cardRow(this.page, WITHHOLD_QUESTION)).toContainText(value, {
+      timeout: 30_000
+    })
     await expect(card.getByRole('link', { name: /Change/ })).toHaveCount(0)
   }
 )
